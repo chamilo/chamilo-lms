@@ -61,8 +61,8 @@ if (!empty($_GET['warn'])) {
 if (!empty($message)) {
     echo $message;
 }
-
-echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
+$dates = SessionManager::parse_session_dates($session);
+echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']." <small>$dates</small>");
 
 $url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_add.php?page=resume_session.php&id=$id_session");
 echo Display::page_subheader(get_lang('GeneralProperties').$url);

@@ -168,6 +168,7 @@ if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
 }
 
 $session_id = intval($_GET['id_session']);
+
 if (empty($session_id)) {
     $session_id = api_get_session_id();
 }
@@ -212,7 +213,7 @@ if (api_is_drh()) {
 $courses = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 
 $courses_in_session_by_coach = array();
-$sessions_coached_by_user = Tracking::get_sessions_coached_by_user(api_get_user_id());
+$sessions_coached_by_user = SessionManager::get_sessions_coached_by_user(api_get_user_id());
 
 //RRHH or session admin
 if (api_is_session_admin() || api_is_drh()) {	
@@ -544,7 +545,7 @@ if (!empty($student_id)) {
 $table_title = '';
 
 if (!empty($session_id)) {
-	$session_name = api_get_session_name($session_id);
+    $session_name = api_get_session_name($session_id);
 	$table_title  = ($session_name? Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.' ':'');
 }
 if (!empty($info_course['title'])) {
@@ -571,26 +572,14 @@ if (empty($_GET['details'])) {
 
 	foreach ($courses_in_session as $key => $courses) {	
 		$session_id   = $key;
-		$session_info = api_get_session_info($session_id);
-		$session_name = $session_info['name'];
-		$date_start = '';
-		
-		if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {			
-			$date_start = api_format_date($session_info['date_start'], DATE_FORMAT_SHORT);
-		}
-		
-		$date_end = '';
-		if (!empty($session_info['date_end']) && $session_info['date_end'] != '0000-00-00') {			
-			$date_end = api_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
-		}
-		if (!empty($date_start) && !empty($date_end)) {
-			$date_session = get_lang('From') . ' ' . $date_start . ' ' . get_lang('Until') . ' ' . $date_end;
-		}
+		$session_info = api_get_session_info($session_id);        
+		$session_name = $session_info['name'];		
+        $date_session = SessionManager::parse_session_dates($session_info);
 		$title = '';
 		if (empty($session_id)) {
 			$title = Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_SMALL).' '.get_lang('Courses');
 		} else {
-			$title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session?' ('.$date_session.')':'');
+			$title = Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.$session_name.($date_session ?' <small>'.$date_session.'</small>':'');
 		}
 			
 		// Courses

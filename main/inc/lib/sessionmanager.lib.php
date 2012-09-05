@@ -1684,34 +1684,42 @@ class SessionManager {
         return $return_array;
     }
     
+    /**
+     * The general coach (field: session.id_coach)  
+     * @param int user id
+     */
     public static function get_sessions_by_general_coach($user_id) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $user_id = intval($user_id);
         
         // session where we are general coach
-        $sql = 'SELECT DISTINCT id, name, date_start, date_end
-                    FROM ' . $session_table . '
-                    WHERE id_coach=' . $user_id;
+        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date 
+                FROM $session_table
+                WHERE id_coach = $user_id";
 
         if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql = 'SELECT DISTINCT id, name, date_start, date_end
+                $sql = 'SELECT DISTINCT id, name, access_start_date, access_end_date
                     FROM ' . $session_table . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
                     ON (session.id = session_rel_url.session_id)
-                    WHERE id_coach=' . $user_id.' AND access_url_id = '.$access_url_id;
+                    WHERE id_coach = '.$user_id.' AND access_url_id = '.$access_url_id;
             }
         }        
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');        
     }    
     
-    function get_sessions_by_coach($user_id) {
+    /**
+     * Get all sessions if the user is a sesion course coach of any session
+     * @param int user id
+     */
+    static function get_sessions_by_coach($user_id) {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);			
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    	$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+    	$sql = 'SELECT DISTINCT session.id, session.name, access_start_date, access_end_date
                 FROM ' . $tbl_session . ' as session
                 INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
                     ON session.id = session_course_user.id_session
@@ -1721,7 +1729,7 @@ class SessionManager {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
-                $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                $sql = 'SELECT DISTINCT session.id, session.name, access_start_date, access_end_date
                     FROM ' . $tbl_session . ' as session
                     INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
                         ON session.id = session_course_user.id_session AND session_course_user.id_user = '.$user_id.' AND session_course_user.status=2
@@ -1732,6 +1740,16 @@ class SessionManager {
         }
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');        
+    }
+        
+    public static function get_sessions_coached_by_user($coach_id) {
+        $sessions = self::get_sessions_by_general_coach($coach_id);
+        $sessions_by_coach = self::get_sessions_by_coach($coach_id);
+
+        if (!empty($sessions_by_coach)) {
+            $sessions = array_merge($sessions, $sessions_by_coach);
+        }
+        return $sessions;
     }
     
     /*
@@ -2247,18 +2265,20 @@ class SessionManager {
      * @params array An array with all the session dates
      * @return string 
      */
-    static function parse_session_dates($session_info) {    
+    static function parse_session_dates($session_info) {
+        //This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
         $session_info['access_start_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
-        $session_info['access_end_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
+        $session_info['access_end_date']   = api_get_local_time($session_info['access_start_date'], null, null, true);
         
         if (!empty($session_info['access_start_date']) && !empty($session_info['access_end_date'])) {
-            $msg_date = get_lang('From').' '.$session_info['access_start_date'].' '.get_lang('To').' '.$session_info['access_end_date'];
+            //$msg_date = get_lang('From').' '.$session_info['access_start_date'].' '.get_lang('To').' '.$session_info['access_end_date'];
+            $msg_date =  sprintf(get_lang('FromDateXToDateY'),$session_info['access_start_date'], $session_info['access_end_date']);
         } else {
             if (!empty($session_info['access_start_date'])) {
                 $msg_date = get_lang('From').' '.$session_info['access_start_date'];
-            }            
-            if (!empty($session_info['access_start_date'])) {
-                $msg_date = get_lang('From').' '.$session_info['access_start_date'];
+            }  
+            if (!empty($session_info['access_end_date'])) {
+                $msg_date = get_lang('Until').' '.$session_info['access_end_date'];
             }
         }
         return $msg_date;

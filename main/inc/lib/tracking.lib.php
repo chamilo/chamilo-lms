@@ -1302,19 +1302,11 @@ class Tracking {
 
 		/**
 		 * Get sessions coached by user
-		 * @param    int        Coach id
+		 * @param    int       Coach id
 		 * @return    array    Sessions list
 		 */
 		public static function get_sessions_coached_by_user($coach_id) {
-            
-            $sessions = SessionManager::get_sessions_by_general_coach($coach_id);
-            $sessions_by_coach = SessionManager::get_sessions_by_coach($coach_id);
-            
-            if (!empty($sessions_by_coach)) {
-                $sessions = array_merge($sessions, $sessions_by_coach);
-            }
-            
-            return $sessions;
+ 
 
 			// session where we are coach of a course
 /*		
@@ -2078,7 +2070,7 @@ class Tracking {
 		 * @param   int     user id
 		 * @return  string  html code
 		 */
-		function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
+		static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
 			global $_configuration;
 			$tbl_course		            = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$tbl_session		        = Database :: get_main_table(TABLE_MAIN_SESSION);

@@ -236,7 +236,7 @@ $form->addElement('text', 'display_end_date', array(get_lang('SessionDisplayEndD
 $form->addRule(array('display_start_date', 'display_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
      
 $form->addElement('text', 'access_start_date', array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')), array('id' => 'access_start_date'));
-$form->addElement('text', 'access_end_date', array(get_lang('SessionEndDate'), get_lang('SessionEndDate')), array('id' => 'access_end_date'));
+$form->addElement('text', 'access_end_date', array(get_lang('SessionEndDate'), get_lang('SessionEndDateComment')), array('id' => 'access_end_date'));
 $form->addRule(array('access_start_date', 'access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
 
 //Visibility

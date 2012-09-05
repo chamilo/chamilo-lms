@@ -385,19 +385,11 @@ class SocialManager extends UserManager {
      * Helper functions definition
      */
     public static function get_logged_user_course_html($my_course, $count) {
-        global $nosession, $nbDigestEntries, $orderKey, $digest, $thisCourseSysCode;
-        if (!$nosession) {
-            global $now, $date_start, $date_end;
-        }
         //initialise
         $result = '';
-        // Table definitions
-        $main_user_table          = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_session              = Database :: get_main_table(TABLE_MAIN_SESSION);
-        
-        $course_code   = $my_course['code'];
-        $course_visual_code   = $my_course['course_info']['official_code'];
-        $course_title         = $my_course['course_info']['title'];
+                
+        $course_code   = $my_course['code'];        
+        $course_title  = $my_course['course_info']['title'];
         
         $course_info = Database :: get_course_info($course_code);
         
@@ -408,18 +400,6 @@ class SocialManager extends UserManager {
         $course_visibility = $course_access_settings['visibility'];
 
         $user_in_course_status = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_code);
-        //function logic - act on the data
-        $is_virtual_course = CourseManager :: is_virtual_course_from_system_code($course_code);
-        if ($is_virtual_course) {
-            // If the current user is also subscribed in the real course to which this
-            // virtual course is linked, we don't need to display the virtual course entry in
-            // the course list - it is combined with the real course entry.
-            $target_course_code = CourseManager :: get_target_of_linked_course($course_code);
-            $is_subscribed_in_target_course = CourseManager :: is_user_subscribed_in_course(api_get_user_id(), $target_course_code);
-            if ($is_subscribed_in_target_course) {
-                return; //do not display this course entry
-            }
-        }
         
         $s_htlm_status_icon = Display::return_icon('course.gif', get_lang('Course'));
 
@@ -435,85 +415,10 @@ class SocialManager extends UserManager {
             $result .= $course_title." "." ".get_lang('CourseClosed')."";
         }
         $result .= '</h3>';
-        //$current_course_settings = CourseManager :: get_access_settings($my_course['k']);
-        // display the what's new icons
-        if ($nbDigestEntries > 0) {
-            reset($digest);
-            $result .= '<ul>';
-            while (list ($key2) = each($digest[$thisCourseSysCode])) {
-                $result .= '<li>';
-                if ($orderKey[1] == 'keyTools') {
-                    $result .= "<a href=\"$toolsList[$key2] [\"path\"] $thisCourseSysCode \">";
-                    $result .= "$toolsList[$key2][\"name\"]</a>";
-                } else {
-                    $result .= api_convert_and_format_date($key2, DATE_FORMAT_LONG, date_default_timezone_get());
-                }
-                $result .= '</li>';
-                $result .= '<ul>';
-                reset($digest[$thisCourseSysCode][$key2]);
-                while (list ($key3, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2])) {
-                    $result .= '<li>';
-                    if ($orderKey[2] == 'keyTools') {
-                        $result .= "<a href=\"$toolsList[$key3] [\"path\"] $thisCourseSysCode \">";
-                        $result .= "$toolsList[$key3][\"name\"]</a>";
-                    } else {
-                        $result .= api_convert_and_format_date($key3, DATE_FORMAT_LONG, date_default_timezone_get());
-                    }
-                    $result .= '<ul compact="compact">';
-                    reset($digest[$thisCourseSysCode][$key2][$key3]);
-                    while (list ($key4, $dataFromCourse) = each($digest[$thisCourseSysCode][$key2][$key3])) {
-                        $result .= '<li>';
-                        $result .= htmlspecialchars(substr(strip_tags($dataFromCourse), 0, CONFVAL_NB_CHAR_FROM_CONTENT));
-                        $result .= '</li>';
-                    }
-                    $result .= '</ul>';
-                    $result .= '</li>';
-                }
-                $result .= '</ul>';
-                $result .= '</li>';
-            }
-            $result .= '</ul>';
-        }
+     
         $result .= '</li>';
-        $result .= '</div>';
-
-        if (!$nosession) {
-            $session = '';
-            $active = false;
-            if (!empty($my_course['session_name'])) {
-
-                // Request for the name of the general coach
-                $sql = 'SELECT lastname, firstname
-                        FROM '.$tbl_session.' ts  LEFT JOIN '.$main_user_table .' tu
-                        ON ts.id_coach = tu.user_id
-                        WHERE ts.id='.(int) $my_course['id_session']. ' LIMIT 1';
-                $rs = Database::query($sql);
-                $sessioncoach = Database::store_result($rs);
-                $sessioncoach = $sessioncoach[0];
-
-                $session = array();
-                $session['title'] = $my_course['session_name'];
-                if ($my_course['date_start']=='0000-00-00') {
-                    $session['dates'] = get_lang('WithoutTimeLimits');
-                    if ( api_get_setting('show_session_coach') === 'true' ) {
-                        $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
-                    }
-                    $active = true;
-                } else {
-                    $session ['dates'] = ' - '.get_lang('From').' '.$my_course['date_start'].' '.get_lang('To').' '.$my_course['date_end'];
-                    if ( api_get_setting('show_session_coach') === 'true' ) {
-                        $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
-                    }
-                    $active = ($date_start <= $now && $date_end >= $now)?true:false;
-                }
-            }            
-            $my_course['id_session'] = isset($my_course['id_session']) ? $my_course['id_session'] : 0;
-            $output = array ($my_course['user_course_cat'], $result, $my_course['id_session'], $session, 'active'=>$active);
-        } else {
-            $output = array ($my_course['user_course_cat'], $result);
-        }
-        //$my_course['creation_date'];
-        return $output;
+        $result .= '</div>';        
+        return $result;
     }
 
     /**

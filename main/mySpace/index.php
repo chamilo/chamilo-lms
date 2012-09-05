@@ -185,8 +185,8 @@ if (empty($session_id)) {
 	$students 		= CourseManager::get_user_list_from_courses_as_coach($user_id);
     		
 	// Sessions for the coach
-	$sessions 	 	= Tracking::get_sessions_coached_by_user($user_id);
-	
+	$sessions 	 	= SessionManager::get_sessions_coached_by_user($user_id);
+    	
 	//If is drh	
 	if ($is_drh) {
 		$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
@@ -442,28 +442,16 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 		$table->set_header(4, get_lang('Details'), false);
 
 		$all_data = array();
+        
 		foreach ($sessions as $session) {			
 			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
 			$row[] = $session['name'];
+            
+            $session_date_label = SessionManager::parse_session_dates($session);
 
-            $session_date = array();
-			if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
-                $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
-            }
-            
-            if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
-                $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
-            }
-            
-            if (empty($session_date)) {
-                $session_date_string = '-';
-            } else {
-                $session_date_string = implode(' ', $session_date);
-            }
-            
-            $row[] = $session_date_string;            
+            $row[] = $session_date_label;            
             $row[] = $count_courses_in_session;
             $row[] = $count_users_in_session;
 			

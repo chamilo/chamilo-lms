@@ -674,7 +674,7 @@ class CourseManager {
 
         //2. Include courses in sessions
         if ($include_courses_in_sessions) {
-            $sessions      = Tracking::get_sessions_coached_by_user($user_id);
+            $sessions      = SessionManager::get_sessions_coached_by_user($user_id);
 
             if (!empty($sessions)) {
                 foreach($sessions as $session_item) {

@@ -722,6 +722,5 @@ function implode_with_key($glue, $array) {
         }
         return $string;
     }
-    return '';
-    
+    return '';    
 }

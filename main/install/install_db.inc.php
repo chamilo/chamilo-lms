@@ -77,7 +77,8 @@ if (!defined('CLI_INSTALLATION')) {
     }	
 	//Create database
 	if ($create_database) {
-		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
+        $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
+		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` $charset_clause";   
 		Database::query($sql) or die(Database::error());
 	}	
 }

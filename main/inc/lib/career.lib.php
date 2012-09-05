@@ -171,8 +171,8 @@ class Career extends Model {
         return $cid;
     }    
     
-    public function save($params) {
-	    $id = parent::save($params);
+    public function save($params, $show_query = false) {
+	    $id = parent::save($params, $show_query);
 	    if (!empty($id)) {
 	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
    		}

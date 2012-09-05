@@ -1159,7 +1159,7 @@ class Database {
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';
             $result = self::query($sql);
             if ($show_query) {
             	var_dump($sql);

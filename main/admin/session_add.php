@@ -102,15 +102,34 @@ $(function() {
     '.$add_coach.'        
 
     $("#display_end_date").datetimepicker({
-        dateFormat: "yy-mm-dd"
+        dateFormat: "yy-mm-dd",
+        hour: 9,        
+        onSelect: function(selectedDateTime) {
+            var start = $(this).datetimepicker("getDate");
+            
+            if (!$("#access_end_date").val()) {
+                $("#access_end_date").val(selectedDateTime);
+            }
+            
+            if (!$("#coach_access_end_date").val()) {
+                $("#coach_access_end_date").val(selectedDateTime);
+            }
+        }
     });
     
     $("#display_start_date").datetimepicker({
         dateFormat: "yy-mm-dd",
         hour: 9,        
         onSelect: function(selectedDateTime) {
-            var start = $(this).datetimepicker("getDate");        
-            $("#display_end_date").val(selectedDateTime);
+            var start = $(this).datetimepicker("getDate");
+            
+            if (!$("#access_start_date").val()) {
+                $("#access_start_date").val(selectedDateTime);
+            }
+            
+            if (!$("#coach_access_start_date").val()) {
+                $("#coach_access_start_date").val(selectedDateTime);
+            }
         }
     });
     
@@ -119,7 +138,7 @@ $(function() {
         hour: 9,
         onSelect: function(selectedDateTime) {
             var start = $(this).datetimepicker("getDate");        
-            $("#access_end_date").val(selectedDateTime);                    
+            //$("#access_end_date").val(selectedDateTime);                    
         }
     });
     
@@ -153,7 +172,7 @@ $(function() {
         hour: 9,
         onSelect: function(selectedDateTime) {
             var start = $(this).datetimepicker("getDate");        
-            $("#coach_access_end_date").val(selectedDateTime);
+            //$("#coach_access_end_date").val(selectedDateTime);
         }
     });
     

@@ -234,11 +234,11 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	if ($result) {		
         $valid_date_time = new DateTime();        
         $diff = "PT".$time_limit.'M';
-        $valid_date_time->sub(new DateInterval($diff));                        
+        $valid_date_time->sub(new DateInterval($diff));        
 		$users_online = array();
 		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $user_login_date = new DateTime($login_date);                       
-			if ($user_login_date > $valid_date_time) {
+			if ($user_login_date > $valid_date_time->format('Y-m-d H:i:s')) {
 				$users_online[] = $login_user_id;
 			}            
 		}        
@@ -333,14 +333,14 @@ function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit
               
 	$result = Database::query($query);
 	if ($result) {
-        $valid_date_time = new DateTime();          
+        $valid_date_time = new DateTime();
         $diff = "PT".$time_limit.'M';
         $valid_date_time->sub(new DateInterval($diff));
 		$users_online = array();
 
 		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $user_login_date = new DateTime($login_date);            
-			if ($user_login_date > $valid_date_time) {
+			if ($user_login_date > $valid_date_time->format('Y-m-d H:i:s')) {
 				$users_online[] = $login_user_id;
 			}            
 		}

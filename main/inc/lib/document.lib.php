@@ -821,6 +821,50 @@ class DocumentManager {
         $result = Database::fetch_array(Database::query("SELECT filetype FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id= $document_id"), 'ASSOC');
         return $result['filetype'] == 'folder';
     }
+    
+    public static function delete_document_from_db($document_id, $course_info = array(), $session_id = 0, $remove_content_from_db = false) {
+        $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
+        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        
+         //Deleting from the DB
+        $user_id = api_get_user_id();
+        
+        if (empty($course_info)) {
+            $course_info = api_get_course_info();
+        }
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
+        
+        //Soft DB delete
+        api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'delete', $user_id, null, null, null, null, $session_id);
+        self::delete_document_from_search_engine($course_info['code'], $document_id);
+        self::unset_document_as_template($document_id, $course_info['code'], $user_id);
+        
+        //Hard DB delete
+        if ($remove_content_from_db) {            
+            $sql = "DELETE FROM $TABLE_ITEMPROPERTY WHERE c_id = {$course_info['real_id']} AND ref = ".$document_id." AND tool='".TOOL_DOCUMENT."'";
+            Database::query($sql);   
+            
+            $sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;           
+            Database::query($sql);
+            
+            self::delete_document_metadata($document_id);
+        }
+    }
+    
+    public static function delete_document_metadata($document_id) {
+        //needed to deleted medadata
+        require_once api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php';
+        require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+        $mdStore = new mdstore(true);
+        
+        //delete metadata
+        $eid = 'Document'.'.'.$document_id;
+        $mdStore->mds_delete($eid);
+        $mdStore->mds_delete_offspring($eid);        
+    }
+    
 
     /**
      * This deletes a document by changing visibility to 2, renaming it to filename_DELETED_#id
@@ -833,126 +877,98 @@ class DocumentManager {
      * @todo now only files/folders in a folder get visibility 2, we should rename them too.
      */
     public static function delete_document($_course, $path, $base_work_dir) {
-
-        $TABLE_DOCUMENT 	= Database :: get_course_table(TABLE_DOCUMENT);
-        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
+        $TABLE_DOCUMENT         = Database :: get_course_table(TABLE_DOCUMENT);
+                
+        if (empty($path) || empty($base_work_dir)) {
+            return false;
+        }
+        
         $course_id = $_course['real_id'];
 
         //first, delete the actual document...
         $document_id = self :: get_document_id($_course, $path);
+        $document_exists_in_disk = file_exists($base_work_dir.$path);
+                
         $new_path = $path.'_DELETED_'.$document_id;
         $current_session_id = api_get_session_id();
+        
+        $file_deleted_from_db = false;
+        $file_deleted_from_disk = false;
+        $file_renamed_from_disk = false;
+        
         if ($document_id) {
-            if (api_get_setting('permanently_remove_deleted_files') == 'true') { //deleted files are *really* deleted
+            self::delete_document_from_db($document_id);            
+            //checking
+            $file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);            
+            $file_deleted_from_db = true;
+        }
+        
+        if ($document_exists_in_disk) {
+            
+            if (api_get_setting('permanently_remove_deleted_files') == 'true') {          
+                //Deleted files are *really* deleted
                 $what_to_delete_sql = "SELECT id FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
                 //get all id's of documents that are deleted
                 $what_to_delete_result = Database::query($what_to_delete_sql);
 
                 if ($what_to_delete_result && Database::num_rows($what_to_delete_result) != 0) {
-                    //needed to deleted medadata
-                    require_once api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php';
-                    require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-                    $mdStore = new mdstore(true);
-
                     //delete all item_property entries
                     while ($row = Database::fetch_array($what_to_delete_result)) {
-                        //query to delete from item_property table
-                        //avoid wrong behavior
-
-                        //$remove_from_item_property_sql = "DELETE FROM ".$TABLE_ITEMPROPERTY." WHERE ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
-                        api_item_property_update($_course, TOOL_DOCUMENT, $row['id'], 'delete', api_get_user_id(), null, null, null, null, $current_session_id);
-
-                        //query to delete from document table
-                        $remove_from_document_sql = "DELETE FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND id = ".$row['id'];
-                        self::unset_document_as_template($row['id'], $_course, api_get_user_id());
-                        Database::query($remove_from_document_sql);
-
-                        //delete metadata
-                        $eid = 'Document'.'.'.$row['id'];
-                        $mdStore->mds_delete($eid);
-                        $mdStore->mds_delete_offspring($eid);
-
+                        //query to delete from item_property table (hard way)
+                        self::delete_document_from_db($row['id'], $_course, $current_session_id, true);
                     }
-                    self::delete_document_from_search_engine(api_get_course_id(), $document_id);
                     //delete documents, do it like this so metadata get's deleted too
                     //update_db_info('delete', $path);
                     //throw it away
-                    my_delete($base_work_dir.$path);
-
-                    return true;
-                } else {
-                    return false;
+                    my_delete($base_work_dir.$path);                    
+                    $file_deleted_from_disk = true;
                 }
+            } else {
+                //Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
+                
+                if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
+                    if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
+                        
+                        $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE c_id = $course_id AND id='".$document_id."'";
+                        Database::query($sql);
+                        
+                        $sql = "SELECT id, path FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path LIKE BINARY '".$path."/%'";
+                        $result = Database::query($sql);
+                        if ($result && Database::num_rows($result) > 0) {
+                            while ($deleted_items = Database::fetch_array($result, 'ASSOC')) {                                
+                                self::delete_document_from_db($deleted_items['id']);                      
+                                
+                                //Change path of subfolders and documents in database
+                                $old_item_path = $deleted_items['path'];
+                                $new_item_path = $new_path.substr($old_item_path, strlen($path));
 
-            } else { //set visibility to 2 and rename file/folder to qsdqsd_DELETED_#id
-
-                if (api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'delete', api_get_user_id(), null, null, null, null, $current_session_id)) {
-                    if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
-                        if(rename($base_work_dir.$path, $base_work_dir.$new_path)) {
-                            self::unset_document_as_template($document_id, api_get_course_id(), api_get_user_id());
-                            $sql = "UPDATE $TABLE_DOCUMENT set path='".$new_path."' WHERE c_id = $course_id AND id='".$document_id."'";
-                            if (Database::query($sql)) {
-                                //if it is a folder it can contain files
-                                $sql = "SELECT id,path FROM ".$TABLE_DOCUMENT." WHERE c_id = $course_id AND path LIKE BINARY '".$path."/%'";
-                                $result = Database::query($sql);
-                                if ($result && Database::num_rows($result) > 0) {
-                                    while ($deleted_items = Database::fetch_array($result, 'ASSOC')) {
-                                        api_item_property_update($_course, TOOL_DOCUMENT, $deleted_items['id'], 'delete', api_get_user_id(),null,null,null,null,$current_session_id);
-                                        //Change path of subfolders and documents in database
-                                        $old_item_path = $deleted_items['path'];
-                                        $new_item_path = $new_path.substr($old_item_path, strlen($path));
-                                        /*
-                                         // Trying to fix this bug FS#2681
-                                         echo $base_work_dir.$old_item_path;
-                                         echo "<br />";
-                                         echo $base_work_dir.$new_item_path;
-                                         echo "<br /><br />";
-                                         rename($base_work_dir.$old_item_path, $base_work_dir.$new_item_path);
-                                         */
-                                        self::unset_document_as_template($deleted_items['id'], api_get_course_id(), api_get_user_id());
-                                        $sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE c_id = $course_id AND id = ".$deleted_items['id'];
-
-                                        Database::query($sql);
-                                    }
-                                }
-
-                                self::delete_document_from_search_engine(api_get_course_id(), $document_id);
-                                return true;
+                                $sql = "UPDATE $TABLE_DOCUMENT set path = '".$new_item_path."' WHERE c_id = $course_id AND id = ".$deleted_items['id'];
+                                Database::query($sql);
                             }
-                        } else {
-                            //Couldn't rename - file permissions problem?
-                            error_log(__FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',0);
                         }
-
+                        $file_renamed_from_disk = true;
                     } else {
-
-                        //echo $base_work_dir.$path;
-                        //The file or directory isn't there anymore (on the filesystem)
-                        // This means it has been removed externally. To prevent a
-                        // blocking error from happening, we drop the related items from the
-                        // item_property and the document table.
-                        error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);
-
-                        $sql = "SELECT id FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND path='".$path."' OR path LIKE BINARY '".$path."/%'";
-                        $res = Database::query($sql);
-
-                        self::delete_document_from_search_engine(api_get_course_id(), $document_id);
-
-                        while ($row = Database::fetch_array($res)) {
-                            $sqlipd = "DELETE FROM $TABLE_ITEMPROPERTY WHERE c_id = $course_id AND ref = ".$row['id']." AND tool='".TOOL_DOCUMENT."'";
-                            Database::query($sqlipd);
-                            self::unset_document_as_template($row['id'],api_get_course_id(), api_get_user_id());
-                            $sqldd = "DELETE FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND id = ".$row['id'];
-                            Database::query($sqldd);
-                        }
+                        //Couldn't rename - file permissions problem?
+                        error_log(__FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',0);
                     }
-                }
-            }
-
+                }                
+            }   
         }
-
-        return false;
+        
+        //Checking inconsistency        
+        if ($file_deleted_from_db && $file_deleted_from_disk || 
+            $file_deleted_from_db && $file_renamed_from_disk) {
+            return true;
+        } else {
+            //Something went wrong
+            
+            //The file or directory isn't there anymore (on the filesystem)
+            // This means it has been removed externally. To prevent a
+            // blocking error from happening, we drop the related items from the
+            // item_property and the document table.
+            error_log(__FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',0);            
+            return false;
+        }
     }
 
     /**
@@ -1066,7 +1082,7 @@ class DocumentManager {
             	$real_dir  = '';
 
             	for ($i = 1; $i < $array_len; $i++) {
-            		$sub_visibility = true;
+            		//$sub_visibility = true;
             		$real_dir .= '/'.$dir_array[$i];
             		$parent_id = self::get_document_id($course_info, $real_dir);
             		if (!empty($parent_id)) {

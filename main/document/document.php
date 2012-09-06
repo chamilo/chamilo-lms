@@ -42,6 +42,7 @@ $lib_path = api_get_path(LIBRARY_PATH);
 /* Libraries */
 require_once $lib_path . 'fileUpload.lib.php';
 require_once $lib_path . 'fileDisplay.lib.php';
+require_once $lib_path . 'fileManage.lib.php';
 //require_once $lib_path.'tablesort.lib.php';moved to autoload
 
 api_protect_course_script(true);
@@ -618,7 +619,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             }
         }
         $document_to_move = DocumentManager::get_document_data_by_id($_POST['move_file'], api_get_course_id());
-        require_once $lib_path . 'fileManage.lib.php';
+        
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
 
@@ -671,20 +672,25 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
                     api_not_allowed();
                 }
             }
-
             if (DocumentManager::check_readonly($_course, api_get_user_id(), $_GET['delete'], '', true)) {
                 api_not_allowed();
             }
         }
-        require_once api_get_path(LIBRARY_PATH) . 'fileManage.lib.php';
-        if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
-            if (isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id'] == strval(intval($_GET['delete_certificate_id']))) {
-                $default_certificate_id = $_GET['delete_certificate_id'];
-                DocumentManager::remove_attach_certificate(api_get_course_id(), $default_certificate_id);
+        
+        $document_data = DocumentManager::get_document_id($_course, $_GET['delete']);
+        // Check whether the document is in the database
+        if (!empty($document_data)) {         
+            if (DocumentManager::delete_document($_course, $_GET['delete'], $base_work_dir)) {
+                if (isset($_GET['delete_certificate_id']) && $_GET['delete_certificate_id'] == strval(intval($_GET['delete_certificate_id']))) {
+                    $default_certificate_id = $_GET['delete_certificate_id'];
+                    DocumentManager::remove_attach_certificate(api_get_course_id(), $default_certificate_id);
+                }
+                Display::display_confirmation_message(get_lang('DocDeleted'));
+            } else {
+                Display::display_error_message(get_lang('DocDeleteError'));
             }
-            Display::display_confirmation_message(get_lang('DocDeleted'));
         } else {
-            Display::display_error_message(get_lang('DocDeleteError'));
+            Display::display_warning_message(get_lang('FileNotFound'));
         }
     }
 

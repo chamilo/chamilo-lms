@@ -20,6 +20,7 @@ require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once 'attendance_controller.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/fe/exportgradebook.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $current_course_tool  = TOOL_ATTENDANCE;
 
@@ -30,7 +31,18 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 // get actions
-$actions = array('attendance_list', 'attendance_sheet_list', 'attendance_sheet_print', 'attendance_sheet_add', 'attendance_add', 'attendance_edit', 'attendance_delete', 'attendance_delete_select', 'attendance_restore');
+$actions = array(
+    'attendance_list', 
+    'attendance_sheet_list', 
+    'attendance_sheet_add', 
+    'attendance_add', 
+    'attendance_edit', 
+    'attendance_delete', 
+    'attendance_delete_select', 
+    'attendance_restore',
+    'attendance_sheet_export_to_pdf',
+
+);
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
 $action  = 'attendance_list';
 
@@ -208,7 +220,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 }
 
 // distpacher actions to controller
-
 switch ($action) {	
 	case 'attendance_list':	
         $attendance_controller->attendance_list();
@@ -244,8 +255,8 @@ switch ($action) {
 	case 'attendance_sheet_list':	
         $attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
 		break;
-    case 'attendance_sheet_print':
-        $attendance_controller->attendance_sheet_print($action, $attendance_id, $student_id, $course_id);
+    case 'attendance_sheet_export_to_pdf':
+        $attendance_controller->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
         break;
 	case 'attendance_sheet_add' 	:	
         if (api_is_allowed_to_edit(null, true)) {
@@ -257,11 +268,11 @@ switch ($action) {
     case 'lock_attendance'          :
     case 'unlock_attendance'        :
         if (api_is_allowed_to_edit(null, true)) {       
-        $attendance_controller->lock_attendance($action, $attendance_id);
+            $attendance_controller->lock_attendance($action, $attendance_id);
         } else { 
             api_not_allowed();
         }
-        break;		  
+        break;
 	case 'calendar_add'  		:
 	case 'calendar_edit' 		:
 	case 'calendar_all_delete' 	:

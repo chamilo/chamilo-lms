@@ -40,7 +40,7 @@ class PDF {
         $params['top']      = isset($params['top'])     ? $params['top']    : 20;
         $params['bottom']   = isset($params['bottom'])  ? $params['bottom'] : 15;
         
-        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_utc_datetime();
+        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;        
@@ -48,12 +48,11 @@ class PDF {
         $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
     } 
     
-    function table_to_pdf($table)  {
-        
+    function html_to_pdf_with_template($content)  {        
         Display :: display_no_header();
         
         //Assignments
-        Display::$global_template->assign('pdf_table', $table);
+        Display::$global_template->assign('pdf_content', $content);
         
         $organization = api_get_setting('Institution');
         $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';    

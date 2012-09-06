@@ -23,6 +23,11 @@
     <tr>
         <td>
          <strong>{{ "Course" | get_lang }}:</strong> {{ pdf_course }}
+         
+         {% if pdf_course_category %}         
+            <strong>{{ "Category" | get_lang }}:</strong> {{ pdf_course_category }}
+         {% endif %}
+         
         </td>
     </tr>    
     <tr>
@@ -34,7 +39,7 @@
 
 <br />
 
-{{ pdf_table }}
+{{ pdf_content }}
 
 {% if add_signatures == true %}
     <br />

@@ -18,7 +18,11 @@ if (api_is_allowed_to_edit(null, true)) {
     }   
     if (!$is_locked_attendance || api_is_platform_admin()) {
         echo '<div class="actions" style="margin-bottom:30px">';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
+                Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'">'.
+                Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
+        
         echo '</div>';
     }
     $message_information = get_lang('AttendanceSheetDescription');
@@ -34,11 +38,12 @@ if (api_is_allowed_to_edit(null, true)) {
     
     $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id);
     
-    $values = array('all'           => get_lang('All'), 
-                    'today'         => get_lang('Today'),
-                    'all_done'      => get_lang('AllDone'), 
-                    'all_not_done'  => get_lang('AllNotDone')
-                    );
+    $values = array(
+        'all'           => get_lang('All'), 
+        'today'         => get_lang('Today'),
+        'all_done'      => get_lang('AllDone'), 
+        'all_not_done'  => get_lang('AllNotDone')
+    );
                     
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;

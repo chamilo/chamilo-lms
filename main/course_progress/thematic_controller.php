@@ -187,10 +187,13 @@ class ThematicController
                         $table[] = array($theme['title'], $plan_html, $advance_html);
                     }                    
                     $params = array(
-                        'filename' => get_lang('Thematic'),
+                        'filename' => get_lang('Thematic').'-'.api_get_local_time(),
                         'pdf_title' => get_lang('Thematic'),
-                        'add_signatures' => true
+                        'add_signatures' => true,
+                        'format' => 'A4-L',
+                        'orientation' =>    'L'
                     );
+                  
                     Export::export_table_pdf($table, $params);
                     break;
                 case 'moveup':

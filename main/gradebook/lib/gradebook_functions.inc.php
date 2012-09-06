@@ -812,7 +812,7 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     
     $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';    
     $pdf = new PDF($page_format, $params['orientation'], $params);    
-    $pdf->table_to_pdf($table->toHtml());
+    $pdf->html_to_pdf_with_template($table->toHtml());
     exit;	
 }
 

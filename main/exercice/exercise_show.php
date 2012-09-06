@@ -487,8 +487,8 @@ foreach ($questionList as $questionId) {
 	    }
 	}
 	
-    //if ($show_results) {
-    if (0) {
+    if ($show_results) {
+    //if (0) {
 		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
 		
 		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {
@@ -540,8 +540,7 @@ foreach ($questionList as $questionId) {
 				echo '<div id="question_feedback">'.$comnt.'</div>';
 			}
 			echo '</td><td>';
-		}
-		
+		}		
 		if ($is_allowedToEdit) {
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				$marksname = "marksName".$questionId;
@@ -558,8 +557,8 @@ foreach ($questionList as $questionId) {
 				echo '</select>';
 				echo '</form><br/ ></div>';
 				if ($questionScore==-1 ) {
-					$questionScore=0;
-				  	echo '<br />'.get_lang('notCorrectedYet');
+					$questionScore = 0;
+				  	echo Display::return_message(get_lang('notCorrectedYet'));
 				}
 			} else {
 				$arrmarks[] = $questionId;

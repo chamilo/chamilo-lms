@@ -1327,11 +1327,11 @@ function get_all_exercises_from_lp($lp_id, $course_id) {
  * @param int $question_id
  * @return str the comment
  */
-function get_comments($id,$question_id) {
+function get_comments($exe_id, $question_id) {
     $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $sql = "SELECT teacher_comment FROM ".$table_track_attempt." where exe_id='".Database::escape_string($id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
+    $sql = "SELECT teacher_comment FROM ".$table_track_attempt." where exe_id='".Database::escape_string($exe_id)."' and question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
     $sqlres = Database::query($sql);
-    $comm = Database::result($sqlres,0,"teacher_comment");
+    $comm = Database::result($sqlres, 0, "teacher_comment");
     return $comm;
 }
 

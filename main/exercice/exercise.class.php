@@ -2520,7 +2520,7 @@ class Exercise {
 							}
 						} elseif($answerType == FREE_ANSWER) {						
 							if($origin != 'learnpath') {
-								ExerciseShowFunctions::display_free_answer($choice,0,0);
+								ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId);
 							}
 						} elseif($answerType == ORAL_EXPRESSION) {
 							// to store the details of open questions in an array to be used in mail							

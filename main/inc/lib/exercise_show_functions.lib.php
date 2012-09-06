@@ -55,34 +55,23 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($answer,$id,$questionId) {
-        global $feedback_type;
-        if (empty($id)) {
-        	if (!empty($answer)) {
-        	    echo '<tr>';
-    	        echo Display::tag('td', nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
-	            echo '</tr>';
-        	}
-            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<tr>';
-                echo Display::tag('td', get_lang('notCorrectedYet'), array('width'=>'45%'));
+	static function display_free_answer($answer, $exe_id, $questionId) {
+        global $feedback_type;        
+        
+        $comments = get_comments($exe_id, $questionId);
+        
+        if (!empty($answer)) {
+            echo '<tr><td>';
+            echo nl2br(Security::remove_XSS($answer, COURSEMANAGERLOWSECURITY));
+            echo '</td></tr>';
+        }
+        
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if (empty($comments)) {
+                echo '<tr>';                
+                echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
                 echo '</tr>';
-            } else {
-                echo '<tr><td>&nbsp;</td></tr>';
             }
-        } else {
-            echo '<tr>';
-		    if (!empty($answer)) {
-		    	echo '<td>';
-		        echo nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY));
-		        echo '</td>';
-		    }
-			if (!api_is_allowed_to_edit(null,true) && $feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                echo '<td>';
-	            $comm = get_comments($id,$questionId);
-	            echo '</td>';
-			}
-			echo '</tr>';
         }
 	}
 

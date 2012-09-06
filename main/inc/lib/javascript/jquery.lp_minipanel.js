@@ -8,7 +8,14 @@
  **/
 
 // Copy little progress bar in <tr></tr>
-function minipb() {    
+function toogle_minipanel() {   
+    
+    // Construct mini panel
+    var panel = $('#lp_navigation_elem div:first').clone();
+
+    $(panel).attr('id', 'control');
+    $('#learning_path_main').append(panel);
+                
     $('#learning_path_main #control tr').after('<tr></tr>');
 	$('#learning_path_main #control tr:eq(1)').append($('#progress_bar').html());
 	$('#learning_path_main #control tr:eq(1) #progress_img_limit_left').attr('height','5');
@@ -18,6 +25,19 @@ function minipb() {
 	$('#learning_path_main #control tr:eq(1) #progress_bar_img_limit_right').attr('height','5');
 	$('#learning_path_main #control tr:eq(1) #progress_text').remove();
 	$('#learning_path_main #control tr:eq(1) div').css('width','');
+    
+    $('#learning_path_main #control .buttons').attr('text-align','center');
+    $('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
+
+    $('#learning_path_main #control .buttons img').click(function(){
+        $('#learning_path_main #control tr:eq(1)').remove();
+        toogle_minipanel();
+    });
+    // Hiding navigation left zone
+    $('#learning_path_left_zone').hide(50);                
+    $('#learning_path_right_zone').css('margin-left','10px');
+    $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+                
 }
 
 var left_width = 292;
@@ -47,29 +67,10 @@ $(document).ready(function() {
     var original = $('#content_id').height();
 
     // Adding funcionality
-    $( "#hide_bar" ).click(function() {
-                
+    $( "#hide_bar" ).click(function() {                
         $('#hide_bar table').toggle(function() {
-
             if ($('#hide_bar').position().left == left_width) {
-
-                // Construct mini panel
-                var panel = $('#lp_navigation_elem div:first').clone();
-                
-                $(panel).attr('id', 'control');
-                $('#learning_path_main').append(panel);
-                minipb();      
-                $('#learning_path_main #control .buttons').attr('text-align','center');
-                $('#content_id').css({ height: $('#content_id').height() - ($('#control').height() + 10) });
-        
-                $('#learning_path_main #control .buttons img').click(function(){
-                    $('#learning_path_main #control tr:eq(1)').remove();
-                    minipb();
-                });
-                // Hiding navigation left zone
-                $('#learning_path_left_zone').hide(50);                
-                $('#learning_path_right_zone').css('margin-left','10px');
-                $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
+                toogle_minipanel();             
             }
         },
         function(){

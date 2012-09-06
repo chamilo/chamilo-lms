@@ -79,16 +79,22 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready(function (){
+$htmlHeadXtra[] = '<script>
+$(document).ready(function(){
 	$("div#log_content_cleaner").bind("click", function() {
     	$("div#log_content").empty();
 	});
 });
-
 var chamilo_xajax_handler = window.oxajax;
-
 </script>';
+
+if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
+    $htmlHeadXtra[] = '<script>        
+        $(document).ready(function(){
+            toogle_minipanel();
+        });        
+        </script>';
+}
 
 
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
@@ -283,10 +289,11 @@ $_SESSION['loaded_lp_view'] = true;
 $display_none = '';
 $margin_left = '305px';
 
-if ($_SESSION['oLP']->mode == 'embedframe' ||$_SESSION['oLP']->get_hide_toc_frame()==1 ) {
+/*
+if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
     $display_none = ';display:none;';
-    $margin_left = '12px';
-}
+    /$margin_left = '12px';
+}*/
 
 //Media player code
 

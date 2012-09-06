@@ -168,18 +168,17 @@ class Export {
         }
         return $string;
     }
-
-    public static function export_table_pdf($data, $file_name = 'export', $header = null, $description = null, $params = array(), $header_attributes = array()) {
+    
+    /** 
+     * 
+     * @param array table in array format to be read with the HTML_table class 
+     */
+    public static function export_table_pdf($data, $params = array()) {
         $headers = $data[0];
-        unset($data[0]);
-        $html = '';
-        
-        $headers_in_pdf = '<img width="150px" src="'.api_get_path(WEB_CSS_PATH).api_get_setting('stylesheets').'/images/header-logo.png">';
-        
-        $html = '<br/><table width="100%" cellspacing="1" cellpadding="5" border="0">                         
-                 <tr><td width="100%" style="text-align: center;" class="title" colspan="4"><h1>'.$header.'</h1></td></tr></table><br />';
-        $html .= $description.'<br />';
-        
+        unset($data[0]); 
+       
+        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();
+                
         $table = new HTML_Table(array('class' => 'data_table', 'repeat_header' => '1'));
         $row = 0;
         $column = 0;
@@ -194,8 +193,7 @@ class Export {
             }
             $column++;
         }
-        $row++;
- 
+        $row++; 
         foreach ($data as &$printable_data_row) {
             $column = 0;
             foreach ($printable_data_row as &$printable_data_cell) {
@@ -205,17 +203,8 @@ class Export {
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
             $row++;
-        }
-       
-        $html .= $table->toHtml();        
-        $html  = api_utf8_encode($html);
-                
-        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
-        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-        
+        }         
         $pdf = new PDF('A4', 'P', $params); 
-        $pdf->set_custom_header($headers_in_pdf);       
-        $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
-        exit;
+        $pdf->table_to_pdf($table->toHtml());        
     }
 }

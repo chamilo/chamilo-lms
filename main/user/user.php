@@ -247,8 +247,7 @@ if (api_is_allowed_to_edit(null, true)) {
 					case 'xls' :
 						Export::export_table_xls($a_users);
 						exit;
-					case 'pdf' :
-                        $header = get_lang('StudentList');
+					case 'pdf' :                        
                         $description = '<table class="data_table_no_border">';  
                         if (api_get_session_id()) {                     
                             $description .= '<tr><td>'.get_lang('Session').': </td><td class="highlight">'.api_get_session_name(api_get_session_id()).'</td>';
@@ -285,18 +284,26 @@ if (api_is_allowed_to_edit(null, true)) {
                                    $description .= '<tr><td>'.get_lang('Coachs').': </td><td class="highlight">'.$coaches.'</td>';                           
                                }
                            }
-                        }          
+                        }
 
                         $description .= '<tr><td>'.get_lang('Date').': </td><td class="highlight">'.api_convert_and_format_date(time(), DATE_TIME_FORMAT_LONG).'</td>';
                         $description .= '</table>';   
-                        $params = array();                       
+                                               
                         $header_attributes = array(
                             array('style' => 'width:10px'),
                             array('style' => 'width:30px'),
                             array('style' => 'width:50px'),
                             array('style' => 'width:500px'),
                         );
-                        Export::export_table_pdf($a_users, get_lang('UserList'), $header, $description, $params, $header_attributes);
+                        
+                        $params = array(
+                            'add_signatures' => false,
+                            'filename' => get_lang('UserList'),
+                            'pdf_title' => get_lang('StudentList'),
+                            'pdf_description' => $description,
+                            'header_attributes' => $header_attributes                            
+                        );
+                        Export::export_table_pdf($a_users, $params);
                         exit;
 				}
 		}

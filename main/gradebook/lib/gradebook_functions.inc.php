@@ -706,14 +706,9 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     //Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
 
-    // Reading report's CSS
-    $css_file = api_get_path(SYS_CODE_PATH).'gradebook/print.css';
-    $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-
     // HTML report creation first    
     $course_code = trim($cat[0]->get_course_code());
-    $organization = api_get_setting('Institution');
-
+    
     $displayscore = ScoreDisplay :: instance();
     $customdisplays = $displayscore->get_custom_score_display_settings();
     
@@ -727,20 +722,6 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
             $total[$user_result[count($user_result)-1][1]]++;
         }
     }
-
-    $html = '';
-
-    $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';    
-    if (file_exists($img)) {
-        $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
-        $organization = "<img src='$img'>";			
-    } else {
-        if (!empty($organization)) {			  
-            $organization = '<h2 align="left">'.$organization.'</h2>';
-        }
-    }
-    
-    Display::$global_template->assign('organization', $organization);
     
     $parent_id = $cat[0]->get_parent_id();    
     if (isset($cat[0]) && isset($parent_id)) {
@@ -759,31 +740,17 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     
     if ($use_grade_model) {   
         if ($parent_id == 0) {         
-            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed').'</h2>';
+            $title = api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed');
         } else {
-            $title = '<h2 align="center"> '.api_strtoupper(get_lang('Average')).'<br />'.$cat[0]->get_description().' - ('.$cat[0]->get_name().')</h2>';
+            $title = api_strtoupper(get_lang('Average')).'<br />'.$cat[0]->get_description().' - ('.$cat[0]->get_name().')';
         }
     } else {
         if ($parent_id == 0) {
-            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed').'</h2>';
+            $title = api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed');
         } else {
-            $title = '<h2 align="center">'.api_strtoupper(get_lang('Average')).'</h2>';
+            $title = api_strtoupper(get_lang('Average'));
         }
     }
-    
-    Display::$global_template->assign('pdf_title', $title);
-    //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
-    //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
-    $user_info = api_get_user_info();    
-    $teacher_list = $user_info['complete_name'];
-    $session_name = api_get_session_name(api_get_session_id());    
-    if (!empty($session_name)) {        
-        Display::$global_template->assign('pdf_session', $session_name);
-    }	
-    
-    Display::$global_template->assign('pdf_course', $course_code);
-    Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
-    Display::$global_template->assign('pdf_teachers', $teacher_list);
  
     $columns  = count($printable_data[0]);
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
@@ -829,38 +796,23 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
             $row++;
-        }   
-        //exit;
+        }        
     } else {
         $column = 0;
         $table->setCellContents($row, $column, get_lang('NoResults'));
         $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
-    }    
-    
-    Display::$global_template->assign('pdf_table', $table->toHtml());
-
-    unset($printable_data);
-    unset($table);
-
-    // Conversion of the created HTML report to a PDF report    
-    $gradebook_tpl = Display::$global_template->get_template('gradebook/flatview.pdf.tpl');     
-    $gradebook_flatview = Display::$global_template->fetch($gradebook_tpl);
-    
-    //Header
-    $html = $gradebook_flatview;  
-    
-    $html = api_utf8_encode($html);
-    $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
-    $pdf = new PDF($page_format, $params['orientation']);
-
-    // Sending the created PDF report to the client    
-    $file_name = null;
-    if (!empty($course_code)) {
-        $file_name .= $course_code;
     }
-    $file_name = api_get_utc_datetime();
-    $file_name = get_lang('FlatView').'_'.$file_name;
-    $pdf->content_to_pdf($html, $css, $file_name, api_get_course_id());
+
+    $params = array(        
+        'filename' => get_lang('FlatView').'_'.api_get_utc_datetime(),
+        'pdf_title' => $title,
+        'course_code' => $course_code,
+        'add_signatures' => true
+    );
+    
+    $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';    
+    $pdf = new PDF($page_format, $params['orientation'], $params);    
+    $pdf->table_to_pdf($table->toHtml());
     exit;	
 }
 

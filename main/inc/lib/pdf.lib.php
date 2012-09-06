@@ -14,9 +14,11 @@ require_once _MPDF_PATH.'mpdf.php';
  */
 class PDF {
     
-    var $pdf;    
-    var $custom_header = '';
-    var $custom_footer = '';    
+    public $pdf;    
+    public $custom_header = '';
+    public $custom_footer = '';
+    public $params = array();
+    
     
     /**
      * Creates the mPDF object
@@ -36,10 +38,62 @@ class PDF {
         $params['left']     = isset($params['left'])    ? $params['left']   : 15;
         $params['right']    = isset($params['right'])   ? $params['right']  : 15;
         $params['top']      = isset($params['top'])     ? $params['top']    : 20;
-        $params['bottom']   = isset($params['bottom'])  ? $params['bottom'] : 15;        
+        $params['bottom']   = isset($params['bottom'])  ? $params['bottom'] : 15;
+        
+        $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_utc_datetime();
+        $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : get_lang('Untitled');
+        $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
+        $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;        
         
         $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
     } 
+    
+    function table_to_pdf($table)  {
+        
+        Display :: display_no_header();
+        
+        //Assignments
+        Display::$global_template->assign('pdf_table', $table);
+        
+        $organization = api_get_setting('Institution');
+        $img = api_get_path(SYS_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';    
+        if (file_exists($img)) {
+            $img = api_get_path(WEB_CODE_PATH).'css/'.api_get_visual_theme().'/images/header-logo.png';
+            $organization = "<img src='$img'>";			
+        } else {
+            if (!empty($organization)) {			  
+                $organization = '<h2 align="left">'.$organization.'</h2>';
+            }
+        }
+
+        Display::$global_template->assign('organization', $organization);
+
+        //Showing only the current teacher/admin instead the all teacherlist name see BT#4080
+        //$teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_code);
+
+        $user_info = api_get_user_info();    
+                
+        $teacher_list = $user_info['complete_name'];
+        $session_name = api_get_session_name(api_get_session_id());
+        if (!empty($session_name)) {        
+            Display::$global_template->assign('pdf_session', $session_name);
+        }
+
+        Display::$global_template->assign('pdf_course', $this->params['course_code']);
+        Display::$global_template->assign('pdf_date', api_format_date(api_get_utc_datetime(), DATE_TIME_FORMAT_LONG));
+        Display::$global_template->assign('pdf_teachers', $teacher_list);        
+        Display::$global_template->assign('pdf_title', $this->params['pdf_title']);
+        Display::$global_template->assign('add_signatures', $this->params['add_signatures']);
+        
+        //Getting template
+        $tpl = Display::$global_template->get_template('export/table_pdf.tpl');     
+        $html = Display::$global_template->fetch($tpl);    
+        $html = api_utf8_encode($html);
+        
+        $css_file = api_get_path(TO_SYS, WEB_CSS_PATH).'/print.css';
+        $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
+        self::content_to_pdf($html, $css, $this->params['filename'], $this->params['course_code']);        
+    }
     
     /**
      * Converts HTML files to PDF
@@ -68,7 +122,7 @@ class PDF {
         $course_data = array();
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
-        }        
+        }
         
         //clean styles and javascript document
         $clean_search = array (
@@ -217,10 +271,9 @@ class PDF {
             '@<style[^>]*?>.*?</style>@siU'
             );
             
-        //Formatting the pdf
-          
+        //Formatting the pdf          
        	$course_data = api_get_course_info($course_code);
-
+        
         self::format_pdf($course_data);
         
         $document_html = preg_replace($clean_search, '', $document_html);   

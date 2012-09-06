@@ -35,7 +35,7 @@ define('ADD_THEMATIC_PLAN', 6);
 
 // get actions
 $actions = array('thematic_details', 'thematic_list', 'thematic_add', 'thematic_edit', 'thematic_copy', 'thematic_delete', 'moveup', 'movedown',
-                'thematic_import_select', 'thematic_import', 'thematic_export',    
+                'thematic_import_select', 'thematic_import', 'thematic_export', 'thematic_export_pdf',
 				 'thematic_plan_list', 'thematic_plan_add', 'thematic_plan_edit', 'thematic_plan_delete',
 				 'thematic_advance_list', 'thematic_advance_add', 'thematic_advance_edit', 'thematic_advance_delete');
 
@@ -311,6 +311,7 @@ switch ($action) {
         }
 	case 'thematic_list'			:
     case 'thematic_export'          :
+    case 'thematic_export_pdf'      :
     case 'thematic_details'         :	
         $thematic_controller->thematic($action);
 		break;	

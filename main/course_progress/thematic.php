@@ -29,6 +29,7 @@ if (api_is_allowed_to_edit(null, true)) {
             echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';
             echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.Display::return_icon('import_csv.png',get_lang('ImportThematic'),'',ICON_SIZE_MEDIUM).'</a>';
             echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.Display::return_icon('export_csv.png',get_lang('ExportThematic'),'', ICON_SIZE_MEDIUM).'</a>';
+            echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.Display::return_icon('pdf.png',get_lang('ExportToPDF'),'', ICON_SIZE_MEDIUM).'</a>';
             break;
 		default :
             echo '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.Display::return_icon('new_course_progress.png',get_lang('NewThematicSection'),'',ICON_SIZE_MEDIUM).'</a>';

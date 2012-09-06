@@ -20,7 +20,6 @@
 
 /* FUNCTIONS */
 
-
 class Link extends Model {
     var $table;
     var $is_course_model = true;
@@ -31,12 +30,12 @@ class Link extends Model {
         $this->table =  Database::get_course_table(TABLE_LINK);
 	}
 
-    public function save($params) {
+    public function save($params, $show_query = null) {
         $course_info = api_get_course_info();
         $params['session_id'] = api_get_session_id();
         $params['category_id'] = isset($params['category_id']) ? $params['category_id'] : 0;
 
-	    $id = parent::save($params);
+	    $id = parent::save($params, $show_query);
 	    if (!empty($id)) {
             api_item_property_update($course_info, TOOL_LINK, $id, 'LinkAdded', api_get_user_id());
    		}

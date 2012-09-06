@@ -70,12 +70,9 @@ if (!empty($attendance_id)) {
 	$attendance_data = $attendance->get_attendance_by_id($attendance_id);
 }
 
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script>
 		
-$(function() {
-	
-	
-											
+$(function() {											
 	$("table th img").click(function() {					
 		var col_id = this.id;
 		var col_split = col_id.split("_");							
@@ -117,8 +114,6 @@ $(function() {
 			//	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 							
 			});
-			
-			
 				
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
 			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
@@ -234,13 +229,17 @@ switch ($action) {
 		break;
 	case 'attendance_delete'	:
     	if (api_is_allowed_to_edit(null, true)) {
-        $attendance_controller->attendance_delete($attendance_id);
-        } else { api_not_allowed();}
+            $attendance_controller->attendance_delete($attendance_id);
+        } else { 
+            api_not_allowed();            
+        }
 		 break;									
 	case 'attendance_restore':
     	if (api_is_allowed_to_edit(null, true)) {
-        $attendance_controller->attendance_restore($attendance_id);
-        } else { api_not_allowed();}
+            $attendance_controller->attendance_restore($attendance_id);
+        } else { 
+            api_not_allowed();            
+        }
 		 break;									
 	case 'attendance_sheet_list':	
         $attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
@@ -250,8 +249,10 @@ switch ($action) {
         break;
 	case 'attendance_sheet_add' 	:	
         if (api_is_allowed_to_edit(null, true)) {
-        $attendance_controller->attendance_sheet($action, $attendance_id);
-        } else { api_not_allowed();}
+            $attendance_controller->attendance_sheet($action, $attendance_id);
+        } else { 
+            api_not_allowed();            
+        }
 		break;
     case 'lock_attendance'          :
     case 'unlock_attendance'        :

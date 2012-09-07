@@ -1869,7 +1869,7 @@ class SessionManager {
         $id = intval($id);
         $params = self::fetch($id);
         
-        $params['name'] = $params['name'].' '.get_lang('Copy');
+        $params['name'] = $params['name'].' '.get_lang('CopyLabelSuffix');
         $sid = self::add($params);
         if (!is_numeric($sid) || empty($sid)) {
         	return false;
@@ -1899,7 +1899,7 @@ class SessionManager {
                     $params['skip_lp_dates'] = true;                    
                     
                     foreach ($short_courses as $course_data) {
-                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('Copy'), $course_data['course_code'], $id, $sid, $params);
+                        $course_info = CourseManager::copy_course_simple($course_data['title'].' '.get_lang('CopyLabelSuffix'), $course_data['course_code'], $id, $sid, $params);
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {    

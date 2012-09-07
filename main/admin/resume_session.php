@@ -276,12 +276,12 @@ if ($session['nbr_users'] == 0) {
 
                 if ($user['moved_status'] != SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
                     $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
-                    $origin = Display::url($session['name'], $url);                
+                    //$origin = Display::url($session['name'], $url);                
 
                     if ($session_info) {
                         $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
                         $destination = Display::url($session_info['name'], $url);
-                        $destination = ' / '.$destination;
+                        //$destination = $destination;
                     }            
                 }
                 $row_style = 'style = " background-color: #ddd;"';            
@@ -301,8 +301,8 @@ if ($session['nbr_users'] == 0) {
                     $origin = Display::url($session_info['name'], $url);
 
                     $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
-                    $destination = Display::url($session['name'], $url);
-                    $destination = ' / '.$destination;
+                    //$destination = Display::url($session['name'], $url);
+                    //$destination = ' / '.$destination;
                 }
 
                 $delete_link = '<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';

@@ -102,13 +102,46 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
         
         if (INSTALL_TYPE_UPDATE == 'update') {
+            $session_table = "$dbNameForm.session";
             
-            //Migrate classes to the new classes (usergroups)
-            
-        }
-        
+            //Fixes new changes in sessions
+            $sql = "SELECT id, date_start, date_end, nb_days_access_before_beginning, nb_days_access_after_end  FROM $session_table ";
+            $result = iDatabase::query($sql);
+            while ($session = Database::fetch_array($result)) {
+                $session_id = $session['id'];
+                
+                //Fixing date_start
+                if (isset($session['date_start']) && !empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
+                    $datetime =  $session['date_start'].' 00:00:00';
+                    $update_sql = "UPDATE $session_table SET display_start_date = '$datetime' , access_start_date = '$datetime' WHERE id = $session_id";
+                    iDatabase::query($update_sql);
+                    
+                    //Fixing nb_days_access_before_beginning
+                    if (!empty($session['nb_days_access_before_beginning'])) {
+                        $datetime = api_strtotime($datetime, 'UTC') - (86400*$session['nb_days_access_before_beginning']);
+                        $datetime = api_get_utc_datetime($datetime);
+                        $update_sql = "UPDATE $session_table SET coach_access_start_date = '$datetime' WHERE id = $session_id";
+                        iDatabase::query($update_sql);
+                    }
+                }
+                
+                //Fixing end_date
+                if (isset($session['date_end']) && !empty($session['date_end']) && $session['date_end'] != '0000-00-00') {                    
+                    $datetime =  $session['date_end'].' 00:00:00';
+                    $update_sql = "UPDATE $session_table SET display_end_date = '$datetime' , access_end_date = '$datetime' WHERE id = $session_id";
+                    iDatabase::query($update_sql);                    
+                    
+                    //Fixing nb_days_access_before_beginning
+                    if (!empty($session['nb_days_access_after_end'])) {
+                        $datetime = api_strtotime($datetime, 'UTC') + (86400*$session['nb_days_access_after_end']);                        
+                        $datetime = api_get_utc_datetime($datetime);
+                        $update_sql = "UPDATE $session_table SET coach_access_end_date = '$datetime' WHERE id = $session_id";
+                        iDatabase::query($update_sql);
+                    }
+                }                                
+            }
+        }        
     }    
-    
 } else {
     echo 'You are not allowed here !' . __FILE__;
 }

@@ -284,12 +284,9 @@ class SessionManager {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
 		$tbl_user               = Database::get_main_table(TABLE_MAIN_USER);      
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-        
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        
-
-        $tbl_session_field_values            = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);        
+        $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);        
+        $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         
 		$where = 'WHERE 1 = 1 ';
 		$user_id = api_get_user_id();
@@ -304,7 +301,20 @@ class SessionManager {
 			$coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
 		}        
 
-		$today = api_get_utc_datetime();            
+		$today = api_get_utc_datetime();   
+        
+        $inject_extra_fields = null;
+                
+        $extra_fields = array();
+        if (isset($options['extra'])) {
+            $extra_fields = $options['extra'];
+            if (!empty($extra_fields)) {
+                foreach ($extra_fields as $extra) {
+                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fv.field_value, NULL ) as {$extra['field']} , ";
+                }                
+            }
+        }
+        //var_dump($inject_extra_fields);
 
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
@@ -325,9 +335,7 @@ class SessionManager {
                 access_end_date,
                 s.visibility,
                 u.user_id,
-                
-                fv.field_id,
-                fv.field_value,                 
+                $inject_extra_fields
                 c.title as course_title,
                 s.id";
 
@@ -359,7 +367,7 @@ class SessionManager {
 		}
         
         //In order to avoid doubles
-        $query .= ' GROUP BY id ';
+        //$query .= ' GROUP BY id ';
         
         if (!empty($options['order']) && !empty($options['limit'])) {
             $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
@@ -369,9 +377,11 @@ class SessionManager {
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
+        
 		if (Database::num_rows($result)) {
-			$sessions   = Database::store_result($result);
+			$sessions   = Database::store_result($result, 'ASSOC');
 			foreach ($sessions as $session) {
+                $session_id = $session['id'];
 				$session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
 
 				$session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
@@ -396,11 +406,35 @@ class SessionManager {
 						$session['visibility'] =  api_ucfirst(get_lang('Invisible'));
 					break;
                 }
-                $formatted_sessions[] = $session;
+                
+                //Magic filter
+                if (isset($formatted_sessions[$session_id])) {
+                    //echo "11";var_dump($session); var_dump($formatted_sessions[$session_id]);
+                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);
+                    //var_dump($formatted_sessions[$session_id]);
+                } else {
+                    $formatted_sessions[$session_id] = $session;
+                }
 			}
 		}		
+        //var_dump($formatted_sessions);
 		return $formatted_sessions;
 	}    
+    
+    static function compare_arrays_to_merge($array1, $array2) {
+        if (empty($array2)) {
+            return $array1;
+        }
+        foreach ($array1 as $key => $item) {            
+            if (!isset($array1[$key])) {                
+                //My string is empty try the other one
+                if (isset($array2[$key]) && !empty($array2[$key])) {
+                    $array1[$key] = $array2[$key];
+                }
+            }
+        }
+        return $array1;        
+    }
     
     static function convert_dates_to_local($params) {
         $params['display_start_date'] = api_get_local_time($params['display_start_date'], null, null, true);

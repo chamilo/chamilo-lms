@@ -75,11 +75,10 @@ if ($_REQUEST['_search'] == 'true') {
     //var_dump($filters);
     
     $session_field = new SessionField();
+    $extra_fields = array();
+    
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';  
-        
-        $rules = array();
-        $extra_rules = array();
+        $where_condition .= ' AND ( ';          
         $counter = 0;
         
         foreach ($filters->rules as $rule) {
@@ -87,20 +86,25 @@ if ($_REQUEST['_search'] == 'true') {
                 $field = $rule->field;
                 $where_condition .= get_where_clause($field, $rule->op, $rule->data);
             } else {
-                $original_field = str_replace('extra_', '', $rule->field);                
+                $original_field = str_replace('extra_', '', $rule->field);
                 $session_field_option = $session_field->get_session_field_info_by_field_variable($original_field);                
+                
+                $extra_fields[] = array(
+                    'field' => $rule->field, 
+                    'id'    => $session_field_option['id']
+                );                
                 //var_dump($session_field_option);
                 $field = 'field_value';
-                $where_condition .= ' ('.get_where_clause('field_id', 'eq', $session_field_option['id']);
-                $where_condition .= ' AND ';
-                $where_condition .= get_where_clause($field, $rule->op, $rule->data).') ';
+                //$where_condition .= ' ('.get_where_clause('field_id', 'eq', $session_field_option['id']);
+                $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
+                $where_condition .= ' ) ';
+                //$where_condition .= get_where_clause($rule->field, $rule->op, $rule->data).') ';
             }
             
             if ($counter < count($filters->rules) -1) {
                 $where_condition .= $filters->groupOp;
             }
-            $counter++;            
-            
+            $counter++;
         }        
         $where_condition .= ' ) ';        
     }
@@ -250,8 +254,15 @@ switch ($action) {
 		break;
     case 'get_sessions':
         //'nbr_courses', 'nbr_users', 
-        $columns = array('name', 'display_start_date','display_end_date', 'category_name', 'coach_name',  'session_active', 'course_title', 'visibility');            
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
+        $columns = array('name', 'display_start_date', 'display_end_date', 'category_name', 'coach_name',  'session_active', 'visibility', 'course_title');
+        
+        if (!empty($extra_fields)) {
+            foreach ($extra_fields as $field) {
+                $columns[] = $field['field'];
+            }
+        }
+        
+        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
         $columns = array('headline', 'actions');   

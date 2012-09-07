@@ -420,7 +420,9 @@ class CourseBuilder {
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
 			if (strlen($obj->sound) > 0) {
-				$doc = Database::fetch_object(Database::query("SELECT id FROM ".$table_doc." WHERE c_id = $course_id AND path = '/audio/".$obj->sound."'"));
+                $sql = "SELECT id FROM ".$table_doc." WHERE c_id = $course_id AND path = '/audio/".$obj->sound."'";
+                $res = Database::query($sql);
+				$doc = Database::fetch_object($res);
 				$obj->sound = $doc->id;
 			}
 			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->max_attempt, 
@@ -443,9 +445,9 @@ class CourseBuilder {
 	/**
 	 * Build the Quiz-Questions
 	 */
-	function build_quiz_questions($course_code = '') {
+	function build_quiz_questions($course_code = null) {
 		$course_info = api_get_course_info($course_code);
-		$course_id 		= $course_info['real_id'];
+		$course_id   = $course_info['real_id'];
 				
 		$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -468,14 +470,14 @@ class CourseBuilder {
 
 		// Building a fictional test for collecting orphan questions.
 		$build_orphan_questions = !empty($_POST['recycle_option']); // When a course is emptied this option should be activated (true).
-		$sql = "SELECT * FROM $table_que as questions LEFT JOIN $table_rel as quizz_questions 
-				ON questions.id=quizz_questions.question_id LEFT JOIN $table_qui as exercices 
-				ON exercice_id=exercices.id 
-				WHERE	questions.c_id          = $course_id  AND 
-						quizz_questions.c_id    = $course_id  AND
-						exercices.c_id          = $course_id  AND
-						quizz_questions.exercice_id IS NULL OR 
-						exercices.active = -1"; // active = -1 means "deleted" test.
+        
+		$sql = "SELECT * FROM $table_que as questions 
+                LEFT JOIN $table_rel as quizz_questions 
+                    ON (questions.id = quizz_questions.question_id AND questions.c_id = $course_id AND quizz_questions.c_id = $course_id)
+                LEFT JOIN $table_qui as exercices 
+                    ON (exercice_id = exercices.id AND exercices.c_id = $course_id AND questions.c_id = $course_id)
+				WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1"; // active = -1 means "deleted" test.
+        
 		$db_result = Database::query($sql);
 		if (Database::num_rows($db_result) > 0) {
 			$build_orphan_questions = true;
@@ -483,9 +485,11 @@ class CourseBuilder {
 				$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
 				$sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;
 				$db_result2 = Database::query($sql);
-				while ($obj2 = Database::fetch_object($db_result2)) {
-					$question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
-				}
+                if (Database::num_rows($db_result2)) {
+                    while ($obj2 = Database::fetch_object($db_result2)) {
+                        $question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
+                    }
+                }
 				$this->course->add_resource($question);
 			}
 		}

@@ -262,7 +262,7 @@ if ($session['nbr_users'] == 0) {
             $information = null;
             $origin = null;
             $destination = null;
-            $row_class = null;
+            $row_style = null;
             $moved_date = '-';        
 
             $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
@@ -284,7 +284,7 @@ if ($session['nbr_users'] == 0) {
                         $destination = ' / '.$destination;
                     }            
                 }
-                $row_class = 'row_odd';            
+                $row_style = 'style = " background-color: #ddd;"';            
                 $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
                 $delete_link = Display::return_icon('delete_na.png', get_lang('Delete')).'&nbsp;';
             } else {          
@@ -319,7 +319,7 @@ if ($session['nbr_users'] == 0) {
                 }                
             }
 
-            echo '<tr class="'.$row_class.'">
+            echo '<tr '.$row_style.'>
                     <td width="30%">
                         '.$user_link.'
                     </td>

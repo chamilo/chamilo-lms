@@ -374,8 +374,12 @@ class SessionManager {
         //In order to avoid doubles
         //$query .= ' GROUP BY id ';
         
-        if (!empty($options['order']) && !empty($options['limit'])) {
-            $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
+        if (!empty($options['order'])) { 
+            $query .= " ORDER BY ".$options['order'];
+        }
+        
+        if (!empty($options['limit'])) {            
+            $query .= " LIMIT ".$options['limit'];
         }
         
         //var_dump($query);
@@ -1756,7 +1760,8 @@ class SessionManager {
                     ON (session.id = session_rel_url.session_id)
                     WHERE id_coach = '.$user_id.' AND access_url_id = '.$access_url_id;
             }
-        }        
+        }
+        $sql .= ' ORDER by name';
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');        
     }    

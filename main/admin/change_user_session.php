@@ -15,7 +15,7 @@ if (empty($user_id) && empty($session_id)) {
 SessionManager::protect_session_edit($session_id);
 
 if (api_is_platform_admin()) {
-    $sessions = SessionManager::get_sessions_admin();
+    $sessions = SessionManager::get_sessions_admin(array('order' => 'name'));
 } else {
     $sessions = SessionManager::get_sessions_by_general_coach(api_get_session_id());
 }

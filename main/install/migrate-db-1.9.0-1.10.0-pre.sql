@@ -50,7 +50,7 @@ ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 -- ALTER TABLE session DROP COLUMN date_start;
 -- ALTER TABLE session DROP COLUMN date_end;
 
-CREATE TABLE IF NOT EXISTS session_field_options (id	int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
+CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
 -- Normal tables
 

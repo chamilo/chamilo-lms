@@ -266,7 +266,7 @@ if (!$user_data['platform_admin']) {
 
 
 // EXTRA FIELDS
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
+$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id, 'user');
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

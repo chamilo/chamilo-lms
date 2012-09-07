@@ -3528,17 +3528,18 @@ class UserManager {
         return false;
     }
     
-    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false, $user_id = null, $extra = null) {        
+    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false, $user_id = null, $type = 'user', $extra = null) {        
         $user_id = intval($user_id);
         
         // User extra fields
-        if (empty($extra)) {
+        if ($type == 'user') {
             $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true, null, true);            
         }       
         
         $jquery_ready_content = null;
         
-        foreach ($extra as $field_details) {             
+        if (!empty($extra))
+        foreach ($extra as $field_details) {       
             if (!$admin_permissions) {
                 if ($field_details['field_visible'] == 0) {
                     continue;

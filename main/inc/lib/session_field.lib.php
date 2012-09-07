@@ -21,7 +21,7 @@ class SessionField extends Model {
             }
         }        
         $extra_fields = self::get_all();        
-        UserManager::set_extra_fields_in_form($form, null, 'session_field', false, false, $extra_fields);        
+        UserManager::set_extra_fields_in_form($form, null, 'session_field', false, false, 'session', $extra_fields);        
     }
      
     public function get_count() {

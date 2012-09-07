@@ -308,7 +308,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                                     $attributes['selected'] = 1;
                                 }
                             }                    
-                    		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes));
+                    		$s .= Display::tag('td', Display::input('radio', 'choice['.$questionId.']['.$numAnswer.']', $id, $attributes), array('style'=>'text-align:center'));
                     	}
                     }
                     

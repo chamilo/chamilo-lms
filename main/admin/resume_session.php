@@ -269,7 +269,10 @@ if ($session['nbr_users'] == 0) {
 
             //User in this session is subscribed but was moved to another session
             if (isset($user['moved_to']) && !empty($user['moved_to']) || $user['moved_status'] == SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
-                $information = $reasons[$user['moved_status']];
+                
+                $variation = SessionManager::get_session_change_user_reasons_variations_by_id($user['moved_status'], 'to');
+                //$information = $reasons[$user['moved_status']].$variation;
+                $information = $variation;
 
                 $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';                        
                 $session_info = SessionManager::fetch($user['moved_to']);
@@ -294,7 +297,11 @@ if ($session['nbr_users'] == 0) {
                    $moved_date = api_get_local_time($session_origin_info['moved_at']);
                 }            
                 $session_info = SessionManager::fetch($session_origin_info['id_session']);
-                $information = $reasons[$session_origin_info['moved_status']];
+                
+                $variation = SessionManager::get_session_change_user_reasons_variations_by_id($session_origin_info['moved_status'], 'from');
+                
+                //$information = $reasons[$session_origin_info['moved_status']].$variation;
+                $information = $variation;
 
                 if ($session_info) {
                     $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
@@ -324,7 +331,6 @@ if ($session['nbr_users'] == 0) {
                         '.$user_link.'
                     </td>
                     <td>'.$information.'</td>
-
                     <td>'.$origin.' '.$destination.'</td>
                     <td>'.$moved_date.'</td>
 

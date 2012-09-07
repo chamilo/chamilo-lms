@@ -2062,6 +2062,42 @@ class SessionManager {
         );
     }
     
+    static function get_session_change_user_reasons_variations() {
+        return array (
+            self::SESSION_CHANGE_USER_REASON_SCHEDULE => array(
+                'default' => get_lang('ScheduleChanged'),
+                'from' => get_lang('ScheduleChangedFrom'),
+                'to' => get_lang('ScheduleChangedTo'),
+            ),
+            self::SESSION_CHANGE_USER_REASON_CLASSROOM => array(
+                'default' => get_lang('ClassRoomChanged'),
+                'from' => get_lang('ClassRoomChangedFrom'),
+                'to' => get_lang('ClassRoomChangedTo'),                
+            ),
+            self::SESSION_CHANGE_USER_REASON_LOCATION => array(
+                'default' => get_lang('LocationChanged'),
+                'from' => get_lang('LocationChangedFrom'),
+                'to' => get_lang('LocationChangedTo'),
+            )
+        );
+    }
+    
+    static function get_session_change_user_reasons_variations_by_id($id, $type) {
+        $reasons = self::get_session_change_user_reasons_variations();
+        $my_reason = isset($reasons[$id]) ? $reasons[$id] : null;        
+        return isset($my_reason[$type]) ? $my_reason[$type] : null;        
+    }
+    
+    static function get_session_changed_reason_label($id, $type) {
+        switch ($type) {
+            case 'origin':
+                break;
+            case 'destination':
+                break;            
+        }
+        
+    }
+    
     /** 
      * Gets the reason name 
      * @param int reason id

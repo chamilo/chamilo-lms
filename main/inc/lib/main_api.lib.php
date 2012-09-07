@@ -810,9 +810,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_drh()) {
         return true;
     }
+    
     if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
+    
     $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
@@ -838,7 +840,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			break;
     	}
     }
-        
+    
     //Check session visibility
     $session_id = api_get_session_id();
     
@@ -1339,11 +1341,11 @@ function api_format_course_array($course_data) {
     $_course['legal']                 = $course_data['legal' ];
     $_course['show_score']            = $course_data['show_score']; //used in the work tool    
     $_course['department_name']       = $course_data['department_name'];
-    $_course['department_url']        = $course_data['department_url' ];
-    
-    $_course['disk_quota']            = $course_data['disk_quota'];
-    
+    $_course['department_url']        = $course_data['department_url' ];    
+    $_course['disk_quota']            = $course_data['disk_quota'];    
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    
+    $_course['user_status_in_course'] = CourseManager::get_user_in_course_status(api_get_user_id(), $_course['code']);
     
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
@@ -1818,52 +1820,53 @@ function api_get_session_info($session_id) {
  * @param int       session id
  * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id) {
+function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
     $visibility = 0; //means that the session is still available
 
     if (api_is_platform_admin()) {
-        return SESSION_AVAILABLE;
+        if ($ignore_visibility_for_admins) {
+            return SESSION_AVAILABLE;
+        }
     }
+    
+    $now = time();
 
     if (!empty($session_id)) {
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning FROM $tbl_session
+        $sql = "SELECT id, visibility, access_start_date, access_end_date, coach_access_start_date, coach_access_end_date 
+                FROM $tbl_session
                 WHERE id = $session_id ";
 
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0 ) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $row['visibility'];
+            $row = Database::fetch_array($result, 'ASSOC');            
+            $visibility = $original_visibility = $row['visibility'];
 
             //I don't care the field visibility
-            if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
-                return SESSION_AVAILABLE;
+            if ($row['access_start_date'] == '0000-00-00 00:00:00' && $row['access_end_date'] == '0000-00-00 00:00:00') {
+                return SessionManager::DEFAULT_VISIBILITY;
             } else {
-                $time = time();
-
-                //If datestart is set
-                if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
-                    $row['date_start'] = $row['date_start'].' 00:00:00';
-
-                    if ($time > api_strtotime($row['date_start'], 'UTC')) {
+                
+              
+                //If access_start_date is set
+                if (!empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00') {                  
+                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {                        
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-
-                //if date_end is set
-                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                    $row['date_end'] = $row['date_end'].' 00:00:00';
-                    //only if date_start said that it was ok
-
+                  
+                //if access_end_date is set
+                if (!empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {                    
+                    //only if access_end_date said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
 
-                        if ($time < api_strtotime($row['date_end'], 'UTC')) {
+                        if ($now <= api_strtotime($row['access_end_date'], 'UTC')) {
                             //date still available
                             $visibility = SESSION_AVAILABLE;
                         } else {
@@ -1873,42 +1876,41 @@ function api_get_session_visibility($session_id) {
                     }
                 }
             }
-
+ 
             //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
-            $is_coach = api_is_coach($session_id);
-
-            if ($is_coach) {
-
+            $is_coach = api_is_coach($session_id, $course_code);
+ 
+            if ($is_coach) {                
+                
                 //Test end date
-                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
-
-                    $end_date_for_coach = new DateTime($row['date_end']);
-                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
-
-                    $end_date_for_coach->add(new DateInterval($number_of_days));
-                    $today = new DateTime();
-
-                    if ($end_date_for_coach >= $today) {
+                if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' && 
+                    isset($row['coach_access_end_date']) && !empty($row['coach_access_end_date']) && $row['coach_access_end_date'] != '0000-00-00 00:00:00') {
+                    $end_date_extra_for_coach = api_strtotime($row['coach_access_end_date'], 'UTC');
+                    
+                    if ($now <= $end_date_extra_for_coach) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-
+                
                 //Test start date
-                if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {
-                    $start_date_for_coach = new DateTime($row['date_start']);
-                    $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
-                    $start_date_for_coach->sub(new DateInterval($number_of_days));
-
-                    $today = new DateTime();
-                    if ($start_date_for_coach < $today) {
+                if (isset($row['access_start_date']) && !empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00' && 
+                    isset($row['coach_start_date']) && !empty($row['coach_start_date']) && $row['coach_start_date'] != '0000-00-00 00:00:00') {                                            
+                    $start_date_for_coach = api_strtotime($row['coach_start_date'], 'UTC');
+                    if ($now > $start_date_for_coach) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-            }
+            } else {
+                //Student - check the moved_to variable
+                $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
+                if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
+                    return $original_visibility;
+                }
+            }            
         } else {
             $visibility = SESSION_INVISIBLE;
         }
@@ -2251,7 +2253,7 @@ function api_get_user_platform_status($user_id = false) {
  * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = '') {
+function api_is_coach($session_id = 0, $course_code = null) {
 	//@todo Not sure about this one
 	/*if (api_is_platform_admin()) {
 		return true;
@@ -2267,12 +2269,13 @@ function api_is_coach($session_id = 0, $course_code = '') {
     } else {
         $course_code = api_get_course_id();
     }
+    
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
 
 	if (!empty($course_code)) {
-	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+	    $sql = "SELECT DISTINCT id
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
 	            ON session_rc_ru.id_user = '".api_get_user_id()."'
 	            WHERE   session_rc_ru.course_code = '$course_code' AND 
@@ -2283,10 +2286,10 @@ function api_is_coach($session_id = 0, $course_code = '') {
 	}
 
 	if (!empty($session_id)) {
-	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+	    $sql = "SELECT DISTINCT id
 	         	FROM $session_table
-	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
-				ORDER BY date_start, date_end, name";
+	         	WHERE   session.id_coach =  '".api_get_user_id()."' AND                     
+                        id = '$session_id'";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
@@ -2612,10 +2615,6 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             // Get the session visibility
             $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
             
-            //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
-            //echo api_get_user_id();
-            //echo api_get_course_id();
-
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1
                     return false;
@@ -2623,7 +2622,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
                     return true;
                 case SESSION_INVISIBLE:         // 3
                     return false;
-                case SESSION_AVAILABLE:         //5
+                case SESSION_AVAILABLE:         //4
                     return true;
             }
 
@@ -2914,7 +2913,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
     				(id_session = $session OR id_session = 0)
     		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }    
+    if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);
     return $row['visibility'];
 }
@@ -2932,7 +2931,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
  * @param $to_group_id : id of the intended group ( 0 = for everybody), only relevant for $type (1)
  * @param $to_user_id : id of the intended user (always has priority over $to_group_id !), only relevant for $type (1)
  * @param string $start_visible 0000-00-00 00:00:00 format
- * @param string $end_visible 0000-00-00 00:00:00 format
+ * @param unknown_type $end_visible 0000-00-00 00:00:00 format
  * @return boolean False if update fails.
  * @author Toon Van Hoecke <Toon.VanHoecke@UGent.be>, Ghent University
  * @version January 2005
@@ -6040,7 +6039,7 @@ function api_is_global_chat_enabled(){
  */
 function api_set_default_visibility($item_id, $tool_id) {
     $original_tool_id = $tool_id;
-    
+
     switch ($tool_id) {
         case TOOL_LINK:
             $tool_id = 'links';
@@ -6067,7 +6066,7 @@ function api_set_default_visibility($item_id, $tool_id) {
             break;
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation'); 
-    
+   
     if (isset($setting[$tool_id])) {
         //$visibility_boolean = false;
         $visibility = 'invisible';        
@@ -6080,6 +6079,17 @@ function api_set_default_visibility($item_id, $tool_id) {
         if ($tool_id == TOOL_GRADEBOOK) {
             return $visibility_boolean;
         }*/
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());            
+        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());    
     }
+}
+
+function api_get_datetime_picker_js($htmlHeadXtra) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+
+    $isocode = api_get_language_isocode();
+    if ($isocode != 'en') {
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+    }
+    return $htmlHeadXtra;
 }

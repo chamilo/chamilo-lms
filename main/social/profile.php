@@ -311,11 +311,10 @@ $personal_course_list = UserManager::get_personal_session_course_list($my_user_i
 
 $course_list_code = array();
 $i=1;
-
 if (is_array($personal_course_list)) {
     foreach ($personal_course_list as $my_course) {
         if ($i<=10) {
-            $list[] = SocialManager::get_logged_user_course_html($my_course, $i);            
+            $list[$my_course['code']] = SocialManager::get_logged_user_course_html($my_course, $i);            
             $course_list_code[] = array('code'=> $my_course['code']);
         } else {
             break;
@@ -586,22 +585,13 @@ if ($show_full_profile) {
         
         //Courses without sessions        
         $i=1;
-        foreach ($list as $key=>$value) {            
-            if ( empty($value[2]) ) { //if out of any session
-                $my_courses .=  $value[1];
+        foreach ($list as $value) {            
+            if (!empty($value)) { //if out of any session
+                $my_courses .=  $value;
                 $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';                    
                 $i++;
             }
         }
-        /*
-        $listActives = $listInactives = array();
-        foreach ( $list as $key=>$value ) {
-            if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
-                $listActives[] = $value;
-            } elseif ( !empty($value[2]) ) { //if there is a session but it is not active
-                $listInactives[] = $value;
-            }
-        }*/
         $my_courses .=  '</div>';        //social-content-training        
         $social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
     }

@@ -1302,61 +1302,14 @@ class Tracking {
 
 		/**
 		 * Get sessions coached by user
-		 * @param    int        Coach id
+		 * @param    int       Coach id
 		 * @return    array    Sessions list
 		 */
 		public static function get_sessions_coached_by_user($coach_id) {
-			// table definition
-			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-			// protect datas
-			$coach_id = intval($coach_id);
-
-			// session where we are general coach
-			$sql = 'SELECT DISTINCT id, name, date_start, date_end
-                        FROM ' . $tbl_session . '
-                        WHERE id_coach=' . $coach_id;
-
-			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1){
-					$sql = 'SELECT DISTINCT id, name, date_start, date_end
-                        FROM ' . $tbl_session . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;
-				}
-			}
-
-			$rs = Database::query($sql);
-			while ($row = Database::fetch_array($rs)) {
-				$a_sessions[$row["id"]] = $row;
-			}
+ 
 
 			// session where we are coach of a course
-			$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                        FROM ' . $tbl_session . ' as session
-                        INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
-                            ON session.id = session_course_user.id_session
-                            AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2';
-
-			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1){
-					$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                        FROM ' . $tbl_session . ' as session
-                        INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
-                            ON session.id = session_course_user.id_session AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2
-                        INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE access_url_id = '.$access_url_id;
-				}
-			}
+/*		
 
 			$rs = Database::query($sql);
 			while ($row = Database::fetch_array($rs)) {
@@ -1388,7 +1341,7 @@ class Tracking {
 					}
 				}
 			}
-			return $a_sessions;
+			return $a_sessions;*/
 
 		}
 
@@ -2117,7 +2070,7 @@ class Tracking {
 		 * @param   int     user id
 		 * @return  string  html code
 		 */
-		function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
+		static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
 			global $_configuration;
 			$tbl_course		            = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$tbl_session		        = Database :: get_main_table(TABLE_MAIN_SESSION);

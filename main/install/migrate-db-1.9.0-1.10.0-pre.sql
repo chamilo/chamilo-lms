@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS session_field_options (id	int NOT NULL auto_increment
 
 -- Normal tables
 
-UPDATE settings_current SET selected_value = '1.10.xx' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.19570' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 -- All stats DB changes will be added in the "main zone"

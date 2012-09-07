@@ -894,7 +894,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19570','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 

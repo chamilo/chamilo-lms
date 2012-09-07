@@ -24,7 +24,7 @@ if ($action == 'delete') {
 	header('Location: session_list.php');
 	exit();
 } elseif ($action == 'copy') {
-	SessionManager::copy_session($idChecked);
+	SessionManager::copy_session($idChecked, true, false);
     header('Location: session_list.php');
     exit();
 }

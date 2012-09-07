@@ -1945,7 +1945,7 @@ class SessionManager {
                             if ($set_exercises_lp_invisible) {    
                                 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
                                 $list       = new LearnpathList('', $course_info['code'], $sid);
-                                $flat_list  = $list->get_flat_list(); 
+                                $flat_list  = $list->get_flat_list();
                                 if (!empty($flat_list)) {                               
                                     foreach($flat_list as $lp_id => $data) { 
                                         api_item_property_update($course_info, TOOL_LEARNPATH, $lp_id, 'invisible', api_get_user_id(), 0 ,0, 0, 0, $sid);
@@ -1954,9 +1954,11 @@ class SessionManager {
                                 }
                                 $quiz_table   = Database::get_course_table(TABLE_QUIZ_TEST);
                                 $course_id	 = $course_info['real_id'];
+                                
                                 //@todo check this query
+                                //Disabling quiz items
                                 $sql = "UPDATE $quiz_table SET active = 0 WHERE c_id = $course_id ";
-                                $result=Database::query($sql);                                
+                                Database::query($sql);                                
                             }
                             $new_short_courses[] = $course_info['code'];
                         }                             

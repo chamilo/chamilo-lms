@@ -304,7 +304,7 @@ class SessionManager {
 			$coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
 		}        
 
-		$today = api_get_utc_datetime();
+		$today = api_get_utc_datetime();            
 
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
@@ -324,13 +324,11 @@ class SessionManager {
                 access_start_date,
                 access_end_date,
                 s.visibility,
-                u.user_id, 
+                u.user_id,
+                
                 fv.field_id,
-                fv.field_value,
-                course_code,
+                fv.field_value,                 
                 c.title as course_title,
-                
-                
                 s.id";
 
 		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
@@ -357,8 +355,11 @@ class SessionManager {
 		$query .= ") AS session_table";   
 
 		if (!empty($options['where'])) {
-		   $query .= ' WHERE '.$options['where']; 
+		   $query .= ' WHERE '.$options['where'];
 		}
+        
+        //In order to avoid doubles
+        $query .= ' GROUP BY id ';
         
         if (!empty($options['order']) && !empty($options['limit'])) {
             $query .= " ORDER BY ".$options['order']." LIMIT ".$options['limit'];
@@ -1703,7 +1704,7 @@ class SessionManager {
         $user_id = intval($user_id);
         
         // session where we are general coach
-        $sql = "SELECT DISTINCT id, name, access_start_date, access_end_date 
+        $sql = "SELECT DISTINCT *
                 FROM $session_table
                 WHERE id_coach = $user_id";
 
@@ -1711,8 +1712,8 @@ class SessionManager {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $sql = 'SELECT DISTINCT id, name, access_start_date, access_end_date
-                    FROM ' . $session_table . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                $sql = 'SELECT DISTINCT session.*
+                    FROM '.$session_table.' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
                     ON (session.id = session_rel_url.session_id)
                     WHERE id_coach = '.$user_id.' AND access_url_id = '.$access_url_id;
             }
@@ -1729,7 +1730,7 @@ class SessionManager {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);			
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    	$sql = 'SELECT DISTINCT session.id, session.name, access_start_date, access_end_date
+    	$sql = 'SELECT DISTINCT session.*
                 FROM ' . $tbl_session . ' as session
                 INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
                     ON session.id = session_course_user.id_session
@@ -1739,8 +1740,8 @@ class SessionManager {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
-                $sql = 'SELECT DISTINCT session.id, session.name, access_start_date, access_end_date
-                    FROM ' . $tbl_session . ' as session
+                $sql = 'SELECT DISTINCT session.*
+                    FROM '.$tbl_session.' as session
                     INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
                         ON session.id = session_course_user.id_session AND session_course_user.id_user = '.$user_id.' AND session_course_user.status=2
                     INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url

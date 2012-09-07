@@ -37,7 +37,12 @@ class SessionManager {
     }
     
     public static function add($params) {
-        global $_configuration;        
+        global $_configuration;
+        
+        //just in case
+        if (isset($params['id'])) {
+            unset($params['id']);
+        }
         
         //Check portal limits
         $access_url_id = 1;

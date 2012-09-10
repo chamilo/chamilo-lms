@@ -25,21 +25,18 @@ class OpenofficePresentation extends OpenofficeDocument {
     public $take_slide_name;
 
     public function __construct($take_slide_name = false, $course_code = null, $resource_id = null, $user_id = null) {
-        $this -> take_slide_name = $take_slide_name;
+        $this->take_slide_name = $take_slide_name;
         parent::__construct($course_code, $resource_id, $user_id);
     }
 
 
     public function make_lp($files = array()) {
-
         global $_course;
-
         $previous = 0;
         $i = 0;
 
         if (!is_dir($this->base_work_dir.$this->created_dir))
             return false;
-
 
         foreach ($files as $file) {
 
@@ -170,11 +167,9 @@ class OpenofficePresentation extends OpenofficeDocument {
     }
 
     function add_command_parameters() {
-
         if (empty($this->slide_width) || empty($this->slide_height))
             list($this->slide_width, $this->slide_height) = explode('x', api_get_setting('service_ppt2lp', 'size'));
         return ' -w '.$this->slide_width.' -h '.$this->slide_height.' -d oogie "'.$this->base_work_dir.'/'.$this->file_path.'"  "'.$this->base_work_dir.$this->created_dir.'.html"';
-
     }
 
     function set_slide_size($width, $height) {
@@ -182,25 +177,18 @@ class OpenofficePresentation extends OpenofficeDocument {
         $this->slide_height = $height;
     }
 
-    function add_docs_to_visio ($files = array()) {
-
+    function add_docs_to_visio($files = array()) {
         global $_course;
-        /* Add Files */
-
         foreach ($files as $file) {
-
             list($slide_name,$file_name) = explode('||',$file); // '||' is used as separator between slide name (with accents) and file name (without accents).
             $slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
             $slide_name = str_replace('&rsquo;', '\'', $slide_name);
             $slide_name = api_convert_encoding($slide_name, api_get_system_encoding(), $this->original_charset);
             $slide_name = api_html_entity_decode($slide_name, ENT_COMPAT, api_get_system_encoding());
-
             $did = add_document($_course, $this->created_dir.'/'.urlencode($file_name), 'file', filesize($this->base_work_dir.$this->created_dir.'/'.$file_name), $slide_name);
-            if ($did)
+            if ($did) {
                 api_item_property_update($_course, TOOL_DOCUMENT, $did, 'DocumentAdded', $_SESSION['_uid'], 0, null, null, null, api_get_session_id());
-
+            }
         }
-
     }
-
 }

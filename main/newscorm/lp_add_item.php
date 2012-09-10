@@ -82,9 +82,6 @@ function check_for_title() {
         }
     }
     temp=true;
-
-        
-        
 }
 
 function InnerDialogLoaded() {
@@ -94,7 +91,6 @@ function InnerDialogLoaded() {
     } else {
         var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
     }
-
     return 	B.ClickFrame();
 };'."\n".
 
@@ -260,7 +256,7 @@ echo '</div>';
 
 //hide bar div
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {    
-    echo '<div id="hide_bar_template" ></div>';    
+    echo '<div id="hide_bar_template"></div>';    
 }
 
 echo '<div id="doc_form" class="span8">';

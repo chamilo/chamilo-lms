@@ -62,8 +62,6 @@ if( Request::is_post() && $is_error){
     	$maker = Database::escape_string($_REQUEST['content_maker']);
     }
 
-
-
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';
@@ -98,13 +96,13 @@ if( Request::is_post() && $is_error){
             require_once 'openoffice_presentation.class.php';
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
             $o_ppt = new OpenofficePresentation($take_slide_name);
-            $first_item_id = $o_ppt -> convert_document($_FILES['user_file']);
+            $first_item_id = $o_ppt->convert_document($_FILES['user_file']);
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
             $split_steps = $_POST['split_steps'];
             $o_doc = new OpenofficeText($split_steps);
-            $first_item_id = $o_doc -> convert_document($_FILES['user_file']);
+            $first_item_id = $o_doc->convert_document($_FILES['user_file']);
             break;
         case '':
         default:

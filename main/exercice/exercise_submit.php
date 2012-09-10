@@ -675,7 +675,7 @@ if ($time_control) {
 
 //echo Display::div($objExercise->description, array('id'=> 'exercise_description', 'class'=>'exercise_description'));
 if (!empty($objExercise->description)) {
-    echo Display::generate_accordion(array( array('title' => get_lang('ExerciseDescription'), 'content' => $objExercise->description)));
+    echo Display::generate_accordion(array( array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)));
 }
 
 if ($origin != 'learnpath') {

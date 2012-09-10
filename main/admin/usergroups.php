@@ -62,6 +62,8 @@ $column_model   = array(
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
+$extra_params['rowList'] = array(50, 100, 500, 1000, 2000, 5000);
+
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {

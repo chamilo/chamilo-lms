@@ -286,6 +286,10 @@ foreach ($questionList as $questionId) {
 	
 	// Start buffer
     ob_start();
+    
+    /* Use switch
+    switch ($answerType) {        
+    }*/
 	
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
@@ -464,12 +468,9 @@ foreach ($questionList as $questionId) {
          		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
         		$resfree = Database::query($queryfree);
         		$questionScore= Database::result($resfree,0,"marks");
-        		$totalScore+=$questionScore;        		
-        		 			?>
-        		 			</table>
-        		 		</td></tr>
-        		 		<?php        		 		
-        		 	echo '<tr>
+        		$totalScore+=$questionScore;    
+                echo '</table></td></tr>';        		 				 		
+                echo '<tr>
         				<td colspan="2">
         					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
         						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
@@ -478,7 +479,7 @@ foreach ($questionList as $questionId) {
         				</td>
         			</tr>
         			</table>';
-	        }		
+	        }
 	}
 
 	if ($show_results) {
@@ -487,67 +488,61 @@ foreach ($questionList as $questionId) {
 	    }
 	}
 	
-    if ($show_results) {
-    //if (0) {
-		echo '<table width="100%" border="0" cellspacing="3" cellpadding="0">';
-		
-		if ($is_allowedToEdit && $locked == false && !api_is_drh() ) {
-			echo '<tr><td>';
+    if ($show_results) {			
+		if ($is_allowedToEdit && $locked == false && !api_is_drh()) {		
 			$name = "fckdiv".$questionId;
-			$marksname = "marksName".$questionId;
-			?>
-			<br />
-			<a class="btn" href="javascript://" onclick="showfck('<?php echo $name; ?>','<?php echo $marksname; ?>');">
-			<?php
+			$marksname = "marksName".$questionId;            
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
-				echo get_lang('EditCommentsAndMarks');
+				$url_name = get_lang('EditCommentsAndMarks');
 			} else {
 				if ($action=='edit') {
-					echo '<img src="../img/edit.gif"/>'.get_lang('EditIndividualComment');
+					$url_name = get_lang('EditIndividualComment');
 				} else {
-					echo get_lang('AddComments');
+					$url_name = get_lang('AddComments');
 				}
 			}
-			echo '</a><br /><div id="feedback_'.$name.'" style="width:100%">';
+            echo '<br />';
+            echo Display::url($url_name, 'javascript://', array('class' => 'btn', 'onclick'=>"showfck('".$name."', '".$marksname."');"));            
+			echo '<br />';
+            
+            echo '<div id="feedback_'.$name.'" style="width:100%">';
 			$comnt = trim(get_comments($id,$questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
 				echo '<div id="question_feedback">'.$comnt.'</div>';
 			}
-			echo '</div><div id="'.$name.'" style="display:none">';
+			echo '</div>';
+            
+            echo '<div id="'.$name.'" style="display:none">';            
 			$arrid[] = $questionId;
-
 			$feedback_form = new FormValidator('frmcomments'.$questionId,'post','');
 			$feedback_form->addElement('html','<br>');
 			$renderer =& $feedback_form->defaultRenderer();
 			$renderer->setFormTemplate('<form{attributes}><div align="left">{content}</div></form>');
 			$renderer->setElementTemplate('<div align="left">{element}</div>');
-			$comnt = get_comments($id,$questionId);
-			${user.$questionId}['comments_'.$questionId] = $comnt;
+			$comnt = get_comments($id, $questionId);
+			$default = array('comments_'.$questionId =>  $comnt);
 			$feedback_form->addElement('html_editor', 'comments_'.$questionId, null, null, array('ToolbarSet' => 'TestAnswerFeedback', 'Width' => '100%', 'Height' => '120'));
-			$feedback_form->addElement('html','<br>');
-			//$feedback_form->addElement('submit','submitQuestion',get_lang('Ok'));
-			$feedback_form->setDefaults(${user.$questionId});
+			$feedback_form->addElement('html','<br>');			
+			$feedback_form->setDefaults($default);
 			$feedback_form->display();
 			echo '</div>';
             
 		} else {
-			$comnt = get_comments($id,$questionId);
-			echo '<tr><td><br />';
+			$comnt = get_comments($id, $questionId);
+			echo '<br />';
 			if (!empty($comnt)) {
 				echo '<b>'.get_lang('Feedback').'</b>';
 				echo '<div id="question_feedback">'.$comnt.'</div>';
-			}
-			echo '</td><td>';
-		}		
+			}			
+		}
+        
 		if ($is_allowedToEdit) {
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				$marksname = "marksName".$questionId;
-				?>
-				<div id="<?php echo $marksname; ?>" style="display:none">
-				<form name="marksform_<?php echo $questionId; ?>" method="post" action="">
-			    <?php
+                echo '<div id="'.$marksname.'" style="display:none" >';
+                echo '<form name="marksform_'.$questionId.'" method="post" action="">';				
 				$arrmarks[] = $questionId;
 				echo get_lang("AssignMarks");
 				echo "&nbsp;<select name='marks' id='marks'>";
@@ -566,13 +561,10 @@ foreach ($questionList as $questionId) {
 					  <select name="marks" id="marks" style="display:none;"><option>'.$questionScore.'</option></select></form><br/ ></div>';
 			}
 		} else {
-			if ($questionScore==-1) {
-				 $questionScore=0;
+			if ($questionScore == -1) {
+				 $questionScore = 0;
 			}
-		}		
-    	echo '</td>
-		</tr>
-		</table>';		
+		}    	
 	}
     
     $my_total_score  = $questionScore;
@@ -586,7 +578,10 @@ foreach ($questionList as $questionId) {
     $score = array();    
     if ($show_results) {	    
 		$score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
-        $score['pass'] = $my_total_score >= $my_total_weight ? true : false;		
+        $score['pass']   = $my_total_score >= $my_total_weight ? true : false;		
+        $score['type']   = $answerType;        
+        $score['score']  = $my_total_score;
+        $score['weight'] = $my_total_weight;  
     }
     
 	unset($objAnswerTmp);
@@ -598,7 +593,7 @@ foreach ($questionList as $questionId) {
     
  	if ($show_results) { 	    
         //Shows question title an description
-	    $question_content .= $objQuestionTmp->return_header("", $counter, $score);
+	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
         
         // display question category, if any
  	    $question_content .= Testcategory::returnCategoryAndTitle($questionId);

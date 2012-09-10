@@ -206,7 +206,6 @@ class ExerciseShowFunctions {
 		<?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
 		<td width="20%">
 			<?php
-
             if ($studentChoice) {
 				if ($answerCorrect) {
                     $color = 'green';

@@ -74,8 +74,7 @@ if (!$is_allowedToEdit) {
 if ($show_headers) {
 	$interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
 	$interbreadcrumb[] = array("url" => "#","name" => get_lang('Result'));
-	$this_section = SECTION_COURSES;
-	
+	$this_section = SECTION_COURSES;	
 	Display::display_header();
 } else {
 	Display::display_reduced_header();

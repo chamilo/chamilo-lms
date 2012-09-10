@@ -68,6 +68,8 @@ $user_id = $client->call('WSCreateUserPasswordCrypted', array('createUserPasswor
 if (!empty($user_id) && is_numeric($user_id)) {
     
     // 2. Get user info of the user
+    echo '<h2>Trying to create an user via webservices</h2>';
+    $original_params = $params;
     
     $params = array('original_user_id_value'    => $random_user_id, // third party user id
                     'original_user_id_name'     => $user_field, // the system field in the user profile (See Profiling)
@@ -75,14 +77,35 @@ if (!empty($user_id) && is_numeric($user_id)) {
 
     $result = $client->call('WSGetUser', array('GetUser' => $params));
     
-    echo '<h2>User created via webservices</h2>';
+    if ($result) {
+        echo "Random user was created user_id: $user_id <br /><br />";
+        echo 'User info: <br />';
+        print_r($original_params);
+        echo '<br /><br />';
+    } else {
+        echo $result;
+    }
         
     //3.Adding user to the course TEST. The course TEST must be created manually in Chamilo
     
-    $params = array('course'        => 'TEST', //Chamilo string course code
-                    'user_id'       => $user_id,
-                    'secret_key'    => $secret_key);
-    //$result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
+    echo '<h2>Trying to add user to a course called TEST via webservices</h2>';
+    
+    $course_info = api_get_course_info('TEST');
+    
+    if (!empty($course_info)) {    
+        $params = array('course'        => 'TEST', //Chamilo string course code
+                        'user_id'       => $user_id,
+                        'secret_key'    => $secret_key);
+        $result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
+    } else {
+        echo 'Course TEST does not exists please create one course with code "TEST"';
+    }
+    
+    if ($result == 1) {
+        echo "User $user_id was added to course TEST";
+    } else {
+        echo $result;
+    }  
     
     //4. Adding course Test to the Session Session1
        
@@ -125,11 +148,7 @@ if (!empty($user_id) && is_numeric($user_id)) {
     $result = $client->call('WSSubscribeUserToCourse', array('subscribeUserToCourse' => $params));
     var_dump($result);*/
     
-    if ($result == 1) {
-        echo "User $user_id added to course TEST";
-    } else {
-        echo $result;
-    }    
+      
 } else {
     echo 'User was not created, activate the debug=true in the registration.soap.php file and see the error logs';
 }
@@ -141,6 +160,7 @@ if ($err) {
     // Display the error
     echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 }
+
 if ($client->fault) {
     echo '<h2>Fault</h2><pre>';
     print_r($result);
@@ -153,8 +173,7 @@ if ($client->fault) {
         echo '<h2>Error</h2><pre>' . $err . '</pre>';
     } else {
         // Display the result
-        echo '<h2>Web service result</h2><pre/>';
+        echo '<h2>There are no errors</h2>';
         var_dump($result);
-
     }
 }

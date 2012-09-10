@@ -13,7 +13,7 @@
 
 if(!class_exists('Question')):
 
-// Answer types
+// Question types
 define('UNIQUE_ANSWER',                             1);
 define('MULTIPLE_ANSWER',                           2);
 define('FILL_IN_BLANKS',                            3);

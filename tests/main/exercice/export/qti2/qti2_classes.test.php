@@ -1,6 +1,7 @@
 <?php
 
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
+require_once(api_get_path(SYS_CODE_PATH).'/exercice/question.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/hotspot.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/unique_answer.class.php');
@@ -8,16 +9,6 @@ require_once(api_get_path(SYS_CODE_PATH).'/exercice/multiple_answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/matching.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/freeanswer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/fill_blanks.class.php');
-define('UNIQUE_ANSWER',		1);
-define('MCUA',				1);
-define('TF',				1);
-define('MULTIPLE_ANSWER',	2);
-define('MCMA',				2);
-define('FILL_IN_BLANKS',	3);
-define('FIB',				3);
-define('MATCHING',			4);
-define('FREE_ANSWER', 		5);
-define('HOTSPOT',			6);
 
 class TestQti2 extends UnitTestCase {
 

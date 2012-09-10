@@ -62,7 +62,7 @@ class Ims2Question extends Question
             case FREE_ANSWER :
             	$answer = new ImsAnswerFree($this->id);
             	return $answer;
-            case HOTSPOT :
+            case HOT_SPOT :
             	$answer = new ImsAnswerHotspot($this->id);
             	return $answer;
             default :

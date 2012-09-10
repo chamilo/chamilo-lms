@@ -67,7 +67,7 @@ class ScormQuestion extends Question
 				$this->answer = new ScormAnswerFree($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
-			case HOTSPOT:
+			case HOT_SPOT:
 				$this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
@@ -142,7 +142,7 @@ class ScormQuestion extends Question
     	//$id = $this->id;
     	$w = $this->selectWeighting();
     	$s = 'questions.push('.$this->js_id.');'."\n";
-    	if($this->type == FREE_ANSWER or $this->type == HOTSPOT)
+    	if($this->type == FREE_ANSWER or $this->type == HOT_SPOT)
     	{ //put the max score to 0 to avoid discounting the points of
     	  //non-exported quiz types in the SCORM
     		$w=0;

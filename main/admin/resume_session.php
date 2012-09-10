@@ -218,7 +218,7 @@ if ($session['nbr_courses'] == 0){
 
 $url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?page=resume_session.php&id_session=$id_session");
 $url .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL), "session_user_import.php?id_session=$id_session");
-echo Display::page_subheader(get_lang('UserList').$url);
+echo Display::page_subheader(get_lang('StudentList').$url);
 
 ?>
 

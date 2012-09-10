@@ -1530,9 +1530,8 @@ class CourseManager {
         $sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
                 FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                 LEFT JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                ON g.id = gu.group_id
-                $session_condition AND
-                g.c_id = $course_id
+                ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
+                $session_condition
                 GROUP BY g.id
                 ORDER BY g.name";
         $result = Database::query($sql);

@@ -1803,20 +1803,20 @@ class learnpath {
      * @param	string 	the original name of the file
      * @return	string	'scorm','aicc','scorm2004','dokeos' or '' if the package cannot be recognized
      */
-    public function get_package_type($file_path, $file_name) {
+    public static function get_package_type($file_path, $file_name) {
 
         // Get name of the zip file without the extension.
         $file_info = pathinfo($file_name);
         $filename = $file_info['basename']; // Name including extension.
         $extension = $file_info['extension']; // Extension only.
 
-        if (!empty($_POST['ppt2lp']) && !in_array(strtolower($extension), array (
+        if (!empty($_POST['ppt2lp']) && !in_array(strtolower($extension), array(
                 'dll',
                 'exe'
             ))) {
             return 'oogie';
         }
-        if (!empty($_POST['woogie']) && !in_array(strtolower($extension), array (
+        if (!empty($_POST['woogie']) && !in_array(strtolower($extension), array(
                 'dll',
                 'exe'
             ))) {

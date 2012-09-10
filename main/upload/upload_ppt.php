@@ -9,35 +9,24 @@
 /**
  * First, initialise the script
  */
-// name of the language file which needs to be included
-// 'inc.php' is automatically appended to the file name
-$language_file[] = "document"; //the document file is loaded because most of the upload vocab relates to the document tool
+
+//the document file is loaded because most of the upload vocab relates to the document tool
+$language_file[] = "document"; 
 $language_file[] = "learnpath";
 $language_file[] = "scormdocument";
+
 // global settings initialisation
 // also provides access to main api (inc/lib/main_api.lib.php)
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'document.lib.php';
 
-
-$form_style= '
-<style>
-.convert_button{
-	background: url("../img/icons/22/learnpath.png") 0px 0px no-repeat;
-	padding: 2px 0px 2px 22px;
-}
-#dynamic_div_container{float:left;margin-right:10px;}
-#dynamic_div_waiter_container{float:left;}
-</style>';
-
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';
-$htmlHeadXtra[] = $form_style;
 
-if(isset($_POST['convert'])){
+if (isset($_POST['convert'])){
 	$cwdir = getcwd();
 	if(isset($_FILES['user_file'])) {
 		$allowed_extensions = array('odp','sxi','ppt','pps','sxd','pptx');
@@ -82,72 +71,43 @@ if(!$is_allowed_to_edit){
 }
 
 $interbreadcrumb[]= array ("url"=>"../newscorm/lp_controller.php?action=list", "name"=> get_lang("Doc"));
+
 $nameTools = get_lang("OogieConversionPowerPoint");
 Display :: display_header($nameTools);
 $message = get_lang("WelcomeOogieConverter");
 
-$s_style="border-width: 1px;
-		 border-style: solid;
-		 margin-left: 0;
-		 margin-top: 10px;
-		 margin-bottom: 0px;
-		 min-height: 30px;
-		 padding: 5px;
-		 position: relative;
-		 width: 500px;
-		 background-color: #E5EDF9;
-		 border-color: #4171B5;
-		 color: #000;";
 
-$s_style_error="border-width: 1px;
-		 border-style: solid;
-		 margin-left: 0;
-		 margin-top: 10px;
-		 margin-bottom: 10px;
-		 min-height: 30px;
-		 padding: 5px;
-		 position: relative;
-		 width: 500px;
-		 background-color: #FFD1D1;
-		 border-color: #FF0000;
-		 color: #000;";
 
-$alt_text = '';
-$attribute_list = '';
-echo '<div style="'.$s_style.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_normal.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$message.'</div></div>';
-
-if(!empty($errorMessage)) {	
-	echo '<div style="'.$s_style_error.'"><div style="float:left; margin-right:10px;"><img src="'.api_get_path(WEB_IMG_PATH)."message_error.gif".'" alt="'.$alt_text.'" '.$attribute_list.'  /></div><div style="margin-left: 43px">'.$errorMessage.'</div></div>';
+if (!empty($errorMessage)) {	
+    echo Display::return_message($errorMessage, 'warning', false);
 }
 
 $form = new FormValidator('upload_ppt', 'POST', '', '');
-$form->addElement('header',get_lang("WelcomeOogieSubtitle"));
+$form->addElement('header', get_lang("WelcomeOogieSubtitle"));
+
+$form->addElement('html', Display::return_message($message, 'info', false));
 
 // build the form
 $div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
-$form -> addElement ('file', 'user_file', array('<img src="../img/powerpoint_big.gif" />', $div_upload_limit));
-$form -> addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
+$form->addElement ('file', 'user_file', array('<img src="../img/powerpoint_big.gif" />', $div_upload_limit));
+$form->addElement ('checkbox', 'take_slide_name','', get_lang('TakeSlideName'));
 if (api_get_setting('search_enabled')=='true') {
     require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
     $specific_fields = get_specific_field_list();
-    $form -> addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));        
-    $form -> addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));    
+    $form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));        
+    $form->addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));    
     foreach ($specific_fields as $specific_field) {
-        $form -> addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
+        $form->addElement ('text', $specific_field['code'], $specific_field['name'].' : ');
     }
 }
 
-$form -> addElement ('style_submit_button', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
+$form->addElement ('style_submit_button', 'convert', get_lang('ConvertToLP'));
+$form->addElement ('hidden', 'ppt2lp', 'true');
 
-$form -> addElement ('hidden', 'ppt2lp', 'true');
-
-$form -> add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
+$form->add_real_progress_bar(md5(rand(0,10000)), 'user_file', 1, true);
 $defaults = array('take_slide_name'=>'checked="checked"','index_document'=>'checked="checked"');
 $form->setDefaults($defaults);
-// display the form
-$form -> display();
 
-/*
-  FOOTER
-*/
+// display the form
+$form->display();
 Display::display_footer();

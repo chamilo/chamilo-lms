@@ -77,5 +77,6 @@ $Username = "User name";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "<p>Go ahead and browse our course catalog %s to register to any course you like. Once registered, you will see the course appear right %s, instead of this message.</p>";
 $HelloXAsYouCanSeeYourCourseListIsEmpty = "<p>Hello <strong>%s</strong> and welcome,</p>
 <p>As you can see, your courses list is still empty. That's because you are not registered to any course yet! </p>";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Please allow us a little time to subscribe you to one of our courses. If you think we forgot you, contact the portal administrators. You can usually find their contact details in the footer of this page.";
 $Profile = "Profile";
 ?>

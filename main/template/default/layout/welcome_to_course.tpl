@@ -4,7 +4,9 @@
     
     {{ "GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX"|get_lang|format(course_catalog_link, course_list_link) }}
     
-    <a class="btn btn-primary btn-large" href="{{ course_catalog_url }}"> 
+    <a class="btn btn-primary btn-large" href="{{ course_catalog_url }}">
         {{ "CourseCatalog"|get_lang }}
     </a>
+{% else %}
+    {{ "PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses"|get_lang }}
 {% endif %}

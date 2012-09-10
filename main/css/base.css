@@ -2491,6 +2491,7 @@ div.admin_section h4 {
 
 .exercise_description {
     padding:0px 0px 10px 0px;
+    border-bottom: 1px solid #CCCCCC;
 }
 .exercise_title {
     font-size: 1.6em;

@@ -82,7 +82,9 @@ if ($is_allowed_to_edit ) {
 $html .= Display::page_header( $objExercise->name.' '.$edit_link);
 
 //Exercise description
-$html .= Display::div($objExercise->description, array('class'=>'exercise_description'));
+if (!empty($objExercise->description)) {
+    $html .= Display::div($objExercise->description, array('class'=>'exercise_description'));
+}
 
 $extra_params = '';
 if (isset($_GET['preview'])) {

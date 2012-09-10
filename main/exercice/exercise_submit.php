@@ -673,6 +673,11 @@ if ($time_control) {
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
+//echo Display::div($objExercise->description, array('id'=> 'exercise_description', 'class'=>'exercise_description'));
+if (!empty($objExercise->description)) {
+    echo Display::generate_accordion(array( array('title' => get_lang('ExerciseDescription'), 'content' => $objExercise->description)));
+}
+
 if ($origin != 'learnpath') {
    echo '<div id="highlight-plugin" class="glossary-content">';
 }
@@ -789,7 +794,6 @@ if (!empty($error)) {
                 $(".no_remind_highlight").hide();               
     		});
 
-
 			function previous_question(question_num) {
 				url = "exercise_submit.php?'.$params.'&num="+question_num;
 				window.location = url;
@@ -799,8 +803,7 @@ if (!empty($error)) {
                 url = "exercise_submit.php?'.$params.'&num="+previous_question_id;                    
                 //Save the current question
                 save_now(question_id_to_save, url);
-            }
-            
+            }            
 
            function save_now(question_id, url_extra) {
            		//1. Normal choice inputs

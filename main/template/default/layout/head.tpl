@@ -224,6 +224,16 @@ $(function() {
 
     //Responsive effect
     $(".collapse").collapse();
+    
+    //$('#collapse1').collapse("hide");
+
+    
+    $(".accordion_jquery").accordion({        
+        autoHeight: false,
+        active: false, // all items closed by default
+        collapsible: true,
+        header: ".accordion-heading",
+    })
 
     //Global popup
     $('.ajax').on('click', function() {

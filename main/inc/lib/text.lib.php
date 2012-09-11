@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * This is the text library for Chamilo.
@@ -7,8 +8,7 @@
  *
  * @package chamilo.library
  */
-
-define ('EXERCISE_NUMBER_OF_DECIMALS', 2);
+define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
@@ -60,11 +60,11 @@ function api_set_encoding_html(&$string, $encoding) {
             $meta = $matches1[1] . $encoding . $matches1[3];
             $string = $matches[1] . $meta . $matches[3];
         } else {
-            $string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/>' . $matches[3];
+            $string = $matches[1] . '<meta http-equiv="Content-Type" content="text/html; charset=' . $encoding . '"/>' . $matches[3];
         }
     } else {
         $count = 1;
-        $string = str_ireplace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>', $string, $count);
+        $string = str_ireplace('</head>', '<meta http-equiv="Content-Type" content="text/html; charset=' . $encoding . '"/></head>', $string, $count);
     }
     $string = api_convert_encoding($string, $encoding, $old_encoding);
 }
@@ -88,7 +88,6 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
     }
     return '';
 }
-
 
 /* XML processing functions */
 
@@ -116,7 +115,6 @@ function api_detect_encoding_xml($string, $default_encoding = null) {
     }
     return api_refine_encoding_id($default_encoding);
 }
-
 
 /**
  * Converts character encoding of a xml-formatted text. If inside the text the encoding is declared, it is modified accordingly.
@@ -165,14 +163,14 @@ function _api_convert_encoding_xml(&$string, $to_encoding, $from_encoding) {
     }
     $to_encoding = api_refine_encoding_id($to_encoding);
     if (!preg_match('/<\?xml.*\?>/m', $string, $matches)) {
-        return api_convert_encoding('<?xml version="1.0" encoding="'.$to_encoding.'"?>'."\n".$string, $to_encoding, $from_encoding);
+        return api_convert_encoding('<?xml version="1.0" encoding="' . $to_encoding . '"?>' . "\n" . $string, $to_encoding, $from_encoding);
     }
     if (!preg_match(_PCRE_XML_ENCODING, $string)) {
         if (strpos($matches[0], 'standalone') !== false) {
             // The encoding option should precede the standalone option, othewise DOMDocument fails to load the document.
-            $replace = str_replace('standalone', ' encoding="'.$to_encoding.'" standalone' , $matches[0]);
+            $replace = str_replace('standalone', ' encoding="' . $to_encoding . '" standalone', $matches[0]);
         } else {
-            $replace = str_replace('?>', ' encoding="'.$to_encoding.'"?>' , $matches[0]);
+            $replace = str_replace('?>', ' encoding="' . $to_encoding . '"?>', $matches[0]);
         }
         return api_convert_encoding(str_replace($matches[0], $replace, $string), $to_encoding, $from_encoding);
     }
@@ -191,7 +189,6 @@ function _api_convert_encoding_xml_callback($matches) {
     return str_replace($matches[1], $_api_encoding, $matches[0]);
 }
 
-
 /* CSV processing functions */
 
 /**
@@ -206,13 +203,19 @@ function _api_convert_encoding_xml_callback($matches) {
  * @link http://php.net/manual/en/function.str-getcsv.php   (exists as of PHP 5 >= 5.3.0)
  */
 function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape = '\\') {
-    $delimiter = (string)$delimiter;
-    if (api_byte_count($delimiter) > 1) { $delimiter = $delimiter[1]; }
-    $enclosure = (string)$enclosure;
-    if (api_byte_count($enclosure) > 1) { $enclosure = $enclosure[1]; }
-    $escape = (string)$escape;
-    if (api_byte_count($escape) > 1) { $escape = $escape[1]; }
-    $str = (string)$string;
+    $delimiter = (string) $delimiter;
+    if (api_byte_count($delimiter) > 1) {
+        $delimiter = $delimiter[1];
+    }
+    $enclosure = (string) $enclosure;
+    if (api_byte_count($enclosure) > 1) {
+        $enclosure = $enclosure[1];
+    }
+    $escape = (string) $escape;
+    if (api_byte_count($escape) > 1) {
+        $escape = $escape[1];
+    }
+    $str = (string) $string;
     $len = api_byte_count($str);
     $enclosed = false;
     $escaped = false;
@@ -271,13 +274,12 @@ function & api_str_getcsv(& $string, $delimiter = ',', $enclosure = '"', $escape
  * @link http://php.net/manual/en/function.fgetcsv.php
  */
 function api_fgetcsv($handle, $length = null, $delimiter = ',', $enclosure = '"', $escape = '\\') {
-    if (($line = is_null($length) ? fgets($handle): fgets($handle, $length)) !== false) {
+    if (($line = is_null($length) ? fgets($handle) : fgets($handle, $length)) !== false) {
         $line = rtrim($line, "\r\n");
         return api_str_getcsv($line, $delimiter, $enclosure, $escape);
     }
     return false;
 }
-
 
 /* Functions for supporting ASCIIMathML mathematical formulas and ASCIIsvg maathematical graphics */
 
@@ -291,7 +293,7 @@ function api_contains_asciimathml($html) {
         return false;
     }
     foreach ($matches[1] as $string) {
-        $string = ' '.str_replace(',', ' ', $string).' ';
+        $string = ' ' . str_replace(',', ' ', $string) . ' ';
         if (preg_match('/\sAM\s/m', $string)) {
             return true;
         }
@@ -309,7 +311,7 @@ function api_contains_asciisvg($html) {
         return false;
     }
     foreach ($matches[1] as $string) {
-        $string = ' '.str_replace(',', ' ', $string).' ';
+        $string = ' ' . str_replace(',', ' ', $string) . ' ';
         if (preg_match('/sscr\s*=\s*[\'"](.*?)[\'"]/m', $string)) {
             return true;
         }
@@ -368,9 +370,9 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
         return $text;
     }
     if ($middle) {
-        return rtrim(api_substr($text, 0, round($length / 2), $encoding)).$suffix.ltrim(api_substr($text, - round($length / 2), $text_length, $encoding));
+        return rtrim(api_substr($text, 0, round($length / 2), $encoding)) . $suffix . ltrim(api_substr($text, - round($length / 2), $text_length, $encoding));
     }
-    return rtrim(api_substr($text, 0, $length, $encoding)).$suffix;
+    return rtrim(api_substr($text, 0, $length, $encoding)) . $suffix;
 }
 
 /**
@@ -409,7 +411,6 @@ function domesticate($input) {
  * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
  * have it require something like xxxx@yyyy.zzzz or such. We'll see.
  */
-
 function make_clickable($string) {
     // TODO: eregi_replace() is deprecated as of PHP 5.3
     if (!stristr($string, ' src=') && !stristr($string, ' href=')) {
@@ -438,36 +439,27 @@ function text_filter($input, $filter = true) {
         // which will return techexplorer or image html depending on the capabilities of the
         // browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
         //$input = _text_parse_tex($input);
-
         // *** parse [teximage]...[/teximage] tags *** //
         // these force the gif rendering of LaTeX using the mimetex gif renderer
         //$input=_text_parse_tex_image($input);
-
         // *** parse [texexplorer]...[/texexplorer] tags  *** //
         // these force the texeplorer LaTeX notation
         //$input = _text_parse_texexplorer($input);
-
         // *** Censor Words *** //
         // censor words. This function removes certain words by [censored]
         // this can be usefull when the campus is open to the world.
         // $input=text_censor_words($input);
-
         // *** parse [?]...[/?] tags *** //
         // for the glossary tool
         //$input = _text_parse_glossary($input);
-
         // parse [wiki]...[/wiki] tags
         // this is for the coolwiki plugin.
         // $input=text_parse_wiki($input);
-
         // parse [tool]...[/tool] tags
         // this parse function adds a link to a certain tool
         // $input=text_parse_tool($input);
-
         // parse [user]...[/user] tags
-
         // parse [email]...[/email] tags
-
         // parse [code]...[/code] tags
     }
 
@@ -498,7 +490,7 @@ function _text_parse_tex($textext) {
         }
     }
 
-    $output = implode('',$input_array);
+    $output = implode('', $input_array);
     return $output;
 }
 
@@ -531,22 +523,22 @@ function latex_gif_renderer($latex_code) {
     global $_course;
 
     // Setting the paths and filenames
-    $mimetex_path = api_get_path(LIBRARY_PATH).'mimetex/';
-    $temp_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp/';
-    $latex_filename = md5($latex_code).'.gif';
+    $mimetex_path = api_get_path(LIBRARY_PATH) . 'mimetex/';
+    $temp_path = api_get_path(SYS_COURSE_PATH) . $_course['path'] . '/temp/';
+    $latex_filename = md5($latex_code) . '.gif';
 
-    if (!file_exists($temp_path.$latex_filename) OR isset($_GET['render'])) {
+    if (!file_exists($temp_path . $latex_filename) OR isset($_GET['render'])) {
         if (IS_WINDOWS_OS) {
-            $mimetex_command = $mimetex_path.'mimetex.exe -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code).'';
+            $mimetex_command = $mimetex_path . 'mimetex.exe -e "' . $temp_path . md5($latex_code) . '.gif" ' . escapeshellarg($latex_code) . '';
         } else {
-            $mimetex_command = $mimetex_path.'mimetex.cgi -e "'.$temp_path.md5($latex_code).'.gif" '.escapeshellarg($latex_code);
+            $mimetex_command = $mimetex_path . 'mimetex.cgi -e "' . $temp_path . md5($latex_code) . '.gif" ' . escapeshellarg($latex_code);
         }
         exec($mimetex_command);
         //echo 'volgende shell commando werd uitgevoerd:<br /><pre>'.$mimetex_command.'</pre><hr>';
     }
 
-    $return  = "<a href=\"\" onclick=\"javascript: newWindow=window.open('".api_get_path(WEB_CODE_PATH)."inc/latex.php?code=".urlencode($latex_code)."&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
-    $return .= '<img src="'.api_get_path(WEB_COURSE_PATH).$_course['path'].'/temp/'.$latex_filename.'" alt="'.$latex_code.'" border="0" /></a>';
+    $return = "<a href=\"\" onclick=\"javascript: newWindow=window.open('" . api_get_path(WEB_CODE_PATH) . "inc/latex.php?code=" . urlencode($latex_code) . "&amp;filename=$latex_filename','latexCode','toolbar=no,location=no,scrollbars=yes,resizable=yes,status=yes,width=375,height=250,left=200,top=100');\">";
+    $return .= '<img src="' . api_get_path(WEB_COURSE_PATH) . $_course['path'] . '/temp/' . $latex_filename . '" alt="' . $latex_code . '" border="0" /></a>';
     return $return;
 }
 
@@ -561,9 +553,9 @@ function latex_gif_renderer($latex_code) {
 function cut($text, $maxchar, $embed = false) {
     if (api_strlen($text) > $maxchar) {
         if ($embed) {
-            return '<span title="'.$text.'">'.api_substr($text, 0, $maxchar).'...</span>';
+            return '<span title="' . $text . '">' . api_substr($text, 0, $maxchar) . '...</span>';
         }
-        return api_substr($text, 0, $maxchar).' ...';
+        return api_substr($text, 0, $maxchar) . ' ...';
     }
     return $text;
 }
@@ -576,17 +568,17 @@ function cut($text, $maxchar, $embed = false) {
  * @return mixed    An integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
-    if (is_numeric($number)) {    	
+    if (is_numeric($number)) {
         if (!$number) {
-            $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
+            $result = ($flag == 2 ? '0.' . str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
-            
+
             if (floor($number) == $number) {
                 $result = number_format($number, ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0));
             } else {
                 $result = number_format(round($number, 2), ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS));
             }
-        }        
+        }
         return $result;
     }
 }
@@ -609,7 +601,7 @@ function get_last_week() {
     $lastweek = sprintf("%02d", $lastweek);
     $arrdays = array();
     for ($i = 1; $i <= 7; $i++) {
-        $arrdays[] = strtotime("$year"."W$lastweek"."$i");
+        $arrdays[] = strtotime("$year" . "W$lastweek" . "$i");
     }
     return $arrdays;
 }
@@ -621,13 +613,12 @@ function get_last_week() {
  */
 function get_week_from_day($date) {
     if (!empty($date)) {
-       $time = api_strtotime($date,'UTC');
-       return date('W', $time);
+        $time = api_strtotime($date, 'UTC');
+        return date('W', $time);
     } else {
         return date('W');
     }
 }
-
 
 /**
  * Deprecated functions
@@ -643,11 +634,11 @@ function get_week_from_day($date) {
  */
 function api_parse_tex($textext) {
     /*
-    if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
-        return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-    }
-    return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-    */
+      if (strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) {
+      return str_replace(array('[tex]', '[/tex]'), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+      }
+      return str_replace(array('[tex]', '[/tex]'), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+     */
     return $textext;
 }
 
@@ -662,13 +653,13 @@ function api_parse_tex($textext) {
  */
 function _text_parse_texexplorer($textext) {
     /*
-    if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
-        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
-    } else {
-        $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
-    }
-    return $textext;
-    */
+      if (strstr($_SERVER['HTTP_USER_AGENT'], 'MSIE')) {
+      $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<object classid=\"clsid:5AFAB315-AD87-11D3-98BB-002035EFB1A4\"><param name=\"autosize\" value=\"true\" /><param name=\"DataType\" value=\"0\" /><param name=\"Data\" value=\"", "\" /></object>"), $textext);
+      } else {
+      $textext = str_replace(array("[texexplorer]", "[/texexplorer]"), array("<embed type=\"application/x-techexplorer\" texdata=\"", "\" autosize=\"true\" pluginspage=\"http://www.integretechpub.com/techexplorer/\">"), $textext);
+      }
+      return $textext;
+     */
     return $textext;
 }
 
@@ -681,46 +672,37 @@ function _text_parse_texexplorer($textext) {
  * @param string how the string will be end 
  * @return a reduce string
  */
-
-function substrwords($text,$maxchar,$end='...')
-{
-	if(strlen($text)>$maxchar)
-	{
-		$words=explode(" ",$text);
-		$output = '';
-		$i=0;
-		while(1)
-		{
-			$length = (strlen($output)+strlen($words[$i]));
-			if($length>$maxchar)
-			{
-				break;
-			}
-			else
-			{
-				$output = $output." ".$words[$i];
-				$i++;
-			};
-		};
-	}
-	else
-	{
-		$output = $text;
-		return $output;
-	}
-	return $output.$end;
+function substrwords($text, $maxchar, $end = '...') {
+    if (strlen($text) > $maxchar) {
+        $words = explode(" ", $text);
+        $output = '';
+        $i = 0;
+        while (1) {
+            $length = (strlen($output) + strlen($words[$i]));
+            if ($length > $maxchar) {
+                break;
+            } else {
+                $output = $output . " " . $words[$i];
+                $i++;
+            };
+        };
+    } else {
+        $output = $text;
+        return $output;
+    }
+    return $output . $end;
 }
 
-function implode_with_key($glue, $array) {    
+function implode_with_key($glue, $array) {
     if (!empty($array)) {
         $string = '';
-        foreach($array as $key => $value) {
+        foreach ($array as $key => $value) {
             if (empty($value)) {
                 $value = 'null';
             }
-            $string .= $key." : ".$value." $glue ";
+            $string .= $key . " : " . $value . " $glue ";
         }
         return $string;
     }
-    return '';    
+    return '';
 }

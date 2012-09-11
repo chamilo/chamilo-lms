@@ -201,7 +201,7 @@ class BlockStudent extends Block {
 
 	 				if (!empty($scoretotal)) {
 	 					$score  += $scoretotal[0];
-	 					$weight += $scoretotal[1];	
+	 					$weight += $scoretotal[1];
 	 				} 
 	 			}
 
@@ -216,8 +216,8 @@ class BlockStudent extends Block {
                 }
 	    		$students_table .= '<tr class="'.$class_tr.'">										
 										<td>'.api_get_person_name($firstname, $lastname).' ('.$username.')</td>										
-										<td align="right">'.$attendances_faults_avg.'</td>
-										<td align="right">'.$evaluations_avg.'</td>
+										<td>'.$attendances_faults_avg.'</td>
+										<td>'.$evaluations_avg.'</td>
 									</tr>';
 	 			
 	 			$i++;		

@@ -63,53 +63,40 @@ class BlockStudent extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller 
      * @return array   column and content html
      */
-    public function get_block() {
-    	
-    	global $charset;
-    	    	
+    public function get_block() {    	
+    	global $charset;    	    	
     	$column = 1;
     	$data   = array();
-
-		/*if (api_is_platform_admin()) {
-			$student_content_html = $this->get_students_content_html_for_platform_admin();
-		} else if (api_is_drh()) {*/
-			$student_content_html = $this->get_students_content_html_for_drh();
-		//}
-		
-		$html = '        		
-			            <li class="widget color-blue" id="intro">
-			                <div class="widget-head">
-			                    <h3>'.get_lang('StudentsInformationsList').'</h3>
-			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
-			                </div>			
-			                <div class="widget-content">			                	
-								'.$student_content_html.'
-			                </div>
-			            </li>			                        			    
-				'; 
-    	
+        
+        $student_content_html = $this->get_students_content_html_for_drh();
+		$html = '<li class="widget color-blue" id="intro">
+                    <div class="widget-head">
+                        <h3>'.get_lang('StudentsInformationsList').'</h3>
+                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.
+                            Display::return_icon('close.gif',get_lang('Close')).'</a>
+                        </div>
+                    </div>
+                    <div class="widget-content">
+                        '.$student_content_html.'
+                    </div>
+                    </li>';    	
     	$data['column'] = $column;
-    	$data['content_html'] = $html;
-    	    	    	    	
-    	return $data;    	    	
-    	
+    	$data['content_html'] = $html;    	    	    	    	
+    	return $data;    	
     }
     
     /**
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_students_content_html_for_platform_admin() {
- 			
- 		$students = $this->students;
- 		$content = ''; 		
+    public function get_students_content_html_for_platform_admin() { 			
+ 		$students = $this->students; 		
  		$content = '<div style="margin:10px;">';
  		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
  		 		
  		if (count($students) > 0) {
-	 		$students_table = '<table class="data_table" width:"95%">'; 		
-	 		$students_table .= '
-								<tr>		
+	 		$students_table = '<table class="data_table">'; 		
+	 		$students_table .= '<tr>		
 									<th width="10%" rowspan="2">'.get_lang('FirstName').'</th>
 									<th width="10%" rowspan="2">'.get_lang('LastName').'</th>														
 									<th width="30%" colspan="2">'.get_lang('CourseInformation').'</th>
@@ -117,8 +104,7 @@ class BlockStudent extends Block {
 								<tr>
 									<th width="10%">'.get_lang('Courses').'</th>
 									<th width="10%">'.get_lang('Time').'</th>									
-								</tr>
-							';
+								</tr>';
 	 		
 	 		$i = 1;
 	 		foreach ($students as $student) {
@@ -167,24 +153,19 @@ class BlockStudent extends Block {
  		return $content;
  	}
   
-  	public function get_students_content_html_for_drh() {
-  		
+  	public function get_students_content_html_for_drh() {  		
   		$attendance = new Attendance();  		  			
-  		$students = $this->students;
- 		$content = ''; 		
+  		$students = $this->students; 		
  		$content = '<div style="margin:5px;">';
  		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
 
  		if (count($students) > 0) {
-	 		$students_table = '<table class="data_table" width:"95%">'; 		
-	 		$students_table .= '
-								<tr>																									
+	 		$students_table = '<table class="data_table">'; 		
+	 		$students_table .= '<tr>																									
 									<th>'.get_lang('User').'</th>
 									<th>'.get_lang('AttendancesFaults').'</th>
 									<th>'.get_lang('Evaluations').'</th>
-								</tr>								
-							';
-	 		
+								</tr>';	 		
 	 		$i = 1;
 	 		foreach ($students as $student) {
 	 			
@@ -223,10 +204,13 @@ class BlockStudent extends Block {
 	 				$evaluations_avg = '<a title="'.get_lang('GoToStudentDetails').'" href="'.api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id.'">'.round($score,2).'/'.round($weight,2).'('.round(($score / $weight) * 100,2) . ' %)</a>';
 	 			}
 	 			
-	 			if ($i%2 == 0) $class_tr = 'row_odd';
-	    		else $class_tr = 'row_even';
+	 			if ($i%2 == 0) {
+                    $class_tr = 'row_odd';
+                } else {
+                    $class_tr = 'row_even';
+                }
 	    		$students_table .= '<tr class="'.$class_tr.'">										
-										<td>'.api_get_person_name($firstname,$lastname).' ('.$username.')</td>										
+										<td>'.api_get_person_name($firstname, $lastname).' ('.$username.')</td>										
 										<td align="right">'.$attendances_faults_avg.'</td>
 										<td align="right">'.$evaluations_avg.'</td>
 									</tr>';

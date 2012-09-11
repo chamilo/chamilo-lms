@@ -38,7 +38,8 @@ class BlockStudent extends Block {
     		/*if (api_is_platform_admin()) {
 	    		$this->students = UserManager::get_user_list(array('status' => STUDENT));
 	    	} else {*/
-	    		$this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
+                
+            $this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
 	    	//}	
     	}	
     }
@@ -113,8 +114,12 @@ class BlockStudent extends Block {
 	 			$count_courses = count($courses_by_user);
 				$rowspan = $count_courses?$count_courses+1:2;
 	
-				if ($i%2 == 0) $style = ' style="background-color:#F2F2F2" ';
-		    	else $style = ' style="background-color:#FFF" ';
+				if ($i%2 == 0) {
+                    $style = ' style="background-color:#F2F2F2" ';
+                } else {
+                    $style = ' style="background-color:#FFF" ';
+                }
+                
 	 			$students_table .= '<tr '.$style.'>
 										<td rowspan="'.$rowspan.'">'.$student['firstname'].'</td>
 										<td rowspan="'.$rowspan.'">'.$student['lastname'].'</td>												
@@ -225,7 +230,9 @@ class BlockStudent extends Block {
   		$content .= $students_table;
  		
  		if (count($students) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=yourstudents">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;">
+                            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin&display=yourstudents">'.get_lang('SeeMore').'</a>
+                         </div>';
 		}
 		$content .= '</div>';		
   		return $content;	

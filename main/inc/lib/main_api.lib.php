@@ -995,6 +995,7 @@ function _api_format_user($user, $add_password = false) {
     }
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
+    $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
 
     $result['firstname'] 		= $firstname;
     $result['lastname'] 		= $lastname;
@@ -1016,6 +1017,7 @@ function _api_format_user($user, $add_password = false) {
     $result['official_code']    = $user['official_code'];
     $result['status']           = $user['status'];
     $result['auth_source']      = $user['auth_source'];
+    $result['active']           = $user['active'];
 
     if (isset($user['username'])) {
         $result['username']         = $user['username'];

@@ -230,6 +230,9 @@ echo Display::page_subheader(get_lang('StudentList').$url);
             <?php echo get_lang('User'); ?>
         </th>
         <th>
+            <?php echo get_lang('Status'); ?>
+        </th>
+        <th>
             <?php echo get_lang('Information'); ?>
         </th>
         <th>
@@ -251,20 +254,35 @@ if ($session['nbr_users'] == 0) {
 	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
     
     $users = SessionManager::get_users_by_session($id_session, 0);        
-    $reasons = SessionManager::get_session_change_user_reasons();
+    //$reasons = SessionManager::get_session_change_user_reasons();
     
     if (!empty($users)) {
         foreach ($users as $user) {
-            $user_link = '';
+            $user_info = api_get_user_info($user['user_id']);
+            //$link_class = 'class="item_disabled"';
+            $link_class = null;
+            $user_status_in_platform = Display::return_icon('error.png', get_lang('Inactive'));
+            if ($user_info['active'] == 1 ) {
+                $user_status_in_platform = Display::return_icon('accept.png', get_lang('Active'));                
+                //$link_class = null;
+            } else {
+                $user_info['complete_name_with_username'] = Display::tag('del', $user_info['complete_name_with_username']);
+            }
+            
+            $user_link = '';            
             if (!empty($user['user_id'])) {
-                $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
+                $user_link = '<a '.$link_class.' href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.$user_info['complete_name_with_username'].'</a>';
             }
             $information = null;
             $origin = null;
             $destination = null;
             $row_style = null;
-            $moved_date = '-';        
+            $moved_date = '-';   
+            
+            
+          
 
+            $course_link = '<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;</a>';
             $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
 
             //User in this session is subscribed but was moved to another session
@@ -287,7 +305,8 @@ if ($session['nbr_users'] == 0) {
                         //$destination = $destination;
                     }            
                 }
-                $row_style = 'style = " background-color: #ddd;"';            
+                $row_style = 'style = " background-color: #ddd;"';
+                $course_link=  Display::return_icon('course_na.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;';
                 $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
                 $delete_link = Display::return_icon('delete_na.png', get_lang('Delete')).'&nbsp;';
             } else {          
@@ -330,13 +349,15 @@ if ($session['nbr_users'] == 0) {
                     <td width="30%">
                         '.$user_link.'
                     </td>
+                    <td>'.$user_status_in_platform.'</td>
                     <td>'.$information.'</td>
                     <td>'.$origin.' '.$destination.'</td>
                     <td>'.$moved_date.'</td>
+                        
 
                     <td>
                         <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
-                        <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
+                        '.$course_link.'
                         '.$moved_link.'
                         '.$delete_link.'
                         '.$link_to_add_user_in_url.'

@@ -52,6 +52,7 @@ switch ($action) {
         }
         break;
 }
+
 Display::display_header($tool_name);
 
 if (!empty($_GET['warn'])) {
@@ -277,10 +278,7 @@ if ($session['nbr_users'] == 0) {
             $origin = null;
             $destination = null;
             $row_style = null;
-            $moved_date = '-';   
-            
-            
-          
+            $moved_date = '-';
 
             $course_link = '<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;</a>';
             $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';

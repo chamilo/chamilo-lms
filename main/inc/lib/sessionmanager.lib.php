@@ -2058,7 +2058,7 @@ class SessionManager {
             self::SESSION_CHANGE_USER_REASON_SCHEDULE => get_lang('ScheduleChanged'),
             self::SESSION_CHANGE_USER_REASON_CLASSROOM => get_lang('ClassRoomChanged'),
             self::SESSION_CHANGE_USER_REASON_LOCATION => get_lang('LocationChanged'),
-            self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
+            //self::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION => get_lang('EnrollmentAnnulation'),
         );
     }
     

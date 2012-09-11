@@ -250,7 +250,6 @@ $form->addElement('text', 'coach_access_start_date', array(get_lang('SessionCoac
 $form->addElement('text', 'coach_access_end_date', array(get_lang('SessionCoachEndDate'), get_lang('SessionCoachEndDateComment')), array('id' => 'coach_access_end_date'));
 $form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
 
-
 $session_field = new SessionField();
 $session_field->add_elements($form, $id);
 

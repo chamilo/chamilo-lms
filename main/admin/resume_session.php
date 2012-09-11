@@ -118,7 +118,7 @@ $coach_info = api_get_user_info($session['id_coach']);
              elseif($session['visibility'] == 2) 
                  echo get_lang('Visible');
              elseif($session['visibility'] == 3) 
-                echo api_ucfirst(get_lang('Invisible'))  ;
+                echo api_ucfirst(get_lang('Invisible'));
         } else {
             //By default course sessions can be access normally see function api_get_session_visibility() when no date_end is proposed            
             echo get_lang('Visible'); 
@@ -136,7 +136,7 @@ foreach ($session_fields as $session_field) {
         continue;        
     }
     $obj = new SessionFieldValue();
-    $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id']);
+    $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id'], true);
     
     $session_value = null;
     if ($result) {
@@ -157,7 +157,7 @@ if ($multiple_url_is_on) {
     echo '</td>';
     echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($id_session);
-    foreach($url_list as $url_data) {
+    foreach ($url_list as $url_data) {
         echo $url_data['url'].'<br />';
     }        
     echo '</td></tr>';

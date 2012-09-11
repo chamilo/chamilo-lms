@@ -1211,8 +1211,8 @@ class UserManager {
 				$sqluf .= $index." = '".$safecolumns[$index]."', ";
 			}
 		}
-		$time = time();
-		$sqluf .= " tms = FROM_UNIXTIME($time) WHERE id='$fid'";
+		$time = api_get_utc_datetime();
+		$sqluf .= " tms = '$time' WHERE id= '$fid' ";
 		$resuf = Database::query($sqluf);
 		return $resuf;
 	}
@@ -1234,9 +1234,8 @@ class UserManager {
 		if ($user_id === false) return false;
 		$fvalues = '';
         
-		//echo '<pre>'; print_r($fvalue);
 		if (is_array($fvalue)) {
-			foreach($fvalue as $val) {
+			foreach ($fvalue as $val) {
 				$fvalues .= Database::escape_string($val).';';
 			}
 			if (!empty($fvalues)) {
@@ -1245,6 +1244,7 @@ class UserManager {
 		} else {
 			$fvalues = Database::escape_string($fvalue);
 		}
+        
 		$sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
 		$resuf = Database::query($sqluf);
 		if (Database::num_rows($resuf) == 1) {
@@ -1287,6 +1287,7 @@ class UserManager {
 			$sqlufv = "SELECT * FROM $t_ufv WHERE user_id = $user_id AND field_id = ".$rowuf['id']." ORDER BY id";
 			$resufv = Database::query($sqlufv);
 			$n = Database::num_rows($resufv);
+          
 			if ($n > 1) {
 				//problem, we already have to values for this field and user combination - keep last one
 				while ($rowufv = Database::fetch_array($resufv)) {
@@ -1299,13 +1300,13 @@ class UserManager {
 					if ($rowufv['field_value'] != $fvalues) {
 						$sqlu = "UPDATE $t_ufv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowufv['id'];
 						$resu = Database::query($sqlu);
-						return($resu ? true : false);
+						return $resu ? true : false;
 					}
 					return true;
 				}
 			} elseif ($n == 1) {
 				//we need to update the current record
-				$rowufv = Database::fetch_array($resufv);
+				$rowufv = Database::fetch_array($resufv);                  
 				if ($rowufv['field_value'] != $fvalues) {
 					// If the new field is empty, delete it
 					if ($fvalues == '') {
@@ -1314,17 +1315,17 @@ class UserManager {
 						// Otherwise update it
 						$sql_query = "UPDATE $t_ufv SET field_value = '$fvalues', tms = '$tms' WHERE id = ".$rowufv['id'];
 					}
+                    
 
 					$resu = Database::query($sql_query);
-					return($resu ? true : false);
+					return $resu ? true : false;
 				}
 				return true;
 			} else {
 				$sqli = "INSERT INTO $t_ufv (user_id,field_id,field_value,tms) 
-                         VALUES ($user_id,".$rowuf['id'].",'$fvalues', '$tms')";
-				//error_log('UM::update_extra_field_value: '.$sqli);
+                         VALUES ($user_id,".$rowuf['id'].",'$fvalues', '$tms')";				
 				$resi = Database::query($sqli);
-				return($resi ? true : false);
+				return $resi ? true : false;
 			}
 		} else {
 			return false; //field not found
@@ -1443,9 +1444,9 @@ class UserManager {
 
 		$sql = 'SELECT options.*
 				FROM '.$t_ufo.' options
-					INNER JOIN '.$t_uf.' fields
-						ON fields.id = options.field_id
-							AND fields.field_variable="'.Database::escape_string($field_name).'"';
+                INNER JOIN '.$t_uf.' fields
+                ON fields.id = options.field_id AND
+                   fields.field_variable="'.Database::escape_string($field_name).'"';
 		$rs = Database::query($sql);
 		return Database::store_result($rs);
 	}
@@ -1491,14 +1492,14 @@ class UserManager {
 			$row = Database::fetch_array($res);
 			$order = $row[0]+1;
 		}
-		$time = time();
+		$time = api_get_utc_datetime();
 		$sql = "INSERT INTO $table_field
 				SET field_type = '".Database::escape_string($fieldtype)."',
 				field_variable = '".Database::escape_string($fieldvarname)."',
 				field_display_text = '".Database::escape_string($fieldtitle)."',
 				field_default_value = '".Database::escape_string($fielddefault)."',
 				field_order = '$order',
-				tms = FROM_UNIXTIME($time)";
+				tms = '$time'";
 		$result = Database::query($sql);
 		if ($result) {
 			//echo "id returned";
@@ -1542,7 +1543,7 @@ class UserManager {
 						$max = $row[0] + 1;
 					}
 					$time = time();
-					$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ($return,'$option','$option',$max,FROM_UNIXTIME($time))";
+					$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ($return,'$option','$option',$max, '$time')";
 					$res = Database::query($sql);
 					if ($res === false) {
 						$return = false;
@@ -1587,15 +1588,16 @@ class UserManager {
 		$table_field 				= Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_field_options		= Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 		$table_field_options_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-
-		// we first update the field definition with the new values
-		$time = time();
+		
+		$time = api_get_utc_datetime();
+        
+        // we first update the field definition with the new values
 		$sql = "UPDATE $table_field
 				SET field_type = '".Database::escape_string($fieldtype)."',
 				field_variable = '".Database::escape_string($fieldvarname)."',
 				field_display_text = '".Database::escape_string($fieldtitle)."',
 				field_default_value = '".Database::escape_string($fielddefault)."',
-				tms = FROM_UNIXTIME($time)
+				tms = '$time'
 			WHERE id = '".Database::escape_string($fieldid)."'";
 		$result = Database::query($sql);
 
@@ -1621,7 +1623,8 @@ class UserManager {
 		}
 
 		// Remove all the field options (and also the choices of the user) that are NOT in the new list of options
-		$sql = "SELECT * FROM $table_field_options WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
+		$sql = "SELECT * FROM $table_field_options 
+                WHERE option_value NOT IN ('".implode("','", $list)."') AND field_id = '".Database::escape_string($fieldid)."'";
 		$result = Database::query($sql);
 		$return['deleted_options'] = 0;
 		while ($row = Database::fetch_array($result)) {
@@ -1631,7 +1634,8 @@ class UserManager {
 			$return['deleted_options']++;
 
 			// deleting the answer of the user who has chosen this option
-			$sql_delete_option_value = "DELETE FROM $table_field_options_values WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
+			$sql_delete_option_value = "DELETE FROM $table_field_options_values 
+                                        WHERE field_id = '".Database::escape_string($fieldid)."' AND field_value = '".Database::escape_string($row['option_value'])."'";
 			Database::query($sql_delete_option_value);
 			$return['deleted_option_values'] = $return['deleted_option_values'] + Database::affected_rows();
 		}
@@ -1655,9 +1659,9 @@ class UserManager {
 			if (Database::num_rows($res) > 0) {
 				$row = Database::fetch_array($res);
 				$max = $row[0] + 1;
-			}
-			$time = time();
-			$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."',$max,FROM_UNIXTIME($time))";
+			}			
+			$sql = "INSERT INTO $table_field_options (field_id,option_value,option_display_text,option_order,tms) 
+                    VALUES ('".Database::escape_string($fieldid)."','".Database::escape_string($option)."','".Database::escape_string($option)."', $max, '$time')";
 			$result = Database::query($sql);
 		}
 		return true;
@@ -1714,25 +1718,55 @@ class UserManager {
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
-				if ($row['type'] == self::USER_FIELD_TYPE_TAG) {
-					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
+                if ($row['type'] == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
+                    $field_options = self::get_extra_field_options($row['fvar']);
                     
+                    $field_details['options'] = $field_options;
+                    $field_details['field_variable'] = $row['fvar'];
+                    
+                    $values = array();                    
+                    foreach ($field_details['options'] as $key => $element) {                          
+                        if ($element['option_display_text'][0] == '*') {
+                            $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
+                        } else {
+                            $values[0][$element['option_value']] = $element['option_display_text'];
+                        }
+                    }
+                                        
+                    if (is_array($extra_data)) {                                          
+                        $sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
+                        $resu = Database::query($sqlu);
+                        $rowu = Database::fetch_array($resu);
+
+                        $selected_values = explode(';', $rowu['fval']);
+                        $extra_data['extra_'.$field_details['field_variable']] = array();
+
+                        // looping through the selected values and assigning the selected values to either the first or second select form
+                        foreach ($selected_values as $key => $selected_value) {                                
+                            if (in_array($selected_value, $values[0])) {
+                                $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']] = $selected_value;
+                            } else {
+                                $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'*'] = $selected_value;
+                            }                                
+                        }                        
+                    }
+                    
+                } elseif ($row['type'] == self::USER_FIELD_TYPE_TAG) {
+					$tags = self::get_user_tags_to_string($user_id, $row['id'], false);                    
 					$extra_data['extra_'.$row['fvar']] = $tags;
 				} else {
 					$sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
 					$resu = Database::query($sqlu);
 					$fval = '';
 					// get default value
-					$sql_df = "SELECT field_default_value as fval_df " .
-							" FROM $t_uf " .
-							" WHERE id=".$row['id'];
+					$sql_df = "SELECT field_default_value as fval_df FROM $t_uf WHERE id=".$row['id'];
 					$res_df = Database::query($sql_df);
 
 					if (Database::num_rows($resu) > 0) {
 						$rowu = Database::fetch_array($resu);
 						$fval = $rowu['fval'];
 						if ($row['type'] ==  self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
-							$fval = split(';',$rowu['fval']);
+							$fval = split(';', $rowu['fval']);
 						}
 					} else {
 						$row_df = Database::fetch_array($res_df);
@@ -3533,7 +3567,7 @@ class UserManager {
         
         // User extra fields
         if ($type == 'user') {
-            $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC', true, null, true);            
+            $extra = self::get_extra_fields(0, 50, 5, 'ASC', true, null, true);            
         }       
         
         $jquery_ready_content = null;
@@ -3549,8 +3583,7 @@ class UserManager {
                 case self::USER_FIELD_TYPE_TEXT:
                     $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('class' => 'span4'));
                     $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
-                    
+                    $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');                    
                     if (!$admin_permissions) {
                         if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
                     }
@@ -3568,7 +3601,7 @@ class UserManager {
                     $group = array();
                     foreach ($field_details['options'] as $option_id => $option_details) {
                         $options[$option_details['option_value']] = $option_details['option_display_text'];
-                        $group[] =& HTML_QuickForm::createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
+                        $group[] =$form->createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
                     }
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '');
                     if (!$admin_permissions) {
@@ -3625,42 +3658,28 @@ class UserManager {
                     $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
                     $form -> setDefaults($defaults);
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                        if ($field_details['field_visible'] == 0)	
+                            $form->freeze('extra_'.$field_details['field_variable']);
                     }
                     $form->applyFilter('theme', 'trim');
                     break;
                 case self::USER_FIELD_TYPE_DOUBLE_SELECT:
-                    $values = array();
-                    foreach ($field_details['options'] as $key => $element) {                    
+                    $values = array();                    
+                    foreach ($field_details['options'] as $key => $element) {                          
                         if ($element['option_display_text'][0] == '*') {
-                            $values['*'][$element[0]] = str_replace('*', '', $element['option_display_text']);
+                            $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
                         } else {
-                            $values[0][$element[0]] = $element[2];
+                            $values[0][$element['option_value']] = $element['option_display_text'];
                         }
-                    }
-
-                    $group = '';
-                    $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details['field_variable'], '', $values[0], '');
-                    $group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details['field_variable'].'*', '', $values['*'], '');
+                    }                    
+                    $group = array();
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], '', $values[0], '');
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'*', '', $values['*'], '');
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '&nbsp;');
                     
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
-                    }
-
-                    // recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-                    if (key_exists('extra_'.$field_details['field_variable'], $extra_data)) {
-                        // exploding all the selected values (of both select forms)
-                        $selected_values = explode(';', $extra_data['extra_'.$field_details['field_variable']]);
-                        $extra_data['extra_'.$field_details['field_variable']] = array();
-
-                        // looping through the selected values and assigning the selected values to either the first or second select form
-                        foreach ($selected_values as $key => $selected_value) {
-                            if (key_exists($selected_value, $values[0])) {
-                                $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']] = $selected_value;
-                            } else {
-                                $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'*'] = $selected_value;
-                            }
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);
                         }
                     }
                     break;
@@ -3711,12 +3730,19 @@ EOF;
                     // get the social network's favicon
                     $icon_path = UserManager::get_favicon_from_url($extra_data['extra_'.$field_details['field_variable']], $field_details['field_default_value']);
                     // special hack for hi5
-                    $leftpad = '1.7'; $top = '0.4'; $domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $leftpad = '3'; $top = '0';}
+                    $leftpad = '1.7'; 
+                    $top = '0.4'; 
+                    $domain = parse_url($icon_path, PHP_URL_HOST); 
+                    if ($domain == 'www.hi5.com' or $domain == 'hi5.com') {
+                        $leftpad = '3'; $top = '0';                        
+                    }
                     // print the input field
                     $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('size' => 60, 'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '));
                     $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
-                    if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                    if ($field_details['field_visible'] == 0) {	
+                        $form->freeze('extra_'.$field_details['field_variable']);
+                    }
                     break;
             }
         }

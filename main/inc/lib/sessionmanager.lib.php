@@ -98,7 +98,7 @@ class SessionManager {
         if (!empty($params['id'])) {
             $session_field_value = new SessionFieldValue();
             $params['session_id'] = $params['id'];
-            unset($params['id']);
+            unset($params['id']);            
             $session_field_value->save_session_field_values($params);               
         }         
     }

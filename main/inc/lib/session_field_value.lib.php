@@ -1,11 +1,12 @@
 <?php
 
-class SessionFieldValue extends Model {
-     public $columns = array('id', 'session_id', 'field_id', 'field_value', 'tms');
+class SessionFieldValue extends Model {    
+    public $columns = array('id', 'session_id', 'field_id', 'field_value', 'tms');
      
-     public function __construct() {
-        $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);        
-     }
+    public function __construct() {
+        $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);    
+        $this->table_session_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+    }
      
     public function get_count() {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
@@ -16,19 +17,19 @@ class SessionFieldValue extends Model {
         $session_field = new SessionField();
         if (empty($params['session_id'])) {
             return false;            
-        }        
+        }
         
-        //Parse params
+        //Parse params        
         foreach ($params as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') { //an extra field
                 $field_variable = substr($key, 6);
                 $session_field_info = $session_field->get_session_field_info_by_field_variable($field_variable);                
                 if ($session_field_info) {                
                     $new_params = array(
-                        'session_id' => $params['session_id'],
-                        'field_id' => $session_field_info['id'],
-                        'field_value' => $value
-                    );                    
+                        'session_id'    => $params['session_id'],
+                        'field_id'      => $session_field_info['id'],
+                        'field_value'   => $value
+                    );
                     self::save($new_params);
                 }
             }
@@ -37,37 +38,32 @@ class SessionFieldValue extends Model {
     
     public function save($params, $show_query = false) {        
         $session_field = new SessionField();
-        $session_field_option = new SessionFieldOption();
+        //$session_field_option = new SessionFieldOption();
         
         //Setting value to insert
         $value = $params['field_value'];
+       
+        
         $value_to_insert = null;
         if (is_array($value)) {
-			foreach ($value as $val) {
-				$value_to_insert .= Database::escape_string($val).';';
-			}
-			if (!empty($value)) {
-				$value_to_insert = substr($value, 0, -1);
-			}
+            $value_to_insert = implode(';', $value);            
 		} else {
 			$value_to_insert = Database::escape_string($value);
-		}
-        
+		}                
         $params['field_value'] = $value_to_insert;
         
         //If field id exists
         $session_field_info = $session_field->get($params['field_id']);
                 
-        if ($session_field_info) {
-            
+        if ($session_field_info) {            
             switch ($session_field_info['field_type']) {
                 case UserManager::USER_FIELD_TYPE_TAG :
                     break;
                 case UserManager::USER_FIELD_TYPE_RADIO:
 				case UserManager::USER_FIELD_TYPE_SELECT:
 				case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
-                    $field_options = $session_field_option->get_field_options_by_field($params['field_id']);                  
-					$params['field_value'] = split(';', $value_to_insert);
+                    //$field_options = $session_field_option->get_field_options_by_field($params['field_id']);                  
+					//$params['field_value'] = split(';', $value_to_insert);
                     
                     /*
 					if ($field_options) {
@@ -87,6 +83,7 @@ class SessionFieldValue extends Model {
                     break;
                 case UserManager::USER_FIELD_TYPE_TEXT:
                 case UserManager::USER_FIELD_TYPE_TEXTAREA:
+                case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
                 default:
                     break;
             }
@@ -98,19 +95,27 @@ class SessionFieldValue extends Model {
             }            
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();                
-            
+            //var_dump($params);
             parent::save($params, $show_query);
         }        
     }
      
-    public function get_values_by_session_and_field_id($session_id, $field_id) {
+    public function get_values_by_session_and_field_id($session_id, $field_id, $transform = false) {
         $field_id = intval($field_id);
         $session_id = intval($session_id);
     
-        $sql = "SELECT * FROM {$this->table} WHERE session_id = '$session_id' AND field_id = '".$field_id."' ORDER BY id";
+        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_session_field} sf ON (s.field_id = sf.id)
+                WHERE session_id = '$session_id' AND field_id = '".$field_id."' ORDER BY id";
         $result = Database::query($sql);        
-        if (Database::num_rows($result)) {
-            return Database::fetch_array($result, 'ASSOC');                        
+        if (Database::num_rows($result)) {            
+            $result = Database::fetch_array($result, 'ASSOC'); 
+            if ($transform) {
+                if ($result['field_type'] == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
+                    $result['field_value'] = str_replace(';', ' -> ', $result['field_value']);
+                    $result['field_value'] = str_replace('*', '', $result['field_value']);
+                }
+            }
+            return $result;
         } else {
             return false;
         }        

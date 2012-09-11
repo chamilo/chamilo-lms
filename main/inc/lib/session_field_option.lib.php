@@ -31,7 +31,7 @@ class SessionFieldOption extends Model {
         if (empty($field_id)) {
             return false;
         }
-    
+        var_dump($params);
         if (!empty($params['field_options']) && 
             in_array($params['field_type'], array(
                 UserManager::USER_FIELD_TYPE_RADIO, 
@@ -42,6 +42,7 @@ class SessionFieldOption extends Model {
             if ($params['field_type'] == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
                 $twolist = explode('|', $params['field_options']);
                 $counter = 0;
+                
                 foreach ($twolist as $individual_list) {
                     $splitted_individual_list = split(';', $individual_list);
                     foreach	($splitted_individual_list as $individual_list_option) {
@@ -55,7 +56,7 @@ class SessionFieldOption extends Model {
                     $counter++;
                 }
             } else {
-                $list = split(';', $params['field_options']);
+                $list = explode(';', $params['field_options']);
             }
             
             if (!empty($list)) {

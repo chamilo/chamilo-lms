@@ -85,7 +85,7 @@ $(function() {
                 break;
             case "4":
                 $("#example").html("'.addslashes(Display::return_icon('userfield_drop_down.png')).'");
-                    break;
+                break;
             case "5":
                 $("#example").html("'.addslashes(Display::return_icon('userfield_multidropdown.png')).'");
                 break;
@@ -108,7 +108,6 @@ $(function() {
                 $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");                                            
                 break;
         }
-
     });
 
     var value = 1;
@@ -141,7 +140,7 @@ switch ($action) {
         $form = $obj->return_form($url, 'add');
 
         // The validation or display
-        if ($form->validate()) {            
+        if ($form->validate()) {          
             if ($check) {
                 $values = $form->exportValues();       
                 $res    = $obj->save($values);            

@@ -40,7 +40,7 @@ if (isset ($_SESSION['objExercise'])) {
 }
 
 $session_info   = SessionManager::fetch($session_id);
-$session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_list   = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 
 //Getting all sessions where I'm subscribed
@@ -272,25 +272,8 @@ if (!empty($course_id)) {
     //$back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
 }
 
-$start = $end = $start_only = $end_only ='';
-
-if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
-    $start = api_convert_and_format_date($session_info['date_start'], DATE_FORMAT_SHORT);    
-    $start_only = get_lang('From').' '.$session_info['date_start'];
-}
-if (!empty($session_info['date_start']) && $session_info['date_end'] != '0000-00-00') {
-    $end = api_convert_and_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
-    $end_only = get_lang('Until').' '.$session_info['date_end'];       
-}
-
-if (!empty($start) && !empty($end)) {
-    $dates = Display::tag('i', sprintf(get_lang('FromDateXToDateY'),$start, $end));
-} else {
-    $dates = Display::tag('i', $start_only.' '.$end_only);
-}
-
-echo Display::tag('h1', $back_url.' '.$session_info['name']);
-echo $dates.'<br />';
+$dates = SessionManager::parse_session_dates($session_info);
+echo Display::page_header($back_url.' '.$session_info['name']." <small>$dates<small>");
 
 //All Learnpaths grid settings (First tab, first subtab)
 

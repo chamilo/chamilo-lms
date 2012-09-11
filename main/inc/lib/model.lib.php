@@ -18,7 +18,7 @@ class Model {
     
     // var $pk; some day this will be implemented
     
-	public function __construct() {        
+	public function __construct() {
 	}
     
     /**
@@ -33,7 +33,7 @@ class Model {
                 return self::get($type);
                 break;
         }
-    }    
+    }
     
     /**
      * Delets an item

@@ -20,7 +20,6 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
-	
 
 if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
 	api_protect_admin_script(true);
@@ -66,29 +65,50 @@ $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 if ($_REQUEST['_search'] == 'true') {
-    $where_condition = ' 1 = 1 ';
-    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+    $where_condition = ' 1 = 1 ';    
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);    
         
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
-    }
+    }    
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //var_dump($filters);
     
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    $session_field = new SessionField();
+    $extra_fields = array();
+    
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';
+        $where_condition .= ' AND ( ';          
         $counter = 0;
-        foreach ($filters->rules as $key=>$rule) {
-            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
+        
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, 'extra_') === false) {
+                $field = $rule->field;
+                $where_condition .= get_where_clause($field, $rule->op, $rule->data);
+            } else {
+                $original_field = str_replace('extra_', '', $rule->field);
+                $session_field_option = $session_field->get_session_field_info_by_field_variable($original_field);                
+                
+                $extra_fields[] = array(
+                    'field' => $rule->field, 
+                    'id'    => $session_field_option['id']
+                );                
+                //var_dump($session_field_option);
+                $field = 'field_value';
+                //$where_condition .= ' ('.get_where_clause('field_id', 'eq', $session_field_option['id']);
+                $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
+                $where_condition .= ' ) ';
+                //$where_condition .= get_where_clause($rule->field, $rule->op, $rule->data).') ';
+            }
             
-            if ($counter < count($filters->rules) -1) {     
+            if ($counter < count($filters->rules) -1) {
                 $where_condition .= $filters->groupOp;
             }
             $counter++;
-        }
-        $where_condition .= ' ) ';
-    }        
+        }        
+        $where_condition .= ' ) ';        
+    }
 }
-//var_dump($where_condition);
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
@@ -109,8 +129,7 @@ switch ($action) {
         break;
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
-        $exercise_id = $_REQUEST['exerciseId'];
-        
+        $exercise_id = $_REQUEST['exerciseId'];        
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
             $filter_user = intval($_GET['filter_by_user']);
             if ($where_condition == "") {
@@ -123,6 +142,10 @@ switch ($action) {
 		break;
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
+        break;
+    case 'get_session_fields':
+        $obj = new SessionField();
+        $count = $obj->get_count();
         break;
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
@@ -230,8 +253,16 @@ switch ($action) {
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
+        //'nbr_courses', 'nbr_users', 
+        $columns = array('name', 'display_start_date', 'display_end_date', 'category_name', 'coach_name',  'session_active', 'visibility', 'course_title');
+        
+        if (!empty($extra_fields)) {
+            foreach ($extra_fields as $field) {
+                $columns[] = $field['field'];
+            }
+        }
+        
+        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
         $columns = array('headline', 'actions');   
@@ -357,7 +388,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses','sessions','actions');
+        $columns = array('name', 'users', 'courses', 'sessions', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {
@@ -375,7 +406,26 @@ switch ($action) {
         }
         //Multidimensional sort
         msort($result, $sidx);
-        break;      
+        break;        
+    case 'get_session_fields':
+        $obj = new SessionField();
+        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');
+        $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {            
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']   = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']   = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                
+                
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }  
+        
+        break;
     default:    
         exit;            
 }
@@ -391,7 +441,9 @@ $allowed_actions = array('get_careers',
                          'get_timelines', 
                          'get_grade_models', 
                          'get_event_email_template',
-                         'get_user_skill_ranking');
+                         'get_user_skill_ranking',
+                         'get_session_fields'
+);
                          	
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
@@ -416,8 +468,7 @@ if (in_array($action, $allowed_actions)) {
             $response->rows[$i]['cell']=$array;
             $i++; 
         }
-    }    
-
+    }
     echo json_encode($response);
 }
 exit;

@@ -23,42 +23,18 @@ $tool_name = get_lang('SessionOverview');
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
-// Database Table Definitions
-$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_class				= Database::get_main_table(TABLE_MAIN_SESSION_CLASS);
-$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
-$table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
-		WHERE '.$tbl_session.'.id='.$id_session;
-
-$rs      = Database::query($sql);
-$session = Database::store_result($rs);
-$session = $session[0];
-
-$sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
-$rs = Database::query($sql);
-$session_category = '';
-
-if (Database::num_rows($rs)>0) {
-	$rows_session_category = Database::store_result($rs);
-	$rows_session_category = $rows_session_category[0];
-	$session_category = $rows_session_category['name'];
+$session = api_get_session_info($id_session);
+$session_cat_info = SessionManager::get_session_category($session['session_category_id']);
+$session_category = null;
+if (!empty($session_cat_info)) {
+    $session_category = $session_cat_info['name'];
 }
 
 $action = $_GET['action'];
 
 $url_id = api_get_current_access_url_id();     
 
-
-switch($action) {
+switch ($action) {
     case 'add_user_to_url':        
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
@@ -68,39 +44,11 @@ switch($action) {
         }
         break;
     case 'delete':
-        $idChecked = $_GET['idChecked'];
-        if(is_array($idChecked)) {
-            $my_temp = array();
-            foreach ($idChecked as $id){
-                $my_temp[]= Database::escape_string($id);// forcing the escape_string
-            }
-            $idChecked = $my_temp;
-
-            $idChecked="'".implode("','",$idChecked)."'";
-
-            Database::query("DELETE FROM $tbl_session_rel_course WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code IN($idChecked)");
-            Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
+        if (isset($_GET['course_code_to_delete'])) {
+            SessionManager::delete_course_in_session($id_session, $_GET['course_code_to_delete']);
         }
-
-        if(!empty($_GET['class'])){
-            Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
-            $nbr_affected_rows=Database::affected_rows();
-            Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
-        }
-
         if (!empty($_GET['user'])) {
-            Database::query("DELETE FROM $tbl_session_rel_user WHERE relation_type<>".SESSION_RELATION_TYPE_RRHH." AND id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session SET nbr_users=nbr_users-$nbr_affected_rows WHERE id='$id_session'");
-
-            Database::query("DELETE FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND id_user=".intval($_GET['user']));
-            $nbr_affected_rows=Database::affected_rows();
-
-            Database::query("UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows WHERE id_session='$id_session'");
+            SessionManager::unsubscribe_user_from_session($id_session, $_GET['user']);            
         }
         break;
 }
@@ -113,18 +61,20 @@ if (!empty($_GET['warn'])) {
 if (!empty($message)) {
     echo $message;
 }
+$dates = SessionManager::parse_session_dates($session);
+echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']." <small>$dates</small>");
 
-echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
-
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_edit.php?page=resume_session.php&id=$id_session");
+$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_add.php?page=resume_session.php&id=$id_session");
 echo Display::page_subheader(get_lang('GeneralProperties').$url);
+
+$coach_info = api_get_user_info($session['id_coach']);
 
 ?>
 <!-- General properties -->
 <table class="data_table">
 <tr>
 	<td><?php echo get_lang('GeneralCoach'); ?> :</td>
-	<td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')' ?></td>
+	<td><?php echo $coach_info['complete_name'].' ('.$coach_info['username'].')' ?></td>
 </tr>
 <?php if(!empty($session_category)) { ?>
 <tr>
@@ -133,57 +83,73 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 </tr>
 <?php } ?>
 <tr>
-	<td><?php echo get_lang('Date'); ?> :</td>
-	<td>
-	<?php
-		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
-			echo get_lang('NoTimeLimits');
-		else {
-            if ($session['date_start'] != '00-00-0000') {
-            	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
-                $session['date_start'] =  get_lang('From').' '.$session['date_start'];
-            } else {
-            	$session['date_start'] = '';
-            }
-            if ($session['date_end'] == '00-00-0000') {
-                $session['date_end'] ='';
-            } else {
-            	$session['date_end'] = get_lang('Until').' '.$session['date_end'];
-            }
-			echo $session['date_start'].' '.$session['date_end'];
-        }
-        ?>
-	</td>
-</tr>
-<!-- show nb_days_before and nb_days_after only if they are different from 0 -->
-<tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysBefore')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_before_beginning']) ?>
-	</td>
+	<td><?php echo get_lang('SessionDisplayStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['display_start_date'], null, null, true); ?></td>    
 </tr>
 <tr>
-	<td>
-		<?php echo api_ucfirst(get_lang('DaysAfter')) ?> :
-	</td>
-	<td>
-		<?php echo intval($session['nb_days_access_after_end']) ?>
-	</td>
+    <td><?php echo get_lang('SessionDisplayEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['display_end_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['access_start_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['access_end_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionCoachStartDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['coach_access_start_date'], null, null, true); ?></td>
+</tr>
+<tr>    
+    <td><?php echo get_lang('SessionCoachEndDate'); ?> :</td>
+	<td><?php echo api_get_local_time($session['coach_access_end_date'], null, null, true); ?></td>
 </tr>
 <tr>
 	<td>
 		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
 	</td>
 	<td>
-		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
+		<?php        
+        if (isset($session['access_end_date']) && $session['access_end_date'] != '0000-00-00 00:00:00') {            
+            if ($session['visibility'] == 1) 
+                echo get_lang('ReadOnly'); 
+             elseif($session['visibility'] == 2) 
+                 echo get_lang('Visible');
+             elseif($session['visibility'] == 3) 
+                echo api_ucfirst(get_lang('Invisible'));
+        } else {
+            //By default course sessions can be access normally see function api_get_session_visibility() when no date_end is proposed            
+            echo get_lang('Visible'); 
+        }
+        ?>
 	</td>
 </tr>
 
-<?php 
+<?php
 
-$multiple_url_is_on = api_get_multiple_access_url();
+$session_field = new SessionField();
+$session_fields = $session_field->get_all();
+foreach ($session_fields as $session_field) {
+    if ($session_field['field_visible'] != '1') {
+        continue;        
+    }
+    $obj = new SessionFieldValue();
+    $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id'], true);
+    
+    $session_value = null;
+    if ($result) {
+        $session_value = $result['field_value'];
+    }    
+    echo "<tr>";
+    echo "<td> {$session_field['field_display_text']} </td>";
+    echo "<td> $session_value </td>";
+    echo "</tr>";    
+}
+
+
+$multiple_url_is_on = api_is_multiple_url_enabled();
 
 if ($multiple_url_is_on) {
     echo '<tr><td>';   
@@ -191,7 +157,7 @@ if ($multiple_url_is_on) {
     echo '</td>';
     echo '<td>';
     $url_list = UrlManager::get_access_url_from_session($id_session);
-    foreach($url_list as $url_data) {
+    foreach ($url_list as $url_data) {
         echo $url_data['url'].'<br />';
     }        
     echo '</td></tr>';
@@ -220,60 +186,26 @@ if ($session['nbr_courses'] == 0){
 	echo '<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
-} else {
-	// select the courses
-	$sql = "SELECT code,title,visual_code, nbr_users
-			FROM $tbl_course,$tbl_session_rel_course
-			WHERE course_code = code
-			AND	id_session='$id_session'
-			ORDER BY title";
-	$result=Database::query($sql);
-	$courses=Database::store_result($result);
+} else {    
+    $courses = SessionManager::get_course_list_by_session_id($id_session);	
 	foreach ($courses as $course) {
-		//select the number of users
-
-		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
-				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
-				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = '".intval($id_session)."'";
-
-		$rs = Database::query($sql);
-		$course['nbr_users'] = Database::result($rs,0,0);
-
-		// Get coachs of the courses in session
-
-		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
-		$rs = Database::query($sql);
-
-		$coachs = array();
-		if (Database::num_rows($rs) > 0) {
-			while($info_coach = Database::fetch_array($rs)) {
-				$coachs[] = api_get_person_name($info_coach['firstname'], $info_coach['lastname']).' ('.$info_coach['username'].')';
-			}
-		} else {
-			$coach = get_lang('None');
-		}
-
-		if (count($coachs) > 0) {
-			$coach = implode('<br />',$coachs);
-		} else {
-			$coach = get_lang('None');
-		}
+        $count_users = SessionManager::get_count_users_in_course_session($course['code'], $id_session);
+        $coaches = SessionManager::get_session_course_coaches_to_string($course['code'], $id_session);
 
 		$orig_param = '&origin=resume_session';
 		//hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
 		echo '
 		<tr>
 			<td>'.Display::url($course['title'].' ('.$course['visual_code'].')', api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session),'</td>
-			<td>'.$coach.'</td>
-			<td>'.$course['nbr_users'].'</td>
+			<td>'.$coaches.'</td>
+			<td>'.$count_users.'</td>
 			<td>
                 <a href="'.api_get_path(WEB_COURSE_PATH).$course['code'].'/?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('Course')).'</a>   
                 <a href="session_course_user_list.php?id_session='.$id_session.'&course_code='.$course['code'].'">'.Display::return_icon('user.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
                 <a href="'.api_get_path(WEB_CODE_PATH).'/user/user_import.php?action=import&cidReq='.$course['code'].'&id_session='.$id_session.'">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'), null, ICON_SIZE_SMALL).'</a>   
 				<a href="../tracking/courseLog.php?id_session='.$id_session.'&cidReq='.$course['code'].$orig_param.'&hide_course_breadcrumb=1">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;                
 				<a href="session_course_edit.php?id_session='.$id_session.'&page=resume_session.php&course_code='.$course['code'].''.$orig_param.'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>
-				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&idChecked[]='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
+				<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&course_code_to_delete='.$course['code'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
 			</td>
 		</tr>';
 	}
@@ -286,7 +218,7 @@ if ($session['nbr_courses'] == 0){
 
 $url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?page=resume_session.php&id_session=$id_session");
 $url .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL), "session_user_import.php?id_session=$id_session");
-echo Display::page_subheader(get_lang('UserList').$url);
+echo Display::page_subheader(get_lang('StudentList').$url);
 
 ?>
 
@@ -298,67 +230,147 @@ echo Display::page_subheader(get_lang('UserList').$url);
             <?php echo get_lang('User'); ?>
         </th>
         <th>
+            <?php echo get_lang('Status'); ?>
+        </th>
+        <th>
+            <?php echo get_lang('Information'); ?>
+        </th>
+        <th>
+            <?php echo get_lang('Destination'); ?>
+        </th>
+        <th>
+            <?php echo get_lang('MovedAt'); ?>
+        </th>
+        <th>
             <?php echo get_lang('Actions'); ?>
         </th>
     </tr>
 <?php
+/*
+if ($session['nbr_users'] == 0) {
+	
+} else {    
+*/
+	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
+    
+    $users = SessionManager::get_users_by_session($id_session, 0);        
+    //$reasons = SessionManager::get_session_change_user_reasons();
+    
+    if (!empty($users)) {
+        foreach ($users as $user) {
+            $user_info = api_get_user_info($user['user_id']);
+            //$link_class = 'class="item_disabled"';
+            $link_class = null;
+            $user_status_in_platform = Display::return_icon('error.png', get_lang('Inactive'));
+            if ($user_info['active'] == 1 ) {
+                $user_status_in_platform = Display::return_icon('accept.png', get_lang('Active'));                
+                //$link_class = null;
+            } else {
+                $user_info['complete_name_with_username'] = Display::tag('del', $user_info['complete_name_with_username']);
+            }
+            
+            $user_link = '';            
+            if (!empty($user['user_id'])) {
+                $user_link = '<a '.$link_class.' href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.$user_info['complete_name_with_username'].'</a>';
+            }
+            $information = null;
+            $origin = null;
+            $destination = null;
+            $row_style = null;
+            $moved_date = '-';   
+            
+            
+          
 
-if ($session['nbr_users']==0) {
-	echo '<tr>
+            $course_link = '<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;</a>';
+            $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
+
+            //User in this session is subscribed but was moved to another session
+            if (isset($user['moved_to']) && !empty($user['moved_to']) || $user['moved_status'] == SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
+                
+                $variation = SessionManager::get_session_change_user_reasons_variations_by_id($user['moved_status'], 'to');
+                //$information = $reasons[$user['moved_status']].$variation;
+                $information = $variation;
+
+                $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';                        
+                $session_info = SessionManager::fetch($user['moved_to']);
+
+                if ($user['moved_status'] != SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION) {
+                    $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
+                    //$origin = Display::url($session['name'], $url);                
+
+                    if ($session_info) {
+                        $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
+                        $destination = Display::url($session_info['name'], $url);
+                        //$destination = $destination;
+                    }            
+                }
+                $row_style = 'style = " background-color: #ddd;"';
+                $course_link=  Display::return_icon('course_na.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;';
+                $moved_link =  Display::return_icon('move_na.png', get_lang('ChangeUserSession')).'&nbsp;';
+                $delete_link = Display::return_icon('delete_na.png', get_lang('Delete')).'&nbsp;';
+            } else {          
+                $session_origin_info = SessionManager::get_session_rel_user_by_moved_to($id_session, $user['user_id']);
+
+                if (!empty($session_origin_info)) {
+                   $moved_date = api_get_local_time($session_origin_info['moved_at']);
+                }            
+                $session_info = SessionManager::fetch($session_origin_info['id_session']);
+                
+                $variation = SessionManager::get_session_change_user_reasons_variations_by_id($session_origin_info['moved_status'], 'from');
+                
+                //$information = $reasons[$session_origin_info['moved_status']].$variation;
+                $information = $variation;
+
+                if ($session_info) {
+                    $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];
+                    $origin = Display::url($session_info['name'], $url);
+
+                    $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session;                
+                    //$destination = Display::url($session['name'], $url);
+                    //$destination = ' / '.$destination;
+                }
+
+                $delete_link = '<a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>';
+
+            }
+
+            $link_to_add_user_in_url = '';
+
+            if ($multiple_url_is_on) {
+                if ($user['access_url_id'] != $url_id) {            
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_SMALL);
+                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_SMALL);
+                    $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+                }                
+            }
+
+            echo '<tr '.$row_style.'>
+                    <td width="30%">
+                        '.$user_link.'
+                    </td>
+                    <td>'.$user_status_in_platform.'</td>
+                    <td>'.$information.'</td>
+                    <td>'.$origin.' '.$destination.'</td>
+                    <td>'.$moved_date.'</td>
+                        
+
+                    <td>
+                        <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
+                        '.$course_link.'
+                        '.$moved_link.'
+                        '.$delete_link.'
+                        '.$link_to_add_user_in_url.'
+                    </td>
+                    </tr>';
+        }
+    } else {
+        echo '<tr>
 			<td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
 		</tr>';
-} else {    
-	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-    
-    if ($multiple_url_is_on) {           
-        $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user su
-                ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                LEFT OUTER JOIN $table_access_url_user uu ON (uu.user_id = u.user_id)
-                WHERE su.id_session = $id_session AND (access_url_id = $url_id OR access_url_id is null )
-                $order_clause";
-    } else {
-        $sql = "SELECT u.user_id, lastname, firstname, username
-                FROM $tbl_user u
-                INNER JOIN $tbl_session_rel_user su
-                ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                AND su.id_session = ".$id_session.$order_clause;
     }
 
-	$result = Database::query($sql);
-	$users  = Database::store_result($result);
-	$orig_param = '&origin=resume_session&id_session='.$id_session; // change breadcrumb in destination page
-	foreach ($users as $user){
-        $user_link = '';
-        if (!empty($user['user_id'])) {
-            $user_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.api_htmlentities(api_get_person_name($user['firstname'], $user['lastname']),ENT_QUOTES,$charset).' ('.$user['username'].')</a>';
-        }
-        
-        $link_to_add_user_in_url = '';
-        
-        if ($multiple_url_is_on) {
-            if ($user['access_url_id'] != $url_id) {            
-                $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), array(), ICON_SIZE_SMALL);
-                $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), array(), ICON_SIZE_SMALL);
-                $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
-            }                
-        }
-		echo '<tr>
-                <td width="90%">
-                    '.$user_link.'
-                </td>
-                <td>               
-                    <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
-                    <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
-                    <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete')).'</a>
-                    '.$link_to_add_user_in_url.'
-                </td>
-                </tr>';
-	}
-}
 ?>
 </table>
 <?php
-// footer
 Display :: display_footer();

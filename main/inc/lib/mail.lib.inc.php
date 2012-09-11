@@ -163,6 +163,12 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     if (is_array($extra_headers) && count($extra_headers) > 0) {
         foreach ($extra_headers as $key => $value) {
             switch (strtolower($key)) {
+                case 'reply-to':
+                    //the value here is the result of api_get_user_info()
+                    $sender_email = $value['email'];
+                    $sender_name  = $value['complete_name'];
+                    $mail->AddReplyTo($sender_email, $sender_name);
+                    break;
                 case 'encoding':
                 case 'content-transfer-encoding':
                     $mail->Encoding = $value;

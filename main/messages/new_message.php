@@ -241,7 +241,8 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');
 						} else {
-							$html .= MessageManager::display_success_message($user);
+                            $user_info = api_get_user_info($user);
+							$html .= Display::return_message(get_lang('MessageSentTo')." &nbsp;<b>".$user_info['complete_name']."</b>", 'confirmation', false);
 						}
 					}
 				}       

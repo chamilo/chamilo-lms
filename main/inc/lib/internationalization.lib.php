@@ -561,14 +561,19 @@ function _api_get_timezone() {
  * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
  *
  * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
- * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
+ * @param bool if the date is not correct return null instead of the current date
+ * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported 
  *
+ * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime($time = null) {
+function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false) {
     $from_timezone = _api_get_timezone();
-    $to_timezone = 'UTC';
-    if (is_null($time)) {
+    $to_timezone = 'UTC';    
+    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+        if ($return_null_if_invalid_date) {
+            return null;
+        }
         return gmdate('Y-m-d H:i:s');
     }
     // If time is a timestamp, return directly in utc
@@ -598,10 +603,11 @@ function api_get_utc_datetime($time = null) {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null) {
+function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null, $return_null_if_invalid_date = false) {
     if (!DATE_TIME_INSTALLED) {
         // This occurs when PHP < 5.2
-        if (is_null($time)) {
+        if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+            
             $time = time();
         }
         if (is_numeric($time)) {
@@ -619,7 +625,10 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
         $to_timezone = _api_get_timezone();
     }
     // If time is a timestamp, convert it to a string
-    if (is_null($time)) {
+    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+        if ($return_null_if_invalid_date) {
+            return null;
+        }
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s');
     }

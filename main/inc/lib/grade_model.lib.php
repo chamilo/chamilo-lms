@@ -8,7 +8,6 @@
 /**
  * Code
  */
-
 /**
  * @package chamilo.library
  */
@@ -105,20 +104,29 @@ class GradeModel extends Model {
         for ($i = 0; $i <= $max;  $i++) {
             $counter = $i;
             $form->addElement('text', 'components['.$i.'][percentage]', null, array('class' => 'span1'));                                        
-            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1'));
-            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span3'));        
-            $form->addElement('hidden', 'components['.$i.'][id]',       null, array('class' => 'span3'));
+            $form->addElement('text', 'components['.$i.'][acronym]',    null, array('class' => 'span1', 'placeholder' => get_lang('Acronym')));
+            $form->addElement('text', 'components['.$i.'][title]',      null, array('class' => 'span2', 'placeholder' => get_lang('Title')));            
+            $form->addElement('text', 'components['.$i.'][prefix]',      null, array('class'=> 'span1', 'placeholder' => get_lang('Prefix')));
             
-             $template_percentage =
+            $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);
+            $form->addElement('select', 'components['.$i.'][count_elements]', null, $options);
+            
+            $options = array(0=>0, 1 => 1, 2 => 2, 3=>3, 4=> 4, 5=> 5);            
+            $form->addElement('select', 'components['.$i.'][exclusions]',      null, $options);
+            
+            
+            
+            $form->addElement('hidden', 'components['.$i.'][id]');
+            
+            $template_percentage =
             '<div id=' . $i . ' style="display: '.(($i<=$nr_items)?'inline':'none').';" class="control-group">                
                 <p>
                 <label class="control-label">{label}</label>
-                <div class="controls">
-                    <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->
+                <div class="controls">                    
                     {element} <!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --> % = ';
             
             $template_acronym = '
-            <!-- BEGIN required --><span class="form_required">*</span> <!-- END required -->            
+            <!-- BEGIN required -->      
             {element} {label} <!-- BEGIN error --><span class="form_error">{error}</span> <!-- END error -->';
 
             $template_title =
@@ -131,9 +139,13 @@ class GradeModel extends Model {
             </a>            
             </div></p></div>';
             
-            $renderer->setElementTemplate($template_title, 'components['.$i.'][title]');
+            $renderer->setElementTemplate($template_acronym, 'components['.$i.'][title]');
             $renderer->setElementTemplate($template_percentage ,  'components['.$i.'][percentage]');
             $renderer->setElementTemplate($template_acronym , 'components['.$i.'][acronym]');
+            
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][prefix]');
+            $renderer->setElementTemplate($template_title , 'components['.$i.'][exclusions]');
+            $renderer->setElementTemplate($template_acronym , 'components['.$i.'][count_elements]');
             
             if ($i == 0) {
                 $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
@@ -256,12 +268,11 @@ class GradeModel extends Model {
 
 class GradeModelComponents extends Model {
     var $table;
-    var $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id');
+    var $columns = array('id', 'title', 'percentage', 'acronym', 'grade_model_id', 'prefix', 'exclusions', 'count_elements');
     
 	public function __construct() {
         $this->table =  Database::get_main_table(TABLE_GRADE_MODEL_COMPONENTS);
 	}    
-    
     public function save($params, $show_query = false) {        
 	    $id = parent::save($params, $show_query);  
         return $id;

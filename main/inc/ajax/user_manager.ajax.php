@@ -78,7 +78,7 @@ switch ($action) {
             
 			if (!empty($user_id)) {
 				$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-				$sql="UPDATE $user_table SET active='".$status."' WHERE user_id='".$user_id."'";
+				$sql = "UPDATE $user_table SET active='".$status."' WHERE user_id='".$user_id."'";
 				$result = Database::query($sql);
                 
 				//Send and email if account is active
@@ -94,8 +94,8 @@ switch ($action) {
 					$emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
 					$emailbody.=get_lang('HaveFun')."\n\n";
 					//$emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
-					$emailbody.=api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-					$result = api_mail($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);					
+					$emailbody.= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+					$result = api_mail_html($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);					
 				}
                 echo $status;
             }				

@@ -369,7 +369,7 @@ if ($tool_visibility == '0' && $to_group_id == '0' && !($is_allowed_to_edit || $
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] ="<script type=\"text/javascript\">
+$htmlHeadXtra[] ="<script>
 function confirmation (name) {
     if (confirm(\" " . get_lang("AreYouSureToDelete") . " \"+ name + \" ?\"))
         {return true;}
@@ -433,12 +433,9 @@ if ($session_id == 0) {
 
 /* 	MAIN SECTION */
 
-
 // Slideshow inititalisation
 $_SESSION['image_files_only'] = '';
 $image_files_only = '';
-
-/* 	Header */
 
 if ($is_certificate_mode) {
     $interbreadcrumb[] = array('url' => '../gradebook/index.php', 'name' => get_lang('Gradebook'));
@@ -499,7 +496,6 @@ $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH) . 'mediaplayer/player.swf';
  */
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
-$format_list = '';
 $count = 1;
 
 if (!empty($docs_and_folders))

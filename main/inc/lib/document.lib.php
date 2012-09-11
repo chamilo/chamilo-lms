@@ -456,8 +456,7 @@ class DocumentManager {
     public static function get_all_document_data($_course, $path = '/', $to_group_id = 0, $to_user_id = NULL, $can_see_invisible = false, $search = false) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLE_COURSE       = Database::get_main_table(TABLE_MAIN_COURSE);
-
+        
         //if to_user_id = NULL -> change query (IS NULL)
         //$to_user_id = (is_null($to_user_id)) ? 'IS NULL' : '= '.$to_user_id;
         if (!is_null($to_user_id)) {
@@ -899,7 +898,7 @@ class DocumentManager {
         if ($document_id) {
             self::delete_document_from_db($document_id);            
             //checking
-            $file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);            
+            //$file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);            
             $file_deleted_from_db = true;
         }
         

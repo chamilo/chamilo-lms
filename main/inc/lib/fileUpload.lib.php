@@ -260,8 +260,13 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							if (is_numeric($document_id)) {
 								// Update filesize
 								update_existing_document($_course, $document_id, $uploaded_file['size']);
+                                
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                
+                                //Redo visibility
+                                //api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'visible', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);

@@ -6068,18 +6068,11 @@ function api_set_default_visibility($item_id, $tool_id) {
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation'); 
     
-    if (isset($setting[$tool_id])) {
-        //$visibility_boolean = false;
-        $visibility = 'invisible';        
+    if (isset($setting[$tool_id])) {        
+        $visibility = 'invisible';    
         if ($setting[$tool_id] == 'true') {
-            $visibility = 'visible';
-            //$visibility_boolean = true;
+            $visibility = 'visible';            
         }
-        //Hack for gradebook because we don't use the item property table
-        /*
-        if ($tool_id == TOOL_GRADEBOOK) {
-            return $visibility_boolean;
-        }*/
         api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());            
     }
 }

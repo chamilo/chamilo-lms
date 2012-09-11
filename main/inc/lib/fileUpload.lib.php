@@ -195,7 +195,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 
 	// If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
-		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $maxFilledSpace, $output, $to_group_id);
+		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output, $to_group_id);
 		//display_message('Unzipping file');
 	} elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) { // We can only unzip ZIP files (no gz, tar,...)        
 	    if ($output) {	

@@ -583,7 +583,7 @@ switch ($action) {
                 $course_max_space = DocumentManager::get_course_quota();
                 $total_size = $filesize + $documents_total_space;
                 if ($total_size > $course_max_space) {
-			       $error_message = get_lang('IsNotPosibleSaveTheDocument');             
+			       $error_message = get_lang('NoSpace');             
                 } else {
                     
                     $active = '1';

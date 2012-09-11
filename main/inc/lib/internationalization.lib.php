@@ -663,6 +663,23 @@ function api_strtotime($time, $timezone = null) {
     return $timestamp;
 }
 
+
+/**
+ * Converts a date to the right timezone and localizes it in the format given as an argument
+ * @param mixed The time to be converted
+ * @param mixed Format to be used (TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
+ * @param string Timezone to be converted from. If null, UTC will be assumed.
+ * @return string Converted and localized date
+ *
+ * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ */
+function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
+    // First, convert the datetime to the right timezone
+    $time = api_get_local_time($time, null, $from_timezone);
+    // Second, localize the date
+    return api_format_date($time, $format);
+}
+
 /**
  * Returns formated date/time, correspondent to a given language.
  * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
@@ -917,21 +934,6 @@ function date_to_str_ago($date) {
     return $str;
 }
 
-/**
- * Converts a date to the right timezone and localizes it in the format given as an argument
- * @param mixed The time to be converted
- * @param mixed Format to be used (TIME_NO_SEC_FORMAT, DATE_FORMAT_SHORT, DATE_FORMAT_LONG, DATE_TIME_FORMAT_LONG)
- * @param string Timezone to be converted from. If null, UTC will be assumed.
- * @return string Converted and localized date
- *
- * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
- */
-function api_convert_and_format_date($time = null, $format = null, $from_timezone = null) {
-    // First, convert the datetime to the right timezone
-    $time = api_get_local_time($time, null, $from_timezone);
-    // Second, localize the date
-    return api_format_date($time, $format);
-}
 
 /**
  * Returns an array of translated week days in short names.

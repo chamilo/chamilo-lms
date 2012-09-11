@@ -12,10 +12,9 @@ class SessionField extends Model {
     public function add_elements($form, $session_id = null) {
         if (empty($form)) {
             return false;
-        }        
-        $extra_data = array();
+        }       
         if (!empty($session_id)) {
-            $extra_data = self::get_session_extra_data($session_id);
+            $extra_data = self::get_session_extra_data($session_id);            
             if ($form) {
                 $form->setDefaults($extra_data);
             }
@@ -74,25 +73,51 @@ class SessionField extends Model {
 		
 		if (!empty($session_fields) > 0) {
 			foreach ($session_fields as $session_field) {
-				//if ($session_field['field_type'] == self::USER_FIELD_TYPE_TAG) {
-					//$tags = self::get_user_tags_to_string($user_id,$row['id'],false);                    
-					//$extra_data['extra_'.$row['fvar']] = $tags;
-				//} else {
-                    $field_value = $session_field_values->get_values_by_session_and_field_id($session_id, $session_field['id']);
-                    if ($field_value) {
-                        $field_value = $field_value['field_value'];
-                        switch ($session_field['field_type']) {
-                            case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
-                                $field_value = split(';', $field_value);                                
-                            case UserManager::USER_FIELD_TYPE_RADIO:
-                                $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $field_value;
-                                break;
-                            default:
-                                $extra_data['extra_'.$session_field['field_variable']] = $field_value;
-                                break;
-                        }
-                    }                   
-				//}
+                $field_value = $session_field_values->get_values_by_session_and_field_id($session_id, $session_field['id']);                    
+                if ($field_value) {
+                    $field_value = $field_value['field_value'];                    
+                    
+                    switch ($session_field['field_type']) {
+                        case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
+                            $session_field_options = new SessionFieldOption();
+                            $field_options = $session_field_options->get_field_options_by_field($session_field['id']);
+                                                
+                            $field_details['options'] = $field_options;
+                            $field_details['field_variable'] = $session_field['field_variable'];
+
+                            $values = array();                    
+                            foreach ($field_details['options'] as $key => $element) {                          
+                                if ($element['option_display_text'][0] == '*') {
+                                    $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
+                                } else {
+                                    $values[0][$element['option_value']] = $element['option_display_text'];
+                                }
+                            }
+
+                            if (is_array($extra_data)) {
+                                $selected_values = explode(';', $field_value);
+                                $extra_data['extra_'.$field_details['field_variable']] = array();
+
+                                // looping through the selected values and assigning the selected values to either the first or second select form
+                                foreach ($selected_values as $key => $selected_value) {                                
+                                    if (in_array($selected_value, $values[0])) {
+                                        $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']] = $selected_value;
+                                    } else {
+                                        $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'*'] = $selected_value;
+                                    }                                
+                                }                        
+                            }
+                            break;
+                        case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
+                            $field_value = explode(';', $field_value);                                
+                        case UserManager::USER_FIELD_TYPE_RADIO:
+                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $field_value;
+                            break;
+                        default:
+                            $extra_data['extra_'.$session_field['field_variable']] = $field_value;
+                            break;
+                    }
+                }				
 			}
 		}        
 		return $extra_data;
@@ -176,9 +201,9 @@ class SessionField extends Model {
         //$form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
         //$form->addElement('html','<div id="options" style="display:none">');
        
-        $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span4'));        
-        $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options'));        
-        $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value'));        
+        $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));        
+        $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options', 'class' => 'span5'));        
+        $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value', 'class' => 'span5'));        
                 
         $group = array();
         $group[] = $form->createElement('radio', 'field_visible', null, get_lang('Yes'), 1);
@@ -197,8 +222,6 @@ class SessionField extends Model {
  
         //$form->addElement('html', '</div>');
       
-   
-        
 	    /*$status_list = $this->get_status_list();         
         $form->addElement('select', 'status', get_lang('Status'), $status_list);*/
         
@@ -239,8 +262,7 @@ class SessionField extends Model {
     }
      
      public function update($params) {
-         $params = self::clean_parameters($params);
-         
+        $params = self::clean_parameters($params);        
         if (isset($params['id'])) {            
              $session_field_option = new SessionFieldOption();
              $params['field_id'] = $params['id'];

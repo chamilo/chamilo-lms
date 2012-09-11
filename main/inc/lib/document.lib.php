@@ -2205,7 +2205,7 @@ class DocumentManager {
      * @param bool      print html messages
      * @return unknown_type
      */
-    public static function upload_document($files, $path, $title ='', $comment = '', $unzip = 0, $if_exists = '', $index_document = false, $show_output = false) {
+    public static function upload_document($files, $path, $title = null, $comment = null, $unzip = 0, $if_exists = null, $index_document = false, $show_output = false) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
         $course_info      = api_get_course_info();
@@ -2256,7 +2256,7 @@ class DocumentManager {
                      Display::display_normal_message(build_missing_files_form($missing_files, $path, $files['file']['name']), false);
                      }*/
                     if ($index_document) {
-                        $idx_doc = self::index_document($docid,$course_info['code'],null,$_POST['language'],$_REQUEST,$if_exists);
+                        self::index_document($docid,$course_info['code'],null,$_POST['language'],$_REQUEST,$if_exists);
                     }
                     if (!empty($docid) && is_numeric($docid)) {
                         $document_data = self::get_document_data_by_id($docid, $course_info['code']);

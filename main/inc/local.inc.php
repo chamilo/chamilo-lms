@@ -1099,7 +1099,7 @@ if (api_get_setting('student_view_enabled') == "true") {
 
 if (isset($_cid)) {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-    $time = api_get_datetime();
+    $time = api_get_utc_datetime();
     $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
     Database::query($sql);
 }

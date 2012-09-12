@@ -680,8 +680,31 @@ function get_event_users($event_name) {
     //For tests
     //$sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER);
         
-    $user_list = Database::store_result(Database::query($sql), 'ASSOC');    
+    $user_list = Database::store_result(Database::query($sql), 'ASSOC');
     return json_encode($user_list);	
+}
+
+function get_events_by_user_and_type($user_id, $event_type) {
+    global $TABLETRACK_DEFAULT;
+    $user_id = intval($user_id);
+    $event_type = Database::escape_string($event_type);
+    
+    $sql = "SELECT * FROM $TABLETRACK_DEFAULT 
+            WHERE default_value_type = 'user_id' AND 
+                  default_value = $user_id AND
+                  default_event_type = '$event_type'
+            ORDER BY default_date ";
+    $result = Database::query($sql);
+    if ($result) {
+        return Database::store_result($result, 'ASSOC');
+    }
+    return false;
+}
+function get_latest_event_by_user_and_type($user_id, $event_type) {
+    $result = get_events_by_user_and_type($user_id, $event_type);
+    if ($result && !empty($result)) {
+        return $result[0];
+    }
 }
 
 /**
@@ -1414,6 +1437,8 @@ function event_send_mail($event_name, $params) {
     EventsMail::send_mail($event_name, $params);
 }
 
+
+
 /**
  * Internal function checking if the mail was already sent from that user to that user
  * @param string $event_name
@@ -1467,6 +1492,8 @@ function portal_homepage_edited_event_send_mail_filter_func(&$values) {
     // proper logic for this filter
     return $res;
 }
+
+
 
 /**
  * 

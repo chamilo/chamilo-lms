@@ -134,7 +134,7 @@ define('LDAP_AUTH_SOURCE', 'extldap');
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
-// event logs types
+// Event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
 define('LOG_USER_CREATE',                       'user_created');
@@ -157,7 +157,7 @@ define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
-// event logs data types
+// Event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');

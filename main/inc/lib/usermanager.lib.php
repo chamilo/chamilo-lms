@@ -569,7 +569,7 @@ class UserManager {
 	 * @param int user_id
 	 * @param int Enable or disable
 	 */
-	private static function change_active_state($user_id, $active) {		
+	public static function change_active_state($user_id, $active, $send_email_if_activated = false) {		
         $user_id = intval($user_id);
         $active = intval($active);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -579,11 +579,28 @@ class UserManager {
         
         $log_event = LOG_USER_DEACTIVATED;
         if ($active == 1) {
-            $log_event = LOG_USER_ACTIVATED;    
+            $log_event = LOG_USER_ACTIVATED;
+            
+            if ($send_email_if_activated) {                
+                $user_info = api_get_user_info($user_id);					
+                $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');                
+                //$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+                $emailbody=get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
+                $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
+                $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
+                $emailbody.=get_lang('HaveFun')."\n\n";
+                $emailbody.=get_lang('Problem'). "\n\n". get_lang('Formula');
+                $emailbody.= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                
+                MessageManager::send_message_simple($user_id, $emailsubject, $emailbody);
+                //$result = api_mail_html($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);                
+            }
         }
+        
         $user_info = api_get_user_info($user_id);
         event_system($log_event, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
-        event_system($log_event, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());		
+        event_system($log_event, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());	
 	}
 
 	/**

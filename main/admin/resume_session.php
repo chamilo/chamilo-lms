@@ -263,10 +263,16 @@ if ($session['nbr_users'] == 0) {
             //$link_class = 'class="item_disabled"';
             $link_class = null;
             $user_status_in_platform = Display::return_icon('error.png', get_lang('Inactive'));
+            
             if ($user_info['active'] == 1 ) {
                 $user_status_in_platform = Display::return_icon('accept.png', get_lang('Active'));                
                 //$link_class = null;
             } else {
+                $status_info = get_latest_event_by_user_and_type($user['user_id'], LOG_USER_DEACTIVATED);
+                //var_dump($status_info);
+                if (!empty($status_info)) {
+                    $user_status_in_platform .= '<br />'.get_lang('UserInactived').' '.api_convert_and_format_date($status_info['default_date'], DATE_TIME_FORMAT_LONG);
+                }
                 $user_info['complete_name_with_username'] = Display::tag('del', $user_info['complete_name_with_username']);
             }
             
@@ -351,8 +357,6 @@ if ($session['nbr_users'] == 0) {
                     <td>'.$information.'</td>
                     <td>'.$origin.' '.$destination.'</td>
                     <td>'.$moved_date.'</td>
-                        
-
                     <td>
                         <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                         '.$course_link.'

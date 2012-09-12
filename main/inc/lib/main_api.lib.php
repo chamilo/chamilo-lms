@@ -1850,8 +1850,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             //I don't care the field visibility
             if ($row['access_start_date'] == '0000-00-00 00:00:00' && $row['access_end_date'] == '0000-00-00 00:00:00') {
                 return SessionManager::DEFAULT_VISIBILITY;
-            } else {
-                
+            } else {                
               
                 //If access_start_date is set
                 if (!empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00') {                  
@@ -1878,11 +1877,13 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
             }
+            
+            
  
-            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
+            //If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values            
             $is_coach = api_is_coach($session_id, $course_code);
  
-            if ($is_coach) {                
+            if ($is_coach) {         
                 
                 //Test end date
                 if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' && 
@@ -1907,6 +1908,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
             } else {
+                
                 //Student - check the moved_to variable
                 $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
                 if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
@@ -2256,10 +2258,6 @@ function api_get_user_platform_status($user_id = false) {
  * @return boolean True if current user is a course or session coach
  */
 function api_is_coach($session_id = 0, $course_code = null) {
-	//@todo Not sure about this one
-	/*if (api_is_platform_admin()) {
-		return true;
-	}*/
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2272,25 +2270,40 @@ function api_is_coach($session_id = 0, $course_code = null) {
         $course_code = api_get_course_id();
     }
     
+    $user_id = api_get_user_id();
+    
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
-
+    
 	if (!empty($course_code)) {
 	    $sql = "SELECT DISTINCT id
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-	            ON session_rc_ru.id_user = '".api_get_user_id()."'
-	            WHERE   session_rc_ru.course_code = '$course_code' AND 
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."'  AND 
+                        session_rc_ru.course_code = '$course_code' AND 
                         session_rc_ru.status = 2 AND 
                         session_rc_ru.id_session = '$session_id'";
 	    $result = Database::query($sql);
 	    $sessionIsCoach = Database::store_result($result);
-	}
-
+	} else { 
+        //Check if at least this user is a coach of one of the courses
+        $sql = "SELECT DISTINCT session.id
+				FROM $session_table session INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."' AND 
+                        session_rc_ru.status = 2 AND 
+                        session_rc_ru.id_session = '$session_id'";
+               
+	    $result = Database::query($sql);
+	    $sessionIsCoach = Database::store_result($result);        
+    }
+    
+    //Check if is main coach
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id
 	         	FROM $session_table
-	         	WHERE   session.id_coach =  '".api_get_user_id()."' AND                     
+	         	WHERE   session.id_coach =  '".$user_id."' AND                     
                         id = '$session_id'";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {

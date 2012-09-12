@@ -2517,7 +2517,7 @@ class Tracking {
 		 * @param   int     session id
 		 * @return  string  html code
 		 */
-		function show_course_detail($user_id, $course_code, $session_id) {
+		static function show_course_detail($user_id, $course_code, $session_id) {
 			$html = '';
 			if (isset($course_code)) {				
 
@@ -2531,17 +2531,17 @@ class Tracking {
                 
 				$html .= Display::page_subheader($course_info['title']);
 				
-				$html .= '<table class="data_table" width="100%">';
+				$html .= '<table class="data_table">';
 						
 				//Course details
 				$html .= '<tr>
-				                <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
-				                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
-				                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
-				                </tr>';
+                            <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
+                            <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
+                            <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
+                         </tr>';
                 
                 if (empty($session_id)) {
                     $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, STUDENT);

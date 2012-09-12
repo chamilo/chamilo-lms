@@ -2024,7 +2024,8 @@ class UserManager {
                                 
                                 moved_to,
                                 moved_status,
-                                id_coach
+                                id_coach,
+                                scu.id_user
                                 
                 FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
                       INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
@@ -2045,7 +2046,8 @@ class UserManager {
                 $session_id = $row['id'];
                 
                 //Checking session visibility
-                $visibility = api_get_session_visibility($session_id, null, false);                
+                $visibility = api_get_session_visibility($session_id, null, false);
+                //var_dump($visibility);
                 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
@@ -2123,20 +2125,23 @@ class UserManager {
 			}
 		}
 
-		//Courses in which we suscribed out of any session
+		//Courses in which we are suscribed out of any session
 		$tbl_user_course_category = Database :: get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
 
-		$personal_course_list_sql = "SELECT course.code, course_rel_user.status course_rel_status, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat		                                      
-			                         FROM ".$tbl_course_user." course_rel_user
-                                            LEFT JOIN ".$tbl_course." course
+		$personal_course_list_sql = "SELECT course.code, 
+                                            course_rel_user.status course_rel_status, 
+                                            course_rel_user.sort sort, 
+                                            course_rel_user.user_course_cat user_course_cat
+			                         FROM $tbl_course_user course_rel_user
+                                            LEFT JOIN $tbl_course course
                                             ON course.code = course_rel_user.course_code
-                                            LEFT JOIN ".$tbl_user_course_category." user_course_category
+                                            LEFT JOIN $tbl_user_course_category user_course_category
                                             ON course_rel_user.user_course_cat = user_course_category.id
 				                     $join_access_url
 			                         WHERE  course_rel_user.user_id = '".$user_id."' AND 
 			                                course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."  $where_access_url
 								     ORDER BY user_course_category.sort, course_rel_user.sort, course.title ASC";
-
+        
 		$course_list_sql_result = Database::query($personal_course_list_sql);
 
 		$personal_course_list = array();
@@ -2148,14 +2153,18 @@ class UserManager {
 			}
 		}
 
-		// Get the list of sessions where the user is subscribed
-		$sessions_sql = "SELECT DISTINCT id, name, date_start, date_end
-						FROM $tbl_session_user, $tbl_session
-						WHERE   (id_session=id AND 
-                                id_user=$user_id AND 
-                                relation_type<>".SESSION_RELATION_TYPE_RRHH.") OR 
-                                (id_coach = $user_id)
-						ORDER BY date_start, date_end, name";
+		// Get the list of sessions where the user is subscribed as student, course coach or session admin
+		$sessions_sql = "SELECT DISTINCT s.id, s.name
+						FROM $tbl_session_user su , $tbl_session s, $tbl_session_course_user scu
+						WHERE  (su.id_session = s.id AND scu.id_session = s.id) AND 
+                                (
+                                    (su.id_user = $user_id AND 
+                                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH.")                                
+                                    OR (id_coach = $user_id)
+                                    OR (scu.id_user = $user_id)
+                                )
+						ORDER BY s.name ";
+        
 		$result     = Database::query($sessions_sql);
 		$sessions   = Database::store_result($result, 'ASSOC');
   

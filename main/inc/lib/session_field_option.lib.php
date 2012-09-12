@@ -25,13 +25,20 @@ class SessionFieldOption extends Model {
         }
     }
     
+    public function delete_all_options_by_field_id($field_id) {
+        $field_id = intval($field_id);
+        $sql = "DELETE FROM  {$this->table} WHERE field_id = $field_id";
+        Database::query($sql);
+    }
+    
     public function save($params, $show_query = false) {
         $field_id = intval($params['field_id']);
         
         if (empty($field_id)) {
             return false;
         }
-        var_dump($params);
+        
+        $time = api_get_utc_datetime();     
         if (!empty($params['field_options']) && 
             in_array($params['field_type'], array(
                 UserManager::USER_FIELD_TYPE_RADIO, 
@@ -40,21 +47,37 @@ class SessionFieldOption extends Model {
                 UserManager::USER_FIELD_TYPE_DOUBLE_SELECT))
             ) {
             if ($params['field_type'] == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
-                $twolist = explode('|', $params['field_options']);
-                $counter = 0;
-                
-                foreach ($twolist as $individual_list) {
-                    $splitted_individual_list = split(';', $individual_list);
-                    foreach	($splitted_individual_list as $individual_list_option) {
-                        //echo 'counter:'.$counter;
-                        if ($counter == 0) {
-                            $list[] = $individual_list_option;
-                        } else {
-                            $list[] = str_repeat('*', $counter).$individual_list_option;
+                //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;                
+                $options_parsed = UserManager::extra_field_double_select_convert_string_to_array($params['field_options']);                
+                if (!empty($options_parsed)) {
+                    foreach ($options_parsed as $key => $option) {
+                        $option['label'];
+                        $sub_options = $option['options'];
+
+                        $new_params = array(
+                            'field_id' => $field_id,                            
+                            'option_value' => 0,
+                            'option_display_text' => $option['label'],
+                            'option_order' => 0,
+                            'tms' => $time,
+                        );
+                        $sub_id = parent::save($new_params, $show_query);
+                        foreach ($sub_options as $sub_option) {
+                            if (!empty($sub_option)) {
+                                $new_params = array(
+                                    'field_id' => $field_id,                            
+                                    'option_value' => $sub_id,
+                                    'option_display_text' => $sub_option,
+                                    'option_order' => 0,
+                                    'tms' => $time,
+                                );
+                                parent::save($new_params, $show_query);
+                            }
+                            
                         }
                     }
-                    $counter++;
                 }
+                return true;
             } else {
                 $list = explode(';', $params['field_options']);
             }
@@ -64,8 +87,7 @@ class SessionFieldOption extends Model {
                     $option_info = self::get_field_option_by_field_and_option($field_id, $option);
                     
                     if ($option_info == false) {
-                        $order = self::get_max_order($field_id);
-                        $time = api_get_utc_datetime();
+                        $order = self::get_max_order($field_id);                        
                         $new_params = array(
                             'field_id' => $field_id,                            
                             'option_value' => $option,
@@ -78,7 +100,7 @@ class SessionFieldOption extends Model {
                 }
             }
         }
-        return true;         
+        return true;    
     }
         
     public function get_field_option_by_field_and_option($field_id, $option_value) {
@@ -105,14 +127,50 @@ class SessionFieldOption extends Model {
         return false;        
     }
     
+    public function get_second_select_field_options_by_field($field_id, $option_value_id, $to_json = false) {
+        $field_id = intval($field_id);
+        $option_value_id = intval($option_value_id);        
+        $options = array();
+        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = $option_value_id ";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            $options = Database::store_result($result, 'ASSOC');
+        }
+        
+        if ($to_json) {
+            $string = null;
+            if (!empty($options)) {
+                $array = array();
+                foreach ($options as $option) {                    
+                    $array[$option['id']] = $option['option_display_text'];
+                }                
+                $string = json_encode($array);                
+            }
+            return $string;
+            
+        }        
+        return $options;    
+    }
+    
     public function get_field_options_by_field_to_string($field_id) {
+        $session_field = new SessionField();
+        $field_info = $session_field->get($field_id);
+        
         $options = self::get_field_options_by_field($field_id);
         $elements = array();
         if (!empty($options)) {
-            foreach ($options as $option) {
-                $elements[]= $option['option_value'];
+            switch ($field_info['field_type']) {
+                case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:                    
+                    $html = UserManager::extra_field_double_select_convert_array_to_string($options);                    
+                    break;
+                default:
+                    foreach ($options as $option) {
+                        $elements[]= $option['option_value'];
+                    }
+                    $html = implode(';', $elements);
+                    break;                
             }
-            $html = implode(';', $elements);
+            
             return $html;
         }
         return null;

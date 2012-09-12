@@ -209,18 +209,6 @@ if (empty($id)) {
 } else {
     $form->addElement('hidden', 'id', $id);
 }
-
-$categories = SessionManager::get_all_session_category();
-
-$select_categories = array();
-if (!empty($categories)) {
-    $select_categories = array('0' => get_lang('None'));
-    foreach ($categories as $row) {
-        $select_categories[$row['id']] = $row['name'];
-    }
-}
-
-
 //Coaches
 //$coaches = SessionManager::get_user_list();
 $form->addElement('select', 'id_coach', get_lang('CoachName'), array(),array('id' => 'coach_id'));
@@ -250,10 +238,30 @@ $form->addElement('text', 'coach_access_end_date', array(get_lang('SessionCoachE
 $form->addRule(array('coach_access_start_date', 'coach_access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
 
 //Session categories
+
+$categories = SessionManager::get_all_session_category();
+
+$select_categories = array();
+if (!empty($categories)) {
+    $select_categories = array('0' => get_lang('None'));
+    foreach ($categories as $row) {
+        $select_categories[$row['id']] = $row['name'];
+    }
+}
 $form->addElement('select', 'session_category_id', get_lang('SessionCategory'), $select_categories, array('id' => 'session_category_id_name', 'class' => null));
 
+//Extra session fields
 $session_field = new SessionField();
-$session_field->add_elements($form, $id);
+$extra = $session_field->add_elements($form, $id);
+
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 $form->addElement('html','</div>');
       

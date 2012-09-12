@@ -12,15 +12,17 @@ class SessionField extends Model {
     public function add_elements($form, $session_id = null) {
         if (empty($form)) {
             return false;
-        }       
+        }   
+        $extra_data = false;
         if (!empty($session_id)) {
             $extra_data = self::get_session_extra_data($session_id);            
             if ($form) {
                 $form->setDefaults($extra_data);
-            }
+            }            
         }        
         $extra_fields = self::get_all();        
-        UserManager::set_extra_fields_in_form($form, null, 'session_field', false, false, 'session', $extra_fields);        
+        $extra = UserManager::set_extra_fields_in_form($form, $extra_data, 'session_field', false, false, 'session', $extra_fields);        
+        return $extra;
     }
      
     public function get_count() {
@@ -78,35 +80,10 @@ class SessionField extends Model {
                     $field_value = $field_value['field_value'];                    
                     
                     switch ($session_field['field_type']) {
-                        case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
-                            $session_field_options = new SessionFieldOption();
-                            $field_options = $session_field_options->get_field_options_by_field($session_field['id']);
-                                                
-                            $field_details['options'] = $field_options;
-                            $field_details['field_variable'] = $session_field['field_variable'];
-
-                            $values = array();                    
-                            foreach ($field_details['options'] as $key => $element) {                          
-                                if ($element['option_display_text'][0] == '*') {
-                                    $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
-                                } else {
-                                    $values[0][$element['option_value']] = $element['option_display_text'];
-                                }
-                            }
-
-                            if (is_array($extra_data)) {
-                                $selected_values = explode(';', $field_value);
-                                $extra_data['extra_'.$field_details['field_variable']] = array();
-
-                                // looping through the selected values and assigning the selected values to either the first or second select form
-                                foreach ($selected_values as $key => $selected_value) {                                
-                                    if (in_array($selected_value, $values[0])) {
-                                        $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']] = $selected_value;
-                                    } else {
-                                        $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'*'] = $selected_value;
-                                    }                                
-                                }                        
-                            }
+                        case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:                            
+                            $selected_options = explode('::', $field_value);                            
+                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $selected_options[0];
+                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable'].'_second'] = $selected_options[1];
                             break;
                         case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
                             $field_value = explode(';', $field_value);                                
@@ -165,7 +142,10 @@ class SessionField extends Model {
         $params = self::clean_parameters($params);            
         if ($session_field_info) {
             return $session_field_info['id'];
-        } else {    
+        } else {
+            if (!isset($params['tms'])) {
+                $params['tms'] = api_get_utc_datetime();
+            }
             $id = parent::save($params, $show_query);
             if ($id) {            
                 $session_field_option = new SessionFieldOption();
@@ -194,8 +174,7 @@ class SessionField extends Model {
         // Field type
         $types = self::get_field_types();        
         
-        $form->addElement('select', 'field_type', get_lang('FieldType'), $types, array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select')));        
-        
+        $form->addElement('select', 'field_type', get_lang('FieldType'), $types, array('id' => 'field_type', 'class' => 'chzn-select', 'data-placeholder' => get_lang('Select')));
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
         
         //$form->addElement('advanced_settings','<a class="btn btn-show" id="advanced_parameters" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
@@ -273,6 +252,10 @@ class SessionField extends Model {
      
     public function delete($id) {
 	    parent::delete($id);
-	    //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        $session_field_option = new SessionFieldOption();        
+        $session_field_option->delete_all_options_by_field_id($id);
+        
+        $session_field_values = new SessionFieldValue();
+        $session_field_values->delete_all_values_by_field_id($id);       
     }     
 }

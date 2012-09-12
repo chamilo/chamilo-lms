@@ -3719,17 +3719,56 @@ class UserManager {
                     $form->applyFilter('theme', 'trim');
                     break;
                 case self::USER_FIELD_TYPE_DOUBLE_SELECT:
+                    $first_select_id = 'first_extra_'.$field_details['field_variable'];
+                    
+                    $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+
+                    $jquery_ready_content .= '                        
+                        $("#'.$first_select_id.'").on("change", function() {                            
+                            var id = $(this).val();
+                            $.ajax({ 
+                                url: "'.$url.'&a=get_second_select_options", 
+                                dataType: "json",
+                                data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
+                                success: function(data) {
+                                    $("#second_extra_'.$field_details['field_variable'].'").empty();
+                                    $.each(data, function(index, value) {
+                                        $("#second_extra_'.$field_details['field_variable'].'").append($("<option/>", {
+                                            value: index,
+                                            text: value
+                                        }));
+                                    });                           
+                                },            
+                            });    
+                        });';
+                    
+                    $first_id = null;
+                    $second_id = null;
+                    
+                    if (!empty($extra_data)) {
+                        $first_id = $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']];
+                        $second_id = $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'_second'];                        
+                    }
+
+                    $options = self::extra_field_double_select_convert_array_to_ordered_array($field_details['options']);
                     $values = array();
-                    foreach ($field_details['options'] as $key => $element) {                          
-                        if ($element['option_display_text'][0] == '*') {
-                            $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
-                        } else {
-                            $values[0][$element['option_value']] = $element['option_display_text'];
+                    $second_values = array();
+                    if (!empty($options)) {                        
+                        foreach ($options as $option) {                            
+                            foreach ($option as $sub_option) {
+                                if ($sub_option['option_value'] == '0') {
+                                    $values[$sub_option['id']] = $sub_option['option_display_text'];
+                                } else {
+                                    if ($first_id === $sub_option['option_value']) {
+                                        $second_values[$sub_option['id']] = $sub_option['option_display_text'];
+                                    }
+                                }
+                            }
                         }
                     }                    
                     $group = array();
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], null, $values[0], array('id'=>'first_extra_'.$field_details['field_variable']));
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'*', null, $values['*'], array('id'=>'second_extra_'.$field_details['field_variable']));
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], null, $values, array('id' => $first_select_id));
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'_second', null, $second_values, array('id'=>'second_extra_'.$field_details['field_variable']));
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '&nbsp;');
                     
                     if (!$admin_permissions) {
@@ -3762,7 +3801,7 @@ class UserManager {
                     //if cache is set to true the jquery will be called 1 time
                     $field_variable = $field_details['field_variable'];
                     $field_id = $field_details['id'];
-                    $jquery_ready_content = <<<EOF
+                    $jquery_ready_content .=  <<<EOF
                     $("#extra_$field_variable").fcbkcomplete({
                         json_url: "$url?a=search_tags&field_id=$field_id",
                         cache: false,
@@ -3840,5 +3879,73 @@ EOF;
             $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
             Database::query($sql);
         }
+    }
+    
+    /**
+     * Converts a string like this:
+     * France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
+     * into
+     * array('France' => array('Paris', 'Bregtane', 'Marseilles'), 'Belgique' => array('Namur', 'Liège', etc
+     * @param string $string
+     * @return array
+     */
+    static function extra_field_double_select_convert_string_to_array($string) {
+        $options = explode('|', $string);
+        $options_parsed = array();
+        $id = 0;
+        if (!empty($options)) {
+            foreach ($options as $sub_options) {
+                $options = explode(':', $sub_options);
+                $sub_sub_options = explode(';', $options[1]);
+                $options_parsed[$id] = array('label' => $options[0], 'options' => $sub_sub_options);
+                $id++;
+            }
+        }
+        return $options_parsed;        
+    }
+    
+    static function extra_field_double_select_convert_array_to_ordered_array($options) {
+        $options_parsed = array();
+        if (!empty($options)) {
+            foreach ($options as $option) {            
+                if ($option['option_value'] == 0 ) {
+                    $options_parsed[$option['id']][] = $option;
+                } else {
+                    $options_parsed[$option['option_value']][] = $option;
+                }
+            }
+        }
+        return $options_parsed;
+    }
+    
+    /**
+  
+     * @param array options the result of the get_field_options_by_field() array
+     */
+    static function extra_field_double_select_convert_array_to_string($options) {
+        $string = null;
+        //var_dump($options);
+        $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
+        
+        if (!empty($options_parsed)) {
+            foreach ($options_parsed as $option) {
+                foreach ($option as $key => $item) {                
+                    $string .= $item['option_display_text'];          
+                    if ($key == 0) {
+                        $string .= ':';
+                    } else {
+                        if (isset($option[$key+1])) {
+                            $string .= ';';
+                        }
+                    }
+                }
+                $string .= '|';            
+            }
+        }
+        
+        if (!empty($string)) {
+           $string = substr($string, 0, strlen($string)-1);
+        }        
+        return $string;
     }
 }

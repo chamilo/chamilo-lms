@@ -29,11 +29,11 @@ class SessionFieldValue extends Model {
                         'session_id'    => $params['session_id'],
                         'field_id'      => $session_field_info['id'],
                         'field_value'   => $value
-                    );
+                    );                    
                     self::save($new_params);
                 }
             }
-        }
+        }        
     }
     
     public function save($params, $show_query = false) {        
@@ -41,8 +41,7 @@ class SessionFieldValue extends Model {
         //$session_field_option = new SessionFieldOption();
         
         //Setting value to insert
-        $value = $params['field_value'];
-       
+        $value = $params['field_value'];       
         
         $value_to_insert = null;
         if (is_array($value)) {
@@ -83,23 +82,31 @@ class SessionFieldValue extends Model {
                     break;
                 case UserManager::USER_FIELD_TYPE_TEXT:
                 case UserManager::USER_FIELD_TYPE_TEXTAREA:
+                    break;
                 case UserManager::USER_FIELD_TYPE_DOUBLE_SELECT:
+                    if (is_array($value)) {                        
+                        $value_to_insert = $value['extra_'.$session_field_info['field_variable']].'::'.$value['extra_'.$session_field_info['field_variable'].'_second'];                        
+                    }
                 default:
                     break;
-            }
-            
-            $session_field_values = self::get_values_by_session_and_field_id($params['session_id'], $params['field_id']);
-            
+            }            
+            $session_field_values = self::get_values_by_session_and_field_id($params['session_id'], $params['field_id']);            
             if ($session_field_values) {
                 self::delete_values_by_session_and_field_id($params['session_id'], $params['field_id']);                
             }            
             $params['field_value'] = $value_to_insert;
-            $params['tms'] = api_get_utc_datetime();                
-            //var_dump($params);
+            $params['tms'] = api_get_utc_datetime();            
             parent::save($params, $show_query);
         }        
     }
-     
+    
+    /**
+     * 
+     * @param int $session_id
+     * @param int $field_id
+     * @param bool transform the result to a human readable strings
+     * @return boolean
+     */
     public function get_values_by_session_and_field_id($session_id, $field_id, $transform = false) {
         $field_id = intval($field_id);
         $session_id = intval($session_id);
@@ -111,8 +118,15 @@ class SessionFieldValue extends Model {
             $result = Database::fetch_array($result, 'ASSOC'); 
             if ($transform) {
                 if ($result['field_type'] == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
-                    $result['field_value'] = str_replace(';', ' -> ', $result['field_value']);
-                    $result['field_value'] = str_replace('*', '', $result['field_value']);
+                    if (!empty($result['field_value'])) {
+                        $session_field_option = new SessionFieldOption();
+                        $options = explode('::', $result['field_value']);    
+                        // only available for PHP 5.4  :( $result['field_value'] = $session_field_option->get($options[0])['id'].' -> ';
+                        $result = $session_field_option->get($options[0]);
+                        $result_second = $session_field_option->get($options[1]);
+                        $result['field_value'] = $result['option_display_text'].' -> ';
+                        $result['field_value'] .= $result_second['option_display_text'];
+                    }            
                 }
             }
             return $result;
@@ -128,6 +142,23 @@ class SessionFieldValue extends Model {
         } else {
             return false;
         }*/
+    }
+    
+    /* Get all values by field id */
+    public function get_values_by_field_id($field_id) {        
+        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_session_field} sf ON (s.field_id = sf.id)
+                WHERE field_id = '".$field_id."' ORDER BY id";
+        $result = Database::query($sql);        
+        if (Database::num_rows($result)) {            
+            return Database::store_result($result, 'ASSOC'); 
+        }
+        return false;
+    }
+    
+    public function delete_all_values_by_field_id($field_id) {
+        $field_id = intval($field_id);
+        $sql = "DELETE FROM  {$this->table} WHERE field_id = $field_id";
+        Database::query($sql); 
     }
     
     public function delete_values_by_session_and_field_id($session_id, $field_id) {

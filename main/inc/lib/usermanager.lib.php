@@ -2006,7 +2006,7 @@ class UserManager {
 		if ($is_time_over) {
 			$condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
 		} else {
-			$condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
+			//$condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
 		}
 
         $sql = "SELECT DISTINCT session.id, 
@@ -2028,12 +2028,12 @@ class UserManager {
                                 
                 FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
                       INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
-                      INNER JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
+                      LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE (
                          scu.id_user = $user_id OR session.id_coach = $user_id
                       )  $condition_date_end
                 ORDER BY session_category_name, name";
-        
+        //var_dump($sql);
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
@@ -2044,6 +2044,7 @@ class UserManager {
                 
                 $session_id = $row['id'];
                 
+                //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);                
                 
                 switch ($visibility) {
@@ -2071,22 +2072,19 @@ class UserManager {
                 
                 $date_message = SessionManager::parse_session_dates($row);
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_message']   = $date_message;                
-                
-                $date_message = SessionManager::parse_session_dates($row);
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['dates_message']   = $date_message;
-                
+                               
                 $courses = UserManager::get_courses_list_by_session($user_id, $row['id']);
                 $course_list = array();
                 foreach ($courses as $course) {
+                    
+                    //Checking course session visibility
                     $visibility = api_get_session_visibility($session_id, $course['code']);
                     if ($visibility == SESSION_INVISIBLE) {
                         continue;
-                    }
-                    
+                    }                   
                     
                     $user_status_in_course = CourseManager::get_user_in_course_status($user_id, $course['code']);
-                    $course['user_status_in_course'] = $user_status_in_course;
-                    
+                    $course['user_status_in_course'] = $user_status_in_course;                    
                     $course_list[] = $course;
                 }                
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']                 = $course_list;                

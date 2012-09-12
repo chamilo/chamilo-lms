@@ -866,7 +866,7 @@ class IndexManager {
 		} else {
             //Load sessions in category
 			$session_categories = UserManager::get_sessions_by_category($user_id, false);
-		}             
+		}        
         
         $html = '';        
         //Showing history title		

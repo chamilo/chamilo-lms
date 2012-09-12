@@ -461,7 +461,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			$all_data[] = $row;
 		}
         
-        $table->use_jqgrid = true;
+        //$table->use_jqgrid = true;
         
         $tracking_column = 1;
         usort($all_data, 'sort_sessions');        

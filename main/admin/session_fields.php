@@ -168,7 +168,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();                
                 $res    = $obj->update($values);                
-                Display::display_confirmation_message(sprintf(get_lang('CareerXUnarchived'), $values['name']), false);                
+                Display::display_confirmation_message(sprintf(get_lang('ItemUpdated'), $values['name']), false);                
             }            
             $obj->display();
         } else {

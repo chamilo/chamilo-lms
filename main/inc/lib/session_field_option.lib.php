@@ -49,9 +49,9 @@ class SessionFieldOption extends Model {
             if ($params['field_type'] == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
                 //$params['field_options'] = France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;                
                 $options_parsed = UserManager::extra_field_double_select_convert_string_to_array($params['field_options']);                
+                
                 if (!empty($options_parsed)) {
-                    foreach ($options_parsed as $key => $option) {
-                        $option['label'];
+                    foreach ($options_parsed as $key => $option) {                        
                         $sub_options = $option['options'];
 
                         $new_params = array(
@@ -61,8 +61,17 @@ class SessionFieldOption extends Model {
                             'option_order' => 0,
                             'tms' => $time,
                         );
-                        $sub_id = parent::save($new_params, $show_query);
-                        foreach ($sub_options as $sub_option) {
+                        //Looking if option already exists:
+                        $option_info = self::get_field_option_by_field_id_and_option_display_text($field_id, $option['label']);
+                        
+                        if (empty($option_info)) {
+                            $sub_id = parent::save($new_params, $show_query);
+                        } else {
+                            $sub_id = $option_info['id'];
+                            $new_params['id'] = $sub_id;
+                            parent::update($new_params, $show_query);                            
+                        }                        
+                        foreach ($sub_options as $sub_option) {                            
                             if (!empty($sub_option)) {
                                 $new_params = array(
                                     'field_id' => $field_id,                            
@@ -71,13 +80,19 @@ class SessionFieldOption extends Model {
                                     'option_order' => 0,
                                     'tms' => $time,
                                 );
-                                parent::save($new_params, $show_query);
+                                $option_info = self::get_field_option_by_field_id_and_option_display_text_and_option_value($field_id, $sub_option, $sub_id);                                                                
+                                if (empty($option_info)) {
+                                    parent::save($new_params, $show_query);                                     
+                                } else {                                    
+                                    $new_params['id'] = $option_info['id'];
+                                    parent::update($new_params, $show_query);    
+                                }                                
                             }
                             
                         }
                     }
                 }
-                return true;
+                $list = array();
             } else {
                 $list = explode(';', $params['field_options']);
             }
@@ -114,6 +129,33 @@ class SessionFieldOption extends Model {
         }
         return false;        
     }
+    
+    public function get_field_option_by_field_id_and_option_display_text($field_id, $option_display_text) {
+        $field_id = intval($field_id);
+        $option_display_text = Database::escape_string($option_display_text);
+        
+        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."'";
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            return Database::fetch_array($result, 'ASSOC');
+        }
+        return false;        
+    }
+    
+    public function get_field_option_by_field_id_and_option_display_text_and_option_value($field_id, $option_display_text, $option_value) {
+        $field_id = intval($field_id);
+        $option_display_text = Database::escape_string($option_display_text);
+        $option_value = Database::escape_string($option_value);
+        
+        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_display_text = '".$option_display_text."' AND option_value = '$option_value'";        
+        $result = Database::query($sql);
+        if (Database::num_rows($result) > 0) {
+            return Database::fetch_array($result, 'ASSOC');
+        }
+        return false;        
+    }
+    
+    
     
     public function get_field_options_by_field($field_id) {
         $field_id = intval($field_id);

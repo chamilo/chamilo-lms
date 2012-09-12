@@ -871,7 +871,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
                 $nbrActiveTests = $nbrActiveTests +1;
                 $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active?'class="invisible"':'').'">'.$title.'</a>');
                 $item .= Display::tag('td', '');
-                $actions ='AAA<a href="exercise_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).'</a>';
+                $actions ='<a href="exercise_report.php?' . api_get_cidreq() . '&path='.$path.'">' . Display :: return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).'</a>';
                 $item .= Display::tag('td', $actions);
                 echo Display::tag('tr',$item, array('class'=>$class));
             }

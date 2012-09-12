@@ -22,7 +22,7 @@ if (!in_array($sord, array('asc','desc'))) {
 }
 	
 
-if (!in_array($action, array('get_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
+if (!in_array($action, array('get_exercise_results', 'get_hotpotatoes_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
 	api_protect_admin_script(true);
 }
 
@@ -120,6 +120,11 @@ switch ($action) {
             }
         } 
 		$count = get_count_exam_results($exercise_id, $where_condition);        
+		break;
+	case 'get_hotpotatoes_exercise_results':
+		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
+        $hotpot_path = $_REQUEST['path'];
+		$count = get_count_exam_hotpotatoes_results($hotpot_path);        
 		break;
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
@@ -228,6 +233,13 @@ switch ($action) {
 			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}       
 		$result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
+		break;
+	case 'get_hotpotatoes_exercise_results':
+		$course = api_get_course_info();        
+        //used inside get_exam_results_data()
+		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
+		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
+		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
@@ -387,6 +399,7 @@ $allowed_actions = array('get_careers',
                          'get_gradebooks', 
                          'get_sessions', 
                          'get_exercise_results', 
+                         'get_hotpotatoes_exercise_results', 
                          'get_work_user_list', 
                          'get_timelines', 
                          'get_grade_models', 

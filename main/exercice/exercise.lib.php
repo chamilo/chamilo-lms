@@ -793,11 +793,58 @@ function get_count_exam_results($exercise_id, $extra_where_conditions) {
     return $count;
 }
 
+function get_count_exam_hotpotatoes_results($in_hotpot_path) {
+    return get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true);
+}
+
+//function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
+function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false) {
+    
+    $tab_res = array();
+    $course_code = api_get_course_id();
+    // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
+    if ($in_column == 1) {
+        $in_column = 'firstname';
+    }
+    
+    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);    
+    $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
+    $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
+    $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);    
+    
+    $sql .= "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+
+    // just count how many answers
+    if ($in_get_count) {
+        $res = Database::query($sql);
+        return Database::num_rows($res);
+    }
+    
+    // get a number of sorted results
+    $sql .= " ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
+    
+    $res = Database::query($sql);
+    while ($data = Database::fetch_array($res)) {
+        $tab_one_res = array();
+        $tab_one_res['firstname'] = $data['firstname'];
+        $tab_one_res['lastname'] = $data['lastname'];
+        $tab_one_res['username'] = $data['username'];
+        $tab_one_res['group_name'] = implode("<br/>",GroupManager::get_user_group_name($data['user_id']));
+        $tab_one_res['exe_date'] = $data['exe_date'];
+        $tab_one_res['score'] = $data['exe_result'].'/'.$data['exe_weighting'];
+        $tab_one_res['actions'] = "";
+        $tab_res[] = $tab_one_res;
+    }
+    return $tab_res;
+}
+
 /**
  * Gets the exam'data results
  * @todo this function should be moved in a library  + no global calls 
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
+    
+                        
     //@todo replace all this globals
     global $documentPath, $filter;
 	
@@ -1156,6 +1203,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
     }	
+    
     return $list_info;
 }
 

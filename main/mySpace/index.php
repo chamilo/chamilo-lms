@@ -38,6 +38,10 @@ $title 				= null;
 
 // access control
 api_block_anonymous_users();
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = '<script>
+
+</script>';
 
 if (!$export_csv) {
 	Display :: display_header($nameTools);
@@ -396,9 +400,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 	
 	//Courses
 	if ($count_courses) {
-		
 		echo Display::page_subheader($title);		
-		
 		$table = new SortableTable('courses_my_space', 'get_number_of_courses', array('MySpace','get_course_data'));
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
@@ -431,7 +433,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
         
 		echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'session.png">&nbsp;'.get_lang('Sessions').' ('.$count_sessions.')');
         
-		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached');
+		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached', null, 1, 20, 'ASC', 'tracking_sessions_myspace');
 		$table->set_header(0, get_lang('Title'), false);
         $table->set_header(1, get_lang('SessionDisplayStartDate'), false);
         $table->set_header(2, get_lang('SessionDisplayEndDate'), false);
@@ -459,8 +461,10 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			$all_data[] = $row;
 		}
         
+        $table->use_jqgrid = true;
+        
         $tracking_column = 1;
-        usort($all_data, 'sort_sessions');
+        usort($all_data, 'sort_sessions');        
 /*
 		if (isset($_GET['tracking_direction']) &&  $_GET['tracking_direction'] == 'DESC') {
 			usort($all_data, 'rsort_sessions');
@@ -473,7 +477,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 		}
 */
 		foreach ($all_data as $row) {
-			$table -> addRow($row);
+			$table->addRow($row);
 		}
 
 		/*  Start session over view stats */
@@ -509,12 +513,6 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);			
 			$csv_content[] = array();
 		} else {
-			// html part
-            
-            			/*<tr>
-						<td>'.get_lang('NbFutureSessions').'</td>
-						<td align="right">'.$nb_sessions_future.'</td>
-					</tr>*/
 			echo '
 			<div class="report_section">				
 				<table class="table table-bordered">
@@ -529,8 +527,9 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 				</table>				
 			</div>';
 		}
-		/*  End session overview */				 
-		$table -> display();
+		$table->display();
+        
+        /*  End session overview */	
 	}
 }
 

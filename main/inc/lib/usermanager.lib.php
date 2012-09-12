@@ -3613,7 +3613,7 @@ class UserManager {
                     $group = array();
                     foreach ($field_details['options'] as $option_id => $option_details) {
                         $options[$option_details['option_value']] = $option_details['option_display_text'];
-                        $group[] =$form->createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
+                        $group[] = $form->createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
                     }
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '');
                     if (!$admin_permissions) {
@@ -3641,7 +3641,9 @@ class UserManager {
                     //chzn-select doesn't work for sessions??
                     $form->addElement('select','extra_'.$field_details['field_variable'], $field_details['field_display_text'], $options, array('class'=>'', 'id'=>'extra_'.$field_details['field_variable']));
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);
+                        }
                     }
                     break;
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -3651,7 +3653,9 @@ class UserManager {
                     }
                     $form->addElement('select','extra_'.$field_details['field_variable'], $field_details['field_display_text'], $options, array('multiple' => 'multiple'));
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);
+                        }
                     }
                     break;
                 case self::USER_FIELD_TYPE_DATE:
@@ -3660,7 +3664,9 @@ class UserManager {
                     $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
                     $form -> setDefaults($defaults);
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
+                        if ($field_details['field_visible'] == 0) {
+                            $form->freeze('extra_'.$field_details['field_variable']);                            
+                        }
                     }
                     $form->applyFilter('theme', 'trim');
                     break;
@@ -3670,13 +3676,14 @@ class UserManager {
                     $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
                     $form -> setDefaults($defaults);
                     if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	
+                        if ($field_details['field_visible'] == 0) {
                             $form->freeze('extra_'.$field_details['field_variable']);
+                        }
                     }
                     $form->applyFilter('theme', 'trim');
                     break;
                 case self::USER_FIELD_TYPE_DOUBLE_SELECT:
-                    $values = array();                    
+                    $values = array();
                     foreach ($field_details['options'] as $key => $element) {                          
                         if ($element['option_display_text'][0] == '*') {
                             $values['*'][$element['option_value']] = str_replace('*', '', $element['option_display_text']);
@@ -3685,8 +3692,8 @@ class UserManager {
                         }
                     }                    
                     $group = array();
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], '', $values[0], '');
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'*', '', $values['*'], '');
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], null, $values[0], array('id'=>'first_extra_'.$field_details['field_variable']));
+                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'*', null, $values['*'], array('id'=>'second_extra_'.$field_details['field_variable']));
                     $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '&nbsp;');
                     
                     if (!$admin_permissions) {

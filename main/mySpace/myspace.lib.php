@@ -1219,7 +1219,7 @@ class MySpace {
 	 * Get data for courses list in sortable with pagination
 	 * @return array
 	 */
-	function get_course_data($from, $number_of_items, $column, $direction) {
+	static function get_course_data($from, $number_of_items, $column, $direction) {
 		global $courses, $csv_content, $charset, $session_id;
 
 		// definition database tables
@@ -1227,7 +1227,6 @@ class MySpace {
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-		$a_course_students  = array();
 		$course_data = array();
 		$courses_code = array_keys($courses);
 

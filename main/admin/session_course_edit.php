@@ -13,10 +13,10 @@ require_once '../inc/global.inc.php';
 $id_session = intval($_GET['id_session']);
 SessionManager::protect_session_edit($id_session);
 
-$course_code=trim(stripslashes($_GET['course_code']));
+$course_code = Database::escape_string($_GET['course_code']);
 
-$formSent=0;
-$errorMsg='';
+$formSent = 0;
+$errorMsg = '';
 
 // Database Table Definitions
 $tbl_user			= Database::get_main_table(TABLE_MAIN_USER);
@@ -26,14 +26,15 @@ $tbl_session_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 $course_info=api_get_course_info($_REQUEST['course_code']);
-$tool_name=$course_info['name'];
+$tool_name = $course_info['name'];
 
 $interbreadcrumb[]=array('url' => 'index.php',"name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[]=array('url' => "session_list.php","name" => get_lang("SessionList"));
 $interbreadcrumb[]=array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 $interbreadcrumb[]=array('url' => "session_course_list.php?id_session=$id_session","name" =>api_htmlentities($session_name,ENT_QUOTES,$charset));
 
-$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc.id_session='$id_session' AND sc.course_code='".addslashes($course_code)."'");
+$result = Database::query("SELECT s.name, c.title FROM $tbl_session_course sc,$tbl_session s,$tbl_course c 
+                           WHERE sc.id_session=s.id AND sc.course_code=c.code AND sc.id_session='$id_session' AND sc.course_code='".$course_code."'");
 
 if (!list($session_name,$course_title)=Database::fetch_row($result)) {
 	header('Location: session_course_list.php?id_session='.$id_session);
@@ -68,7 +69,7 @@ if ($_POST['formSent']) {
 		$array_intersect = array_diff($coachs_course_session,$id_coachs);
 
 		foreach ($array_intersect as $nocoach_user_id) {
-			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code,true);
+			$rs2 = SessionManager::set_coach_to_course_session($nocoach_user_id, $id_session, $course_code, true);
 		}
 
 		header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
@@ -96,19 +97,18 @@ if ($_configuration['multiple_access_urls']) {
     $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 }
 
-$result=Database::query($sql);
+$result = Database::query($sql);
 
-$coaches=Database::store_result($result);
+$coaches = Database::store_result($result);
 
 Display::display_header($tool_name);
 
-$tool_name=get_lang('ModifySessionCourse');
-api_display_tool_title($tool_name);
+$tool_name = get_lang('ModifySessionCourse');
+echo Display::page_header($tool_name);
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&page=<?php echo Security::remove_XSS($_GET['page']) ?>" style="margin:0px;">
 <input type="hidden" name="formSent" value="1">
-
-<table border="0" cellpadding="5" cellspacing="0" width="600px">
+<table>
 
 <?php
 if(!empty($errorMsg)) {

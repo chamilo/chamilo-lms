@@ -96,6 +96,12 @@ class SortableTable extends HTML_Table {
      * Activates the odd even rows  
      * **/
     public $odd_even_rows_enabled = true;
+    
+    public $use_jqgrid = false;
+    
+    public $table_id = null;
+    
+    public $headers = array();
 
 
 	/**
@@ -112,8 +118,12 @@ class SortableTable extends HTML_Table {
 	 * @param string $default_order_direction The default order direction;
 	 * either the constant 'ASC' or 'DESC'
 	 */
-	public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC') {
-		parent :: __construct (array ('class' => 'data_table'));
+	public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC', $table_id = null) {
+        if (empty($table_id)) {
+            $table_id = $table_name.uniqid();
+        }
+        $this->table_id = $table_id;
+		parent :: __construct (array('class' => 'data_table', 'id' => $table_id));
 		$this->table_name = $table_name;
 		$this->additional_parameters = array ();
 		$this->param_prefix = $table_name.'_';
@@ -124,7 +134,6 @@ class SortableTable extends HTML_Table {
 		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
 		
 		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
-
 
 		if (isset($_SESSION[$this->param_prefix.'direction'])) {
 			$my_session_direction = $_SESSION[$this->param_prefix.'direction'];
@@ -208,6 +217,8 @@ class SortableTable extends HTML_Table {
 		}
 		return $this->pager;
 	}
+    
+    
 	
 	public function display() {
 		echo $this->return_table();
@@ -249,9 +260,32 @@ class SortableTable extends HTML_Table {
     			$html .= '</tr>';
     			$html .= '</table>';
             }
+            $col = array();
+            $colModel = array();
+            foreach($this->headers as $key => $value) {
+                $col[] = $value;
+                $colModel[] = array('name' => "$key", 'index' => "$key"); 
+            }
+            $col = json_encode($col); 
+            $colModel = json_encode($colModel); 
+            $colModel = str_replace('"name"', 'name', $colModel);
+            $colModel = str_replace('"index"', 'index', $colModel);
+    
+            if ($this->use_jqgrid) {
+                $html .= '<script>
+                    $(function() {  
+                    tableToGrid("#'.$this->table_id.'", { 
+                        height: "auto",        
+                        colNames:'.$col.' ,
+                        colModel: '.$colModel.',                        
+                        sortname: "'.$this->column.'"
+                    });    
+                });
+                </script>';
+            }
 			
 			if (count($this->form_actions) > 0) {
-				$html .= '<script type="text/javascript">                            
+				$html .= '<script>                            
                             function setCheckbox(value) {
                                 d = document.form_'.$this->table_name.';
                                 for (i = 0; i < d.elements.length; i++) {
@@ -732,6 +766,7 @@ class SortableTable extends HTML_Table {
 		if (!is_null($th_attributes)) {
 			$this->th_attributes[$column] = $th_attributes;
 		}
+        $this->headers[$column] = $label;
 	}
 
 	/**

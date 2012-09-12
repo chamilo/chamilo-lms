@@ -159,13 +159,13 @@ $logging_in = false;
 
 /*  MAIN CODE  */
 
-if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
+if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
     //Check if we have to reset user data
     //This param can be used to reload user data if user has been logged by external script
-    if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']){
-        $uidReset=true;
+    if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']) {
+        $uidReset = true;
     }
 } else {
     if (isset($_user['user_id'])) {
@@ -883,7 +883,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 // this user has no status related to this course
                 // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
-                $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
+                $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);                
                 $tbl_session_course      = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -894,7 +894,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                session_rcru.course_code = '$_cid' AND
                                session_rcru.id_user     = '$user_id' AND
                                session_rcru.id_session  = $session_id AND
-                               session_rcru.status      = 2";
+                               session_rcru.status      = 2                               
+                        ";
 
                 $result = Database::query($sql);
                 $row     = Database::store_result($result);
@@ -909,16 +910,16 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                     $is_sessionAdmin     = true;
                 } else {
                     //Im a coach or a student?
-                    $sql = "SELECT id_user, status FROM ".$tbl_session_course_user."
+                    $sql = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu                             
                             WHERE   course_code = '$_cid' AND
-                                    id_user     = '".$user_id."' AND
-                                    id_session  = '".$session_id."'
+                                    cu.id_user     = '".$user_id."' AND
+                                    cu.id_session  = '".$session_id."'
                             LIMIT 1";
                     $result = Database::query($sql);
 
                     if (Database::num_rows($result)) {
                         $row = Database::fetch_array($result, 'ASSOC');
-
+                        
                         $session_course_status = $row['status'];
 
                         switch ($session_course_status) {
@@ -936,13 +937,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                                 }
                                 Session::write('_courseUser', $_courseUser);
                                 break;
-                            case '0': //student
+                            case '0': //Student
                                 $_courseUser['role'] = '';
                                 $is_courseMember     = true;
                                 $is_courseTutor      = false;
                                 $is_courseAdmin      = false;
                                 $is_courseCoach      = false;
                                 $is_sessionAdmin     = false;
+                      
                                 Session::write('_courseUser', $_courseUser);
                                 break;
                             default:
@@ -1016,8 +1018,8 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         if ($session_id != 0) {
             if (!$is_platformAdmin) {
                 // admin is not affected to the invisible session mode
-                $session_visibility = api_get_session_visibility($session_id);
-
+                $session_visibility = api_get_session_visibility($session_id);                
+                
                 switch ($session_visibility) {
                     case SESSION_INVISIBLE:
                         $is_allowed_in_course = false;
@@ -1105,4 +1107,3 @@ if (isset($_cid)) {
 }
 
 Redirect::session_request_uri($logging_in, $user_id);
-

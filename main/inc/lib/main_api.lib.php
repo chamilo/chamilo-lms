@@ -137,8 +137,13 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 // event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
-define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
+define('LOG_USER_UPDATED',                      'user_updated');
+define('LOG_USER_DELETE',                       'user_deleted');
+define('LOG_USER_ACTIVATED',                    'user_activated');
+define('LOG_USER_DEACTIVATED',                  'user_deactivated');
+
+
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -978,6 +983,61 @@ function api_get_user_courses($userid, $fetch_session = true) {
     return $courses;
 }
 
+
+/**
+ * Finds all the information about a user. If no paramater is passed you find all the information about the current user.
+ * @param $user_id (integer): the id of the user
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Patrick Cool <patrick.cool@UGent.be>
+ * @version 21 September 2004
+ */
+function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
+    if ($user_id == '') {
+        return _api_format_user($GLOBALS['_user']);
+    }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+		if ($check_if_user_is_online) {
+            $use_status_in_platform = user_is_online($user_id);
+
+			$result_array['user_is_online'] = $use_status_in_platform;
+            $user_online_in_chat = 0;
+
+            if ($use_status_in_platform) {
+                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'user_chat_status', false, true);
+                if (intval($user_status['user_chat_status']) == 1) {
+                    $user_online_in_chat = 1;
+                }
+            }
+            $result_array['user_is_online_in_chat'] = $user_online_in_chat;
+		}
+        $user =  _api_format_user($result_array, $show_password);
+        return $user;
+    }
+    return false;
+}
+
+/**
+ * Finds all the information about a user from username instead of user id
+ * @param $username (string): the username
+ * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+function api_get_user_info_from_username($username = '') {
+    if (empty($username)) { return false; }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
+    $result = Database::query($sql);
+    if (Database::num_rows($result) > 0) {
+        $result_array = Database::fetch_array($result);
+        return _api_format_user($result_array);
+    }
+    return false;
+}
+
+
+
 /**
  * Formats user information into a standard array
  *
@@ -1079,60 +1139,7 @@ function _api_format_user($user, $add_password = false) {
     if ($add_password) {
         $result['password'] = $user['password'];
     }
-
     return $result;
-}
-
-/**
- * Finds all the information about a user. If no paramater is passed you find all the information about the current user.
- * @param $user_id (integer): the id of the user
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
- * @author Patrick Cool <patrick.cool@UGent.be>
- * @version 21 September 2004
- */
-function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
-    if ($user_id == '') {
-        return _api_format_user($GLOBALS['_user']);
-    }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
-		if ($check_if_user_is_online) {
-            $use_status_in_platform = user_is_online($user_id);
-
-			$result_array['user_is_online'] = $use_status_in_platform;
-            $user_online_in_chat = 0;
-
-            if ($use_status_in_platform) {
-                $user_status = UserManager::get_extra_user_data_by_field($user_id, 'user_chat_status', false, true);
-                if (intval($user_status['user_chat_status']) == 1) {
-                    $user_online_in_chat = 1;
-                }
-            }
-            $result_array['user_is_online_in_chat'] = $user_online_in_chat;
-		}
-        $user =  _api_format_user($result_array, $show_password);
-        return $user;
-    }
-    return false;
-}
-
-/**
- * Finds all the information about a user from username instead of user id
- * @param $username (string): the username
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
- */
-function api_get_user_info_from_username($username = '') {
-    if (empty($username)) { return false; }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
-        return _api_format_user($result_array);
-    }
-    return false;
 }
 
 /**

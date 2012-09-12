@@ -566,16 +566,19 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
     if ($event_value_type == LOG_USER_OBJECT) {
         if (is_array($event_value)) {
             unset($event_value['complete_name']);
+            unset($event_value['complete_name_with_username']);
             unset($event_value['firstName']);
             unset($event_value['lastName']);
             unset($event_value['avatar_small']);
+            unset($event_value['avatar_sys_path']);
             unset($event_value['avatar']);
+            unset($event_value['mail']);
             unset($event_value['password']);
-            unset($event_value['lastLogin']);
+            unset($event_value['lastLogin']);            
             unset($event_value['picture_uri']);
             $event_value = serialize($event_value);
         }
-    }
+    } 
 
     $event_value        = Database::escape_string($event_value);
     $course_info        = api_get_course_info($course_code);

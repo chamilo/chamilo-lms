@@ -185,13 +185,12 @@ class UserManager {
                     @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */              
-			}
-          
-
+			}            
 			// Add event to system log			
 			$user_id_manager = api_get_user_id();
 			$user_info = api_get_user_info($return);
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
 
 		} else {
 			//echo "false - failed" ;
@@ -294,6 +293,7 @@ class UserManager {
 		// Delete user picture
 		// TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
 		$user_info = api_get_user_info($user_id);
+        
 		if (strlen($user_info['picture_uri']) > 0) {
 			$img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
 			if (file_exists($img_path))
@@ -352,8 +352,8 @@ class UserManager {
 		}
 		// Add event to system log		
 		$user_id_manager = api_get_user_id();
-		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-        	event_system(LOG_USER_DELETE, LOG_USER_OBJECT, implode(';',$user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
+		event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
+        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
 		return true;
 	}
     
@@ -367,13 +367,11 @@ class UserManager {
      * @return boolean  True if at least one user was successfuly deleted. False otherwise.
      * @author Laurent Opprecht
      */
-    static function delete_users($ids = array())
-    {
+    static function delete_users($ids = array()) {
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();        
         $ids = array_map('intval', $ids);
-        foreach($ids as $id)
-        {
+        foreach ($ids as $id) {
             $deleted = self::delete_user($id);
             $result = $deleted || $result;
         }
@@ -393,14 +391,14 @@ class UserManager {
     static function deactivate_users($ids = array()) {
         if (empty($ids)) {
             return false;
-        }
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        }        
         $ids = is_array($ids) ? $ids : func_get_args();
-        $ids = array_map('intval', $ids);
-        $ids = implode(',', $ids);
-        
-        $sql = "UPDATE $table_user SET active = 0 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                self::change_active_state($id, 0);
+            }        
+        }
+        return true;
     }
 
     /**
@@ -413,20 +411,18 @@ class UserManager {
      * @return boolean 
      * @author Laurent Opprecht
      */
-    static function activate_users($ids = array())
-    {
+    static function activate_users($ids = array()) {
         if (empty($ids)) {
             return false;
         }
-
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
         $ids = is_array($ids) ? $ids : func_get_args();
-        $ids = array_map('intval', $ids);
-        $ids = implode(',', $ids);
-        
-        $sql = "UPDATE $table_user SET active = 1 WHERE user_id IN ($ids)";
-        return Database::query($sql);
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                self::change_active_state($id, 1);
+            }        
+        }
     }
     
 	/**
@@ -439,8 +435,7 @@ class UserManager {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		if ($user_id != strval(intval($user_id))) return false;
 		if ($user_id === false) return false;
-		$sql = "UPDATE $table_user SET
-				openid='".Database::escape_string($openid)."'";
+		$sql = "UPDATE $table_user SET openid='".Database::escape_string($openid)."'";
 		$sql .=	" WHERE user_id='$user_id'";
 		return Database::query($sql);
 	}
@@ -525,13 +520,12 @@ class UserManager {
 				official_code='".Database::escape_string($official_code)."',
 				phone='".Database::escape_string($phone)."',
 				picture_uri='".Database::escape_string($picture_uri)."',
-				expiration_date='".Database::escape_string($expiration_date)."',
-				active='".Database::escape_string($active)."',
+				expiration_date='".Database::escape_string($expiration_date)."',				
 				hr_dept_id=".intval($hr_dept_id);
 		if (!is_null($creator_id)) {
 			$sql .= ", creator_id='".Database::escape_string($creator_id)."'";
 		}
-		$sql .=	" WHERE user_id='$user_id'";
+		$sql .=	" WHERE user_id = '$user_id' ";
 		$return = Database::query($sql);
 		if (is_array($extra) && count($extra) > 0) {
 			$res = true;
@@ -539,6 +533,11 @@ class UserManager {
 				$res = $res && self::update_extra_field_value($user_id,$fname,$fvalue);
 			}
 		}
+        
+        if ($user_info['active'] != $active) {
+            self::change_active_state($user_id, $active);
+        }
+        //active='".Database::escape_string($active)."',
         
         if (!empty($email) && $send_email) {
 			$recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
@@ -558,6 +557,9 @@ class UserManager {
 			@api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);
         }
         
+        $user_info = api_get_user_info($user_id);
+        event_system(LOG_USER_UPDATED, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
+        event_system(LOG_USER_UPDATED, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
 		return $return;
 	}
 
@@ -567,11 +569,21 @@ class UserManager {
 	 * @param int user_id
 	 * @param int Enable or disable
 	 */
-	private static function change_active_state($user_id, $active) {
-		$user_id = (int)$user_id;
+	private static function change_active_state($user_id, $active) {		
+        $user_id = intval($user_id);
+        $active = intval($active);
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        
 		$sql = "UPDATE $table_user SET active = '$active' WHERE user_id = '$user_id';";
-		Database::query($sql);
+        Database::query($sql);
+        
+        $log_event = LOG_USER_DEACTIVATED;
+        if ($active == 1) {
+            $log_event = LOG_USER_ACTIVATED;    
+        }
+        $user_info = api_get_user_info($user_id);
+        event_system($log_event, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
+        event_system($log_event, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());		
 	}
 
 	/**
@@ -644,10 +656,10 @@ class UserManager {
 		$firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
 		
 		//Looking for a space in the lastname
-                $pos = api_strpos($lastname, ' ');
-                    if ($pos !== false ) {
-                        $lastname = api_substr($lastname, 0, $pos);
-                } 
+        $pos = api_strpos($lastname, ' ');
+            if ($pos !== false ) {
+                $lastname = api_substr($lastname, 0, $pos);
+        }
 
 		$lastname = preg_replace(USERNAME_PURIFIER, '', api_transliterate($lastname, '', $encoding));
 		//$username = api_is_western_name_order(null, $language) ? $firstname.$lastname : $lastname.$firstname;

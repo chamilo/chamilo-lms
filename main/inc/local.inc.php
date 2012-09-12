@@ -159,13 +159,13 @@ $logging_in = false;
 
 /*  MAIN CODE  */
 
-if (!empty($_SESSION['_user']['user_id']) && ! ($login || $logout)) {
+if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
     //Check if we have to reset user data
     //This param can be used to reload user data if user has been logged by external script
-    if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']){
-        $uidReset=true;
+    if (isset($_SESSION['_user']['uidReset']) && $_SESSION['_user']['uidReset']) {
+        $uidReset = true;
     }
 } else {
     if (isset($_user['user_id'])) {

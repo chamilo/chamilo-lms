@@ -43,13 +43,11 @@ class Redirect {
         $url = isset($_SESSION['request_uri']) ? $_SESSION['request_uri'] : '';
         unset($_SESSION['request_uri']);
 
-
         if (!empty($url)) {
             self::navigate($url);
-        } elseif ($logging_in) {
+        } elseif ($logging_in || (isset($_REQUEST['sso_referer']) && !empty($_REQUEST['sso_referer']))) {
             if (isset($user_id)) {
-                // Make sure we use the appropriate role redirection in case one has been defined
-                global $_configuration;
+                // Make sure we use the appropriate role redirection in case one has been defined                
                 $user_status = api_get_user_status($user_id);
                 switch ($user_status) {
                     case COURSEMANAGER:
@@ -102,5 +100,4 @@ class Redirect {
         header("Location: $url");
         exit;
     }
-
 }

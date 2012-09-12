@@ -271,7 +271,7 @@ if ($session['nbr_users'] == 0) {
                 $status_info = get_latest_event_by_user_and_type($user['user_id'], LOG_USER_DEACTIVATED);
                 //var_dump($status_info);
                 if (!empty($status_info)) {
-                    $user_status_in_platform .= '<br />'.get_lang('UserInactived').' '.api_convert_and_format_date($status_info['default_date'], DATE_TIME_FORMAT_LONG);
+                    $user_status_in_platform .= '<br />'.sprintf(get_lang('UserInactivedSinceX'), api_convert_and_format_date($status_info['default_date'], DATE_TIME_FORMAT_LONG));
                 }
                 $user_info['complete_name_with_username'] = Display::tag('del', $user_info['complete_name_with_username']);
             }

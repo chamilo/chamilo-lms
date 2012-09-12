@@ -1373,4 +1373,5 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
+$UserInactivedSinceX = "Usuario inactivo desde %s";
 ?>

@@ -1388,7 +1388,7 @@ abstract class Question
         if ($this->type == FREE_ANSWER) {
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
-                $class = 'gray';
+                $class = '';
             } else {
                 $score_label = get_lang('NotRevised');
                 $class = 'error';

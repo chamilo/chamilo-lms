@@ -252,9 +252,8 @@ class ExtraFieldOption extends Model {
     function display() {
         // action links
         echo '<div class="actions">';
-       	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';	   
-        //echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';               
-
+       	//echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';	   
+        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';               
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
@@ -270,7 +269,10 @@ class ExtraFieldOption extends Model {
         
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
-        $form->addElement('hidden', 'id', $id);        
+        $form->addElement('hidden', 'id', $id);       
+        //$form->addElement('hidden', 'type', $this->type);
+        //$form->addElement('hidden', 'field_id', $this->field_id);
+        
         
         $form->addElement('text', 'option_display_text', get_lang('Name'), array('class' => 'span5'));  
         $form->addElement('text', 'option_value', get_lang('Value'), array('class' => 'span5'));  

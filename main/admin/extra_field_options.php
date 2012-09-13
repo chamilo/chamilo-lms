@@ -47,12 +47,12 @@ if ($action == 'add') {
 } else {
     $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));
     $interbreadcrumb[]=array('url' => 'session_fields.php?action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditOptions'));
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
 }
 
 //jqgrid will use this URL to do the selects
 $params = 'field_id='.$field_id.'&type='.$type;
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
 $columns        = array(get_lang('Name'), get_lang('Value'),  get_lang('Order'), get_lang('Actions'));
@@ -79,7 +79,7 @@ $htmlHeadXtra[]='
 <script>
 $(function() {
     // grid definition see the $obj->display() function
-    '.Display::grid_js('extra_field_options',  $url, $columns, $column_model, $extra_params, array(), $action_links,true).'
+    '.Display::grid_js('extra_field_options',  $url, $columns, $column_model, $extra_params, array(), $action_links, true).'
     
 });
 </script>';
@@ -87,7 +87,10 @@ $(function() {
 // The header.
 Display::display_header($tool_name);
 
+echo Display::page_header($extra_field_info['field_display_text']);
+
 $obj = new ExtraFieldOption($type);
+//$obj->field_id = $field_id;
 
 // Action handling: Add
 switch ($action) {
@@ -95,7 +98,7 @@ switch ($action) {
         if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
             api_not_allowed();
         }        
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']);
+        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.$params;
         $form = $obj->return_form($url, 'add');
 
         // The validation or display
@@ -119,7 +122,7 @@ switch ($action) {
         break;
     case 'edit':
         // Action handling: Editing 
-        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url  = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']).'&'.$params;
         $form = $obj->return_form($url, 'edit');    
 
         // The validation or display

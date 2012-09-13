@@ -126,14 +126,15 @@ function user_is_online($user_id) {
 	$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);	
 	$table_user			= Database::get_main_table(TABLE_MAIN_USER);
 	
-	$current_date		= api_get_utc_datetime();	
 	$access_url_id		= api_get_current_access_url_id();	
 	$time_limit			= api_get_setting('time_limit_whosonline');
-	//$time_limit = 1; changing this value there is no time limit 
-	
+    
+    $online_time 	= time() - $time_limit*60;
+    $limit_date		= api_get_utc_datetime($online_time);
+    
 	$query = " SELECT login_user_id,login_date FROM ".$track_online_table ." track INNER JOIN ".$table_user ." u ON (u.user_id=track.login_user_id)
                WHERE track.access_url_id =  $access_url_id AND 
-                    DATE_ADD(login_date,INTERVAL $time_limit MINUTE) >= '".$current_date."'  AND 
+                    login_date >= '".$limit_date."'  AND 
                     u.user_id =  $user_id 
                LIMIT 1 ";
 	

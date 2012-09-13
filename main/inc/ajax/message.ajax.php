@@ -28,11 +28,10 @@ switch ($action) {
 			break;
 		}
 		$track_online_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ONLINE);
-		$tbl_my_user		= Database :: get_main_table(TABLE_MAIN_USER);
-		$tbl_my_user_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-		$tbl_user 			= Database :: get_main_table(TABLE_MAIN_USER);
-		$search				= Database::escape_string($_REQUEST['tag']);
-		$current_date		= date('Y-m-d H:i:s',time());
+		$tbl_my_user		= Database::get_main_table(TABLE_MAIN_USER);
+		$tbl_my_user_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
+		$tbl_user 			= Database::get_main_table(TABLE_MAIN_USER);
+		$search				= Database::escape_string($_REQUEST['tag']);		
 
 		$user_id            = api_get_user_id();
 		$is_western_name_order = api_is_western_name_order();
@@ -53,11 +52,14 @@ switch ($action) {
 			}
 		} elseif (api_get_setting('allow_social_tool')=='false' && api_get_setting('allow_message_tool')=='true') {
 			
-			$valid   = api_get_setting('time_limit_whosonline');
+			$time_limit = api_get_setting('time_limit_whosonline');
+            
+            $online_time 	= time() - $time_limit*60;
+            $limit_date		= api_get_utc_datetime($online_time);
 
 			$sql='SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 			 FROM '.$tbl_my_user.' u INNER JOIN '.$track_online_table.' t ON u.user_id=t.login_user_id
-			 WHERE DATE_ADD(login_date,INTERVAL "'.$valid.'" MINUTE) >= "'.$current_date.'" AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
+			 WHERE login_date >= "'.$limit_date.'" AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
 		}		
 		$sql .=' LIMIT 20';
 		$result=Database::query($sql);

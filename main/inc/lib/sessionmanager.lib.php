@@ -339,8 +339,8 @@ class SessionManager {
         }
         $options_by_double = array();
         foreach ($double_fields as $double) {            
-            $options = $extra_field_option->get_field_options_by_field($double['id'], true);
-            $options_by_double['extra_'.$double['field_variable']] = $options;
+            $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
+            $options_by_double['extra_'.$double['field_variable']] = $my_options;
             //$options_by_double['extra_'.$double['field_variable'].'_second'] = true;
         }            
         

@@ -39,13 +39,18 @@ $check = Security::check_token('request');
 $token = Security::get_token();    
 
 if ($action == 'add') {
-    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('ExtraFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php?action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Add'));
 } elseif ($action == 'edit') {
-    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));    
+    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('ExtraFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php?action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array('url' => 'extra_field_options.php?type='.$type.'&field_id='.$extra_field_info['id'], 'name' => get_lang('EditExtraFieldOptions'));
+    
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('ExtraFields'));
     $interbreadcrumb[]=array('url' => 'session_fields.php?action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditExtraFieldOptions'));
 }
@@ -90,7 +95,7 @@ Display::display_header($tool_name);
 echo Display::page_header($extra_field_info['field_display_text']);
 
 $obj = new ExtraFieldOption($type);
-//$obj->field_id = $field_id;
+$obj->field_id = $field_id;
 
 // Action handling: Add
 switch ($action) {
@@ -102,19 +107,19 @@ switch ($action) {
         $form = $obj->return_form($url, 'add');
 
         // The validation or display
-        if ($form->validate()) {          
+        if ($form->validate()) {
             if ($check) {
-                $values = $form->exportValues();       
-                $res    = $obj->save($values);            
+                $values = $form->exportValues();
+                $res    = $obj->save_one_item($values);            
                 if ($res) {
                     Display::display_confirmation_message(get_lang('ItemAdded'));
                 }
             }        
             $obj->display();
         } else {
-            echo '<div class="actions">';
+            /*echo '<div class="actions">';
             echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';            
+            echo '</div>';            */
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();
@@ -134,9 +139,9 @@ switch ($action) {
             }            
             $obj->display();
         } else {
-            echo '<div class="actions">';
+            /*echo '<div class="actions">';
             echo '<a href="'.api_get_self().'">'.Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
-            echo '</div>';
+            echo '</div>';*/
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(array('sec_token' => $token));
             $form->display();

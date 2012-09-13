@@ -48,10 +48,11 @@ class SessionField extends ExtraField {
 
         $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));
         $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options', 'class' => 'span6'));
-        if ($action == 'edit') {
+        if ($action == 'edit') {            
             if (in_array($defaults['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
                 $url = Display::url(get_lang('EditExtraFieldOptions'), 'extra_field_options.php?type=session&field_id=' . $id);
                 $form->addElement('label', null, $url);
+                $form->freeze('field_options');
             }
         }
         $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value', 'class' => 'span5'));

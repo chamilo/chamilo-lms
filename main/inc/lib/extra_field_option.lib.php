@@ -22,7 +22,7 @@ class ExtraFieldOption extends Model {
     }  
     
     public function get_count_by_field_id($field_id) {
-        $row = Database::select('count(*) as count', $this->table, array('where' => array('field_id = ?', $field_id)), 'first');
+        $row = Database::select('count(*) as count', $this->table, array('where' => array('field_id = ?' => $field_id)), 'first');           
         return $row['count'];
     }
     
@@ -130,7 +130,22 @@ class ExtraFieldOption extends Model {
         }
         return true;    
     }
+    
+    public function save_one_item($params, $show_query = false) {
+        $field_id = intval($params['field_id']);
         
+        if (empty($field_id)) {
+            return false;
+        }        
+        $params['tms'] = api_get_utc_datetime();
+   
+        if (empty($params['option_order'])) {
+            $order = self::get_max_order($field_id);
+            $params['option_order'] = $order;
+        }
+        parent::save($params, $show_query); 
+    }
+           
     public function get_field_option_by_field_and_option($field_id, $option_value) {
         $field_id = intval($field_id);
         $option_value = Database::escape_string($option_value);
@@ -253,7 +268,8 @@ class ExtraFieldOption extends Model {
         // action links
         echo '<div class="actions">';
        	//echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';	   
-        echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';               
+        $field_id = isset($_REQUEST['field_id']) ? intval($_REQUEST['field_id']) : null;
+        echo '<a href="'.api_get_self().'?action=add&type='.$this->type.'&field_id='.$field_id.'">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';               
         echo '</div>';
         echo Display::grid_html('extra_field_options');
     }
@@ -269,19 +285,21 @@ class ExtraFieldOption extends Model {
         
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
-        $form->addElement('hidden', 'id', $id);       
-        //$form->addElement('hidden', 'type', $this->type);
-        //$form->addElement('hidden', 'field_id', $this->field_id);
         
+        $form->addElement('hidden', 'id', $id);       
+        $form->addElement('hidden', 'type', $this->type);
+        $form->addElement('hidden', 'field_id', $this->field_id);       
         
         $form->addElement('text', 'option_display_text', get_lang('Name'), array('class' => 'span5'));  
-        $form->addElement('text', 'option_value', get_lang('Value'), array('class' => 'span5'));  
+        $form->addElement('text', 'option_value', get_lang('Value'), array('class' => 'span5'));
+        $form->addElement('text', 'option_order', get_lang('Order'), array('class' => 'span2'));
         
         $defaults = array();
         
         if ($action == 'edit') {
             // Setting the defaults
-            $defaults = $this->get($id);                        
+            $defaults = $this->get($id);
+            $form->freeze('option_value');
         	$form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
         } else {            
         	$form->addElement('button', 'submit', get_lang('Add'), 'class="save"');

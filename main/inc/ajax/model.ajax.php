@@ -152,7 +152,7 @@ switch ($action) {
         $type = $_REQUEST['type'];
         $field_id = $_REQUEST['field_id'];
         $obj = new ExtraFieldOption($type);
-        $count = $obj->get_count_by_field_id($field_id);
+        $count = $obj->get_count_by_field_id($field_id);        
         break;    
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';

@@ -55,7 +55,7 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($answer, $exe_id, $questionId) {
+	static function display_free_answer($answer, $exe_id, $questionId, $questionScore = null) {
         global $feedback_type;        
         
         $comments = get_comments($exe_id, $questionId);
@@ -66,8 +66,9 @@ class ExerciseShowFunctions {
             echo '</td></tr>';
         }
         
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-            if (empty($comments)) {
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {            
+            if ($questionScore > 0 || !empty($comments)) {                
+            } else {
                 echo '<tr>';                
                 echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
                 echo '</tr>';
@@ -75,7 +76,7 @@ class ExerciseShowFunctions {
         }
 	}
 
-	static function display_oral_expression_answer($answer,$id,$questionId, $nano = null) {
+	static function display_oral_expression_answer($answer, $id, $questionId, $nano = null) {
 		global $feedback_type;
 
 		if (isset($nano)) {
@@ -83,7 +84,6 @@ class ExerciseShowFunctions {
 		}
 
 		if (empty($id)) {
-
 			echo '<tr>';
 			echo Display::tag('td',nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)), array('width'=>'55%'));
 			echo '</tr>';

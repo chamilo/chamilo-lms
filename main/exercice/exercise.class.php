@@ -2317,11 +2317,11 @@ class Exercise {
 						$choice = Database::result($resq,0,'answer');
 						$choice = str_replace('\r\n', '', $choice);
 						$choice = stripslashes($choice);
-						$questionScore = Database::result($resq,0,"marks");
-						if ($questionScore==-1) {
-							$totalScore+=0;
+						$questionScore = Database::result($resq, 0, "marks");                        
+						if ($questionScore == -1) {
+							$totalScore+= 0;
 						} else {
-							$totalScore+=$questionScore;
+							$totalScore+= $questionScore;
 						}
 						$arrques = $questionName;
 						$arrans  = $choice;
@@ -2357,8 +2357,7 @@ class Exercise {
 							$totalScore += 0;
 						}
 					}
-					break;						
-					
+					break;
 					// for matching
 				case MATCHING :
 					if ($from_database) {
@@ -2520,7 +2519,7 @@ class Exercise {
 							}
 						} elseif($answerType == FREE_ANSWER) {						
 							if($origin != 'learnpath') {
-								ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId);
+								ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId, $questionScore);
 							}
 						} elseif($answerType == ORAL_EXPRESSION) {
 							// to store the details of open questions in an array to be used in mail							
@@ -2730,7 +2729,7 @@ class Exercise {
 							ExerciseShowFunctions::display_fill_in_blanks_answer($answer,$exeId,$questionId);							
 							break;
 						case FREE_ANSWER:
-							echo ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId);                            
+							echo ExerciseShowFunctions::display_free_answer($choice, $exeId, $questionId, $questionScore);                            
 							break;
 						case ORAL_EXPRESSION:
 							echo '<tr>

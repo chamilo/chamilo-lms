@@ -1391,7 +1391,7 @@ abstract class Question
                 $class = 'gray';
             } else {
                 $score_label = get_lang('NotRevised');
-                $class = 'gray';
+                $class = 'error';
             }            
         }
         

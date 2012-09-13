@@ -34,7 +34,7 @@ class SessionField extends ExtraField {
 		
 		if (!empty($session_fields) > 0) {
 			foreach ($session_fields as $session_field) {
-                $field_value = $session_field_values->get_values_by_session_and_field_id($session_id, $session_field['id']);                    
+                $field_value = $session_field_values->get_values_by_handler_and_field_id($session_id, $session_field['id']);                    
                 if ($field_value) {
                     $field_value = $field_value['field_value'];                    
                     

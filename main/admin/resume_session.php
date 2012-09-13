@@ -137,7 +137,7 @@ foreach ($session_fields as $session_field) {
         continue;        
     }
     $obj = new SessionFieldValue();
-    $result = $obj->get_values_by_session_and_field_id($id_session, $session_field['id'], true);
+    $result = $obj->get_values_by_handler_and_field_id($id_session, $session_field['id'], true);
     
     $session_value = null;
     if ($result) {

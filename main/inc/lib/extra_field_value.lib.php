@@ -7,7 +7,7 @@ class ExtraFieldValue extends Model {
      
     public function __construct($type) {
         $this->type = $type;
-        $extra_field = ExtraField($this->type);
+        $extra_field = new ExtraField($this->type);
         $this->handler_id = $extra_field->handler_id;
         switch ($this->type) {
             case 'user':

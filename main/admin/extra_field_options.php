@@ -24,6 +24,16 @@ $interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'
 $tool_name = null;
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
+$field_id = isset($_GET['field_id']) ? $_GET['field_id'] : null;
+$type = 'session';
+
+if (empty($field_id)) {
+    api_not_allowed();
+}
+
+$extra_field = new ExtraField($type);
+$extra_field_info = $extra_field->get($field_id);
+
 
 $check = Security::check_token('request');
 $token = Security::get_token();    
@@ -35,23 +45,23 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));    
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Edit'));
 } else {
-    $interbreadcrumb[]=array('url' => '#','name' => get_lang('SessionFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php','name' => get_lang('SessionFields'));
+    $interbreadcrumb[]=array('url' => 'session_fields.php?action=edit&id='.$extra_field_info['id'],'name' => $extra_field_info['field_display_text']);
+    $interbreadcrumb[]=array('url' => '#','name' => get_lang('EditOptions'));
 }
 
 //jqgrid will use this URL to do the selects
-$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_fields&type=session';
+$params = 'field_id='.$field_id.'&type='.$type;
+$url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_field_options&'.$params;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Type'), get_lang('FieldChangeability'), get_lang('Visibility'), get_lang('Filter'), get_lang('Actions'));
-
+$columns        = array(get_lang('Name'), get_lang('Value'),  get_lang('Order'), get_lang('Actions'));
+  
 //Column config
 $column_model   = array(
-                        array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'180',   'align'=>'left'),
-                        array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'false'),    
+                        array('name'=>'option_display_text', 'index'=>'option_display_text',      'width'=>'180',   'align'=>'left'),
+                        array('name'=>'option_value',       'index'=>'option_value',          'width'=>'',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'option_order',         'index'=>'option_order',              'width'=>'',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
                        );            
 //Autowidth             
@@ -61,74 +71,23 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-                         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
+                         return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
+                         '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
                          '\'; 
                  }';
 $htmlHeadXtra[]='
 <script>
 $(function() {
     // grid definition see the $obj->display() function
-    '.Display::grid_js('session_fields',  $url, $columns, $column_model, $extra_params, array(), $action_links,true).'
-            
-    $("#field_type").on("change", function() {      
-        id = $(this).val();        
-        switch(id) {
-            case "1":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_text.png')).'"); 
-                break;
-            case "2":        
-                $("#example").html("'.addslashes(Display::return_icon('userfield_text_area.png')).'"); 
-                break;
-            case "3":     
-                $("#example").html("'.addslashes(Display::return_icon('add_user_field_howto.png')).'");            
-                break;
-            case "4":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_drop_down.png')).'");
-                break;
-            case "5":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_multidropdown.png')).'");
-                break;
-            case "6":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");
-                break;
-            case "7":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_date_time.png')).'");
-                break;
-            case "8":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_doubleselect.png')).'");
-                break;
-            case "9":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_divider.png')).'");
-                break;
-            case "10":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_user_tag.png')).'");
-                break;
-            case "11":
-                $("#example").html("'.addslashes(Display::return_icon('userfield_data.png')).'");                                            
-                break;
-        }
-    });
-
-    var value = 1;
-    $("#advanced_parameters").on("click", function() {
-        $("#options").toggle(function() {        
-            if (value == 1) {
-                $("#advanced_parameters").addClass("btn-hide");        
-                value = 0;
-            } else {
-                $("#advanced_parameters").removeClass("btn-hide");      
-                value = 1;
-            }
-        });
-    });
+    '.Display::grid_js('extra_field_options',  $url, $columns, $column_model, $extra_params, array(), $action_links,true).'
+    
 });
 </script>';
 
 // The header.
 Display::display_header($tool_name);
 
-$obj = new SessionField();
+$obj = new ExtraFieldOption($type);
 
 // Action handling: Add
 switch ($action) {

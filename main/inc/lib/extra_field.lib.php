@@ -110,6 +110,59 @@ class ExtraField extends model {
         return $types;
     }
     
+        
+    public function add_elements($form, $item_id = null) {
+        if (empty($form)) {
+            return false;
+        }   
+        $extra_data = false;
+        if (!empty($item_id)) {
+            $extra_data = self::get_handler_extra_data($item_id);            
+            if ($form) {
+                $form->setDefaults($extra_data);
+            }            
+        }        
+        $extra_fields = self::get_all();        
+        $extra = ExtraField::set_extra_fields_in_form($form, $extra_data, $this->type.'_field', false, false, $this->type, $extra_fields);        
+        return $extra;
+    }
+      
+    
+    public function get_handler_extra_data($item_id) {
+        if (empty($item_id)) {
+            return array();
+        }
+		$extra_data = array();		
+        $fields = self::get_all();        
+        $session_field_values = new ExtraFieldValue($this->type);		
+		
+		if (!empty($fields) > 0) {
+			foreach ($fields as $field) {
+                $field_value = $session_field_values->get_values_by_handler_and_field_id($item_id, $field['id']);                    
+                if ($field_value) {
+                    $field_value = $field_value['field_value'];                    
+                    
+                    switch ($field['field_type']) {
+                        case ExtraField::FIELD_TYPE_DOUBLE_SELECT:                            
+                            $selected_options = explode('::', $field_value);                            
+                            $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']] = $selected_options[0];
+                            $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable'].'_second'] = $selected_options[1];
+                            break;
+                        case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                            $field_value = explode(';', $field_value);                                
+                        case ExtraField::FIELD_TYPE_RADIO:
+                            $extra_data['extra_'.$field['field_variable']]['extra_'.$field['field_variable']] = $field_value;
+                            break;
+                        default:
+                            $extra_data['extra_'.$field['field_variable']] = $field_value;
+                            break;
+                    }
+                }				
+			}
+		}        
+		return $extra_data;
+    }
+    
     public static function get_all_extra_field_by_type($field_type) {		
 		// all the information of the field
 		$sql = "SELECT * FROM  {$this->table} WHERE field_type='".Database::escape_string($field_type)."'";

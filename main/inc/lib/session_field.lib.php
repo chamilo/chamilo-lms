@@ -7,59 +7,7 @@ class SessionField extends ExtraField {
     public function __construct() {
        parent::__construct('session');
     }
-    
-    public function add_elements($form, $session_id = null) {
-        if (empty($form)) {
-            return false;
-        }   
-        $extra_data = false;
-        if (!empty($session_id)) {
-            $extra_data = self::get_session_extra_data($session_id);            
-            if ($form) {
-                $form->setDefaults($extra_data);
-            }            
-        }        
-        $extra_fields = self::get_all();        
-        $extra = ExtraField::set_extra_fields_in_form($form, $extra_data, 'session_field', false, false, 'session', $extra_fields);        
-        return $extra;
-    }
-     
-    public function get_session_extra_data($session_id) {
-        if (empty($session_id)) {
-            return array();
-        }
-		$extra_data = array();		
-        $session_fields = self::get_all();        
-        $session_field_values = new SessionFieldValue();		
-		
-		if (!empty($session_fields) > 0) {
-			foreach ($session_fields as $session_field) {
-                $field_value = $session_field_values->get_values_by_handler_and_field_id($session_id, $session_field['id']);                    
-                if ($field_value) {
-                    $field_value = $field_value['field_value'];                    
-                    
-                    switch ($session_field['field_type']) {
-                        case ExtraField::FIELD_TYPE_DOUBLE_SELECT:                            
-                            $selected_options = explode('::', $field_value);                            
-                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $selected_options[0];
-                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable'].'_second'] = $selected_options[1];
-                            break;
-                        case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
-                            $field_value = explode(';', $field_value);                                
-                        case ExtraField::FIELD_TYPE_RADIO:
-                            $extra_data['extra_'.$session_field['field_variable']]['extra_'.$session_field['field_variable']] = $field_value;
-                            break;
-                        default:
-                            $extra_data['extra_'.$session_field['field_variable']] = $field_value;
-                            break;
-                    }
-                }				
-			}
-		}        
-		return $extra_data;
-    }
 
-    
     function display() {
         // action links
         echo '<div class="actions">';
@@ -96,6 +44,10 @@ class SessionField extends ExtraField {
        
         $form->addElement('text', 'field_variable', get_lang('FieldLabel'), array('class' => 'span5'));        
         $form->addElement('text', 'field_options', get_lang('FieldPossibleValues'), array('id' => 'field_options', 'class' => 'span6'));        
+        if ($action == 'edit') {
+            $url = Display::url(get_lang('EditOptions'), 'extra_field_options.php?type=session&field_id='.$id);
+            $form->addElement('label', null, $url);
+        }
         $form->addElement('text', 'field_default_value', get_lang('FieldDefaultValue'), array('id' => 'field_default_value', 'class' => 'span5'));        
                 
         $group = array();

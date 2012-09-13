@@ -143,10 +143,17 @@ switch ($action) {
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
         break;
-    case 'get_session_fields':
-        $obj = new SessionField();
+    case 'get_extra_fields':
+        $type = $_REQUEST['type'];
+        $obj = new ExtraField($type);
         $count = $obj->get_count();
         break;
+    case 'get_extra_field_options':
+        $type = $_REQUEST['type'];
+        $field_id = $_REQUEST['field_id'];
+        $obj = new ExtraFieldOption($type);
+        $count = $obj->get_count_by_field_id($field_id);
+        break;    
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
         $obj        = new Timeline();
@@ -330,7 +337,7 @@ switch ($action) {
         if(!in_array($sidx, $columns)) {
         	$sidx = 'subject';
         }
-        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
+        $result = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
         $new_result = array();
         foreach ($result as $item) {
             $language_info = api_get_language_info($item['language_id']);
@@ -407,8 +414,9 @@ switch ($action) {
         //Multidimensional sort
         msort($result, $sidx);
         break;        
-    case 'get_session_fields':
-        $obj = new SessionField();
+    
+    case 'get_extra_fields':         
+        $obj = new ExtraField($type);
         $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');
         $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
@@ -416,15 +424,29 @@ switch ($action) {
             foreach ($result as $item) {            
                 $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
                 $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_visible']   = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                $item['field_filter']   = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
-                
-                
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
                 $new_result[]        = $item;
             }
             $result = $new_result;
-        }  
-        
+        }        
+        break;
+    case 'get_extra_field_options':
+        $obj = new ExtraFieldOption($type);
+        $columns = array('option_display_text', 'option_value', 'option_order');
+        $result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id),'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        /*$new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {            
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }*/  
+
         break;
     default:    
         exit;            
@@ -442,7 +464,8 @@ $allowed_actions = array('get_careers',
                          'get_grade_models', 
                          'get_event_email_template',
                          'get_user_skill_ranking',
-                         'get_session_fields'
+                         'get_extra_fields',
+                         'get_extra_field_options'
 );
                          	
 //5. Creating an obj to return a json

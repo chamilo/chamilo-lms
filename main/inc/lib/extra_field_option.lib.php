@@ -19,7 +19,12 @@ class ExtraFieldOption extends Model {
     public function get_count() {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
         return $row['count'];
-    }    
+    }  
+    
+    public function get_count_by_field_id($field_id) {
+        $row = Database::select('count(*) as count', $this->table, array('where' => array('field_id = ?', $field_id)), 'first');
+        return $row['count'];
+    }
     
     public function get_field_options_to_string($field_id) {
         $options = self::get_field_options_by_field($field_id);
@@ -241,4 +246,51 @@ class ExtraFieldOption extends Model {
     public function update($params) {
         parent::update($params);
     }
+    
+    //Form
+    
+    function display() {
+        // action links
+        echo '<div class="actions">';
+       	echo  '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'),'', ICON_SIZE_MEDIUM).'</a>';	   
+        //echo '<a href="'.api_get_self().'?action=add">'.Display::return_icon('add_user_fields.png',get_lang('Add'),'', ICON_SIZE_MEDIUM).'</a>';               
+
+        echo '</div>';
+        echo Display::grid_html('extra_field_options');
+    }
+    
+    public function return_form($url, $action) {
+		$form_name = $this->type.'_field';
+        $form = new FormValidator($form_name, 'post', $url);
+        // Settting the form elements
+        $header = get_lang('Add');        
+        if ($action == 'edit') {
+            $header = get_lang('Modify');
+        }
+        
+        $form->addElement('header', $header);
+        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $form->addElement('hidden', 'id', $id);        
+        
+        $form->addElement('text', 'option_display_text', get_lang('Name'), array('class' => 'span5'));  
+        $form->addElement('text', 'option_value', get_lang('Value'), array('class' => 'span5'));  
+        
+        $defaults = array();
+        
+        if ($action == 'edit') {
+            // Setting the defaults
+            $defaults = $this->get($id);                        
+        	$form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
+        } else {            
+        	$form->addElement('button', 'submit', get_lang('Add'), 'class="save"');
+        }
+        
+        $form->setDefaults($defaults);
+    
+        // Setting the rules
+        $form->addRule('option_display_text', get_lang('ThisFieldIsRequired'), 'required');        
+        //$form->addRule('field_variable', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('option_value', get_lang('ThisFieldIsRequired'), 'required');        
+		return $form;
+    }    
 }

@@ -166,8 +166,8 @@ if (isset($_REQUEST['search_course'])) {
 
 // subscribe user to course
 if (isset($_GET['subscribe_course'])) {
-    if ($ctok == $_GET['sec_token']) {
-            $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
+    if ($ctok == $_GET['sec_token']) {        
+        $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);                
     }
 }
 // We are unsubscribing from a course (=Unsubscribe from course).

@@ -311,16 +311,39 @@ class SessionManager {
         $inject_extra_fields = null;
                 
         $extra_fields = array();
+        $extra_fields_info = array();
+        
+        //for now only sessions
+        $extra_field = new ExtraField('session');
+        $double_fields = array();
+        
+        $extra_field_option = new ExtraFieldOption('session');
+        
         if (isset($options['extra'])) {
             $extra_fields = $options['extra'];
             if (!empty($extra_fields)) {
                 foreach ($extra_fields as $extra) {
                     $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fv.field_value, NULL ) as {$extra['field']} , ";
+                    if (isset($extra_fields_info[$extra['id']])) {
+                        $info = $extra_fields_info[$extra['id']];                        
+                    } else {
+                        $info = $extra_field->get($extra['id']);
+                        $extra_fields_info[$extra['id']] = $info;                        
+                    }
+                    
+                    if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                        $double_fields[$info['id']] = $info;
+                    }
                 }                
             }
         }
-        //var_dump($inject_extra_fields);
-
+        $options_by_double = array();
+        foreach ($double_fields as $double) {            
+            $options = $extra_field_option->get_field_options_by_field($double['id'], true);
+            $options_by_double['extra_'.$double['field_variable']] = $options;
+            //$options_by_double['extra_'.$double['field_variable'].'_second'] = true;
+        }            
+        
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
 					(s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR 
@@ -386,7 +409,7 @@ class SessionManager {
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
-        
+                
 		if (Database::num_rows($result)) {
 			$sessions   = Database::store_result($result, 'ASSOC');
 			foreach ($sessions as $session) {
@@ -415,6 +438,33 @@ class SessionManager {
 						$session['visibility'] =  api_ucfirst(get_lang('Invisible'));
 					break;
                 }
+                
+                //Cleaning double selects
+                
+                foreach ($session as $key => &$value) {                    
+                    if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
+                        $options = explode('::', $value);                        
+                    }
+                    $original_key = $key;
+                    
+                    if (strpos($key, '_second') === false) {                        
+                    } else {
+                        $key = str_replace('_second', '', $key);
+                    }
+                    
+                    if (isset($options_by_double[$key])) {                       
+                        if (isset($options[0])) {
+                            if (isset($options_by_double[$key][$options[0]])) {                                
+                                if (strpos($original_key, '_second') === false) {
+                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];          
+                                } else {
+                                    $value = $options_by_double[$key][$options[1]]['option_display_text'];      
+                                }                                
+                            }                            
+                        }                                
+                    }
+                }
+                //var_dump($session);                
                 
                 //Magic filter
                 if (isset($formatted_sessions[$session_id])) {

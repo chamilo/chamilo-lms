@@ -57,8 +57,6 @@ $columns = array(
     get_lang('SessionDisplayStartDate'),
     get_lang('SessionDisplayEndDate'),
     get_lang('SessionCategoryName'),
-    //get_lang('StartDate'), 
-    //get_lang('EndDate'), 
     get_lang('Coach'),
     get_lang('Status'),     
     get_lang('Visibility'),
@@ -101,7 +99,7 @@ $fields = $session_field->get_all();
 $rules = array();
 $now = new DateTime();
 $now->add(new DateInterval('P30D'));
-$one_month = $now->format('Y-m-d h:m:s');
+$one_month = $now->format('Y-m-d H:m:s');
 
 //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
 //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
@@ -124,7 +122,70 @@ if (!empty($fields)) {
         
         $search_options['searchhidden'] = 'true';
         $search_options['defaultValue'] = $search_options['field_default_value'];
-        $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);
+        
+        
+        if ($field['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+            //Add 2 selects
+            $options = $session_field_option->get_field_options_by_field($field['id']);
+            $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array($options);
+            $first_options = array();
+            
+            if (!empty($options)) {
+                foreach ($options as $option) {
+                    foreach ($option as $sub_option) {                        
+                        if ($sub_option['option_value'] == 0) {
+                            $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
+                        } else {
+
+                        }
+                    }
+                }
+            }
+            
+            $search_options['value']  = implode(';', $first_options);
+            $search_options['dataInit'] = 'fill_second_select';
+            //$search_options['dataEvents'] = array("type" => 'click', "data" => array("i"=> "7"), "fn" => "function(e) { console.log(e.data.i); }");
+            //$search_options['attr'] = array("title" => '123');
+            
+            
+            //First
+            $column_model[] = array(
+                'name' => 'extra_'.$field['field_variable'],
+                'index' => 'extra_'.$field['field_variable'],
+                'width' => '100',
+                'hidden' => 'true',
+                'search' => 'true',
+                'stype' => 'select',
+                'searchoptions' => $search_options
+            ); 
+            $columns[] = $field['field_display_text'].' (1)';
+            $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');           
+            
+            
+            //Second
+            $search_options['value'] = $field['id'].':';
+            $search_options['dataInit'] = 'register_second_select';
+            //$search_options['attr'] = array('rel' => 'sss'); 
+            
+            $column_model[] = array(
+                'name' => 'extra_'.$field['field_variable'].'_second',
+                'index' => 'extra_'.$field['field_variable'].'_second',
+                'width' => '100',
+                'hidden' => 'true',
+                'search' => 'true',
+                'stype' => 'select',                
+                'searchoptions' => $search_options
+            );        
+            $columns[] = $field['field_display_text'].' (2)';
+            $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
+            continue;
+
+            
+            //var_dump($options);
+        } else {            
+            $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);    
+        }
+        
         //$search_options['dataInit'] = 'datePick';
               
         $column_model[] = array(
@@ -139,15 +200,9 @@ if (!empty($fields)) {
         $columns[] = $field['field_display_text'];
         $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');        
     }
-    
-    /*$groups = array(
-        'groupOp'=> 'OR', 
-        'rules' => $rules
-    );*/
 }
 
-
-$column_model[] = array('name'=>'actions',        'index'=>'actions',         'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
+$column_model[] = array('name'=>'actions',        'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
 $columns[] = get_lang('Actions');
 
                        
@@ -188,6 +243,9 @@ $action_links = 'function action_formatter(cellvalue, options, rowObject) {
                          '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="session_list.php?action=delete&idChecked=\'+options.rowId+\'">'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
                          '\'; 
                  }';
+
+$url_select = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
+
 ?>
 <script>
 
@@ -214,6 +272,7 @@ function clean_cols(grid, added_cols) {
     };
 }
 
+var second_filters = [];
 
 $(function() {
     date_pick_today = function(elem) {
@@ -225,15 +284,41 @@ $(function() {
         next_month = Date.today().next().month();
         $(elem).datetimepicker('setDate', next_month);
     }
+    
+    //Great hack
+    register_second_select = function(elem) {
+        second_filters[$(elem).val()] = $(elem);        
+    }
+    
+    fill_second_select = function(elem) {        
+        $(elem).on("change", function() {
+            composed_id = $(this).val();
+            field_id = composed_id.split("#")[0];
+            id = composed_id.split("#")[1];
+            
+            $.ajax({ 
+                url: "<?php echo $url_select ?>&a=get_second_select_options", 
+                dataType: "json",
+                data: "type=session&field_id="+field_id+"&option_value_id="+id,
+                success: function(data) {
+                    my_select = second_filters[field_id];
+                    my_select.empty();
+                    $.each(data, function(index, value) {
+                        my_select.append($("<option/>", {
+                            value: index,
+                            text: value
+                        }));
+                    });            
+                }
+            }); 
+        });        
+    }
 
     <?php 
         echo Display::grid_js('sessions', $url, $columns, $column_model, $extra_params, array(), $action_links,true);      
     ?>
-            
     
     setSearchSelect("status");
-    
-    
     
     var grid = $("#sessions"),
     prmSearch = {
@@ -252,8 +337,7 @@ $(function() {
                 $.each(filters, function(key, value){  
                     if (key == 'rules') {
                         $.each(value, function(key, value){  
-                            //console.log(value.field);
-                            
+                            //console.log(value.field);                            
                             if (added_cols[value.field] == undefined) {
                                 added_cols[value.field] = value.field;
                             }
@@ -273,8 +357,7 @@ $(function() {
        }
     };
     
-    original_cols = grid.jqGrid('getGridParam', 'colModel'); 
-   
+    original_cols = grid.jqGrid('getGridParam', 'colModel');    
     
     grid.jqGrid('navGrid','#sessions_pager', 
         {edit:false,add:false,del:false},

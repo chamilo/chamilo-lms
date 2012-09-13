@@ -31,7 +31,7 @@ class ExtraFieldOption extends Model {
         $new_options = array();        
         if (!empty($options)) {
             foreach ($options as $option) {
-                $new_options[] = $option['option_value'].':'.$option['option_value'];
+                $new_options[] = $option['option_value'].':'.$option['option_display_text'];
             }
             $string = implode(';', $new_options);
             return $string;
@@ -183,14 +183,22 @@ class ExtraFieldOption extends Model {
         return false;        
     }
     
-    public function get_field_options_by_field($field_id) {
+    public function get_field_options_by_field($field_id, $add_id_in_array = false) {
         $field_id = intval($field_id);
         $option_value = Database::escape_string($option_value);
         
         $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-            return Database::store_result($result, 'ASSOC');
+            if ($add_id_in_array) {
+                $options = array();
+                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    $options[$row['id']] = $row;
+                }
+                return $options;
+            } else {
+                return Database::store_result($result, 'ASSOC');
+            }
         }
         return false;        
     }

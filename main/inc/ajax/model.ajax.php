@@ -74,41 +74,56 @@ if ($_REQUEST['_search'] == 'true') {
     $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
     //var_dump($filters);
     
-    $session_field = new SessionField();
-    $extra_fields = array();
-    
+    //for now
+    $extra_field = new ExtraField('session');
+    $extra_fields = array();    
     if (!empty($filters)) {
         $where_condition .= ' AND ( ';          
-        $counter = 0;
-        
+        $counter = 0;        
         foreach ($filters->rules as $rule) {
+            $insert_group_op = false;
             if (strpos($rule->field, 'extra_') === false) {
+                //normal fields
                 $field = $rule->field;
                 $where_condition .= get_where_clause($field, $rule->op, $rule->data);
+                $insert_group_op = true;
             } else {
-                $original_field = str_replace('extra_', '', $rule->field);
-                $session_field_option = $session_field->get_handler_field_info_by_field_variable($original_field);                
+                //extra fields
+                if (strpos($rule->field, '_second') === false) {
                 
-                $extra_fields[] = array(
-                    'field' => $rule->field, 
-                    'id'    => $session_field_option['id']
-                );                
-                //var_dump($session_field_option);
-                $field = 'field_value';
-                //$where_condition .= ' ('.get_where_clause('field_id', 'eq', $session_field_option['id']);
-                $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
-                $where_condition .= ' ) ';
-                //$where_condition .= get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                    $original_field = str_replace('extra_', '', $rule->field);
+
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);                
+
+                    $extra_fields[] = array(
+                        'field' => $rule->field, 
+                        'id'    => $field_option['id']
+                    );                
+                    //var_dump($session_field_option);
+                    $field = 'field_value';    
+                    $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
+                    $where_condition .= ' ) ';
+                    $insert_group_op = true;
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $original_field = str_replace('extra_', '', $my_field);                    
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+                                       
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);            
+                    $insert_group_op = false;
+                }
             }
-            
-            if ($counter < count($filters->rules) -1) {
-                $where_condition .= $filters->groupOp;
+            if ($insert_group_op) {
+                if ($counter < count($filters->rules) - 1) {
+                    $where_condition .= $filters->groupOp;
+                }
             }
             $counter++;
         }        
         $where_condition .= ' ) ';        
     }
 }
+
 
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
@@ -267,8 +282,7 @@ switch ($action) {
             foreach ($extra_fields as $field) {
                 $columns[] = $field['field'];
             }
-        }
-        
+        }                
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
@@ -413,8 +427,7 @@ switch ($action) {
         }
         //Multidimensional sort
         msort($result, $sidx);
-        break;        
-    
+        break;
     case 'get_extra_fields':         
         $obj = new ExtraField($type);
         $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');

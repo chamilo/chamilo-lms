@@ -928,6 +928,18 @@ class Display {
         
         //Fixes datainit datepick
         $json_encode = str_replace('"dataInit"','dataInit', $json_encode);
+        $json_encode = str_replace('"dataEvents"','dataEvents', $json_encode);
+        $json_encode = str_replace('"type"','type', $json_encode);
+        $json_encode = str_replace('"fn"','fn', $json_encode);
+        $json_encode = str_replace('"data"','data', $json_encode);
+        $json_encode = str_replace('"attr"','attr', $json_encode);
+        $json_encode = str_replace('"rel"','rel', $json_encode);
+        $json_encode = str_replace('"title"','title', $json_encode);
+        
+        $json_encode = str_replace('"register_second_select"','register_second_select', $json_encode);
+        
+        $json_encode = str_replace('"fill_second_select"','fill_second_select', $json_encode);
+        
         $json_encode = str_replace('"date_pick"','date_pick', $json_encode);
         $json_encode = str_replace('"date_pick_today"','date_pick_today', $json_encode);
         $json_encode = str_replace('"date_pick_one_month"','date_pick_one_month', $json_encode);

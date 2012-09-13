@@ -422,7 +422,7 @@ class ExtraField extends model {
                     $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 
                     $jquery_ready_content .= '                        
-                        $("#'.$first_select_id.'").on("change", function() {                            
+                        $("#'.$first_select_id.'").on("change", function() {                   
                             var id = $(this).val();
                             $.ajax({ 
                                 url: "'.$url.'&a=get_second_select_options", 
@@ -542,6 +542,4 @@ EOF;
         $return['jquery_ready_content'] = $jquery_ready_content;
         return $return;
     }
-           
-    
 }

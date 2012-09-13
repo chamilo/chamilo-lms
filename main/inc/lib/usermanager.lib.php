@@ -15,21 +15,6 @@
  * @package chamilo.include.user
  */
 class UserManager {
-    
-    // Constants for user extra field types.    
-    CONST USER_FIELD_TYPE_TEXT =                    1;
-    CONST USER_FIELD_TYPE_TEXTAREA =                2;
-    CONST USER_FIELD_TYPE_RADIO =                   3;
-    CONST USER_FIELD_TYPE_SELECT =                  4;
-    CONST USER_FIELD_TYPE_SELECT_MULTIPLE =         5;
-    CONST USER_FIELD_TYPE_DATE =                    6;
-    CONST USER_FIELD_TYPE_DATETIME =                7;
-    CONST USER_FIELD_TYPE_DOUBLE_SELECT =           8;
-    CONST USER_FIELD_TYPE_DIVIDER =                 9;
-    CONST USER_FIELD_TYPE_TAG =                     10;
-    CONST USER_FIELD_TYPE_TIMEZONE =                11;
-    CONST USER_FIELD_TYPE_SOCIAL_PROFILE =          12;
-
 	private function __construct () {
 	}
 
@@ -1281,14 +1266,14 @@ class UserManager {
 			// Check if enumerated field, if the option is available
 			$rowuf = Database::fetch_array($resuf);
 			switch ($rowuf['field_type']) {
-				case self::USER_FIELD_TYPE_TAG :
+				case ExtraField::FIELD_TYPE_TAG :
 					//4. Tags are process here comes from main/auth/profile.php                    
 					UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
 					return true;
                     break;
-				case self::USER_FIELD_TYPE_RADIO:
-				case self::USER_FIELD_TYPE_SELECT:
-				case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
+				case ExtraField::FIELD_TYPE_RADIO:
+				case ExtraField::FIELD_TYPE_SELECT:
+				case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
 					$sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
 					$resuo = Database::query($sqluo);
 					$values = split(';',$fvalues);
@@ -1538,8 +1523,8 @@ class UserManager {
 			return false;
 		}
 
-		if (!empty($fieldoptions) && in_array($fieldtype, array(self::USER_FIELD_TYPE_RADIO, self::USER_FIELD_TYPE_SELECT, self::USER_FIELD_TYPE_SELECT_MULTIPLE, self::USER_FIELD_TYPE_DOUBLE_SELECT))) {
-			if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
+		if (!empty($fieldoptions) && in_array($fieldtype, array(ExtraField::FIELD_TYPE_RADIO, ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_SELECT_MULTIPLE, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
+			if ($fieldtype == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
 				$twolist = explode('|', $fieldoptions);
 				$counter = 0;
 				foreach ($twolist as $individual_list) {
@@ -1631,7 +1616,7 @@ class UserManager {
 		$result = Database::query($sql);
 
 		// we create an array with all the options (will be used later in the script)
-		if ($fieldtype == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
+		if ($fieldtype == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
 			$twolist = explode('|', $fieldoptions);
 			$counter = 0;
 			foreach ($twolist as $individual_list) {
@@ -1747,7 +1732,7 @@ class UserManager {
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			while ($row = Database::fetch_array($res)) {
-                if ($row['type'] == self::USER_FIELD_TYPE_DOUBLE_SELECT) {
+                if ($row['type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                     $field_options = self::get_extra_field_options($row['fvar']);
                     
                     $field_details['options'] = $field_options;
@@ -1780,7 +1765,7 @@ class UserManager {
                         }                        
                     }
                     
-                } elseif ($row['type'] == self::USER_FIELD_TYPE_TAG) {
+                } elseif ($row['type'] == ExtraField::FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id, $row['id'], false);                    
 					$extra_data['extra_'.$row['fvar']] = $tags;
 				} else {
@@ -1794,7 +1779,7 @@ class UserManager {
 					if (Database::num_rows($resu) > 0) {
 						$rowu = Database::fetch_array($resu);
 						$fval = $rowu['fval'];
-						if ($row['type'] ==  self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
+						if ($row['type'] ==  ExtraField::FIELD_TYPE_SELECT_MULTIPLE) {
 							$fval = split(';', $rowu['fval']);
 						}
 					} else {
@@ -1803,13 +1788,13 @@ class UserManager {
 					}
                     // We get here (and fill the $extra_data array) even if there is no user with data (we fill it with default values)
 					if ($prefix) {
-						if ($row['type'] ==  self::USER_FIELD_TYPE_RADIO) {
+						if ($row['type'] ==  ExtraField::FIELD_TYPE_RADIO) {
 							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
 						} else {
 							$extra_data['extra_'.$row['fvar']] = $fval;
 						}
 					} else {
-						if ($row['type'] ==  self::USER_FIELD_TYPE_RADIO) {
+						if ($row['type'] ==  ExtraField::FIELD_TYPE_RADIO) {
 							$extra_data['extra_'.$row['fvar']]['extra_'.$row['fvar']] = $fval;
 						} else {
 							$extra_data[$row['fvar']] = $fval;
@@ -1859,7 +1844,7 @@ class UserManager {
 				if (Database::num_rows($resu) > 0) {
 					$rowu = Database::fetch_array($resu);
 					$fval = $rowu['fval'];
-					if ($row['type'] ==  self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
+					if ($row['type'] ==  ExtraField::FIELD_TYPE_SELECT_MULTIPLE) {
 						$fval = split(';',$rowu['fval']);
 					}
 				}
@@ -3609,257 +3594,9 @@ class UserManager {
         }
         return false;
     }
-    
-    static function set_extra_fields_in_form($form, $extra_data, $form_name, $admin_permissions = false, $user_id = null, $type = 'user', $extra = null) {        
-        $user_id = intval($user_id);
-        
-        // User extra fields
-        if ($type == 'user') {
-            $extra = self::get_extra_fields(0, 50, 5, 'ASC', true, null, true);            
-        }       
-        
-        $jquery_ready_content = null;
-        
-        if (!empty($extra))
-        foreach ($extra as $field_details) {       
-            if (!$admin_permissions) {
-                if ($field_details['field_visible'] == 0) {
-                    continue;
-                }
-            }           
-            switch ($field_details['field_type']) {
-                case self::USER_FIELD_TYPE_TEXT:
-                    $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('class' => 'span4'));
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');                    
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_TEXTAREA:
-                    $form->add_html_editor('extra_'.$field_details['field_variable'], $field_details['field_display_text'], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
-                    //$form->addElement('textarea', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('size' => 80));
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) $form->freeze('extra_'.$field_details['field_variable']);
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_RADIO:
-                    $group = array();
-                    foreach ($field_details['options'] as $option_id => $option_details) {
-                        $options[$option_details['option_value']] = $option_details['option_display_text'];
-                        $group[] = $form->createElement('radio', 'extra_'.$field_details['field_variable'], $option_details['option_value'],$option_details['option_display_text'].'<br />',$option_details['option_value']);
-                    }
-                    $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '');
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_SELECT:
-                    $get_lang_variables = false;
-                    if (in_array($field_details['field_variable'], array('mail_notify_message','mail_notify_invitation', 'mail_notify_group_message'))) {
-                        $get_lang_variables = true;
-                    }                
-                    $options = array();
-                   
-                    foreach ($field_details['options'] as $option_id => $option_details) {
-                        //$options[$option_details['option_value']] = $option_details['option_display_text'];
-                        if ($get_lang_variables) {
-                            $options[$option_details['option_value']] = get_lang($option_details['option_display_text']);
-                        } else {
-                          $options[$option_details['option_value']] = $option_details['option_display_text'];  
-                        }
-                    }
-                    if ($get_lang_variables) {
-                        $field_details['field_display_text'] = get_lang($field_details['field_display_text']);
-                    }                    
-                    //chzn-select doesn't work for sessions??
-                    $form->addElement('select','extra_'.$field_details['field_variable'], $field_details['field_display_text'], $options, array('class'=>'', 'id'=>'extra_'.$field_details['field_variable']));
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) {
-                            $form->freeze('extra_'.$field_details['field_variable']);
-                        }
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
-                    $options = array();
-                    foreach ($field_details['options'] as $option_id => $option_details) {
-                        $options[$option_details['option_value']] = $option_details['option_display_text'];
-                    }
-                    $form->addElement('select','extra_'.$field_details['field_variable'], $field_details['field_display_text'], $options, array('multiple' => 'multiple'));
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) {
-                            $form->freeze('extra_'.$field_details['field_variable']);
-                        }
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_DATE:
-                    $form->addElement('datepickerdate', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details['field_variable']]]->setLocalOption('minYear', 1900);
-                    $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                    $form -> setDefaults($defaults);
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) {
-                            $form->freeze('extra_'.$field_details['field_variable']);                            
-                        }
-                    }
-                    $form->applyFilter('theme', 'trim');
-                    break;
-                case self::USER_FIELD_TYPE_DATETIME:
-                    $form->addElement('datepicker', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details['field_variable']]]->setLocalOption('minYear', 1900);
-                    $defaults['extra_'.$field_details['field_variable']] = date('Y-m-d 12:00:00');
-                    $form -> setDefaults($defaults);
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) {
-                            $form->freeze('extra_'.$field_details['field_variable']);
-                        }
-                    }
-                    $form->applyFilter('theme', 'trim');
-                    break;
-                case self::USER_FIELD_TYPE_DOUBLE_SELECT:
-                    $first_select_id = 'first_extra_'.$field_details['field_variable'];
-                    
-                    $url = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
-
-                    $jquery_ready_content .= '                        
-                        $("#'.$first_select_id.'").on("change", function() {                            
-                            var id = $(this).val();
-                            $.ajax({ 
-                                url: "'.$url.'&a=get_second_select_options", 
-                                dataType: "json",
-                                data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
-                                success: function(data) {
-                                    $("#second_extra_'.$field_details['field_variable'].'").empty();
-                                    $.each(data, function(index, value) {
-                                        $("#second_extra_'.$field_details['field_variable'].'").append($("<option/>", {
-                                            value: index,
-                                            text: value
-                                        }));
-                                    });                           
-                                },            
-                            });    
-                        });';
-                    
-                    $first_id = null;
-                    $second_id = null;
-                    
-                    if (!empty($extra_data)) {
-                        $first_id = $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable']];
-                        $second_id = $extra_data['extra_'.$field_details['field_variable']]['extra_'.$field_details['field_variable'].'_second'];                        
-                    }
-
-                    $options = self::extra_field_double_select_convert_array_to_ordered_array($field_details['options']);
-                    $values = array();
-                    $second_values = array();
-                    if (!empty($options)) {                        
-                        foreach ($options as $option) {                            
-                            foreach ($option as $sub_option) {
-                                if ($sub_option['option_value'] == '0') {
-                                    $values[$sub_option['id']] = $sub_option['option_display_text'];
-                                } else {
-                                    if ($first_id === $sub_option['option_value']) {
-                                        $second_values[$sub_option['id']] = $sub_option['option_display_text'];
-                                    }
-                                }
-                            }
-                        }
-                    }                    
-                    $group = array();
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'], null, $values, array('id' => $first_select_id));
-                    $group[] = $form->createElement('select', 'extra_'.$field_details['field_variable'].'_second', null, $second_values, array('id'=>'second_extra_'.$field_details['field_variable']));
-                    $form->addGroup($group, 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], '&nbsp;');
-                    
-                    if (!$admin_permissions) {
-                        if ($field_details['field_visible'] == 0) {
-                            $form->freeze('extra_'.$field_details['field_variable']);
-                        }
-                    }
-                    break;
-                case self::USER_FIELD_TYPE_DIVIDER:
-                    $form->addElement('static', $field_details['field_variable'], '<br /><strong>'.$field_details['field_display_text'].'</strong>');
-                    break;
-                case self::USER_FIELD_TYPE_TAG:
-                    //the magic should be here
-                    $user_tags = UserManager::get_user_tags($user_id, $field_details['id']);                    
-
-                    $tag_list = '';
-                    if (is_array($user_tags) && count($user_tags) > 0) {
-                        foreach ($user_tags as $tag) {
-                            $tag_list .= '<option value="'.$tag['tag'].'" class="selected">'.$tag['tag'].'</option>';
-                        }
-                    }
-
-                    $multi_select = '<select id="extra_'.$field_details['field_variable'].'" name="extra_'.$field_details['field_variable'].'">
-                                    '.$tag_list.'
-                                    </select>';
-
-                    $form->addElement('label',$field_details['field_display_text'], $multi_select);
-                    $url = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php';
-                    $complete_text = get_lang('StartToType');
-                    //if cache is set to true the jquery will be called 1 time
-                    $field_variable = $field_details['field_variable'];
-                    $field_id = $field_details['id'];
-                    $jquery_ready_content .=  <<<EOF
-                    $("#extra_$field_variable").fcbkcomplete({
-                        json_url: "$url?a=search_tags&field_id=$field_id",
-                        cache: false,
-                        filter_case: true,
-                        filter_hide: true,
-                        complete_text:"$complete_text",
-                        firstselected: true,
-                        //onremove: "testme",
-                        //onselect: "testme",
-                        filter_selected: true,
-                        newel: true
-                    });
-EOF;
-                    break;
-                case self::USER_FIELD_TYPE_TIMEZONE:
-                    $form->addElement('select', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], api_get_timezones(), '');
-                    if ($field_details['field_visible'] == 0)	$form->freeze('extra_'.$field_details['field_variable']);
-                    break;
-                case self::USER_FIELD_TYPE_SOCIAL_PROFILE:
-                    // get the social network's favicon
-                    $icon_path = UserManager::get_favicon_from_url($extra_data['extra_'.$field_details['field_variable']], $field_details['field_default_value']);
-                    // special hack for hi5
-                    $leftpad = '1.7'; 
-                    $top = '0.4'; 
-                    $domain = parse_url($icon_path, PHP_URL_HOST); 
-                    if ($domain == 'www.hi5.com' or $domain == 'hi5.com') {
-                        $leftpad = '3'; $top = '0';                        
-                    }
-                    // print the input field
-                    $form->addElement('text', 'extra_'.$field_details['field_variable'], $field_details['field_display_text'], array('size' => 60, 'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '));
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'stripslashes');
-                    $form->applyFilter('extra_'.$field_details['field_variable'], 'trim');
-                    if ($field_details['field_visible'] == 0) {	
-                        $form->freeze('extra_'.$field_details['field_variable']);
-                    }
-                    break;
-            }
-        }
-        $return = array();
-        $return['jquery_ready_content'] = $jquery_ready_content;
-        return $return;
-    }
-    
+   
     static function get_user_field_types() {
-        $types = array();
-        $types[self::USER_FIELD_TYPE_TEXT]            = get_lang('FieldTypeText');
-        $types[self::USER_FIELD_TYPE_TEXTAREA]        = get_lang('FieldTypeTextarea');
-        $types[self::USER_FIELD_TYPE_RADIO]           = get_lang('FieldTypeRadio');
-        $types[self::USER_FIELD_TYPE_SELECT]          = get_lang('FieldTypeSelect');
-        $types[self::USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::USER_FIELD_TYPE_DATE]            = get_lang('FieldTypeDate');
-        $types[self::USER_FIELD_TYPE_DATETIME]        = get_lang('FieldTypeDatetime');
-        $types[self::USER_FIELD_TYPE_DOUBLE_SELECT]   = get_lang('FieldTypeDoubleSelect');
-        $types[self::USER_FIELD_TYPE_DIVIDER]         = get_lang('FieldTypeDivider');
-        $types[self::USER_FIELD_TYPE_TAG]             = get_lang('FieldTypeTag');
-        $types[self::USER_FIELD_TYPE_TIMEZONE]        = get_lang('FieldTypeTimezone');
-        $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
-        return $types;
+        return ExtraField::get_extra_fields_by_handler('user');
     }
 
     static function add_user_as_admin($user_id) {
@@ -3879,73 +3616,5 @@ EOF;
             $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
             Database::query($sql);
         }
-    }
-    
-    /**
-     * Converts a string like this:
-     * France:Paris;Bretagne;Marseilles;Lyon|Belgique:Bruxelles;Namur;Liège;Bruges|Peru:Lima;Piura;
-     * into
-     * array('France' => array('Paris', 'Bregtane', 'Marseilles'), 'Belgique' => array('Namur', 'Liège', etc
-     * @param string $string
-     * @return array
-     */
-    static function extra_field_double_select_convert_string_to_array($string) {
-        $options = explode('|', $string);
-        $options_parsed = array();
-        $id = 0;
-        if (!empty($options)) {
-            foreach ($options as $sub_options) {
-                $options = explode(':', $sub_options);
-                $sub_sub_options = explode(';', $options[1]);
-                $options_parsed[$id] = array('label' => $options[0], 'options' => $sub_sub_options);
-                $id++;
-            }
-        }
-        return $options_parsed;        
-    }
-    
-    static function extra_field_double_select_convert_array_to_ordered_array($options) {
-        $options_parsed = array();
-        if (!empty($options)) {
-            foreach ($options as $option) {            
-                if ($option['option_value'] == 0 ) {
-                    $options_parsed[$option['id']][] = $option;
-                } else {
-                    $options_parsed[$option['option_value']][] = $option;
-                }
-            }
-        }
-        return $options_parsed;
-    }
-    
-    /**
-  
-     * @param array options the result of the get_field_options_by_field() array
-     */
-    static function extra_field_double_select_convert_array_to_string($options) {
-        $string = null;
-        //var_dump($options);
-        $options_parsed = self::extra_field_double_select_convert_array_to_ordered_array($options);
-        
-        if (!empty($options_parsed)) {
-            foreach ($options_parsed as $option) {
-                foreach ($option as $key => $item) {                
-                    $string .= $item['option_display_text'];          
-                    if ($key == 0) {
-                        $string .= ':';
-                    } else {
-                        if (isset($option[$key+1])) {
-                            $string .= ';';
-                        }
-                    }
-                }
-                $string .= '|';            
-            }
-        }
-        
-        if (!empty($string)) {
-           $string = substr($string, 0, strlen($string)-1);
-        }        
-        return $string;
     }
 }

@@ -11,14 +11,8 @@ switch ($action) {
         $option_value_id = isset($_REQUEST['option_value_id']) ? $_REQUEST['option_value_id'] : null;
         
         if (!empty($type) && !empty($field_id) && !empty($option_value_id)) {
-            switch($type) {
-                case 'session':
-                    $session_field_options = new SessionFieldOption();
-                    echo $session_field_options->get_second_select_field_options_by_field($field_id, $option_value_id, true);                    
-                    break;
-                case 'user':
-                    break;
-            }
+            $field_options = new ExtraFieldOption($type);
+            echo $field_options->get_second_select_field_options_by_field($field_id, $option_value_id, true);           
         }
         break;
     default:

@@ -112,11 +112,10 @@ $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get
 //$rules[] = array( "field" => "course_code", "op" => "cn", "data" => '');
 
 if (!empty($fields)) {    
-    foreach ($fields as $field) {        
-        $search_options = array();
-        
+    foreach ($fields as $field) {
+        $search_options = array();        
         $type = 'text';
-        if ($field['field_type'] == UserManager::USER_FIELD_TYPE_SELECT) {
+        if ($field['field_type'] == ExtraField::FIELD_TYPE_SELECT) {
             $type = 'select';
             $search_options['sopt'] = array('eq', 'ne'); //equal not equal
         } else {

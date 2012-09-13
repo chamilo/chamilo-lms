@@ -277,7 +277,7 @@ if ($display_all_form) {
         }
     }
     $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration', false, null, 'user');
+    ExtraField::set_extra_fields_in_form($form, $extra_data, 'registration', false, null, 'user');
 }
 
 // Terms and conditions

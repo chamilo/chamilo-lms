@@ -492,7 +492,7 @@ class Autoload
         $result['Entity\SearchEngineRef'] = '/main/inc/entity/search_engine_ref.class.php';
         $result['Entity\Session'] = '/main/inc/entity/session.class.php';
         $result['Entity\SessionCategory'] = '/main/inc/entity/session_category.class.php';
-        $result['Entity\SessionField'] = '/main/inc/entity/session_field.class.php';
+        $result['Entity\SessionField'] = '/main/inc/entity/session_field.class.php';        
         $result['Entity\SessionFieldValues'] = '/main/inc/entity/session_field_values.class.php';
         $result['Entity\SessionRelCourse'] = '/main/inc/entity/session_rel_course.class.php';
         $result['Entity\SessionRelCourseRelUser'] = '/main/inc/entity/session_rel_course_rel_user.class.php';
@@ -584,6 +584,11 @@ class Autoload
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
+        
+        $result['ExtraField'] = '/main/inc/lib/extra_field.lib.php';
+        $result['ExtraFieldOption'] = '/main/inc/lib/extra_field_option.lib.php';
+        $result['ExtraFieldValue'] = '/main/inc/lib/extra_field_value.lib.php';
+        
         $result['Testcategory'] = '/main/exercice/testcategory.class.php';        
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';

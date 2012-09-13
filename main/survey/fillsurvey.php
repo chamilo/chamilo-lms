@@ -389,7 +389,7 @@ if ($survey_data['form_fields']!='' && $survey_data['anonymous'] == 0 && is_arra
 
 	// EXTRA FIELDS	
 	$extra_data = UserManager :: get_extra_user_data($user_id, true);    
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'profile', false, null, 'user');
+    ExtraField::set_extra_fields_in_form($form, $extra_data, 'profile', false, null, 'user');
     
 	$form->addElement('style_submit_button', '', get_lang('Next'), array('class' => 'next'));
 	$user_data = array_merge($user_data, $extra_data);

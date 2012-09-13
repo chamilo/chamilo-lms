@@ -87,7 +87,7 @@ if ($_REQUEST['_search'] == 'true') {
                 $where_condition .= get_where_clause($field, $rule->op, $rule->data);
             } else {
                 $original_field = str_replace('extra_', '', $rule->field);
-                $session_field_option = $session_field->get_session_field_info_by_field_variable($original_field);                
+                $session_field_option = $session_field->get_handler_field_info_by_field_variable($original_field);                
                 
                 $extra_fields[] = array(
                     'field' => $rule->field, 

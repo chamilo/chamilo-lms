@@ -78,7 +78,7 @@ class SessionManager {
             //Saving extra fields
             $session_field_value = new SessionFieldValue();
             $params['session_id'] = $session_id;            
-            $session_field_value->save_session_field_values($params);
+            $session_field_value->save_field_values($params);
             
             //Adding to the correct URL                    
             $access_url_id = api_get_current_access_url_id();
@@ -99,7 +99,7 @@ class SessionManager {
             $session_field_value = new SessionFieldValue();
             $params['session_id'] = $params['id'];
             unset($params['id']);            
-            $session_field_value->save_session_field_values($params);               
+            $session_field_value->save_field_values($params);               
         }         
     }
     

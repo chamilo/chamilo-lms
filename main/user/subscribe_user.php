@@ -685,14 +685,14 @@ function display_extra_profile_fields_filter() {
 		// $field_details[2] contains the type of the additional user profile field
 		switch($field_details[2]) {
 			// text fields cannot be used as a filter
-			case UserManager::USER_FIELD_TYPE_TEXT:
+			case ExtraField::FIELD_TYPE_TEXT:
 				break;
 			// text area fields cannot be used as a filter
-			case UserManager::USER_FIELD_TYPE_TEXTAREA:
+			case ExtraField::FIELD_TYPE_TEXTAREA:
 				break;
-			case UserManager::USER_FIELD_TYPE_RADIO:
-			case UserManager::USER_FIELD_TYPE_SELECT:
-			case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
+			case ExtraField::FIELD_TYPE_RADIO:
+			case ExtraField::FIELD_TYPE_SELECT:
+			case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
 				$return .= '<optgroup label="'.$field_details[3].'">';
 				foreach($field_details[9] as $option_id => $option_details) {
 					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {

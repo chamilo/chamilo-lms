@@ -40,7 +40,7 @@ class CourseRecycler
         $this->recycle_events();
         $this->recycle_announcements();
         $this->recycle_documents();
-        $this->recycle_forums(); //@todo does not work yet
+        $this->recycle_forums();
         $this->recycle_forum_categories();
         $this->recycle_quizzes();
         $this->recycle_surveys();
@@ -134,8 +134,16 @@ class CourseRecycler
      * Delete forums
      */
     function recycle_forums() {
+        
+        if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {
+            $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);            
+            $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUMCATEGORY])));
+            echo $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id." AND cat_id IN(".$forum_ids.");";
+            Database::query($sql);            
+        }
+        
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-            //$table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
+            
             $table_forum = Database :: get_course_table(TABLE_FORUM);
             $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
             $table_post = Database :: get_course_table(TABLE_FORUM_POST);
@@ -144,6 +152,8 @@ class CourseRecycler
             $table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
             $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
             $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
+            
+            
 
             $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
 
@@ -190,6 +200,7 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+    
     /**
      * Delete forum-categories
      * Deletes all forum-categories from current course without forums

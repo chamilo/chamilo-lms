@@ -424,20 +424,24 @@ class ExtraField extends model {
                     $jquery_ready_content .= '                        
                         $("#'.$first_select_id.'").on("change", function() {                   
                             var id = $(this).val();
-                            $.ajax({ 
-                                url: "'.$url.'&a=get_second_select_options", 
-                                dataType: "json",
-                                data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
-                                success: function(data) {
-                                    $("#second_extra_'.$field_details['field_variable'].'").empty();
-                                    $.each(data, function(index, value) {
-                                        $("#second_extra_'.$field_details['field_variable'].'").append($("<option/>", {
-                                            value: index,
-                                            text: value
-                                        }));
-                                    });                           
-                                },            
-                            });    
+                            if (id) {
+                                $.ajax({ 
+                                    url: "'.$url.'&a=get_second_select_options", 
+                                    dataType: "json",
+                                    data: "type='.$type.'&field_id='.$field_details['id'].'&option_value_id="+id,
+                                    success: function(data) {
+                                        $("#second_extra_'.$field_details['field_variable'].'").empty();
+                                        $.each(data, function(index, value) {
+                                            $("#second_extra_'.$field_details['field_variable'].'").append($("<option/>", {
+                                                value: index,
+                                                text: value
+                                            }));
+                                        });                           
+                                    },            
+                                });  
+                            } else {
+                                $("#second_extra_'.$field_details['field_variable'].'").empty();
+                            }
                         });';
                     
                     $first_id = null;
@@ -449,7 +453,8 @@ class ExtraField extends model {
                     }
 
                     $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array($field_details['options']);
-                    $values = array();
+                    $values = array('' => get_lang('Select'));
+                    
                     $second_values = array();
                     if (!empty($options)) {                        
                         foreach ($options as $option) {                            

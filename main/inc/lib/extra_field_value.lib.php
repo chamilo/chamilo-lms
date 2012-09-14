@@ -137,8 +137,10 @@ class ExtraFieldValue extends Model {
                         // only available for PHP 5.4  :( $result['field_value'] = $session_field_option->get($options[0])['id'].' -> ';
                         $result = $session_field_option->get($options[0]);
                         $result_second = $session_field_option->get($options[1]);
-                        $result['field_value'] = $result['option_display_text'].' -> ';
-                        $result['field_value'] .= $result_second['option_display_text'];
+                        if (!empty($result)) {
+                            $result['field_value'] = $result['option_display_text'].' -> ';
+                            $result['field_value'] .= $result_second['option_display_text'];
+                        }
                     }            
                 }
             }

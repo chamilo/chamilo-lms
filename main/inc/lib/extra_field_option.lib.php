@@ -237,7 +237,7 @@ class ExtraFieldOption extends Model {
     public function get_field_options_by_field_to_string($field_id, $ordered = false) {        
         $field = new ExtraField($this->type);
         $field_info = $field->get($field_id);                
-        $options = self::get_field_options_by_field($field_id, $ordered);        
+        $options = self::get_field_options_by_field($field_id, false, $ordered);        
         $elements = array();
         if (!empty($options)) {
             switch ($field_info['field_type']) {

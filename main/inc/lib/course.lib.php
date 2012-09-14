@@ -1373,7 +1373,7 @@ class CourseManager {
     public static function get_teacher_list_from_course_code($course_code) {
         $course_code = Database::escape_string($course_code);
         $teachers = array();        
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status 
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status 
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u 
                 ON (cu.user_id = u.user_id)
                 WHERE   cu.course_code = '$course_code' AND 
@@ -1430,7 +1430,8 @@ class CourseManager {
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coaches = array();
 
-        $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username FROM $tbl_user u,$tbl_session_course_user scu
+        $sql = "SELECT DISTINCT u.user_id, u.lastname u.firstname, u.username 
+                FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";
         $rs = Database::query($sql);
 

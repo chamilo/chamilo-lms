@@ -342,7 +342,9 @@ class SessionManager {
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
             $options_by_double['extra_'.$double['field_variable']] = $my_options;
             //$options_by_double['extra_'.$double['field_variable'].'_second'] = true;
-        }            
+        }       
+        
+        //var_dump($options_by_double);
         
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
@@ -388,15 +390,13 @@ class SessionManager {
 			}
 		}
         
-		$query .= ") AS session_table";   
+		$query .= ") AS session_table";        
+        
 
 		if (!empty($options['where'])) {
 		   $query .= ' WHERE '.$options['where'];
 		}
-        
-        //In order to avoid doubles
-        //$query .= ' GROUP BY id ';
-        
+             
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }

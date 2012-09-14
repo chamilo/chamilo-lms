@@ -133,7 +133,7 @@ if ($_REQUEST['_search'] == 'true') {
                     $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);                                        
                 }
             }            
-        }            
+        }
         
         if (!empty($condition_array)) {
             $where_condition .= implode($filters->groupOp, $condition_array);

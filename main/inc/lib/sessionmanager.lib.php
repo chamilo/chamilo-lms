@@ -103,139 +103,6 @@ class SessionManager {
         }         
     }
     
-	 /**
-	  * Create a session
-	  * @author Carlos Vargas from existing code
-	  * @param	string 		name
-	  * @param 	integer		Start year (yyyy)
-	  * @param 	integer		Start month (mm)
-	  * @param 	integer		Start day (dd)
-	  * @param 	integer		End year (yyyy)
-	  * @param 	integer		End month (mm)
-	  * @param 	integer		End day (dd)
-	  * @param 	integer		Number of days that the coach can access the session before the start date
-	  * @param 	integer		Number of days that the coach can access the session after the end date
-	  * @param 	integer		If 1, means there are no date limits
-	  * @param 	mixed		If integer, this is the session coach id, if string, the coach ID will be looked for from the user table
-	  * @param 	integer		ID of the session category in which this session is registered
-      * @param  integer     Visibility after end date (0 = read-only, 1 = invisible, 2 = accessible)
-      * @param  string      Start limit = true if the start date has to be considered
-      * @param  string      End limit = true if the end date has to be considered
-      * @todo use an array to replace all this parameters or use the model.lib.php ...
-	  * @return mixed       Session ID on success, error message otherwise
-      **/
-    /*
-	public static function create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after, $nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit = true, $end_limit = true, $fix_name = false) {		
-		global $_configuration;
-        
-		//Check portal limits
-        $access_url_id = 1;
-        if (api_get_multiple_access_url()) {
-            $access_url_id = api_get_current_access_url_id();
-        }
-        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
-            $num = self::count_sessions();
-            if ($num >= $_configuration[$access_url_id]['hosting_limit_sessions']) {
-                return get_lang('PortalSessionsLimitReached');
-            }
-        }
-
-		$name                 = Database::escape_string(trim($sname));
-		$year_start           = intval($syear_start);
-		$month_start          = intval($smonth_start);
-		$day_start            = intval($sday_start);
-		$year_end             = intval($syear_end);
-		$month_end            = intval($smonth_end);
-		$day_end              = intval($sday_end);
-		$nb_days_acess_before = intval($snb_days_acess_before);
-		$nb_days_acess_after  = intval($snb_days_acess_after);
-		$id_session_category  = intval($id_session_category);
-		$id_visibility        = intval($id_visibility);
-		$tbl_user		      = Database::get_main_table(TABLE_MAIN_USER);
-		$tbl_session	      = Database::get_main_table(TABLE_MAIN_SESSION);        
-    
-		if (is_int($coach_username)) {
-			$id_coach = $coach_username;
-		} else {
-			$sql = 'SELECT user_id FROM '.$tbl_user.' WHERE username="'.Database::escape_string($coach_username).'"';
-			$rs = Database::query($sql);
-			$id_coach = Database::result($rs,0,'user_id');
-		}
-
-		if (empty($nolimit)) {
-			$date_start  ="$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-			$date_end    ="$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
-		} else {
-			$id_visibility   = 1; // by default session visibility is read only
-			$date_start      ="0000-00-00";
-			$date_end        ="0000-00-00";
-		}
-        
-        if (empty($end_limit)) {
-            $date_end ="0000-00-00";
-            $id_visibility   = 1; // by default session visibility is read only
-        }
-              
-        if (empty($start_limit)) {
-            $date_start ="0000-00-00";
-        }            
-         
-		if (empty($name)) {
-			$msg=get_lang('SessionNameIsRequired');
-			return $msg;
-		} elseif (empty($coach_username))   {
-			$msg=get_lang('CoachIsRequired');
-			return $msg;
-		} elseif (!empty($start_limit)  && empty($nolimit) && (!$month_start || !$day_start || !$year_start || !checkdate($month_start,$day_start,$year_start))) {
-			$msg=get_lang('InvalidStartDate');
-			return $msg;
-		} elseif (!empty($end_limit)  &&  empty($nolimit) && (!$month_end || !$day_end || !$year_end || !checkdate($month_end,$day_end,$year_end))) {
-			$msg=get_lang('InvalidEndDate');
-			return $msg;
-		} elseif(!empty($start_limit) && !empty($end_limit)  && empty($nolimit) && $date_start >= $date_end) {
-			$msg=get_lang('StartDateShouldBeBeforeEndDate');
-			return $msg;
-		} else {
-		    $ready_to_create = false;
-		    if ($fix_name) {
-		        $name = self::generate_nice_next_session_name($name);		    
-		        if ($name) {
-		            $ready_to_create = true;
-		        } else {
-		            $msg=get_lang('SessionNameAlreadyExists');
-    				return $msg;
-		        }	        
-		    } else {
-    		    $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
-    			if (Database::num_rows($rs)) {
-    				$msg=get_lang('SessionNameAlreadyExists');
-    				return $msg;
-    			} 
-    			$ready_to_create = true;
-		    }
-			
-			if ($ready_to_create) {
-				$sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
-							   VALUES('".$name."','$date_start','$date_end','$id_coach',".api_get_user_id().",".$nb_days_acess_before.", ".$nb_days_acess_after.", ".$id_session_category.", ".$id_visibility.")";
-				Database::query($sql_insert);
-				$session_id = Database::insert_id();
-                
-                if (!empty($session_id)) {
-                        
-    				//Adding to the correct URL                    
-                    $access_url_id = api_get_current_access_url_id();
-                    UrlManager::add_session_to_url($session_id,$access_url_id);            
-    
-    				// add event to system log				
-    				$user_id = api_get_user_id();
-    				event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), $user_id);
-    		    }
-				return $session_id;
-			}
-		}
-	}
-	
-    */
 	function session_name_exists($session_name) {
 	    $session_name = Database::escape_string($session_name);
         $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
@@ -390,8 +257,7 @@ class SessionManager {
 			}
 		}
         
-		$query .= ") AS session_table";        
-        
+		$query .= ") AS session_table";
 
 		if (!empty($options['where'])) {
 		   $query .= ' WHERE '.$options['where'];
@@ -440,10 +306,10 @@ class SessionManager {
                 }
                 
                 //Cleaning double selects
-                
+                //var_dump($session);
                 foreach ($session as $key => &$value) {                    
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
-                        $options = explode('::', $value);                        
+                        $options = explode('::', $value);                     
                     }
                     $original_key = $key;
                     
@@ -454,6 +320,7 @@ class SessionManager {
                     
                     if (isset($options_by_double[$key])) {                       
                         if (isset($options[0])) {
+                            
                             if (isset($options_by_double[$key][$options[0]])) {                                
                                 if (strpos($original_key, '_second') === false) {
                                     $value = $options_by_double[$key][$options[0]]['option_display_text'];          
@@ -464,13 +331,10 @@ class SessionManager {
                         }                                
                     }
                 }
-                //var_dump($session);                
                 
                 //Magic filter
-                if (isset($formatted_sessions[$session_id])) {
-                    //echo "11";var_dump($session); var_dump($formatted_sessions[$session_id]);
-                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);
-                    //var_dump($formatted_sessions[$session_id]);
+                if (isset($formatted_sessions[$session_id])) {                    
+                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
                 } else {
                     $formatted_sessions[$session_id] = $session;
                 }

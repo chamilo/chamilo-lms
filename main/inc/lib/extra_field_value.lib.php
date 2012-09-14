@@ -58,6 +58,7 @@ class ExtraFieldValue extends Model {
         $value = $params['field_value'];       
         
         $value_to_insert = null;
+        
         if (is_array($value)) {
             $value_to_insert = implode(';', $value);            
 		} else {
@@ -98,7 +99,13 @@ class ExtraFieldValue extends Model {
                     break;
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                     if (is_array($value)) {                        
-                        $value_to_insert = $value['extra_'.$session_field_info['field_variable']].'::'.$value['extra_'.$session_field_info['field_variable'].'_second'];                        
+                        if (isset($value['extra_'.$session_field_info['field_variable']]) && 
+                            isset($value['extra_'.$session_field_info['field_variable'].'_second'])
+                             ) {
+                            $value_to_insert = $value['extra_'.$session_field_info['field_variable']].'::'.$value['extra_'.$session_field_info['field_variable'].'_second'];                        
+                        } else {
+                            $value_to_insert = null;
+                        }
                     }
                 default:
                     break;

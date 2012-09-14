@@ -195,7 +195,7 @@ class ExtraFieldOption extends Model {
         if (Database::num_rows($result) > 0) {
             if ($add_id_in_array) {
                 $options = array();
-                while ($row = Database::fetch_array($result, 'ASSOC')) {
+                while ($row = Database::fetch_array($result, 'ASSOC')) {                    
                     $options[$row['id']] = $row;
                 }
                 return $options;

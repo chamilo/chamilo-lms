@@ -263,6 +263,8 @@ if ($session['nbr_users'] == 0) {
             //$link_class = 'class="item_disabled"';
             $link_class = null;
             $user_status_in_platform = Display::return_icon('error.png', get_lang('Inactive'));
+            $information = '';
+            $moved_date = '-';
             
             if ($user_info['active'] == 1 ) {
                 $user_status_in_platform = Display::return_icon('accept.png', get_lang('Active'));                
@@ -271,7 +273,8 @@ if ($session['nbr_users'] == 0) {
                 $status_info = get_latest_event_by_user_and_type($user['user_id'], LOG_USER_DEACTIVATED);
                 //var_dump($status_info);
                 if (!empty($status_info)) {
-                    $user_status_in_platform .= '<br />'.sprintf(get_lang('UserInactivedSinceX'), api_convert_and_format_date($status_info['default_date'], DATE_TIME_FORMAT_LONG));
+                    $information .= sprintf(get_lang('UserInactivedSinceX'), api_convert_and_format_date($status_info['default_date'], DATE_TIME_FORMAT_LONG));
+                    $moved_date = api_get_local_time($status_info['default_date']);
                 }
                 $user_info['complete_name_with_username'] = Display::tag('del', $user_info['complete_name_with_username']);
             }
@@ -280,11 +283,9 @@ if ($session['nbr_users'] == 0) {
             if (!empty($user['user_id'])) {
                 $user_link = '<a '.$link_class.' href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.intval($user['user_id']).'">'.$user_info['complete_name_with_username'].'</a>';
             }
-            $information = null;
             $origin = null;
             $destination = null;
             $row_style = null;
-            $moved_date = '-';
 
             $course_link = '<a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('course.gif', get_lang('BlockCoursesForThisUser')).'&nbsp;</a>';
             $moved_link =  '<a href="change_user_session.php?user_id='.$user['user_id'].'&id_session='.$id_session.'">'.Display::return_icon('move.png', get_lang('ChangeUserSession')).'</a>&nbsp;';
@@ -294,7 +295,7 @@ if ($session['nbr_users'] == 0) {
                 
                 $variation = SessionManager::get_session_change_user_reasons_variations_by_id($user['moved_status'], 'to');
                 //$information = $reasons[$user['moved_status']].$variation;
-                $information = $variation;
+                $information .= $variation;
 
                 $moved_date = isset($user['moved_at']) && $user['moved_at'] != '0000-00-00 00:00:00' ? api_get_local_time($user['moved_at']) : '-';                        
                 $session_info = SessionManager::fetch($user['moved_to']);
@@ -324,7 +325,7 @@ if ($session['nbr_users'] == 0) {
                 $variation = SessionManager::get_session_change_user_reasons_variations_by_id($session_origin_info['moved_status'], 'from');
                 
                 //$information = $reasons[$session_origin_info['moved_status']].$variation;
-                $information = $variation;
+                $information .= $variation;
 
                 if ($session_info) {
                     $url = api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_info['id'];

@@ -183,15 +183,17 @@ class ExtraFieldOption extends Model {
         return false;        
     }
     
-    public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered = true) {
+    public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null) {
         $field_id = intval($field_id);
         $option_value = Database::escape_string($option_value);
         
         $sql = "SELECT * FROM {$this->table} 
                 WHERE field_id = $field_id ";
-        if ($ordered) {
-            $sql .= " ORDER BY option_display_text";
+        
+        if (!empty($ordered_by)) {
+            $sql .= " ORDER BY $ordered_by ";
         }
+        
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             if ($add_id_in_array) {
@@ -234,10 +236,10 @@ class ExtraFieldOption extends Model {
         return $options;    
     }
     
-    public function get_field_options_by_field_to_string($field_id, $ordered = false) {        
+    public function get_field_options_by_field_to_string($field_id, $ordered_by = null) {        
         $field = new ExtraField($this->type);
         $field_info = $field->get($field_id);                
-        $options = self::get_field_options_by_field($field_id, false, $ordered);        
+        $options = self::get_field_options_by_field($field_id, false, $ordered_by);        
         $elements = array();
         if (!empty($options)) {
             switch ($field_info['field_type']) {

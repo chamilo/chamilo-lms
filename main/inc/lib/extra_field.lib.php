@@ -49,7 +49,7 @@ class ExtraField extends model {
     
         
     public function get_all($where_conditions = array()) {
-        $options = Database::select('*', $this->table, array('where'=>$where_conditions,'order' =>'field_display_text ASC'));
+        $options = Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'field_display_text ASC'));
         $sesion_field_option = new SessionFieldOption();
         if (!empty($options)) {
             foreach ($options as &$option) {                

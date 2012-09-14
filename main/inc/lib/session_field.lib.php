@@ -83,7 +83,7 @@ class SessionField extends ExtraField {
             if ($defaults['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                 $form->freeze('field_options');
             }
-            $defaults['field_options'] = $option->get_field_options_by_field_to_string($id, false);
+            $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
             $form->addElement('button', 'submit', get_lang('Modify'), 'class="save"');
         } else {
             $defaults['field_visible'] = 0;

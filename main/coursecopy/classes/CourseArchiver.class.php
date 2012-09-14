@@ -3,7 +3,6 @@
 /* For licensing terms, see /license.txt */
 
 require_once 'Course.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
 
 /**
  * Some functions to write a course-object to a zip-file and to read a course-
@@ -18,7 +17,7 @@ class CourseArchiver {
     /**
      * Delete old temp-dirs
      */
-    function clean_backup_dir() {
+    static function clean_backup_dir() {
         $dir = api_get_path(SYS_ARCHIVE_PATH);
         if ($handle = @ opendir($dir)) {
             while (($file = readdir($handle)) !== false) {
@@ -69,7 +68,9 @@ class CourseArchiver {
         if ($res === false) {
             error_log(__FILE__ . ' line ' . __LINE__ . ': ' . (ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
-
+        
+        //Documents
+        
         // Copy all documents to the temp-dir        
         if (is_array($course->resources[RESOURCE_DOCUMENT])) {
             foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
@@ -156,7 +157,7 @@ class CourseArchiver {
     /**
      *
      */
-    function import_uploaded_file($file) {
+    static function import_uploaded_file($file) {
         $new_filename = uniqid('') . '.zip';
         $new_dir = api_get_path(SYS_ARCHIVE_PATH);
         if (is_dir($new_dir) && is_writable($new_dir)) {
@@ -172,7 +173,7 @@ class CourseArchiver {
      * @param boolean $delete Delete the file after reading the course?
      * @todo Check if the archive is a correct Chamilo-export
      */
-    function read_course($filename, $delete = false) {
+    static function read_course($filename, $delete = false) {
         CourseArchiver::clean_backup_dir();
         // Create a temp directory
         $tmp_dir_name = 'CourseArchiver_' . uniqid('');

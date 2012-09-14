@@ -52,7 +52,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
-	}
+	}    
 	$cr = new CourseRestorer($course);
 
 	$cr->set_file_option($_POST['same_file_name_option']);

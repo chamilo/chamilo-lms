@@ -27,15 +27,6 @@ $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 /*
-    Constants
-*/
-define('TOOL_FORUM_CATEGORY','forum_category');
-//define('TOOL_FORUM','forum'); defined in main_api
-define('TOOL_FORUM_THREAD','forum_thread');
-define('TOOL_FORUM_POST','forum_post');
-define('TOOL_FORUM_ATTACH','forum_attachment');
-define('TOOL_FORUM_THREAD_QUALIFY','forum_thread_qualify');
-/*
     Some configuration settings
     (these can go to the dokeos config settings afterwards)
 */

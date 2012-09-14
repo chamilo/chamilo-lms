@@ -329,6 +329,7 @@ echo '</tr>';
 // Getting al the threads
 $threads = get_threads($my_forum); // Note: This has to be cleaned first.
 
+
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 $course_id = api_get_course_int_id();

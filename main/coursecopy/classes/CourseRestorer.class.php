@@ -33,7 +33,7 @@ define('FILE_SKIP',             1);
 define('FILE_RENAME',           2);
 define('FILE_OVERWRITE',        3);
 
-define('UTF8_CONVERT', 		false);
+define('UTF8_CONVERT', 		true);
 
 /**
  * Class to restore items from a course object to a Chamilo-course
@@ -58,21 +58,25 @@ class CourseRestorer
 	var $set_tools_invisible_by_default;
 	var $skip_content;
 
-    var $tools_to_restore = array(
-                            'events',
+    var $tools_to_restore = array(                            
                             'announcements',
-                            'tool_intro',
-                            'surveys',
-                            'documents',
-                            'quizzes',
-                            'glossary',
-                            'learnpaths',
-                            'links',
-                            'course_descriptions',
-                            'wiki',
-                            'thematic',
                             'attendance',
-                            'scorm_documents');
+                            'course_descriptions',
+                            'documents', 
+                            'events',
+                           // 'forum_category', 
+                            'forums',
+                           // 'forum_topics',
+                            'glossary',
+                            'quizzes',                                     
+                            'learnpaths',
+                            'links', 
+                            'surveys',
+                            //'scorm_documents', ??
+                            'tool_intro',
+                            'thematic',
+                            'wiki'
+        );
 
     /** Setting per tool */
     var $tool_copy_settings = array();
@@ -128,6 +132,16 @@ class CourseRestorer
 			$this->course->destination_path = $course_info['path'];
 		}
 		$this->destination_course_id = $course_info['real_id'];
+        
+        //Getting first teacher (for the forums)        
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+        $this->first_teacher_id = api_get_user_id();
+        if (!empty($teacher_list)) {
+            foreach ($teacher_list  as $teacher) {
+                $this->first_teacher_id = $teacher['user_id'];
+                break;
+            }
+        }
 
         if (empty($this->course)) {
             return false;
@@ -708,13 +722,18 @@ class CourseRestorer
 	function restore_forums() {
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
 			$table_forum 	= Database::get_course_table(TABLE_FORUM);
-			$table_topic 	= Database::get_course_table(TABLE_FORUM_THREAD);
-			$table_post 	= Database::get_course_table(TABLE_FORUM_POST);
 
 			$resources 		= $this->course->resources;
-			foreach ($resources[RESOURCE_FORUM] as $id => $forum)
-			{
-				$cat_id = $this->restore_forum_category($forum->category_id);
+			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
+                $params = (array)$forum->obj;                
+                $cat_id = $this->restore_forum_category($params['forum_category']);                
+                self::DBUTF8_array($params);
+                $params['c_id'] = $this->destination_course_id;
+                $params['forum_category'] = $cat_id;    
+                unset($params['forum_id']);
+                $new_id = Database::insert($table_forum, $params);
+				
+                /*
 				$sql = "INSERT INTO ".$table_forum." SET
 					forum_title = '".self::DBUTF8escapestring($forum->title).
 					"', c_id= '".$this->destination_course_id.
@@ -735,35 +754,38 @@ class CourseRestorer
 					", locked = ".(int)self::DBUTF8escapestring($forum->locked).
 					", session_id = ".(int)self::DBUTF8escapestring($forum->session_id).
 					", forum_image = '".self::DBUTF8escapestring($forum->image)."'";
-				Database::query($sql);
-				$new_id = Database::insert_id();
+				Database::query($sql);*/
+				//$new_id = Database::insert_id();
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 				$forum_topics = 0;
-				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {
-					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {
-						if ($topic->forum_id == $id) {
+				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {                    
+					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {                        
+						if ($topic->obj->forum_id == $id) {
 							$this->restore_topic($topic_id, $new_id);
 							$forum_topics ++;
 						}
 					}
 				}
 				if ($forum_topics > 0) {
-					$last_post = $this->course->resources[RESOURCE_FORUMPOST][$forum->last_post];
-					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics.", forum_last_post = ".(int)$last_post->destination_id." WHERE forum_id = ".(int)$new_id;
+					//$last_post = $this->course->resources[RESOURCE_FORUMPOST][$forum->last_post];
+					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics." 
+                            WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int)$new_id;
 					Database::query($sql);
 				}
 			}
 		}
 	}
+    
 	/**
 	 * Restore forum-categories
-	 */
+	 */    
 	function restore_forum_category($id) {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
 		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
-		if (!$forum_cat->is_restored()) {
-			$title = $forum_cat->title;
+        
+		if ($forum_cat && !$forum_cat->is_restored()) {
+			$title = $forum_cat->obj->cat_title;
 			if (!empty($title)) {
     			if (!preg_match('/.*\((.+)\)$/', $title, $matches)) {
     			    // This is for avoiding repetitive adding of training code after several backup/restore cycles.
@@ -772,6 +794,12 @@ class CourseRestorer
     				}
     			}
 			}
+            $params = (array) $forum_cat->obj;
+            $params['c_id'] = $this->destination_course_id;
+            unset($params['cat_id']);
+            self::DBUTF8_array($params);     
+            $new_id = Database::insert($forum_cat_table, $params);
+            /*
 			$sql = "INSERT INTO ".$forum_cat_table." SET
 				c_id = ".$this->destination_course_id." ,
 				cat_title = '".self::DBUTF8escapestring($title).
@@ -779,20 +807,47 @@ class CourseRestorer
 				"', cat_order = ".(int)self::DBUTF8escapestring($forum_cat->order).
 				", locked = ".(int)self::DBUTF8escapestring($forum_cat->locked).
 				", session_id = ".(int)self::DBUTF8escapestring($forum_cat->session_id);
-			Database::query($sql);
-			$new_id = Database::insert_id();
+			Database::query($sql);*/			
 			$this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
 			return $new_id;
 		}
 		return $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id;
 	}
+    
 	/**
 	 * Restore a forum-topic
 	 */
 	function restore_topic($id, $forum_id) {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
+        
 		$resources = $this->course->resources;
 		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
+                
+        $params = (array)$topic->obj;
+        self::DBUTF8_array($params);        
+        $params['c_id'] = $this->destination_course_id;
+        $params['forum_id'] = $forum_id;
+        $params['thread_poster_id'] = $this->first_teacher_id;
+        $params['thread_date'] = api_get_utc_datetime();
+        $params['thread_close_date']  = '0000-00-00 00:00:00';
+        $params['thread_last_post'] = 0;
+        $params['thread_replies'] = 0;
+        unset($params['thread_id']);        
+        $new_id = Database::insert($table, $params);        
+        api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);
+        
+        //Save a post for this thread
+        /*
+        $post_params = array(
+          'c_id' => $this->destination_course_id,
+          'post_title' => $params['thread_title'],
+          'post_text' => $params['thread_title'],
+        );
+        
+         * 
+         */
+        
+        /*
 		$sql = "INSERT INTO ".$table." SET
 			c_id = ".$this->destination_course_id." ,
 			thread_title = '".self::DBUTF8escapestring($topic->title).
@@ -806,32 +861,33 @@ class CourseRestorer
 			", thread_close_date = '".self::DBUTF8escapestring($topic->time_closed).
 			"', thread_weight = ".(float)self::DBUTF8escapestring($topic->weight).
 			", thread_title_qualify = '".self::DBUTF8escapestring($topic->title_qualify).
-			"', thread_qualify_max = ".(float)self::DBUTF8escapestring($topic->qualify_max);
-		Database::query($sql);
-		$new_id = Database::insert_id();
+			"', thread_qualify_max = ".(float)self::DBUTF8escapestring($topic->qualify_max);*/
+		//Database::query($sql);
+		//$new_id = Database::insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
+        
 		$topic_replies = -1;
-		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post)
-		{
-			if ($post->topic_id == $id)
-			{
+        var_dump($this->course->resources);exit;
+		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){
+			if ($post->obj->topic_id == $id) {
 				$topic_replies ++;
 				$this->restore_post($post_id, $new_id, $forum_id);
 			}
 		}
+        /*
 		$last_post = $this->course->resources[RESOURCE_FORUMPOST][$topic->last_post];
-		if (is_object($last_post))
-		{
+		if (is_object($last_post)) {
 			$sql = "UPDATE ".$table." SET thread_last_post = ".(int)$last_post->destination_id;
 			Database::query($sql);
 		}
-		if ($topic_replies >= 0)
-		{
+        
+		if ($topic_replies >= 0) {
 			$sql = "UPDATE ".$table." SET thread_replies = ".$topic_replies;
 			Database::query($sql);
-		}
+		}*/
 		return $new_id;
 	}
+    
 	/**
 	 * Restore a forum-post
 	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
@@ -840,6 +896,16 @@ class CourseRestorer
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$resources = $this->course->resources;
 		$post = $resources[RESOURCE_FORUMPOST][$id];
+        $params = (array) $post->obj;
+        $params['c_id'] = $this->destination_course_id;
+        $params['forum_id'] = $forum_id;
+        $params['thread_id'] = $topic_id;
+        $params['poster_id'] = $this->first_teacher_id;
+        $params['post_date'] = api_get_utc_datetime();
+        unset($params['post_id']);        
+        
+        $new_id = Database::insert($table_post, $params, true);
+        /*
 		$sql = "INSERT INTO ".$table_post." SET
 				c_id = ".$this->destination_course_id." ,
 				post_title = '".self::DBUTF8escapestring($post->title).
@@ -853,10 +919,11 @@ class CourseRestorer
 			", post_parent_id = ".(int)self::DBUTF8escapestring($post->parent_post_id).
 			", visible = ".(int)self::DBUTF8escapestring($post->visible);
 		Database::query($sql);
-		$new_id = Database::insert_id();
+		$new_id = Database::insert_id();*/
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		return $new_id;
 	}
+    
 	/**
 	 * Restore links
 	 */
@@ -1961,4 +2028,16 @@ class CourseRestorer
 		if (UTF8_CONVERT) $str = utf8_encode($str);
 		return Database::escape_string($str);
 	}
+    
+    function DBUTF8_array($array) {        
+        if (UTF8_CONVERT) {
+            
+            foreach ($array as &$item)  {
+                $item = utf8_encode($item);
+            }
+            return $array;
+        } else {
+            return $array;
+        }
+    }
 }

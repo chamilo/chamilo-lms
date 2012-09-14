@@ -3781,7 +3781,7 @@ class CourseManager {
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
-    public static function count_courses($access_url_id=null) {
+    public static function count_courses($access_url_id = null) {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql = "SELECT count(id) FROM $table_course c";

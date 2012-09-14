@@ -260,10 +260,12 @@ class SortableTable extends HTML_Table {
     			$html .= '</tr>';
     			$html .= '</table>';
             }
+            
             $col = array();
             $colModel = array();
             foreach($this->headers as $key => $value) {
                 $col[] = $value;
+                $key = addslashes($key);
                 $colModel[] = array('name' => "$key", 'index' => "$key"); 
             }
             $col = json_encode($col); 
@@ -272,7 +274,7 @@ class SortableTable extends HTML_Table {
             $colModel = str_replace('"index"', 'index', $colModel);
     
             if ($this->use_jqgrid) {
-                $html .= '<script>
+                /*$html .= '<script>
                     $(function() {  
                     tableToGrid("#'.$this->table_id.'", { 
                         height: "auto",        
@@ -281,7 +283,7 @@ class SortableTable extends HTML_Table {
                         sortname: "'.$this->column.'"
                     });    
                 });
-                </script>';
+                </script>';*/
             }
 			
 			if (count($this->form_actions) > 0) {

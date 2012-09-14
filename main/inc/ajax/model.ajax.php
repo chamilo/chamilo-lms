@@ -79,8 +79,7 @@ if ($_REQUEST['_search'] == 'true') {
     $extra_fields = array();    
     if (!empty($filters)) {
         $where_condition .= ' AND ( ';          
-        $counter = 0;        
-        
+                
         //Getting double select
         $double_select = array();
         foreach ($filters->rules as $rule) {
@@ -102,11 +101,11 @@ if ($_REQUEST['_search'] == 'true') {
             } else {
                 //Extra fields
                 
-                //First select
+                //normal
                 if (strpos($rule->field, '_second') === false) {
-                    $original_field = str_replace('extra_', '', $rule->field);
-                    
+                    $original_field = str_replace('extra_', '', $rule->field);                    
                     $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+                    
                     if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                         
                         $extra_fields[] = array(
@@ -123,25 +122,30 @@ if ($_REQUEST['_search'] == 'true') {
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1];                            
                         }
-                        $field = 'field_value';                            
-                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';                                        
-                    }                    
+                        $field = 'field_value';
+                    } else {
+                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';                            
+                        $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                    }            
+                    
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
                     $original_field = str_replace('extra_', '', $my_field);                    
                     $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);                                       
-                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);                                        
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                    
                 }
             }            
         }
         
         if (!empty($condition_array)) {
+            //var_dump($condition_array);
             $where_condition .= implode($filters->groupOp, $condition_array);
         }
         $where_condition .= ' ) ';        
     }
 }
-
+//var_dump($where_condition);
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
 if (!$sidx) $sidx = 1;

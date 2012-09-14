@@ -12,7 +12,7 @@ class HTML_QuickForm_Compare_Fields extends HTML_QuickForm_Rule_Compare
      * @param   string the value to compare
 	 * @return boolean True if date is valid
 	 */
-	function validate($values, $operator_and_max_value) {
+	function validate($values, $operator_and_max_value = null) {
         if (is_array($values) && !empty($values) && !empty($operator_and_max_value)) {
            $final_value = 0;
            foreach ($values as $value) {

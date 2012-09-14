@@ -280,7 +280,7 @@ if (is_platform_authentication() && is_profile_editable() && api_get_setting('pr
 
 // EXTRA FIELDS
 $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'profile', api_get_user_id());
+$return_params = ExtraField::set_extra_fields_in_form($form, $extra_data, 'profile', api_get_user_id(), 'user');
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
@@ -612,7 +612,7 @@ if ($form->validate()) {
 
 	// User tag process
 	//1. Deleting all user tags
-	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(UserManager::USER_FIELD_TYPE_TAG);
+	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(ExtraField::FIELD_TYPE_TAG);
     
 	if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
 		foreach ($list_extra_field_type_tag as $id) {

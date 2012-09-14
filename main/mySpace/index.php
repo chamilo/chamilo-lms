@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$language_file = array('registration', 'index', 'tracking');
+$language_file = array('registration', 'index', 'tracking', 'admin');
 
 // resetting the course id
 $cidReset = true;
@@ -38,6 +38,10 @@ $title 				= null;
 
 // access control
 api_block_anonymous_users();
+$htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = '<script>
+
+</script>';
 
 if (!$export_csv) {
 	Display :: display_header($nameTools);
@@ -185,8 +189,8 @@ if (empty($session_id)) {
 	$students 		= CourseManager::get_user_list_from_courses_as_coach($user_id);
     		
 	// Sessions for the coach
-	$sessions 	 	= Tracking::get_sessions_coached_by_user($user_id);
-	
+	$sessions 	 	= SessionManager::get_sessions_coached_by_user($user_id);
+    	
 	//If is drh	
 	if ($is_drh) {
 		$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
@@ -195,7 +199,7 @@ if (empty($session_id)) {
 		foreach ($courses_of_the_platform as $course) {
 			$courses[$course['code']] = $course['code'];
 		}        
-        $sessions 	 	= SessionManager::get_sessions_followed_by_drh($user_id);  
+        $sessions = SessionManager::get_sessions_followed_by_drh($user_id);  
 	}		
 	
 	//Courses for the user
@@ -249,11 +253,11 @@ if (empty($session_id)) {
 			}
 		}
 		// average progress of the student
-		$avg_student_progress = $nb_courses_student ?$avg_student_progress / $nb_courses_student:0;
+		$avg_student_progress = $nb_courses_student ? $avg_student_progress / $nb_courses_student:0;
 		$avg_total_progress += $avg_student_progress;
 	
 		// average test results of the student
-		$avg_student_score = $avg_student_score?$avg_student_score / $nb_courses_student:0;
+		$avg_student_score = $avg_student_score ? $avg_student_score / $nb_courses_student:0;
 		$avg_results_to_exercises += $avg_student_score;
 	}
 
@@ -375,10 +379,7 @@ if (empty($session_id)) {
     $count_courses = count($courses);
     
     //Sessions for the user
-	$count_sessions = count($sessions);
-    
-    
-        
+	$count_sessions = count($sessions);        
 }
 
 if ($count_courses || $count_sessions) {
@@ -399,9 +400,7 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 	
 	//Courses
 	if ($count_courses) {
-		
 		echo Display::page_subheader($title);		
-		
 		$table = new SortableTable('courses_my_space', 'get_number_of_courses', array('MySpace','get_course_data'));
 		$parameters['view'] = 'teacher';
 		$parameters['class'] = 'data_table';
@@ -434,47 +433,39 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
         
 		echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'session.png">&nbsp;'.get_lang('Sessions').' ('.$count_sessions.')');
         
-		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached');
+		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached', null, 1, 20, 'ASC', 'tracking_sessions_myspace');
 		$table->set_header(0, get_lang('Title'), false);
-        $table->set_header(1, get_lang('Date'), false);		
-        $table->set_header(2, get_lang('NbStudentPerSession'), false);
-		$table->set_header(3, get_lang('NbCoursesPerSession'), false);
-		$table->set_header(4, get_lang('Details'), false);
+        $table->set_header(1, get_lang('SessionDisplayStartDate'), false);
+        $table->set_header(2, get_lang('SessionDisplayEndDate'), false);
+        $table->set_header(3, get_lang('NbStudentPerSession'), false);
+		$table->set_header(4, get_lang('NbCoursesPerSession'), false);
+		$table->set_header(5, get_lang('Details'), false);
 
 		$all_data = array();
+        
 		foreach ($sessions as $session) {			
 			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
 			$row[] = $session['name'];
-
-            $session_date = array();
-			if (!empty($session['date_start']) && $session['date_start'] != '0000-00-00') {
-                $session_date[] = get_lang('From').' '.api_format_date($session['date_start'], DATE_FORMAT_SHORT);
-            }
             
-            if (!empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
-                $session_date[] = get_lang('Until').' '.api_format_date($session['date_end'], DATE_FORMAT_SHORT);
-            }
+            $row[] = api_get_local_time($session['display_start_date'], null, null, true);
+            $row[] = api_get_local_time($session['display_end_date'], null, null, true);
             
-            if (empty($session_date)) {
-                $session_date_string = '-';
-            } else {
-                $session_date_string = implode(' ', $session_date);
-            }
-            
-            $row[] = $session_date_string;            
+            //$session_date_label = SessionManager::parse_session_dates($session);
+            //$row[] = $session_date_label;            
             $row[] = $count_courses_in_session;
             $row[] = $count_users_in_session;
 			
 			$row[] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
 			$all_data[] = $row;
 		}
-
-		if (!isset($tracking_column)) {
-			$tracking_column = 0;
-		}
-
+        
+        //$table->use_jqgrid = true;
+        
+        $tracking_column = 1;
+        usort($all_data, 'sort_sessions');        
+/*
 		if (isset($_GET['tracking_direction']) &&  $_GET['tracking_direction'] == 'DESC') {
 			usort($all_data, 'rsort_sessions');
 		} else {
@@ -484,9 +475,9 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 		if ($export_csv) {
 			usort($csv_content, 'sort_sessions');
 		}
-
+*/
 		foreach ($all_data as $row) {
-			$table -> addRow($row);
+			$table->addRow($row);
 		}
 
 		/*  Start session over view stats */
@@ -522,12 +513,6 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 			$csv_content[] = array(get_lang('NbStudentPerSession', '').';'.$nb_students_per_session);			
 			$csv_content[] = array();
 		} else {
-			// html part
-            
-            			/*<tr>
-						<td>'.get_lang('NbFutureSessions').'</td>
-						<td align="right">'.$nb_sessions_future.'</td>
-					</tr>*/
 			echo '
 			<div class="report_section">				
 				<table class="table table-bordered">
@@ -542,8 +527,9 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 				</table>				
 			</div>';
 		}
-		/*  End session overview */				 
-		$table -> display();
+		$table->display();
+        
+        /*  End session overview */	
 	}
 }
 

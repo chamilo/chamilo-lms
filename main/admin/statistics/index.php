@@ -83,8 +83,7 @@ switch ($_GET['report']) {
         break;
     case 'courselastvisit':
         Statistics::print_course_last_visit();
-        break;
-    //---
+        break;    
     case 'users':
         // total amount of users
         Statistics::print_stats(
@@ -118,12 +117,10 @@ switch ($_GET['report']) {
         break;
     case 'zombies':
         ZombieReport::create(array('report' => 'zombies'))->display();
-        break;
-    //---
+        break;    
     case 'activities':
         Statistics::print_activities_stats();
-        break;
-    //---
+        break;    
     case 'messagesent':
         $messages_sent = Statistics::get_messages('sent');
         Statistics::print_stats(get_lang('MessagesSent'), $messages_sent);

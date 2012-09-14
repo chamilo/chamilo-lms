@@ -86,6 +86,7 @@ CREATE TABLE track_e_default (
   default_value_type varchar(20) NOT NULL default '',
   default_value text NOT NULL,
   c_id int unsigned default NULL,
+  session_id int unsigned default 0,
   PRIMARY KEY  (default_id)
 );
 
@@ -287,6 +288,7 @@ ALTER TABLE track_e_access ADD INDEX (access_session_id);
 
 ALTER TABLE track_e_online ADD INDEX (course);
 ALTER TABLE track_e_online ADD INDEX (session_id);
+ALTER TABLE track_e_online ADD INDEX idx_trackonline_uat (login_user_id, access_url_id, login_date);
 
 ALTER TABLE track_e_item_property ADD INDEX (course_id, item_property_id, session_id);
 ALTER TABLE track_e_downloads ADD INDEX (down_session_id);  

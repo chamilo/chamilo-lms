@@ -460,15 +460,17 @@ CREATE TABLE IF NOT EXISTS session (
   name char(50) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
   nbr_users mediumint unsigned NOT NULL default '0',
-  nbr_classes mediumint unsigned NOT NULL default '0',
-  date_start date NOT NULL default '0000-00-00',
-  date_end date NOT NULL default '0000-00-00',
-  nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
-  nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
+  nbr_classes mediumint unsigned NOT NULL default '0',   
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
+  display_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  display_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (id),
   INDEX (session_admin_id),
   UNIQUE KEY name (name)
@@ -514,8 +516,11 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
 DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
-  id_user mediumint unsigned NOT NULL default '0',
+  id_user int unsigned NOT NULL default '0',
   relation_type int default 0,
+  moved_to int default 0,
+  moved_status int default 0,
+  moved_at datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (id_session, id_user, relation_type)
 );
 
@@ -534,6 +539,18 @@ CREATE TABLE IF NOT EXISTS session_field (
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
+DROP TABLE IF EXISTS session_field_options;
+CREATE TABLE IF NOT EXISTS session_field_options (
+    id	int NOT NULL auto_increment,
+    field_id int NOT NULL,
+    option_value text,
+    option_display_text varchar(255),
+    option_order int,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY (id)
+);
+
 
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
@@ -877,7 +894,7 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19570','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -2826,6 +2843,7 @@ CREATE TABLE IF NOT EXISTS notification (
 	dest_user_id INT NOT NULL,
  	dest_mail 	CHAR(255),
  	title 		CHAR(255),
+    sender_id   INT NOT NULL DEFAULT 0,
  	content 	CHAR(255),
  	send_freq 	SMALLINT DEFAULT 1,
  	created_at 	DATETIME NOT NULL,
@@ -2995,9 +3013,13 @@ DROP TABLE IF EXISTS grade_components;
 CREATE TABLE grade_components (
     id INTEGER NOT NULL AUTO_INCREMENT,
     percentage VARCHAR(255)  NOT NULL,
-    title VARCHAR(255)  NOT NULL,
-    acronym VARCHAR(255)  NOT NULL,
-    grade_model_id INTEGER NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    acronym VARCHAR(255) NOT NULL,
+    grade_model_id INTEGER NOT NULL,    
+    prefix VARCHAR(255) DEFAULT NULL,
+    count_elements INT DEFAULT 0,
+    exclusions INT DEFAULT 0,
+    grade_model_id INT NOT NULL,
     PRIMARY KEY (id)
 );
 

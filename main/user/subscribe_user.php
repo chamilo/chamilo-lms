@@ -16,7 +16,6 @@ $current_course_tool  = TOOL_USER;
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
 
-
 // notice for unauthorized people.
 api_protect_course_script(true);
 
@@ -39,9 +38,6 @@ if ($_GET['keyword']) {
 }
 
 Display :: display_header($tool_name, "User");
-
-// api_display_tool_title($tool_name);
-
 
 // Build search-form
 echo '<div class="actions">';
@@ -77,13 +73,11 @@ $list_not_register_user='';
 
 if (isset ($_REQUEST['register'])) {
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
-
 		if (!empty($current_session_id)) {
 			$result_simple_sub = SessionManager::set_coach_to_course_session(intval($_REQUEST['user_id']), $current_session_id, $_course['sysCode']);
 		} else {
 			$result_simple_sub = CourseManager :: subscribe_user(intval($_REQUEST['user_id']), $_course['sysCode'],COURSEMANAGER);
 		}
-
 	} else {
 		$result_simple_sub=CourseManager :: subscribe_user(intval($_REQUEST['user_id']), $_course['sysCode']);
 	}
@@ -180,11 +174,8 @@ if (!empty($_SESSION['session_user_name'])) {
 	unset($_SESSION['session_user_name']);
 }
 
-
-
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
-
 
 // Build table
 $table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
@@ -359,20 +350,7 @@ function get_number_of_users() {
     if ($res) {	
 	   $row = Database::fetch_row($res);
 	   $count_user = $row[0];	   
-	}
-	
-	/* @todo seems not to be used
-	// we add 1 for every additional user (a user where the keyword matches one of the additional profile fields)
-	// that is not yet in the course and not yet in the search result
-	if (isset ($_REQUEST['keyword']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
-		foreach($additional_users as $additional_user_key=>$additional_user_value){
-			if (!in_array($additional_user_key,$users) AND !in_array($additional_user_key,$users_of_course)){
-				$result++;
-			}
-		}
-	}
-    */
-    
+	}   
 	return $count_user;
 }
 /**
@@ -413,8 +391,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                 u.active               AS col4,
                 u.user_id              AS col5";
     }
-
-	
+    
 	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
 		// adding a teacher through a session
 		if (!empty($_SESSION["id_session"])) {
@@ -640,7 +617,7 @@ function active_filter($active, $url_params, $row) {
 		$image='error';
 	}
 	if ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<center>'.Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array('border'=>'0', 'style'=>'vertical-align: middle;') , 16).'</center>';
+		$result = Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array('border'=>'0', 'style'=>'vertical-align: middle;') , 16);
 	}
 	return $result;
 }
@@ -708,14 +685,14 @@ function display_extra_profile_fields_filter() {
 		// $field_details[2] contains the type of the additional user profile field
 		switch($field_details[2]) {
 			// text fields cannot be used as a filter
-			case UserManager::USER_FIELD_TYPE_TEXT:
+			case ExtraField::FIELD_TYPE_TEXT:
 				break;
 			// text area fields cannot be used as a filter
-			case UserManager::USER_FIELD_TYPE_TEXTAREA:
+			case ExtraField::FIELD_TYPE_TEXTAREA:
 				break;
-			case UserManager::USER_FIELD_TYPE_RADIO:
-			case UserManager::USER_FIELD_TYPE_SELECT:
-			case UserManager::USER_FIELD_TYPE_SELECT_MULTIPLE:
+			case ExtraField::FIELD_TYPE_RADIO:
+			case ExtraField::FIELD_TYPE_SELECT:
+			case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
 				$return .= '<optgroup label="'.$field_details[3].'">';
 				foreach($field_details[9] as $option_id => $option_details) {
 					if ($_GET['subscribe_user_filter_value'] == $field_details[0].'*'.$option_details[1]) {

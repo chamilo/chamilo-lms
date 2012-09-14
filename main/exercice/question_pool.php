@@ -285,7 +285,7 @@ if (isset($type)) {
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 
 // Session list, if sessions are used.
-$session_list = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_list = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $tabAttrParam = array('class'=>'chzn-select', 'onchange'=>'submit_form(this)');	// when sessions are used
 $labelFormRow = get_lang('Session');
 $session_select_list = array();

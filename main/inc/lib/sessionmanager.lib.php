@@ -309,7 +309,8 @@ class SessionManager {
                 //var_dump($session);
                 foreach ($session as $key => &$value) {                    
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
-                        $options = explode('::', $value);                     
+                        $options = explode('::', $value);
+                        //var_dump($options);
                     }
                     $original_key = $key;
                     
@@ -319,11 +320,10 @@ class SessionManager {
                     }
                     
                     if (isset($options_by_double[$key])) {                       
-                        if (isset($options[0])) {
-                            
+                        if (isset($options[0])) {                            
                             if (isset($options_by_double[$key][$options[0]])) {                                
                                 if (strpos($original_key, '_second') === false) {
-                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];          
+                                    $value = $options_by_double[$key][$options[0]]['option_display_text'];                                    
                                 } else {
                                     $value = $options_by_double[$key][$options[1]]['option_display_text'];      
                                 }                                
@@ -1707,6 +1707,8 @@ class SessionManager {
                     WHERE access_url_id = '.$access_url_id;
             }
         }
+        //$sql .= " ORDER BY session.name";
+        
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');        
     }

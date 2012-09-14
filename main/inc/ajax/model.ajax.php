@@ -80,6 +80,18 @@ if ($_REQUEST['_search'] == 'true') {
     if (!empty($filters)) {
         $where_condition .= ' AND ( ';          
         $counter = 0;        
+        
+        //Getting double select
+        $double_select = array();
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, '_second') === false) {
+                
+            } else {
+                $my_field = str_replace('_second', '', $rule->field);
+                $double_select[$my_field] = $rule->data;
+            }                
+        }        
+        
         foreach ($filters->rules as $rule) {
             $insert_group_op = false;
             if (strpos($rule->field, 'extra_') === false) {
@@ -88,28 +100,36 @@ if ($_REQUEST['_search'] == 'true') {
                 $where_condition .= get_where_clause($field, $rule->op, $rule->data);
                 $insert_group_op = true;
             } else {
-                //extra fields
-                if (strpos($rule->field, '_second') === false) {
+                //Extra fields
                 
+                //First select
+                if (strpos($rule->field, '_second') === false) {
                     $original_field = str_replace('extra_', '', $rule->field);
-
-                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);                
+                    
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
 
                     $extra_fields[] = array(
                         'field' => $rule->field, 
                         'id'    => $field_option['id']
-                    );                
+                    );
+                    
+                    if (isset($double_select[$rule->field])) {
+                        $data = explode('#', $rule->data);
+                        //var_dump($data);
+                        $rule->data = $data[1].'::'.$double_select[$rule->field];                        
+                    }
+                    
                     //var_dump($session_field_option);
                     $field = 'field_value';    
                     $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
                     $where_condition .= ' ) ';
-                    $insert_group_op = true;
+                    
+                    //$insert_group_op = true;
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
                     $original_field = str_replace('extra_', '', $my_field);                    
-                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
-                                       
-                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);            
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);                                       
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);                    
                     $insert_group_op = false;
                 }
             }

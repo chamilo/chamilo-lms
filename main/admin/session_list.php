@@ -111,9 +111,10 @@ $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get
 
 if (!empty($fields)) {    
     foreach ($fields as $field) {
-        $search_options = array();        
+        $search_options = array();
+        
         $type = 'text';
-        if ($field['field_type'] == ExtraField::FIELD_TYPE_SELECT) {
+        if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
             $type = 'select';
             $search_options['sopt'] = array('eq', 'ne'); //equal not equal
         } else {
@@ -136,7 +137,6 @@ if (!empty($fields)) {
                         if ($sub_option['option_value'] == 0) {
                             $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
                         } else {
-
                         }
                     }
                 }
@@ -157,7 +157,7 @@ if (!empty($fields)) {
                 'search' => 'true',
                 'stype' => 'select',
                 'searchoptions' => $search_options
-            ); 
+            );
             $columns[] = $field['field_display_text'].' (1)';
             $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');           
             

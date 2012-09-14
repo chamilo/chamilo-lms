@@ -187,7 +187,10 @@ class ExtraFieldOption extends Model {
         $field_id = intval($field_id);
         $option_value = Database::escape_string($option_value);
         
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id ";
+        $sql = "SELECT * FROM {$this->table} 
+                WHERE field_id = $field_id 
+                ORDER BY option_display_text
+        ";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             if ($add_id_in_array) {
@@ -207,7 +210,9 @@ class ExtraFieldOption extends Model {
         $field_id = intval($field_id);
         $option_value_id = intval($option_value_id);        
         $options = array();
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = $option_value_id ";
+        $sql = "SELECT * FROM {$this->table} 
+                WHERE field_id = $field_id AND option_value = $option_value_id 
+                ORDER BY option_display_text";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             $options = Database::store_result($result, 'ASSOC');

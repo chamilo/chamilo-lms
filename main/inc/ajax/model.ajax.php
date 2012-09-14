@@ -90,8 +90,8 @@ if ($_REQUEST['_search'] == 'true') {
                 $my_field = str_replace('_second', '', $rule->field);
                 $double_select[$my_field] = $rule->data;
             }                
-        }        
-        
+        }
+                
         foreach ($filters->rules as $rule) {
             $insert_group_op = false;
             if (strpos($rule->field, 'extra_') === false) {
@@ -107,22 +107,28 @@ if ($_REQUEST['_search'] == 'true') {
                     $original_field = str_replace('extra_', '', $rule->field);
                     
                     $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                        
+                        $extra_fields[] = array(
+                            'field' => $rule->field, 
+                            'id'    => $field_option['id']
+                        );
 
-                    $extra_fields[] = array(
-                        'field' => $rule->field, 
-                        'id'    => $field_option['id']
-                    );
-                    
-                    if (isset($double_select[$rule->field])) {
-                        $data = explode('#', $rule->data);
-                        //var_dump($data);
-                        $rule->data = $data[1].'::'.$double_select[$rule->field];                        
+                        if (isset($double_select[$rule->field])) {
+                            $data = explode('#', $rule->data);
+                            //var_dump($data);
+                            $rule->data = $data[1].'::'.$double_select[$rule->field];
+                        } else {
+                            // only was sent 1 select
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1];                            
+                        }
+
+                        //var_dump($session_field_option);
+                        $field = 'field_value';    
+                        $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
+                        $where_condition .= ' ) ';
                     }
-                    
-                    //var_dump($session_field_option);
-                    $field = 'field_value';    
-                    $where_condition .= ' ('.get_where_clause($rule->field, $rule->op, $rule->data);
-                    $where_condition .= ' ) ';
                     
                     //$insert_group_op = true;
                 } else {

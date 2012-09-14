@@ -2015,12 +2015,18 @@ class UserManager {
         $now = api_get_utc_datetime();
         
 		// Get the list of sessions per user
-		$condition_date_end = "";
+		$condition_date_end = null;
         
 		if ($is_time_over) {
 			$condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
 		} else {
-			//$condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
+            if (api_is_allowed_to_edit()) {
+                $condition_date_end = null;
+                //Teachers can access the session depending in the access_coach date
+            } else {
+                //Student can't access before this dates
+                $condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
+            }
 		}
 
         $sql = "SELECT DISTINCT session.id, 
@@ -2061,8 +2067,7 @@ class UserManager {
                 
                 //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
-                //var_dump($visibility);
-                
+                                
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
                     case SESSION_VISIBLE:                    

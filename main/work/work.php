@@ -867,7 +867,7 @@ switch ($action) {
 
                     if (!empty($_POST['type1']) || !empty($_POST['type2'])) {
                         
-                        echo $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
+                        $sql_add_homework = "INSERT INTO $TSTDPUBASG SET
                                                 c_id = $course_id ,
                                                 expires_on       		= '".((isset($_POST['type1']) && $_POST['type1']==1) ? api_get_utc_datetime(get_date_from_select('expires')) : '0000-00-00 00:00:00'). "',
                                                 ends_on        	 		= '".((isset($_POST['type2']) && $_POST['type2']==1) ? api_get_utc_datetime(get_date_from_select('ends')) : '0000-00-00 00:00:00')."',

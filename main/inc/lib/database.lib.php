@@ -1387,6 +1387,4 @@ class Database {
     public static function get_last_insert_id() {
         return mysql_insert_id();
     }
-
 }
-//end class Database

@@ -1095,7 +1095,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $group_list = GroupManager::get_group_ids(api_get_course_int_id(), $results[$i]['user_id']);
 
                     foreach ($group_list as $id) {               
-                        $group_name_list .= $clean_group_list[$id].' ';
+                        $group_name_list .= $clean_group_list[$id].'<br/>';
                     }
                     $results[$i]['group_name'] = $group_name_list;
                 }                

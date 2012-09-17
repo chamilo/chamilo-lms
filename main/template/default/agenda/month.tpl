@@ -171,7 +171,7 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({				
 					buttons: {
-						{{ "Add"|get_lang }}: function() {
+						'{{ "Add"|get_lang}}' : function() {
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );
 							//bValid = bValid && checkLength( content, "content", 1, 255 );

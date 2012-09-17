@@ -7,21 +7,8 @@
 /**
  * Code
  */
-require('../../inc/global.inc.php');
+require_once '../../inc/global.inc.php';
 Display::display_header('OpenID', NULL);
-?>
-<p>
-<?php echo get_lang('OpenIDWhatIs');?>
-<br />
-<?php echo get_lang('OpenIDDescription');?>
-</p>
-<p>
-<a href="<?php
- if (strpos($_SERVER['HTTP_REFERER'],$_SERVER['HTTP_HOST'])) {
- 	 echo Security::remove_XSS($_SERVER['HTTP_REFERER']);
- }
- ?>">Return to the previous page</a>
-</p>
-<?php
+echo Display::page_header(get_lang('OpenIDWhatIs'));
+echo get_lang('OpenIDDescription');
 Display::display_footer();
-?>

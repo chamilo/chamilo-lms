@@ -3161,6 +3161,10 @@ form .formw .freeze {
     text-align: left;
 }
 
+.form_login {
+    padding: 3px 15px;
+}
+
 #formLogin label {
     color:#666666;
 }
@@ -3262,7 +3266,7 @@ div#no-data-view div.controls {
 
 
 
-/*             styles for the star rater                */
+/* styles for the star rater */
 .star-rating{
     list-style:none;
     margin: 0px;
@@ -4667,4 +4671,3 @@ i.size-32.icon-new-work{
 #filepaths input{
     margin-bottom:5px;    
 }
-

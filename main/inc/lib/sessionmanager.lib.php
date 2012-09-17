@@ -242,8 +242,9 @@ class SessionManager {
 
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
-					(s.date_start <= '$today' AND '$today' < s.date_end OR DATEDIFF(s.date_start,'$today') <= s.nb_days_access_before_beginning) OR 
-					(s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+                    (DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR 
+                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
 					('$today' < s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0) 

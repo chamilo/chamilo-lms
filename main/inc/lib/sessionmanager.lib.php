@@ -204,6 +204,7 @@ class SessionManager {
                 }                
             }
         }
+        
         $options_by_double = array();
         foreach ($double_fields as $double) {            
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
@@ -212,7 +213,7 @@ class SessionManager {
         }       
         
         //var_dump($options_by_double);
-        
+        //sc.name as category_name,         
 		$select = "SELECT * FROM (SELECT 
 				IF ( 
 					(s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR 
@@ -223,8 +224,7 @@ class SessionManager {
 				as session_active, 
 				s.name, 
                 s.nbr_courses, 
-                s.nbr_users, 
-                   sc.name as category_name, 
+                s.nbr_users,                
                 s.display_start_date, 
                 s.display_end_date,
                 $coach_name,              
@@ -2292,4 +2292,157 @@ class SessionManager {
         }
         return $msg_date;
     }
+    
+    static public function get_session_columns() {
+        
+        $columns = array(
+            get_lang('Name'),     
+            get_lang('SessionDisplayStartDate'),
+            get_lang('SessionDisplayEndDate'),
+            get_lang('SessionCategoryName'),
+            get_lang('Coach'),
+            get_lang('Status'),     
+            get_lang('Visibility'),
+            get_lang('CourseTitle'),
+        );
+
+        //$activeurl = '?sidx=session_active';
+        //Column config
+        $operators = array('cn', 'nc');
+        $date_operators = array('gt', 'ge', 'lt', 'le');
+
+        $column_model = array (
+                        array('name'=>'name',                'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                        array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
+                        array('name'=>'display_end_date',    'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
+                        array('name'=>'category_name',       'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
+                        //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
+                        //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
+                        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),                        
+                        array('name'=>'session_active',         'index'=>'session_active','width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+
+                              //for the bottom bar
+                              'searchoptions' => array(                                            
+                                                'defaultValue'  => '1', 
+                                                'value'         => '1:'.get_lang('Active').';0:'.get_lang('Inactive')),
+                              //for the top bar                              
+                              //'editoptions' => array('value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive'))
+                        ),   
+                        //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
+                        array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'course_title',    'index'=>'course_title',   'width'=>'40',  'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
+        ); 
+
+        //Inject extra session fields
+        $session_field = new SessionField();
+        $session_field_option = new SessionFieldOption();
+        $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1))); 
+
+        $rules = array();
+        $now = new DateTime();
+        $now->add(new DateInterval('P30D'));
+        $one_month = $now->format('Y-m-d H:m:s');
+
+        //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
+        //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
+        $rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
+        $rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
+        $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
+
+        if (!empty($fields)) { 
+            foreach ($fields as $field) {
+                $search_options = array();
+                $type = 'text';        
+                if (in_array($field['field_type'], array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT))) {
+                    $type = 'select';
+                    $search_options['sopt'] = array('eq', 'ne'); //equal not equal
+                } else {
+                    $search_options['sopt'] = array('cn', 'nc');//contains not contains
+                }
+
+                $search_options['searchhidden'] = 'true';
+                $search_options['defaultValue'] = $search_options['field_default_value'];
+
+
+                if ($field['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+                    //Add 2 selects
+                    $options = $session_field_option->get_field_options_by_field($field['id']);
+                    $options = ExtraField::extra_field_double_select_convert_array_to_ordered_array($options);
+                    $first_options = array();
+
+                    if (!empty($options)) {
+                        foreach ($options as $option) {
+                            foreach ($option as $sub_option) {                        
+                                if ($sub_option['option_value'] == 0) {
+                                    $first_options[] = $sub_option['field_id'].'#'.$sub_option['id'].':'.$sub_option['option_display_text'];
+                                } else {
+                                }
+                            }
+                        }
+                    }
+
+                    $search_options['value']  = implode(';', $first_options);
+                    $search_options['dataInit'] = 'fill_second_select';                    
+
+                    //First
+                    $column_model[] = array(
+                        'name' => 'extra_'.$field['field_variable'],
+                        'index' => 'extra_'.$field['field_variable'],
+                        'width' => '100',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'stype' => 'select',
+                        'searchoptions' => $search_options
+                    );
+                    $columns[] = $field['field_display_text'].' (1)';
+                    $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');            
+
+                    //Second
+                    $search_options['value'] = $field['id'].':';
+                    $search_options['dataInit'] = 'register_second_select';
+
+                    $column_model[] = array(
+                        'name' => 'extra_'.$field['field_variable'].'_second',
+                        'index' => 'extra_'.$field['field_variable'].'_second',
+                        'width' => '100',
+                        'hidden' => 'true',
+                        'search' => 'true',
+                        'stype' => 'select',                
+                        'searchoptions' => $search_options
+                    );        
+                    $columns[] = $field['field_display_text'].' (2)';
+                    $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
+                    continue;
+                } else {            
+                    $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);    
+                }
+
+                $column_model[] = array(
+                    'name' => 'extra_'.$field['field_variable'],
+                    'index' => 'extra_'.$field['field_variable'],
+                    'width' => '100',
+                    'hidden' => 'true',
+                    'search' => 'true',
+                    'stype' => $type,
+                    'searchoptions' => $search_options
+                );        
+                $columns[] = $field['field_display_text'];
+                $rules[] = array('field' => 'extra_'.$field['field_variable'], 'op' => 'cn');        
+            }
+        }
+
+        $column_model[] = array('name'=>'actions', 'index'=>'actions', 'width'=>'80',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false');
+        $columns[] = get_lang('Actions');
+        
+        foreach ($column_model as $col_model) {
+            $simple_column_name[] = $col_model['name'];
+        }
+         
+        return array(
+            'columns' => $columns, 
+            'column_model' => $column_model, 
+            'rules' => $rules,
+            'simple_column_name' => $simple_column_name
+        );
+    }   
 }

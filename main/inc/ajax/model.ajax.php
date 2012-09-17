@@ -76,7 +76,7 @@ if ($_REQUEST['_search'] == 'true') {
     
     //for now
     $extra_field = new ExtraField('session');
-    $extra_fields = array();    
+    $extra_fields = array();
     if (!empty($filters)) {
         
         //Getting double select if exists
@@ -90,10 +90,9 @@ if ($_REQUEST['_search'] == 'true') {
             }                
         }
         
-        
         $condition_array = array();
                 
-        foreach ($filters->rules as $rule) {            
+        foreach ($filters->rules as $rule) {
             if (strpos($rule->field, 'extra_') === false) {
                 //normal fields
                 $field = $rule->field;
@@ -305,15 +304,9 @@ switch ($action) {
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
-    case 'get_sessions':
-        //'nbr_courses', 'nbr_users', 
-        $columns = array('name', 'display_start_date', 'display_end_date', 'category_name', 'coach_name',  'session_active', 'visibility', 'course_title');
-        
-        if (!empty($extra_fields)) {
-            foreach ($extra_fields as $field) {
-                $columns[] = $field['field'];
-            }
-        }                
+    case 'get_sessions':        
+        $result = SessionManager::get_session_columns();
+        $columns = $result['simple_column_name'];        
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 

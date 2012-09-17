@@ -34,19 +34,24 @@ class CourseBuilder {
 	var $course;
     
     /* With this array you can filter the tools you want to be parsed by default all tools are included*/
-    var $tools_to_build = array('events',
+    var $tools_to_build = array(
                                 'announcements',
-                                'tool_intro',
-                                'surveys',
+                                'attendance',
+                                'course_descriptions',
                                 'documents', 
-                                'quizzes', 
+                                'events',
+                                'forum_category', 
+                                'forums',
+                                'forum_topics',
                                 'glossary',
+                                'quizzes',                                     
                                 'learnpaths',
                                 'links', 
-                                'course_descriptions',
-                                'wiki',
+                                'surveys',
+                                'tool_intro',
                                 'thematic',
-                                'attendance');
+                                'wiki'
+    );
     
     /* With this array you can filter wich elements of the tools are going to be added in the course obj (only works with LPs) */
     var $specific_id_list = array();
@@ -111,7 +116,7 @@ class CourseBuilder {
 		$course_id        = $course_info['real_id'];		
         
         foreach ($this->tools_to_build as $tool) {
-            $function_build = 'build_'.$tool;            
+            $function_build = 'build_'.$tool;
             $this->$function_build($session_id, $course_code, $with_base_content, $this->specific_id_list[$tool]);
         }
 		
@@ -256,49 +261,59 @@ class CourseBuilder {
 			}
 		}
 	}
+    
 	/**
 	 * Build the forums
 	 */
-	function build_forums($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
+	function build_forums($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
+        $course_info 	= api_get_course_info($course_code);
+		$course_id 		= $course_info['real_id'];
+        
 		$table = Database :: get_course_table(TABLE_FORUM);
-		$course_id = api_get_course_int_id();		
-		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
+        
+		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";   
+        $sql .= " ORDER BY forum_title, forum_category";
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			$forum = new Forum($obj->forum_id, $obj->forum_title, $obj->forum_comment, $obj->forum_category, $obj->forum_last_post, $obj->forum_threads, $obj->forum_posts, $obj->allow_anonymous, $obj->allow_edit, $obj->approval_direct_post, $obj->allow_attachements, $obj->allow_new_threads, $obj->default_view, $obj->forum_of_group, $obj->forum_group_public_private, $obj->forum_order, $obj->locked, $obj->session_id, $obj->forum_image);
-			$this->course->add_resource($forum);
-			$this->build_forum_category($obj->forum_category);
+			//$forum = new Forum($obj->forum_id, $obj->forum_title, $obj->forum_comment, $obj->forum_category, $obj->forum_last_post, $obj->forum_threads, $obj->forum_posts, $obj->allow_anonymous, $obj->allow_edit, $obj->approval_direct_post, $obj->allow_attachements, $obj->allow_new_threads, $obj->default_view, $obj->forum_of_group, $obj->forum_group_public_private, $obj->forum_order, $obj->locked, $obj->session_id, $obj->forum_image);
+            $forum = new Forum($obj);
+			$this->course->add_resource($forum);			
 		}
-		$this->build_forum_topics();
-		$this->build_forum_posts();
+		//$this->build_forum_topics();
+		//$this->build_forum_posts();
 	}
     
 	/**
 	 * Build a forum-category
 	 */
-	function build_forum_category($id) {
+	function build_forum_category($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-		$course_id = api_get_course_int_id();
-		$sql = "SELECT * FROM $table WHERE c_id = $course_id AND cat_id = $id";
+        $course_info 	= api_get_course_info($course_code);
+		$course_id 		= $course_info['real_id'];
+        
+		$sql = "SELECT * FROM $table WHERE c_id = $course_id ORDER BY cat_title";
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);
-			$this->course->add_resource($forum_category);
+			//$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);            
+            $forum_category = new ForumCategory($obj);            
+			$this->course->add_resource($forum_category);            
 		}
 	}
     
 	/**
 	 * Build the forum-topics
 	 */
-	function build_forum_topics() {
+	function build_forum_topics($session_id = 0, $course_code = null, $with_base_content = false, $id_list = array()) {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
-		$course_id = api_get_course_int_id();		
-		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
+		$course_info 	= api_get_course_info($course_code);
+		$course_id 		= $course_info['real_id'];        
+		$sql = "SELECT * FROM $table WHERE c_id = $course_id ORDER BY thread_title ";
 		$db_result = Database::query($sql);
-		while ($obj = Database::fetch_object($db_result))
-		{
-			$forum_topic = new ForumTopic($obj->thread_id, $obj->thread_title, $obj->thread_date, $obj->thread_poster_id, $obj->thread_poster_name, $obj->forum_id, $obj->thread_last_post, $obj->thread_replies, $obj->thread_views, $obj->thread_sticky, $obj->locked, $obj->thread_close_date, $obj->thread_weight, $obj->thread_title_qualify, $obj->thread_qualify_max);
+		while ($obj = Database::fetch_object($db_result)) {
+			//$forum_topic = new ForumTopic($obj->thread_id, $obj->thread_title, $obj->thread_date, $obj->thread_poster_id, $obj->thread_poster_name, $obj->forum_id, $obj->thread_last_post, $obj->thread_replies, $obj->thread_views, $obj->thread_sticky, $obj->locked, $obj->thread_close_date, $obj->thread_weight, $obj->thread_title_qualify, $obj->thread_qualify_max);
+            $forum_topic = new ForumTopic($obj);
 			$this->course->add_resource($forum_topic);
+            $this->build_forum_posts($obj->thread_id, $obj->forum_id);
 		}
 	}
     
@@ -306,13 +321,18 @@ class CourseBuilder {
 	 * Build the forum-posts
 	 * TODO: All tree structure of posts should be built, attachments for example.
 	 */
-	function build_forum_posts() {
+	function build_forum_posts($thread_id = null, $forum_id = null) {
 		$table = Database :: get_course_table(TABLE_FORUM_POST);
 		$course_id = api_get_course_int_id();		
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ";
+        if (!empty($thread_id) && !empty($forum_id)) {
+            $forum_id = intval($forum_id);
+            $thread_id = intval($thread_id);
+            $sql     .= " AND thread_id = $thread_id AND forum_id = $forum_id ";
+        }        
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			$forum_post = new ForumPost($obj->post_id, $obj->post_title, $obj->post_text, $obj->post_date, $obj->poster_id, $obj->poster_name, $obj->post_notification, $obj->post_parent_id, $obj->thread_id, $obj->forum_id, $obj->visible);
+			$forum_post = new ForumPost($obj);            
 			$this->course->add_resource($forum_post);
 		}
 	}
@@ -322,8 +342,7 @@ class CourseBuilder {
 	 */
 	function build_links($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array()) {
 		$course_info = api_get_course_info($course_code);
-		$course_id 		= $course_info['real_id'];
-		
+		$course_id 		= $course_info['real_id'];		
 		
 		$table = Database :: get_course_table(TABLE_LINK);
 		$table_prop = Database :: get_course_table(TABLE_ITEM_PROPERTY);
@@ -362,6 +381,7 @@ class CourseBuilder {
 			}
 		}
 	}
+    
 	/**
 	 * Build tool intro
 	 */
@@ -375,6 +395,7 @@ class CourseBuilder {
 			$this->course->add_resource($tool_intro);
 		}
 	}
+    
 	/**
 	 * Build a link category
 	 */
@@ -393,6 +414,7 @@ class CourseBuilder {
 		}
 		return 0;
 	}
+    
 	/**
 	 * Build the Quizzes
 	 */

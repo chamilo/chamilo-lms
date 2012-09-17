@@ -2187,14 +2187,15 @@ class CourseManager {
         if (Database::num_rows($result)) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $course_list[] = $row;
-                $codes[] = $row['code'];
+                $codes[] = $row['real_id'];
             }
         }
 
         if ($include_sessions === true) {
-            $r = Database::query("SELECT DISTINCT(c.code), c.id as real_id
+            $sql = "SELECT DISTINCT(c.code), c.id as real_id
                     FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." s, ".Database::get_main_table(TABLE_MAIN_COURSE)." c
-                    WHERE id_user = $user_id AND s.course_code=c.code");
+                    WHERE id_user = $user_id AND s.course_code=c.code";
+            $r = Database::query($sql);
             while ($row = Database::fetch_array($r, 'ASSOC')) {
                 if (!in_array($row['real_id'], $codes)) {
                     $course_list[] = $row;

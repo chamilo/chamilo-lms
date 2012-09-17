@@ -57,6 +57,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		// Partial backup here we recover the documents posted
 		$course = CourseSelectForm::get_posted_course();
+        
 	} else {
 		if ($_POST['backup_type'] == 'server') {
 			$filename = $_POST['backup_server'];
@@ -73,9 +74,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 				$error = true;
 			}
 		}
+    
         if (!$error) {
 		  // Full backup
-		  $course = CourseArchiver::read_course($filename,$delete_file);
+		  $course = CourseArchiver::read_course($filename, $delete_file);
         }
 	}
 
@@ -106,7 +108,8 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		$filename = CourseArchiver::import_uploaded_file($_FILES['backup']['tmp_name']);
 		$delete_file = true;
 	}
-	$course = CourseArchiver::read_course($filename,$delete_file);
+	$course = CourseArchiver::read_course($filename, $delete_file);
+  
 	if ($course->has_resources() && ($filename !== false)) {
 		CourseSelectForm::display_form($course, array('same_file_name_option' => $_POST['same_file_name_option']));
 	} elseif ($filename === false) {
@@ -118,7 +121,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 	}
 } else {
 	$user = api_get_user_info();
-	$backups = CourseArchiver::get_available_backups($is_platformAdmin?null:$user['user_id']);
+	$backups = CourseArchiver::get_available_backups($is_platformAdmin ?null:$user['user_id']);
 	$backups_available = count($backups) > 0;
 
 	$form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');
@@ -132,7 +135,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 	$form->addElement('file', 'backup', '', 'style="margin-left: 50px;"');
 	$form->addElement('html', '<br />');
 
-	if ($backups_available ) {
+	if ($backups_available) {
 		$form->addElement('radio', 'backup_type', '', get_lang('ServerFile'), 'server', 'id="bt_server" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"');
 		$options['null'] = '-';
 		foreach ($backups as $index => $backup) {

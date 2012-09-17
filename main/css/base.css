@@ -34,6 +34,7 @@ legend {
 header #logo {
     padding: 0px 0px 15px 0px;
 }
+
 .subnav .brand {
     display:none;
 }
@@ -2904,8 +2905,9 @@ form .formw .freeze {
 .label_tag.group_event {
     background:#A0522D;
 }
-
-
+.label_tag.session_event {
+    background:#00496D;
+}
 
 
 .label_tag.important {

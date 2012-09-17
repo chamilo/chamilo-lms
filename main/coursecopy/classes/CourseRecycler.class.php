@@ -40,7 +40,7 @@ class CourseRecycler
         $this->recycle_events();
         $this->recycle_announcements();
         $this->recycle_documents();
-        $this->recycle_forums(); //@todo does not work yet
+        $this->recycle_forums();
         $this->recycle_forum_categories();
         $this->recycle_quizzes();
         $this->recycle_surveys();
@@ -134,8 +134,16 @@ class CourseRecycler
      * Delete forums
      */
     function recycle_forums() {
+        
+        if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {
+            $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);            
+            $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUMCATEGORY])));
+            $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id." AND cat_id IN(".$forum_ids.");";
+            Database::query($sql);            
+        }
+        
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-            //$table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
+            
             $table_forum = Database :: get_course_table(TABLE_FORUM);
             $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
             $table_post = Database :: get_course_table(TABLE_FORUM_POST);
@@ -144,36 +152,38 @@ class CourseRecycler
             $table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
             $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
             $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
-
+            
             $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
 
-            $sql = "DELETE FROM ".$table_attachment.
-                " USING ".$table_attachment." INNER JOIN ".$table_post.
-                " WHERE c_id = ".$this->course_id." AND  ".$table_attachment.".post_id = ".$table_post.".post_id".
+            $sql = "DELETE FROM $table_attachment USING $table_attachment
+                    INNER JOIN $table_post 
+                    WHERE   ".$table_post.".c_id = ".$this->course_id." AND 
+                            ".$table_attachment.".c_id = ".$this->course_id." AND 
+                            ".$table_attachment.".post_id = ".$table_post.".post_id".
                 " AND ".$table_post.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
             $sql = "DELETE FROM ".$table_mail_queue." USING ".$table_mail_queue." INNER JOIN ".$table_post.
-                " WHERE c_id = ".$this->course_id." AND  ".$table_mail_queue.".post_id = ".$table_post.".post_id".
+                " WHERE  ".$table_post.".c_id = ".$this->course_id." AND ".$table_mail_queue.".c_id = ".$this->course_id." AND  ".$table_mail_queue.".post_id = ".$table_post.".post_id".
                 " AND ".$table_post.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
             // Just in case, deleting in the same table using thread_id as record-linker.
             $sql = "DELETE FROM ".$table_mail_queue.
                 " USING ".$table_mail_queue." INNER JOIN ".$table_thread.
-                " WHERE c_id = ".$this->course_id." AND ".$table_mail_queue.".thread_id = ".$table_thread.".thread_id".
+                " WHERE $table_mail_queue.c_id = ".$this->course_id." AND $table_thread.c_id = ".$this->course_id." AND ".$table_mail_queue.".thread_id = ".$table_thread.".thread_id".
                 " AND ".$table_thread.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
             $sql = "DELETE FROM ".$table_thread_qualify.
                 " USING ".$table_thread_qualify." INNER JOIN ".$table_thread.
-                " WHERE c_id = ".$this->course_id." AND ".$table_thread_qualify.".thread_id = ".$table_thread.".thread_id".
+                " WHERE $table_thread_qualify.c_id = ".$this->course_id." AND  $table_thread.c_id = ".$this->course_id." AND ".$table_thread_qualify.".thread_id = ".$table_thread.".thread_id".
                 " AND ".$table_thread.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
             $sql = "DELETE FROM ".$table_thread_qualify_log.
                 " USING ".$table_thread_qualify_log." INNER JOIN ".$table_thread.
-                " WHERE c_id = ".$this->course_id." AND ".$table_thread_qualify_log.".thread_id = ".$table_thread.".thread_id".
+                " WHERE  $table_thread_qualify_log.c_id = ".$this->course_id." AND $table_thread.c_id = ".$this->course_id." AND ".$table_thread_qualify_log.".thread_id = ".$table_thread.".thread_id".
                 " AND ".$table_thread.".forum_id IN(".$forum_ids.");";
             Database::query($sql);
 
@@ -190,6 +200,7 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+    
     /**
      * Delete forum-categories
      * Deletes all forum-categories from current course without forums

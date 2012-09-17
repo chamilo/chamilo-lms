@@ -1427,7 +1427,7 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_threads($forum_id, $course_code = '') {
+function get_threads($forum_id, $course_code = null) {
 	$course_info = api_get_course_info($course_code);
     if (empty($course_info)) {
         return array();
@@ -1489,7 +1489,7 @@ function get_threads($forum_id, $course_code = '') {
             	thread.c_id = $course_id AND
                 thread.forum_id='".Database::escape_string($forum_id)."'
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
-    }
+    }    
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $thread_list[] = $row;
@@ -1940,7 +1940,7 @@ function store_thread($values) {
                 api_item_property_update($_course, TOOL_FORUM_THREAD, $last_thread_id, 'invisible', api_get_user_id());
                 $visible = 1;
             }            
-        }       
+        }
         
         // We now store the content in the table_post table.
         $sql = "INSERT INTO $table_posts (c_id, post_title, post_text, thread_id, forum_id, poster_id, poster_name, post_date, post_notification, post_parent_id, visible)
@@ -2001,6 +2001,7 @@ function store_thread($values) {
         }
         
         send_notification_mails($last_thread_id, $reply_info);
+        
         Session::erase('formelements');
         Session::erase('origin');
         Session::erase('breadcrumbs');

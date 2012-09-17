@@ -7762,12 +7762,13 @@ class learnpath {
         //$preq_max = $row['max_score'];
 
         $return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
-        $return .= '<div class="sectioncomment">';
-        $return .= '<form method="POST">';
-
+                
         $return = '<legend>';
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
+        
+        $return .= '<div class="sectioncomment">';
+        $return .= '<form method="POST">';
 
         $return .= '<table class="data_table" style="width:650px">';
         $return .= '<tr>';
@@ -7853,10 +7854,10 @@ class learnpath {
         $return .= '</tr>';
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
-        $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . ' </button></td>';
+        $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</div>';
         $return .= '</form>';
-        $return .= '</div>';
+       // $return .= '</div>';
 
         return $return;
     }

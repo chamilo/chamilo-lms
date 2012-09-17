@@ -113,8 +113,9 @@ echo '<div class="span3">';
 echo '</div>';
 echo '<div class="span9">';
 
-if (isset($is_success) && $is_success === true) {
-    echo '<div class="lp_message" style="margin:3px 10px;">';
+if (isset($is_success) && $is_success == true) {
+    echo $_SESSION['oLP']->display_manipulate($_GET['id'], null);
+    echo '<div class="normal-message" style="margin:3px 10px;">';
     echo get_lang("PrerequisitesAdded");
     echo '</div>';
 } else {

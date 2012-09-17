@@ -440,31 +440,30 @@
         $data_users_presence = $data_array['users_presence'];
         $count = 1;
         
-        foreach ($data_array['users_in_course'] as $user) {
-            $cols = 1;
-            $result = array();
-            $result['count'] = $count;
-            $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);            
-            foreach ($data_array['attendant_calendar'] as $class_day) {                
-                if ($class_day['done_attendance'] == 1) {
-                    if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1)
-                        $result[$class_day['id']] = " . ";
-                    else
-                        $result[$class_day['id']] = " F ";
-                } else {
-                   $result[$class_day['id']] = " \ ";
-                }                
-                $cols++;
+        if (!empty($data_array['users_in_course'])) {
+            foreach ($data_array['users_in_course'] as $user) {
+                $cols = 1;
+                $result = array();
+                $result['count'] = $count;
+                $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);            
+                foreach ($data_array['attendant_calendar'] as $class_day) {                
+                    if ($class_day['done_attendance'] == 1) {
+                        if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1)
+                            $result[$class_day['id']] = " . ";
+                        else
+                            $result[$class_day['id']] = " F ";
+                    } else {
+                       $result[$class_day['id']] = " \ ";
+                    }                
+                    $cols++;
+                }
+                $count++;           
+                $data_table[] = $result;
             }
-            $count++;
-           
-            $data_table[] = $result;
-        }
-               
+        } 
         
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-        //
         //var_dump($cols);exit;
         $rows = count($data_table);
  
@@ -474,11 +473,9 @@
             //var_dump($number_tables);
             $headers = $data_table[0];            
             //var_dump($data_table[1]);
-            $all = array();
-            
+            $all = array();            
             $tables = array();
-            $changed = 1;
-            
+            $changed = 1;            
             
             for ($i= 0; $i <= $rows; $i++) { 
                 $row = $data_table[$i]; 
@@ -504,14 +501,16 @@
                     }
                 }
             }
-        }
+            
+            $content = null;
         
-        $content = null;
-        
-        if (!empty($tables)) {
-            foreach ($tables as $sub_table) {
-                $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+            if (!empty($tables)) {
+                foreach ($tables as $sub_table) {
+                    $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+                }
             }
+        } else {
+            $content .= Export::convert_array_to_html($data_table);
         }
         
         $params = array(        

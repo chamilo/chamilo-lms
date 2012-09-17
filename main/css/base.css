@@ -2892,16 +2892,15 @@ form .formw .freeze {
 .label_tag.admin_event {
     background:red;
 }
-
 .label_tag.course_event {
     background:#458B00;
 }
-
 .label_tag.group_event {
     background:#A0522D;
 }
-
-
+.label_tag.session_event {
+    background:#00496D;
+}
 
 
 .label_tag.important {

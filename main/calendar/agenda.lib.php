@@ -28,7 +28,7 @@ class Agenda {
 		$this->event_platform_color = 'red';//red
 		$this->event_course_color 	= '#458B00'; //green
 		$this->event_group_color 	= '#A0522D'; //siena
-		$this->event_session_color 	= '#000080'; // blue
+		$this->event_session_color 	= '#00496D'; // kind of green
 		$this->event_personal_color = 'steel blue'; //steel blue
 	}
     
@@ -274,8 +274,9 @@ class Agenda {
 				$this->get_platform_events($start, $end);
 				break;
 			case 'course':				
-				$course_info = api_get_course_info_by_id($course_id);				
-				$this->get_course_events($start, $end, $course_info, $group_id);
+                $session_id = api_get_session_id();
+				$course_info = api_get_course_info_by_id($course_id);                
+				$this->get_course_events($start, $end, $course_info, $group_id, $session_id);
 				break;
 			case 'personal':
 			default:
@@ -289,8 +290,23 @@ class Agenda {
 				$my_course_list = array();
                 
 				if (!api_is_anonymous()) {
+                    $session_list = SessionManager::get_sessions_by_user(api_get_user_id());                    
 					$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
 				}
+                
+                if (!empty($session_list)) {
+                    foreach ($session_list as $session_item) {
+                        $my_courses = $session_item['courses'];
+                        $my_session_id = $session_item['session_id'];
+                        if (!empty($my_courses)) {
+                            foreach ($my_courses as $course_item) {
+                                $course_info = api_get_course_info($course_item['code']);
+                                $this->get_course_events($start, $end, $course_info, 0, $my_session_id);
+                            }
+                        }                        
+                    }                    
+                }
+                
 				if (!empty($my_course_list)) {
 					foreach ($my_course_list as $course_info_item) {
 						if (isset($course_id) && !empty($course_id)) {
@@ -459,12 +475,11 @@ class Agenda {
 		return $my_events;
 	}
 	
-	function get_course_events($start, $end, $course_info, $group_id = 0) {
-        
+	function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0) {        
 		$course_id = $course_info['real_id'];        
         $group_list = GroupManager::get_group_list(null, $course_info['code']);        
-        $group_name_list = array();
         
+        $group_name_list = array();        
         if (!empty($group_list)) {
             foreach($group_list as $group) {
                 $group_name_list[$group['id']]= $group['name'];
@@ -476,7 +491,7 @@ class Agenda {
         } else {            
             $group_memberships = array_keys($group_name_list);            
         }
-                
+        
 		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA);
 		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
 	
@@ -485,6 +500,8 @@ class Agenda {
         if (!empty($group_id)) {
             $group_memberships = array($group_id);
         }
+        
+        $session_id = intval($session_id);
         
 		if (is_array($group_memberships) && count($group_memberships) > 0) {
 		    if (api_is_allowed_to_edit()) {
@@ -508,15 +525,19 @@ class Agenda {
 		        $where_condition = "";                
             } else {
                 $where_condition = "( ip.to_user_id=$user_id OR ip.to_group_id='0') AND ";
-            }         
+            }
+                            
             $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
-                    WHERE agenda.id = ip.ref AND
-                    ip.tool='".TOOL_CALENDAR_EVENT."' AND
-                    $where_condition
-                    ip.visibility='1' AND 
-                    agenda.c_id = $course_id AND
-                    ip.c_id = $course_id";  
+                    WHERE   agenda.id = ip.ref AND
+                            ip.tool='".TOOL_CALENDAR_EVENT."' AND
+                            $where_condition
+                            ip.visibility='1' AND 
+                            agenda.c_id = $course_id AND
+                            ip.c_id = $course_id AND
+                            agenda.session_id = $session_id AND
+                            ip.id_session = $session_id                            
+                    ";
 			
 		}
 		
@@ -545,11 +566,11 @@ class Agenda {
                 }
             
 				//Only show events from the session
-				if (api_get_course_int_id()) {
+				/*if (api_get_course_int_id()) {
 					if ($row['session_id'] != api_get_session_id()) {
 						continue;
 					}
-				}
+				}*/
                 
 				$event = array();
                 
@@ -560,7 +581,7 @@ class Agenda {
                     continue;
                 }
                 
-                $events_added[]         = $row['id'];                
+                $events_added[] = $row['id'];                
                 
                 $attachment = get_attachment($row['id'], $course_id);
                 
@@ -604,7 +625,11 @@ class Agenda {
 				}	
                 
                 $event['sent_to'] = '';
-                $event['type']    = $this->type;                
+                //$event['type']    = $this->type;
+                $event['type']    = 'course';                
+                if ($row['session_id'] != 0) {
+                    $event['type']    = 'session';
+                }
                 
                 //Event Sent to a group?
                 if (isset($row['to_group_id']) && !empty($row['to_group_id'])) {
@@ -620,8 +645,7 @@ class Agenda {
                     $event['type']    = 'group';    
                 }
 
-                //Event sent to a user?
-                //var_dump($row);
+                //Event sent to a user?                
                 if (isset($row['to_user_id'])) {
                     $sent_to = array();
                     if (!empty($user_to_array)) {                        
@@ -635,7 +659,6 @@ class Agenda {
                     $sent_to = implode('@@', $sent_to);                    
                     $sent_to =  str_replace('@@', '</div><div class="label_tag notice">', $sent_to);
                     $event['sent_to'] = '<div class="label_tag notice">'.$sent_to.'</div>';
-
                 }
                 
                 //Event sent to everyone!

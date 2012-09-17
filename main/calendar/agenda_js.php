@@ -47,8 +47,9 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
 
 
 $is_group_tutor = false;
-
+$session_id = api_get_session_id();
 $group_id = api_get_group_id();
+
 if (!empty($group_id)) {
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
     $group_properties  = GroupManager :: get_group_properties($group_id);
@@ -148,6 +149,12 @@ if ($type == 'course' && !empty($group_id)) {
     $type_event_class = 'group_event';    
     $type_label = get_lang('GroupCalendar');
 }
+
+if ($type == 'course' && !empty($session_id)) {
+    $type_event_class = 'session_event';    
+    $type_label = get_lang('SessionCalendar');
+}
+
 $tpl->assign('type_label', $type_label);
 $tpl->assign('type_event_class', $type_event_class);
 

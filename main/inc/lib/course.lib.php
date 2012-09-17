@@ -1430,7 +1430,7 @@ class CourseManager {
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coaches = array();
 
-        $sql = "SELECT DISTINCT u.user_id, u.lastname u.firstname, u.username 
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
                 FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";
         $rs = Database::query($sql);

@@ -21,7 +21,7 @@ $.extend($.jgrid,{
 	    Find: "Buscar",
 	    Reset: "Limpiar",
 	    odata : ['igual ', 'no igual a', 'menor que', 'menor o igual que','mayor que','mayor o igual a', 'empiece por','no empiece por','está en','no está en','termina por','no termina por','contiene','no contiene'],
-	    groupOps: [	{ op: "AND", text: "todo" },	{ op: "OR",  text: "cualquier" }	],
+	    groupOps: [	{ op: "AND", text: "todo" },	{ op: "OR",  text: "cualquiera" }	],
 		matchText: " match",
 		rulesText: " reglas"
 	},

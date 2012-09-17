@@ -264,8 +264,6 @@ class Agenda {
 	 * Get agenda events
 	 * @param	int		start tms
 	 * @param	int		end tms
-	 * @param 	string	agenda type (personal, admin or course)
-	 * @param	int		user id
 	 * @param	int		course id *integer* not the course code 
 	 * 
 	 */
@@ -280,7 +278,7 @@ class Agenda {
 				$this->get_course_events($start, $end, $course_info, $group_id);
 				break;
 			case 'personal':
-			default:                
+			default:
                 //Getting personal events
 				$this->get_personal_events($start, $end);
                 
@@ -294,9 +292,9 @@ class Agenda {
 					$my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id(), true);
 				}
 				if (!empty($my_course_list)) {
-					foreach($my_course_list as $course_info_item) {
+					foreach ($my_course_list as $course_info_item) {
 						if (isset($course_id) && !empty($course_id)) {
-							if ($course_info_item['course_id'] == $course_id) {
+							if ($course_info_item['real_id'] == $course_id) {
 								$this->get_course_events($start, $end, $course_info_item);
 							}
 						} else {

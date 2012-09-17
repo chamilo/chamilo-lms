@@ -88,13 +88,13 @@ if (api_is_allowed_to_edit(null, true)) {
     ?>
     <script>
     var original_url = '';    
-    $("#pdf_export").on('click', function() {
-       filter = $("#filter_id").val();
+    $("#filter_id").on('change', function() {
+       filter = $(this).val();
        if (original_url == '') {
-          original_url = $(this).attr('href');
+          original_url = $("#pdf_export").attr('href');
        }
        new_url =  original_url + "&filter=" +filter
-       $(this).attr('href', new_url);
+       $("#pdf_export").attr('href', new_url);
        //console.log(new_url);
     });
     

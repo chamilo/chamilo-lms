@@ -507,8 +507,11 @@
         }
         
         $content = null;
-        foreach ($tables as $sub_table) {
-            $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+        
+        if (!empty($tables)) {
+            foreach ($tables as $sub_table) {
+                $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+            }
         }
         
         $params = array(        

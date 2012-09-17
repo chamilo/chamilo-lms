@@ -193,8 +193,7 @@ class Export {
         $headers = $data[0];
         unset($data[0]); 
        
-        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();
-                
+        $header_attributes = isset($params['header_attributes']) ? $params['header_attributes'] : array();                
         $table = new HTML_Table(array('class' => 'data_table', 'repeat_header' => '1'));
         $row = 0;
         $column = 0;

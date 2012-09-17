@@ -112,7 +112,7 @@ $langSave = "Guardar";
 $langMove = "Mover";
 $Help = "Ayuda";
 $langOk = "Aceptar";
-$langAdd = "añadir";
+$langAdd = "Añadir";
 $langAddIntro = "Añadir un texto de introducción";
 $langBackList = "Volver a la lista";
 $langText = "Texto";
@@ -977,6 +977,9 @@ $NumberOfCoursesPrivate = "Número de cursos privados";
 $NumberOfCoursesClosed = "Número de cursos cerrados";
 $NumberOfCoursesTotal = "Número total de cursos";
 $NumberOfUsersActive = "Número de usuarios activos";
+$UserNotAttendedSymbol = "F";
+$UserAttendedSymbol = "P";
+$Order = "Orden";
 $GlobalPlatformInformation = "Información global de plataforma";
 $ReportABug = "Comunicar un error";
 $Letters = "Letras";
@@ -993,6 +996,7 @@ $SendInformation = "Enviar la información";
 $YouMustAcceptLicence = "Debe aceptar la licencia para poder usar este software";
 $SelectOne = "Seleccione uno";
 $ContactInformationHasBeenSent = "Información de contacto enviada";
+$UserInactivedSinceX = "Usuario inactivo desde %s";
 $ContactInformationDescription = "Estimado usuario,
 
 está a punto de instalar una de las mejores plataformas e-learning de código abierto que existen en el mercado. Al igual de muchos otros proyectos de código abierto, Chamilo está respaldado por una amplia comunidad de profesores, estudiantes, desarrolladores y creadores de contenido.

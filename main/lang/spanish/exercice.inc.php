@@ -369,6 +369,7 @@ $ReUseACopyInCurrentTest = "Reutilizar una copia de esta pregunta en el ejercici
 $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Promedio de todos los intentos en ejercicios";
 $DefaultContent = "Generar contenido por defecto";
+$ExerciseDescriptionLabel = "Descripción";
 $ExerciseEditionNotAvailableInSession = "Edición de ejercicio de curso no autorizada desde la sesión";
 $UniqueAnswerNoOption = "Respuesta única con no-se";
 $MultipleAnswerTrueFalse = "Respuestas múltiples v/f/no-se";

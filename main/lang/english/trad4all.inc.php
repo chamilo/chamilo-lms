@@ -976,6 +976,7 @@ $NumberOfCoursesPrivate = "Number of private courses";
 $NumberOfCoursesClosed = "Number of closed courses";
 $NumberOfCoursesTotal = "Total number of courses";
 $NumberOfUsersActive = "Number of active users";
+$Order = "Order";
 $GlobalPlatformInformation = "Global platform information";
 $ReportABug = "Report a bug";
 $Letters = "Letters";
@@ -992,6 +993,7 @@ $SendInformation = "Send information";
 $YouMustAcceptLicence = "You must accept the licence";
 $SelectOne = "Select one";
 $ContactInformationHasBeenSent = "Contact information has been sent";
+$UserInactivedSinceX = "User inactive since %s";
 $ContactInformationDescription = "Dear user,<br />
 <br />You are about to start using one of the best open-source e-learning platform on the market. Like many other open-source project, this project is backed up by a large community of students, teachers, developers and content creators who would like to promote the project better.<br />
 <br />

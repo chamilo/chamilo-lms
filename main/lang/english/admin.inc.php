@@ -1265,6 +1265,7 @@ $GradebookActivateScoreDisplayCustom = "Enable competence level labelling in ord
 $GradebookScoreDisplayCustomValues = "Competence levels custom values";
 $GradebookNumberDecimals = "Number of decimals";
 $GradebookNumberDecimalsComment = "Allows you to set the number of decimals allowed in a score";
+$EditExtraFieldOptions = "Edit extra field options";
 $ManageSessionFields = "Manage session fields";
 $EditSessionsToURL = "Edit sessions for a URL";
 $AddSessionsToURL = "Add sessions to URL";

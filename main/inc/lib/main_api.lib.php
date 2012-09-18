@@ -1667,7 +1667,7 @@ function get_status_from_code($status_code) {
         case COURSE_STUDENT:
             return get_lang('StudentInCourse');    
         case SESSION_STUDENT:
-            return get_lang('StudentInSession');    
+            return get_lang('StudentInSessionCourse');    
         case COURSE_TUTOR:
             return get_lang('CourseTutor');
     }

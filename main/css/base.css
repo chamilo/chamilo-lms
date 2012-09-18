@@ -2708,6 +2708,11 @@ div.admin_section h4 {
     color: green;
 }
 
+.ribbon h3 {
+    font-size: 18px;
+    line-height: 9px;
+}
+
 .exercise_save_now_button img {
     position: relative;
     top: 4px;

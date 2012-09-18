@@ -79,7 +79,7 @@ class CoursesController { // extends Controller {
      * @param string   	action
      * @param string    Category code (optional)
      */
-    public function courses_categories($action, $category_code = null, $message = '', $error = '') {
+    public function courses_categories($action, $category_code = null, $message = '', $error = '', $content = null) {
         $data = array();
         $browse_course_categories = $this->model->browse_course_categories();        
         
@@ -117,6 +117,7 @@ class CoursesController { // extends Controller {
         $data['user_coursecodes'] = $user_coursecodes;
         $data['action']           = $action;
         $data['message']          = $message;
+        $data['content']          = $content;
         $data['error']            = $error;
 
         // render to the view
@@ -170,23 +171,19 @@ class CoursesController { // extends Controller {
      */
     public function subscribe_user($course_code, $search_term, $category_code) {
         $data = array();
-        $result = $this->model->subscribe_user($course_code);      
+        $result = $this->model->subscribe_user($course_code);
         if (!$result) {
             $error = get_lang('CourseRegistrationCodeIncorrect');
         } else {
             //Redirect directly to the course after subscription
-            /*
-            if ($result) {
-                $url = api_get_course_url($course_code);
-                header('Location: '.$url);
-                exit;
-            }*/
-            $message = $result;
+            $message = $result['message'];
+            $content = $result['content'];
         }
+        
         if (!empty($search_term)) {
             $this->search_courses($search_term, $message, $error);
         } else {
-            $this->courses_categories('subcribe', $category_code, $message, $error);
+            $this->courses_categories('subcribe', $category_code, $message, $error, $content);
         }
         return $result;
     }

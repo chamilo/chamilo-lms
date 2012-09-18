@@ -1261,6 +1261,7 @@ $GradebookActivateScoreDisplayCustom = "Habilitar el etiquetado de nivel de comp
 $GradebookScoreDisplayCustomValues = "Niveles de competencia valores personalizados";
 $GradebookNumberDecimals = "Número de decimales";
 $GradebookNumberDecimalsComment = "Establecer el número de decimales permitidos en una puntuación";
+$EditExtraFieldOptions = "Editar opciones de los campos extras";
 $ManageSessionFields = "Gestionar los campos de sesión";
 $EditSessionsToURL = "Editar sesiones de una URL";
 $AddSessionsToURL = "Añadir sesiones a una URL";

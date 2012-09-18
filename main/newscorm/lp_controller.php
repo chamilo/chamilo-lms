@@ -430,7 +430,9 @@ switch ($action) {
                 $_SESSION['oLP']->set_modified_on();
 
                 $_SESSION['refresh'] = 1;
-                $_SESSION['oLP']->edit_item_prereq($_GET['id'], $_POST['prerequisites'], $_POST['min_' . $_POST['prerequisites']], $_POST['max_' . $_POST['prerequisites']]);
+                if ($_SESSION['oLP']->edit_item_prereq($_GET['id'], $_POST['prerequisites'], $_POST['min_' . $_POST['prerequisites']], $_POST['max_' . $_POST['prerequisites']])) {
+                    $is_success = true;
+                }
             }
             require 'lp_edit_item_prereq.php';
         }

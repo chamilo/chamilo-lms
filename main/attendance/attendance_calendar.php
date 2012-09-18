@@ -15,7 +15,7 @@ if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 }
 if (!$is_locked_attendance || api_is_platform_admin()) {
-	echo '<div class="actions" style="margin-bottom:30px">';	
+	echo '<div class="actions">';	
 	if ($action == 'calendar_add') {
 		echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.Display::return_icon('back.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {

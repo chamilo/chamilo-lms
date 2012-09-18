@@ -15,7 +15,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	if (isset($_SESSION['gradebook'])) {
 		$param_gradebook = '&gradebook='.Security::remove_XSS($_SESSION['gradebook']);
 	}
-	echo '<div class="actions" style="margin-bottom:30px">';
+	echo '<div class="actions">';
 	echo '<a href="index.php?'.api_get_cidreq().$param_gradebook.'&action=attendance_add">'.Display::return_icon('new_attendance_list.png',get_lang('CreateANewAttendance'),'',ICON_SIZE_MEDIUM).'</a>';	
 	echo '</div>';
 }

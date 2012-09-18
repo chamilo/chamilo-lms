@@ -174,6 +174,7 @@
 		}
 		$this->attendance_list();	
 	}
+    
 	/**
 	 * Restores an attendance entry and fallback to attendances rendering
 	 * @param int	attendance id
@@ -265,8 +266,7 @@
 			}
 
 			$data['users_in_course'] 			 = $attendance->get_users_rel_course($attendance_id);
-			$my_calendar_id = null;
-			
+			$my_calendar_id = null;			
 			if (is_numeric($filter_type)) {			    
 			    $my_calendar_id = $filter_type;
 			    $filter_type = 'calendar_id';
@@ -385,7 +385,7 @@
      * @param int    attendance id
      */
     public function attendance_sheet_export_to_pdf($action, $attendance_id, $student_id = 0, $course_id = '') {
-
+        
         $attendance = new Attendance();
         $courseInfo = CourseManager::get_course_information($course_id);
 
@@ -394,7 +394,20 @@
         $data_array['attendance_id'] = $attendance_id;
         $data_array['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
         
-        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
+        $filter_type = 'today';
+        
+		if (!empty($_REQUEST['filter'])) {
+			$filter_type = $_REQUEST['filter'];
+		}
+        
+        $my_calendar_id = null;
+        if (is_numeric($filter_type)) {			    
+            $my_calendar_id = $filter_type;
+            $filter_type = 'calendar_id';
+        }
+        
+        $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id);
+        //$data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
@@ -408,10 +421,12 @@
             $data_array['faults'] = $attendance->get_faults_of_user($user_id, $attendance_id);
             $data_array['user_id'] = $user_id;
         }
+        
+       
 
         $data_array['next_attendance_calendar_id'] = $attendance->get_next_attendance_calendar_id($attendance_id);
 
-        // set headers pdf
+        //Set headers pdf
         
         $courseCategory = CourseManager::get_course_category($courseInfo['category_code']);
         $teacherInfo    = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
@@ -427,9 +442,9 @@
         $data_table = array();
         
         $head_table = array('#', get_lang('Name'));
-        foreach ($data_array['attendant_calendar'] as $class_day) {
-            $head_table[] = $class_day['date'];
-        }
+        foreach ($data_array['attendant_calendar'] as $class_day) {            
+            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_SHORT).' <br />'.api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
+        }                        
         $data_table[] = $head_table;
         
         $dataClass = array();
@@ -439,54 +454,44 @@
         $data_attendant_calendar = $data_array['attendant_calendar'];
         $data_users_presence = $data_array['users_presence'];
         $count = 1;
-        
-        foreach ($data_array['users_in_course'] as $user) {
-            $cols = 1;
-            $result = array();
-            $result['count'] = $count;
-            $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);            
-            foreach ($data_array['attendant_calendar'] as $class_day) {                
-                if ($class_day['done_attendance'] == 1) {
-                    if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1)
-                        $result[$class_day['id']] = " . ";
-                    else
-                        $result[$class_day['id']] = " F ";
-                } else {
-                   $result[$class_day['id']] = " \ ";
-                }                
-                $cols++;
+         
+        if (!empty($data_array['users_in_course'])) {
+            foreach ($data_array['users_in_course'] as $user) {
+                $cols = 1;
+                $result = array();
+                $result['count'] = $count;
+                $result['full_name'] = api_get_person_name($user['firstname'], $user['lastname']);            
+                foreach ($data_array['attendant_calendar'] as $class_day) {                
+                    if ($class_day['done_attendance'] == 1) {
+                        if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1)
+                            $result[$class_day['id']] = get_lang('UserAttendedSymbol');
+                        else
+                            $result[$class_day['id']] = get_lang('UserNotAttendedSymbol');
+                    } else {
+                       $result[$class_day['id']] = " ";
+                    }                
+                    $cols++;
+                }
+                $count++;           
+                $data_table[] = $result;
             }
-            $count++;
-           
-            $data_table[] = $result;
-        }
-               
-        
+        }         
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-        //
         //var_dump($cols);exit;
-        $rows = count($data_table);
- 
+        $rows = count($data_table); 
                                 
         if ($cols > $max_cols_per_page) {
-            $number_tables = round(($cols-2)/$max_dates_per_page);
-            //var_dump($number_tables);
+            $number_tables = round(($cols-2)/$max_dates_per_page);            
             $headers = $data_table[0];            
-            //var_dump($data_table[1]);
-            $all = array();
-            
+            $all = array();            
             $tables = array();
-            $changed = 1;
-            
+            $changed = 1;            
             
             for ($i= 0; $i <= $rows; $i++) { 
-                $row = $data_table[$i]; 
-                
+                $row = $data_table[$i];                 
                 $key = 1;
                 $max_dates_per_page = 10;
-                                
-                //for ($j = 0; $j < $cols; $j++) {   
                 $item = $data_table[$i];
                 $count_j = 0;
                 
@@ -504,11 +509,16 @@
                     }
                 }
             }
-        }
+            
+            $content = null;
         
-        $content = null;
-        foreach ($tables as $sub_table) {
-            $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+            if (!empty($tables)) {
+                foreach ($tables as $sub_table) {
+                    $content .= Export::convert_array_to_html($sub_table).'<br /><br />';                
+                }
+            }
+        } else {
+            $content .= Export::convert_array_to_html($data_table, array('header_attributes' =>   array('align' => 'center')));
         }
         
         $params = array(        

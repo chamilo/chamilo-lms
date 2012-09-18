@@ -16,35 +16,14 @@ if (api_is_allowed_to_edit(null, true)) {
     if (isset($_SESSION['gradebook'])) {
         $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
     }   
-    if (!$is_locked_attendance || api_is_platform_admin()) {
-        echo '<div class="actions" style="margin-bottom:30px">';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
-                Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
-        echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'">'.
-                Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
-        
-        echo '</div>';
-    }
-    $message_information = get_lang('AttendanceSheetDescription');
-    if (!empty($message_information)) {
-        $message = '<strong>'.get_lang('Information').'</strong><br />';
-        $message .= $message_information;
-        Display::display_normal_message($message, false);
-    }
-
-    if ($is_locked_attendance) {
-        Display::display_warning_message(get_lang('TheAttendanceSheetIsLocked'), false);
-    }
     
-    $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id);
-    
+    $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id, null, array('class' => 'form-search pull-left'));    
     $values = array(
         'all'           => get_lang('All'), 
         'today'         => get_lang('Today'),
         'all_done'      => get_lang('AllDone'), 
         'all_not_done'  => get_lang('AllNotDone')
-    );
-                    
+    );                    
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;
     
@@ -62,7 +41,7 @@ if (api_is_allowed_to_edit(null, true)) {
         Display::display_warning_message(get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'));
     }
     
-    $form->addElement('select', 'filter', get_lang('Filter'), $values);   
+    $form->addElement('select', 'filter', get_lang('Filter'), $values, array('id' => 'filter_id'));   
     $form->addElement('style_submit_button', null, get_lang('Filter'), 'class="filter"');
     
     if (isset($_REQUEST['filter'])) {        
@@ -71,14 +50,54 @@ if (api_is_allowed_to_edit(null, true)) {
         }       
     } else {
         $default_filter = 'today';      
-    }   
+    }  
+    
+    $renderer = $form->defaultRenderer();
+    $renderer->setElementTemplate('{label} {element} ');
+    
     $form->setDefaults(array('filter'=>$default_filter));
+     
+    
+    if (!$is_locked_attendance || api_is_platform_admin()) {
+        echo '<div class="actions">';
+        echo '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">'.
+                Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).'</a>';
+        if (count($users_in_course) > 0) {
+            $form->display(); 
+        }
+        echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'">'.
+                Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '</div>';
+    }
+    
+    $message_information = get_lang('AttendanceSheetDescription');
+    if (!empty($message_information)) {
+        $message = '<strong>'.get_lang('Information').'</strong><br />';
+        $message .= $message_information;
+        Display::display_normal_message($message, false);
+    }
+
+    if ($is_locked_attendance) {
+        Display::display_warning_message(get_lang('TheAttendanceSheetIsLocked'), false);
+    }
+    
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
     
     if (count($users_in_course) > 0) {
-        $form->display();  
+        
     ?>
-    <script type="text/javascript">
+    <script>
+    var original_url = '';    
+    $("#filter_id").on('change', function() {
+       filter = $(this).val();
+       if (original_url == '') {
+          original_url = $("#pdf_export").attr('href');
+       }
+       new_url =  original_url + "&filter=" +filter
+       $("#pdf_export").attr('href', new_url);
+       //console.log(new_url);
+    });
+    
     function UpdateTableHeaders() {
         $("div.divTableWithFloatingHeader").each(function() {
             var originalHeaderRow = $(".tableFloatingHeaderOriginal", this);

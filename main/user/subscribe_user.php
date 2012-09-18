@@ -379,13 +379,17 @@ function get_number_of_users() {
  * Get the users to display on the current page.
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
-	global $_course, $_configuration;;
+	global $_course, $_configuration;
+    
+    $url_access_id = api_get_current_access_url_id();        
 
 	// Database table definitions
 	$user_table                    = Database::get_main_table(TABLE_MAIN_USER);
 	$course_user_table             = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 	$tbl_session_rel_course_user   = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 	$table_user_field_values 	   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
+    
+    $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
     
     // adding teachers
 	$is_western_name_order = api_is_western_name_order();
@@ -454,10 +458,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 
 				// adding a teacher NOT trough a session on a portal with multiple URLs
-				if ($_configuration['multiple_access_urls']) {
-					$url_access_id = api_get_current_access_url_id();
-					if ($url_access_id !=-1) {
-						$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+				if ($_configuration['multiple_access_urls']) {					
+					if ($url_access_id !=-1) {						
 						$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
@@ -482,26 +484,34 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		// adding a student
 		if (!empty($_SESSION["id_session"])) {
 			$sql = "SELECT $select_fields
-				FROM $user_table u
-				LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
-
-			// applying the filter of the additional user profile fields
-			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
-				$field_identification = explode('*',$_GET['subscribe_user_filter_value']);
-				$sql .=	"
-					LEFT JOIN $table_user_field_values field_values
-						ON field_values.user_id = u.user_id
-					WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
-						AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
-						AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
-			} else	{
-				$sql .=	"WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
-			}
+                    FROM $user_table u
+                    LEFT JOIN $tbl_session_rel_course_user cu ON u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
+            
+            if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+                $sql .= " INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";                
+            }
+            
+            // applying the filter of the additional user profile fields
+            if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
+                $field_identification = explode('*',$_GET['subscribe_user_filter_value']);
+                $sql .=	"
+                    LEFT JOIN $table_user_field_values field_values
+                        ON field_values.user_id = u.user_id
+                    WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL)
+                        AND field_values.field_id = '".Database::escape_string($field_identification[0])."'
+                        AND field_values.field_value = '".Database::escape_string($field_identification[1])."'";
+            } else	{
+                $sql .=	"WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
+            }
+            
+            if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
+                $sql .=  "AND access_url_id = $url_access_id";
+            }            
+            
 		} else {
-
-		$sql = "SELECT $select_fields
-				FROM $user_table u
-				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+            $sql = "SELECT $select_fields
+                    FROM $user_table u
+                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
@@ -515,14 +525,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			} else	{
 				$sql .=	"WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
 			}
-
-			//showing only the courses of the current Dokeos access_url_id
-			global $_configuration;
+            
+			//showing only the courses of the current Chamilo access_url_id
+			
 			if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
-				$url_access_id = api_get_current_access_url_id();
+			
 				if ($url_access_id !=-1) {
 
-					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 					$sql = "SELECT $select_fields
 						FROM $user_table u
 						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
@@ -542,8 +551,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 					} else	{
 						$sql .=	"WHERE  cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
 					}
-
-				}
+				}              
 			}
 		}
 	}

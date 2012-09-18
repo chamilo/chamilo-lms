@@ -2339,15 +2339,18 @@ class SessionManager {
         $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1))); 
 
         $rules = array();
+        /*
         $now = new DateTime();
         $now->add(new DateInterval('P30D'));
-        $one_month = $now->format('Y-m-d H:m:s');
+        $one_month = $now->format('Y-m-d H:m:s');*/
 
         //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
         //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
         //$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
         //$rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
         //$rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
+        
+//        var_dump($fields);exit;
 
         if (!empty($fields)) {
             foreach ($fields as $field) {
@@ -2438,11 +2441,13 @@ class SessionManager {
             $simple_column_name[] = $col_model['name'];
         }
          
-        return array(
+        $return_array =  array(
             'columns' => $columns, 
             'column_model' => $column_model, 
             'rules' => $rules,
-            'simple_column_name' => $simple_column_name
+            'simple_column_name' => $simple_column_name            
         );
+        
+        return $return_array;
     }   
 }

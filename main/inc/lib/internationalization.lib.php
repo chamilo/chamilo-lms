@@ -690,7 +690,7 @@ function api_format_date($time, $format = null, $language = null) {
     if (is_int($format)) {
         switch ($format) {
         	case DATE_FORMAT_NUMBER:        		
-        		$date_format = get_lang('dateFormatShortNumber', '', $language);                
+        		$date_format = get_lang('dateFormatShortNumber', '', $language);                                 		                
         		if (IS_PHP_53 && INTL_INSTALLED) {
         			$datetype = IntlDateFormatter::SHORT;
         			$timetype = IntlDateFormatter::NONE;
@@ -755,18 +755,24 @@ function api_format_date($time, $format = null, $language = null) {
     } else {
         $date_format = $format;
     }
-
-    if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
+    
+    //if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {        
+    if (0) {
+        //if using PHP 5.3 format dates like: $dateFormatShortNumber, can't be used
+        //
         // Use ICU
         if (is_null($language)) {
             $language = api_get_language_isocode();
         }
-        $date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
-       
-        $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
-    } else {
-        // We replace %a %A %b %B masks of date format with translated strings.
+        /*$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());                        
+        $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');*/        
+        
+        $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
+        //$date_formatter->setPattern($date_format);
+        $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
 
+    } else {
+        // We replace %a %A %b %B masks of date format with translated strings
         $translated = &_api_get_day_month_names($language);
         $date_format = str_replace(array('%A', '%a', '%B', '%b'),
         array($translated['days_long'][(int)strftime('%w', $time )],

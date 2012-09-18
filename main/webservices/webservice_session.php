@@ -31,7 +31,7 @@ class WSSession extends WS {
 	 * @param array Array of extra fields
 	 * @return mixed Generated id in case of success, WSError otherwise
 	 */
-	protected function createSessionHelper($name, $start_date, $end_date, $nb_days_access_before, $nb_days_access_after, $nolimit, $visibility, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $extras) {
+	protected function createSessionHelper($name, $start_date, $end_date, $coach_access_start_date, $coach_access_end_date, $nolimit, $visibility, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $extras) {
 		// Verify that coach exists and get its id
 		$user_id = $this->getUserId($user_id_field_name, $user_id_value);
 		if($user_id instanceof WSError) {
@@ -47,7 +47,17 @@ class WSSession extends WS {
 			$ed_element = intval($ed_element);
 		}
 		// Try to create the session
-		$session_id = SessionManager::create_session($name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+        $params = array(
+            'name' => $name,
+            'access_start_date' => $start_date,
+            'access_end_date' => $end_date,
+            'coach_access_start_date' => $coach_access_start_date,
+            'coach_access_end_date' => $coach_access_end_date,
+            'visibility' => $visibility
+        );
+        
+		$session_id = SessionManager::add($params);
+        
 		if(!is_int($session_id)) {
 			return new WSError(301, 'Could not create the session');
 		} else {
@@ -153,7 +163,7 @@ class WSSession extends WS {
 	 * @param array Array of extra fields
 	 * @return mixed True on success, WSError otherwise
 	 */
-	protected function editSessionHelper($name, $start_date, $end_date, $nb_days_access_before, $nb_days_access_after, $nolimit, $visibility, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $extras) {
+	protected function editSessionHelper($name, $start_date, $end_date, $coach_access_start_date, $coach_access_end_date, $nolimit, $visibility, $user_id_field_name, $user_id_value, $session_id_field_name, $session_id_value, $extras) {
 		$session_id = $this->getSessionId($session_id_field_name, $session_id_value);
 		if($session_id instanceof WSError) {
 			return $session_id;
@@ -163,16 +173,17 @@ class WSSession extends WS {
 			if($user_id instanceof WSError) {
 				return $user_id;
 			}
-			// Build the date
-			$start_date_array = explode('-', $start_date);
-			foreach($start_date_array as &$sd_element) {
-				$sd_element = intval($sd_element);
-			}
-			$end_date_array = explode('-', $end_date);
-			foreach($end_date_array as &$ed_element) {
-				$ed_element = intval($ed_element);
-			}
-			$result_id = SessionManager::edit_session($session_id, $name, $start_date_array[0], $start_date_array[1], $start_date_array[2], $end_date_array[0], $end_date_array[1], $end_date_array[2], (int)$nb_days_access_before, (int)$nb_days_access_after, (int)$nolimit, $user_id, 0, (int)$visibility);
+            $params = array(
+              'id' =>   $session_id,
+                'name' => $name,
+               'access_start_date' => $start_date,
+                'access_end_date' => $end_date,
+                'coach_access_start_date' => $coach_access_start_date,
+                'coach_access_end_date' => $coach_access_end_date,
+                'visibility' => $visibility
+            );
+			$result_id = SessionManager::update($params);
+
 			if(!is_int($result_id)) {
 				return new WSError(302, 'Could not edit the session');
 			} else {

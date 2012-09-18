@@ -207,7 +207,7 @@ $form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
 
 $extra_data = UserManager::get_extra_user_data(0, true);
 
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_add');
+$return_params = ExtraField::set_extra_fields_in_form($form, $extra_data, 'user_add', false, null, 'user');
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

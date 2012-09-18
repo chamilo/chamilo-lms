@@ -819,47 +819,36 @@ class CourseHome {
      * @return string	session data
      */
     public static function show_session_data($id_session) {
-        $session_table 			= Database::get_main_table(TABLE_MAIN_SESSION);
-        $user_table 			= Database::get_main_table(TABLE_MAIN_USER);
-        $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
         if ($id_session != strval(intval($id_session))) {
             return '';
         } else {
             $id_session = intval($id_session);
         }
-
-        $sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-                    FROM '.$session_table.'
-                LEFT JOIN '.$user_table.'
-                    ON id_coach = user_id
-                WHERE '.$session_table.'.id='.$id_session;
-
-        $rs = Database::query($sql);
-        $session = Database::store_result($rs);
-        $session = $session[0];
-
-        $sql_category = 'SELECT name FROM '.$session_category_table.' WHERE id = "'.intval($session['session_category_id']).'"';
-        $rs_category = Database::query($sql_category);
-        $session_category = '';
-        if (Database::num_rows($rs_category) > 0) {
-            $rows_session_category = Database::store_result($rs_category);
-            $rows_session_category = $rows_session_category[0];
-            $session_category = $rows_session_category['name'];
+        
+        $session_info = api_get_session_info($id_session);
+        $session_category = SessionManager::get_session_category($session_info['session_category_id']);
+        
+        $session_category_name = null;
+        if (!empty($session_category)) {
+            $session_category_name = $session_category['name'];
         }
-
-        if ($session['date_start'] == '00-00-0000') {
-            $msg_date = get_lang('NoTimeLimits');
-        } else {
-            $msg_date = get_lang('From').' '.$session['date_start'].' '.get_lang('To').' '.$session['date_end'];
-        }
-
+        $user_info = api_get_user_info($session_info['id_coach']);
+        $general_coach = null;
+        if (!empty($user_info)) {
+            $general_coach = $user_info['complete_name'].' ('.$user_info['username'].')';
+        }        
+        $msg_date = SessionManager::parse_session_dates($session_info);
+        
         $output  = '';
         if (!empty($session_category)) {
-            $output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category .'</b></td></tr>';
+            $output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category_name .'</b></td></tr>';
         }
-        $output .= '<tr><td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session['name'] .'</b></td><td>'. get_lang('GeneralCoach') . ': ' . '<b>' . $session['lastname'].' '.$session['firstname'].' ('.$session['username'].')' .'</b></td></tr>';
-        $output .= '<tr><td>'. get_lang('SessionIdentifier') . ': '. Display::return_icon('star.png', ' ', array('align' => 'absmiddle')) .'</td><td>'. get_lang('Date') . ': ' . '<b>' . $msg_date .'</b></td></tr>';
+        $output .= '<tr>
+                        <td style="width:50%">'. get_lang('SessionName') . ': ' . '<b>' . $session_info['name'] .'</b></td>
+                        <td>'. get_lang('GeneralCoach') . ': ' . '<b>' .$general_coach.'</b></td></tr>';
+        $output .= '<tr><td>'. get_lang('SessionIdentifier') . ': '. Display::return_icon('star.png', ' ', array('align' => 'absmiddle')) .'</td>
+                        <td>'. get_lang('Date') . ': ' . '<b>' . $msg_date .'</b></td></tr>';
 
         return $output;
     }

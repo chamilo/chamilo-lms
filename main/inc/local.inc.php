@@ -108,12 +108,6 @@
 *    @package chamilo.include
 */
 
-/*
-	 INIT SECTION
-	 variables should be initialised here
- */
-
-//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
 use \ChamiloSession as Session;
@@ -854,7 +848,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     }
 
-
     if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
     
         //Check if user is subscribed in a course
@@ -870,7 +863,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
             $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
             $is_courseMember     = true;
-
           
             $_courseUser['role'] = $cuData['role'];
             Session::write('_courseUser',$_courseUser);

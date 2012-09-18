@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // TODO: Is this file deprecated?
+exit;
 
 /**
  * @package chamilo.tracking
@@ -13,8 +14,9 @@
 
 /* INIT SECTION */
 
-$uInfo = $_REQUEST['uInfo'];
-$view  = $_REQUEST['view'];
+
+$uInfo = isset($_REQUEST['uInfo']) ? $_REQUEST['uInfo'] : null;
+$view  = isset($_REQUEST['view']) ? $_REQUEST['view'] : null;
 
 // name of the language file that needs to be included
 $language_file = 'tracking';
@@ -45,7 +47,7 @@ $interbreadcrumb[]= array ("url"=>"../group/group.php", "name"=> get_lang('BredC
 $interbreadcrumb[]= array ("url"=>"../group/group_space.php?gidReq=$_gid", "name"=> get_lang('BredCrumpGroupSpace'));
 */
 
-if(isset($uInfo)) {
+if ($uInfo) {
     $interbreadcrumb[]= array ('url'=>'../user/userInfo.php?uInfo='.Security::remove_XSS($uInfo), "name"=> api_ucfirst(get_lang('Users')));
 }
 
@@ -74,23 +76,8 @@ $is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($
 // Database Table Definitions
 $TABLECOURSUSER	        	= Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $TABLEUSER	        		= Database::get_main_table(TABLE_MAIN_USER);
-$tbl_session_course_user 	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-$tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
-$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 
-$sql = "SELECT 1
-        FROM $tbl_session_course_user AS session_course_user
-        INNER JOIN $tbl_session AS session
-            ON session_course_user.id_session = session.id
-            AND ((date_start<=NOW()
-            AND date_end>=NOW())
-            OR (date_start='0000-00-00' AND date_end='0000-00-00'))
-        WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
-//echo $sql;
-$result=Database::query($sql);
-if(!Database::num_rows($result)){
-    $disabled = true;
-}
+$TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 
 $tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);

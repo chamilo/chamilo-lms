@@ -14,7 +14,7 @@ courses/*
 main/garbage/*
 !main/garbage/index.html
 !main/garbage/Serializer
-
+vendor/*
 #Home
 home/*
 #!home/default_platform_document

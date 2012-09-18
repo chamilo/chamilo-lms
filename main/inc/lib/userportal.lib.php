@@ -966,8 +966,10 @@ class IndexManager {
                         
                         $html_courses_session = '';
                         $count = 0;
-                        foreach ($session['courses'] as $course) {                          
-                            $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id);                            
+                        foreach ($session['courses'] as $course) {
+                            if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id);
+                            }
                             $count_courses_session++;
                             $count++;                          
                         }

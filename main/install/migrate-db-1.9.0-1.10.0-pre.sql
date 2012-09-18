@@ -18,17 +18,9 @@
 ALTER TABLE track_e_online ADD INDEX idx_trackonline_uat (login_user_id, access_url_id, login_date);
 ALTER TABLE track_e_default ADD COLUMN session_id INT NOT NULL DEFAULT 0;
 
-
--- Do not move this query
-
--- Main changes
-
--- Courses changes c_XXX
-
-ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
-ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id(c_id, lp_view_id, lp_item_id);
-ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
-
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'false', 'No');
 
 ALTER TABLE notification ADD COLUMN sender_id INT NOT NULL DEFAULT 0;
 
@@ -52,9 +44,14 @@ ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 
 CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
--- Normal tables
+-- Courses changes c_XXX
 
-UPDATE settings_current SET selected_value = '1.10.0.19570' WHERE variable = 'chamilo_database_version';
+ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
+ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id(c_id, lp_view_id, lp_item_id);
+ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
+
+-- Do not move this 
+UPDATE settings_current SET selected_value = '1.10.0.19730' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 -- All stats DB changes will be added in the "main zone"

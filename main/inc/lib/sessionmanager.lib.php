@@ -1756,7 +1756,8 @@ class SessionManager {
                 WHERE session_rcru.id_user = user.user_id AND 
                 session_rcru.id_session = '".intval($session_id)."' AND 
                 session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
-                user.user_id = ".intval($user_id);        
+                user.user_id = ".intval($user_id);    
+        
         $result = Database::query($sql);
         $status = false;
         if (Database::num_rows($result)) {
@@ -1911,7 +1912,7 @@ class SessionManager {
     	return $sid;
     }
     
-    function user_is_general_coach($user_id, $session_id) {
+    static function user_is_general_coach($user_id, $session_id) {
     	$session_id = intval($session_id);
     	$user_id = intval($user_id);
     	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);    	

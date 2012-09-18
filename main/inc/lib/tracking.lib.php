@@ -3346,7 +3346,7 @@ class TrackingCourseLog {
 		return array('table_name' => $table_name,'link_tool' => $link_tool,'id_tool' => $id_tool);
 	}
 
-	function display_additional_profile_fields() {
+	static function display_additional_profile_fields() {
 		// getting all the extra profile fields that are defined by the platform administrator
 		$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
 
@@ -3492,7 +3492,7 @@ class TrackingCourseLog {
 	 * Get number of users for sortable with pagination
 	 * @return int
 	 */
-	function get_number_of_users() {
+	static function get_number_of_users() {
 		global $user_ids;
 		return count($user_ids);
 	}
@@ -3501,7 +3501,7 @@ class TrackingCourseLog {
 	 * Get data for users list in sortable with pagination
 	 * @return array
 	 */
-	function get_user_data($from, $number_of_items, $column, $direction) {
+	static function get_user_data($from, $number_of_items, $column, $direction) {
 		global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
 
 		$course_code        = Database::escape_string($course_code);

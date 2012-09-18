@@ -894,7 +894,8 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19570','DatabaseVersion','', NULL, NULL, 0);
+('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19730','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1236,7 +1237,9 @@ VALUES
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
 ('enable_webcam_clip', 'true', 'Yes'),
-('enable_webcam_clip', 'false', 'No');
+('enable_webcam_clip', 'false', 'No'),
+('session_tutor_reports_visibility', 'true', 'Yes'),
+('session_tutor_reports_visibility', 'false', 'No');
 
 UNLOCK TABLES;
 

@@ -38,6 +38,15 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
+//Soft user status
+define('PLATFORM_ADMIN', 11);
+define('SESSION_COURSE_COACH', 12);
+define('SESSION_GENERAL_COACH', 13);
+define('COURSE_STUDENT', 14);   //student subscribed in a course
+define('SESSION_STUDENT', 15);  //student subscribed in a session course
+define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
+
+
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
@@ -1648,6 +1657,19 @@ function get_status_from_code($status_code) {
             return get_lang('SessionsAdmin', '');
         case DRH:
             return get_lang('Drh', '');
+        // "New" roles            
+        case PLATFORM_ADMIN:
+            return get_lang('Admin');
+        case SESSION_COURSE_COACH:
+            return get_lang('SessionCourseCoach');
+        case SESSION_GENERAL_COACH:
+            return get_lang('SessionGeneralCoach');    
+        case COURSE_STUDENT:
+            return get_lang('StudentInCourse');    
+        case SESSION_STUDENT:
+            return get_lang('StudentInSession');    
+        case COURSE_TUTOR:
+            return get_lang('CourseTutor');
     }
 }
 
@@ -2259,6 +2281,25 @@ function api_get_user_platform_status($user_id = false) {
     }
 
     return $status;
+}
+
+function api_is_course_session_coach($user_id, $course_code, $session_id) {    
+    $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    
+    $user_id = intval($user_id);
+    $session_id = intval($session_id);
+    $course_code = Database::escape_string($course_code);
+    
+    $sql = "SELECT DISTINCT id
+				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."'  AND 
+                        session_rc_ru.course_code = '$course_code' AND 
+                        session_rc_ru.status = 2 AND 
+                        session_rc_ru.id_session = '$session_id'";
+    $result = Database::query($sql);
+    return Database::num_rows($result) > 0;    
 }
 
 /**
@@ -6160,4 +6201,113 @@ function api_get_datetime_picker_js($htmlHeadXtra) {
         $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
     }
     return $htmlHeadXtra;
+}
+
+
+function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
+    $user_roles = array();    
+    /*$user_info = api_get_user_info($user_id);
+    $user_roles[] = $user_info['status'];*/
+    
+    $url_id = api_get_current_access_url_id();    
+    if (api_is_platform_admin_by_id($user_id, $url_id)) {
+        $user_roles[] = PLATFORM_ADMIN;
+    }   
+        
+    /*if (api_is_drh()) {    
+        $user_roles[] = DRH;    
+    }*/
+     
+    if (!empty($session_id)) {
+        if (SessionManager::user_is_general_coach($user_id, $session_id)) {
+            $user_roles[] = SESSION_GENERAL_COACH;
+        }
+    }
+    
+    if (!empty($course_code)) {
+        if (empty($session_id)) {
+            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+                $user_roles[] = COURSEMANAGER;
+            }        
+            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+                $user_roles[] = COURSE_TUTOR;
+            }
+
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                $user_roles[] = COURSE_STUDENT;
+            }
+        } else {
+            $user_status_in_session = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+            
+            if (!empty($user_status_in_session)) {
+                if ($user_status_in_session == 0) {
+                    $user_roles[] = SESSION_STUDENT;
+                }
+                if ($user_status_in_session == 2) {
+                    $user_roles[] = SESSION_COURSE_COACH;      
+                }
+            }      
+            
+            /*if (api_is_course_session_coach($user_id, $course_code, $session_id)) {
+               $user_roles[] = SESSION_COURSE_COACH; 
+            }*/
+        }
+    }    
+    return $user_roles;
+}
+function api_get_roles_to_string($roles) {
+    $role_names = array();
+    if (!empty($roles)) {
+        foreach ($roles as $role) {
+            $role_names[] = get_status_from_code($role);
+        }
+    }
+    if (!empty($role_names)) {
+        return implode(', ', $role_names);
+    }
+    return null;
+}
+
+function role_actions() {
+    return array(
+        'course' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        ),
+        'admin' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        )
+    );    
+}
+
+function api_coach_can_edit_view_results($course_code = null, $session_id = null) {
+    $user_id = api_get_user_id();
+    
+    if (empty($course_code)) {
+        $course_code = api_get_course_id();
+    }
+    
+    if (empty($session_id)) {
+        $session_id = api_get_session_id();
+    }
+    
+    if (api_is_platform_admin()) {
+        return true;
+    }
+       
+    $roles = api_detect_user_roles($user_id, $course_code, $session_id);
+                
+    if (in_array(SESSION_COURSE_COACH, $roles)) {     
+        return api_get_setting('session_tutor_reports_visibility') == 'true';
+    } else {
+        if (in_array(COURSEMANAGER, $roles)) {
+            return true;
+        }
+        return false;
+    }
 }

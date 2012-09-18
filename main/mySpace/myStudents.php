@@ -754,8 +754,10 @@ if (empty($_GET['details'])) {
     		// Latest exercise results in a LP                
             $score_latest = Tracking :: get_avg_student_score($student_id, $course_code, array($lp_id),$session_id, false, true);
     
-    		if ($i % 2 == 0) $css_class = "row_even";
-    		else $css_class = "row_odd";
+    		if ($i % 2 == 0) 
+                $css_class = "row_even";
+    		else 
+                $css_class = "row_odd";
     
     		$i++;
     		
@@ -838,8 +840,8 @@ if (empty($_GET['details'])) {
 			</tr>
 		<?php
 
-		$csv_content[] = array ();
-		$csv_content[] = array (
+		$csv_content[] = array();
+		$csv_content[] = array(
 			get_lang('Exercices'),
 			get_lang('Score'),
 			get_lang('Attempts')
@@ -867,8 +869,10 @@ if (empty($_GET['details'])) {
 					$count_attempts
 				);
 
-				if ($i % 2) $css_class = 'row_odd';
-				else $css_class = 'row_even';
+				if ($i % 2) 
+                    $css_class = 'row_odd';
+				else 
+                    $css_class = 'row_even';
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
 				
@@ -897,8 +901,14 @@ if (empty($_GET['details'])) {
 				$result_last_attempt = Database::query($sql_last_attempt);
 				if (Database :: num_rows($result_last_attempt) > 0) {
 					$id_last_attempt = Database :: result($result_last_attempt, 0, 0);
-					if ($count_attempts > 0)
-						echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+					if ($count_attempts > 0) {
+                        if (api_coach_can_edit_view_results($course_code, $session_id)) {
+                            echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+                        } else {
+                            echo Display::return_icon('quiz_na.png', get_lang('Exercise'));                            
+                            //echo '<a href="../exercice/exercise_show.php?id=' . $id_last_attempt . '&cidReq='.$course_code.'&session_id='.$session_id.'&student='.$student_id.'&origin='.(empty($_GET['origin'])?'tracking':Security::remove_XSS($_GET['origin'])).'"> <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" border="0" /> </a>';
+                        }
+                    }
 				}
 				echo '</td>';
 				

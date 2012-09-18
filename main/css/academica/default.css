@@ -229,15 +229,6 @@ ul#navigation .student-connect a {
 	list-style-type: none;
 	margin-bottom: 5px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-}
 
 .courses a {
 	text-decoration:underline;

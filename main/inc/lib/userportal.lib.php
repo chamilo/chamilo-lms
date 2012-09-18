@@ -976,7 +976,7 @@ class IndexManager {
                         
                         $params = array();
                         if ($count > 0) {                                                                             
-                            $params['icon'] = Display::return_icon('window_list.png', $session['session_name'], array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session_id)) . ' ';
+                            $params['icon'] = Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
 
                             if (api_is_drh()) {
                                 $session_link = $session['session_name'];

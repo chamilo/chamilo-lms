@@ -482,16 +482,11 @@ a.tag {
     margin-bottom: 5px;
     height: 30px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-    margin-bottom: 5px;
-    height:35px;
-}
-.session_course_item {
-    /* padding: 0px; */
-    margin: 0px;
-    margin-bottom:15px;
-    font-size:135%;
+
+/* Fixes course items with bootstrap 2.1.1*/
+.course_item h3{
+    margin:0px 0px 5px 0px;
+    line-height: 28px;
 }
 
 .userportal-course-item {
@@ -507,9 +502,6 @@ a.tag {
     margin-bottom: 7px;
 }
 
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-    font-size:80%;
-}
 #maincontent .courseslist li {
     margin-bottom:8px;
 }
@@ -2011,6 +2003,17 @@ input.maininput:focus {
     margin-bottom: 20px;
 }
 
+/* session.php */
+#session_course_list .big_icon {
+    padding:10px;
+    text-align:center;
+}
+
+#session_course_list .content {
+    text-align:center;
+    margin-bottom: 20px;
+}
+
 .big_icon img {
     padding:5px;
     -moz-border-radius:10px;
@@ -2060,18 +2063,7 @@ input.maininput:focus {
     padding: 18px;
 }
 
-/* Makes the course elements more readable */
-.userportal-course-item {
-
-}
-
-.session_course_item {
-    padding: 6px 0px 6px 5px ;
-}
-
 /* LP tool*/
-
-
 #lp_overview .thumbnail {
     text-align: center;
 }
@@ -3810,7 +3802,7 @@ a.forum_group_link {
 }
 
 #main_content .course_item {
-    padding: 5px 0px 5px 0px;
+    padding: 0px 0px 16px 0px;
 }
 
 /* actions */

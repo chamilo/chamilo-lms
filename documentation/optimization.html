@@ -77,6 +77,14 @@ An optional additional caching mechanism you may use is the realpath_cache_size 
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
+<br /><br />
+In Chamilo 1.9 in particular, due to the merge of all databases into one, you might experience performance issue if you have many learning paths with many items in them.<br />
+To solve this performance issue, you can execute the following queries manually in your database:<br />
+<pre>
+ALTER TABLE lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
+ALTER TABLE lp_item_view ADD INDEX  idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id);
+</pre>
+These will be available in Chamilo 1.10 directly, but we cannot put them into Chamilo 1.9 from now on for organizational reasons.<br />
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />

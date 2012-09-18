@@ -8,7 +8,7 @@
 */
 $stok = Security::get_token();
 ?>
-<script type="text/javascript">
+<script>
     $(document).ready( function() {
         $('.star-rating li a').live('click', function(event) {
         var id = $(this).parents('ul').attr('id');
@@ -111,6 +111,8 @@ $stok = Security::get_token();
         <?php
         if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
+        
+        if (!empty($content)) { echo $content; }
 
         if (!empty($search_term)) {
             echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
@@ -185,7 +187,7 @@ $stok = Security::get_token();
 
                     // If user is already subscribed to the course
                     if (!api_is_anonymous() && in_array($course['code'], $user_coursecodes)) {
-			if ($course['unsubscribe'] == UNSUBSCRIBE_ALLOWED) {
+                        if ($course['unsubscribe'] == UNSUBSCRIBE_ALLOWED) {
                             echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=unsubscribe&amp;sec_token='.$stok.'&amp;unsubscribe='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Unsubscribe').'</a>';
                         }
                         echo '<br />';
@@ -193,16 +195,15 @@ $stok = Security::get_token();
                         echo Display::label(get_lang("AlreadyRegisteredToCourse"), "info");
                     }
                     echo '</div>';
-
                     echo '</p>';
                     echo '</div>';
-
                     echo '<div class="span2">';
                         echo '<div class="course-block-popularity"><span>'.get_lang('ConnectionsLastMonth').'</span><div class="course-block-popularity-score">'.$count_connections.'</div></div>';
                     echo '</div>';
                 echo '</div></div>';
             }
-        } else {
+        } else {            
+            if (!isset($_POST['subscribe_user_with_password']))
             echo Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
         }
         ?>

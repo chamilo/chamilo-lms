@@ -279,7 +279,7 @@ function get_number_of_users() {
 	} else {
 		// students
 		if (api_get_session_id() != 0) {
-			$sql = "SELECT	COUNT(u.user_id)
+			$sql = "SELECT COUNT(u.user_id)
 					FROM $user_table u
 					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 					WHERE cu.id_user IS NULL AND u.status<>".DRH." AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
@@ -287,7 +287,7 @@ function get_number_of_users() {
 				$url_access_id = api_get_current_access_url_id();
 				if ($url_access_id !=-1) {
 					$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-					$sql = "SELECT	COUTN(u.user_id)
+					$sql = "SELECT COUNT(u.user_id)
 							FROM $user_table u
 							LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user and course_code='".api_get_course_id()."' AND id_session ='".api_get_session_id()."'
 							INNER JOIN  $tbl_url_rel_user as url_rel_user

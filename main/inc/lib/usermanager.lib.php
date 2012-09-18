@@ -2018,11 +2018,11 @@ class UserManager {
 		$condition_date_end = null;
         
 		if ($is_time_over) {
-			$condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
-		} else {
-            if (api_is_allowed_to_edit()) {
-                $condition_date_end = null;
+			$condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";            
+		} else {            
+            if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
+                $condition_date_end = null;                
             } else {
                 //Student can't access before this dates
                 $condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
@@ -2030,7 +2030,7 @@ class UserManager {
 		}
 
         $sql = "SELECT DISTINCT session.id, 
-                                session.name, 
+                                session.name,
                                 
                                 access_start_date, 
                                 access_end_date, 

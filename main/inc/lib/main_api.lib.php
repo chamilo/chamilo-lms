@@ -2241,17 +2241,17 @@ function api_get_user_platform_status($user_id = false) {
             if ($user_course_status) {
                 $course_status = array('id'=> $course_id);
                 switch($user_course_status) {
-                    case 1;
+                    case COURSEMANAGER;
                         $course_status['status'] = 'teacher';
-                    break;
-                    case 5;
+                        break;
+                    case STUDENT;
                         $course_status['status'] = 'student';
                         //check if tutor
                         $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
                         if ($tutor_course_status) {
                             $course_status['status'] = 'tutor';
                         }
-                    break;
+                        break;
                 }
             }
 	    }

@@ -2345,11 +2345,11 @@ class SessionManager {
 
         //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
         //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
-        $rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
-        $rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
-        $rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
+        //$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
+        //$rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
+        //$rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
 
-        if (!empty($fields)) { 
+        if (!empty($fields)) {
             foreach ($fields as $field) {
                 $search_options = array();
                 $type = 'text';        

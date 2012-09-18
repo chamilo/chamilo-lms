@@ -50,9 +50,6 @@ if (isset($_REQUEST['keyword'])) {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';    
 }
 
-//The order is important you need to check the the $column variable in the model.ajax.php file 
-
-                       
 //Autowidth             
 $extra_params['autowidth'] = 'true';
 //Height auto 
@@ -66,7 +63,7 @@ $column_model = $result['column_model'];
 
 $extra_params['postData'] =array (
                     'filters' => array(                                        
-                                        "groupOp" => "OR",                                         
+                                        "groupOp" => "AND",                                         
                                         "rules" => $result['rules'], 
                                         /*array(
                                             array( "field" => "display_start_date", "op" => "gt", "data" => ""),

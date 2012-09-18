@@ -859,11 +859,11 @@ class Display {
         $obj = new stdClass();
 
         if (!empty($url))
-            $obj->url       = $url;
+            $obj->url  = $url;
 
-        $obj->colNames      = $column_names;
-        $obj->colModel      = $column_model;
-        $obj->pager         = '#'.$div_id.'_pager';
+        $obj->colNames = $column_names;
+        $obj->colModel = $column_model;
+        $obj->pager    = '#'.$div_id.'_pager';
 
         $obj->datatype  = 'json';
         
@@ -894,8 +894,6 @@ class Display {
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum     = $extra_params['rowNum'];
         }
-
-        //height: 'auto',
 
         $obj->viewrecords = 'true';
 
@@ -928,14 +926,15 @@ class Display {
         
         //Fixes datainit datepick
         $json_encode = str_replace('"dataInit"','dataInit', $json_encode);
-        $json_encode = str_replace('"dataEvents"','dataEvents', $json_encode);
+        
+        /*$json_encode = str_replace('"dataEvents"','dataEvents', $json_encode);
         $json_encode = str_replace('"type"','type', $json_encode);
         $json_encode = str_replace('"fn"','fn', $json_encode);
         $json_encode = str_replace('"data"','data', $json_encode);
         $json_encode = str_replace('"attr"','attr', $json_encode);
         $json_encode = str_replace('"rel"','rel', $json_encode);
         $json_encode = str_replace('"title"','title', $json_encode);
-        
+        */
         $json_encode = str_replace('"register_second_select"','register_second_select', $json_encode);
         
         $json_encode = str_replace('"fill_second_select"','fill_second_select', $json_encode);

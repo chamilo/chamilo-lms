@@ -298,7 +298,7 @@ $extra_params_courses['pgbuttons'] = false;*/
 //$extra_params_courses['autowidth'] = 'true'; 
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
-$columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));
+$columns        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'true'));

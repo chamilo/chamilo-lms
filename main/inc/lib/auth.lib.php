@@ -614,40 +614,42 @@ class Auth {
      * @return string  Message about results
      */
     public function subscribe_user($course_code) {
-        global $_user;
-
+        $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
+        
         if ($all_course_information['registration_code'] == '' || $_POST['course_registration_code'] == $all_course_information['registration_code']) {
             if (api_is_platform_admin()) {
                 $status_user_in_new_course = COURSEMANAGER;
             } else {
                 $status_user_in_new_course = null;
             }
-            if (CourseManager::add_user_to_course($_user['user_id'], $course_code, $status_user_in_new_course)) {
+            if (CourseManager::add_user_to_course($user_id, $course_code, $status_user_in_new_course)) {
                 $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $course_code);
                 if ($send == 1) {
-                    CourseManager::email_to_tutor($_user['user_id'], $course_code, $send_to_tutor_also = false);
+                    CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = false);
                 } else if ($send == 2) {
-                    CourseManager::email_to_tutor($_user['user_id'], $course_code, $send_to_tutor_also = true);
+                    CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
                 }
-                return get_lang('EnrollToCourseSuccessful');
+                $message = get_lang('EnrollToCourseSuccessful');
             } else {
-                return get_lang('ErrorContactPlatformAdmin');
-            }
+                $message = get_lang('ErrorContactPlatformAdmin');
+            }            
+            return array('message' => $message);
         } else {
-
-            $return = '';
             if (isset($_POST['course_registration_code']) && $_POST['course_registration_code'] != $all_course_information['registration_code']) {
                 return false;
             }
-            $return .= get_lang('CourseRequiresPassword') . '<br />';
-            $return .= $all_course_information['visual_code'] . ' - ' . $all_course_information['title'];
-
-            $return .= "<form action=\"" . api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_course&sec_token=" . $_SESSION['sec_token'] . "&subscribe_course=" . $all_course_information['code'] . "&category_code=" . $all_course_information['category_code'] . "   \" method=\"post\">";
-            $return .= '<input type="hidden" name="token" value="' . $_SESSION['sec_token'] . '" />';
-            $return .= "<input type=\"text\" name=\"course_registration_code\" value=\"" . $_POST['course_registration_code'] . "\" />";
-            $return .= "<input type=\"submit\" name=\"submit_course_registration_code\" value=\"OK\" alt=\"" . get_lang('SubmitRegistrationCode') . "\" /></form>";
-            return $return;
+            $message = get_lang('CourseRequiresPassword') . '<br />';
+            $message .= $all_course_information['title'].' ('.$all_course_information['visual_code'].') ';
+            
+            $action  = api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_user_with_password&sec_token=" . $_SESSION['sec_token'];            
+            $form = new FormValidator('subscribe_user_with_password', 'post', $action);
+            $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
+            $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);            
+            $form->addElement('text', 'course_registration_code');
+            $form->addElement('button', 'submit', get_lang('SubmitRegistrationCode'));
+            $content = $form->return_form();
+            return array('message' => $message, 'content' => $content);
         }
     }
 }

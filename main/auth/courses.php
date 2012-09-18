@@ -73,7 +73,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses','display_random_courses');
+$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses' , 'subscribe_user_with_password');
 $action = 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
@@ -85,6 +85,10 @@ if ($action == 'createcoursecategory') {
 	$nameTools = get_lang('CreateCourseCategory');
 }
 if ($action == 'subscribe') {
+	$nameTools = get_lang('CourseManagement');
+}
+
+if ($action == 'subscribe_user_with_password') {
 	$nameTools = get_lang('CourseManagement');
 }
 
@@ -164,9 +168,9 @@ if (isset($_REQUEST['search_course'])) {
     }
 }
 
-// subscribe user to course
-if (isset($_GET['subscribe_course'])) {
-    if ($ctok == $_GET['sec_token']) {        
+// Subscribe user to course
+if (isset($_REQUEST['subscribe_course'])) {    
+    if ($ctok == $_GET['sec_token']) {
         $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);                
     }
 }
@@ -185,6 +189,10 @@ if (isset($_POST['unsubscribe'])) {
 	}
 }
 switch ($action) {
+    case 'subscribe_user_with_password':        
+        $courses_controller->subscribe_user($_POST['subscribe_user_with_password'], $_POST['search_term'], $_POST['category_code']);                       
+        exit;
+        break;
     case 'createcoursecategory':
         $courses_controller->categories_list($action);
         break;

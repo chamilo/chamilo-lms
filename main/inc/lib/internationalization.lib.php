@@ -690,9 +690,9 @@ function api_format_date($time, $format = null, $language = null) {
     if (is_int($format)) {
         switch ($format) {
         	case DATE_FORMAT_NUMBER:        		
-        		$date_format = get_lang('dateFormatShortNumber', '', $language);
+        		$date_format = get_lang('dateFormatShortNumber', '', $language);                
         		if (IS_PHP_53 && INTL_INSTALLED) {
-        			$datetype = IntlDateFormatter::LONG;
+        			$datetype = IntlDateFormatter::SHORT;
         			$timetype = IntlDateFormatter::NONE;
         		}
         		break;
@@ -762,8 +762,8 @@ function api_format_date($time, $format = null, $language = null) {
             $language = api_get_language_isocode();
         }
         $date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+       
         $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');
-
     } else {
         // We replace %a %A %b %B masks of date format with translated strings.
 

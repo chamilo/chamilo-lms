@@ -77,5 +77,6 @@ $Username = "Nombre de usuario";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adelante, vaya al catálogo de cursos %s para inscribirte en un curso que le interese. Una vez inscrito/a, el curso aparecerá %s, en lugar de este mensaje.";
 $HelloXAsYouCanSeeYourCourseListIsEmpty = "Hola %s, te deseamos la bienvenida,<br />
 Como puedes ver, tu lista de cursos todavía está vacía. Esto es porque no estás inscrito/a a algun curso todavía!";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Permitanos un poco de tiempo para suscribirse a uno de nuestros cursos. Si considera que nos olvidamos de Ud., póngase en contacto con los administradores del portal. Puede encontrar sus datos de contacto en el pie de página.";
 $Profile = "Perfil";
 ?>

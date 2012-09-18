@@ -1253,6 +1253,7 @@ $SessionStartDate = "Fecha de inicio de acceso";
 $SessionDisplayEndDate = "Fecha de fin a mostrar";
 $SessionDisplayStartDate = "Fecha de inicio a mostrar";
 $UserHasNoCourse = "El usuario no tiene inscripción a cursos";
+$SessionTutorsCanSeeExpiredSessionsResultsTitle = "Visibilidad de reportes para los tutores de sesión";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "La importación XML le permitirá añadir más información y crear recursos (cursos, usuarios), mientras la importación CSV solamente creará sesiones y usará recursos ya existentes.";
 $ShowLinkBugNotificationTitle = "Mostrar el enlace para informar de errores";
 $ShowLinkBugNotificationComment = "Mostrar un enlace en la cabecera para informar de un error a la plataforma de apoyo (http://support.chamilo.org). Al hacer clic en el enlace el usuario será dirigido al sistema de soporte de Chamilo, en el que una página wiki describe el procedimiento para informar de errores.";

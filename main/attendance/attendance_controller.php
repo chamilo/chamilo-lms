@@ -443,7 +443,7 @@
         $head_table = array('#', get_lang('Name'));
         foreach ($data_array['attendant_calendar'] as $class_day) {            
             //$head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_SHORT).' <br />'.api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
-            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER);           
+            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER_NO_YEAR);           
         }        
         $data_table[] = $head_table;
         

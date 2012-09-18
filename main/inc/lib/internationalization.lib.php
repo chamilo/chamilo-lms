@@ -33,6 +33,7 @@ define('DATE_TIME_FORMAT_LONG_24H', 5); // August 25, 2009 at 15:28
 
 define('DATE_TIME_FORMAT_SHORT', 6);	// Aug 25, 2009 at 03:28 PM 
 define('DATE_TIME_FORMAT_SHORT_TIME_FIRST', 7);	// 03:28 PM, Aug 25 2009
+define('DATE_FORMAT_NUMBER_NO_YEAR',  8);	// 25.08
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
@@ -689,6 +690,13 @@ function api_format_date($time, $format = null, $language = null) {
 
     if (is_int($format)) {
         switch ($format) {
+            case DATE_FORMAT_NUMBER_NO_YEAR:
+                $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);                                 		                
+        		if (IS_PHP_53 && INTL_INSTALLED) {
+        			$datetype = IntlDateFormatter::SHORT;
+        			$timetype = IntlDateFormatter::NONE;
+        		}
+                break;
         	case DATE_FORMAT_NUMBER:        		
         		$date_format = get_lang('dateFormatShortNumber', '', $language);                                 		                
         		if (IS_PHP_53 && INTL_INSTALLED) {

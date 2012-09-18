@@ -65,7 +65,7 @@ if (api_is_allowed_to_edit(null, true)) {
         if (count($users_in_course) > 0) {
             $form->display(); 
         }
-        echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'">'.
+        echo '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.$param_gradebook.'&filter='.$default_filter.'">'.
                 Display::return_icon('pdf.png',get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }

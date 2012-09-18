@@ -33,8 +33,7 @@ class SessionField extends ExtraField {
             $defaults = $this->get($id);            
         }
 
-        $form->addElement('header', $header);        
-
+        $form->addElement('header', $header);
         $form->addElement('text', 'field_display_text', get_lang('Name'), array('class' => 'span5'));
 
         // Field type
@@ -70,7 +69,9 @@ class SessionField extends ExtraField {
         $group = array();
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_filter', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldFilter'), '', false);
+        $form->addGroup($group, '', get_lang('FieldFilter'), '', false);        
+        
+        $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
 
         /* $status_list = $this->get_status_list();         
           $form->addElement('select', 'status', get_lang('Status'), $status_list); */

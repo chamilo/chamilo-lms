@@ -304,9 +304,9 @@ switch ($action) {
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
-    case 'get_sessions':        
-        $result = SessionManager::get_session_columns();
-        $columns = $result['simple_column_name'];        
+    case 'get_sessions':   
+        $session_columns = SessionManager::get_session_columns();
+        $columns = $session_columns['simple_column_name'];        
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
@@ -454,7 +454,7 @@ switch ($action) {
         break;
     case 'get_extra_fields':         
         $obj = new ExtraField($type);
-        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter');
+        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter', 'field_order');
         $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {

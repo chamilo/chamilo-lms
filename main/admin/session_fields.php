@@ -42,22 +42,25 @@ if ($action == 'add') {
 $url            = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_extra_fields&type=session';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file 
-$columns        = array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Type'), get_lang('FieldChangeability'), get_lang('Visibility'), get_lang('Filter'), get_lang('Actions'));
+$columns        = array(get_lang('Name'), get_lang('FieldLabel'),  get_lang('Type'), get_lang('FieldChangeability'), get_lang('Visibility'), get_lang('Filter'), get_lang('FieldOrder'), get_lang('Actions'));
 
 //Column config
 $column_model   = array(
                         array('name'=>'field_display_text', 'index'=>'field_display_text',      'width'=>'180',   'align'=>'left'),
-                        array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'false'),    
-                        array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'false'),    
+                        array('name'=>'field_variable',     'index'=>'field_variable',          'width'=>'',  'align'=>'left','sortable'=>'true'),
+                        array('name'=>'field_type',         'index'=>'field_type',              'width'=>'',  'align'=>'left','sortable'=>'true'),    
+                        array('name'=>'field_changeable',   'index'=>'field_changeable',        'width'=>'50',  'align'=>'left','sortable'=>'true'),    
+                        array('name'=>'field_visible',      'index'=>'field_visible',           'width'=>'40',  'align'=>'left','sortable'=>'true'),                            
+                        array('name'=>'field_filter',       'index'=>'field_filter',            'width'=>'30',  'align'=>'left','sortable'=>'true'),
+                        array('name'=>'field_order',        'index'=>'field_order',             'width'=>'40',  'align'=>'left','sortable'=>'true'),    
                         array('name'=>'actions',            'index'=>'actions',                 'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false')
-                       );            
+);
+
 //Autowidth             
 $extra_params['autowidth'] = 'true';
 //height auto 
-$extra_params['height'] = 'auto'; 
+$extra_params['height'] = 'auto';
+$extra_params['sortname'] = 'field_order';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {

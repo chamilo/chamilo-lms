@@ -407,7 +407,6 @@
         }
         
         $data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id, $filter_type, $my_calendar_id);
-        //$data_array['attendant_calendar'] = $attendance->get_attendance_calendar($attendance_id);
 
         if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
             $data_array['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);
@@ -443,8 +442,9 @@
         
         $head_table = array('#', get_lang('Name'));
         foreach ($data_array['attendant_calendar'] as $class_day) {            
-            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_SHORT).' <br />'.api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
-        }                        
+            //$head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_SHORT).' <br />'.api_format_date($class_day['date_time'], TIME_NO_SEC_FORMAT);
+            $head_table[] = api_format_date($class_day['date_time'], DATE_FORMAT_NUMBER);           
+        }        
         $data_table[] = $head_table;
         
         $dataClass = array();

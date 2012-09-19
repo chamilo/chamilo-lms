@@ -43,10 +43,20 @@ $lib_path = api_get_path(LIBRARY_PATH);
 require_once $lib_path . 'fileUpload.lib.php';
 require_once $lib_path . 'fileDisplay.lib.php';
 require_once $lib_path . 'fileManage.lib.php';
-//require_once $lib_path.'tablesort.lib.php';moved to autoload
 
 api_protect_course_script(true);
-
+/*
+Testing time labels
+$now = api_get_utc_datetime();
+var_dump(api_convert_and_format_date($now, TIME_NO_SEC_FORMAT));
+var_dump(api_convert_and_format_date($now, DATE_FORMAT_SHORT));
+var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG));
+var_dump(api_convert_and_format_date($now, DATE_FORMAT_NUMBER));
+var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG_24H));
+var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_SHORT));
+var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_SHORT_TIME_FIRST));
+var_dump(api_convert_and_format_date($now, DATE_FORMAT_NUMBER_NO_YEAR));
+*/
 //erase temp nanogons' audio, image edit
 if(isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
 	unlink($_SESSION['temp_audio_nanogong']);

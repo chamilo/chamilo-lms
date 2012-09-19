@@ -674,7 +674,7 @@ class CourseManager {
 
         //2. Include courses in sessions
         if ($include_courses_in_sessions) {
-            $sessions      = Tracking::get_sessions_coached_by_user($user_id);
+            $sessions      = SessionManager::get_sessions_coached_by_user($user_id);
 
             if (!empty($sessions)) {
                 foreach($sessions as $session_item) {
@@ -714,9 +714,10 @@ class CourseManager {
                     }
                 } else {
                     $students_in_course = SessionManager::get_users_by_session($session_id, '0');
-
-                    foreach($students_in_course as $user_item) {
-                        $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+                    foreach ($students_in_course as $user_item) {
+                        if ($user_item['moved_to'] == 0) {
+                            $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+                        }                        
                     }
                 }
             }
@@ -1120,11 +1121,11 @@ class CourseManager {
      * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER 
      * @return array
      */
-    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '', $filter_by_status = null) {
-        // variable initialisation
+    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = null, $order_by =null, $filter_by_status = null, $keyword = null) {
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
-        $where          = array();
+        $keyword        = Database::escape_string($keyword);
+        $where          = array();        
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
@@ -1140,30 +1141,35 @@ class CourseManager {
         if (!empty($session_id)) {
             $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
             $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user                      
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code="'.$course_code.'"
-                      AND session_course_user.id_session = '.$session_id;
-            $where[] = ' session_course_user.course_code IS NOT NULL ';
+                      AND session_course_user.id_session = '.$session_id.' 
+                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su 
+                      ON (  su.id_session = session_course_user.id_session AND 
+                            user.user_id = su.id_user AND 
+                            su.moved_to = 0 AND
+                            su.moved_status <> '.SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.'
+                      ) ';
+            $where[] = ' AND session_course_user.course_code IS NOT NULL ';
             
             // 2 = coach
             // 0 = student            
             if (isset($filter_by_status)) {                
                 $filter_by_status = intval($filter_by_status);
-                $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";                
+                $filter_by_status_condition = " AND session_course_user.status = $filter_by_status AND ";                
             }
         } else {            
             $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
-            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
-            
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
-            $where[] = ' course_rel_user.course_code IS NOT NULL ';
+            $where[] = ' AND course_rel_user.course_code IS NOT NULL ';
             
             if (isset($filter_by_status) && $filter_by_status != '') {
                 $filter_by_status = intval($filter_by_status);
-                $filter_by_status_condition = " course_rel_user.status = $filter_by_status AND ";
+                $filter_by_status_condition = " AND course_rel_user.status = $filter_by_status AND ";
             }
         }
         
@@ -1171,15 +1177,35 @@ class CourseManager {
         if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
+        
+        $keyword_condition = null;
+        if (!empty($keyword)) {
+            $where_keyword = array();
+            $where_keyword[] = "firstname LIKE '%$keyword%'";
+            $where_keyword[] = "lastname LIKE '%$keyword%'";
+            $where_keyword[] = "username LIKE '%$keyword%'";
+            $where_keyword[] = "official_code LIKE '%$keyword%'";    
+            $keyword_condition = ' AND ('.implode(' OR ', $where_keyword).') ';
+        }
+        
+        $where_condition = null;
+        if (!empty($where)) {
+            $where_condition = implode(' OR ', $where);
+        }
 
-        $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
-                
+        $sql .= " WHERE 1=1 $filter_by_status_condition $where_condition $keyword_condition";
+
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
-        $sql .= ' '.$order_by.' '.$limit;
-
+        
+        $sql .= ' '.$order_by;
+        
+        if (!empty($keyword)) {
+            $sql .= ' '.$limit;
+        }
+        
         $rs = Database::query($sql);
         $users = array();
 
@@ -1194,11 +1220,9 @@ class CourseManager {
                 if (isset($user['tutor_id'])) {
                     $user_info['tutor_id'] = $user['tutor_id'];
                 }
-
                 if (!empty($session_id)) {
                     $user_info['status_session'] = $user['status_session'];
                 }
-
                 $users[$user['user_id']] = $user_info;
             }
         }
@@ -1212,8 +1236,7 @@ class CourseManager {
      * @param   int       $session_id
      * @return  int
      */
-    public static function get_users_count_in_course($course_code, $session_id = 0) {
-        // variable initialisation
+    public static function get_users_count_in_course($course_code, $session_id = 0) {        
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
 
@@ -1223,7 +1246,13 @@ class CourseManager {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code = "'.$course_code.'"
-                      AND session_course_user.id_session  = '.$session_id;
+                      AND session_course_user.id_session  = '.$session_id.'  
+                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su 
+                      ON ( su.id_session = session_course_user.id_session AND 
+                           user.user_id = su.id_user AND 
+                           su.moved_to = 0 AND
+                           su.moved_status <> '.SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.'
+                         )';
 
             $where[] = ' session_course_user.course_code IS NOT NULL ';
         } else {
@@ -1344,7 +1373,7 @@ class CourseManager {
     public static function get_teacher_list_from_course_code($course_code) {
         $course_code = Database::escape_string($course_code);
         $teachers = array();        
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status 
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status 
                 FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u 
                 ON (cu.user_id = u.user_id)
                 WHERE   cu.course_code = '$course_code' AND 
@@ -1401,7 +1430,8 @@ class CourseManager {
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coaches = array();
 
-        $sql = "SELECT u.user_id,u.lastname,u.firstname,u.username FROM $tbl_user u,$tbl_session_course_user scu
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
+                FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";
         $rs = Database::query($sql);
 
@@ -2787,7 +2817,6 @@ class CourseManager {
                         $html .= $params['icon'];
                         $html .= '</div>';
                     }
-
                     $html .= '</div>';
 
                     $html .= '<div class="span6">';
@@ -2796,13 +2825,18 @@ class CourseManager {
                         if (!empty($params['subtitle'])) {
                             $html .= '<small>'.$params['subtitle'].'</small>';
                         }
+                        if (!empty($params['dates'])) {
+                            if (!empty($params['subtitle'])) {
+                                $html .= " | ";
+                            }
+                            $html .= '<small>'.$params['dates'].'</small>';
+                        }
                         if (!empty($params['teachers'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
                         }
                         if (!empty($params['coaches'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
-                        }
-                        
+                        }                        
                         
                     $html .= '</div>';
                 $html .= '</div>';
@@ -3143,68 +3177,37 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    public static function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
-        global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
-        $user_id  = api_get_user_id();
-        $course_info = api_get_course_info($course['code']);
-        $status_course = CourseManager::get_user_in_course_status($user_id, $course_info['code']);
-
-        $course_info['status'] = empty($session_id) ? $status_course : STUDENT;
-
+    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false) {        
+        $course_info = api_get_course_info($course['code']);                
         $course_info['id_session'] = $session_id;
 
-        if (!$nosession) {
-            global $now, $date_start, $date_end;
-        }
-
-        // Table definitions
-        $main_user_table            = Database :: get_main_table(TABLE_MAIN_USER);
-        $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category       = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-
-        $course_access_settings     = CourseManager :: get_access_settings($course_info['code']);
-        $course_visibility          = $course_access_settings['visibility'];
-
-        $user_in_course_status      = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
-
-        $is_coach = api_is_coach($course_info['id_session'], $course['code']);
-
         // Display course entry.
-        // Show a hyperlink to the course, unless the course is closed and user is not course admin.
+        // Show a link to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $session_title = '';
-
-        if ($session_accessible) {
-            if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
-                if (!$nosession) {
-                    if (empty($course_info['id_session'])) {
-                        $course_info['id_session'] = 0;
-                    }
-                    if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
-                        $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
-                        $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
-                    }
-                } else {
-                    $session_url   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/';
-                    $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/">'.$course_info['name'].'</a>';
-                }
-            } else {
-                $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
-            }
+        $session_title = $course_info['name'];        
+                 
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {                       
+            //if ($course_info['user_status_in_course'] == COURSEMANAGER) {
+                $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
+                $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
+            //}            
         } else {
-            $session_title = $course_info['name'];
+            $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }
+
 
         $params = array();
         $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
+        
 
         $params['right_actions'] = '';
         
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED) {
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
             if ($load_dirs) {
-                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
+                $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview" href="javascript:void(0);">'.
+                                            Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
                 $params['right_actions'] .= Display::div('', array('id' => 'document_result_'.$course_info['real_id'].'_'.$course_info['id_session'], 'class'=>'document_preview_container'));
             }
         }
@@ -3213,80 +3216,22 @@ class CourseManager {
             $session_title .= ' ('.$course_info['visual_code'].') ';
         }
 
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {
-            if (!$nosession) {
-                $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], self::USER_SEPARATOR, true);
-                $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);
-
-                if ($course_info['status'] == COURSEMANAGER || ($course_info['status'] == STUDENT && empty($course_info['id_session'])) || empty($course_info['status'])) {
-                    $params['teachers'] = $teacher_list;
-                }
-                if (($course_info['status'] == STUDENT && !empty($course_info['id_session'])) || ($is_coach && $course_info['status'] != COURSEMANAGER)) {
-                    $params['coaches'] = $course_coachs;
-                }
-            } else {
-                $params['teachers'] = $teacher_list;
-            }
+        if (api_get_setting('display_teacher_in_courselist') == 'true') {            
+            $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], self::USER_SEPARATOR, true);
+            $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);            
+            $params['teachers'] = $teacher_list;
+            $params['coaches'] = $course_coachs;            
         }
-
         $session_title .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
 
         // Display the "what's new" icons
-        if ($course_visibility != COURSE_VISIBILITY_CLOSED) {
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
             $session_title .= Display :: show_notification($course_info);
         }
-
         $params['title'] = $session_title;
         $params['extra'] = '';
-
         $html = self::course_item_html($params, true);
-
-        $session_category_id = null;
-        if (!$nosession) {
-            $session = '';
-            $active = false;
-            if (!empty($course_info['session_name'])) {
-
-                // Request for the name of the general coach
-                $sql = 'SELECT lastname, firstname,sc.name
-                FROM '.$tbl_session.' ts
-                LEFT JOIN '.$main_user_table .' tu
-                ON ts.id_coach = tu.user_id
-                INNER JOIN '.$tbl_session_category.' sc ON ts.session_category_id = sc.id
-                WHERE ts.id='.(int) $course_info['id_session']. ' LIMIT 1';
-
-                $rs = Database::query($sql);
-                $sessioncoach = Database::store_result($rs);
-                $sessioncoach = $sessioncoach[0];
-
-                $session = array();
-                $session['title'] = $course_info['session_name'];
-                $session_category_id = CourseManager::get_session_category_id_by_session_id($course_info['id_session']);
-                $session['category'] = $sessioncoach['name'];
-                if ($course_info['date_start'] == '0000-00-00') {
-                    //$session['dates'] = get_lang('WithoutTimeLimits');
-                    $session['dates'] = '';
-                    if (api_get_setting('show_session_coach') === 'true') {
-                        $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
-                    }
-                    $active = true;
-                } else {
-                    $session ['dates'] = ' - '.get_lang('From').' '.$course_info['date_start'].' '.get_lang('To').' '.$course_info['date_end'];
-                    if (api_get_setting('show_session_coach') === 'true') {
-                        $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($sessioncoach['firstname'], $sessioncoach['lastname']);
-                    }
-                    $active = ($date_start <= $now && $date_end >= $now);
-                }
-            }
-            $user_course_category = '';
-            if (isset($course_info['user_course_cat'])) {
-                 $user_course_category = $course_info['user_course_cat'];
-            }
-            $output = array ($user_course_category, $html, $course_info['id_session'], $session, 'active' => $active, 'session_category_id' => $session_category_id);
-        } else {
-            $output = array ($course_info['user_course_cat'], $html);
-        }
-        return $output;
+        return $html;
     }
 
     /**

@@ -9,14 +9,10 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
-
-
 
 /**
  * This class is used like controller for teacher graph block plugin, 
@@ -65,21 +61,18 @@ class BlockTeacherGraph extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller 
      * @return array   column and content html
      */
-    public function get_block() {
-    	
-    	global $charset;
-    	    	
+    public function get_block() {    	
+    	global $charset;    	    	
     	$column = 1;
     	$data   = array();
 		
 		/*if (api_is_platform_admin()) {
 			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
 		} else if (api_is_drh()) {*/
-			$teacher_information_graph = $this->get_teachers_information_graph();
+        $teacher_information_graph = $this->get_teachers_information_graph();
 		//}
 		
-		$html = '        		
-			            <li class="widget color-blue" id="intro">
+		$html = '<li class="widget color-blue" id="intro">
 			                <div class="widget-head">
 			                    <h3>'.get_lang('TeachersInformationsGraph').'</h3>
 			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
@@ -88,14 +81,10 @@ class BlockTeacherGraph extends Block {
 			                	<div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
 								'.$teacher_information_graph.'
 			                </div>
-			            </li>		            			    
-				'; 
-    	
+			            </li>';    	
     	$data['column'] = $column;
-    	$data['content_html'] = $html;
-    	    	    	    	
-    	return $data;    	    	
-    	
+    	$data['content_html'] = $html;    	    	    	    	
+    	return $data;    	
     }
     
     /**
@@ -103,13 +92,10 @@ class BlockTeacherGraph extends Block {
  	 * @return string  content html
  	 */
     public function get_teachers_information_graph() {
-
-	 	$teachers = $this->teachers;
 		$graph = '';
-
- 		$user_ids = array_keys($teachers); 		
+ 		$user_ids = array_keys($this->teachers); 		
  		$a_last_week = get_last_week();
-
+        
 		if (is_array($user_ids) && count($user_ids) > 0) {
 			$data_set = new pData;  		
 			foreach ($user_ids as $user_id) {
@@ -117,16 +103,19 @@ class BlockTeacherGraph extends Block {
 				$username = $teacher_info['username'];
 				$time_by_days = array();
 				foreach ($a_last_week as $day) {
-					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, false, $day);
+                    $date = new DateTime(api_get_utc_datetime($day));
+                    $start_date = $date->format('Y-m-d').' 00:00:00';
+                    $end_date   = $date->format('Y-m-d').' 23:59:59';                    
+					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);                    
 					$hours = floor($time_on_platform_by_day / 3600);			
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
 					$time_by_days[] = $min;					
-				}
-				$data_set->AddPoint($time_by_days,$username);	
+				}                
+				$data_set->AddPoint($time_by_days, $username);	
 				$data_set->AddSerie($username);
 			}
 	
-			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+			$last_week 	 = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 			$days_on_week = array();			
 			foreach ($a_last_week as $weekday) {
 				$days_on_week[] = date('d/m',$weekday);
@@ -184,10 +173,8 @@ class BlockTeacherGraph extends Block {
 		} else {
 			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
 		}		  
- 		return $graph; 	
- 		
-	}
-	
+ 		return $graph; 		
+	}	
  
     /**
 	 * Get number of teachers 
@@ -195,6 +182,5 @@ class BlockTeacherGraph extends Block {
 	 */
 	function get_number_of_teachers() {
 		return count($this->teachers);
-	}
-    
+	}    
 }

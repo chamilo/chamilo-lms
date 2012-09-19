@@ -495,6 +495,10 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
                 $this->setName($myName);
             }
             $strHtml .= $tabs . '<select' . $attrString . ">\n";
+            
+            if (isset($this->_attributes['data-placeholder'])) {            
+                $strHtml .= "<option></option>";
+            }
 
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
             foreach ($this->_options as $option) {

@@ -21,6 +21,13 @@
  *
  */
 
+ //@todo will be removed before a stable release
+$mtime = microtime(); 
+$mtime = explode(" ",$mtime); 
+$mtime = $mtime[1] + $mtime[0]; 
+$starttime = $mtime; 
+define('START', $starttime);
+
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
@@ -65,7 +72,6 @@ if (empty($_configuration['system_version'])) {
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 
-
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
@@ -98,28 +104,21 @@ ini_set('auto_detect_line_endings', '1');
 // Include the libraries that are necessary everywhere
 require_once dirname(__FILE__).'/autoload.inc.php';
 
+/* 
+ * Using composer
+ */
+//Fixes autoader issue with composer
+/*
+define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
+require_once __DIR__.'../../../vendor/autoload.php'; 
+*/
+
 require_once $lib_path.'database.lib.php';
-//require_once $lib_path.'template.lib.php'; moved to autoload
-//require_once $lib_path.'display.lib.php';
 require_once $lib_path.'text.lib.php';
-//require_once $lib_path.'image.lib.php';   moved to autoload
 require_once $lib_path.'array.lib.php';
-//require_once $lib_path.'security.lib.php';  moved to autoload
 require_once $lib_path.'events.lib.inc.php';
-//require_once $lib_path.'debug.lib.php';  moved to autoload
-//require_once $lib_path.'rights.lib.php';  moved to autoload
-
 require_once $lib_path.'model.lib.php';
-//require_once $lib_path.'sortable_table.class.php';  moved to autoload
-//require_once $lib_path.'usermanager.lib.php'; moved to autoload
-//require_once $lib_path.'message.lib.php'; moved to autoload
-//require_once $lib_path.'social.lib.php'; moved to autoload
-//require_once $lib_path.'notification.lib.php'; moved to autoload
 require_once $lib_path.'course.lib.php';
-//require_once $lib_path.'sessionmanager.lib.php'; moved to autoload
-//require_once $lib_path.'tracking.lib.php'; moved to autoload
-
-//require_once $lib_path.'formvalidator/FormValidator.class.php'; moved to autoload
 require_once $lib_path.'online.inc.php';
 
 //Here we load the new Doctrine class (just for tests)
@@ -198,8 +197,6 @@ $charset_initial_value = $charset;
 api_initialize_internationalization();
 // Initialization of the default encoding that will be used by the multibyte string routines in the internationalization library.
 api_set_internationalization_default_encoding($charset);
-
-//setting_gettext();
 
 // Initialization of the database encoding to be used.
 Database::query("SET SESSION character_set_server='utf8';");

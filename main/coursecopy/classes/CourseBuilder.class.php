@@ -492,7 +492,7 @@ class CourseBuilder {
 		// Building a fictional test for collecting orphan questions.
 		$build_orphan_questions = !empty($_POST['recycle_option']); // When a course is emptied this option should be activated (true).
         
-		$sql = "SELECT questions.* FROM $table_que as questions
+		$sql = "SELECT * FROM $table_que as questions 
                 LEFT JOIN $table_rel as quizz_questions 
                     ON (questions.id = quizz_questions.question_id AND questions.c_id = $course_id AND quizz_questions.c_id = $course_id)
                 LEFT JOIN $table_qui as exercices 

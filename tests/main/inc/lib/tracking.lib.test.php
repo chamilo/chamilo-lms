@@ -220,13 +220,6 @@ class TestTracking extends UnitTestCase {
 	 	//var_dump($res);
 	}
 
-	function testget_sessions_coached_by_user() {
-		$coach_id='';
-		$res=Tracking::get_sessions_coached_by_user($coach_id);
-	 	if(!is_null($res))$this->assertTrue(is_array($res));
-	 	//var_dump($res);
-	}
-
 	function testget_student_followed_by_coach() {
 		$coach_id='';
 		$res=Tracking::get_student_followed_by_coach($coach_id);

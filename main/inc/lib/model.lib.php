@@ -11,15 +11,24 @@
  */
 class Model {
     
-    var $table;
-    var $columns;
-    var $required;
-    var $is_course_model =false;
+    public $table;
+    public $columns;
+    public $required;
+    public $is_course_model =false;
     
     // var $pk; some day this will be implemented
     
-	public function __construct() {        
+	public function __construct() {
 	}
+    
+    public function set($id) {
+        /*$data = self::get($id);
+        foreach ($data as $key => $value) {
+            if (in_array($key, $this->columns)) {
+                $this->$key = $value;
+            }
+        }*/
+    }
     
     /**
      * Useful finder - experimental akelos like only use in notification.lib.php send function
@@ -33,7 +42,7 @@ class Model {
                 return self::get($type);
                 break;
         }
-    }    
+    }
     
     /**
      * Delets an item

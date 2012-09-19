@@ -14,7 +14,6 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -202,6 +201,7 @@ if (api_is_platform_admin()) {
 }
 
 $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+$items[] = array('url'=>'session_fields.php', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;

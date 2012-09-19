@@ -199,6 +199,7 @@ $(document).ready(function(){
 
     $options = $options_pedia = array();
     $selected_language = null;
+	$options_pedia['defaultmessage'] = get_lang('FirstSelectALanguage');//need read before platform languages
 	
     while ($row = Database::fetch_array($result_select)) {       
         if (api_get_setting('platformLanguage')==$row['english_name']) {        
@@ -238,8 +239,8 @@ $(document).ready(function(){
 	if(Security::remove_XSS($_GET['dt2a'])=='pediaphon'){
 		//lang default is a default message
 		$selected_language = "defaultmessage";
-		$options_pedia['defaultmessage'] =get_lang('FirstSelectALanguage');
-		$options['defaultmessage'] =get_lang('FirstSelectALanguage'); 
+		
+		$options['defaultmessage'] = get_lang('FirstSelectALanguage'); 
 		echo '<div>';
 		
 		$form = new FormValidator('form2', 'post', null, '', array('id' => 'form2'));
@@ -413,9 +414,25 @@ function downloadMP3_google($filepath, $dir) {
     // Replacing remaining dangerous non-letter characters.
     $clean_text = str_replace($search, $replace, $filename);
 	
+	$returntext2voice=file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text)."");
+	
+	//make a temporal file for get the file size
+		$tmpfname = tempnam("/tmp", "CTF");
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, $returntext2voice);
+		fclose($handle);
+		// Check if there is enough space in the course to save the file
+		if (!DocumentManager::enough_space(filesize($tmpfname), DocumentManager::get_course_quota())) {
+			unlink($tmpfname);
+			die(get_lang('UplNotEnoughSpace'));
+		}
+		//erase temporal file
+		unlink($tmpfname);
+		
+	
 	//adding the file
 		//add new file to disk
-		file_put_contents($documentPath, file_get_contents("http://translate.google.com/translate_tts?tl=".$clean_lang."&q=".urlencode($clean_text).""));
+		file_put_contents($documentPath, $returntext2voice);
 		//add document to database
 		$current_session_id = api_get_session_id();
 		$groupId=$_SESSION['_gid'];
@@ -520,7 +537,20 @@ function downloadMP3_pediaphon($filepath, $dir){
 		$search_source=preg_match($find_t2v, $previous_returntext2voice, $hits);
 		$souce_end=substr($hits[0], 0,-1);
 		$returntext2voice = file_get_contents($souce_end);
-				
+		
+		//make a temporal file for get the file size
+			$tmpfname = tempnam("/tmp", "CTF");
+			$handle = fopen($tmpfname, "w");
+			fwrite($handle, $returntext2voice);
+			fclose($handle);
+			// Check if there is enough space in the course to save the file
+			if (!DocumentManager::enough_space(filesize($tmpfname), DocumentManager::get_course_quota())) {
+				unlink($tmpfname);
+				die(get_lang('UplNotEnoughSpace'));
+			}
+			//erase temporal file
+			unlink($tmpfname);
+		
 		//save file
 		file_put_contents($documentPath, $returntext2voice);
 		

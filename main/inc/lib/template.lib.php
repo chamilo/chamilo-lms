@@ -212,6 +212,7 @@ class Template {
     function display_one_col_template() {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
+        self::show_page_loaded_info();
     }
 
     /**
@@ -220,6 +221,15 @@ class Template {
     function display_two_col_template() {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
+        self::show_page_loaded_info();        
+    }
+    
+    function show_page_loaded_info() {        
+        //@todo will be removed before a stable release
+        $mtime = microtime(); 
+        $mtime = explode(" ",$mtime); 
+        $mtime = $mtime[1] + $mtime[0]; 
+        error_log("Page loaded in ".($mtime-START));
     }
 
     /**
@@ -448,11 +458,16 @@ class Template {
         //Setting the theme and CSS files
         $this->set_theme();
 
-        //Extra JS files
         
+        
+        // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
+        $theme = 'smoothness'; 
+        
+        //Extra JS files
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
+            'jquery-ui/'.$theme.'/jquery-ui-custom.min.js',            
             'chosen/chosen.jquery.min.js',
             'thickbox.js',            
             'bootstrap/bootstrap.js',
@@ -487,8 +502,10 @@ class Template {
         
         //Extra CSS files
         $css_files = array(
-            api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css',
-            api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css'
+            api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css',
+            api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css',
+            api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-custom.css', // CSS changes for chamilo
+            api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css'
         );
 
         if ($this->show_learnpath) {
@@ -519,6 +536,7 @@ class Template {
                 }
                 </style>';
         }
+        
         // Implementation of prefetch. 
         // See http://cdn.chamilo.org/main/img/online.png for details
         $prefetch = '';
@@ -543,9 +561,6 @@ class Template {
             $this->assign('css_file_to_string', $css_file_to_string);
             $this->assign('js_file_to_string', $js_file_to_string);
             
-            //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
-
             //$extra_headers = '';		
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {

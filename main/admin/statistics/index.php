@@ -18,8 +18,6 @@ $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 
-//require_once 'statistics.lib.php'; moved to autoload
-
 $strCourse = get_lang('Courses');
 $strUsers = get_lang('Users');
 $strSystem = get_lang('System');
@@ -83,8 +81,7 @@ switch ($_GET['report']) {
         break;
     case 'courselastvisit':
         Statistics::print_course_last_visit();
-        break;
-    //---
+        break;    
     case 'users':
         // total amount of users
         Statistics::print_stats(
@@ -118,12 +115,10 @@ switch ($_GET['report']) {
         break;
     case 'zombies':
         ZombieReport::create(array('report' => 'zombies'))->display();
-        break;
-    //---
+        break;    
     case 'activities':
         Statistics::print_activities_stats();
-        break;
-    //---
+        break;    
     case 'messagesent':
         $messages_sent = Statistics::get_messages('sent');
         Statistics::print_stats(get_lang('MessagesSent'), $messages_sent);

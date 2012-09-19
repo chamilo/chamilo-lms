@@ -16,7 +16,6 @@ $current_course_tool  = TOOL_USER;
 // the section (for the tabs)
 $this_section = SECTION_COURSES;
 
-
 // notice for unauthorized people.
 api_protect_course_script(true);
 
@@ -39,9 +38,6 @@ if ($_GET['keyword']) {
 }
 
 Display :: display_header($tool_name, "User");
-
-// api_display_tool_title($tool_name);
-
 
 // Build search-form
 echo '<div class="actions">';
@@ -117,10 +113,10 @@ if (isset ($_POST['action'])) {
 						if (!empty($current_session_id)) {
 							$is_suscribe[] = SessionManager::set_coach_to_course_session($user_id, $current_session_id, $_course['sysCode']);
 						} else {
-							$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);
+							$is_suscribe[] = CourseManager::subscribe_user($user_id, $_course['sysCode'],COURSEMANAGER);
 						}
 					} else {
-						$is_suscribe[]=CourseManager :: subscribe_user($user_id, $_course['sysCode']);
+						$is_suscribe[]=CourseManager::subscribe_user($user_id, $_course['sysCode']);
 					}
 						$is_suscribe_user_id[]=$user_id;
 				}
@@ -180,11 +176,8 @@ if (!empty($_SESSION['session_user_name'])) {
 	unset($_SESSION['session_user_name']);
 }
 
-
-
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
-
 
 // Build table
 $table = new SortableTable('subscribe_users', 'get_number_of_users', 'get_user_data', ($is_western_name_order xor $sort_by_first_name) ? 3 : 2);
@@ -220,9 +213,7 @@ if (!empty($_POST['keyword'])) {
 // Display table
 $table->display();
 
-// footer
-Display :: display_footer();
-
+Display::display_footer();
 
 /*		SHOW LIST OF USERS  */
 
@@ -328,7 +319,6 @@ function get_number_of_users() {
 							WHERE cu.user_id IS NULL AND access_url_id= $url_access_id AND u.status<>".DRH." ";
 				}
 			}
-
 		}
 	}
 
@@ -381,7 +371,9 @@ function get_number_of_users() {
 function get_user_data($from, $number_of_items, $column, $direction) {
 	global $_course, $_configuration;
     
-    $url_access_id = api_get_current_access_url_id();        
+    $url_access_id = api_get_current_access_url_id();
+    $course_code = api_get_course_id();
+    $session_id = api_get_session_id();
 
 	// Database table definitions
 	$user_table                    = Database::get_main_table(TABLE_MAIN_USER);
@@ -419,12 +411,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     }
 
 	
-	if (isset($_REQUEST['type']) && $_REQUEST['type']=='teacher') {
+	if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'teacher') {
 		// adding a teacher through a session
-		if (!empty($_SESSION["id_session"])) {
+		if (!empty($session_id)) {
 			$sql = "SELECT $select_fields			
 					FROM $user_table u
-					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
+					LEFT JOIN $tbl_session_rel_course_user cu on u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."' 
+                    INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true') {
@@ -438,11 +431,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 			} else {
 				$sql .=	"WHERE cu.id_user IS NULL AND u.status=1 AND (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
 			}
+            
+            $sql .=	" AND access_url_id= $url_access_id";
+            
 		} else {
 		     // adding a teacher NOT through a session
 			$sql = "SELECT $select_fields
-				FROM $user_table u
-				LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+                    FROM $user_table u
+                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code = '".$course_code."'";
 
 				// applying the filter of the additional user profile fields
 				if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value']) AND api_get_setting('ProfilingFilterAddingUsers') == 'true'){
@@ -458,11 +454,11 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 
 				// adding a teacher NOT trough a session on a portal with multiple URLs
-				if ($_configuration['multiple_access_urls']) {					
+				if ($_configuration['multiple_access_urls']) {				
 					if ($url_access_id !=-1) {						
 						$sql = "SELECT $select_fields
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
 
 					// applying the filter of the additional user profile fields
@@ -482,10 +478,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		}
 	} else {
 		// adding a student
-		if (!empty($_SESSION["id_session"])) {
+		if (!empty($session_id)) {
 			$sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $tbl_session_rel_course_user cu ON u.user_id = cu.id_user AND course_code='".$_SESSION['_course']['id']."' AND id_session ='".$_SESSION["id_session"]."' ";
+                    LEFT JOIN $tbl_session_rel_course_user cu ON u.user_id = cu.id_user AND course_code='".$course_code."' AND id_session ='".$session_id."' ";
             
             if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
                 $sql .= " INNER JOIN  $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";                
@@ -511,7 +507,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		} else {
             $sql = "SELECT $select_fields
                     FROM $user_table u
-                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'";
+                    LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'";
 
 			// applying the filter of the additional user profile fields
 			if (isset($_GET['subscribe_user_filter_value']) AND !empty($_GET['subscribe_user_filter_value'])){
@@ -534,7 +530,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 					$sql = "SELECT $select_fields
 						FROM $user_table u
-						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$_SESSION['_course']['id']."'
+						LEFT JOIN $course_user_table cu on u.user_id = cu.user_id and course_code='".$course_code."'
 						INNER JOIN  $tbl_url_rel_user as url_rel_user
 						ON (url_rel_user.user_id = u.user_id) ";
 
@@ -567,10 +563,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		}
 
 		// getting all the users of the course (to make sure that we do not display users that are already in the course)
-		if (!empty($_SESSION["id_session"])) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], $_SESSION['id_session']);
+		if (!empty($session_id)) {
+			$a_course_users = CourseManager :: get_user_list_from_course_code($course_code, $session_id);
 		} else {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($_SESSION['_course']['id'], 0);
+			$a_course_users = CourseManager :: get_user_list_from_course_code($course_code, 0);
 	    }
 		foreach ($a_course_users as $user_id=>$course_user) {
 			$users_of_course[] = $course_user['user_id'];
@@ -598,7 +594,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 	if (isset ($_REQUEST['keyword'])){
 		if (is_array($additional_users)) {
 			foreach($additional_users as $additional_user_key=>$additional_user_value){
-				if (!in_array($additional_user_key,$_SESSION['session_user_id']) AND !in_array($additional_user_key,$users_of_course)){
+				if (!in_array($additional_user_key, $_SESSION['session_user_id']) AND !in_array($additional_user_key,$users_of_course)){
 					$users[]= array($additional_user_value['col0'],$additional_user_value['col1'],$additional_user_value['col2'].'*',$additional_user_value['col3'].'*',$additional_user_value['col4'],$additional_user_value['col5'], $additional_user_value['col6']);
 				}
 			}

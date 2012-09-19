@@ -937,8 +937,10 @@ class CourseRestorer
         				c_id = ".$this->destination_course_id." ,
         				title = '".self::DBUTF8escapestring($event->title)."',
         				content = '".self::DBUTF8escapestring($event->content)."',
+                        all_day = '".$event->all_day."',
         				start_date = '".$event->start_date."',
         				end_date = '".$event->end_date."'";
+                
 				Database::query($sql);
 				$new_event_id = Database::insert_id();
 				$this->course->resources[RESOURCE_EVENT][$id]->destination_id = $new_event_id;

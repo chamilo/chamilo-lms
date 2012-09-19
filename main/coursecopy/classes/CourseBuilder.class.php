@@ -655,9 +655,8 @@ class CourseBuilder {
 				$att_filename 	= $attachment_obj->filename;
 				$att_size 		= $attachment_obj->size;
 				$atth_comment 	= $attachment_obj->comment;
-			}
-				
-			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date, $att_path, $att_filename, $att_size, $atth_comment);						
+			}				
+			$event = new Event($obj->id, $obj->title, $obj->content, $obj->start_date, $obj->end_date, $att_path, $att_filename, $att_size, $atth_comment, $obj->all_day);						
 			$this->course->add_resource($event);
 		}
 		

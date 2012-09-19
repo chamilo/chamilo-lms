@@ -2603,7 +2603,7 @@ class DocumentManager {
         return $html;
     }
 
-    function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
+    static function get_document_preview($course_info, $lp_id = false, $target = '', $session_id = 0, $add_move_button = false, $filter_by_folder = null, $overwrite_url = null) {
     	if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
     		return '';
     	}
@@ -2671,7 +2671,6 @@ class DocumentManager {
         
     	$res_doc 	= Database::query($sql_doc);
     	$resources  = Database::store_result($res_doc, 'ASSOC');
-
 
     	$resources_sorted = array();
         $return 	= '';
@@ -2790,7 +2789,7 @@ class DocumentManager {
     * @param	integer Enables the tree display by shifting the new elements a certain distance to the right
     * @return	string	The HTML list
     */
-    public function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $overwrite_url = null) {
+    public static function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $overwrite_url = null) {
     	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
     	$img_path 		= api_get_path(WEB_IMG_PATH);
@@ -2874,7 +2873,7 @@ class DocumentManager {
     					// Show the "image name" not the filename of the image.
     					if ($lp_id) {
     						//LP URL
-    						$lp_id = $this->lp_id;
+    						//$lp_id = $this->lp_id;
     						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url.'&document_id='.$key;

@@ -1513,7 +1513,7 @@ class DocumentManager {
             
             if (!is_dir($base_work_dir_test)) {
                 $created_dir = create_unexisting_directory($course_info, api_get_user_id(), api_get_session_id(), $to_group_id,$to_user_id,$base_work_dir,$dir_name,$post_dir_name);                
-                $update_id = DocumentManager::get_document_id_of_directory_certificate();                
+                $update_id = self::get_document_id_of_directory_certificate();                
                 api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
             }
         }
@@ -1524,7 +1524,7 @@ class DocumentManager {
      * @param string The course id
      * @return int The document id of the directory certificate
      */
-    function get_document_id_of_directory_certificate () {
+    static function get_document_id_of_directory_certificate () {
         $tbl_document=Database::get_course_table(TABLE_DOCUMENT);
         $course_id = api_get_course_int_id();
         $sql = "SELECT id FROM $tbl_document WHERE c_id = $course_id AND path='/certificates' ";
@@ -1561,7 +1561,7 @@ class DocumentManager {
      * @param	int		level of recursivity we're in
      * @return	array	List of file paths. An additional field containing 'local' or 'remote' helps determine if the file should be copied into the zip or just linked
      */
-    function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1) {
+    static function get_resources_from_source_html($source_html, $is_file = false, $type = null, $recursivity = 1) {
         $max = 5;
         $attributes = array();
         $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars');
@@ -1576,7 +1576,7 @@ class DocumentManager {
         }
 
         if (!$is_file) {
-            $attributes = DocumentManager::parse_HTML_attributes($source_html, $wanted_attributes);
+            $attributes = self::parse_HTML_attributes($source_html, $wanted_attributes);
 
         } else {
             if (is_file($source_html)) {
@@ -1591,7 +1591,7 @@ class DocumentManager {
                     case 'css'	:
                         $file_content = file_get_contents($abs_path);
                         //get an array of attributes from the HTML source
-                        $attributes = DocumentManager::parse_HTML_attributes($file_content, $wanted_attributes);
+                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes);
                         break;
                     default		:
                         break;
@@ -1656,7 +1656,7 @@ class DocumentManager {
                                         if (strpos($second_part, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
                                             $files_list[] = array($second_part, 'local', 'url');
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1668,7 +1668,7 @@ class DocumentManager {
                                         if (substr($second_part, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = array($second_part, 'local', 'abs');
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($second_part, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1682,7 +1682,7 @@ class DocumentManager {
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$second_part);
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1697,7 +1697,7 @@ class DocumentManager {
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$second_part);
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1709,7 +1709,7 @@ class DocumentManager {
                                         if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                             //we found the current portal url
                                             $files_list[] = array($source, 'local', 'url');
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
+                                            $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity+1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1722,7 +1722,7 @@ class DocumentManager {
                                         if (substr($source, 0, 1) === '/') {
                                             //link starts with a /, making it absolute (relative to DocumentRoot)
                                             $files_list[] = array($source, 'local', 'abs');
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1733,7 +1733,7 @@ class DocumentManager {
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$source);
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1748,7 +1748,7 @@ class DocumentManager {
                                                 $dir = dirname($abs_path).'/';
                                             }
                                             $new_abs_path = realpath($dir.$source);
-                                            $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                            $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                             if (count($in_files_list) > 0) {
                                                 $files_list = array_merge($files_list, $in_files_list);
                                             }
@@ -1759,7 +1759,7 @@ class DocumentManager {
                                 if (strpos($source, api_get_path(WEB_PATH)) !== false) {
                                     //we found the current portal url
                                     $files_list[] = array($source, 'local', 'url');
-                                    $in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -1772,7 +1772,7 @@ class DocumentManager {
                                 if (substr($source, 0, 1) === '/') {
                                     //link starts with a /, making it absolute (relative to DocumentRoot)
                                     $files_list[] = array($source, 'local', 'abs');
-                                    $in_files_list[] = DocumentManager::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html($source, true, TOOL_DOCUMENT, $recursivity + 1);
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -1784,7 +1784,7 @@ class DocumentManager {
                                         $dir = dirname($abs_path).'/';
                                     }
                                     $new_abs_path = realpath($dir.$source);
-                                    $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -1799,7 +1799,7 @@ class DocumentManager {
                                         $dir = dirname($abs_path).'/';
                                     }
                                     $new_abs_path = realpath($dir.$source);
-                                    $in_files_list[] = DocumentManager::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
+                                    $in_files_list[] = self::get_resources_from_source_html($new_abs_path, true, TOOL_DOCUMENT, $recursivity + 1);
                                     if (count($in_files_list) > 0) {
                                         $files_list = array_merge($files_list, $in_files_list);
                                     }
@@ -1915,7 +1915,7 @@ class DocumentManager {
      * @param string		destination course directory
      * @return string	new content html with replaced urls or return false if content is not a string
      */
-    function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
+    static function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         if (!is_string($content_html)) {
             return false;

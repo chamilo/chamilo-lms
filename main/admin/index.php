@@ -375,7 +375,7 @@ function check_system_version() {
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = statistics::count_courses();
+        $number_of_courses = Statistics::count_courses();
 
         // The number of users
         $number_of_users = statistics::count_users();

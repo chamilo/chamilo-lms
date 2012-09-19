@@ -1226,8 +1226,7 @@ class CourseRestorer
 				$order = 0;
 				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
-					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
-					//$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : 1;
+					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;					
 					$sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id." , question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
 					Database::query($sql);
 				}
@@ -1971,7 +1970,7 @@ class CourseRestorer
 					}
 
 					foreach($thematic->thematic_plan_list as $thematic_plan) {
-						unset($thematic_advance['id']);
+						unset($thematic_plan['id']);
 						$thematic_plan['thematic_id'] 	= $last_id;
 						$thematic_plan['c_id']  		= $this->destination_course_id;
 						$my_id = Database::insert($table_thematic_plan, $thematic_plan, false);

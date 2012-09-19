@@ -1722,26 +1722,7 @@ class SessionManager {
         }
         return $sessions;
     }
-    
-   public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
-        $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
-        $sql = "SELECT session_rcru.status
-                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-                WHERE session_rcru.id_user = user.user_id AND 
-                session_rcru.id_session = '".intval($session_id)."' AND 
-                session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
-                user.user_id = ".intval($user_id);    
-        
-        $result = Database::query($sql);
-        $status = false;
-        if (Database::num_rows($result)) {
-            $status = Database::fetch_row($result);
-            $status = $status['0'];
-        }
-        return $status;
-    }
-    
+      
     /**
      * Gets user status within a session 
      * @param $user_id

@@ -1769,6 +1769,9 @@ class SessionManager {
             
     static function get_user_status_in_session($session_id, $user_id) {
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $session_id = intval($session_id);
+        $user_id = intval($user_id);
+        
         $sql = "SELECT * FROM $tbl_session_rel_user WHERE id_user = $user_id AND id_session = $session_id";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -1776,7 +1779,7 @@ class SessionManager {
             return $result[0];
         }
         return array();
-    }
+    }    
     
     function get_all_sessions_by_promotion($id) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);

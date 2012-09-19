@@ -2239,7 +2239,7 @@ function api_get_user_platform_status($user_id = false) {
 	if ($session_id && $course_id) {
         $session_status = array();
         $session_status = array('id' => $session_id, 'course_id' => $course_id);
-        $session_user_status = SessionManager::get_user_status_in_session($user_id, $course_code, $session_id);
+        $session_user_status = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
         switch ($session_user_status) {
             case 0:
                 $session_status['status'] = 'student';

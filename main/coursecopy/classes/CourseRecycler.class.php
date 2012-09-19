@@ -280,9 +280,10 @@ class CourseRecycler
             $ids = implode(',', $ids);
 
             // Deletion of the normal tests, questions in them are not deleted, they become orphan at this moment.
-            $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND id <> -1 AND id IN(".$ids.")";
+            $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
             Database::query($sql);
-            $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND exercice_id <> -1 AND exercice_id IN(".$ids.")";
+            
+            $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
             Database::query($sql);
 
             // Identifying again and deletion of the orphan questions, if it was desired.
@@ -309,9 +310,7 @@ class CourseRecycler
                     $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
                     Database::query($sql);
                 }
-            }
-            
-            // Purge "deleted" tests (active = -1).
+            }            
             $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
             Database::query($sql);            
         }        

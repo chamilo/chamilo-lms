@@ -881,19 +881,16 @@ function display_wiki_entry($newtitle) {
         
         echo '<span style="float:right;">';
         echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
-        echo '</span>';      
-            
-            
+        echo '</span>';
+        
          //ONly available if row['id'] is set
         if ($row['id']) {
-            
-        
             //page action: export to pdf
             echo '<span style="float:right;padding-top:5px;">';
             echo '<form name="form_export2PDF" method="post" action="index.php">';
             echo '<input type="hidden" name="action" value="export_to_pdf">';
             echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
-            echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" border:none; margin-top: -9px">';
+            echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang('ExportToPDF').'" alt="'.get_lang('ExportToPDF').'" style=" width:22px; border:none; margin-top: -9px">';
             echo '</form>';
             echo '</span>';
     
@@ -903,7 +900,7 @@ function display_wiki_entry($newtitle) {
                 echo '<form name="form_export2DOC" method="post" action="index.php" >';
                 echo '<input type=hidden name="export2DOC" value="export2doc">';
                 echo '<input type=hidden name="doc_id" value="'.$row['id'].'">';            
-                echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" border:none; margin-top: -6px">';
+                echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang('ExportToDocArea').'" alt="'.get_lang('ExportToDocArea').'" style=" width:22px; border:none; margin-top: -6px">';
                 echo '</form>';
                 echo '</span>';
             }

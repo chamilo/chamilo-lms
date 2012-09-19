@@ -223,7 +223,7 @@
 	 * @param string action
 	 * @param int	 attendance id
 	 */
-	public function attendance_sheet($action, $attendance_id, $student_id = 0) {		
+	public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true) {		
 		$attendance = new Attendance();				        
 		$data = array();
 		$data['attendance_id'] = $attendance_id;		
@@ -233,22 +233,31 @@
         
 		if (!empty($_REQUEST['filter'])) {
 			$filter_type = $_REQUEST['filter'];
-		}		
-
-		if (api_is_allowed_to_edit(null, true)) {
-			$data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	            
-		} else {
-			if (!empty($student_id)) {
-				$user_id = intval($student_id);
-			} else {
-				$user_id = api_get_user_id();	
-			}            
-			$data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);            
-			$data['faults']          = $attendance->get_faults_of_user($user_id, $attendance_id);
-            
-			$data['user_id'] = $user_id;			
 		}
-				
+        
+        if ($edit == true) {
+            if (api_is_allowed_to_edit(null, true)) {
+                $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	            
+            } else {
+                
+            }
+        } else {
+            if (!empty($student_id)) {
+                $user_id = intval($student_id);
+            } else {
+                $user_id = api_get_user_id();	
+            }
+            
+            if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {                
+                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id);                
+            } else {
+                $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);            
+            }
+            
+            $data['faults']          = $attendance->get_faults_of_user($user_id, $attendance_id);
+            $data['user_id'] = $user_id;
+        }
+        
 		$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);
 		$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);
 		
@@ -279,6 +288,8 @@
 		    $data['attendant_calendar_all']            = $attendance->get_attendance_calendar($attendance_id);		    
 			$data['attendant_calendar']                = $attendance->get_attendance_calendar($attendance_id, $filter_type);
 		}
+        
+        $data['edit_table'] = intval($edit);
 		$data['is_locked_attendance'] = $attendance->is_locked_attendance($attendance_id);
 		$this->view->set_data($data);
 		$this->view->set_layout('layout'); 
@@ -536,4 +547,3 @@
         exit;
     } 	
 }
-

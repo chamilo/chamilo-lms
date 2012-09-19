@@ -40,7 +40,8 @@ $actions = array(
     'attendance_delete', 
     'attendance_delete_select', 
     'attendance_restore',
-    'attendance_sheet_export_to_pdf'
+    'attendance_sheet_export_to_pdf',
+    'attendance_sheet_list_no_edit'
 );
 
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
@@ -249,9 +250,12 @@ switch ($action) {
             api_not_allowed();            
         }
 		 break;									
-	case 'attendance_sheet_list':	
-        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id);
+	case 'attendance_sheet_list':    
+        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, true);
 		break;
+    case 'attendance_sheet_list_no_edit':
+        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, false);
+        break;        
     case 'attendance_sheet_export_to_pdf':
         $attendance_controller->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
         break;

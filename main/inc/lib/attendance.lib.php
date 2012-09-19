@@ -106,17 +106,17 @@ class Attendance
         $active_plus = 'att.active = 1';
         
         if (api_is_platform_admin()) { 
-            $active_plus = ' 1=1 ';
+            $active_plus = ' 1 = 1 ';
         }
         
 		$sql = "SELECT
-				att.id AS col0,
-				att.name AS col1,
-				att.description AS col2,
-				att.attendance_qualify_max AS col3,
-                att.locked AS col4,
-                att.active AS col5,
-                att.session_id
+                    att.id AS col0,
+                    att.name AS col1,
+                    att.description AS col2,
+                    att.attendance_qualify_max AS col3,
+                    att.locked AS col4,
+                    att.active AS col5,
+                    att.session_id
 				FROM $tbl_attendance att
 				WHERE c_id = $course_id AND $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";        
@@ -140,11 +140,18 @@ class Attendance
             if (api_get_session_id() == $attendance[6]) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
-                        if ($attendance[5] == 1) {
-                            $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
-                        } else {
-                            $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'"><del>'.$attendance[1].'</del></a>'.$session_star;
-                        }
+            if ($attendance[5] == 1) {
+                if (api_is_allowed_to_edit(null, true)) {
+                    //Link to edit
+                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                } else {
+                    //Link to view
+                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                }
+                
+            } else {
+                $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'"><del>'.$attendance[1].'</del></a>'.$session_star;
+            }
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
@@ -156,7 +163,7 @@ class Attendance
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     } else {
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), ICON_SIZE_SMALL).'</a>';
-			$attendance[2] = '<del>'.$attendance[2].'</del>';
+                        $attendance[2] = '<del>'.$attendance[2].'</del>';
                     }
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
@@ -1050,30 +1057,15 @@ class Attendance
         return $result;
     }
 
-
     /**
      * check if an attendance is locked
      * @param   int   attendance id
      * @param   bool
      */
-    public function is_locked_attendance($attendance_id) {
+    public static function is_locked_attendance($attendance_id) {
         //use gradebook lock
         $result = api_resource_is_locked_by_gradebook($attendance_id, LINK_ATTENDANCE);            
-        return $result;
-
-        /*
-        $attendance_id = intval($attendance_id);
-        $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT id FROM $tbl_attendance WHERE c_id = $course_id  AND id = $attendance_id AND locked = 1";
-        $rs  = Database::query($sql);
-        $result = false;
-
-        if (Database::num_rows($rs) > 0) {
-            $result = true;
-        }
-        return $result;*/
+        return $result;  
     }       
 
 	/**

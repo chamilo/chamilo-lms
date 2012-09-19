@@ -11,13 +11,14 @@
 // protect a course script
 api_protect_course_script(true);
 
-if (api_is_allowed_to_edit(null, true)) {
+if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {
+    
     $param_gradebook = '';
     if (isset($_SESSION['gradebook'])) {
         $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
     }   
     
-    $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_add&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id, null, array('class' => 'form-search pull-left'));    
+    $form = new FormValidator('filter', 'post', 'index.php?action=attendance_sheet_list&'.api_get_cidreq().$param_gradebook.'&attendance_id='.$attendance_id, null, array('class' => 'form-search pull-left'));    
     $values = array(
         'all'           => get_lang('All'), 
         'today'         => get_lang('Today'),
@@ -56,7 +57,6 @@ if (api_is_allowed_to_edit(null, true)) {
     $renderer->setElementTemplate('{label} {element} ');
     
     $form->setDefaults(array('filter'=>$default_filter));
-     
     
     if (!$is_locked_attendance || api_is_platform_admin()) {
         echo '<div class="actions">';
@@ -185,12 +185,14 @@ if (api_is_allowed_to_edit(null, true)) {
                 <tbody>
                 <?php 
                 $i = 1;
-                $class = '';
-                
+                $class = '';                
                 foreach ($users_in_course as $data) {
                     $faults = 0;
-                    if ($i%2 == 0) {$class='row_odd';}
-                    else {$class='row_even';}
+                    if ($i%2 == 0) {
+                        $class='row_odd';                        
+                    } else {
+                        $class='row_even';
+                    }
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $data['username']), ENT_QUOTES);
                 ?>
                     <tr class="<?php echo $class ?>">
@@ -211,127 +213,146 @@ if (api_is_allowed_to_edit(null, true)) {
                 </tbody>
             </table>
         </div>
+        
+        <?php     
+        
+        echo '<div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
+        echo '<table class="tableWithFloatingHeader data_table" width="100%">';
+        echo '<thead>';
+        if (count($attendant_calendar) > 0 ) {
+            foreach ($attendant_calendar as $calendar) {
+                $date = $calendar['date'];
+                $time = $calendar['time'];
+                $datetime = $date.'<br />'.$time;
 
-        <div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">
-            <table class="tableWithFloatingHeader data_table" width="100%">
-                <thead>         
-                <?php
-                    if (count($attendant_calendar) > 0 ) {
-                        foreach ($attendant_calendar as $calendar) {
-                            $date = $calendar['date'];
-                            $time = $calendar['time'];
-                            $datetime = $date.'<br />'.$time;
-                                                        
-                            $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
-                            
-                            if (!empty($calendar['done_attendance'])){
-                                $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
-                            }
-                            $disabled_check = 'disabled = "true"';
-                            $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';                        
-                            if ($next_attendance_calendar_id == $calendar['id']) {
-                                $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
-                                $disabled_check = '';
-                                $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
-                            }                                   
-                                                
-                            $result .= '<th width="800px">';
-                            $result .= '<center><div style="font-size:10px;width:125px;">'.$datetime.'&nbsp;';                            
-                            $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
-                            
-                            if ($is_locked_attendance == false) {
-                                $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
-                            }
-                         }                  
-                    } else {
-                        $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
-                        $result .= Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+                $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
+
+                if (!empty($calendar['done_attendance'])){
+                    $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
+                }
+                $disabled_check = 'disabled = "true"';
+                $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';                        
+                if ($next_attendance_calendar_id == $calendar['id']) {
+                    $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
+                    $disabled_check = '';
+                    $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
+                }                                   
+
+                $result .= '<th width="800px">';
+                $result .= '<center><div style="font-size:10px;width:125px;">'.$datetime.'&nbsp;';
+
+                if (api_is_allowed_to_edit(null, true)) {
+                    $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
+                }
+
+                if ($is_locked_attendance == false) {
+                    if (api_is_allowed_to_edit(null, true)) {
+                        $result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />'.$input_hidden.'</div></center></th>';
                     }
-                    ?>
-                    
-                <tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >   
-                <?php echo $result; ?>
-                </tr>
-                
-                <tr class="tableWithFloatingHeader row_odd">
-                <?php echo $result; ?>
-                </tr>                
-                </thead>
-                <tbody>         
-                <?php 
-                $i = 0;
-                foreach ($users_in_course as $user) {
-                    $class = '';
-                    if ($i%2==0) {
-                        $class = 'row_even';                        
+                }
+             }                  
+        } else {
+            $result  = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.$param_gradebook.'">';
+            $result .= Display::return_icon('attendance_calendar.png',get_lang('AttendanceCalendar'),'',ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+        }
+
+        echo '<tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
+        echo $result; 
+        echo '</tr>';                
+        echo '<tr class="tableWithFloatingHeader row_odd">';
+        echo $result;
+        echo '</tr>';
+        echo '</thead>';
+        
+        echo '<tbody>';
+        $i = 0;
+        foreach ($users_in_course as $user) {
+            $class = '';
+            if ($i%2 == 0) {
+                $class = 'row_even';                        
+            } else {
+                $class = 'row_odd';
+            }
+            echo '<tr class="'.$class.'">';
+
+            if (count($attendant_calendar) > 0 ) {                            
+                foreach ($attendant_calendar as $calendar) {
+                    $checked = 'checked';
+                    $presence = -1;
+
+                    if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
+                        $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];                                    
+                        if (intval($presence) == 1) {
+                            $checked = 'checked';
+                        } else {
+                            $checked = '';
+                        }
                     } else {
-                        $class = 'row_odd';
+                        //if the user wasn't registered at that time, consider unchecked
+                        if ($next_attendance_calendar_datetime == 0 || $calendar['date_time'] < $next_attendance_calendar_datetime) {
+                            $checked = '';
+                        }
                     }
-                ?>          
-                    <tr class="<?php echo $class ?>">
-                    <?php 
-                        if (count($attendant_calendar) > 0 ) {
-                            
-                            foreach ($attendant_calendar as $calendar) {
-                                $checked = 'checked';          
-                                $presence = null;
-                                
-                                if (isset($users_presence[$user['user_id']][$calendar['id']]['presence'])) {
-                                    $presence = $users_presence[$user['user_id']][$calendar['id']]['presence'];                                    
-                                    if (intval($presence) == 1) {
-                                        $checked = 'checked';
-                                    } else {
-                                        $checked = '';
-                                    }
-                                } else {
-                                    //if the user wasn't registered at that time, consider unchecked
-                                    if ($next_attendance_calendar_datetime == 0 || $calendar['date_time'] < $next_attendance_calendar_datetime) {
-                                        $checked = '';
-                                    }
-                                }
-                                $disabled = 'disabled';
-                                $style_td = '';
-                                
-                                if ($next_attendance_calendar_id == $calendar['id']) {
-                                	if ($i%2==0)
-                                    	$style_td = 'background-color:#eee;';
-                                	else 
-                                		$style_td = 'background-color:#dcdcdc;';
-                                    $disabled = '';
-                                }
-                    ?>
-                            <td style="<?php echo $style_td ?>" class="checkboxes_col_<?php echo $calendar['id'] ?>">
-                                <div style="height:20px">
-                                 <center>
-                                    <?php if (!$is_locked_attendance || api_is_platform_admin()) { ?>
-                                        <input type="checkbox" name="check_presence[<?php echo $calendar['id'] ?>][]" value="<?php echo $user['user_id'] ?>"  <?php echo $disabled.' '.$checked ?> /><span class="<?php echo 'anchor_'.$calendar['id'] ?>"></span>
-                                    <?php } else { 
-                                                echo $presence?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence'));
-                                           } ?>
-                                </center>
-                                </div>
-                            </td>
-                            
-                    <?php   } 
-                        } else { ?>
-                            <td class="checkboxes_col_<?php echo $calendar['id'] ?>">
-                                <div style="height:20px">
-                                    <center>&nbsp;</center>
-                               </div>
-                            </td>
-                  <?php } ?>
-                    </tr>
-                <?php $i++ ;            
-                } 
-                ?>  
-                </tbody>            
-            </table>
-        </div>  
-    </div>
+                    $disabled = 'disabled';
+                    $style_td = '';
+
+                    if ($next_attendance_calendar_id == $calendar['id']) {
+                        if ($i%2==0)
+                            $style_td = 'background-color:#eee;';
+                        else 
+                            $style_td = 'background-color:#dcdcdc;';
+                        $disabled = '';
+                    }
+
+                    echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
+                    echo '<div style="height:20px">';
+                    echo '<center>';
+                    if (api_is_allowed_to_edit(null, true)) {
+                        if (!$is_locked_attendance || api_is_platform_admin()) {
+                            echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
+                            echo '<span class="anchor_'.$calendar['id'].'"></span>';
+                        } else { 
+                            echo $presence ? Display::return_icon('checkbox_on.gif',get_lang('Presence')) : Display::return_icon('checkbox_off.gif',get_lang('Presence'));                            
+                        }
+                    } else {
+                        switch($presence) {
+                            case 1:
+                                echo Display::return_icon('accept.png',get_lang('Attended'));
+                                break;
+                            case 0:
+                                echo Display::return_icon('exclamation.png',get_lang('NotAttended'));
+                                break;
+                            case -1:                                
+                                //echo Display::return_icon('warning.png',get_lang('NotAttended'));
+                                break;
+                        }                        
+                    }
+                    echo '</center>';
+                    echo '</div>';
+                    echo '</td>';
+                }
+            } else { 
+                echo '<td class="checkboxes_col_'.$calendar['id'].'">';
+                echo '<div style="height:20px">';
+                echo '<center>&nbsp;</center>
+                        </div>
+                        </td>';
+            }
+            echo '</tr>';
+            $i++ ;            
+        }
+        echo '</tbody></table>';
+        echo '</div></div>';
+    ?>
     <div class="clear"></div>
     <div style="margin-top:20px;">
-        <?php if (!$is_locked_attendance || api_is_platform_admin()) { ?>
-            <button type="submit" class="save"><?php echo get_lang('Save') ?></button><?php } ?>
+        <?php if (!$is_locked_attendance || api_is_platform_admin()) { 
+                if (api_is_allowed_to_edit(null, true)) {
+            ?>
+            <button type="submit" class="save"><?php echo get_lang('Save') ?></button>
+        <?php }
+            }
+        ?>
     </div>
     </form> 
     <?php 
@@ -339,9 +360,9 @@ if (api_is_allowed_to_edit(null, true)) {
         echo Display::display_warning_message('<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>', false);  
     }
 } else {
+    echo Display::page_header(get_lang('AttendanceSheetReport'));
     // View for students
-?>  
-    <h3><?php echo get_lang('AttendanceSheetReport') ?></h3>
+?>      
     <?php if(!empty($users_presence)) { ?>
         <div>
             <table width="250px;">
@@ -362,7 +383,7 @@ if (api_is_allowed_to_edit(null, true)) {
         
         if (!empty($users_presence)) {
             $i = 0;
-            foreach($users_presence[$user_id] as $presence) { 
+            foreach ($users_presence[$user_id] as $presence) { 
                 $class = '';
                 if ($i%2==0) {$class = 'row_even';}
                 else {$class = 'row_odd';}  

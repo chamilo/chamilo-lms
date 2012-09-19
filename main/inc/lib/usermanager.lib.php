@@ -2686,7 +2686,7 @@ class UserManager {
 	 * @return int returns 0 if fails otherwise the tag id
 	 */
 	public static function get_tag_id($tag, $field_id) {
-		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
+		$table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
 		$tag = Database::escape_string($tag);
 		$field_id = intval($field_id);
 		//with COLLATE latin1_bin to select query in a case sensitive mode
@@ -2732,12 +2732,12 @@ class UserManager {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$table_user_tag_values	= Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
-		$tag = Database::escape_string($tag);
-		$tag = trim($tag);
+		$tag = trim(Database::escape_string($tag));		
 		$user_id = intval($user_id);
 		$field_id = intval($field_id);
 
-		$tag_id = UserManager::get_tag_id($tag,$field_id);
+		$tag_id = UserManager::get_tag_id($tag, $field_id);
+        var_dump($tag_id);
         
 		/* IMPORTANT
 		 *  @todo we don't create tags with numbers
@@ -2774,7 +2774,7 @@ class UserManager {
 
 		if (!empty($last_insert_id) && ($last_insert_id!=0)) {
 			//we insert the relationship user-tag
-			$sql_select ="SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";
+			$sql_select ="SELECT tag_id FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $last_insert_id ";            
 			$result = Database::query($sql_select);
 			//if the relationship does not exist we create it
 			if (Database::num_rows($result)==0) {
@@ -2818,7 +2818,7 @@ class UserManager {
 	 */
 	public static function process_tags($tags, $user_id, $field_id) {
 		//We loop the tags and add it to the DB        
-		if (is_array($tags)) {
+		if (is_array($tags)) {            
 			foreach($tags as $tag) {
 				UserManager::add_tag($tag, $user_id, $field_id);
 			}

@@ -622,11 +622,11 @@ if ($form->validate()) {
 
 	//2. Update the extra fields and user tags if available
     
-	if (is_array($extras) && count($extras)> 0) {
+	if (is_array($extras) && count($extras)> 0) {        
 		foreach ($extras as $key => $value) {
 			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
 			UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
-		}
+		}        
 	}
     
     // re-init the system to take new settings into account

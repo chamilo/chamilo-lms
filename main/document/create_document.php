@@ -423,7 +423,12 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 				$selected = (substr($dir,0,-1) == $folder) ? ' selected="selected"' : '';
 				$path_parts = explode('/', $folder);
 				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
-				$label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
+                $space_counter =count($path_parts) - 2;
+                if ($space_counter > 0) {
+                    $label = str_repeat('&nbsp;&nbsp;&nbsp;', $space_counter).' &mdash; '.$folder_titles[$folder];
+                } else {
+                    $label = ' &mdash; '.$folder_titles[$folder];
+                }
 				$parent_select -> addOption($label, $folder);
 				if ($selected != '') {
 					$parent_select->setSelected($folder);

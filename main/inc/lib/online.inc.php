@@ -259,7 +259,12 @@ function who_is_online_count($time_limit = null, $friends = false) {
 	$friend_user_table  = Database::get_main_table(TABLE_MAIN_USER_REL_USER);	
 	$query = '';
     
-    $current_date		= api_get_utc_datetime();
+   /*$current_date = api_get_utc_datetime();
+   $current_date = api_strtotime($current_date, 'UTC');
+   $current_date = date('Y-m-d H:i:s', $current_date);*/
+   
+    $online_time 		= time() - $time_limit*60;
+	$current_date		= api_get_utc_datetime($online_time);
     
 	if ($friends) {
 		// 	who friends from social network is online

@@ -2117,7 +2117,7 @@ class Tracking {
 		 * @param   int     user id
 		 * @return  string  html code
 		 */
-		function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
+		static function show_user_progress($user_id, $session_id = 0, $extra_params = '', $show_courses = true) {
 			global $_configuration;
 			$tbl_course		            = Database :: get_main_table(TABLE_MAIN_COURSE);
 			$tbl_session		        = Database :: get_main_table(TABLE_MAIN_SESSION);
@@ -2557,7 +2557,7 @@ class Tracking {
 		 * @param   int     session id
 		 * @return  string  html code
 		 */
-		function show_course_detail($user_id, $course_code, $session_id) {
+		static function show_course_detail($user_id, $course_code, $session_id) {
 			$html = '';
 			if (isset($course_code)) {				
 

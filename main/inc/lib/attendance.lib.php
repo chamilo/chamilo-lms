@@ -98,11 +98,17 @@ class Attendance
         $column = intval($column);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
-            if (!in_array($direction, array('ASC','DESC'))) {
+        
+        if (!in_array($direction, array('ASC','DESC'))) {
             $direction = 'ASC';
         }
+        
         $active_plus = 'att.active = 1';
-        if (api_is_platform_admin()) { $active_plus = ' 1=1 ';}
+        
+        if (api_is_platform_admin()) { 
+            $active_plus = ' 1=1 ';
+        }
+        
 		$sql = "SELECT
 				att.id AS col0,
 				att.name AS col1,
@@ -113,7 +119,7 @@ class Attendance
                 att.session_id
 				FROM $tbl_attendance att
 				WHERE c_id = $course_id AND $active_plus $condition_session
-				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
+				ORDER BY col$column $direction LIMIT $from,$number_of_items ";        
 		$res = Database::query($sql);
 		$attendances = array ();
 

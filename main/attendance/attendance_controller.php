@@ -34,10 +34,9 @@
 	 * @param boolean   true for listing history (optional)
 	 * @param array 	message for showing by action['edit','add','delete'] (optional) 
 	 */
-	public function attendance_list($history=false,$messages=array()) {
-		
-		$attendance = new Attendance();        
-		$data = array();		
+	public function attendance_list($history=false,$messages=array()) {		
+		$attendance = new Attendance();
+		$data = array();
 		
 		// render to the view
 		$this->view->set_data($data);

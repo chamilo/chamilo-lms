@@ -40,9 +40,9 @@ $actions = array(
     'attendance_delete', 
     'attendance_delete_select', 
     'attendance_restore',
-    'attendance_sheet_export_to_pdf',
-
+    'attendance_sheet_export_to_pdf'
 );
+
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
 $action  = 'attendance_list';
 
@@ -114,7 +114,6 @@ $(function() {
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 			
-			
 			$(".checkboxes_col_"+calendar_id).mouseover(function() {	
 				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
 				//$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"red", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
@@ -122,9 +121,8 @@ $(function() {
 			});
 			
 			$(".checkboxes_col_"+calendar_id).mouseout(function() {
-			//	$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-			//	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-							
+                //	$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
+                //	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });			
 			});
 				
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
@@ -148,7 +146,7 @@ $(function() {
 		} else {
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
 		}
-	});					
+	});
 	
 	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
 		$(".row_odd").css({"background-color":"#F9F9F9"});
@@ -218,7 +216,6 @@ if ($action == 'calendar_add') {
 if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 	$attendance_controller->attendance_delete($_POST['id']);
 }
-
 // distpacher actions to controller
 switch ($action) {	
 	case 'attendance_list':	

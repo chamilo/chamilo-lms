@@ -212,6 +212,7 @@ class Template {
     function display_one_col_template() {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
+        self::show_page_loaded_info();
     }
 
     /**
@@ -220,6 +221,15 @@ class Template {
     function display_two_col_template() {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
+        self::show_page_loaded_info();        
+    }
+    
+    function show_page_loaded_info() {        
+        //@todo will be removed before a stable release
+        $mtime = microtime(); 
+        $mtime = explode(" ",$mtime); 
+        $mtime = $mtime[1] + $mtime[0]; 
+        error_log("Page loaded in ".($mtime-START));
     }
 
     /**

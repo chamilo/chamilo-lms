@@ -21,6 +21,13 @@
  *
  */
 
+ //@todo will be removed before a stable release
+$mtime = microtime(); 
+$mtime = explode(" ",$mtime); 
+$mtime = $mtime[1] + $mtime[0]; 
+$starttime = $mtime; 
+define('START', $starttime);
+
 // Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
@@ -65,7 +72,6 @@ if (empty($_configuration['system_version'])) {
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 
-
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
@@ -97,6 +103,15 @@ ini_set('auto_detect_line_endings', '1');
 
 // Include the libraries that are necessary everywhere
 require_once dirname(__FILE__).'/autoload.inc.php';
+
+/* 
+ * Using composer
+ */
+//Fixes autoader issue with composer
+/*
+define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
+require_once __DIR__.'../../../vendor/autoload.php'; 
+*/
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';

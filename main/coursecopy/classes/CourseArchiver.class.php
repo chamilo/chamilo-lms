@@ -33,7 +33,7 @@ class CourseArchiver {
      * Write a course and all its resources to a zip-file.
      * @return string A pointer to the zip-file
      */
-    function write_course($course) {
+    static function write_course($course) {
         $perm_dirs = api_get_permissions_for_new_directories();
 
         CourseArchiver::clean_backup_dir();

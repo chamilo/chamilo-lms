@@ -46,7 +46,11 @@ class ForumTopic extends Resource {
      */
     function show() {
         parent::show();
-        echo $this->obj->thread_title . ' (' . $this->obj->topic_poster_name . ', ' . $this->obj->topic_time . ')';
+        $extra = api_convert_and_format_date($this->obj->thread_date);
+        if ($this->obj->thread_poster_id) {
+            $user_info = api_get_user_info($this->obj->thread_poster_id);
+            $extra = $user_info['complete_name'].', '.$extra;
+        }        
+        echo $this->obj->thread_title . ' (' . $extra . ')';
     }
-
 }

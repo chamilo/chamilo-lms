@@ -221,8 +221,7 @@ class CourseSelectForm
                     echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUM."',true, '".$forum_category_id."');\" >".get_lang('All')."</a>";
                     echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUM."',false, '".$forum_category_id."' );\" >".get_lang('None')."</a>";
                     echo '</div>';
-                }
-                
+                }                
                 echo '</li>';
 
                 if (isset($forums[$forum_category_id])) {
@@ -344,7 +343,7 @@ class CourseSelectForm
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	function get_posted_course($from='', $session_id = 0, $course_code = '') {
+	static function get_posted_course($from='', $session_id = 0, $course_code = '') {
 		$course = Course::unserialize(base64_decode($_POST['course']));
 
 		//Create the resource DOCUMENT objects

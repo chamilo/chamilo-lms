@@ -73,10 +73,10 @@ class Course
 	/**
 	 * Show this course resources
 	 */
-	function show()	{
+	function show()	{/*
 		echo '<pre>';
 		print_r($this);
-		echo '</pre>';
+		echo '</pre>';*/
 	}
 
 	/**

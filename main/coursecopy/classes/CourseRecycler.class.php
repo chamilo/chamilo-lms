@@ -448,8 +448,7 @@ class CourseRecycler
             $table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
            
             $resources = $this->course->resources;
-            foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {
-                //print_r($obj);
+            foreach ($resources[RESOURCE_ATTENDANCE] as $last_id => $obj) {                
                 if (is_numeric($last_id)) {                    
                     foreach($obj->attendance_calendar as $attendance_calendar) {
                         $cond = array('id = ? AND c_id = ? '=>array($attendance_calendar['id'], $this->course_id));
@@ -457,7 +456,7 @@ class CourseRecycler
                     }
                     $cond = array('id = ? AND c_id = ?'=>array($last_id, $this->course_id));
                     Database::delete($table_attendance, $cond);
-                    api_item_property_update($this->destination_course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
+                    api_item_property_update($this->course_info, TOOL_ATTENDANCE, $last_id,'AttendanceDeleted', api_get_user_id());
                 }
             }
         }

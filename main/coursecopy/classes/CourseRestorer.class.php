@@ -866,11 +866,10 @@ class CourseRestorer
 		//$new_id = Database::insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
         
-		$topic_replies = -1;
-        var_dump($this->course->resources);exit;
+		$topic_replies = -1;        
 		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){
 			if ($post->obj->topic_id == $id) {
-				$topic_replies ++;
+				$topic_replies++;
 				$this->restore_post($post_id, $new_id, $forum_id);
 			}
 		}

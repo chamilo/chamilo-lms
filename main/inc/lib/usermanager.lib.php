@@ -1689,7 +1689,6 @@ class UserManager {
 			while ($row = Database::fetch_array($res)) {
 				if ($row['type'] == self::USER_FIELD_TYPE_TAG) {
 					$tags = self::get_user_tags_to_string($user_id,$row['id'],false);
-                    
 					$extra_data['extra_'.$row['fvar']] = $tags;
 				} else {
 					$sqlu = "SELECT field_value as fval FROM $t_ufv WHERE field_id=".$row['id']." AND user_id = ".$user_id;
@@ -3600,7 +3599,8 @@ class UserManager {
                     break;
                 case self::USER_FIELD_TYPE_TAG:
                     //the magic should be here
-                    $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);                    
+                    $user_tags = UserManager::get_user_tags($user_id, $field_details[0]);    
+                    
 
                     $tag_list = '';
                     if (is_array($user_tags) && count($user_tags)> 0) {

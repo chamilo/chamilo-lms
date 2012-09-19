@@ -18,8 +18,6 @@ $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 
-//require_once 'statistics.lib.php'; moved to autoload
-
 $strCourse = get_lang('Courses');
 $strUsers = get_lang('Users');
 $strSystem = get_lang('System');

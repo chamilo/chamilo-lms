@@ -14,7 +14,6 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

@@ -1354,6 +1354,32 @@ function get_forums($id='', $course_code = '') {
     return $forum_list;
 }
 
+function get_last_post_by_thread($course_id,  $thread_id, $forum_id, $show_visible = true) {
+    if (empty($thread_id) || empty($forum_id) || empty($course_id)) {
+        return false;
+    }
+        
+    $thread_id = intval($thread_id);
+    $forum_id = intval($forum_id);
+    $course_id = intval($course_id);
+    
+    $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $sql = "SELECT * FROM $table_posts 
+            WHERE c_id = $course_id AND thread_id = $thread_id AND forum_id = $forum_id";
+    
+    if ($show_visible == false) {
+        $sql .= " AND visible = 1 ";
+    }
+    
+    $sql .= " ORDER BY post_id DESC LIMIT 1";
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        return Database::fetch_array($result,'ASSOC');
+    } else {
+        return false;
+    }    
+}
+
 /**
  * This function gets all the last post information of a certain forum
  *
@@ -1372,8 +1398,6 @@ function get_last_post_information($forum_id, $show_invisibles = false, $course_
         $course_id = intval($course_id);
     }
 
-    $table_forums 			= Database :: get_course_table(TABLE_FORUM);
-    $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
     $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
@@ -1436,8 +1460,7 @@ function get_threads($forum_id, $course_code = null) {
 	$course_id   = $course_info['real_id'];
 
     $table_item_property 	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);
-    $table_posts 			= Database :: get_course_table(TABLE_FORUM_POST);
+    $table_threads 			= Database :: get_course_table(TABLE_FORUM_THREAD);    
     $table_users 			= Database :: get_main_table(TABLE_MAIN_USER);
 
     $thread_list = array();
@@ -1446,49 +1469,48 @@ function get_threads($forum_id, $course_code = null) {
     // 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
     //					This is why it is added to the end of the field selection
 
-    $sql = "SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
-                last_poster_users.firstname as last_poster_firstname , last_poster_users.lastname as last_poster_lastname, last_poster_users.user_id as last_poster_user_id, thread.locked as locked
+    $sql = "SELECT  thread.*, 
+                    item_properties.*, 
+                    users.firstname, 
+                    users.lastname, 
+                    users.user_id,
+                    thread.locked as locked
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
-                ON thread.thread_id=item_properties.ref
-                AND item_properties.visibility='1'
-                AND item_properties.tool='".TABLE_FORUM_THREAD."'
+                ON  thread.thread_id=item_properties.ref AND 
+                    item_properties.c_id = $course_id AND
+                    thread.c_id = $course_id AND 
+                    item_properties.tool='".TABLE_FORUM_THREAD."'
             LEFT JOIN $table_users users
-                ON thread.thread_poster_id=users.user_id
-            LEFT JOIN $table_posts post
-                ON thread.thread_last_post = post.post_id
-            LEFT JOIN $table_users last_poster_users
-                ON post.poster_id= last_poster_users.user_id
+                ON thread.thread_poster_id=users.user_id    
             WHERE
-            post.c_id = $course_id AND
-            item_properties.c_id = $course_id AND
-            thread.c_id = $course_id AND
-            thread.forum_id='".Database::escape_string($forum_id)."'
+                item_properties.visibility='1' AND            
+                thread.forum_id='".Database::escape_string($forum_id)."'
             ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+    
     if (is_allowed_to_edit()) {
         // important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
         //					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
         // 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
         //					This is why it is added to the end of the field selection
-        $sql = "SELECT thread.*, item_properties.*, post.*, users.firstname, users.lastname, users.user_id,
-                    last_poster_users.firstname as last_poster_firstname , last_poster_users.lastname as last_poster_lastname, last_poster_users.user_id as last_poster_user_id, thread.locked as locked
+        $sql = "SELECT  thread.*, 
+                        item_properties.*,                         
+                        users.firstname, 
+                        users.lastname, 
+                        users.user_id,
+                        thread.locked as locked
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
-                    ON thread.thread_id=item_properties.ref
-                    AND item_properties.visibility<>2
-                    AND item_properties.tool='".TABLE_FORUM_THREAD."'
+                    ON  thread.thread_id=item_properties.ref AND
+                        item_properties.c_id = $course_id AND
+                        thread.c_id = $course_id AND                        
+                        item_properties.tool='".TABLE_FORUM_THREAD."'
                 LEFT JOIN $table_users users
-                    ON thread.thread_poster_id=users.user_id
-                LEFT JOIN $table_posts post
-                    ON thread.thread_last_post = post.post_id
-                LEFT JOIN $table_users last_poster_users
-                    ON post.poster_id= last_poster_users.user_id
+                    ON thread.thread_poster_id=users.user_id               
                 WHERE
-                post.c_id = $course_id AND
-            	item_properties.c_id = $course_id AND
-            	thread.c_id = $course_id AND
-                thread.forum_id='".Database::escape_string($forum_id)."'
-                ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
+                    item_properties.visibility<>2 AND           	
+                    thread.forum_id='".Database::escape_string($forum_id)."'
+                ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";        
     }    
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result, 'ASSOC')) {

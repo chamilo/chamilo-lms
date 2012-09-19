@@ -38,6 +38,7 @@ if (isset($_GET['origin'])) {
 // Note pcool: I tried to use only one sql statement (and function) for this,
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 $current_thread	= get_thread_information($_GET['thread']); // Nnote: This has to be validated that it is an existing thread
+
 $current_forum	= get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
 
@@ -65,9 +66,7 @@ if ($origin == 'group') {
     $interbreadcrumb[] = array('url'=>'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
     $interbreadcrumb[] = array('url'=>'viewthread.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']), 'name' => Security::remove_XSS($current_thread['thread_title']));
 
-    Display :: display_header('');
-    //api_display_tool_title($nameTools);
-
+    Display :: display_header('');    
 } else {
     $my_search = isset($_GET['search']) ? $_GET['search'] : '';
     if ($origin == 'learnpath') {
@@ -80,8 +79,7 @@ if ($origin == 'group') {
 
         $message = isset($message) ? $message : '';
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
-        Display :: display_header('');
-        //api_display_tool_title($nameTools);
+        Display :: display_header('');        
     }
 }
 
@@ -90,7 +88,7 @@ if ($origin == 'group') {
 // If the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 OR $current_thread['visibility'] == 0)) {
-    $forum_allow = forum_not_allowed_here();
+    $forum_allow = forum_not_allowed_here();    
     if ($forum_allow === false) {
         exit;
     }
@@ -226,19 +224,18 @@ if ($my_message != 'PostDeletedSpecial') {
     			break;
     	}    	
     }
-
     switch ($viewmode) {
         case 'flat':
-            include_once('viewthread_flat.inc.php');
+            include_once 'viewthread_flat.inc.php';
             break;
         case 'threaded':
-            include_once('viewthread_threaded.inc.php');
+            include_once 'viewthread_threaded.inc.php';
             break;
         case 'nested':
-            include_once('viewthread_nested.inc.php');
+            include_once 'viewthread_nested.inc.php';
             break;
         default:
-            include_once('viewthread_flat.inc.php');
+            include_once 'viewthread_flat.inc.php';
             break;
     }
 } // if ($message != 'PostDeletedSpecial') // in this case the first and only post of the thread is removed.

@@ -327,9 +327,7 @@ echo '<td>'.get_lang('Actions').'</td>';
 echo '</tr>';
 
 // Getting al the threads
-$threads = get_threads($my_forum); // Note: This has to be cleaned first.
-
-
+$threads = get_threads($my_forum); // Note: This has to be cleaned first
 $whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 $course_id = api_get_course_int_id();
@@ -364,12 +362,22 @@ if (is_array($threads)) {
             // display the author name
             $tab_poster_info = api_get_user_info($row['user_id']);
             $poster_username = sprintf(get_lang('LoginX'), $tab_poster_info['username']);
+            
             if ($origin != 'learnpath') {
                 echo '<td>'.display_user_link($row['user_id'], api_get_person_name($row['firstname'], $row['lastname']), '', $poster_username).'</td>';
             } else {
                 echo '<td>'.Display::tag('span', api_get_person_name($row['firstname'], $row['lastname']), array("title"=>api_htmlentities($poster_username, ENT_QUOTES))).'</td>';
-            }            
+            }   
             
+            $last_post_info = get_last_post_by_thread($row['c_id'], $row['thread_id'], $row['forum_id'], is_allowed_to_edit());
+            $last_post = null;
+            
+            if ($last_post_info) {
+                $poster_info = api_get_user_info($last_post_info['poster_id']);                                
+                $post_date = api_convert_and_format_date($last_post_info['post_date']);
+                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($last_post_info['poster_id'], $poster_info['complete_name'], '', $poster_info['user_name']);        
+            }
+            /*
             if ($row['last_poster_user_id'] == '0') {
                 $name = $row['poster_name'];
                 $last_poster_username = "";
@@ -380,7 +388,7 @@ if (is_array($threads)) {
             }
             // If the last post is invisible and it is not the teacher who is looking then we have to find the last visible post of the thread.
             if (($row['visible'] == '1' OR api_is_allowed_to_edit(false, true)) && $origin != 'learnpath') {
-                $last_post = api_convert_and_format_date($row['thread_date']).' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name, '', $last_poster_username);
+                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($row['last_poster_user_id'], $name, '', $last_poster_username);
             } elseif ($origin != 'learnpath') {
                 $last_post_sql = "SELECT post.*, user.firstname, user.lastname, user.username FROM $table_posts post, $table_users user WHERE post.poster_id=user.user_id AND visible='1' AND thread_id='".$row['thread_id']."' AND post.c_id=".api_get_course_int_id()." ORDER BY post_id DESC";
                 $last_post_result = Database::query($last_post_sql);
@@ -395,7 +403,7 @@ if (is_array($threads)) {
                 $last_post_info_username = sprintf(get_lang('LoginX'), $last_post_row['username']);
                 $name = api_get_person_name($last_post_row['firstname'], $last_post_row['lastname']);
                 $last_post = api_convert_and_format_date($last_post_row['post_date']).' '.get_lang('By').' '.Display::tag('span', $name, array("title"=>api_htmlentities($last_post_info_username, ENT_QUOTES)));
-            }
+            }*/
 
             echo '<td>'.$last_post.'</td>';
             echo '<td class="td_actions">';

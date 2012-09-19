@@ -32,7 +32,6 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 define('FILE_SKIP',             1);
 define('FILE_RENAME',           2);
 define('FILE_OVERWRITE',        3);
-
 define('UTF8_CONVERT', 		false); //false by default
 
 /**
@@ -729,30 +728,7 @@ class CourseRestorer
                 $params['forum_category'] = $cat_id;    
                 unset($params['forum_id']);
                 $new_id = Database::insert($table_forum, $params);
-				
-                /*
-				$sql = "INSERT INTO ".$table_forum." SET
-					forum_title = '".self::DBUTF8escapestring($forum->title).
-					"', c_id= '".$this->destination_course_id.
-					"', forum_comment = '".self::DBUTF8escapestring($forum->description).
-					"', forum_category = ".(int)self::DBUTF8escapestring($cat_id).
-					", forum_last_post = ".(int)self::DBUTF8escapestring($forum->last_post).
-					", forum_threads = ".(int)self::DBUTF8escapestring($forum->topics).
-					", forum_posts = ".(int)self::DBUTF8escapestring($forum->posts).
-					", allow_anonymous = ".(int)self::DBUTF8escapestring($forum->allow_anonymous).
-					", allow_edit = ".(int)self::DBUTF8escapestring($forum->allow_edit).
-					", approval_direct_post = '".self::DBUTF8escapestring($forum->approval_direct_post).
-					"', allow_attachments = ".(int)self::DBUTF8escapestring($forum->allow_attachments).
-					", allow_new_threads = ".(int)self::DBUTF8escapestring($forum->allow_new_topics).
-					", default_view = '".self::DBUTF8escapestring($forum->default_view).
-					"', forum_of_group = '".self::DBUTF8escapestring($forum->of_group).
-					"', forum_group_public_private = '".self::DBUTF8escapestring($forum->group_public_private).
-					"', forum_order = ".(int)self::DBUTF8escapestring($forum->order).
-					", locked = ".(int)self::DBUTF8escapestring($forum->locked).
-					", session_id = ".(int)self::DBUTF8escapestring($forum->session_id).
-					", forum_image = '".self::DBUTF8escapestring($forum->image)."'";
-				Database::query($sql);*/
-				//$new_id = Database::insert_id();
+			
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
 				$forum_topics = 0;
 				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {                    
@@ -763,8 +739,7 @@ class CourseRestorer
 						}
 					}
 				}
-				if ($forum_topics > 0) {
-					//$last_post = $this->course->resources[RESOURCE_FORUMPOST][$forum->last_post];
+				if ($forum_topics > 0) {					
 					$sql = "UPDATE ".$table_forum." SET forum_threads = ".$forum_topics." 
                             WHERE c_id = {$this->destination_course_id} AND forum_id = ".(int)$new_id;
 					Database::query($sql);
@@ -829,58 +804,20 @@ class CourseRestorer
         $params['thread_close_date']  = '0000-00-00 00:00:00';
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
-        unset($params['thread_id']);        
+        unset($params['thread_id']);      
         $new_id = Database::insert($table, $params);        
         api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);
         
-        //Save a post for this thread
-        /*
-        $post_params = array(
-          'c_id' => $this->destination_course_id,
-          'post_title' => $params['thread_title'],
-          'post_text' => $params['thread_title'],
-        );
-        
-         * 
-         */
-        
-        /*
-		$sql = "INSERT INTO ".$table." SET
-			c_id = ".$this->destination_course_id." ,
-			thread_title = '".self::DBUTF8escapestring($topic->title).
-			"', forum_id = ".(int)self::DBUTF8escapestring($forum_id).
-			", thread_date = '".self::DBUTF8escapestring($topic->time).
-			"', thread_poster_id = ".(int)self::DBUTF8escapestring($topic->topic_poster_id).
-			", thread_poster_name = '".self::DBUTF8escapestring($topic->topic_poster_name).
-			"', thread_views = ".(int)self::DBUTF8escapestring($topic->views).
-			", thread_sticky = ".(int)self::DBUTF8escapestring($topic->sticky).
-			", locked = ".(int)self::DBUTF8escapestring($topic->locked).
-			", thread_close_date = '".self::DBUTF8escapestring($topic->time_closed).
-			"', thread_weight = ".(float)self::DBUTF8escapestring($topic->weight).
-			", thread_title_qualify = '".self::DBUTF8escapestring($topic->title_qualify).
-			"', thread_qualify_max = ".(float)self::DBUTF8escapestring($topic->qualify_max);*/
-		//Database::query($sql);
-		//$new_id = Database::insert_id();
 		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
         
 		$topic_replies = -1;        
-		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){
-			if ($post->obj->topic_id == $id) {
+       
+		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){             
+			if ($post->obj->thread_id == $id) {
 				$topic_replies++;
 				$this->restore_post($post_id, $new_id, $forum_id);
 			}
-		}
-        /*
-		$last_post = $this->course->resources[RESOURCE_FORUMPOST][$topic->last_post];
-		if (is_object($last_post)) {
-			$sql = "UPDATE ".$table." SET thread_last_post = ".(int)$last_post->destination_id;
-			Database::query($sql);
-		}
-        
-		if ($topic_replies >= 0) {
-			$sql = "UPDATE ".$table." SET thread_replies = ".$topic_replies;
-			Database::query($sql);
-		}*/
+		}       
 		return $new_id;
 	}
     
@@ -890,8 +827,7 @@ class CourseRestorer
 	 */
 	function restore_post($id, $topic_id, $forum_id) {
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
-		$resources = $this->course->resources;
-		$post = $resources[RESOURCE_FORUMPOST][$id];
+		$post = $this->course->resources[RESOURCE_FORUMPOST][$id];        
         $params = (array) $post->obj;
         $params['c_id'] = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
@@ -900,22 +836,9 @@ class CourseRestorer
         $params['post_date'] = api_get_utc_datetime();
         unset($params['post_id']);        
         
-        $new_id = Database::insert($table_post, $params, true);
-        /*
-		$sql = "INSERT INTO ".$table_post." SET
-				c_id = ".$this->destination_course_id." ,
-				post_title = '".self::DBUTF8escapestring($post->title).
-			"', post_text = '".self::DBUTF8escapestring($post->text).
-			"', thread_id = ".(int)self::DBUTF8escapestring($topic_id).
-			", post_date = '".self::DBUTF8escapestring($post->post_time).
-			"', forum_id = ".(int)self::DBUTF8escapestring($forum_id).
-			", poster_id = ".(int)self::DBUTF8escapestring($post->poster_id).
-			", poster_name = '".self::DBUTF8escapestring($post->poster_name).
-			"', post_notification = ".(int)self::DBUTF8escapestring($post->topic_notify).
-			", post_parent_id = ".(int)self::DBUTF8escapestring($post->parent_post_id).
-			", visible = ".(int)self::DBUTF8escapestring($post->visible);
-		Database::query($sql);
-		$new_id = Database::insert_id();*/
+        $new_id = Database::insert($table_post, $params);
+        api_item_property_update($this->destination_course_info, TOOL_FORUM_POST, $new_id, 'PostAdded', api_get_user_id(), 0, 0, null, null);
+        
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		return $new_id;
 	}

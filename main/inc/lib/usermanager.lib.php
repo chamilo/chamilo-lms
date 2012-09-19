@@ -2736,8 +2736,7 @@ class UserManager {
 		$field_id = intval($field_id);
 
 		$tag_id = UserManager::get_tag_id($tag, $field_id);
-        var_dump($tag_id);
-        
+                
 		/* IMPORTANT
 		 *  @todo we don't create tags with numbers
 		 *

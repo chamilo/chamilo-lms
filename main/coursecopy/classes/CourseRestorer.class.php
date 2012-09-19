@@ -33,7 +33,7 @@ define('FILE_SKIP',             1);
 define('FILE_RENAME',           2);
 define('FILE_OVERWRITE',        3);
 
-define('UTF8_CONVERT', 		true);
+define('UTF8_CONVERT', 		false); //false by default
 
 /**
  * Class to restore items from a course object to a Chamilo-course

@@ -55,7 +55,12 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
                 $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                 $path_parts = explode('/', $folder);
                 $folder_titles[$folder] = cut($folder_titles[$folder], 80);
-                $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$folder_titles[$folder];
+                $counter = count($path_parts) - 2;
+                if ($counter > 0) {
+                    $label = str_repeat('&nbsp;&nbsp;&nbsp;', $counter).' &mdash; '.$folder_titles[$folder];
+                } else {
+                    $label = ' &mdash; '.$folder_titles[$folder];
+                }
                 $parent_select -> addOption($label, $folder_id);
                 if ($selected != '') {
                     $parent_select->setSelected($folder_id);

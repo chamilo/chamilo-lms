@@ -6795,13 +6795,14 @@ class learnpath {
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_doc 	 = Database :: get_course_table(TABLE_DOCUMENT);
 
-        $path_parts = pathinfo($extra_info['dir']);
+        
         $no_display_edit_textarea = false;
 
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
         if ($action == "edit") {
             if (is_array($extra_info)) {
+                $path_parts = pathinfo($extra_info['dir']);
                 if ($path_parts['extension'] != "txt" && $path_parts['extension'] != "html") {
                     $no_display_edit_textarea = true;
                 }
@@ -6968,7 +6969,7 @@ class learnpath {
         //POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
-                if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
                     $s_selected_position = $arrLP[$i]['id'];
                 elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
                 $arrHide[$arrLP[$i]['id']]['value'] = get_lang('After') . ' "' . $arrLP[$i]['title'] . '"';
@@ -7003,7 +7004,7 @@ class learnpath {
 
             for ($i = 0; $i < count($arrLP); $i++) {
                 if ($arrLP[$i]['id'] != $id && $arrLP[$i]['item_type'] != 'dokeos_chapter') {
-                    if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
+                    if (isset($extra_info['previous_item_id']) && $extra_info['previous_item_id'] == $arrLP[$i]['id'])
                         $s_selected_position = $arrLP[$i]['id'];
                     elseif ($action == 'add') $s_selected_position = $arrLP[$i]['id'];
 

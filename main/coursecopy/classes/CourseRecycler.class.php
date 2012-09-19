@@ -264,6 +264,7 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+    
     /**
      * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
      */

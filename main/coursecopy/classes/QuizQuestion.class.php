@@ -58,7 +58,7 @@ class QuizQuestion extends Resource
 	 * @param int $position
 	 */
 	function QuizQuestion($id,$question,$description,$ponderation,$type,$position,$picture,$level, $extra) {
-		parent::Resource($id,RESOURCE_QUIZQUESTION);
+		parent::Resource($id, RESOURCE_QUIZQUESTION);
 		$this->question = $question;
 		$this->description = $description;
 		$this->ponderation = $ponderation;

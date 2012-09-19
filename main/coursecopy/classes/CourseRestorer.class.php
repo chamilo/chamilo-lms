@@ -324,8 +324,7 @@ class CourseRestorer
 		    		}
 		    		$new = substr($document->path, 8);
 
-		    		if (!is_dir($path.'document'.$new)) {
-		    			//var_dump($path.'document'.$new);
+		    		if (!is_dir($path.'document'.$new)) {		    			
 						$created_dir = create_unexisting_directory($course_info, api_get_user_id(), $my_session_id, 0, 0 ,$path.'document', $new, $title, $visibility);
 		    		}
 		    	} elseif ($document->file_type == DOCUMENT) {
@@ -359,9 +358,7 @@ class CourseRestorer
                         }
                     }
 
-					if (file_exists($path.$document->path)) {
-					    //var_dump($this->file_option);
-
+					if (file_exists($path.$document->path)) {					    
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
                                 $origin_path = $this->course->backup_path.'/'.$document->path;
@@ -1222,8 +1219,10 @@ class CourseRestorer
 					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
 					$new_id = -1;
 				}
+                
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 				$order = 0;
+                ///var_dump($quiz->title);var_dump($quiz->question_ids);
 				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
 					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;					
@@ -1238,10 +1237,10 @@ class CourseRestorer
 	 * Restore quiz-questions
 	 */
 	function restore_quiz_question($id) {
-		$resources = $this->course->resources;
-		$question = $resources[RESOURCE_QUIZQUESTION][$id];
-
-		$new_id=0;
+		$resources = $this->course->resources;        
+		$question = $resources[RESOURCE_QUIZQUESTION][$id];   
+                
+		$new_id = 0;
 
 		if (is_object($question)) {
 			if ($question->is_restored()) {
@@ -1255,20 +1254,20 @@ class CourseRestorer
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
 			$sql = "INSERT INTO ".$table_que." SET
-						c_id = ".$this->destination_course_id." ,
-						question = '".self::DBUTF8escapestring($question->question)."',
-						description = '".self::DBUTF8escapestring($question->description)."',
-						ponderation = '".self::DBUTF8escapestring($question->ponderation)."',
-						position = '".self::DBUTF8escapestring($question->position)."',
-						type='".self::DBUTF8escapestring($question->quiz_type)."',
-						picture='".self::DBUTF8escapestring($question->picture)."',
-						level='".self::DBUTF8escapestring($question->level)."',
-						extra='".self::DBUTF8escapestring($question->extra)."'";
+                    c_id = ".$this->destination_course_id." ,
+                    question = '".self::DBUTF8escapestring($question->question)."',
+                    description = '".self::DBUTF8escapestring($question->description)."',
+                    ponderation = '".self::DBUTF8escapestring($question->ponderation)."',
+                    position = '".self::DBUTF8escapestring($question->position)."',
+                    type='".self::DBUTF8escapestring($question->quiz_type)."',
+                    picture='".self::DBUTF8escapestring($question->picture)."',
+                    level='".self::DBUTF8escapestring($question->level)."',
+                    extra='".self::DBUTF8escapestring($question->extra)."'";
+            
 			Database::query($sql);
-			$new_id = Database::insert_id();
-
-			if ($question->quiz_type == MATCHING) { // for answer type matching
-                $answerid = 0;
+			$new_id = Database::insert_id();        
+            
+			if ($question->quiz_type == MATCHING) {
                 $t = array();
                 foreach ($question->answers as $index => $answer) {
                     $t[$answer['position']] = $answer;

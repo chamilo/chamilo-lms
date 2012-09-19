@@ -1546,23 +1546,24 @@ class SessionManager {
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));    	
     }
     
-    /*
-    public static function get_coaches_by_session($session_id, $course_code) {
+   public static function get_user_status_in_course_session($user_id, $course_code, $session_id) {
         $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);
-        
-        $sql = "SELECT user.user_id
+        $tbl_user                           = Database::get_main_table(TABLE_MAIN_USER);        
+        $sql = "SELECT session_rcru.status
                 FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
                 WHERE session_rcru.id_user = user.user_id AND 
                 session_rcru.id_session = '".intval($session_id)."' AND 
                 session_rcru.course_code ='".Database::escape_string($course_code)."' AND 
-                session_rcru.status = 2 ";
+                user.user_id = ".intval($user_id);    
+        
         $result = Database::query($sql);
-        while ($row = Database::fetch_array($result,'ASSOC')) {
-            $return_array[] = $row;
+        $status = false;
+        if (Database::num_rows($result)) {
+            $status = Database::fetch_row($result);
+            $status = $status['0'];
         }
-        return $return_array;
-    }*/
+        return $status;
+    }
     
     /**
      * Gets user status within a session 

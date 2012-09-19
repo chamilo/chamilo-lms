@@ -435,7 +435,7 @@ class Attendance
 			$user_status_in_course  = null;
 			
 			if (api_get_session_id()) {
-                $user_status_in_session = SessionManager::get_user_status_in_session($uid, $current_course_id, $current_session_id);                
+                $user_status_in_session = SessionManager::get_user_status_in_course_session($uid, $current_course_id, $current_session_id);                
 			} else {
 			    $user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
 			}

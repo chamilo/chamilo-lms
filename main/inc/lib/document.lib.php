@@ -1246,7 +1246,7 @@ class DocumentManager {
     			$user_in_course = true;
     		}
     	} else {
-    		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
+    		$user_status = SessionManager::get_user_status_in_course_session($user_id, $course_info['code'], $session_id);
     		if (in_array($user_status, array('0', '2', '6'))) {
     			//is true if is an student, course session teacher or coach
     			$user_in_course = true;
@@ -2633,7 +2633,7 @@ class DocumentManager {
         			$user_in_course = true;
         		}
         	} else {
-        		$user_status = SessionManager::get_user_status_in_session($user_id, $course_info['code'], $session_id);
+        		$user_status = SessionManager::get_user_status_in_course_session($user_id, $course_info['code'], $session_id);
                 //is true if is an student, course session teacher or coach
         		if (in_array($user_status, array('0', '2', '6'))) {
         			$user_in_course = true;

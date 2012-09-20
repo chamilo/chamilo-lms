@@ -101,17 +101,21 @@ ini_set('include_path', api_create_include_path_setting());
 // This is for compatibility with MAC computers.
 ini_set('auto_detect_line_endings', '1');
 
-// Include the libraries that are necessary everywhere
-require_once dirname(__FILE__).'/autoload.inc.php';
+//Include the libraries that are necessary everywhere
+//require_once dirname(__FILE__).'/autoload.inc.php';
 
 /* 
  * Using composer
  */
-//Fixes autoader issue with composer
-/*
+
+//Fixes autoloader issue with composer
 define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
 require_once __DIR__.'../../../vendor/autoload.php'; 
-*/
+
+require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
+require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
+require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 require_once $lib_path.'database.lib.php';
 require_once $lib_path.'text.lib.php';

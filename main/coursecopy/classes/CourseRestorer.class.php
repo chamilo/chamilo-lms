@@ -63,7 +63,7 @@ class CourseRestorer
                             'course_descriptions',
                             'documents', 
                             'events',
-                            'forum_category', 
+                            //'forum_category', 
                             'forums',
                            // 'forum_topics',
                             'glossary',
@@ -722,7 +722,8 @@ class CourseRestorer
 			$resources 		= $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
                 $params = (array)$forum->obj;                
-                $cat_id = $this->restore_forum_category($params['forum_category']);                
+                $cat_id = $this->restore_forum_category($params['forum_category']);
+                
                 self::DBUTF8_array($params);
                 $params['c_id'] = $this->destination_course_id;
                 $params['forum_category'] = $cat_id;    
@@ -751,17 +752,14 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */    
-	function restore_forum_category($my_id = null) {
+	function restore_forum_category($id) {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
-		     
-        foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
-            if (!empty($my_id)) {
-                if ($id != $my_id) {
-                    continue;
-                }
-            }
-            if (!$forum_cat->is_restored()) {
+		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
+                
+        //foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
+
+            if ($forum_cat && !$forum_cat->is_restored()) {
                 $title = $forum_cat->obj->cat_title;
                 if (!empty($title)) {
                     if (!preg_match('/.*\((.+)\)$/', $title, $matches)) {
@@ -775,14 +773,11 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 unset($params['cat_id']);
                 self::DBUTF8_array($params);     
-                $new_id = Database::insert($forum_cat_table, $params);
-                if (!empty($my_id)) {
-                    return $new_id;
-                }
+                $new_id = Database::insert($forum_cat_table, $params);               
                 $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;                
-            }
-            $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id;
-        }
+                return $new_id;
+            }            
+        //}
 	}
     
 	/**

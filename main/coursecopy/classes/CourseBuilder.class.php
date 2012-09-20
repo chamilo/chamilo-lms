@@ -303,7 +303,8 @@ class CourseBuilder {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$course_info 	= api_get_course_info($course_code);
 		$course_id 		= $course_info['real_id'];        
-		$sql = "SELECT * FROM $table WHERE c_id = $course_id ORDER BY thread_title ";
+		$sql = "SELECT * FROM $table WHERE c_id = $course_id 
+                ORDER BY thread_title ";
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
 			//$forum_topic = new ForumTopic($obj->thread_id, $obj->thread_title, $obj->thread_date, $obj->thread_poster_id, $obj->thread_poster_name, $obj->forum_id, $obj->thread_last_post, $obj->thread_replies, $obj->thread_views, $obj->thread_sticky, $obj->locked, $obj->thread_close_date, $obj->thread_weight, $obj->thread_title_qualify, $obj->thread_qualify_max);

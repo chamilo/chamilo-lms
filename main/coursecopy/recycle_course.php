@@ -17,7 +17,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
-
 // Check access rights (only teachers are allowed here)
 if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
@@ -51,12 +50,12 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}    
-	$cr = new CourseRecycler($course);
-	$cr->recycle();
+	$cr = new CourseRecycler($course);    
+	$cr->recycle($_POST['recycle_option']);
 	Display::display_confirmation_message(get_lang('RecycleFinished'));
 } elseif (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items') {
 	$cb = new CourseBuilder();
-	$course = $cb->build();
+	$course = $cb->build();    
 	CourseSelectForm::display_form($course);
 } else {
 	$cb = new CourseBuilder();

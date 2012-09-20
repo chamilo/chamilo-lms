@@ -13,7 +13,9 @@ class CourseRecycler
     /**
      * A course-object with the items to delete
      */
-    var $course;
+    public $course;
+    public $type;
+    
     /**
      * Create a new CourseRecycler
      * @param course $course The course-object which contains the items to
@@ -29,8 +31,9 @@ class CourseRecycler
      * This deletes all items in the course-object from the current Chamilo-
      * course
      */
-    function recycle() {
-    	
+    function recycle($type) {
+        $this->type = $type;
+            	
         $table_tool_intro 		= Database::get_course_table(TABLE_TOOL_INTRO);
         $table_linked_resources = Database::get_course_table(TABLE_LINKED_RESOURCES);
         $table_item_properties 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -135,23 +138,44 @@ class CourseRecycler
      */
     function recycle_forums() {
         
-        if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {
-            $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);            
-            $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUMCATEGORY])));
-            $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id." AND cat_id IN(".$forum_ids.");";
+        $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
+        $table_forum = Database :: get_course_table(TABLE_FORUM);
+        $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
+        $table_post = Database :: get_course_table(TABLE_FORUM_POST);
+        $table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
+        $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
+        $table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
+        $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
+        $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
+        
+        if ($this->type == 'full_backup') {
+            $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id;            
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_forum." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_thread." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_post." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_attachment." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_notification." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_mail_queue." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            $sql = "DELETE FROM ".$table_thread_qualify." WHERE c_id = ".$this->course_id;
+            Database::query($sql);            
+            $sql = "DELETE FROM ".$table_thread_qualify_log." WHERE c_id = ".$this->course_id;
             Database::query($sql);            
         }
         
+        if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {                
+            $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUMCATEGORY])));
+            $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id." AND cat_id IN(".$forum_ids.");";
+            Database::query($sql); 
+        }
+        
         if ($this->course->has_resources(RESOURCE_FORUM)) {
-            
-            $table_forum = Database :: get_course_table(TABLE_FORUM);
-            $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
-            $table_post = Database :: get_course_table(TABLE_FORUM_POST);
-            $table_attachment = Database::get_course_table(TABLE_FORUM_ATTACHMENT);
-            $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-            $table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
-            $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
-            $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
             
             $forum_ids = implode(',', (array_keys($this->course->resources[RESOURCE_FORUM])));
 
@@ -199,6 +223,7 @@ class CourseRecycler
             $sql = "DELETE FROM ".$table_forum." WHERE c_id = ".$this->course_id." AND forum_id IN(".$forum_ids.")";
             Database::query($sql);
         }
+        
     }
     
     /**

@@ -79,6 +79,7 @@ class CourseSelectForm
    					}
  				}
 			}
+            
 			function checkLearnPath(message){
 				d = document.course_select_form;
  				for (i = 0; i < d.elements.length; i++) {
@@ -94,6 +95,43 @@ class CourseSelectForm
  					}
  				}
 			}
+            	
+            function check_forum(obj) {
+                var id = $(obj).attr('rel'); 
+                var my_id = $(obj).attr('my_rel');
+                var checked = false;
+                if ($('#resource_forum_'+my_id).attr('checked')) {
+                    checked = true;    
+                }                
+                setCheckboxForum('thread', checked, my_id);
+                $('#resource_Forum_Category_'+id).attr('checked','checked');     
+            }
+            
+             function check_category(obj) {
+                var my_id = $(obj).attr('my_rel');             
+                var checked = false;
+                if ($('#resource_Forum_Category_'+my_id).attr('checked')) {
+                    checked = true;    
+                }
+                $('.resource_forum').each(function(index, value) {
+                    if ($(value).attr('rel') == my_id) {
+                        $(value).attr('checked', checked);
+                    }
+                });
+                
+                $('.resource_topic').each(function(index, value) {
+                    if ($(value).attr('cat_id') == my_id) {
+                        $(value).attr('checked', checked);
+                    }
+                });
+            }
+            
+            function check_topic(obj) {
+                var my_id = $(obj).attr('cat_id');
+                var forum_id = $(obj).attr('forum_id');
+                $('#resource_Forum_Category_'+my_id).attr('checked','checked');     
+                $('#resource_forum_'+forum_id).attr('checked','checked');                
+            }
 		</script>
 		<?php
 
@@ -193,7 +231,6 @@ class CourseSelectForm
 		}
         
         //Fixes forum order
-        //var_dump($forum_topics);exit;
         if (!empty($forum_categories)) {
             $type = RESOURCE_FORUMCATEGORY;
             
@@ -202,25 +239,25 @@ class CourseSelectForm
             echo '<div id="div_'.$type.'">';
             
             //All non  categories
-            echo '<div class="btn-group">';
-            echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('".RESOURCE_FORUMCATEGORY."',true);\" >".get_lang('All')."</a>";
-            echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('".RESOURCE_FORUMCATEGORY."',false);\" >".get_lang('None')."</a>";
-            echo '</div><br />';
+            /*echo '<div class="btn-group">';
+            echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('".RESOURCE_FORUMCATEGORY."', true);\" >".get_lang('All')."</a>";
+            echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('".RESOURCE_FORUMCATEGORY."', false);\" >".get_lang('None')."</a>";
+            echo '</div><br />';*/
             
             echo '<ul>';
             foreach ($forum_categories as $forum_category_id => $forum_category) {
                 echo '<li>';
                 echo '<label class="checkbox">';
                 
-                echo '<input type="checkbox" name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" id="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']" />';
+                echo '<input type="checkbox" id="resource_'.RESOURCE_FORUMCATEGORY.'_'.$forum_category_id.'" my_rel="'.$forum_category_id.'" onclick="javascript:check_category(this);"  name="resource['.RESOURCE_FORUMCATEGORY.']['.$forum_category_id.']"  /> ';
                 $forum_category->show();
                 echo '</label>';
                 
                 if (isset($forums[$forum_category_id]) && count($forums[$forum_category_id])  > 1) {
-                    echo '<div class="btn-group">';
+                    /*echo '<div class="btn-group">';
                     echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUM."',true, '".$forum_category_id."');\" >".get_lang('All')."</a>";
                     echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUM."',false, '".$forum_category_id."' );\" >".get_lang('None')."</a>";
-                    echo '</div>';
+                    echo '</div>';*/
                 }                
                 echo '</li>';
 
@@ -230,15 +267,15 @@ class CourseSelectForm
                     foreach ($my_forums as $forum_id => $forum) {                        
                         echo '<li>';
                         echo '<label class="checkbox">';
-                        echo '<input type="checkbox" rel="'.$forum_category_id.'" name="resource['.RESOURCE_FORUM.']['.$forum_id.']"  id="resource['.RESOURCE_FORUM.']['.$forum_id.']" />';
+                        echo '<input type="checkbox" class="resource_forum" id="resource_'.RESOURCE_FORUM.'_'.$forum_id.'" onclick="javascript:check_forum(this);" my_rel="'.$forum_id.'" rel="'.$forum_category_id.'" name="resource['.RESOURCE_FORUM.']['.$forum_id.']"  />';
                         $forum->show();
                         echo '</label>';
                         
                         if (isset($forum_topics[$forum_id])) {
-                            echo '<div class="btn-group">';
+                            /*echo '<div class="btn-group">';
                             echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUMTOPIC."',true, '".$forum_id."');\" >".get_lang('All')."</a>";
                             echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckboxForum('".RESOURCE_FORUMTOPIC."',false, '".$forum_id."' );\" >".get_lang('None')."</a>";
-                            echo '</div>';
+                            echo '</div>';*/
                         }
 
                         echo '</li>';
@@ -250,7 +287,7 @@ class CourseSelectForm
                                 foreach ($my_forum_topics as $topic_id => $topic) {                                    
                                     echo '<li>';                                    
                                     echo '<label class="checkbox">';
-                                    echo '<input type="checkbox" rel="'.$forum_id.'" name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']"  id="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']" />';
+                                    echo '<input type="checkbox"  id="resource_'.RESOURCE_FORUMTOPIC.'_'.$topic_id.'" onclick="javascript:check_topic(this);" class="resource_topic" forum_id="'.$forum_id.'"  rel="'.$forum_id.'" cat_id="'.$forum_category_id.'" name="resource['.RESOURCE_FORUMTOPIC.']['.$topic_id.']"  />';
                                     $topic->show();
                                     echo '</label>';                                    
                                     echo '</li>';                                    

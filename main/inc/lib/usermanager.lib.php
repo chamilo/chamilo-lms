@@ -2070,7 +2070,7 @@ class UserManager {
                                 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:
-                    case SESSION_VISIBLE:                    
+                    case SESSION_VISIBLE:
                     case SESSION_AVAILABLE:
                         break;
                     case SESSION_INVISIBLE:
@@ -2084,7 +2084,7 @@ class UserManager {
                 if (isset($row['id_coach']) && !empty($row['id_coach'])) {
                     $user_info = api_get_user_info($row['id_coach']);
                     $categories[$row['session_category_id']]['sessions'][$row['id']]['coach_info']          = $user_info;
-                }                
+                }
                 
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['access_start_date']       = $row['access_start_date'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['access_end_date']         = $row['access_end_date'];

@@ -220,7 +220,7 @@ class SessionManager {
 					(s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR
 					(s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR
 					('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date)
-				, 1, 0) 
+				, 1, 0)
 				as session_active, 
 				s.name, 
                 s.nbr_courses, 

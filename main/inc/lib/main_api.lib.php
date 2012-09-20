@@ -1909,13 +1909,11 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
             }
-            
-            
  
             //If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values            
             $is_coach = api_is_coach($session_id, $course_code);
  
-            if ($is_coach) {         
+            if ($is_coach) {
                 
                 //Test end date
                 if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' && 

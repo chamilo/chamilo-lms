@@ -1886,10 +1886,11 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             if ($is_coach) {
 
                 //Test end date
-                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
+                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {                    
                     $end_date_for_coach = new DateTime($row['date_end']);
-                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';                                                        
-                    $end_date_for_coach->add(new DateInterval($number_of_days));                                                            
+                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
+                    $end_date_for_coach->add(new DateInterval($number_of_days));            
+                    
                     if ($end_date_for_coach->getTimestamp() >= $now) {
                         $visibility = SESSION_AVAILABLE;
                     } else {

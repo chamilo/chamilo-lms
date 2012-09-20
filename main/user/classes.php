@@ -24,8 +24,10 @@ if (isset($_GET['id'])) {
 }
 
 if (api_get_setting('show_groups_to_users') == 'false') {
-    api_not_allowed();    
+    
 }
+
+
 
 Display :: display_header($tool_name, 'Classes');
 

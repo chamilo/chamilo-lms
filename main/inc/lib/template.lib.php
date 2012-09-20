@@ -8,6 +8,7 @@
  * */
 
 require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
 class Template {
 
@@ -211,7 +212,6 @@ class Template {
     function display_one_col_template() {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
-        self::show_page_loaded_info();
     }
 
     /**
@@ -220,15 +220,6 @@ class Template {
     function display_two_col_template() {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
-        self::show_page_loaded_info();        
-    }
-    
-    function show_page_loaded_info() {        
-        //@todo will be removed before a stable release
-        $mtime = microtime(); 
-        $mtime = explode(" ",$mtime); 
-        $mtime = $mtime[1] + $mtime[0]; 
-        error_log("Page loaded in ".($mtime-START));
     }
 
     /**
@@ -365,7 +356,10 @@ class Template {
 
     /**
      * Set theme, include CSS files  */
-    function set_theme() {
+    function set_css_files() {
+        global $disable_js_and_css_files;
+        $css = array();
+        
         //$platform_theme = api_get_setting('stylesheets');
         $this->theme = api_get_visual_theme();
 
@@ -374,46 +368,126 @@ class Template {
         }
 
         //Base CSS
-        $style_html = '@import "' . api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'base.css') . '";' . "\n";
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
         //Default theme CSS
-        $style_html .= '@import "' . api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/default.css') . '";' . "\n";
-
-        $navigator_info = api_get_navigator();
-
-        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $style_html .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+        
+        //Extra CSS files
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
+            
+        if ($this->show_learnpath) {
+            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
+            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
         }
 
-        $style_html .= '@import "' . api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'bootstrap-responsive.css') . '";' . "\n";
-        $style_html .= '@import "' . api_get_cdn_path(api_get_path(WEB_CSS_PATH) . 'responsive.css') . '";' . "\n";
-
-        $this->assign('css_style', $style_html);
-
-        $style_print = '@import "' . api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css') . '";' . "\n";
-
-        $this->assign('css_style_print', $style_print);
-
+        if (api_is_global_chat_enabled()) {
+            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
+        }
+               
+        $css_file_to_string = null;
+        foreach ($css as $file) {
+            $css_file_to_string .= api_get_css($file);
+        }    
+        
+        // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
+        if (SHOW_TEXT_NEAR_ICONS == true) {
+            //hack in order to fix the actions buttons
+            $css_file_to_string .= '<style>                
+                .td_actions a {
+                    float:left;
+                    width:100%;
+                }                
+                .forum_message_left a {
+                    float:left;
+                    width:100%;
+                }
+                </style>';
+        }
+        
+        $navigator_info = api_get_navigator();
+        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
+            $css_file_to_string .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
+        }
+        
+        if (!$disable_js_and_css_files) {
+            $this->assign('css_file_to_string', $css_file_to_string);
+            
+            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
+            $this->assign('css_style_print', $style_print);
+        }
+        
         // Logo
         $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
+    }
+    
+    function set_js_files() {
+        global $disable_js_and_css_files, $htmlHeadXtra;
+        
+        //JS files        
+        $js_files = array(
+            'modernizr.js',
+            'jquery.min.js',
+            'chosen/chosen.jquery.min.js',
+            'thickbox.js',            
+            'bootstrap/bootstrap.js',
+        );
+        
+        if (api_is_global_chat_enabled()) {           
+            //Do not include the global chat in LP
+            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+                $js_files[] = 'chat/js/chat.js';
+            }            
+        }
+
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $js_files[] = 'fontresize.js';
+        }
+
+        if (api_get_setting('include_asciimathml_script') == 'true') {
+            $js_files[] = 'asciimath/ASCIIMathML.js';
+        }       
+        
+        $js_file_to_string = null;
+        
+        foreach ($js_files as $js_file) {
+            $js_file_to_string .= api_get_js($js_file);
+        }
+        
+        //Loading email_editor js
+        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
+            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');            
+        }
+        
+        if (!$disable_js_and_css_files) {       
+            $this->assign('js_file_to_string', $js_file_to_string);
+            
+            //Adding jquery ui by default
+            $extra_headers = api_get_jquery_ui_js();
+
+            //$extra_headers = '';		
+            if (isset($htmlHeadXtra) && $htmlHeadXtra) {
+                foreach ($htmlHeadXtra as & $this_html_head) {
+                    $extra_headers .= $this_html_head . "\n";
+                }
+            }
+            $this->assign('extra_headers', $extra_headers);
+        }
     }
 
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {
+    private function set_header_parameters() {        
+        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
         $help = $this->help;
         $nameTools = $this->title;
-
-        global $lp_theme_css, $mycoursetheme, $user_theme;
-        global $httpHeadXtra, $htmlHeadXtra, $_course, $text_dir,
-        $interbreadcrumb, $charset, $language_file, $noPHP_SELF;
-
         $navigation = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
-
-        global $_configuration;
 
         $this->assign('system_charset', api_get_system_encoding());
 
@@ -442,6 +516,7 @@ class Template {
         if ($nameTools != '') {
             $title_list[] = $nameTools;
         }
+        
         $title_string = '';
         for ($i = 0; $i < count($title_list); $i++) {
             $title_string .=$title_list[$i];
@@ -453,88 +528,10 @@ class Template {
         }
 
         $this->assign('title_string', $title_string);
-
+               
         //Setting the theme and CSS files
-        $this->set_theme();
-
-        
-        
-        // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
-        $theme = 'smoothness'; 
-        
-        //Extra JS files
-        $js_files = array(
-            'modernizr.js',
-            'jquery.min.js',
-            'jquery-ui/'.$theme.'/jquery-ui-custom.min.js',            
-            'chosen/chosen.jquery.min.js',
-            'thickbox.js',            
-            'bootstrap/bootstrap.js',
-        );
-        
-      
-        if (api_is_global_chat_enabled()) {            
-            //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
-                $js_files[] = 'chat/js/chat.js';
-            }            
-        }
-
-        if (api_get_setting('accessibility_font_resize') == 'true') {
-            $js_files[] = 'fontresize.js';
-        }
-
-        if (api_get_setting('include_asciimathml_script') == 'true') {
-            $js_files[] = 'asciimath/ASCIIMathML.js';
-        }
-        
-        $js_file_to_string = '';
-        
-        foreach ($js_files as $js_file) {
-            $js_file_to_string .= api_get_js($js_file);
-        }
-        
-        //Loading email_editor js
-        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');            
-        }
-        
-        //Extra CSS files
-        $css_files = array(
-            api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css',
-            api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css',
-            api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$theme.'/jquery-ui-custom.css', // CSS changes for chamilo
-            api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css'
-        );
-
-        if ($this->show_learnpath) {
-            $css_files[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
-            $css_files[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
-        }
-
-        if (api_is_global_chat_enabled()) {
-            $css_files[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
-        }
-        
-        $css_file_to_string = '';
-        foreach ($css_files as $css_file) {
-            $css_file_to_string .= api_get_css($css_file);
-        }        
-
-        // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
-        if (SHOW_TEXT_NEAR_ICONS == true) {
-            //hack in order to fix the actions buttons
-            $css_file_to_string .= '<style>                
-                .td_actions a {
-                    float:left;
-                    width:100%;
-                }                
-                .forum_message_left a {
-                    float:left;
-                    width:100%;
-                }
-                </style>';
-        }
+        $this->set_css_files();
+        $this->set_js_files();
         
         // Implementation of prefetch. 
         // See http://cdn.chamilo.org/main/img/online.png for details
@@ -545,29 +542,10 @@ class Template {
                 $prefetch .= '<link rel="dns-prefetch" href="' . $host . '">';
             }
         }
-
-        global $this_section;
-
-        //@todo minify CSS and JS 
-
+        
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-' . $this_section);
-        
-        global $disable_js_and_css_files;
-        
-        if (!$disable_js_and_css_files) {
-            $this->assign('css_file_to_string', $css_file_to_string);
-            $this->assign('js_file_to_string', $js_file_to_string);
-            
-            //$extra_headers = '';		
-            if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-                foreach ($htmlHeadXtra as & $this_html_head) {
-                    $extra_headers .= $this_html_head . "\n";
-                }
-            }
-            $this->assign('extra_headers', $extra_headers);
-        }
 
         $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
 
@@ -605,8 +583,7 @@ class Template {
         $this->assign('bug_notification_link', $bug_notification_link);
 
         $notification = return_notification_menu();
-        $this->assign('notification_menu', $notification);
-        
+        $this->assign('notification_menu', $notification);        
         
         //Preparing values for the menu
         
@@ -725,7 +702,6 @@ class Template {
                 $this->assign('teachers', $teacher_data);
             }
         }
-
         /* $stats = '';	
           $this->assign('execution_stats', $stats); */
     }
@@ -741,7 +717,6 @@ class Template {
     }
 
     /* Sets the plugin content in a template variable */
-
     function set_plugin_region($plugin_region) {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);

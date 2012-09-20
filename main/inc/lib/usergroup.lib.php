@@ -50,6 +50,11 @@ class UserGroup extends Model {
         echo '</div>';
         echo Display::grid_html('usergroups');
     }
+    
+    function display_teacher_view() {
+        // action links        
+        echo Display::grid_html('usergroups');
+    }
 
      /**
      * Gets a list of course ids by user group
@@ -76,6 +81,15 @@ class UserGroup extends Model {
             }
         }
         return $array;
+    }
+    
+    public function usergroup_was_added_in_course($usergroup_id, $course_id) {
+         $results = Database::select('usergroup_id', $this->usergroup_rel_course_table, array('where'=>array('course_id = ? AND usergroup_id = ?'=> array($course_id, $usergroup_id))));
+         if (empty($results)) {
+             return false;
+         }
+         return true;
+       
     }
 
     /**
@@ -197,7 +211,7 @@ class UserGroup extends Model {
     /**
      * Subscribes courses to a group (also adding the members of the group in the course)
      * @param   int     usergroup id
-     * @param   array   list of course ids
+     * @param   array   list of course ids (integers)
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list) {
 
@@ -212,6 +226,7 @@ class UserGroup extends Model {
                 }
             }
         }
+        
         if (!empty($current_list)) {
             foreach($current_list as $id) {
                 if (!in_array($id, $list)) {
@@ -220,22 +235,11 @@ class UserGroup extends Model {
             }
         }
 
-        //Deleting items
-        if (!empty($delete_items)) {
-            foreach($delete_items as $course_id) {
-                $course_info = api_get_course_info_by_id($course_id);
-                if (!empty($user_list)) {
-                    foreach($user_list as $user_id) {
-                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
-                    }
-                }
-                Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
-            }
-        }
+        self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
 
         //Addding new relationships
         if (!empty($new_items)) {
-            foreach($new_items as $course_id) {
+            foreach ($new_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if (!empty($user_list)) {
                     foreach($user_list as $user_id) {
@@ -247,6 +251,23 @@ class UserGroup extends Model {
                 Database::insert($this->usergroup_rel_course_table, $params);
             }
         }
+    }
+    
+    function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items) {
+        //Deleting items
+        if (!empty($delete_items)) {
+            $user_list    = self::get_users_by_usergroup($usergroup_id);
+            foreach ($delete_items as $course_id) {
+                $course_info = api_get_course_info_by_id($course_id);
+                if (!empty($user_list)) {
+                    foreach ($user_list as $user_id) {
+                        CourseManager::unsubscribe_user($user_id, $course_info['code']);
+                    }
+                }
+                Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
+            }
+        }
+        
     }
 
      /**

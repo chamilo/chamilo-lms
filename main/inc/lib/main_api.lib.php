@@ -5710,8 +5710,8 @@ function api_get_js($file) {
 /**
  * Returns the <link> HTML tag
  */
-function api_get_css($file) {
-	return '<link rel="stylesheet" href="'.$file.'" type="text/css" />'."\n";
+function api_get_css($file, $media = 'screen') {
+    return '<link href="'.$file.'" rel="stylesheet" media="'.$media.'" type="text/css" />'."\n";    
 }
 
 function api_get_jqgrid_js() {

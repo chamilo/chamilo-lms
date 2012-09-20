@@ -9,7 +9,6 @@ require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
-require_once $libpath.'add_course.lib.inc.php';
 
 $debug = false;
 
@@ -2284,7 +2283,7 @@ function WSCreateCourseByTitle($params) {
         $maxlength = 40 - $dbnamelength;
 
         if (empty($wanted_code)) {
-            $wanted_code = generate_course_code(substr($title, 0, $maxlength));
+            $wanted_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
 
         // Check if exits $x_course_code into user_field_values table.
@@ -2323,7 +2322,7 @@ function WSCreateCourseByTitle($params) {
 
         $values['tutor_name'] = api_get_person_name($_user['firstName'], $_user['lastName'], null, null, $values['course_language']);
 
-        $keys = define_course_keys($wanted_code, '', $_configuration['db_prefix']);
+        $keys = CourseManager::define_course_keys($wanted_code, '', $_configuration['db_prefix']);
 
         $sql_check = sprintf('SELECT * FROM '.$table_course.' WHERE visual_code = "%s"', Database :: escape_string($wanted_code));
         $result_check = Database::query($sql_check); // I don't know why this api function doesn't work...
@@ -2520,7 +2519,7 @@ function WSEditCourse($params){
         $maxlength = 40 - $dbnamelength;
 
         if (empty($visual_code)) {
-            $visual_code = generate_course_code(substr($title, 0, $maxlength));
+            $visual_code = CourseManager::generate_course_code(substr($title, 0, $maxlength));
         }
 
         $disk_quota = '50000'; // TODO: A hard-coded value.

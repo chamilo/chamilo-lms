@@ -23,7 +23,6 @@ $cidReset = true;
 
 // include global script
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
 require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 

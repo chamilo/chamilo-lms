@@ -706,3 +706,26 @@ function implode_with_key($glue, $array) {
     }
     return '';
 }
+
+function lang2db($string) {
+    $string = str_replace("\\'", "'", $string);
+    $string = Database::escape_string($string);
+    return $string;
+}
+
+/**
+ * function string2binary converts the string "true" or "false" to the boolean true false (0 or 1)
+ * This is used for the Chamilo Config Settings as these store true or false as string
+ * and the api_get_setting('course_create_active_tools') should be 0 or 1 (used for
+ * the visibility of the tool)
+ * @param string    $variable
+ * @author Patrick Cool, patrick.cool@ugent.be
+ */
+function string2binary($variable) {
+    if ($variable == 'true') {
+        return true;
+    }
+    if ($variable == 'false') {
+        return false;
+    }
+}

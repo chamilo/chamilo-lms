@@ -13,7 +13,6 @@ require_once '../inc/global.inc.php';
 api_protect_admin_script();
 
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 
 // Load terms & conditions from the current lang
 if (get_setting('allow_terms_conditions') == 'true') {

@@ -155,12 +155,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Protecting the admin section.
 api_protect_admin_script();
 
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
-
 $tool_name = get_lang('AddUsersToACourse').' CSV';
-
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
 set_time_limit(0);

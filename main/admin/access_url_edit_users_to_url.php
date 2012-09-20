@@ -13,19 +13,17 @@ $language_file='admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'access_url_edit_users_to_url_functions.lib.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
-//$xajax->debugOn();
-$xajax -> registerFunction (array('search_users', 'Accessurledituserstourl', 'search_users'));
 
+$xajax -> registerFunction (array('search_users', 'Accessurledituserstourl', 'search_users'));
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Access restrictions
 api_protect_global_admin_script();
+
 if (!api_get_multiple_access_url()) {
 	header('Location: index.php');
 	exit;

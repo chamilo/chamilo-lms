@@ -26,8 +26,6 @@ require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }

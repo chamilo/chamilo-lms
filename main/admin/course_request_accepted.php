@@ -18,21 +18,11 @@ $language_file = array('admin', 'create_course');
 
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-
-// Including a configuration file.
-require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
-// Include additional libraries
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';

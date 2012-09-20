@@ -133,5 +133,4 @@ switch ($_GET['report']) {
         Statistics::print_stats(get_lang('CountFriends'), $friends);
         break;
 }
-
 Display::display_footer();

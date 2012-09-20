@@ -10,14 +10,10 @@
  * Validate the imported data.
  */
 
-$language_file = array ('admin', 'registration');
+$language_file = array('admin', 'registration');
 
 $cidReset = true;
-require '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
+require_once '../inc/global.inc.php';
 
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;

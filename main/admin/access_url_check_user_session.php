@@ -11,8 +11,6 @@ $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 

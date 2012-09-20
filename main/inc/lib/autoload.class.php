@@ -979,8 +979,9 @@ class Autoload
         $result['vtimezone'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
-
-
+        
+        $result['xajax'] = '/main/inc/lib/xajax/xajax.inc.php';
+        $result['xajaxResponse'] = '/main/inc/lib/xajax/xajaxResponse.inc.php';
         return $result;
     }
 

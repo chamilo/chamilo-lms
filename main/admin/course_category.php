@@ -290,7 +290,7 @@ function addNode($code,$name,$canHaveCourses,$parent_id)
 
 	$tree_pos=$row['maxTreePos']+1;
 	
-	$code = generate_course_code($code);
+	$code = CourseManager::generate_course_code($code);
 	Database::query("INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child) VALUES('$name','$code',".(empty($parent_id)?"NULL":"'$parent_id'").",'$tree_pos','0','$canHaveCourses')");
 
 	updateFils($parent_id);
@@ -313,7 +313,7 @@ function editNode($code,$name,$canHaveCourses,$old_code)
 			return false;
 		}
 	}
-	$code = generate_course_code($code);
+	$code = CourseManager::generate_course_code($code);
 	Database::query("UPDATE $tbl_category SET name='$name', code='$code',auth_course_child='$canHaveCourses' WHERE code='$old_code'");
 	$sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";	
 	Database::query($sql);

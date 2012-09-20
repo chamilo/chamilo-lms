@@ -227,7 +227,7 @@ class survey_manager {
 			$course_id = api_get_course_int_id();
 			$sql = "INSERT INTO $table_survey (c_id, code, title, subtitle, author, lang, avail_from, avail_till, is_shared, template, intro, surveythanks, creation_date, anonymous".$additional['columns'].", session_id) VALUES (
 						$course_id, 
-						'".Database::escape_string(strtolower(generate_course_code(api_substr($values['survey_code'],0))))."',
+						'".Database::escape_string(strtolower(CourseManager::generate_course_code(api_substr($values['survey_code'],0))))."',
 						'".Database::escape_string($values['survey_title'])."',
 						'".Database::escape_string($values['survey_subtitle'])."',
 						'".Database::escape_string($_user['user_id'])."',

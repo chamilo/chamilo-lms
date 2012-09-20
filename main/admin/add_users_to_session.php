@@ -12,7 +12,6 @@ $cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
 $xajax -> registerFunction ('search_users');

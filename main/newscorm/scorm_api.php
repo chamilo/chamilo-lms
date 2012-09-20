@@ -197,7 +197,7 @@ olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
 //var old_suspend_data = '';
 //var olms.lms_old_item_id = 0;
 
-olms.execute_stats=false;
+olms.execute_stats = false;
 
 
 // Initialize stuff when the page is loaded
@@ -846,7 +846,7 @@ function savedata(origin) {
     if(olms.item_objectives.length>0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
-    olms.execute_stats=false;
+    olms.execute_stats = false;
 
     //clean array
     olms.variable_to_send=new Array();
@@ -1050,21 +1050,27 @@ function addListeners(){
  */
 function lms_save_asset(){
     // only for Chamilo lps
-    if (olms.execute_stats) {
-        olms.execute_stats=false;
+  
+    if (olms.execute_stats) {    
+        olms.execute_stats = false;
     } else {
-        olms.execute_stats=true;
+        olms.execute_stats = true;
     }
-
-    if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-        logit_lms('lms_save_asset',2);
+    
+    //For scorms do not show stats
+    if (olms.lms_lp_type == 2) {
+        olms.execute_stats = false;
+    }
+    
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset'){
+        logit_lms('lms_save_asset', 2);
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
-        if(olms.item_objectives.length>0)
-        {
+        if(olms.item_objectives.length>0) {
             xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
         }
     }
 }
+
 /**
  * Save a Chamilo learnpath item's time and mark as completed upon leaving it.
  * Same function as lms_save_asset() but saves it with empty params
@@ -1212,21 +1218,20 @@ function update_toc(update_action, update_id, change_ids) {
 function update_stats() {
     if (olms.execute_stats) {
         try {
-        cont_f = document.getElementById('content_id');
-        cont_f.src="lp_controller.php?action=stats";
-        cont_f.reload();
+            cont_f = document.getElementById('content_id');
+            cont_f.src="lp_controller.php?action=stats";
+            cont_f.reload();
         } catch (e) {
             return false;
         }
     }
-    olms.execute_stats=false;
+    olms.execute_stats = false;
 }
 
 /**
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
-function update_stats_page()
-{
+function update_stats_page() {
     var myframe = document.getElementById('content_id');
     var mysrc = myframe.location.href;
     if(mysrc == 'lp_controller.php?action=stats'){

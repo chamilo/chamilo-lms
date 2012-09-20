@@ -33,10 +33,8 @@ require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // need functions of statsutils lib to display previous exercices scores
 require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';

@@ -38,6 +38,15 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
+//Soft user status
+define('PLATFORM_ADMIN', 11);
+define('SESSION_COURSE_COACH', 12);
+define('SESSION_GENERAL_COACH', 13);
+define('COURSE_STUDENT', 14);   //student subscribed in a course
+define('SESSION_STUDENT', 15);  //student subscribed in a session course
+define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
+
+
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
@@ -139,11 +148,16 @@ define('LDAP_AUTH_SOURCE', 'extldap');
 // CONSTANT defining the default HotPotatoes files directory
 define('DIR_HOTPOTATOES','/HotPotatoes_files');
 
-// event logs types
+// Event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
-define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
+define('LOG_USER_UPDATED',                      'user_updated');
+define('LOG_USER_DELETE',                       'user_deleted');
+define('LOG_USER_ACTIVATED',                    'user_activated');
+define('LOG_USER_DEACTIVATED',                  'user_deactivated');
+
+
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -157,7 +171,7 @@ define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
-// event logs data types
+// Event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
@@ -815,9 +829,11 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (api_is_drh()) {
         return true;
     }
+    
     if (api_is_platform_admin($allow_session_admins)) {
     	return true;
     }
+    
     $course_info = api_get_course_info();
 
     if (isset($course_info) && isset($course_info['visibility'])) {
@@ -843,7 +859,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     			break;
     	}
     }
-        
+    
     //Check session visibility
     $session_id = api_get_session_id();
     
@@ -998,6 +1014,7 @@ function _api_format_user($user, $add_password = false) {
     }
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
+    $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
 
     $result['firstname'] 		= $firstname;
     $result['lastname'] 		= $lastname;
@@ -1019,6 +1036,7 @@ function _api_format_user($user, $add_password = false) {
     $result['official_code']    = $user['official_code'];
     $result['status']           = $user['status'];
     $result['auth_source']      = $user['auth_source'];
+    $result['active']           = $user['active'];
 
     if (isset($user['username'])) {
         $result['username']         = $user['username'];
@@ -1344,11 +1362,11 @@ function api_format_course_array($course_data) {
     $_course['legal']                 = $course_data['legal' ];
     $_course['show_score']            = $course_data['show_score']; //used in the work tool    
     $_course['department_name']       = $course_data['department_name'];
-    $_course['department_url']        = $course_data['department_url' ];
-    
-    $_course['disk_quota']            = $course_data['disk_quota'];
-    
+    $_course['department_url']        = $course_data['department_url' ];    
+    $_course['disk_quota']            = $course_data['disk_quota'];    
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
+    
+    $_course['user_status_in_course'] = CourseManager::get_user_in_course_status(api_get_user_id(), $_course['code']);
     
     if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
         $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
@@ -1639,6 +1657,19 @@ function get_status_from_code($status_code) {
             return get_lang('SessionsAdmin', '');
         case DRH:
             return get_lang('Drh', '');
+        // "New" roles            
+        case PLATFORM_ADMIN:
+            return get_lang('Admin');
+        case SESSION_COURSE_COACH:
+            return get_lang('SessionCourseCoach');
+        case SESSION_GENERAL_COACH:
+            return get_lang('SessionGeneralCoach');    
+        case COURSE_STUDENT:
+            return get_lang('StudentInCourse');    
+        case SESSION_STUDENT:
+            return get_lang('StudentInSessionCourse');    
+        case COURSE_TUTOR:
+            return get_lang('CourseTutor');
     }
 }
 
@@ -1827,7 +1858,9 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     $visibility = 0; //means that the session is still available
 
     if (api_is_platform_admin()) {
-        return SESSION_AVAILABLE;
+        if ($ignore_visibility_for_admins) {
+            return SESSION_AVAILABLE;
+        }
     }
     
     $now = time();
@@ -1836,7 +1869,8 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning FROM $tbl_session
+        $sql = "SELECT id, visibility, access_start_date, access_end_date, coach_access_start_date, coach_access_end_date 
+                FROM $tbl_session
                 WHERE id = $session_id ";
 
         $result = Database::query($sql);
@@ -1846,30 +1880,26 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             $visibility = $original_visibility = $row['visibility'];
 
             //I don't care the field visibility
-            if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
-                return SESSION_AVAILABLE;
-            } else {
-                
-
-                //If datestart is set
-                if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
-                    $row['date_start'] = $row['date_start'].' 00:00:00';
-                    if ($now > api_strtotime($row['date_start'], 'UTC')) {
+            if ($row['access_start_date'] == '0000-00-00 00:00:00' && $row['access_end_date'] == '0000-00-00 00:00:00') {
+                return SessionManager::DEFAULT_VISIBILITY;
+            } else {                
+              
+                //If access_start_date is set
+                if (!empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00') {                  
+                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {                        
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-
-                //if date_end is set
-                if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                    $row['date_end'] = $row['date_end'].' 00:00:00';
-                    //only if date_start said that it was ok
-
+                  
+                //if access_end_date is set
+                if (!empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {                    
+                    //only if access_end_date said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
 
-                        if ($now < api_strtotime($row['date_end'], 'UTC')) {
+                        if ($now <= api_strtotime($row['access_end_date'], 'UTC')) {
                             //date still available
                             $visibility = SESSION_AVAILABLE;
                         } else {
@@ -1879,37 +1909,42 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
             }
-
-            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values            
+ 
+            //If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values            
             $is_coach = api_is_coach($session_id, $course_code);
-            
+ 
             if ($is_coach) {
-
+                
                 //Test end date
-                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {                    
-                    $end_date_for_coach = new DateTime($row['date_end']);
-                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
-                    $end_date_for_coach->add(new DateInterval($number_of_days));            
+                if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' && 
+                    isset($row['coach_access_end_date']) && !empty($row['coach_access_end_date']) && $row['coach_access_end_date'] != '0000-00-00 00:00:00') {
+                    $end_date_extra_for_coach = api_strtotime($row['coach_access_end_date'], 'UTC');
                     
-                    if ($end_date_for_coach->getTimestamp() >= $now) {
+                    if ($now <= $end_date_extra_for_coach) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-
+                
                 //Test start date
-                if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {
-                    $start_date_for_coach = new DateTime($row['date_start']);
-                    $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
-                    $start_date_for_coach->sub(new DateInterval($number_of_days));
-                    if ($start_date_for_coach->getTimestamp() < $now) {
+                if (isset($row['access_start_date']) && !empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00' && 
+                    isset($row['coach_start_date']) && !empty($row['coach_start_date']) && $row['coach_start_date'] != '0000-00-00 00:00:00') {                                            
+                    $start_date_for_coach = api_strtotime($row['coach_start_date'], 'UTC');
+                    if ($now > $start_date_for_coach) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
                     }
                 }
-            }
+            } else {
+                
+                //Student - check the moved_to variable
+                $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
+                if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
+                    return $original_visibility;
+                }
+            }            
         } else {
             $visibility = SESSION_INVISIBLE;
         }
@@ -2226,17 +2261,17 @@ function api_get_user_platform_status($user_id = false) {
             if ($user_course_status) {
                 $course_status = array('id'=> $course_id);
                 switch($user_course_status) {
-                    case 1;
+                    case COURSEMANAGER;
                         $course_status['status'] = 'teacher';
-                    break;
-                    case 5;
+                        break;
+                    case STUDENT;
                         $course_status['status'] = 'student';
                         //check if tutor
                         $tutor_course_status = CourseManager::get_tutor_in_course_status($user_id, $course_code);
                         if ($tutor_course_status) {
                             $course_status['status'] = 'tutor';
                         }
-                    break;
+                        break;
                 }
             }
 	    }
@@ -2244,6 +2279,25 @@ function api_get_user_platform_status($user_id = false) {
     }
 
     return $status;
+}
+
+function api_is_course_session_coach($user_id, $course_code, $session_id) {    
+    $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
+    $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    
+    $user_id = intval($user_id);
+    $session_id = intval($session_id);
+    $course_code = Database::escape_string($course_code);
+    
+    $sql = "SELECT DISTINCT id
+				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."'  AND 
+                        session_rc_ru.course_code = '$course_code' AND 
+                        session_rc_ru.status = 2 AND 
+                        session_rc_ru.id_session = '$session_id'";
+    $result = Database::query($sql);
+    return Database::num_rows($result) > 0;    
 }
 
 /**
@@ -2264,26 +2318,42 @@ function api_is_coach($session_id = 0, $course_code = null) {
     } else {
         $course_code = api_get_course_id();
     }
+    
+    $user_id = api_get_user_id();
+    
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
     $sessionIsCoach = null;
-
+    
 	if (!empty($course_code)) {
-	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+	    $sql = "SELECT DISTINCT id
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-	            ON session_rc_ru.id_user = '".api_get_user_id()."'
-	            WHERE   session_rc_ru.course_code = '$course_code' AND 
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."'  AND 
+                        session_rc_ru.course_code = '$course_code' AND 
                         session_rc_ru.status = 2 AND 
                         session_rc_ru.id_session = '$session_id'";
 	    $result = Database::query($sql);
 	    $sessionIsCoach = Database::store_result($result);
-	}
-
+	} else { 
+        //Check if at least this user is a coach of one of the courses
+        $sql = "SELECT DISTINCT session.id
+				FROM $session_table session INNER JOIN $session_rel_course_rel_user_table session_rc_ru
+	            ON session.id = session_rc_ru.id_session
+	            WHERE   session_rc_ru.id_user = '".$user_id."' AND 
+                        session_rc_ru.status = 2 AND 
+                        session_rc_ru.id_session = '$session_id'";
+               
+	    $result = Database::query($sql);
+	    $sessionIsCoach = Database::store_result($result);        
+    }
+    
+    //Check if is main coach
 	if (!empty($session_id)) {
-	    $sql = "SELECT DISTINCT id, name, date_start, date_end
+	    $sql = "SELECT DISTINCT id
 	         	FROM $session_table
-	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
-				ORDER BY date_start, date_end, name";
+	         	WHERE   session.id_coach =  '".$user_id."' AND                     
+                        id = '$session_id'";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
 	    	$sessionIsCoach = array_merge($sessionIsCoach , Database::store_result($result));
@@ -2608,11 +2678,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             
             // Get the session visibility
             $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
-                        
-            //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
-            //echo api_get_user_id();
-            //echo api_get_course_id();
-
+            
             switch ($session_visibility) {
                 case SESSION_VISIBLE_READ_ONLY: // 1
                     return false;
@@ -2620,7 +2686,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
                     return true;
                 case SESSION_INVISIBLE:         // 3
                     return false;
-                case SESSION_AVAILABLE:         //5
+                case SESSION_AVAILABLE:         //4
                     return true;
             }
 
@@ -2911,7 +2977,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
     				(id_session = $session OR id_session = 0)
     		ORDER BY id_session DESC, lastedit_date DESC";
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }    
+    if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);
     return $row['visibility'];
 }
@@ -5648,30 +5714,82 @@ function api_get_css($file) {
 	return '<link rel="stylesheet" href="'.$file.'" type="text/css" />'."\n";
 }
 
-/**
- * Returns the js header to include the jquery library
- */
-function api_get_jquery_js() {
-    return api_get_js('jquery.min.js');
-}
-
-
-/**
- * Returns the jquery-ui library js headers
- * @param   bool    add the jqgrid library
- * @return  string  html tags
- *
- */
-function api_get_jquery_ui_js($include_jqgrid = false) {
-    $libraries = array('jquery-ui');
-	if ($include_jqgrid) {
-	   $libraries[]='jqgrid';
-	}
-    return api_get_jquery_libraries_js($libraries);
-}
-
 function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
+}
+
+function get_available_jquery_ui_languages() {
+    //see http://jqueryui.com/demos/datepicker/#localization
+    return array(
+        'af',//Afrikaans
+        'sq', //Albanian (Gjuha shqipe)
+        'ar-DZ', //Algerian Arabic
+        'ar', //Arabic (&#8235;(&#1604;&#1593;&#1585;&#1576;&#1610;
+        'hy', //Armenian (&#1344;&#1377;&#1397;&#1381;&#1408;&#1381;&#1398;)
+        'az', //Azerbaijani (Az&#601;rbaycan dili)
+        'eu', //Basque (Euskara)
+        'bs', //Bosnian (Bosanski)
+        'bg', //Bulgarian (&#1073;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080; &#1077;&#1079;&#1080;&#1082;)
+        'ca', //Catalan (Catal&agrave;)
+        'zh-HK', //Chinese Hong Kong (&#32321;&#39636;&#20013;&#25991;)
+        'zh-CN', //Chinese Simplified (&#31616;&#20307;&#20013;&#25991;)
+        'zh-TW', //Chinese Traditional (&#32321;&#39636;&#20013;&#25991;)
+        'hr', //Croatian (Hrvatski jezik)
+        'cs', //Czech (&#269;e&#353;tina)
+        'da', //Danish (Dansk)
+        'nl-BE', //Dutch (Belgium)
+        'nl', //Dutch (Nederlands)
+        'en-AU', //English/Australia
+        'en-NZ', //English/New Zealand
+        'en-GB', //English/UK
+        'eo', //Esperanto
+        'et', //Estonian (eesti keel)
+        'fo', //Faroese (f&oslash;royskt)
+        'fa', //Farsi/Persian (&#8235;(&#1601;&#1575;&#1585;&#1587;&#1740;
+        'fi', //Finnish (suomi)
+        'fr', //French (Fran&ccedil;ais)
+        'fr-CH', //French/Swiss (Fran&ccedil;ais de Suisse)
+        'gl', //Galician
+        'ge', //Georgian
+        'de', //German (Deutsch)
+        'el', //Greek (&#917;&#955;&#955;&#951;&#957;&#953;&#954;&#940;)
+        'he', //Hebrew (&#8235;(&#1506;&#1489;&#1512;&#1497;&#1514;
+        'hi', //Hindi (&#2361;&#2367;&#2306;&#2342;&#2368;)
+        'hu', //Hungarian (Magyar)
+        'is', //Icelandic (&Otilde;slenska)
+        'id', //Indonesian (Bahasa Indonesia)
+        'it', //Italian (Italiano)
+        'ja', //Japanese (&#26085;&#26412;&#35486;)
+        'kk', //Kazakhstan (Kazakh)
+        'km', //Khmer
+        'ko', //Korean (&#54620;&#44397;&#50612;)
+        'lv', //Latvian (Latvie&ouml;u Valoda)
+        'lt', //Lithuanian (lietuviu kalba)
+        'lb', //Luxembourgish
+        'mk', //Macedonian
+        'ml', //Malayalam
+        'ms', //Malaysian (Bahasa Malaysia)
+        'no', //Norwegian (Norsk)
+        'pl', //Polish (Polski)
+        'pt', //Portuguese (Portugu&ecirc;s)
+        'pt-BR', //Portuguese/Brazilian (Portugu&ecirc;s)
+        'rm', //Rhaeto-Romanic (Romansh)
+        'ro', //Romanian (Rom&acirc;n&#259;)
+        'ru', //Russian (&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;)
+        'sr', //Serbian (&#1089;&#1088;&#1087;&#1089;&#1082;&#1080; &#1112;&#1077;&#1079;&#1080;&#1082;)
+        'sr-SR', //Serbian (srpski jezik)
+        'sk', //Slovak (Slovencina)
+        'sl', //Slovenian (Slovenski Jezik)
+        'es', //Spanish (Espa&ntilde;ol)
+        'sv', //Swedish (Svenska)
+        'ta', //Tamil (&#2980;&#2990;&#3007;&#2996;&#3021;)
+        'th', //Thai (&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;)
+        'tj', //Tajikistan
+        'tr', //Turkish (T&uuml;rk&ccedil;e)
+        'uk', //Ukranian (&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072;)
+        'vi', //Vietnamese (Ti&#7871;ng Vi&#7879;t)
+        'cy-GB'//Welsh/UK (Cymraeg)
+    ); 
 }
 
 /**
@@ -5685,21 +5803,18 @@ function api_get_jqgrid_js() {
 function api_get_jquery_libraries_js($libraries) {
     $js = '';
     $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
-    //jquery-ui js and css
-    if (in_array('jquery-ui', $libraries)) {
-        //Jquery ui
-        $theme = 'smoothness'; // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
-
-        $jquery_ui_version = '1.8.21';
-
-        //$js .= '<link rel="stylesheet" href="'.$js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css" type="text/css">';
-        $js .= api_get_css($js_path.'jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.css');
-        $js .= api_get_js('jquery-ui/'.$theme.'/jquery-ui-'.$jquery_ui_version.'.custom.min.js');
-    }
-
+    $isocode = api_get_language_isocode();
+    
     if (in_array('jquery-ui-i18n', $libraries)) {
         $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+        
+        if (!in_array($isocode, get_available_jquery_ui_languages())) {
+            $isocode = 'en';
+        }
+        if ($isocode == 'en') {
+            $isocode = '';
+        }
+        $js .= "<script> $(function() {  $.datepicker.setDefaults($.datepicker.regional['$isocode']);   });</script>";
     }
 
     //jqgrid js and css
@@ -5724,12 +5839,6 @@ function api_get_jquery_libraries_js($libraries) {
         $js .= api_get_js('jquery-upload/jquery.fileupload.js');
         $js .= api_get_js('jquery-upload/jquery.fileupload-ui.js');
         $js .= api_get_css($js_path.'jquery-upload/jquery.fileupload-ui.css');
-    }
-
-    //jquery-ui css changes for Chamilo
-    if (in_array('jquery-ui',$libraries)) {
-        //Adding default CSS changes of the jquery-ui themes for Chamilo in order to preserve the original jquery-ui css
-        $js .= api_get_css($js_path.'jquery-ui/default.css');
     }
 
     if (in_array('bxslider',$libraries)) {
@@ -6037,7 +6146,7 @@ function api_is_global_chat_enabled(){
  */
 function api_set_default_visibility($item_id, $tool_id) {
     $original_tool_id = $tool_id;
-    
+
     switch ($tool_id) {
         case TOOL_LINK:
             $tool_id = 'links';
@@ -6064,12 +6173,139 @@ function api_set_default_visibility($item_id, $tool_id) {
             break;
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation'); 
-    
-    if (isset($setting[$tool_id])) {        
-        $visibility = 'invisible';    
+   
+    if (isset($setting[$tool_id])) {
+        //$visibility_boolean = false;
+        $visibility = 'invisible';        
         if ($setting[$tool_id] == 'true') {
-            $visibility = 'visible';            
+            $visibility = 'visible';
+            //$visibility_boolean = true;
         }
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());            
+        //Hack for gradebook because we don't use the item property table
+        /*
+        if ($tool_id == TOOL_GRADEBOOK) {
+            return $visibility_boolean;
+        }*/
+        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());    
+    }
+}
+
+function api_get_datetime_picker_js($htmlHeadXtra) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+
+    $isocode = api_get_language_isocode();
+    if ($isocode != 'en') {
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+    }
+    return $htmlHeadXtra;
+}
+
+
+function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
+    $user_roles = array();    
+    /*$user_info = api_get_user_info($user_id);
+    $user_roles[] = $user_info['status'];*/
+    
+    $url_id = api_get_current_access_url_id();    
+    if (api_is_platform_admin_by_id($user_id, $url_id)) {
+        $user_roles[] = PLATFORM_ADMIN;
+    }   
+        
+    /*if (api_is_drh()) {    
+        $user_roles[] = DRH;    
+    }*/
+     
+    if (!empty($session_id)) {
+        if (SessionManager::user_is_general_coach($user_id, $session_id)) {
+            $user_roles[] = SESSION_GENERAL_COACH;
+        }
+    }
+    
+    if (!empty($course_code)) {
+        if (empty($session_id)) {
+            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+                $user_roles[] = COURSEMANAGER;
+            }        
+            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+                $user_roles[] = COURSE_TUTOR;
+            }
+
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                $user_roles[] = COURSE_STUDENT;
+            }
+        } else {
+            $user_status_in_session = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+            
+            if (!empty($user_status_in_session)) {
+                if ($user_status_in_session == 0) {
+                    $user_roles[] = SESSION_STUDENT;
+                }
+                if ($user_status_in_session == 2) {
+                    $user_roles[] = SESSION_COURSE_COACH;      
+                }
+            }      
+            
+            /*if (api_is_course_session_coach($user_id, $course_code, $session_id)) {
+               $user_roles[] = SESSION_COURSE_COACH; 
+            }*/
+        }
+    }    
+    return $user_roles;
+}
+function api_get_roles_to_string($roles) {
+    $role_names = array();
+    if (!empty($roles)) {
+        foreach ($roles as $role) {
+            $role_names[] = get_status_from_code($role);
+        }
+    }
+    if (!empty($role_names)) {
+        return implode(', ', $role_names);
+    }
+    return null;
+}
+
+function role_actions() {
+    return array(
+        'course' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        ),
+        'admin' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        )
+    );    
+}
+
+function api_coach_can_edit_view_results($course_code = null, $session_id = null) {
+    $user_id = api_get_user_id();
+    
+    if (empty($course_code)) {
+        $course_code = api_get_course_id();
+    }
+    
+    if (empty($session_id)) {
+        $session_id = api_get_session_id();
+    }
+    
+    if (api_is_platform_admin()) {
+        return true;
+    }
+       
+    $roles = api_detect_user_roles($user_id, $course_code, $session_id);
+                
+    if (in_array(SESSION_COURSE_COACH, $roles)) {     
+        return api_get_setting('session_tutor_reports_visibility') == 'true';
+    } else {
+        if (in_array(COURSEMANAGER, $roles)) {
+            return true;
+        }
+        return false;
     }
 }

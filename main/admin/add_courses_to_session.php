@@ -15,8 +15,6 @@ require_once '../inc/global.inc.php';
 
 // including additonal libraries
 
-require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
-
 $id_session = intval($_GET['id_session']);
 
 SessionManager::protect_session_edit($id_session);

@@ -3,7 +3,6 @@
 
 require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 class TestAnnouncements extends UnitTestCase {

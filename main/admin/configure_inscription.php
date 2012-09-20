@@ -13,7 +13,6 @@ require_once '../inc/global.inc.php';
 api_protect_admin_script();
 
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 
 // Load terms & conditions from the current lang
 if (get_setting('allow_terms_conditions') == 'true') {
@@ -277,7 +276,7 @@ if ($display_all_form) {
         }
     }
     $extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
-    UserManager::set_extra_fields_in_form($form, $extra_data, 'registration');
+    ExtraField::set_extra_fields_in_form($form, $extra_data, 'registration', false, null, 'user');
 }
 
 // Terms and conditions

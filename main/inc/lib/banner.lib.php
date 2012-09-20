@@ -194,8 +194,10 @@ function return_notification_menu() {
 
         // Display the who's online for the session
         if (isset($user_id) && api_get_session_id() != 0) {
-            $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?id_coach='.$user_id.'&amp;referer='.urlencode($_SERVER['REQUEST_URI']).'" target="_top">'.
+            if (api_is_allowed_to_edit()) {
+                $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?session_id='.api_get_session_id().'&id_coach='.$user_id.'" >'.
                     Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+            }
         }
     }
 

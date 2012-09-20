@@ -108,13 +108,8 @@ class BlockSession extends Block {
 			foreach ($sessions as $session) {
 
 				$session_id = intval($session['id']);
-				$title = $session['name'];		
-
-				if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
-					$date = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
-				} else {
-					$date = ' - ';
-				}
+				$title = $session['name'];
+                $date_string = SessionManager::parse_session_dates($session);
 	 			
 	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
 	 			
@@ -123,7 +118,7 @@ class BlockSession extends Block {
 
 				$sessions_table .= '<tr class="'.$class_tr.'">
 										<td>'.$title.'</td>
-										<td align="center">'.$date.'</td>
+										<td align="center">'.$date_string.'</td>
 										<td align="center">'.$count_courses_in_session.'</td>										
 								   </tr>';
 				$i++;

@@ -26,8 +26,6 @@ require_once 'answer.class.php';
 require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
@@ -62,10 +60,16 @@ if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
-	api_not_allowed();
+	api_not_allowed(true);
 }
-
 $is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+
+//if (api_is_coach(api_get_session_id(), api_get_course_id())) {    
+if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {    
+    if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
+        api_not_allowed(true);
+    }
+}
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -73,7 +77,7 @@ $track_exercise_info = get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $exercise_id        = $track_exercise_info['id'];
@@ -102,7 +106,7 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id,
 //Only users can see their own results 
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed();
+    	api_not_allowed(true);
     }
 }
 

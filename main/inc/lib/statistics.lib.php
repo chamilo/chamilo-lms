@@ -185,10 +185,10 @@ class Statistics {
         } else {
             $sql .= " ORDER BY col4 DESC ";
         }
-        $sql .=    " LIMIT $from,$number_of_items ";
+        $sql .=    " LIMIT $from, $number_of_items ";
 
         $res = Database::query($sql);
-        $activities = array ();
+        $activities = array();
         while ($row = Database::fetch_row($res)) {            
             if (strpos($row[1], '_object') === false) {
                 $row[2] = $row[2];
@@ -200,13 +200,21 @@ class Statistics {
                     }
                 }
             }
-        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
+        	/*if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
             	$row['default_date'] = api_get_local_time($row['default_date']);
         	} else {
         		$row['default_date'] = '-';
+        	}*/
+            
+            if (!empty($row[4]) && $row[4] != '0000-00-00 00:00:00') {        	
+            	$row[4] = api_get_local_time($row[4]);
+        	} else {
+        		$row[4] = '-';
         	}
+            
             $activities[] = $row;
         }
+        
         return $activities;
     }
 
@@ -482,7 +490,6 @@ class Statistics {
     }
 
     static function print_activities_stats() {
-
         echo '<h4>'.get_lang('ImportantActivities').'</h4>';
 
         // Create a search-box
@@ -495,7 +502,7 @@ class Statistics {
         $form->addElement('text','keyword',get_lang('keyword'));
         $form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
         echo '<div class="actions">';
-            $form->display();
+        $form->display();
         echo '</div>';
         
         $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');

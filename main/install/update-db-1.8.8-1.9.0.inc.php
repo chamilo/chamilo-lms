@@ -295,7 +295,6 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
     
     //Adds the c_XXX courses tables see #3910
-    require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
     global $_configuration;
     
     drop_course_tables();    

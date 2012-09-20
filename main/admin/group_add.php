@@ -12,7 +12,6 @@ $cidReset = true;
 // Including necessary libraries.
 require '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
 
 // Section for the tabs

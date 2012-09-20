@@ -13,8 +13,6 @@ $language_file = 'admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'access_url_edit_courses_to_url_functions.lib.php';
 
 $xajax = new xajax();
 $xajax -> registerFunction (array('search_courses', 'Accessurleditcoursestourl', 'search_courses'));

@@ -228,7 +228,7 @@ class SessionManager {
         
 		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
-		}        
+		}
 
 		$coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
 
@@ -237,24 +237,32 @@ class SessionManager {
 		}        
 
 		$today = api_get_utc_datetime();
-		$today = api_strtotime($today, 'UTC');
-		$today = date('Y-m-d', $today);
-
+        $today = api_strtotime($today, 'UTC');
+        $today = date('Y-m-d', $today);
+            
 		$select = "SELECT * FROM (SELECT 
-				IF ( 
-					(s.date_start <= '$today' AND '$today' < s.date_end) OR
-                    (DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR 
-                    (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
-					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' < s.date_end AND '0000-00-00' = s.date_start)
-				, 1, 0) 
+                IF ( 
+                        (s.date_start <= '$today' AND '$today' < s.date_end) OR 
+                        (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
+                        (s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
+                        ('$today' < s.date_end AND '0000-00-00' = s.date_start)
+                , 1, 0) 
 				as session_active, 
-				s.name, nbr_courses, nbr_users, s.date_start, s.date_end, $coach_name, sc.name as category_name, s.visibility, u.user_id, s.id";
-
+				s.name, 
+                nbr_courses, 
+                nbr_users, 
+                s.date_start, 
+                s.date_end, 
+                $coach_name, 
+                sc.name as category_name, 
+                s.visibility, 
+                u.user_id, s.id";
+        
 		$query = "$select FROM $tbl_session s 
 				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id 
 				INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
-			 $where;
+                $where;
+        
 		global $_configuration;
 		if ($_configuration['multiple_access_urls']) {
 			$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -262,13 +270,13 @@ class SessionManager {
 			if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
 				$query = "$select
-				 FROM $tbl_session s
-					LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-					INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-					INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-				 $where";
+                           FROM $tbl_session s
+                               LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                               INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                               INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+				 $where ";
 			}
-		}  
+		}
 		$query .= ") AS session_table";   
 
 		if (!empty($options['where'])) {

@@ -913,10 +913,11 @@ switch ($action) {
         break;
     case 'return_to_course_homepage':
         if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
-        else {
+        else {            
             $_SESSION['oLP']->save_current();
             $_SESSION['oLP']->save_last();            
             header('location: '.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/?id_session='.api_get_session_id());
+            exit;
         }
         break;
     case 'search':

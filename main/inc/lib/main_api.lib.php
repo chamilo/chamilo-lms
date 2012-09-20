@@ -1823,12 +1823,14 @@ function api_get_session_info($session_id) {
  * @param int       session id
  * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id) {
+function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
     $visibility = 0; //means that the session is still available
 
     if (api_is_platform_admin()) {
         return SESSION_AVAILABLE;
     }
+    
+    $now = time();
 
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -1840,20 +1842,19 @@ function api_get_session_visibility($session_id) {
         $result = Database::query($sql);
 
         if (Database::num_rows($result) > 0 ) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $row['visibility'];
+            $row = Database::fetch_array($result, 'ASSOC');            
+            $visibility = $original_visibility = $row['visibility'];
 
             //I don't care the field visibility
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
                 return SESSION_AVAILABLE;
             } else {
-                $time = time();
+                
 
                 //If datestart is set
                 if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
                     $row['date_start'] = $row['date_start'].' 00:00:00';
-
-                    if ($time > api_strtotime($row['date_start'], 'UTC')) {
+                    if ($now > api_strtotime($row['date_start'], 'UTC')) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
@@ -1868,7 +1869,7 @@ function api_get_session_visibility($session_id) {
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
 
-                        if ($time < api_strtotime($row['date_end'], 'UTC')) {
+                        if ($now < api_strtotime($row['date_end'], 'UTC')) {
                             //date still available
                             $visibility = SESSION_AVAILABLE;
                         } else {
@@ -1879,21 +1880,17 @@ function api_get_session_visibility($session_id) {
                 }
             }
 
-            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
-            $is_coach = api_is_coach($session_id);
-
+            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values            
+            $is_coach = api_is_coach($session_id, $course_code);
+            
             if ($is_coach) {
 
                 //Test end date
                 if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
-
                     $end_date_for_coach = new DateTime($row['date_end']);
-                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
-
-                    $end_date_for_coach->add(new DateInterval($number_of_days));
-                    $today = new DateTime();
-
-                    if ($end_date_for_coach >= $today) {
+                    $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';                                                        
+                    $end_date_for_coach->add(new DateInterval($number_of_days));                                                            
+                    if ($end_date_for_coach->getTimestamp() >= $now) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
@@ -1905,9 +1902,7 @@ function api_get_session_visibility($session_id) {
                     $start_date_for_coach = new DateTime($row['date_start']);
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
                     $start_date_for_coach->sub(new DateInterval($number_of_days));
-
-                    $today = new DateTime();
-                    if ($start_date_for_coach < $today) {
+                    if ($start_date_for_coach->getTimestamp() < $now) {
                         $visibility = SESSION_AVAILABLE;
                     } else {
                         $visibility = SESSION_INVISIBLE;
@@ -2256,11 +2251,7 @@ function api_get_user_platform_status($user_id = false) {
  * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = '') {
-	//@todo Not sure about this one
-	/*if (api_is_platform_admin()) {
-		return true;
-	}*/
+function api_is_coach($session_id = 0, $course_code = null) {
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {

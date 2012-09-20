@@ -1942,7 +1942,12 @@ class UserManager {
 		if ($is_time_over) {
 			$condition_date_end = " AND (session.date_end < '$now' AND session.date_end != '0000-00-00')  ";
 		} else {
-			$condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
+            if (api_is_allowed_to_create_course()) {
+                //Teachers can access the session depending in the access_coach date
+                $condition_date_end = null;                
+            } else {
+                $condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
+            }
 		}
         		
         //ORDER BY session_category_id, date_start, date_end 
@@ -1969,7 +1974,21 @@ class UserManager {
                 $categories[$row['session_category_id']]['session_category']['id']                  = $row['session_category_id'];
                 $categories[$row['session_category_id']]['session_category']['name']                = $row['session_category_name'];
                 $categories[$row['session_category_id']]['session_category']['date_start']          = $row['session_category_date_start'];
-                $categories[$row['session_category_id']]['session_category']['date_end']            = $row['session_category_date_end'];                                
+                $categories[$row['session_category_id']]['session_category']['date_end']            = $row['session_category_date_end'];
+                
+                $session_id = $row['id'];
+                
+                //Checking session visibility
+                $visibility = api_get_session_visibility($session_id, null, false);
+                                
+                switch ($visibility) {
+                    case SESSION_VISIBLE_READ_ONLY:
+                    case SESSION_VISIBLE:                    
+                    case SESSION_AVAILABLE:
+                        break;
+                    case SESSION_INVISIBLE:
+                        continue(2);
+                }
                 
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name']    = $row['name'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id']      = $row['id'];

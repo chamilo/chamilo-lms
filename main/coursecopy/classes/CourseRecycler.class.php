@@ -208,14 +208,16 @@ class CourseRecycler
     function recycle_forum_categories() {
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $table_forumcat = Database :: get_course_table(TABLE_FORUM_CATEGORY);
-        $sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc LEFT JOIN ".$table_forum." f ON fc.cat_id=f.forum_category 
-        		WHERE fc.c_id = ".$this->course_id." AND f.c_id = ".$this->course_id." AND f.forum_id IS NULL";
+        $sql = "SELECT fc.cat_id FROM ".$table_forumcat." fc 
+                        LEFT JOIN ".$table_forum." f ON fc.cat_id=f.forum_category AND fc.c_id = ".$this->course_id." AND f.c_id = ".$this->course_id." 
+        		WHERE f.forum_id IS NULL";        
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {
             $sql = "DELETE FROM ".$table_forumcat." WHERE c_id = ".$this->course_id." AND cat_id = ".$obj->cat_id;
             Database::query($sql);
         }
     }
+    
     /**
      * Delete link-categories
      * Deletes all empty link-categories (=without links) from current course
@@ -223,7 +225,9 @@ class CourseRecycler
     function recycle_link_categories() {
         $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
         $link_table = Database :: get_course_table(TABLE_LINK);
-        $sql = "SELECT lc.id FROM ".$link_cat_table." lc LEFT JOIN ".$link_table." l ON lc.id=l.category_id 
+        $sql = "SELECT lc.id FROM ".$link_cat_table." lc 
+                LEFT JOIN ".$link_table." l 
+                    ON lc.id=l.category_id AND lc.c_id = ".$this->course_id." AND l.c_id = ".$this->course_id." 
         		WHERE l.id IS NULL";
         $res = Database::query($sql);
         while ($obj = Database::fetch_object($res)) {

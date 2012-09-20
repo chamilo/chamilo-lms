@@ -275,12 +275,9 @@ class CourseBuilder {
         $sql .= " ORDER BY forum_title, forum_category";
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			//$forum = new Forum($obj->forum_id, $obj->forum_title, $obj->forum_comment, $obj->forum_category, $obj->forum_last_post, $obj->forum_threads, $obj->forum_posts, $obj->allow_anonymous, $obj->allow_edit, $obj->approval_direct_post, $obj->allow_attachements, $obj->allow_new_threads, $obj->default_view, $obj->forum_of_group, $obj->forum_group_public_private, $obj->forum_order, $obj->locked, $obj->session_id, $obj->forum_image);
             $forum = new Forum($obj);
 			$this->course->add_resource($forum);			
 		}
-		//$this->build_forum_topics();
-		//$this->build_forum_posts();
 	}
     
 	/**
@@ -294,7 +291,6 @@ class CourseBuilder {
 		$sql = "SELECT * FROM $table WHERE c_id = $course_id ORDER BY cat_title";
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
-			//$forum_category = new ForumCategory($obj->cat_id, $obj->cat_title, $obj->cat_comment, $obj->cat_order, $obj->locked, $obj->session_id);            
             $forum_category = new ForumCategory($obj);            
 			$this->course->add_resource($forum_category);            
 		}

@@ -63,7 +63,7 @@ class CourseRestorer
                             'course_descriptions',
                             'documents', 
                             'events',
-                           // 'forum_category', 
+                            'forum_category', 
                             'forums',
                            // 'forum_topics',
                             'glossary',
@@ -751,39 +751,38 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */    
-	function restore_forum_category($id) {
+	function restore_forum_category($my_id = null) {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
-		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
-        
-		if ($forum_cat && !$forum_cat->is_restored()) {
-			$title = $forum_cat->obj->cat_title;
-			if (!empty($title)) {
-    			if (!preg_match('/.*\((.+)\)$/', $title, $matches)) {
-    			    // This is for avoiding repetitive adding of training code after several backup/restore cycles.
-    				if ($matches[1] != $this->course->code) {
-    					$title = $title.' ('.$this->course->code.')';
-    				}
-    			}
-			}
-            $params = (array) $forum_cat->obj;
-            $params['c_id'] = $this->destination_course_id;
-            unset($params['cat_id']);
-            self::DBUTF8_array($params);     
-            $new_id = Database::insert($forum_cat_table, $params);
-            /*
-			$sql = "INSERT INTO ".$forum_cat_table." SET
-				c_id = ".$this->destination_course_id." ,
-				cat_title = '".self::DBUTF8escapestring($title).
-				"', cat_comment = '".self::DBUTF8escapestring($forum_cat->description).
-				"', cat_order = ".(int)self::DBUTF8escapestring($forum_cat->order).
-				", locked = ".(int)self::DBUTF8escapestring($forum_cat->locked).
-				", session_id = ".(int)self::DBUTF8escapestring($forum_cat->session_id);
-			Database::query($sql);*/			
-			$this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
-			return $new_id;
-		}
-		return $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id;
+		     
+        foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
+            if (!empty($my_id)) {
+                if ($id != $my_id) {
+                    continue;
+                }
+            }
+            if (!$forum_cat->is_restored()) {
+                $title = $forum_cat->obj->cat_title;
+                if (!empty($title)) {
+                    if (!preg_match('/.*\((.+)\)$/', $title, $matches)) {
+                        // This is for avoiding repetitive adding of training code after several backup/restore cycles.
+                        if ($matches[1] != $this->course->code) {
+                            $title = $title.' ('.$this->course->code.')';
+                        }
+                    }
+                }
+                $params = (array) $forum_cat->obj;
+                $params['c_id'] = $this->destination_course_id;
+                unset($params['cat_id']);
+                self::DBUTF8_array($params);     
+                $new_id = Database::insert($forum_cat_table, $params);
+                if (!empty($my_id)) {
+                    return $new_id;
+                }
+                $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;                
+            }
+            $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id;
+        }
 	}
     
 	/**

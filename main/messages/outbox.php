@@ -134,16 +134,16 @@ if ($action == 'delete') {
         MessageManager::delete_message_by_user_sender(api_get_user_id(), $delete_list_id[$i]);
     }
     $delete_list_id=array();
-    $social_right_content .= outbox_display();
+    $social_right_content .= MessageManager::outbox_display();
 
 } elseif($action =='deleteone') {
     $delete_list_id=array();
     $id = Security::remove_XSS($_GET['id']);
     MessageManager::delete_message_by_user_sender(api_get_user_id(),$id);
     $delete_list_id=array();
-    $social_right_content .= outbox_display();
+    $social_right_content .= MessageManager::outbox_display();
 } else {
-    $social_right_content .= outbox_display();
+    $social_right_content .= MessageManager::outbox_display();
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {				    

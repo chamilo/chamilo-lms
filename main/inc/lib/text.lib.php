@@ -722,6 +722,26 @@ function implode_with_key($glue, $array) {
         }
         return $string;
     }
-    return '';
-    
+    return '';    
+}
+
+
+/**
+ * Transform the file size in a human readable format.
+ *
+ * @param  int      Size of the file in bytes
+ * @return string A human readable representation of the file size
+ */
+function format_file_size($file_size) {
+    $file_size = intval($file_size);
+    if($file_size >= 1073741824) {
+        $file_size = round($file_size / 1073741824 * 100) / 100 . 'G';
+    } elseif($file_size >= 1048576) {
+        $file_size = round($file_size / 1048576 * 100) / 100 . 'M';
+    } elseif($file_size >= 1024) {
+        $file_size = round($file_size / 1024 * 100) / 100 . 'k';
+    } else {
+        $file_size = $file_size . 'B';
+    }
+    return $file_size;
 }

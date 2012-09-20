@@ -9,6 +9,7 @@
 // name of the language file that needs to be included
 $language_file = array('registration','messages','userInfo');
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
 
 api_block_anonymous_users();
@@ -81,12 +82,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) >0) {
 			MessageManager::send_message($user_id_by_email, $title, $content);
 			$show_message .= MessageManager::return_message($user_id_by_email,'confirmation');
-			$social_right_content .= inbox_display();
+			$social_right_content .= MessageManager::inbox_display();
 			exit;
 		} elseif (is_null($user_id_by_email)) {
 			$message_box=get_lang('ErrorSendingMessage');
 			$show_message .= Display::return_message(api_xml_http_response_encode($message_box),'error');
-			$social_right_content .= inbox_display();
+			$social_right_content .= MessageManager::inbox_display();
 			exit;
 		}
 	} elseif (trim($info_delete[0])=='delete' ) {
@@ -95,7 +96,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 		}
 		$message_box=get_lang('SelectedMessagesDeleted');
 		$show_message .= Display::return_message(api_xml_http_response_encode($message_box));
-	   	$social_right_content .= inbox_display();
+	   	$social_right_content .= MessageManager::inbox_display();
 	    exit;
 	}
 }
@@ -146,7 +147,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
 //MAIN CONTENT
 
 if (!isset($_GET['del_msg'])) {
-    $social_right_content .= inbox_display();
+    $social_right_content .= MessageManager::inbox_display();
 } else {
     $num_msg = intval($_POST['total']);
     for ($i=0;$i<$num_msg;$i++) {
@@ -155,7 +156,7 @@ if (!isset($_GET['del_msg'])) {
             $show_message .= MessageManager::delete_message_by_user_receiver(api_get_user_id(), $_POST['_'.$i]);
         }
     }
-    $social_right_content .= inbox_display();
+    $social_right_content .= MessageManager::inbox_display();
 }
 
 if (api_get_setting('allow_social_tool') == 'true') {

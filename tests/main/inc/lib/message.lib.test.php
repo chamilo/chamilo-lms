@@ -43,7 +43,7 @@ class TestMessage extends UnitTestCase {
 	function testInboxDisplay() {
 		global $charset;
 		ob_start();
-		$res=inbox_display();
+		$res=MessageManager::inbox_display();
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);
@@ -52,7 +52,7 @@ class TestMessage extends UnitTestCase {
 	function testOutboxDisplay() {
 		global $charset;
 		ob_start();
-		$res=outbox_display();
+		$res=MessageManager::outbox_display();
 		$this->assertTrue(is_null($res));
 		ob_end_clean();
 		//var_dump($res);

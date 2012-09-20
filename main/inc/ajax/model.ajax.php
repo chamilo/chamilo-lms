@@ -20,9 +20,14 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
-	
 
-if (!in_array($action, array('get_exercise_results', 'get_hotpotatoes_exercise_results', 'get_work_user_list', 'get_timelines', 'get_user_skill_ranking'))) {
+if (!in_array($action, array(
+        'get_exercise_results', 
+        'get_hotpotatoes_exercise_results', 
+        'get_work_user_list', 
+        'get_timelines', 
+        'get_user_skill_ranking'))
+    ) {
 	api_protect_admin_script(true);
 }
 
@@ -155,7 +160,8 @@ switch ($action) {
         $obj        = new GradeModel();
         $count      = $obj->get_count();
         break;
-    case 'get_usergroups':        
+    case 'get_usergroups':
+    case 'get_usergroups_teacher':
         $obj        = new UserGroup();
         $count      = $obj->get_count();
         break;
@@ -387,7 +393,36 @@ switch ($action) {
         }
         //Multidimensional sort
         msort($result, $sidx);
-        break;      
+        break;   
+    case 'get_usergroups_teacher':
+        $columns = array('name', 'users', 'actions');
+        $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        $course_id = api_get_course_int_id();
+        
+        if (!empty($result)) {
+            foreach ($result as $group) {                
+                $group['users']      = count($obj->get_users_by_usergroup($group['id']));
+                
+                if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
+                    $url  = 'class.php?action=remove_class_from_course&id='.$group['id'];
+                    $icon = Display::return_icon('delete.png', get_lang('Remove'));
+                } else {
+                    $url  = 'class.php?action=add_class_to_course&id='.$group['id'];
+                    $icon = Display::return_icon('add.png', get_lang('Add'));                    
+                }
+                $group['actions']    = Display::url($icon, $url);
+                    
+                $new_result[]        = $group;
+            }
+            $result = $new_result;
+        }                    
+        if(!in_array($sidx, $columns)) {
+            $sidx = 'name';
+        }
+        //Multidimensional sort
+        msort($result, $sidx);        
+        break;
     default:    
         exit;            
 }
@@ -395,7 +430,8 @@ switch ($action) {
 
 $allowed_actions = array('get_careers', 
                          'get_promotions', 
-                         'get_usergroups', 
+                         'get_usergroups',
+                         'get_usergroups_teacher',
                          'get_gradebooks', 
                          'get_sessions', 
                          'get_exercise_results', 

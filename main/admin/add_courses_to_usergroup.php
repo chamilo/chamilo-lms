@@ -42,7 +42,7 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_user_to_session (code, content) {
 
     document.getElementById("user_to_add").value = "";

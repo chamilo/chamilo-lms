@@ -2704,7 +2704,7 @@ class UserManager {
 	 * @since Nov 2009
 	 * @version 1.8.6.2
 	 */
-	public static function get_tags($tag, $field_id, $return_format='json',$limit=10) {
+	public static function get_tags($tag, $field_id, $return_format  = 'json', $limit=10) {
 		// database table definition
 		$table_user_tag			= Database::get_main_table(TABLE_MAIN_TAG);
 		$field_id	= intval($field_id);
@@ -2718,7 +2718,7 @@ class UserManager {
 		$return = array();
 		if (Database::num_rows($result)>0) {
 			while ($row = Database::fetch_array($result,'ASSOC')) {
-				$return[] = array('caption'=>$row['tag'], 'value'=>$row['tag']);
+				$return[] = array('key'=> $row['tag'], 'value'=>$row['tag']);
 			}
 		}
 		if ($return_format=='json') {

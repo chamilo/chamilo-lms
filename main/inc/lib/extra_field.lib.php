@@ -512,9 +512,7 @@ class ExtraField extends model {
                         filter_case: true,
                         filter_hide: true,
                         complete_text:"$complete_text",
-                        firstselected: true,
-                        //onremove: "testme",
-                        //onselect: "testme",
+                        firstselected: false,             
                         filter_selected: true,
                         newel: true
                     });

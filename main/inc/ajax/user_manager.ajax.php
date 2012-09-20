@@ -9,7 +9,6 @@ $action = $_GET['a'];
 
 switch ($action) {	
     case 'get_user_popup':        
-        
         $user_info = api_get_user_info($_REQUEST['user_id']);
         //var_dump($user_info);
         echo '<div class="well">';

@@ -379,14 +379,17 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
         <tr class="row_odd" >
             <th><?php echo get_lang('Attendance')?></th>
         </tr>
-        <?php 
+        <?php
         
         if (!empty($users_presence)) {
             $i = 0;
             foreach ($users_presence[$user_id] as $presence) { 
                 $class = '';
-                if ($i%2==0) {$class = 'row_even';}
-                else {$class = 'row_odd';}  
+                if ($i%2==0) {
+                    $class = 'row_even';
+                } else {
+                    $class = 'row_odd';
+                }  
             ?>
             <tr class="<?php echo $class ?>">                    
                 <td>                        

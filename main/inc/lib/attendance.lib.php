@@ -120,6 +120,7 @@ class Attendance
 				FROM $tbl_attendance att
 				WHERE c_id = $course_id AND $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";        
+        var_dump($sql);exit;
 		$res = Database::query($sql);
 		$attendances = array ();
 
@@ -810,8 +811,7 @@ class Attendance
 	 * @param	int	   user id for showing data for only one user (optional)
 	 * @return 	array  users attendance sheet data
 	 */
-	public function get_users_attendance_sheet($attendance_id, $user_id = 0) {
-		global $dateTimeFormatLong;
+	public function get_users_attendance_sheet($attendance_id, $user_id = 0) {		
 		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 
@@ -832,7 +832,7 @@ class Attendance
 			if (count($calendar_ids) > 0 && count($user_ids) > 0) {
 				foreach ($user_ids as $uid) {
 					$sql = "SELECT * FROM $tbl_attendance_sheet 
-					        WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id IN(".implode(',',$calendar_ids).") ";
+					        WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id IN(".implode(',',$calendar_ids).") ";                    
 					$res = Database::query($sql);
 					if (Database::num_rows($res) > 0) {
 						while ($row = Database::fetch_array($res)) {
@@ -842,14 +842,18 @@ class Attendance
 				}
 			}
 		} else {
-			// get attendance for current user
+			// Get attendance for current user
 			$user_id = intval($user_id);
 			if (count($calendar_ids) > 0) {
-				$sql = "SELECT cal.date_time, att.presence FROM $tbl_attendance_sheet att INNER JOIN  $tbl_attendance_calendar cal ON cal.id = att.attendance_calendar_id 
+				$sql = "SELECT cal.date_time, att.presence 
+                        FROM $tbl_attendance_sheet att 
+                            INNER JOIN  $tbl_attendance_calendar cal 
+                            ON cal.id = att.attendance_calendar_id 
 						WHERE 	att.c_id = $course_id AND
 								cal.c_id =  $course_id AND
 								att.user_id = '$user_id' AND 
-								att.attendance_calendar_id IN(".implode(',',$calendar_ids).") ";
+								att.attendance_calendar_id IN(".implode(',',$calendar_ids).") 
+                        ORDER BY date_time";
 				$res = Database::query($sql);
 				if (Database::num_rows($res) > 0) {
 					while ($row = Database::fetch_array($res)) {

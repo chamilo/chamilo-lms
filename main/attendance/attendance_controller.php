@@ -235,7 +235,7 @@
 			$filter_type = $_REQUEST['filter'];
 		}
         
-        if ($edit == true) {
+        if ($edit == true) {            
             if (api_is_allowed_to_edit(null, true)) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	            
             } else {
@@ -254,7 +254,7 @@
                 $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);            
             }
             
-            $data['faults']          = $attendance->get_faults_of_user($user_id, $attendance_id);
+            $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id);
             $data['user_id'] = $user_id;
         }
         

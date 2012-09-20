@@ -63,7 +63,7 @@ class CourseRestorer
                             'course_descriptions',
                             'documents', 
                             'events',
-                            //'forum_category', 
+                            'forum_category', 
                             'forums',
                            // 'forum_topics',
                             'glossary',
@@ -721,8 +721,12 @@ class CourseRestorer
 
 			$resources 		= $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
-                $params = (array)$forum->obj;                
-                $cat_id = $this->restore_forum_category($params['forum_category']);
+                $params = (array)$forum->obj;        
+                if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
+                    $cat_id = $this->restore_forum_category($params['forum_category']);
+                } else {
+                    $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
+                }
                 
                 self::DBUTF8_array($params);
                 $params['c_id'] = $this->destination_course_id;
@@ -731,6 +735,7 @@ class CourseRestorer
                 $new_id = Database::insert($table_forum, $params);
 			
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;
+                
 				$forum_topics = 0;
 				if (is_array($this->course->resources[RESOURCE_FORUMTOPIC])) {                    
 					foreach ($this->course->resources[RESOURCE_FORUMTOPIC] as $topic_id => $topic) {                        
@@ -752,13 +757,16 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */    
-	function restore_forum_category($id) {
+	function restore_forum_category($my_id = null) {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
-		$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
-                
-        //foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
-
+		//$forum_cat = $resources[RESOURCE_FORUMCATEGORY][$id];
+        foreach ($resources[RESOURCE_FORUMCATEGORY] as $id => $forum_cat) {
+            if (!empty($my_id)) {
+                if ($my_id != $id) {
+                    continue;
+                }
+            }
             if ($forum_cat && !$forum_cat->is_restored()) {
                 $title = $forum_cat->obj->cat_title;
                 if (!empty($title)) {
@@ -773,11 +781,13 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 unset($params['cat_id']);
                 self::DBUTF8_array($params);     
-                $new_id = Database::insert($forum_cat_table, $params);               
+                $new_id = Database::insert($forum_cat_table, $params);                
                 $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;                
-                return $new_id;
+                if (!empty($my_id)) {
+                    return $new_id;
+                }
             }            
-        //}
+        }
 	}
     
 	/**

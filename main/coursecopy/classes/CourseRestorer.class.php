@@ -808,6 +808,7 @@ class CourseRestorer
         $params['thread_close_date']  = '0000-00-00 00:00:00';
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
+        $params['thread_views'] = 0;
         unset($params['thread_id']);      
         $new_id = Database::insert($table, $params);        
         api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);

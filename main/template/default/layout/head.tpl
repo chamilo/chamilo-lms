@@ -12,16 +12,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!--[if ie]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 <title>{{ title_string }}</title>
-<style type="text/css" media="screen">
-/*<![CDATA[*/
-{{ css_style }}
-/*]]>*/
-</style>
-<style type="text/css" media="print">
-/*<![CDATA[*/
+{{ css_file_to_string }}
 {{ css_style_print }}
-/*]]>*/
-</style>
+{{ js_file_to_string }}
+{{ extra_headers }}
 <script>
 //<![CDATA[
 // This is a patch for the "__flash__removeCallback" bug, see FS#4378.
@@ -47,13 +41,7 @@ var online_button   = '{{ online_button }}';
 var offline_button  = '{{ offline_button }}';
 var connect_lang    = '{{ "ChatConnected"|get_lang }}';
 var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
-</script>
 
-{{ js_file_to_string}}
-{{ css_file_to_string}}
-{{ extra_headers}}
-
-<script>
 function get_url_params(q, attribute) {
     var vars;
     var hash;
@@ -77,7 +65,6 @@ function check_brand() {
         }
     }
 }
-
 
 $(window).resize(function() {
     check_brand();
@@ -106,7 +93,6 @@ $(document).scroll(function() {
     } else {
         //$('.subnav .brand').hide();
     }
-    
     
     //Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
@@ -182,20 +168,7 @@ $(document).scroll(function() {
             }
         }
     }
-}); 
-    
-    
-/*
-function isScrolledIntoView(elem) {
-    var docViewTop = $(window).scrollTop();
-    var docViewBottom = docViewTop + $(window).height();
-
-    var elemTop = $(elem).offset().top;
-    var elemBottom = elemTop + $(elem).height();
-
-    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-}*/
-
+});    
 
 $(function() {
     
@@ -217,17 +190,13 @@ $(function() {
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
     }
-
-
+    
     //Dropdown effect
     $('.dropdown-toggle').dropdown();
 
     //Responsive effect
     $(".collapse").collapse();
-    
-    //$('#collapse1').collapse("hide");
-
-    
+        
     $(".accordion_jquery").accordion({        
         autoHeight: false,
         active: false, // all items closed by default
@@ -295,7 +264,6 @@ $(function() {
             },200);
         }
     );
-
     /*
     $(".td_actions").hide();
 

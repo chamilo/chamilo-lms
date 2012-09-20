@@ -97,9 +97,9 @@ if ($load_dirs) {
 	$folder_icon 	= api_get_path(WEB_IMG_PATH).'icons/22/folder.png';
 	$close_icon 	= api_get_path(WEB_IMG_PATH).'loading1.gif';
 	
-	$htmlHeadXtra[] =  '<script type="text/javascript">
+	$htmlHeadXtra[] =  '<script>
 	
-	$(document).ready( function() {		
+	$(document).ready(function() {    
 		$(".document_preview_container").hide();		
 		$(".document_preview").click(function() {
 			var my_id = this.id;

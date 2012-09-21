@@ -54,29 +54,32 @@ $course_user_list = CourseManager::get_courses_list_by_user_id($user_id);
 $dates = $issues = '';
 
 if (!empty($course_user_list)) {
-    foreach ($course_user_list as $course) {    
-        $items = MySpace::get_connections_to_course($user_id, $course['code']);
-        $first = null;
-        $last = null;
-        $last_item = count($items);
-        $count = 1;
-        foreach ($items as $result) {
-            $login = $result['login']; 
-            if ($count == 1) {
-                $first = '<a href="#'.$login.'">'. get_lang('First').'</a>';
-            }
-            if ($count == $last_item) {
-                $last = '<a href="#'.$login.'">'.  get_lang('Last').'</a>';
-            }
-            
-            $course_info = api_get_course_info($course['code']);
-            $course_image = '<img src="'.$course_info['course_image'].'">';
-            $dates .= '<li><a href="#'.$login.'">'.  api_get_utc_datetime($login).'</a></li>';
-            $issues .= '<li id ="'.$login.'"><div class="row"><div class="span2"><div class="thumbnail">'.$course_image.'</div></div>
-                    <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY') , $course['code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div></li>';
-            $count++;
-        }    
-    }
+    $items = MySpace::get_connections_from_course_list($user_id, $course_user_list); 
+    
+    $first = null;
+    $last = null;
+    $last_item = count($items);
+    $count = 1;
+    foreach ($items as $result) {
+        $login = $result['login']; 
+        if ($count == 1) {
+            $first = '<a href="#'.$login.'">'. get_lang('First').'</a>';
+        }
+        if ($count == $last_item) {
+            $last = '<a href="#'.$login.'">'.  get_lang('Last').'</a>';
+        }            
+        $course_info = api_get_course_info($result['course_code']);
+        $course_image = '<img src="'.$course_info['course_image'].'">';
+        $dates .= '<li><a href="#'.$login.'">'.  api_get_utc_datetime($login).'</a></li>';
+        $issues .= '<li id ="'.$login.'">
+                        <div class="row">
+                            <div class="span2"><div class="thumbnail">'.$course_image.'</div>
+                        </div>
+                        <div class="span3">'.sprintf(get_lang('YouHaveEnteredTheCourseXInY') , $result['course_code'], api_convert_and_format_date($login, DATE_FORMAT_LONG)).'</div>
+                    </li>';
+        $count++;
+    }    
+    
 }
 
 $content .= Tracking::show_user_progress(api_get_user_id());

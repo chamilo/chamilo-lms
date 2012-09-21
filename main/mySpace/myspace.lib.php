@@ -61,23 +61,54 @@ class MySpace {
 		$course_code = Database::escape_string($course_code);
 		$session_id  = intval($session_id);
 
-
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-	    	WHERE user_id = '.$user_id.'
-	    	AND course_code="'.$course_code.'" AND session_id = '.$session_id.' ORDER BY login_course_date ASC';
-
+                WHERE   user_id = '.$user_id.' AND 
+                        course_code="'.$course_code.'" AND 
+                        session_id = '.$session_id.' 
+                ORDER BY login_course_date ASC';
 	    $rs = Database::query($sql);
 	    $connections = array();
 
 	    while ($row = Database::fetch_array($rs)) {
-	        
-	        $login_date = api_get_local_time($row['login_course_date'], null, date_default_timezone_get());
-	        $logout_date = api_get_local_time($row['logout_course_date'], null, date_default_timezone_get());
-
-	        $timestamp_login_date = api_strtotime($login_date);
-	        $timestamp_logout_date = api_strtotime($logout_date);
-
+	        $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
+	        $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
 	        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date);
+	    }
+	    return $connections;
+	}
+    
+    static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
+		// Database table definitions
+	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        if (empty($course_list)) {
+            return false;   
+        }
+
+		// protect data
+		$user_id     = intval($user_id);
+		$course_code = Database::escape_string($course_code);
+		$session_id  = intval($session_id);
+        $new_course_list = array();;
+        foreach ($course_list as $course_item) {            
+            $new_course_list[] =  '"'.Database::escape_string($course_item['code']).'"';
+        }
+        $course_list = implode(', ', $new_course_list);
+        
+        if (empty($course_list)) {
+            return false;   
+        }
+	    $sql = 'SELECT login_course_date, logout_course_date, course_code FROM ' . $tbl_track_course . '
+                WHERE   user_id = '.$user_id.' AND 
+                        course_code IN ('.$course_list.') AND 
+                        session_id = '.$session_id.' 
+                ORDER BY login_course_date ASC';
+	    $rs = Database::query($sql);
+	    $connections = array();
+
+	    while ($row = Database::fetch_array($rs)) {
+	        $timestamp_login_date = api_strtotime($row['login_course_date'], 'UTC');
+	        $timestamp_logout_date = api_strtotime($row['logout_course_date'], 'UTC');
+	        $connections[] = array('login' => $timestamp_login_date, 'logout' => $timestamp_logout_date,'course_code' => $row['course_code']);
 	    }
 	    return $connections;
 	}

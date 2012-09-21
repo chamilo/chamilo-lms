@@ -95,8 +95,13 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
             Display::display_error_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'));
             echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
         } else {
-			Display::display_error_message(api_ucfirst(get_lang('UploadError')));
-            echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+            if ($filename == '') {
+               Display::display_error_message(get_lang('SelectBackupFile')); 
+               echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+            } else {
+    			Display::display_error_message(get_lang('UploadError'));
+                echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+            }
 		}
 	}
 	CourseArchiver::clean_backup_dir();

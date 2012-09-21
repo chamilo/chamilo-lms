@@ -730,6 +730,9 @@ class CourseRestorer
                 $params['c_id'] = $this->destination_course_id;
                 $params['forum_category'] = $cat_id;    
                 unset($params['forum_id']);
+                
+                $params['forum_comment']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['forum_comment'], $this->course->code, $this->course->destination_path);        
+                
                 $new_id = Database::insert($table_forum, $params);
 			
 				$this->course->resources[RESOURCE_FORUM][$id]->destination_id = $new_id;

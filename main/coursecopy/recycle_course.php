@@ -63,10 +63,9 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	if (!$course->has_resources()) {
 		echo get_lang('NoResourcesToRecycle');
 	} else {
-		Display::display_warning_message(get_lang('RecycleWarning'), false);        
-        
-        $form = new FormValidator('recycle_course', 'post', 'recycle_course.php');
-		$form->addElement('header',get_lang('SelectOptionForBackup'));
+		Display::display_warning_message(get_lang('RecycleWarning'), false);
+        $form = new FormValidator('recycle_course', 'post', 'recycle_course.php?'.api_get_cidreq());
+		$form->addElement('header', get_lang('SelectOptionForBackup'));
 		
 		$form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');

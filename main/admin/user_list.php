@@ -356,8 +356,9 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                  u.email				AS col6,
                  u.status				AS col7,
                  u.active				AS col8,
-                 u.user_id				AS col9 ".
-                 ", u.expiration_date      AS exp ".
+                 u.user_id				AS col9,
+                 u.registration_date    AS col10 ".
+                 ", u.expiration_date   AS exp ".
             " FROM $user_table u ";
 
     // adding the filter to see the user's only of the current access_url
@@ -441,24 +442,25 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	$users = array ();
     $t = time();
-	while ($user = Database::fetch_row($res)) {
+	while ($user = Database::fetch_row($res)) {        
 		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
 		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
-			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'"><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
+			$photo = '<center><a href="'.api_get_path(WEB_PATH).'whoisonline.php?origin=user_list&id='.$user[0].'" title="'.get_lang('Info').'">
+                            <img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2],$user[3]).'"  title="'.api_get_person_name($user[2], $user[3]).'" /></a></center>';
 		} else {
 			$photo = '<center><img src="'.$user_profile['file'].'" '.$user_profile['style'].' alt="'.api_get_person_name($user[2], $user[3]).'" title="'.api_get_person_name($user[2], $user[3]).'" /></center>';
 		}
-        if ($user[7] == 1 && $user[9] != '0000-00-00 00:00:00') {
+        if ($user[7] == 1 && $user[10] != '0000-00-00 00:00:00') {
             // check expiration date
-            $expiration_time = convert_sql_date($user[9]);
+            $expiration_time = convert_sql_date($user[10]);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
         	   $user[7] = '-1';
             }
         }
         // forget about the expiration date field
-        $users[] = array($user[0],$photo,$user[1],$user[2],$user[3],$user[4],$user[5],$user[6],$user[7],$user[8]);        
+        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]));
 	}
 	return $users;
 }
@@ -760,11 +762,7 @@ while ($row_admin = Database::fetch_row($res_admin)) {
 $form = new FormValidator('advanced_search','get');
 
 $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
-
-$form->addElement('header', '', get_lang('AdvancedSearch'));
-
-//$form->addElement('html', '<strong>'.get_lang('SearchAUser').'</strong>');
-
+$form->addElement('header', get_lang('AdvancedSearch'));
 $form->addElement('html', '<table>');
 
 $form->addElement('html', '<tr><td>');
@@ -825,7 +823,7 @@ if (!empty($extra_data)) {
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '<tr><td>');
-$form->addElement('style_submit_button', 'submit',get_lang('SearchUsers'),'class="btn"');
+$form->addElement('button', 'submit',get_lang('SearchUsers'));
 $form->addElement('html', '</td></tr>');
 
 $form->addElement('html', '</table>');
@@ -855,15 +853,15 @@ $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
 $table->set_header(8, get_lang('Active'), true, 'width="15px"');
-$table->set_header(9, get_lang('Action'), false,'width="220px"');
+$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
+$table->set_header(10, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
-
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(9, 'modify_filter');
+$table->set_column_filter(10, 'modify_filter');
 
 if (api_is_platform_admin())
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
@@ -873,9 +871,9 @@ $table_result = $table->return_table();
 $extra_search_options = '';
 
 //Try to search the user everywhere
-if ($table->get_total_number_of_items() ==0) {
+if ($table->get_total_number_of_items() == 0) {
     
-    if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {        
+    if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {     
         $keyword = Database::escape_string($_REQUEST['keyword']);
         //$conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
         $conditions = array('username' => $keyword);

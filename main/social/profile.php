@@ -14,8 +14,7 @@ require_once '../inc/global.inc.php';
 if (api_get_setting('allow_social_tool') !='true') {
     $url = api_get_path(WEB_PATH).'whoisonline.php?id='.intval($_GET['u']);
     header('Location: '.$url);
-    exit;
-    //api_not_allowed();
+    exit;    
 }
 
 $user_id = api_get_user_id();
@@ -66,7 +65,7 @@ require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
 api_block_anonymous_users();
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
     
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
@@ -98,9 +97,9 @@ function send_message_to_user(user_id) {
                     $.ajax({
                         url: url+"&"+params,
                         success:function(data) {                        
-                            $("#main_content").before(data);
-                            $("#send_message_div").dialog({ buttons:{}});                        
-                            //$("#send_message_reponse").html(data);
+                            $("#message_ajax_reponse").html(data);
+                            $("#message_ajax_reponse").show();
+                            $("#send_message_div").dialog({ buttons:{}});                            
                             $("#send_message_form").hide();                        
                             $("#send_message_div").dialog("close");        
 
@@ -125,8 +124,7 @@ function send_invitation_to_user(user_id) {
         modal:true,
         buttons: {
             "'.  addslashes(get_lang('SendInvitation')).'": function() {
-                var bValid = true;
-                
+                var bValid = true;                
                 bValid = bValid && checkLength( content, "content", 1, 255 );
                 if (bValid) {
                     var url = "'.$ajax_url.'?a=send_invitation&user_id="+user_id;
@@ -134,8 +132,10 @@ function send_invitation_to_user(user_id) {
                     $.ajax({
                         url: url+"&"+params,
                         success:function(data) {                        
-                            $("#main_content").before(data);
-                            $("#send_invitation_div").dialog({ buttons:{}});                        
+                            $("#message_ajax_reponse").html(data);
+                            $("#message_ajax_reponse").show();
+                            
+                            $("#send_invitation_div").dialog({ buttons:{}});
 
                             $("#send_invitation_form").hide();                        
                             $("#send_invitation_div").dialog("close");                                                        
@@ -206,47 +206,11 @@ $(document).ready(function (){
        });
     
 });
-function change_panel (mypanel_id,myuser_id) {
-        $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-            $("#id_content_panel").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-            type: "POST",
-            url: "../messages/send_message.php",
-            data: "panel_id="+mypanel_id+"&user_id="+myuser_id,
-            success: function(datos) {
-             $("div#id_content_panel_init").html(datos);
-             $("div#display_response_id").html("");
-            }
-        });
-}
-function action_database_panel (option_id, myuser_id) {
 
-    if (option_id==5) {
-        my_txt_subject=$("#txt_subject_id").val();
-    } else {
-        my_txt_subject="clear";
-    }
-    my_txt_content=$("#txt_area_invite").val();
-
-    $.ajax({
-        contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-        $("#display_response_id").html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-        type: "POST",
-        url: "../messages/send_message.php",
-        data: "panel_id="+option_id+"&user_id="+myuser_id+"&txt_subject="+my_txt_subject+"&txt_content="+my_txt_content,
-        success: function(datos) {
-            $("#display_response_id").html(datos);
-        }
-    });
-}
 function display_hide () {
-        setTimeout("hide_display_message()",3000);
+    setTimeout("hide_display_message()",3000);
 }
-function message_information_display() {
-    $("#display_response_id").html("");
-}
+
 function hide_display_message () {
     $("div#display_response_id").html("");
     try {
@@ -355,6 +319,7 @@ if ($show_full_profile) {
         $personal_info .=  '<dt>'.get_lang('UserName').'</dt><dd>'. $user_info['username'].'</dd>';
     $personal_info .=  '</dl>';        
 }
+
 $social_right_content =  SocialManager::social_wrapper_div($personal_info, 4);
 
 if ($show_full_profile) {
@@ -404,7 +369,6 @@ if ($show_full_profile) {
                     $status_icon = Display::span('', array('class' => 'offline_user_in_text'));
                 }
                 
-                //$friend_html.= '<div id=div_'.$friend['friend_user_id'].' class="image_friend_network" >';
                 $friend_html.= '<li class="span2">';
                 $friend_html.= '<div class="thumbnail">';
                 
@@ -474,9 +438,8 @@ if ($show_full_profile) {
                     } elseif($field_type == USER_FIELD_TYPE_TAG ) {
                         $user_tags = UserManager::get_user_tags($user_id, $field_id);
                         $tag_tmp = array();
-                        foreach ($user_tags as $tags) {
-                            //$tag_tmp[] = $tags['tag'];
-                            $tag_tmp[] = '<a class="tag" href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
+                        foreach ($user_tags as $tags) {                            
+                            $tag_tmp[] = '<a class="label label_tag" href="'.api_get_path(WEB_PATH).'main/social/search.php?q='.$tags['tag'].'">'.$tags['tag'].'</a>';
                         }
                         if (is_array($user_tags) && count($user_tags)>0) {
                             $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode('', $tag_tmp).'</dd>';

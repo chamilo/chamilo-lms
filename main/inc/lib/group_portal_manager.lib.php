@@ -290,8 +290,7 @@ class GroupPortalManager {
 	 * @param bool show group links or not
 	 *
 	 */
-	public static function get_group_tags($group_id, $show_tag_links = true)
-	{
+	public static function get_group_tags($group_id, $show_tag_links = true) {
 		$tag					= Database :: get_main_table(TABLE_MAIN_TAG);
 		$table_group_rel_tag	= Database :: get_main_table(TABLE_MAIN_GROUP_REL_TAG);
 		$group_id 				= intval($group_id);

@@ -42,9 +42,6 @@ $(document).ready(function (){
 function display_hide () {
 		setTimeout("hide_display_message()",3000);
 }
-function message_information_display() {
-	$("#display_response_id").html("");
-}
 function hide_display_message () {
 	$("div#display_response_id").html("");
 	try {

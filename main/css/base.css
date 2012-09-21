@@ -2568,7 +2568,7 @@ div.admin_section h4 {
 
 .ribbon .rib {    
     height: 30px;
-    width: 115px;
+    width: 120px;
     display: block;    
     line-height: 1.3;
     left: -2px;
@@ -2594,7 +2594,8 @@ div.admin_section h4 {
 }
 
 .ribbon .rib h3 {    
-    color:white;
+    color: white;
+    font-size: 16px;
 }
 
 .ribbon .rib-total {
@@ -2645,7 +2646,7 @@ div.admin_section h4 {
 
 .ribbon h4 {
     display: block;
-    left: 132px;
+    left: 140px;
     height: 30px;
     line-height: 1.3;    
     margin: 0;
@@ -2653,10 +2654,6 @@ div.admin_section h4 {
     position: absolute;    
     top: 8px;
     color: #444;
-}
-
-.score_exercise {
-    /*font-size: 110%;*/
 }
 
 .ribbon-total h4 {

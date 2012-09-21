@@ -59,12 +59,11 @@ if (!class_exists('FreeAnswer')):
         }
 
         function return_header($feedback_type = null, $counter = null, $score = null) {            
-            if ((int) $score['score'] == 0) {
-                $score['revised'] = false;
-            } else {
+            if (!empty($score['comments']) || $score['score'] > 0) {
                 $score['revised'] = true;
+            } else {
+                $score['revised'] = false;
             }
-
             $header = parent::return_header($feedback_type, $counter, $score);
             $header .= '<table class="' . $this->question_table_class . '" >	
 	        <tr>		

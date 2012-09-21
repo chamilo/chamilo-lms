@@ -487,8 +487,10 @@ foreach ($questionList as $questionId) {
 	        echo '</table>';
 	    }
 	}
-	
-    if ($show_results) {			
+    
+	$comnt = null;
+    
+    if ($show_results) {		
 		if ($is_allowedToEdit && $locked == false && !api_is_drh()) {		
 			$name = "fckdiv".$questionId;
 			$marksname = "marksName".$questionId;            
@@ -541,7 +543,7 @@ foreach ($questionList as $questionId) {
 		if ($is_allowedToEdit) {
 			if (in_array($answerType, array(FREE_ANSWER, ORAL_EXPRESSION))) {
 				$marksname = "marksName".$questionId;
-                echo '<div id="'.$marksname.'" style="display:none" >';
+                echo '<div id="'.$marksname.'" style="display:none">';
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';				
 				$arrmarks[] = $questionId;
 				echo get_lang("AssignMarks");
@@ -551,7 +553,8 @@ foreach ($questionList as $questionId) {
 				}
 				echo '</select>';
 				echo '</form><br/ ></div>';
-				if ($questionScore==-1 ) {
+                
+				if ($questionScore == -1 ) {
 					$questionScore = 0;
 				  	echo Display::return_message(get_lang('notCorrectedYet'));
 				}
@@ -581,9 +584,10 @@ foreach ($questionList as $questionId) {
         $score['pass']   = $my_total_score >= $my_total_weight ? true : false;		
         $score['type']   = $answerType;        
         $score['score']  = $my_total_score;
-        $score['weight'] = $my_total_weight;  
+        $score['weight'] = $my_total_weight;    
+        $score['comments'] = isset($comnt) ? $comnt : null;        
     }
-    
+        
 	unset($objAnswerTmp);
 	$i++;
     
@@ -592,7 +596,7 @@ foreach ($questionList as $questionId) {
     $question_content = '<div class="question_row">';
     
  	if ($show_results) { 	    
-        //Shows question title an description
+        //Shows question title an description        
 	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
         
         // display question category, if any

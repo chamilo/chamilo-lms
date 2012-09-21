@@ -81,7 +81,7 @@ $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
 
 // Form title
-$form->addElement('header', null, get_lang('EditLPSettings'));
+$form->addElement('header', get_lang('EditLPSettings'));
 
 // Title
 $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('size' => 43));
@@ -186,7 +186,7 @@ $expired_on     = $_SESSION['oLP'] ->expired_on;
 $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 
 // Prerequisites
-$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('Prerequisites').'</label>
+$form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('LearnpathPrerequisites').'</label>
 <div class="controls">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
 
 //Start date
@@ -198,7 +198,7 @@ if ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on)) {
 }
 
 $form->addElement('html','<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'exercise_admin'), 5);
+$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'form1'), 5);
 $form->addElement('html','</div>');
 
 //End date

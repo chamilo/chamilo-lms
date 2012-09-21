@@ -422,10 +422,15 @@ function store_regions() {
     $installed_plugins = $plugin_obj->get_installed_plugins();
     
     $shortlist_installed = array();
-    foreach ($installed_plugins as $plugin) {
-        $shortlist_installed[] = $plugin['subkey'];
+    if (!empty($installed_plugins)) {
+        foreach ($installed_plugins as $plugin) {
+            if (isset($plugin['subkey'])) {
+                $shortlist_installed[] = $plugin['subkey'];
+            }
+        }
     }
     $shortlist_installed = array_flip(array_flip($shortlist_installed));
+    
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     foreach ($plugin_list as $plugin) {

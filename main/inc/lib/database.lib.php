@@ -677,16 +677,13 @@ class Database {
             $line = $file;
             $file = $connection;
             $connection = null;
-        }        
-        //error_log($query);
-        
+        }                
         //@todo remove this before the stable release
         
         //Check if the table contains a c_ (means a course id)
         if (strpos($query, 'c_')) {	
         	//Check if the table contains inner joins 
-        	if (                    
-                     
+        	if (     
                 strpos($query, 'assoc_handle') === false &&
                 strpos($query, 'olpc_peru_filter') === false &&
                 strpos($query, 'allow_public_certificates') === false &&
@@ -718,46 +715,17 @@ class Database {
         		strpos($query, 'c_id') === false &&
         		strpos($query, 'create table') === false &&
         		strpos($query, 'CREATE TABLE') === false &&
-        		strpos($query, 'AUTO_INCREMENT') === false
-        	
+        		strpos($query, 'AUTO_INCREMENT') === false        	
         	) {
-        	    //error_log($query);
-                echo '<pre>';
                 //@todo remove this
-                echo '<h4>Dev message: please add the c_id field in this query or report this error in support.chamilo.org </h4>';
-                echo $query;                
-                echo '</pre>';
-        	    /*        		
-        		$limit_list = explode('LIMIT', $query);
-        		$limit = '';
-        		if (isset($limit_list[1])) {
-        			$limit = ' LIMIT '.$limit_list[1];
-        		}
-        		$group_list = explode('GROUP', $limit_list[0]);
-        		$group = '';
-        		if (isset($group_list[1])) {
-        			$group = ' GROUP '.$group_list[1];
-        		}
-        		$order_list = explode('ORDER', $group_list[0]);
-        		$order = '';
-        		if (isset($order_list[1])) {
-        			$order = ' ORDER '.$order_list[1];
-        		}
-	        	$where_list = explode('WHERE', $order_list[0]);
-	        	$select = $where_list[0];
-	        	if (isset($where_list[1])) {	        		
-	        		$where  = $where_list[1].' AND c_id = '.api_get_course_int_id().' ';	        		
-	        		$query 	= $select.' WHERE '.$where.' '.$order.$group.$limit;	        		
-	        		//echo ($query ); exit;
-	        	} else {
-	        		//check if order ?
-	        		$query = $select. ' WHERE 1 AND c_id = '.api_get_course_int_id().' '.$order.$group.$limit;	    
-	        	}	        	
-                */        	
-        	}
-        	//echo ($query);var_dump('d');
-        }
-        
+                echo '<pre>';
+                $message = '<h4>Dev message: please add the c_id field in this query or report this error in support.chamilo.org </h4>';
+                $message .= $query;    
+                echo $message;
+                echo '</pre>';        	    
+                //error_log($message);
+        	}        	
+        }        
         
         if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.

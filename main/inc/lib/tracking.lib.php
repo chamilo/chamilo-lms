@@ -2832,7 +2832,7 @@ class Tracking {
 		 * @param 	array attempts
 
 		 */
-		function generate_exercise_result_thumbnail_graph($attempts) {
+		static function generate_exercise_result_thumbnail_graph($attempts) {
 			require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
@@ -2963,7 +2963,7 @@ class Tracking {
 		 * Generates a big graph with the number of best results
 		 * @param	array
 		 */
-		function generate_exercise_result_graph($attempts) {
+		static function generate_exercise_result_graph($attempts) {
 
 			require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';

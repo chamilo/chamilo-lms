@@ -3210,8 +3210,7 @@ class Exercise {
 	 * Sends a notification when a user ends an examn
 	 * 
 	 */
-	function send_notification_for_open_questions($question_list_answers, $origin, $exe_id) {
-		
+	function send_notification_for_open_questions($question_list_answers, $origin, $exe_id) {		
 		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
 			return null;
 		}     
@@ -3259,7 +3258,6 @@ class Exercise {
                 }
 			}
             
-            
             if (!empty($open_question_list)) {
                 $msg .=  '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>                        
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
@@ -3287,9 +3285,11 @@ class Exercise {
                 } else {
                     $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
                 }
-
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple($user_id, $subject, $mail_content);    
+                
+                if (!empty($teachers)) {
+                    foreach ($teachers as $user_id => $teacher_data) {
+                        MessageManager::send_message_simple($user_id, $subject, $mail_content);    
+                    }
                 }
             }
 	}

@@ -695,10 +695,6 @@ if ($origin != 'learnpath') {
 	}
 }
 
-if (!$is_allowedToEdit) {	
-    $objExercise->send_notification($arrques, $arrans, $origin);	
-}
-
 //destroying the session
 Session::erase('questionList');
 unset ($questionList);

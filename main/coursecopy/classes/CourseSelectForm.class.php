@@ -23,10 +23,8 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_DOCUMENT] 			= get_lang('Documents');
 		$resource_titles[RESOURCE_LINK] 				= get_lang('Links');
 		$resource_titles[RESOURCE_COURSEDESCRIPTION]	= get_lang('CourseDescription');
-		$resource_titles[RESOURCE_FORUM] 			= get_lang('Forums');
-        
-        $resource_titles[RESOURCE_FORUMCATEGORY]    = get_lang('ForumCategory');
-        
+		$resource_titles[RESOURCE_FORUM] 			= get_lang('Forums');        
+        $resource_titles[RESOURCE_FORUMCATEGORY]    = get_lang('ForumCategory');        
 		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
 		$resource_titles[RESOURCE_LEARNPATH] 		= get_lang('Learnpaths');
 		$resource_titles[RESOURCE_SCORM] 			= 'SCORM';
@@ -187,7 +185,7 @@ class CourseSelectForm
                             $forum_topics[$resource->obj->forum_id][$id] = $resource;
                         }
                         $element_count++;
-                    break;
+                        break;
                     case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMPOST :					
 					case RESOURCE_QUIZQUESTION:
@@ -210,7 +208,6 @@ class CourseSelectForm
 						}
 
 						echo '<blockquote>';
-
                         echo '<div class="btn-group">';
 						echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                         echo "<a class=\"btn\" href=\"javascript: void(0);\" onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
@@ -300,14 +297,10 @@ class CourseSelectForm
                 }
                 echo '<hr/>';                    
             }
-            echo '</ul>';
-            
+            echo '</ul>';            
             echo '</div>';
-            echo '<script language="javascript">exp('."'$type'".')</script>';
-            
+            echo '<script language="javascript">exp('."'$type'".')</script>';            
         }
-   
-        
 
 		if ($avoid_serialize) {
 			/*Documents are avoided due the huge amount of memory that the serialize php function "eats"
@@ -351,7 +344,6 @@ class CourseSelectForm
 								echo '<input type="hidden" name="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" id="resource['.RESOURCE_QUIZQUESTION.']['.$id.']" value="On" />';
 							}
 							break;
-
 					}
 				}
 			}
@@ -382,10 +374,10 @@ class CourseSelectForm
 	 */
 	static function get_posted_course($from='', $session_id = 0, $course_code = '') {
 		$course = Course::unserialize(base64_decode($_POST['course']));
-
+        
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of the javascript
-		$resource = $_POST['resource'][RESOURCE_DOCUMENT];
+		$resource       = $_POST['resource'][RESOURCE_DOCUMENT];
 
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
@@ -430,21 +422,47 @@ class CourseSelectForm
 				}
 			}
 		}
-        
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {
-						    if(is_array($_POST['resource'][RESOURCE_SURVEY]) && !in_array($obj->survey_id,array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
-								unset ($course->resources[$type][$id]);
+						    if (is_array($_POST['resource'][RESOURCE_SURVEY]) && !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
+								unset($course->resources[$type][$id]);
 							}
 						}
 						break;
+                    case RESOURCE_FORUMTOPIC:
+                    case RESOURCE_FORUMPOST:
+                       //Add post from topic
+                        if ($type == RESOURCE_FORUMTOPIC) {
+                            $posts_to_save = array();
+                            $posts = $course->resources[RESOURCE_FORUMPOST];
+                            foreach ($resources as $thread_id => $obj) {
+                                if (!isset($_POST['resource'][RESOURCE_FORUMTOPIC][$thread_id])) {
+                                    unset($course->resources[RESOURCE_FORUMTOPIC][$thread_id]);
+                                    continue;
+                                }
+                                $forum_id = $obj->obj->forum_id;                             
+                                $title = $obj->obj->thread_title;
+                                foreach ($posts as $post_id => $post) {                                
+                                    if ($post->obj->thread_id == $thread_id && $forum_id == $post->obj->forum_id && $title == $post->obj->post_title) {
+                                        //unset($course->resources[RESOURCE_FORUMPOST][$post_id]);
+                                        $posts_to_save[] = $post_id;
+                                    } 
+                                }                            
+                            }                      
+                            if (!empty($posts)) {
+                                foreach ($posts as $post_id => $post) {
+                                    if (!in_array($post_id, $posts_to_save)) {
+                                        unset($course->resources[RESOURCE_FORUMPOST][$post_id]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
 					case RESOURCE_LINKCATEGORY :
-					case RESOURCE_FORUMCATEGORY :
-					case RESOURCE_FORUMPOST :
-					case RESOURCE_FORUMTOPIC :
+					case RESOURCE_FORUMCATEGORY :					
 					case RESOURCE_QUIZQUESTION :
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
@@ -452,11 +470,11 @@ class CourseSelectForm
 						$documents = $_POST['resource'][RESOURCE_DOCUMENT];
 						if (is_array($resources))
 							foreach($resources as $id => $obj) {
-								if( $obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
+								if ($obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
 									foreach($documents as $id_to_check => $post_value) {
 										$obj_to_check = $resources[$id_to_check];
 										$shared_path_part = substr($obj_to_check->path,0,strlen($obj->path));
-										if($id_to_check != $id && $obj->path == $shared_path_part) {
+										if ($id_to_check != $id && $obj->path == $shared_path_part) {
 											$_POST['resource'][RESOURCE_DOCUMENT][$id] = 1;
 											break;
 										}
@@ -470,19 +488,19 @@ class CourseSelectForm
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
 									foreach($course->resources[RESOURCE_QUIZ] as $qid => $quiz) {
-										if($quiz->media == $id) {
+										if ($quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
 										}
 									}
 								}
 								if (!isset($_POST['resource'][$type][$id]) && !$resource_is_used_elsewhere) {
-									unset ($course->resources[$type][$id]);
+									unset($course->resources[$type][$id]);
 								}
 							}
 						}
 				}
 			}
-		}
+		}        
 		return $course;
 	}
 
@@ -493,7 +511,7 @@ class CourseSelectForm
 	 */
 	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize=false) {
 ?>
-		<script type="text/javascript">
+		<script>
 			function exp(item) {
 				el = document.getElementById('div_'+item);
 				if (el.style.display=='none'){

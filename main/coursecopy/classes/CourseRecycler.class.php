@@ -54,7 +54,6 @@ class CourseRecycler
         $this->recycle_thematic();
         $this->recycle_attendance();
 
-
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
                 $sql = "DELETE FROM ".$table_linked_resources." WHERE c_id = ".$this->course_id." AND  (source_type = '".$type."' AND source_id = '".$id."') OR (resource_type = '".$type."' AND resource_id = '".$id."')  ";
@@ -147,7 +146,7 @@ class CourseRecycler
         $table_mail_queue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
         $table_thread_qualify = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY);
         $table_thread_qualify_log = Database::get_course_table(TABLE_FORUM_THREAD_QUALIFY_LOG);
-        
+                
         if ($this->type == 'full_backup') {
             $sql = "DELETE FROM ".$table_category." WHERE c_id = ".$this->course_id;            
             Database::query($sql);
@@ -166,7 +165,11 @@ class CourseRecycler
             $sql = "DELETE FROM ".$table_thread_qualify." WHERE c_id = ".$this->course_id;
             Database::query($sql);            
             $sql = "DELETE FROM ".$table_thread_qualify_log." WHERE c_id = ".$this->course_id;
-            Database::query($sql);            
+            Database::query($sql);
+            
+            $sql = "DELETE FROM ".$table_thread_qualify_log." WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+            
         }
         
         if ($this->course->has_resources(RESOURCE_FORUMCATEGORY)) {                

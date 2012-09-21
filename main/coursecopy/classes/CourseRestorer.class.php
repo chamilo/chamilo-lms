@@ -304,7 +304,6 @@ class CourseRestorer
 			$resources = $this->course->resources;
             
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
-
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 				//$dirs = explode('/', dirname($document->path));
 
@@ -721,7 +720,8 @@ class CourseRestorer
 
 			$resources 		= $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
-                $params = (array)$forum->obj;        
+                $params = (array)$forum->obj;
+                
                 if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
                     $cat_id = $this->restore_forum_category($params['forum_category']);
                 } else {
@@ -793,15 +793,13 @@ class CourseRestorer
 	/**
 	 * Restore a forum-topic
 	 */
-	function restore_topic($id, $forum_id) {
-		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
-        
-		$resources = $this->course->resources;
-		$topic = $resources[RESOURCE_FORUMTOPIC][$id];
-                
+	function restore_topic($thread_id, $forum_id) {
+		$table = Database :: get_course_table(TABLE_FORUM_THREAD);        
+		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
+		                 
         $params = (array)$topic->obj;
         self::DBUTF8_array($params);        
-        $params['c_id'] = $this->destination_course_id;
+        $params['c_id']     = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
         $params['thread_poster_id'] = $this->first_teacher_id;
         $params['thread_date'] = api_get_utc_datetime();
@@ -809,16 +807,17 @@ class CourseRestorer
         $params['thread_last_post'] = 0;
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
-        unset($params['thread_id']);      
+        unset($params['thread_id']);
+                
         $new_id = Database::insert($table, $params);        
         api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);
         
-		$this->course->resources[RESOURCE_FORUMTOPIC][$id]->destination_id = $new_id;
+		$this->course->resources[RESOURCE_FORUMTOPIC][$thread_id]->destination_id = $new_id;
         
 		$topic_replies = -1;        
-       
-		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){             
-			if ($post->obj->thread_id == $id) {
+        
+		foreach ($this->course->resources[RESOURCE_FORUMPOST] as $post_id => $post){    
+			if ($post->obj->thread_id == $thread_id) {
 				$topic_replies++;
 				$this->restore_post($post_id, $new_id, $forum_id);
 			}
@@ -880,6 +879,7 @@ class CourseRestorer
 			}
 		}
 	}
+    
 	/**
 	 * Restore tool intro
 	 */
@@ -1151,8 +1151,7 @@ class CourseRestorer
 				}
                 
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
-				$order = 0;
-                ///var_dump($quiz->title);var_dump($quiz->question_ids);
+				$order = 0;                
 				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
 					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;					

@@ -34,7 +34,7 @@ if (function_exists('ini_set')) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array ('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
+$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;
@@ -48,13 +48,12 @@ echo Display::page_header(get_lang('CopyCourse'));
 // If a CourseSelectForm is posted or we should copy all resources, then copy them
 if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['copy_option']) && $_POST['copy_option'] == 'full_copy')) {
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
-		$course = CourseSelectForm :: get_posted_course('copy_course');
+		$course = CourseSelectForm :: get_posted_course('copy_course');        
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}    
 	$cr = new CourseRestorer($course);
-
 	$cr->set_file_option($_POST['same_file_name_option']);
 	$cr->restore($_POST['destination_course']);
 	Display::display_normal_message(get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.$_POST['destination_course'].'</a>',false);

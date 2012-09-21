@@ -48,4 +48,5 @@ $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Αν θέλετε να εξάγ
 $ArchivesDirectoryNotWriteableContactAdmin = "Ο φάκελλος αρχείων που χρησιμοποιείται από αυτό το εργαλείο, δεν είναι εγγράψιμος. Παρακαλώ απευθυνθείτε στον διαχειριστή της πλατφόρμας.";
 $DestinationCourse = "Μάθημα στόχος";
 $IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Αν οι Εκπαιδευτικές σας διαδρομές περιλαμβάνουν και αρχεία ήχου, θα πρέπει να τα επιλέξετε από τα έγγραφα";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Μη ξεχάσετε να επιλέξετε τα αρχεία των μέσων, αν η πηγή σας τα χρειάζεται";
 ?>

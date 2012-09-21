@@ -75,6 +75,7 @@ $AgendaSortChronologicallyDown = "Descendant";
 $ItemForUserSelection = "Liste de sélection des utilisateurs";
 $IsNotiCalFormatFile = "Ce fichier n'est pas au format iCal";
 $RepeatEvent = "Évènement répétitif";
+$SessionCalendar = "Calendrier de la session";
 $RepeatDate = "Répéter la date";
 $EndDateMustBeMoreThanStartDate = "La date de fin doit être supérieure à la date de début";
 $SelectACourse = "Sélectionnez un cours";

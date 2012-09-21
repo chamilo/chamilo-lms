@@ -85,6 +85,7 @@ Sempre pode atopar máis información acerca deste software no noso website: htt
 
 Disfrute, e non dubide en unirse á comunidade e proporcionarnos feedback a través do foro.";
 $Username = "Nome de usuario";
+$GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adiante, vaia ao catálogo de cursos %s para inscribirse nun curso que lle interese. Unha vez inscrito/a no curso aparecerá  %s, no lugar desta mensaxe.";
 $HelloXAsYouCanSeeYourCourseListIsEmpty = "Como podes ver, a túa lista de cursos está baleira. Iso é porque non tes rexistrado ningún curso ainda.";
 $Profile = "Perfil";
 ?>

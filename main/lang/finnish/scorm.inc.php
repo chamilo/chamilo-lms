@@ -51,4 +51,11 @@ $MoveCurrentChapter = "Siirrä tämä osio";
 $GenericScorm = "Yleinen Scorm";
 $UnknownPackageFormat = "Tiedostomuotoa ei voitu tunnistaa. Tarkista yhteensopivuus.";
 $Attempt = "Yritys";
+$MoveTheCurrentForum = "Siirrä tämä keskustelualue";
+$WarningWhenEditingScorm = "Varoitus! Jos muokkaat Scorm -elementin sisältöä, saatat muuttaa kurssin raportointia tai vahingoittaa Scorm -elementtiä.";
+$AdditionalProfileField = "Lisää kenttä käyttäjäprofiiliin";
+$ScormUnknownPackageFormat = "Paketti jota yrität viedä on tuntemattomassa tiedostomuodossa. Tarkista onko tiedostomuoto tuettu.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "Kurssin jäljellä oleva tila ei ole riittävä tämän paketin purkamiseen.";
+$ScormPackageFormatNotScorm = "Paketti jota yrität viedä ei ilmeisesti ole Scorm -formaatissa. Tarkista että ZIP -tiedosto sisältää tiedoston nimeltä imsmanifest.xml";
+$HideTocFrame = "Piilota sisällysluettelo";
 ?>

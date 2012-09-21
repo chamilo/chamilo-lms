@@ -2,7 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CasMainActivateComment = "Η ενεργοποίηση της πιστοποίησης CAS θα επιτρέψει στους εκπαιδευόμενους να πιστοποιούνται με τα CAS διαπιστεύτηριά τους. Μεταβείτε στα Πρόσθετα (plugins) για να προσθέσετε ένα διαμορφώσιμο κουμπί 'Σύνδεση CAS' για το Chamilo campus.";
 $UsersRegisteredInAnyGroup = "Χρήστες εγγεγραμμένοι σε οποιαδήποτε ομάδα";
+$ShowHotCoursesComment = "Η σελίδα με τα Καυτά μαθήματα θα προστεθεί στη σελίδα ευρετηρίου";
+$ShowHotCoursesTitle = "Εμφάνιση Καυτών μαθημάτων";
+$EnableIframeInclusionTitle = "Να επιτρέπονται τα iframes στον HTML Editor";
+$MailTemplateRegistrationTitle = "Νέος χρήστης στο ((όνομα ιστοτόπου))";
 $AdminBy = "Διαχείριση από";
 $AdministrationTools = "Εργαλεία Διαχείρισης";
 $State = "Κατάσταση συστήματος";

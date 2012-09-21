@@ -177,6 +177,7 @@ $EnterEmailUserAndWellSendYouPassword = "Introduza o nome de usuario ou o e-mail
 $NoUserAccountWithThisEmailAddress = "Non existe unha conta para ese usuario e/ou e-mail.";
 $CouldNotResetPassword = "Non se puido resetear o contrasinal.";
 $WithTheFollowingSettings = "cos seguintes parámetros:";
+$UnsubscribeUsersAlreadyAddedInCourse = "Desinscribir todos os alumnos que xa inscritos";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "A súa conta en %s foi aprobada por un dos nosos administradores.";
 $HaveFun = "Disfrute,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Non pode loguearse en %s usando o nome de usuario e contrasinal que introduceu.";

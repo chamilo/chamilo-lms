@@ -117,6 +117,9 @@ $AllowUserViewUserList = "Omogoči uporabnikom vpogled v seznam uporabnikov";
 $AllowUserViewUserListActivate = "Omogoči seznam uporabnikov";
 $AllowUserViewUserListDeactivate = "Onemogoči seznam uporabnikov";
 $DoNotDisplayAnyAdvance = "Ne prikaži napredka";
+$CourseSettingsRegisterDirectLink = "V primeru, da je vaš tečaj javen ali odprt, lahko dodate direktno povezavo spodaj za pošiljanje vabila novim uporabnikom, da bodo po registraciji lahko direktno dostopili do tečaja. Dodatno lahko dodate parameter e=1 k URL; z nadomestitvijo vrednosti 1 z ID izbranega testa, ga npr. lahko pošljete direktno na ta test. ID testa lahko razberete iz URL po odprtju testa.
+%s";
+$DirectLink = "Direktna povezava";
 $NewHomeworkEmailAlert = "E-poštno obveščanje uporabnikov ob objavi naloge";
 $NewHomeworkEmailAlertEnable = "Omogoči e-poštno obveščanje uporabnikov ob objavi naloge";
 $NewHomeworkEmailAlertDisable = "Onemogoči e-poštno obveščanje ob objavi naloge";

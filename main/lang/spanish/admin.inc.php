@@ -1253,6 +1253,7 @@ $SessionStartDate = "Fecha de inicio de acceso";
 $SessionDisplayEndDate = "Fecha de fin a mostrar";
 $SessionDisplayStartDate = "Fecha de inicio a mostrar";
 $UserHasNoCourse = "El usuario no tiene inscripción a cursos";
+$SessionTutorsCanSeeExpiredSessionsResultsComment = "¿Los tutores de sesión pueden ver los informes del curso después de que haya expirado la sesión?";
 $SessionTutorsCanSeeExpiredSessionsResultsTitle = "Visibilidad de reportes para los tutores de sesión";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "La importación XML le permitirá añadir más información y crear recursos (cursos, usuarios), mientras la importación CSV solamente creará sesiones y usará recursos ya existentes.";
 $ShowLinkBugNotificationTitle = "Mostrar el enlace para informar de errores";

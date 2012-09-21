@@ -1239,6 +1239,7 @@ $AllowUserCourseSubscriptionByCourseAdminTitle = "Permitir aos profesores rexist
 $AllowUserCourseSubscriptionByCourseAdminComment = "Ao activar esta opción, permitirá aos profesores rexistrar usuarios no seu curso";
 $ConfigureDashboardPlugin = "Configurar o plugin do Panel de control";
 $EditBlocks = "Editar bloques";
+$UserHasNoCourse = "O usuario non está inscrito en curso algún";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "A importación XML permitiralle engadir máis información e crear recursos (cursos, usuarios), mentras a importación CSV soamente creará sesións e usará recursos xa existentes.";
 $ShowLinkBugNotificationTitle = "Amosar a ligazón para informar dos erros";
 $ShowLinkBugNotificationComment = "Amosar unha ligazón na cabeceira para informar de erros dentro da plataforma de apoio (http://support.chamilo.org).  Cando pulse na ligazón, o usuario vai á plataforma de apoio, nunha páxina wiki na que aparece o proceso de informe de erros.";

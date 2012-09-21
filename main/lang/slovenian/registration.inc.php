@@ -177,6 +177,7 @@ $EnterEmailUserAndWellSendYouPassword = "Vnesi uporabniško ime ali e-poštni na
 $NoUserAccountWithThisEmailAddress = "Tu ni uporabniškega računa s tem uporabniškim imenom ali e-poštnim naslovom";
 $CouldNotResetPassword = "Gesla ni mogoče ponastaviti";
 $WithTheFollowingSettings = "z naslednjimi nastavitvami:";
+$UnsubscribeUsersAlreadyAddedInCourse = "Izpiši uporabnike že dodane v tečaj";
 $YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators = "Vaš uporabniški račun %s je bil pravkar odobren s strani enega od upraviteljev.";
 $HaveFun = "Veliko uspeha,";
 $YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided = "Sedaj se lahko prijavite v %s z uporabniškim imenom in geslom, ki ste ga podali pri registraciji.";

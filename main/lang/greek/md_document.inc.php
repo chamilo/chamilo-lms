@@ -43,4 +43,7 @@ $langConfirmDelete = "Θέλετε *πραγματικά* να διαγράψε�
 $langCourseKwds = "Αυτό το έγγραφο περιέχει μόνο τις λέξεις-κλειδί της σειράς μαθημάτων";
 $langSearch = "Αναζήτηση";
 $langSearchCrit = "Μία λέξη ανά γραμμή";
+$langCopyrights = "
+:Ναι:πνευματικά δικαιώματα copyright, Όχι:χωρίς πνευματικά δικαιώματα copyright";
+$langFormats = ":text/plain;iso-8859-1:text/plain;iso-8859-1,, text/plain;utf-8:text/plain;utf-8,, text/html;iso-8859-1:text/html;iso-8859-1,, text/html;utf-8:text/html;utf-8,, inode/directory:Folder,, application/msword:MsWord,, application/octet-stream:Octet stream,, application/pdf:PDF,, application/postscript:PostScript,, application/rtf:RTF,, application/vnd.ms-excel:MsExcel,, application/vnd.ms-powerpoint:MsPowerpoint,, application/xml;iso-8859-1:XML;iso-8859-1,, application/xml;utf-8:XML;utf-8,, application/zip:ZIP";
 ?>

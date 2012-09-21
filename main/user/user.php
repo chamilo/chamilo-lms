@@ -408,7 +408,8 @@ if ( api_is_allowed_to_edit(null, true)) {
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
     
-    $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
+    $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';    
+    //$actions .= ' <a class="btn" href="social_groups.php?'.api_get_cidreq().'">'.get_lang('SocialGroups').'</a>';
 		
 	// Build search-form
 	$form = new FormValidator('search_user', 'get', '', '', null, false);

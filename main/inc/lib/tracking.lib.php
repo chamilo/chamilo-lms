@@ -475,7 +475,7 @@ class Tracking {
      * @param    int       session id
     */
    
-    function get_exercise_student_progress($exercise_list, $user_id, $course_code, $session_id) {
+    static function get_exercise_student_progress($exercise_list, $user_id, $course_code, $session_id) {
         $course_code    = Database::escape_string($course_code);
         $user_id        = intval($user_id);
         $session_id     = intval($session_id);  
@@ -490,9 +490,9 @@ class Tracking {
         $exercise_list_imploded = implode("' ,'", $exercise_list);
         
         $sql = "SELECT COUNT(DISTINCT ex.exe_exo_id) FROM $tbl_stats_exercices AS ex
-                    WHERE   ex.exe_cours_id = '$course_code' AND
-                            ex.session_id  = $session_id AND
-                            ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list_imploded') ";
+                WHERE ex.exe_cours_id = '$course_code' AND
+                      ex.session_id  = $session_id AND
+                      ex.exe_user_id = $user_id AND ex.exe_exo_id IN ('$exercise_list_imploded') ";
                                                                 
         $rs = Database::query($sql);
         $count = 0;
@@ -505,7 +505,7 @@ class Tracking {
     }
 
 
-    function get_exercise_student_average_best_attempt($exercise_list, $user_id, $course_code, $session_id) {
+    static function get_exercise_student_average_best_attempt($exercise_list, $user_id, $course_code, $session_id) {
         $result = 0;
         if (!empty($exercise_list)) {
             foreach ($exercise_list as $exercise_data) {
@@ -3382,7 +3382,7 @@ class TrackingCourseLog {
 		return array('table_name' => $table_name,'link_tool' => $link_tool,'id_tool' => $id_tool);
 	}
 
-	function display_additional_profile_fields() {
+	static function display_additional_profile_fields() {
 		// getting all the extra profile fields that are defined by the platform administrator
 		$extra_fields = UserManager :: get_extra_fields(0,50,5,'ASC');
 
@@ -3528,7 +3528,7 @@ class TrackingCourseLog {
 	 * Get number of users for sortable with pagination
 	 * @return int
 	 */
-	function get_number_of_users() {
+	static function get_number_of_users() {
 		global $user_ids;
 		return count($user_ids);
 	}
@@ -3537,14 +3537,13 @@ class TrackingCourseLog {
 	 * Get data for users list in sortable with pagination
 	 * @return array
 	 */
-	function get_user_data($from, $number_of_items, $column, $direction) {
+	static function get_user_data($from, $number_of_items, $column, $direction) {
 		global $user_ids, $course_code, $additional_user_profile_info, $export_csv, $is_western_name_order, $csv_content, $session_id, $_configuration;
 
 		$course_code        = Database::escape_string($course_code);
 		$tbl_user           = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_url_rel_user   = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-		$course_info        = CourseManager::get_course_information($course_code);
 		$access_url_id      = api_get_current_access_url_id();
 
 		// get all users data from a course for sortable with limit

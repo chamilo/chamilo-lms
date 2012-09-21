@@ -1163,7 +1163,9 @@ if ($image_present && !isset($_GET['keyword'])) {
     echo '<a href="slideshow.php?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpathurl . '">' . Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM) . '</a>';
 }
 
-echo '<a href="document_quota.php?' . api_get_cidreq() . '">' . Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM) . '</a>';
+if (api_is_allowed_to_edit(null, true)) {
+    echo '<a href="document_quota.php?' . api_get_cidreq() . '">' . Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM) . '</a>';
+}
 
 echo '</div>'; //end actions
 

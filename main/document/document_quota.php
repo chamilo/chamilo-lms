@@ -6,6 +6,10 @@ require_once '../inc/global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
+if (!api_is_allowed_to_edit(null, true)) {
+    api_not_allowed(true);
+}
+
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 

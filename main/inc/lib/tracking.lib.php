@@ -2307,11 +2307,7 @@ class Tracking {
 									}
 								}
 							}			
-						}
-						//Graph per session
-						//if (!empty($user_results) && !empty($exercise_graph_list)) {						
-							//$session_graph[$my_session_id] = self::generate_session_exercise_graph($exercise_graph_name_list, $user_results, $exercise_graph_list);
-						//}
+						}		
 					}				
 				
 					//Complete graph
@@ -2753,7 +2749,7 @@ class Tracking {
 		 * @param 	array	my results 0 to 100
 		 * @param 	array	average scores 0-100
 		 */
-		function generate_session_exercise_graph($names, $my_results, $average) {
+		static function generate_session_exercise_graph($names, $my_results, $average) {
 			require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 			require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';

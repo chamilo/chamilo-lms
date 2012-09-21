@@ -51,21 +51,16 @@ class MySpace {
 	 * @param	int		Session id (optional, default = 0)
 	 * @return 	array   Conections
 	 */
-	function get_connections_to_course($user_id, $course_code, $session_id = 0) {
+	static function get_connections_to_course($user_id, $course_code, $session_id = 0) {
 
 		// Database table definitions
 	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-	    $tbl_main			= Database :: get_main_table(TABLE_MAIN_COURSE);
 
 		// protect data
 		$user_id     = intval($user_id);
 		$course_code = Database::escape_string($course_code);
 		$session_id  = intval($session_id);
 
-	    /*$sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.$course_code.'"';
-	    $result = Database::query($sql_query);
-	    $row_query = Database::fetch_array($result, 'ASSOC');
-	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;*/
 
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    	WHERE user_id = '.$user_id.'
@@ -75,12 +70,9 @@ class MySpace {
 	    $connections = array();
 
 	    while ($row = Database::fetch_array($rs)) {
-
-	        $login_date = $row['login_course_date'];
-	        $logout_date = $row['logout_course_date'];
-
-	        $login_date = api_get_local_time($login_date, null, date_default_timezone_get());
-	        $logout_date = api_get_local_time($logout_date, null, date_default_timezone_get());
+	        
+	        $login_date = api_get_local_time($row['login_course_date'], null, date_default_timezone_get());
+	        $logout_date = api_get_local_time($row['logout_course_date'], null, date_default_timezone_get());
 
 	        $timestamp_login_date = api_strtotime($login_date);
 	        $timestamp_logout_date = api_strtotime($logout_date);
@@ -100,15 +92,9 @@ class MySpace {
 	 * @param date $day
 	 * @return unknown
 	 */
-	function get_connections_to_course_by_time($user_id, $course_code, $year = '', $month = '', $day = '') {
+	static function get_connections_to_course_by_time($user_id, $course_code, $year = '', $month = '', $day = '') {
 		// Database table definitions
 	    $tbl_track_course 		= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-	    $tbl_main				= Database :: get_main_table(TABLE_MAIN_COURSE);
-
-	    /*$sql_query = 'SELECT visual_code as course_code FROM '.$tbl_main.' c WHERE code="'.Database :: escape_string($course_code).'";';
-	    $result = Database::query($sql_query);
-	    $row_query = Database::fetch_array($result,'ASSOC');
-	    $course_true = isset($row_query['course_code']) ? $row_query['course_code']: $course_code;*/
 
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
 	    				WHERE user_id = ' . intval($user_id) . '

@@ -104,13 +104,12 @@ require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'fileUpload.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 
-if (api_is_in_group()) {
-	$group_properties = GroupManager::get_group_properties($group_id);
-}
-
 $course_info = api_get_course_info();
 $group_id = api_get_group_id();
 
+if (api_is_in_group()) {
+	$group_properties = GroupManager::get_group_properties($group_id);
+}
 
 $dir = '/';
 
@@ -141,7 +140,6 @@ $file_name = $doc;
 $group_document = false;
 
 $current_session_id = api_get_session_id();
-$group_id = api_get_group_id();
 $user_id = api_get_user_id();
 
 

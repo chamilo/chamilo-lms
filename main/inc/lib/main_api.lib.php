@@ -229,6 +229,7 @@ define('REL_COURSE_PATH', 'REL_COURSE_PATH');
 define('REL_CODE_PATH', 'REL_CODE_PATH');
 define('WEB_CODE_PATH', 'WEB_CODE_PATH');
 define('SYS_CODE_PATH', 'SYS_CODE_PATH');
+define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
@@ -339,6 +340,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * api_get_path(SYS_ARCHIVE_PATH)               /var/www/chamilo/archive/
  * api_get_path(SYS_COURSE_PATH)                /var/www/chamilo/courses/
  * api_get_path(SYS_CODE_PATH)                  /var/www/chamilo/main/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
@@ -388,6 +390,7 @@ function api_get_path($path_type, $path = null) {
         REL_CODE_PATH           => '',
         WEB_CODE_PATH           => '',
         SYS_CODE_PATH           => '',
+        SYS_CSS_PATH            => 'css/',
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
         WEB_CSS_PATH            => 'css/',
@@ -499,14 +502,15 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
-
+        
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-
+        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];

@@ -136,10 +136,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             $s .= '</td></tr>';
 		} elseif ($answerType == ORAL_EXPRESSION) {
 			//Add nanog
-			if (api_get_setting('enable_nanogong') == 'true') {				
-				
-				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
-				
+			if (api_get_setting('enable_nanogong') == 'true') {
+						
 				//@todo pass this as a parameter
 				global $exercise_stat_info, $exerciseId, $exe_id;
 				
@@ -507,8 +505,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	} elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
 		// Question is a HOT_SPOT        
         //checking document/images visibility
-        if (api_is_platform_admin() || api_is_course_admin()) {
-            require_once api_get_path(LIBRARY_PATH).'document.lib.php';
+        if (api_is_platform_admin() || api_is_course_admin()) {            
             $course = api_get_course_info();        
             $doc_id = DocumentManager::get_document_id($course, '/images/'.$pictureName);  
             if (is_numeric($doc_id)) {              

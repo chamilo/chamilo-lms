@@ -25,9 +25,6 @@ $show=(isset($_GET['show']) && $_GET['show'] == 'result')?'result':'test'; // mo
  * Libraries
  */
 
-require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-//include(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
-
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
 $is_tutor = api_is_allowed_to_edit(true);

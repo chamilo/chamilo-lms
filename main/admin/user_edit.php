@@ -68,9 +68,7 @@ function show_image(image,width,height) {
 </script>';
 
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'mail.lib.inc.php';
 
 $noPHP_SELF = true;
 $tool_name = get_lang('ModifyUserInfo');
@@ -266,7 +264,7 @@ if (!$user_data['platform_admin']) {
 
 
 // EXTRA FIELDS
-$return_params = UserManager::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id);
+$return_params = ExtraField::set_extra_fields_in_form($form, $extra_data, 'user_edit', true, $user_id, 'user');
 $jquery_ready_content = $return_params['jquery_ready_content'];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function

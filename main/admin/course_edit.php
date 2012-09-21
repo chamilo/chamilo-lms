@@ -12,8 +12,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
@@ -198,7 +196,7 @@ if ($form->validate()) {
 	$dbName = $_POST['dbName'];
 	$course_code = $course['code'];
 	$visual_code = $course['visual_code'];	
-	$visual_code = generate_course_code($visual_code);   
+	$visual_code = CourseManager::generate_course_code($visual_code);   
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;

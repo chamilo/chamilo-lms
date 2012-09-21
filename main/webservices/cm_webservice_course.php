@@ -2,8 +2,6 @@
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'course.lib.php';
-require_once $libpath.'add_course.lib.inc.php';
 require_once $libpath.'course_description.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 
@@ -107,7 +105,7 @@ class WSCMCourse extends WSCM {
 			return $course_admin_id;
 		}
 		if($wanted_code == '') {
-			$wanted_code = generate_course_code($title);
+			$wanted_code = CourseManager::generate_course_code($title);
 		}
 		$result = create_course($wanted_code, $title, $tutor_name, $category_code, $language, $course_admin_id, $this->_configuration['db_prefix'], 0);
 		if (!$result) {

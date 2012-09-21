@@ -1,0 +1,22 @@
+{       
+    "autoload": {
+        "psr-0": { "Chamilo": "src/" },
+        "classmap": [            
+            "main/auth",
+            "main/admin",
+            "main/cron/lang",
+            "main/coursecopy",
+            "main/exercice",
+            "main/gradebook/lib",
+            "main/newscorm",
+            "main/inc/lib",            
+            "main/install",        
+            "main/inc/lib/getid3",
+            "main/survey"
+        ]
+    },   
+    "require": {
+        "php": ">=5.3.2"      
+    },
+    "minimum-stability": "dev"
+}

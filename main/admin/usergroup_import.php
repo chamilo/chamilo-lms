@@ -55,10 +55,8 @@ $language_file = array ('admin', 'registration');
 // Resetting the course id.
 $cidReset = true;
 
-// Including some necessary dokeos files.
-include '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
+// Including some necessary dokeos files
+require_once '../inc/global.inc.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;

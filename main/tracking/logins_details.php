@@ -14,6 +14,9 @@
  */
 // TODO: Is this file deprecated?
 
+exit;
+
+
 /* 		INIT SECTION */
 $uInfo = $_REQUEST['uInfo'];
 if (!isset($_REQUEST['reqdate']))
@@ -104,7 +107,7 @@ $is_allowedToTrackEverybodyInCourse = $is_courseAdmin; // allowed to track all s
             /*             * ***** MENU ******* */
             echo "<tr>
                 <td>
-                [<a href='userLog.php?uInfo=$uInfo&view=$view'>" . get_lang('Back') . "</a>]
+                
         ";
             echo "  &nbsp;&nbsp;&nbsp;||&nbsp;&nbsp;&nbsp;
                 [<a href='" . api_get_self() . "?uInfo=$uInfo&view=$view&period=week&reqdate=$reqdate' class='specialLink'>" . get_lang('PeriodWeek') . "</a>]

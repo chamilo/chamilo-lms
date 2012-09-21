@@ -15,7 +15,7 @@ require_once 'model.lib.php';
  */
 class UserGroup extends Model {
 
-    var $columns = array('id', 'name','description');
+    public $columns = array('id', 'name', 'description');
 
 	public function __construct() {
         $this->table                        =  Database::get_main_table(TABLE_USERGROUP);

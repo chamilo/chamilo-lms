@@ -1128,7 +1128,7 @@ class Database {
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';
             $result = self::query($sql);
             if ($show_query) {
             	var_dump($sql);
@@ -1146,9 +1146,8 @@ class Database {
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
-
-    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
-        $conditions = self::parse_conditions($conditions);
+    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
+        $conditions = self::parse_conditions($conditions);        
         
         //@todo we could do a describe here to check the columns ...
         $clean_columns = '';
@@ -1161,7 +1160,6 @@ class Database {
                 $clean_columns = (string)$columns;
             }
         }
-
         $sql    = "SELECT $clean_columns FROM $table_name $conditions";
         //var_dump($sql);
         $result = self::query($sql);
@@ -1198,8 +1196,7 @@ class Database {
             }
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
-                case 'where':            
-                    
+                case 'where':                    
                     foreach ($condition_data as $condition => $value_array) {                       
                         if (is_array($value_array)) {
                             $clean_values = array();                       

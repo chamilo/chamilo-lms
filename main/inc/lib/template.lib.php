@@ -10,6 +10,10 @@
 require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
+/*use Assetic\Asset\AssetCollection;
+use Assetic\Asset\FileAsset;
+use Assetic\Asset\GlobAsset;*/
+
 class Template {
 
     var $style = 'default'; //see the template folder 
@@ -87,16 +91,6 @@ class Template {
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
-
-        /*
-          $lexer = new Twig_Lexer($this->twig, array(
-          //'tag_comment'  => array('{*', '*}'),
-          //'tag_comment'  => array('{#', '#}'),
-          //'tag_block'    => array('{', '}'),
-          //'tag_variable' => array('{$', '}'),
-          ));
-          $this->twig->setLexer($lexer); */
 
         //Setting system variables
         $this->set_system_parameters();
@@ -387,11 +381,51 @@ class Template {
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
+        
+        foreach ($css as $file) {
+            $css_file_to_string .= api_get_css($file);           
+        }
+        
+        /*
+        $css = array();
+        //Base CSS
+        $css[] = api_get_path(SYS_CSS_PATH).'base.css';
+
+        //Default theme CSS
+        $css[] = api_get_path(SYS_CSS_PATH).$this->theme.'/default.css';
+        $css[] = api_get_path(SYS_CSS_PATH).'bootstrap-responsive.css';
+        $css[] = api_get_path(SYS_CSS_PATH).'responsive.css';
+        
+        //Extra CSS files
+        $css[] = api_get_path(LIBRARY_PATH) . 'javascript/thickbox.css';
+        $css[] = api_get_path(LIBRARY_PATH) . 'javascript/chosen/chosen.css';
+            
+        if ($this->show_learnpath) {
+            $css[] = api_get_path(SYS_CSS_PATH) . $this->theme . '/learnpath.css';
+            $css[] = api_get_path(SYS_CSS_PATH) . $this->theme . '/scorm.css';
+        }
+
+        if (api_is_global_chat_enabled()) {
+            $css[] = api_get_path(SYS_CODE_PATH) . 'javascript/chat/css/chat.css';
+        }
                
         $css_file_to_string = null;
+        $array_assets = array();
+        
         foreach ($css as $file) {
-            $css_file_to_string .= api_get_css($file);
+            //$css_file_to_string .= api_get_css($file);
+            $array_assets[] = new FileAsset($file);
         }    
+        
+        
+        $js = new AssetCollection(array(
+            //new GlobAsset('/path/to/js/*'),
+            new FileAsset('/path/to/another.js'),
+        ));
+        $js = new AssetCollection($array_assets);
+
+        // the code is merged when the asset is dumped
+        $css_file_to_string = $js->dump();*/
         
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
@@ -414,8 +448,7 @@ class Template {
         }
         
         if (!$disable_js_and_css_files) {
-            $this->assign('css_file_to_string', $css_file_to_string);
-            
+            $this->assign('css_file_to_string', $css_file_to_string);            
             $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
@@ -431,7 +464,7 @@ class Template {
         //JS files        
         $js_files = array(
             'modernizr.js',
-            'jquery.min.js',
+            'jquery.min.js',            
             'chosen/chosen.jquery.min.js',
             'thickbox.js',            
             'bootstrap/bootstrap.js',
@@ -467,7 +500,7 @@ class Template {
             $this->assign('js_file_to_string', $js_file_to_string);
             
             //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
+            $extra_headers = api_get_jquery_libraries_js(array('jquery-ui'));
 
             //$extra_headers = '';		
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {

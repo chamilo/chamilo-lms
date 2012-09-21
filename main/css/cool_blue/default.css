@@ -45,7 +45,7 @@ ul#navigation li a {
     border:1px solid #AFAFAF;
     -moz-border-radius:10px 0px 0px 10px;
     -webkit-border-bottom-right-radius: 10px;
-    -webkit-border-top-right-radius: 10x;
+    -webkit-border-top-right-radius: 10px;
     -khtml-border-bottom-right-radius: 10px;
     -khtml-border-top-right-radius: 10px;
     -moz-box-shadow: 0px 4px 3px #000;
@@ -276,19 +276,6 @@ a:active {
 	margin-bottom: 5px;
 	height: 30px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-	font-size:135%;
-}
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-     font-size:80%; 
-}
 
 /*****************************************************
  *  HEADER STYLES                                    *
@@ -298,20 +285,7 @@ a:active {
 	padding: 0;
 	margin: 0;
 }
-/********************************************************
- *  HEADER 1: Title, portal, organisation, course title	*
- ********************************************************/
-#header1 {
-	padding: 4px;
-	color: #2ea2c5;
-}
-#header1 a {
-	color: #636363;
-	text-decoration: none;
-}
-#header1 a:hover {
-	text-decoration: underline;
-}
+
 #sitename {
 	margin: 0;
 	font-weight: bold;

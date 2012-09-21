@@ -77,7 +77,8 @@ if (!defined('CLI_INSTALLATION')) {
     }	
 	//Create database
 	if ($create_database) {
-		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb`";
+        $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
+		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` $charset_clause";   
 		Database::query($sql) or die(Database::error());
 	}	
 }
@@ -115,8 +116,6 @@ $installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
 load_main_database($installation_settings);
 
-//Adds the c_XXX courses tables see #3910
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php'; 
 
 drop_course_tables();
 

@@ -402,7 +402,6 @@ class CourseRestorer
                                     if (UTF8_CONVERT) $content = utf8_encode($content);
                                     $content    = DocumentManager::replace_urls_inside_content_html_from_copy_course($content ,$this->course->code,$this->course->destination_path);
                                     $result     = file_put_contents($path.$document->path,$content);
-
                                 }
 
 								$sql = "SELECT id FROM ".$table." WHERE c_id = ".$this->destination_course_id." AND path='/".substr($document->path, 9)."'";
@@ -720,8 +719,7 @@ class CourseRestorer
 
 			$resources 		= $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
-                $params = (array)$forum->obj;
-                
+                $params = (array)$forum->obj;                
                 if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
                     $cat_id = $this->restore_forum_category($params['forum_category']);
                 } else {
@@ -778,7 +776,8 @@ class CourseRestorer
                     }
                 }
                 $params = (array) $forum_cat->obj;
-                $params['c_id'] = $this->destination_course_id;
+                $params['c_id'] = $this->destination_course_id;                
+                $params['cat_comment']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['cat_comment'], $this->course->code, $this->course->destination_path);
                 unset($params['cat_id']);
                 self::DBUTF8_array($params);     
                 $new_id = Database::insert($forum_cat_table, $params);                
@@ -808,7 +807,7 @@ class CourseRestorer
         $params['thread_replies'] = 0;
         $params['thread_views'] = 0;
         unset($params['thread_id']);
-                
+        
         $new_id = Database::insert($table, $params);        
         api_item_property_update($this->destination_course_info, TOOL_FORUM_THREAD, $new_id, 'ThreadAdded', api_get_user_id(), 0, 0, null, null);
         
@@ -839,10 +838,9 @@ class CourseRestorer
         $params['poster_id'] = $this->first_teacher_id;
         $params['post_date'] = api_get_utc_datetime();
         unset($params['post_id']);        
-        
+        $params['post_text']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['post_text'], $this->course->code, $this->course->destination_path);        
         $new_id = Database::insert($table_post, $params);
-        api_item_property_update($this->destination_course_info, TOOL_FORUM_POST, $new_id, 'PostAdded', api_get_user_id(), 0, 0, null, null);
-        
+        api_item_property_update($this->destination_course_info, TOOL_FORUM_POST, $new_id, 'PostAdded', api_get_user_id(), 0, 0, null, null);        
 		$this->course->resources[RESOURCE_FORUMPOST][$id]->destination_id = $new_id;
 		return $new_id;
 	}

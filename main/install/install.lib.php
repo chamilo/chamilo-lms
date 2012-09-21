@@ -3070,7 +3070,8 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
-    Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool,ref)");
+    Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_item_property_toolref (tool, ref)");
+    Database::query("ALTER TABLE `$TABLEITEMPROPERTY` ADD INDEX idx_itemprop_id_tool (c_id, tool(8))");
 
     /*           Tool introductions    */
     Database::query("

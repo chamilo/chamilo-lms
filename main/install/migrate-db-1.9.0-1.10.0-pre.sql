@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment
 
 ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id(c_id, lp_view_id, lp_item_id);
+ALTER TABLE c_item_property ADD INDEX idx_itemprop_id_tool (c_id, tool(8));
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 
 -- Do not move this 

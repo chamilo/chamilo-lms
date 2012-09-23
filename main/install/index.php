@@ -416,6 +416,7 @@ if ($encryptPassForm == '1') {
         function send_contact_information() {
             var data_post = "";
             data_post += "person_name="+$("#person_name").val()+"&";
+            data_post += "person_email="+$("#person_email").val()+"&";
             data_post += "company_name="+$("#company_name").val()+"&";
             data_post += "company_activity="+$("#company_activity option:selected").val()+"&";
             data_post += "person_role="+$("#person_role option:selected").val()+"&";

@@ -460,7 +460,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
             }
         }
         // forget about the expiration date field
-        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]));
+        $users[] = array($user[0], $photo, $user[1],$user[2], $user[3], $user[4], $user[5], $user[6], $user[7], api_get_local_time($user[9]), $user[0]);
 	}
 	return $users;
 }
@@ -491,12 +491,13 @@ function user_filter($name, $params, $row) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $charset, $_user, $_admins_list, $delete_user_available;
-    
+	global $charset, $_admins_list, $delete_user_available;    
 	$is_admin   = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
-	if ($row['7'] == $statusname[ANONYMOUS]) {
+    $current_user_status_label = $row['7'];
+        
+	if ($current_user_status_label == $statusname[ANONYMOUS]) {
 		$user_is_anonymous =true;
 	}
 	$result = '';
@@ -518,7 +519,7 @@ function modify_filter($user_id, $url_params, $row) {
 	}
 
     //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
-    if (api_is_platform_admin() || (api_is_session_admin() && $row['7'] == $statusname[STUDENT])) {
+    if (api_is_platform_admin() || (api_is_session_admin() && $current_user_status_label == $statusname[STUDENT])) {
     	if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id)) {
                 $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
@@ -533,7 +534,7 @@ function modify_filter($user_id, $url_params, $row) {
     	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
     
-	if ($row['7'] != $statusname[STUDENT]) {
+	if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
@@ -562,11 +563,11 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
 	} else {
-		if ($row['7'] == $statusname[DRH] || UserManager::is_admin($row[0])) {
+		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
 			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
-		} else if ($row['7'] == $statusname[SESSIONADMIN]) {
+		} else if ($current_user_status_label == $statusname[SESSIONADMIN]) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}
 	}
@@ -574,7 +575,7 @@ function modify_filter($user_id, $url_params, $row) {
     if (api_is_platform_admin()) {        
         $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
         if ($delete_user_available) {
-            if ($row[0] != $_user['user_id'] && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {                  
+            if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {                  
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {

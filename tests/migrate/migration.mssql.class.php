@@ -18,7 +18,7 @@ class MigrationMSSQL extends Migration {
             $this->errors_stack[] = 'Could not connect. MSSQL error: ' . mssql_get_last_message();
             return false;
         }
-        mssql_select_db($dbname, $this->c);
+        mssql_select_db($this->odbname, $this->c);
         return true;
     }
 
@@ -27,15 +27,23 @@ class MigrationMSSQL extends Migration {
         foreach ($fields as $field) {
             $fields_sql .= $field . ', ';
         }
-        $fields_sql = substr($fields_sql, 0, -2);
-        $sql = 'SELECT ' . $fields_sql . ' FROM ' . $table;
+        if (!empty($fields_sql)) {
+            $fields_sql = substr($fields_sql, 0, -2);
+        }
+        $sql = "SELECT $fields_sql FROM $table";
         //remove
         error_log($sql);
         $this->rows_iterator = mssql_query($sql, $this->c);
+        
+        if ($this->rows_iterator  === false) {
+            error_log("--- Error with query ".$sql." MSSQL error: ".mssql_get_last_message()."-- \n");
+        }
     }
 
-    public function fetch_row() {
+    public function fetch_row() {        
         return mssql_fetch_row($this->rows_iterator);
     }
-
+    public function num_rows() {
+        return mssql_num_rows($this->rows_iterator);
+    }    
 }

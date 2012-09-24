@@ -51,4 +51,8 @@ class MigrationCustom {
     public function log_original_session_unique_id(&$omigrate, $data) {
         $omigrate['sessions'][$data] = 0;
     }
+    
+    public function store_user_data1() {
+        
+    }
 }

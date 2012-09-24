@@ -1827,7 +1827,9 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     $visibility = 0; //means that the session is still available
 
     if (api_is_platform_admin()) {
-        return SESSION_AVAILABLE;
+        if ($ignore_visibility_for_admins) {
+            return SESSION_AVAILABLE;
+        }
     }
     
     $now = time();

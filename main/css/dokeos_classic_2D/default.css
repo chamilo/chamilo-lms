@@ -103,7 +103,7 @@ ul#navigation li a {
 	border:1px solid #AFAFAF;
 	-moz-border-radius:10px 0px 0px 10px;
 	-webkit-border-bottom-right-radius: 10px;
-	-webkit-border-top-right-radius: 10x;
+	-webkit-border-top-right-radius: 10px;
 	-khtml-border-bottom-right-radius: 10px;
 	-khtml-border-top-right-radius: 10px;
 	-moz-box-shadow: 0px 4px 3px #000;
@@ -162,7 +162,7 @@ ul#navigation li a {
     border:1px solid #AFAFAF;
     -moz-border-radius:10px 0px 0px 10px;
     -webkit-border-bottom-right-radius: 10px;
-    -webkit-border-top-right-radius: 10x;
+    -webkit-border-top-right-radius: 10px;
     -khtml-border-bottom-right-radius: 10px;
     -khtml-border-top-right-radius: 10px;
     -moz-box-shadow: 0px 4px 3px #000;
@@ -298,47 +298,13 @@ ul#navigation .student-connect a {
 	margin-bottom: 5px;
 	height: 30px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-	font-size:135%;
-}
-
-/*
-	HEADER STYLES
-*/
 
 #header {
 	margin: 0;
 	padding: 0;
 	width: 100%;
 }
-/*
-------------------------------------------------------------------------------
-	HEADER 1: Title, portal, organisation, course title
-------------------------------------------------------------------------------
-*/
 
-#header1 {
-	background-color: #264269;
-	border-bottom: 1px solid white;
-	color: #fff;
-	font-size: 12px;
-	padding: 4px;
-}
-#header1 a {
-	color: #fff;
-	text-decoration: none;
-}
-#header1 a:hover {
-	background-color: #264269;
-	text-decoration: underline;
-}
 #sitename {
 	font-weight: bold;
 	margin: 0;

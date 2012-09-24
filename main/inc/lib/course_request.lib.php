@@ -83,7 +83,7 @@ class CourseRequestManager {
         $request_date = api_get_utc_datetime();
         $status = COURSE_REQUEST_PENDING;
         $info = 0;
-        $keys = define_course_keys($wanted_code, '');
+        $keys = CourseManager::define_course_keys($wanted_code, '');
         if (!count($keys)) {
             return false;
         }
@@ -218,7 +218,7 @@ class CourseRequestManager {
             if (self::course_code_exists($wanted_code)) {
                 return false;
             }
-            $keys = define_course_keys($wanted_code, '');
+            $keys = CourseManager::define_course_keys($wanted_code, '');
             if (count($keys)) {
                 $visual_code = $keys['currentCourseCode'];
                 $code = $keys['currentCourseId'];

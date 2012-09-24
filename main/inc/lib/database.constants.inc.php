@@ -102,6 +102,7 @@ define('TABLE_MAIN_USER_API_KEY',           'user_api_key');
 define('TABLE_MAIN_COURSE_FIELD',           'course_field');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',    'course_field_values');
 define('TABLE_MAIN_SESSION_FIELD',          'session_field');
+define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 
 // Message

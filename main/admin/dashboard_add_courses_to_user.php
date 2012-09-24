@@ -13,11 +13,8 @@ $cidReset=true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
-
-
 // create an ajax object
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');

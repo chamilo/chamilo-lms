@@ -20,6 +20,7 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
+	
 
 if (!in_array($action, array(
         'get_exercise_results', 
@@ -71,30 +72,84 @@ $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
 if ($_REQUEST['_search'] == 'true') {
-    $where_condition = ' 1 = 1 ';
-    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+    $where_condition = ' 1 = 1 ';    
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);    
         
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
-    }
+    }    
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //var_dump($filters);
     
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //for now
+    $extra_field = new ExtraField('session');
+    $extra_fields = array();
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';
-        $counter = 0;
-        foreach ($filters->rules as $key=>$rule) {
-            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
-            
-            if ($counter < count($filters->rules) -1) {     
-                $where_condition .= $filters->groupOp;
-            }
-            $counter++;
+        
+        //Getting double select if exists
+        $double_select = array();
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, '_second') === false) {
+                
+            } else {
+                $my_field = str_replace('_second', '', $rule->field);
+                $double_select[$my_field] = $rule->data;
+            }                
         }
-        $where_condition .= ' ) ';
-    }        
+        
+        $condition_array = array();
+                
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, 'extra_') === false) {
+                //normal fields
+                $field = $rule->field;
+                $condition_array[] = get_where_clause($field, $rule->op, $rule->data);                
+            } else {
+                //Extra fields
+                
+                //normal
+                if (strpos($rule->field, '_second') === false) {
+                    //No _second
+                    $original_field = str_replace('extra_', '', $rule->field);                    
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+                    
+                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {                        
+                        
+                        if (isset($double_select[$rule->field])) {
+                            $data = explode('#', $rule->data);
+                            //var_dump($data);
+                            $rule->data = $data[1].'::'.$double_select[$rule->field];
+                        } else {
+                            // only was sent 1 select
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1];                            
+                        }                        
+                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';                        
+                        $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                    } else {
+                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                        $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                    }
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $original_field = str_replace('extra_', '', $my_field);                    
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);                                       
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                }
+            }            
+        }
+        
+        if (!empty($condition_array)) {
+            $where_condition .= ' AND ( ';    
+            //var_dump($condition_array);
+            $where_condition .= implode($filters->groupOp, $condition_array);
+            
+            $where_condition .= ' ) ';        
+        }        
+    }
 }
+//var_dump($extra_fields);
 //var_dump($where_condition);
-
 // get index row - i.e. user click to sort $sord = $_GET['sord']; 
 // get the direction 
 if (!$sidx) $sidx = 1;
@@ -114,8 +169,7 @@ switch ($action) {
         break;
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
-        $exercise_id = $_REQUEST['exerciseId'];
-        
+        $exercise_id = $_REQUEST['exerciseId'];        
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
             $filter_user = intval($_GET['filter_by_user']);
             if ($where_condition == "") {
@@ -134,6 +188,17 @@ switch ($action) {
     case 'get_sessions':           
         $count = SessionManager::get_count_admin();
         break;
+    case 'get_extra_fields':
+        $type = $_REQUEST['type'];
+        $obj = new ExtraField($type);
+        $count = $obj->get_count();
+        break;
+    case 'get_extra_field_options':
+        $type = $_REQUEST['type'];
+        $field_id = $_REQUEST['field_id'];
+        $obj = new ExtraFieldOption($type);
+        $count = $obj->get_count_by_field_id($field_id);        
+        break;    
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
         $obj        = new Timeline();
@@ -247,9 +312,10 @@ switch ($action) {
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
-    case 'get_sessions':
-        $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));        
+    case 'get_sessions':   
+        $session_columns = SessionManager::get_session_columns();
+        $columns = $session_columns['simple_column_name'];        
+        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         break;    
      case 'get_timelines': 
         $columns = array('headline', 'actions');   
@@ -317,7 +383,7 @@ switch ($action) {
         if(!in_array($sidx, $columns)) {
         	$sidx = 'subject';
         }
-        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
+        $result = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));        
         $new_result = array();
         foreach ($result as $item) {
             $language_info = api_get_language_info($item['language_id']);
@@ -375,7 +441,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses','sessions','actions');
+        $columns = array('name', 'users', 'courses', 'sessions', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {
@@ -393,8 +459,40 @@ switch ($action) {
         }
         //Multidimensional sort
         msort($result, $sidx);
-        break;   
-    case 'get_usergroups_teacher':
+        break;
+    case 'get_extra_fields':         
+        $obj = new ExtraField($type);
+        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter', 'field_order');
+        $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {            
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }        
+        break;
+    case 'get_extra_field_options':
+        $obj = new ExtraFieldOption($type);
+        $columns = array('option_display_text', 'option_value', 'option_order');
+        $result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id),'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        /*$new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {            
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }*/  
+        break;
+   case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
@@ -423,6 +521,7 @@ switch ($action) {
         //Multidimensional sort
         msort($result, $sidx);        
         break;
+
     default:    
         exit;            
 }
@@ -440,7 +539,10 @@ $allowed_actions = array('get_careers',
                          'get_timelines', 
                          'get_grade_models', 
                          'get_event_email_template',
-                         'get_user_skill_ranking');
+                         'get_user_skill_ranking',
+                         'get_extra_fields',
+                         'get_extra_field_options'
+);
                          	
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
@@ -465,8 +567,7 @@ if (in_array($action, $allowed_actions)) {
             $response->rows[$i]['cell']=$array;
             $i++; 
         }
-    }    
-
+    }
     echo json_encode($response);
 }
 exit;

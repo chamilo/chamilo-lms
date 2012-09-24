@@ -53,6 +53,17 @@ class sso {
         header('Location: '.$this->master_url.'&sso_referer='.urlencode($this->referer).'&sso_target='.urlencode($this->target));
         exit;
     }
+    
+    function redirect_to($sso, $user_id, $logged_in) {           
+        if (isset($sso['target']) && !empty($sso['target'])) {
+            header('Location: '. $sso['target']);    
+        } else {
+            //Use this handy function to deal with platform settings
+            Redirect::session_request_uri($logged_in, $user_id);                                            
+        }                                            
+        exit;
+    }
+    
     /**
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
@@ -121,13 +132,10 @@ class sso {
                                     if (is_array($my_url_list) && count($my_url_list)>0 ) {
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             // the user has permission to enter at this site
-                                            $_user['user_id'] = $uData['user_id'];
+                                            $_user['user_id'] = $uData['user_id'];                                            
                                             Session::write('_user',$_user);
-                                            event_login();
-                                            // Redirect to homepage
-                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
-                                            header('Location: '. $sso_target);
-                                            exit;
+                                            event_login();                                            
+                                            self::redirect_to($sso, $_user['user_id'], true);                                        
                                         } else {
                                             // user does not have permission for this site
                                             $loginFailed = true;
@@ -152,6 +160,7 @@ class sso {
                                         $_user['user_id'] = $uData['user_id'];
                                         Session::write('_user',$_user);
                                         event_login();
+                                        self::redirect_to($sso, $_user['user_id'], true);
                                     } else {
                                         //Secondary URL admin wants to login 
                                         // so we check as a normal user
@@ -159,6 +168,7 @@ class sso {
                                             $_user['user_id'] = $uData['user_id'];
                                             Session::write('_user',$_user);
                                             event_login();
+                                            self::redirect_to($sso, $_user['user_id'], true);
                                         } else {
                                             $loginFailed = true;
                                             Session::erase('_uid');
@@ -172,15 +182,7 @@ class sso {
                                 $_user['user_id'] = $uData['user_id'];
                                 Session::write('_user',$_user);
                                 event_login();
-                                // Redirect to homepage
-                                /* Login was successfull, stay on Chamilo 
-                                $protocol = api_get_setting('sso_authentication_protocol');
-                                $master_url = api_get_setting('sso_authentication_domain');
-                                $target = $protocol.$master_url;
-                                $sso_target = isset($target) ? $target : api_get_path(WEB_PATH) .'.index.php';
-                                header('Location: '. $sso_target);
-                                exit;
-                                */
+                                self::redirect_to($sso, $_user['user_id'], true);                               
                             }
                         } else {
                             // user account expired

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 class TestAddCourse extends UnitTestCase {

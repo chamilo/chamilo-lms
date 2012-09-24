@@ -31,37 +31,44 @@ class Tracking {
 	 * @return timestamp $nb_seconds
 	 */
 	public static function get_time_spent_on_the_platform($user_id, $time_filter = 'last_7_days', $start_date = null, $end_date = null) {
-
 		$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
-		$condition_time = '';
-        
+		$condition_time = null;        
         if (empty($time_filter)) {
-            $time_filter = 'last_week';
-        }        
-        
-        $today = date('Y-m-d H:i:s');
+            $time_filter = 'last_7_days';
+        }                
+        $today = api_get_utc_datetime();
         
         switch ($time_filter) {
             case 'last_7_days':
                 $new_date = strtotime('-7 day');              
-                $new_date = date('Y-m-d H:i:s', $new_date);
+                $new_date = api_get_utc_datetime($new_date);
                 $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
                 break;
             case 'last_30_days':
-                $new_date = strtotime('-30 day');              
-                $new_date = date('Y-m-d H:i:s', $new_date);
+                $new_date = strtotime('-30 day');
+                $new_date = api_get_utc_datetime($new_date);
                 $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
-               break;                
+               break;
             case 'custom':
+                $start_date = Database::escape_string($start_date);
+                $end_date = Database::escape_string($end_date);                
+                
                 if (!empty($start_date) && !empty($end_date))  {
-                    $condition_time = ' AND (login_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'" ) ';                                        
-                }
+                    $condition_time = ' AND (login_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'" ) ';
+                } else {
+                    if (!empty($start_date))  {                                      
+                        $condition_time = ' AND (login_date >= "'.$start_date.'" ) ';
+                    }
+                    if (!empty($end_date))  {                                      
+                        $condition_time = ' AND (logout_date <= "'.$end_date.'" ) ';
+                    }
+                }             
                 break;
         }
 
 		$sql = 'SELECT login_date, logout_date FROM '.$tbl_track_login.'
-                WHERE login_user_id = '.intval($user_id).$condition_time;             
+                WHERE login_user_id = '.intval($user_id).$condition_time;
+        
 		$rs = Database::query($sql);
 
 		$nb_seconds = 0;
@@ -1303,61 +1310,14 @@ class Tracking {
 
 		/**
 		 * Get sessions coached by user
-		 * @param    int        Coach id
+		 * @param    int       Coach id
 		 * @return    array    Sessions list
 		 */
 		public static function get_sessions_coached_by_user($coach_id) {
-			// table definition
-			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-			$tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-			$tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
-			// protect datas
-			$coach_id = intval($coach_id);
-
-			// session where we are general coach
-			$sql = 'SELECT DISTINCT id, name, date_start, date_end
-                        FROM ' . $tbl_session . '
-                        WHERE id_coach=' . $coach_id;
-
-			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1){
-					$sql = 'SELECT DISTINCT id, name, date_start, date_end
-                        FROM ' . $tbl_session . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;
-				}
-			}
-
-			$rs = Database::query($sql);
-			while ($row = Database::fetch_array($rs)) {
-				$a_sessions[$row["id"]] = $row;
-			}
+ 
 
 			// session where we are coach of a course
-			$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                        FROM ' . $tbl_session . ' as session
-                        INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
-                            ON session.id = session_course_user.id_session
-                            AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2';
-
-			global $_configuration;
-			if ($_configuration['multiple_access_urls']) {
-				$tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-				$access_url_id = api_get_current_access_url_id();
-				if ($access_url_id != -1){
-					$sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                        FROM ' . $tbl_session . ' as session
-                        INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
-                            ON session.id = session_course_user.id_session AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2
-                        INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE access_url_id = '.$access_url_id;
-				}
-			}
+/*		
 
 			$rs = Database::query($sql);
 			while ($row = Database::fetch_array($rs)) {
@@ -1389,7 +1349,7 @@ class Tracking {
 					}
 				}
 			}
-			return $a_sessions;
+			return $a_sessions;*/
 
 		}
 
@@ -2568,17 +2528,17 @@ class Tracking {
                 
 				$html .= Display::page_subheader($course_info['title']);
 				
-				$html .= '<table class="data_table" width="100%">';
+				$html .= '<table class="data_table">';
 						
 				//Course details
 				$html .= '<tr>
-				                <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
-				                <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
-				                <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
-				                <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
-				                </tr>';
+                            <th class="head" style="color:#000">'.get_lang('Exercices').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Attempts').'</th>                    
+                            <th class="head" style="color:#000">'.get_lang('BestAttempt').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Ranking').'</th>
+                            <th class="head" style="color:#000">'.get_lang('BestResultInCourse').'</th>
+                            <th class="head" style="color:#000">'.get_lang('Statistics').' '.Display :: return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), array('align' => 'absmiddle', 'hspace' => '3px')).'</th>                                        
+                         </tr>';
                 
                 if (empty($session_id)) {
                     $user_list  = CourseManager::get_user_list_from_course_code($course, $session_id, null, null, STUDENT);

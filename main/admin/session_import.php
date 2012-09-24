@@ -8,13 +8,10 @@
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
-
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $form_sent = 0;
 $error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
@@ -22,10 +19,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     $error_message = Security::remove_XSS($_GET['message']);
 }
 
-
 $tbl_user                   = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_session                = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_session_user           = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -56,9 +50,7 @@ if ($_POST['formSent']) {
         $session_counter = 0;
 
         if ($file_type == 'xml') {
-
             // XML
-
             // SimpleXML for PHP5 deals with various encodings, but how many they are, what are version issues, do we need to waste time with configuration options?
             // For avoiding complications we go some sort of "PHP4 way" - we convert the input xml-file into UTF-8 before passing it to the parser.
             // Instead of:
@@ -161,7 +153,7 @@ if ($_POST['formSent']) {
                         $params['user_id']          = api_get_user_id();
                         
                         // Looking up for the teacher.
-                        $username       = trim(api_utf8_decode($courseNode->CourseTeacher));
+                        $username = trim(api_utf8_decode($courseNode->CourseTeacher));
                         $sql = "SELECT user_id, lastname, firstname FROM $tbl_user WHERE username='$username'";
                         $rs = Database::query($sql);
                         list($user_id, $lastname, $firstname) = Database::fetch_array($rs);
@@ -193,30 +185,7 @@ if ($_POST['formSent']) {
                         }
 
                         $date_start = trim(api_utf8_decode($node_session->DateStart)); // Just in case - encoding conversion.
-
-                        if (!empty($date_start)) {
-                            list($year_start, $month_start, $day_start) = explode('/', $date_start);
-                            if(empty($year_start) || empty($month_start) || empty($day_start)) {
-                                $error_message .= get_lang('WrongDate').' : '.$date_start.'<br />';
-                                break;
-                            } else {
-                                $time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
-                            }
-
-                            $date_end = trim(api_utf8_decode($node_session->DateEnd));
-                            if (!empty($date_start)) {
-                                list($year_end, $month_end, $day_end) = explode('/', $date_end);
-                                if (empty($year_end) || empty($month_end) || empty($day_end)) {
-                                    $error_message .= get_lang('Error').' : '.$date_end.'<br />';
-                                    break;
-                                } else {
-                                    $time_end = mktime(0, 0, 0, $month_end, $day_end, $year_end);
-                                }
-                            }
-                            if ($time_end - $time_start < 0) {
-                                $error_message .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$date_end.'<br />';
-                            }
-                        }
+                        $date_end = trim(api_utf8_decode($node_session->DateEnd));                                                
 
                         $visibility = trim(api_utf8_decode($node_session->Visibility));
                         $session_category_id = trim(api_utf8_decode($node_session->SessionCategory));
@@ -239,45 +208,48 @@ if ($_POST['formSent']) {
                                     $session_name .= $suffix;
                                 }
                             }
-                            // Creating the session.
-                            $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                                    name = '".Database::escape_string($session_name)."',
-                                    id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id',
-                                    session_admin_id=".intval($_user['user_id']);
-                            $rs_session = Database::query($sql_session);
-                            $session_id = Database::insert_id();
+                            
+                            $params = array (
+                                'id_coach' => $coach_id,
+                                'visibility' => $visibility,
+                                'name' => $session_name,
+                                'access_start_date' => $date_start,
+                                'access_end_date' => $date_end,
+                                'session_category_id' => $session_category_id,
+                                'session_admin_id' => api_get_user_id(),
+                            );
+                            $session_id = SessionManager::add($params);                            
                             $session_counter++;
 
                         } else {
                             // Update the session if it is needed.
                             $my_session_result = SessionManager::get_session_by_name($session_name);
+                            
                             if ($my_session_result === false) {
-                                // Creating the session.
-                                $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                                        name = '".Database::escape_string($session_name)."',
-                                        id_coach = '$coach_id',
-                                        date_start = '$date_start',
-                                        date_end = '$date_end',
-                                        visibility = '$visibility',
-                                        session_category_id = '$session_category_id',
-                                        session_admin_id=".intval($_user['user_id']);
-                                $rs_session = Database::query($sql_session);
-                                $session_id = Database::insert_id();
+                                $params = array (
+                                    'id_coach' => $coach_id,
+                                    'visibility' => $visibility,
+                                    'name' => $session_name,
+                                    'access_start_date' => $date_start,
+                                    'access_end_date' => $date_end,
+                                    'session_category_id' => $session_category_id,
+                                    'session_admin_id' => api_get_user_id(),
+                                );
+                                $session_id = SessionManager::add($params);                                      
                                 $session_counter++;
                             } else {
-                                // if the session already exists - update it.
-                                $sql_session = "UPDATE $tbl_session SET
-                                        id_coach = '$coach_id',
-                                        date_start = '$date_start',
-                                        date_end = '$date_end',
-                                        visibility = '$visibility',
-                                        session_category_id = '$session_category_id'
-                                    WHERE name = '$session_name'";
-                                $rs_session = Database::query($sql_session);
+                                
+                                $params = array (
+                                    'id' => $my_session_result['id'],
+                                    'id_coach' => $coach_id,
+                                    'visibility' => $visibility,
+                                    'name' => $session_name,
+                                    'access_start_date' => $date_start,
+                                    'access_end_date' => $date_end,
+                                    'session_category_id' => $session_category_id,
+                                    'session_admin_id' => api_get_user_id(),
+                                );
+                                SessionManager::update($params);                                
                                 $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
                                 list($session_id) = Database::fetch_array($session_id);
                                 Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
@@ -295,7 +267,6 @@ if ($_POST['formSent']) {
                             // We fill by default the access_url_rel_session table.
                             UrlManager::add_session_to_url($session_id, 1);
                         }
-
 
                         // Adding users to the new session.
                         foreach ($node_session->User as $node_user) {
@@ -522,49 +493,44 @@ if ($_POST['formSent']) {
                                 $session_name .= $suffix;
                             }
                         }
-
-                        // Creating the session.
-                        $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                                name = '".Database::escape_string($session_name)."',
-                                id_coach = '$coach_id',
-                                date_start = '$date_start',
-                                date_end = '$date_end',
-                                visibility = '$visibility',
-                                session_category_id = '$session_category_id',
-                                session_admin_id=".intval($_user['user_id']);
-                        $rs_session = Database::query($sql_session);
-                        $session_id = Database::insert_id();
+                        
+                        $params = array (
+                            'id_coach' => $coach_id,
+                            'visibility' => $visibility,
+                            'name' => $session_name,
+                            'access_start_date' => $date_start,
+                            'access_end_date' => $date_end,
+                            'session_category_id' => $session_category_id,
+                            'session_admin_id' => api_get_user_id(),
+                        );
+                        $session_id = SessionManager::add($params); 
                         $session_counter++;
                     } else {
                         $my_session_result = SessionManager::get_session_by_name($session_name);
                         if ($my_session_result === false) {
-
-                            // Creating a session.
-                            $sql_session = "INSERT IGNORE INTO $tbl_session SET
-                                    name = '$session_name',
-                                    id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id'";
-
-                            $rs_session = Database::query($sql_session);
-                            // We get the last insert id.
-                            $my_session_result = SessionManager::get_session_by_name($session_name);
-                            $session_id = $my_session_result['id'];
-                            //echo '<br>';
+                            $params = array (
+                                'id_coach' => $coach_id,
+                                'visibility' => $visibility,
+                                'name' => $session_name,
+                                'access_start_date' => $date_start,
+                                'access_end_date' => $date_end,
+                                'session_category_id' => $session_category_id,
+                                'session_admin_id' => api_get_user_id(),
+                            );
+                            $session_id = SessionManager::add($params); 
                         } else {
-                            // The session already exists, update it then.
-                            $sql_session = "UPDATE $tbl_session SET
-                                    id_coach = '$coach_id',
-                                    date_start = '$date_start',
-                                    date_end = '$date_end',
-                                    visibility = '$visibility',
-                                    session_category_id = '$session_category_id'
-                                WHERE name = '$session_name'";
-                            $rs_session = Database::query($sql_session);
-                            $session_id = Database::query("SELECT id FROM $tbl_session WHERE name='$session_name'");
-                            list($session_id) = Database::fetch_array($session_id);
+                            $session_id = $my_session_result['id'];
+                            $params = array (
+                                'id' => $session_id,
+                                'id_coach' => $coach_id,
+                                'visibility' => $visibility,
+                                'name' => $session_name,
+                                'access_start_date' => $date_start,
+                                'access_end_date' => $date_end,
+                                'session_category_id' => $session_category_id,
+                                'session_admin_id' => api_get_user_id(),
+                            );
+                            SessionManager::update($params);
                             Database::query("DELETE FROM $tbl_session_user WHERE id_session='$session_id'");
                             Database::query("DELETE FROM $tbl_session_course WHERE id_session='$session_id'");
                             Database::query("DELETE FROM $tbl_session_course_user WHERE id_session='$session_id'");

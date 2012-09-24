@@ -371,18 +371,13 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 		} else {
 			//insert mode
-			if ($ctok == $_POST['sec_token']) {
-				
-                $sql = "SELECT MAX(display_order) FROM $tbl_announcement WHERE c_id = $course_id AND (session_id=".api_get_session_id()." OR session_id=0)";
-                $result = Database::query($sql);
-                list($orderMax) = Database::fetch_row($result);
-                $order = $orderMax + 1;
+			if ($ctok == $_POST['sec_token']) {		
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
                 if (!empty($group_id)) {
-                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, $order, array('GROUP:'.$group_id), $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $_POST['selectedform'], $file, $file_comment);
                 } else {
-                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $order, $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $_POST['selectedform'], $file, $file_comment);
                 }
                 //store_resources($_SESSION['source_type'],$insert_id);
                 $_SESSION['select_groupusers']="hide";

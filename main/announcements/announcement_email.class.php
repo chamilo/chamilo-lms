@@ -36,9 +36,9 @@ class AnnouncementEmail
         }
         $this->course = $course;
         $this->session_id = api_get_session_id();
-
-        if (is_numeric($announcement)) {
-            $announcement = AnnouncementManager::get_by_id($course['id'], intval($announcement));
+        
+        if (is_numeric($announcement)) {            
+            $announcement = AnnouncementManager::get_by_id($course['real_id'], $announcement);            
         }
         $this->announcement = $announcement;
     }

@@ -216,10 +216,10 @@ class Tracking {
                         AND session_id = '.$session_id.'
                         ORDER BY login_course_date ASC LIMIT 0,1';
 		$rs = Database::query($sql);
-		if (Database::num_rows($rs)>0) {
+		if (Database::num_rows($rs) > 0) {
 			if ($first_login_date = Database::result($rs, 0, 0)) {
 				if ($convert_date) {
-					return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT, date_default_timezone_get());
+					return api_convert_and_format_date($first_login_date, DATE_FORMAT_SHORT);
 				} else {
 					return $first_login_date;
 				}
@@ -250,23 +250,24 @@ class Tracking {
                         ORDER BY login_course_date DESC LIMIT 0,1';
 
 		$rs = Database::query($sql);
-		if (Database::num_rows($rs)>0) {
+		if (Database::num_rows($rs) > 0) {
 			if ($last_login_date = Database::result($rs, 0, 0)) {
-				$last_login_date = api_get_local_time($last_login_date, null, date_default_timezone_get());
-				$timestamp = api_strtotime($last_login_date);
-				$currentTimestamp = time();
+                $last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
+                
+				$now = time();
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds
-				if ($currentTimestamp - $timestamp > 604800) {
-					if ($convert_date) {
-					    //@todo this is so bad ...
-						return '<span style="color: #F00;">' . api_format_date($last_login_date, DATE_FORMAT_SHORT) . (api_is_allowed_to_edit()?' <a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /></a>':'').'</span>';
+				if ($now - $last_login_date_timestamp > 604800) {
+					if ($convert_date) {		
+                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        $icon = api_is_allowed_to_edit() ? '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>': null;
+						return $icon. Display::label(api_format_date($last_login_date, DATE_FORMAT_SHORT), 'warning');
 					} else {
 						return $last_login_date;
 					}
 				} else {
 					if ($convert_date) {
-						return api_format_date($last_login_date, DATE_FORMAT_SHORT);
+						return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
 					} else {
 						return $last_login_date;
 					}
@@ -3596,14 +3597,11 @@ class TrackingCourseLog {
 		$sql .= " LIMIT $from,$number_of_items";
 
 		$res      = Database::query($sql);
-		$users    = array ();
+		$users    = array();
 		$t        = time();
-		$row      = array();
-        
+		        
         $course_info = api_get_course_info($course_code);
-        
-        $total_surveys = 0;
-        
+        $total_surveys = 0;        
         $total_exercises = get_all_exercises($course_info, $session_id);
                 
         if (empty($session_id)) {

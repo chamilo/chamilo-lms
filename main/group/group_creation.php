@@ -43,7 +43,7 @@ if (isset ($_POST['action'])) {
 					$group['places'] = $_POST['group_0_places'];
 				}
 				if (api_get_setting('allow_group_categories') == 'false') {
-					$group['category'] = DEFAULT_GROUP_CATEGORY;
+					$group['category'] = GroupManager::DEFAULT_GROUP_CATEGORY;
 				} elseif ($_POST['same_category']) {
 					$group['category'] = $_POST['group_0_category'];
 				}
@@ -135,7 +135,7 @@ elseif (isset($_POST['number_of_groups'])) {
 		$group_id = GroupManager :: get_number_of_groups() + 1;
 		foreach ($group_categories as $index => $category) {
 			// Don't allow new groups in the virtual course category!
-			if ($category['id'] != VIRTUAL_COURSE_CATEGORY) {
+			if ($category['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 				$cat_options[$category['id']] = $category['title'];
 			}
 		}
@@ -310,7 +310,7 @@ EOT;
 			$cat_options = array ();
 			foreach ($group_categories as $index => $category) {
 				// Don't allow new groups in the virtual course category!
-				if ($category['id'] != VIRTUAL_COURSE_CATEGORY) {
+				if ($category['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 					$cat_options[$category['id']] = $category['title'];
 				}
 			}

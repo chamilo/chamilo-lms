@@ -25,7 +25,7 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready( function() {
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
@@ -35,16 +35,12 @@ $(document).ready( function() {
  } );
  </script>';
 $nameTools = get_lang('GroupManagement');
-
-/*	Libraries */
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 $course_id = api_get_course_int_id();
 
 // Create default category if it doesn't exist when group categories aren't allowed
 if (api_get_setting('allow_group_categories') == 'false') {
 	$cat_table = Database::get_course_table(TABLE_GROUP_CATEGORY);
-	$sql = "SELECT * FROM $cat_table WHERE c_id = $course_id AND id = '".DEFAULT_GROUP_CATEGORY."'";
+	$sql = "SELECT * FROM $cat_table WHERE c_id = $course_id AND id = '".GroupManager::DEFAULT_GROUP_CATEGORY."'";
 	$res = Database::query($sql);
 	$num = Database::num_rows($res);
 	if ($num == 0) {
@@ -63,6 +59,7 @@ if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 		api_not_allowed(true);
 	}
 }
+
 Display::display_header(get_lang('Groups'));
 
 // Tool introduction
@@ -143,7 +140,7 @@ if (api_is_allowed_to_edit(false, true)) {
 				GroupManager :: unsubscribe_all_users($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupEmptied'));
 				break;
-			case 'fill_one':
+			case 'fill_one':                
 				GroupManager :: fill_groups($my_get_id);
 				Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
 				break;
@@ -245,12 +242,12 @@ foreach ($group_cats as $index => $category) {
 			if ((api_is_allowed_to_edit(false, true) ||
 					in_array($_user['user_id'], $tutorsids_of_group) ||
 					$this_group['is_member'] ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_FORUM) ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_DOCUMENTS) ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_CALENDAR) ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_ANNOUNCEMENT) ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_WORK) ||
-					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GROUP_TOOL_WIKI))
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_FORUM) ||
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_DOCUMENTS) ||
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_CALENDAR) ||
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_ANNOUNCEMENT) ||
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_WORK) ||
+					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_WIKI))
 					&& !(api_is_course_coach() && intval($this_group['session_id']) != intval($_SESSION['id_session']))) {
 				$orig = isset($origin) ? $origin : null;
 				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
@@ -291,7 +288,7 @@ foreach ($group_cats as $index => $category) {
             
 		
             // Max number of members in group
-            $max_members = ($this_group['maximum_number_of_members'] == MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members']);
+            $max_members = ($this_group['maximum_number_of_members'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members']);
             
             
 			// Number of members in group

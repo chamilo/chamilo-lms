@@ -85,7 +85,7 @@ if (!$_user['user_id'] AND $current_forum['allow_anonymous'] == 0) {
 }
 
 if ($current_forum['forum_of_group'] != 0) {
-    $show_forum = GroupManager::user_has_access(api_get_user_id(), $current_forum['forum_of_group'], GROUP_TOOL_FORUM);
+    $show_forum = GroupManager::user_has_access(api_get_user_id(), $current_forum['forum_of_group'], GroupManager::GROUP_TOOL_FORUM);
     if (!$show_forum) {
         api_not_allowed();
     }

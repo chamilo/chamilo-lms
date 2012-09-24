@@ -13,47 +13,6 @@ require_once 'fileUpload.lib.php';
 require_once 'document.lib.php';
 
 /**
- * infinite
- */
-define("INFINITE", "99999");
-/**
- * No limit on the number of users in a group
- */
-define("MEMBER_PER_GROUP_NO_LIMIT", "0");
-/**
- * No limit on the number of groups per user
- */
-define("GROUP_PER_MEMBER_NO_LIMIT", "0");
-/**
- * The tools of a group can have 3 states
- * - not available
- * - public
- * - private
- */
-define("TOOL_NOT_AVAILABLE", "0");
-define("TOOL_PUBLIC", "1");
-define("TOOL_PRIVATE", "2");
-/**
- * Constants for the available group tools
- */
-define("GROUP_TOOL_FORUM", "0");
-define("GROUP_TOOL_DOCUMENTS", "1");
-define("GROUP_TOOL_CALENDAR","2");
-define("GROUP_TOOL_ANNOUNCEMENT","3");
-define("GROUP_TOOL_WORK","4");
-define("GROUP_TOOL_WIKI", "5");
-define("GROUP_TOOL_CHAT", "6");
-
-/**
- * Fixed id's for group categories
- * - VIRTUAL_COURSE_CATEGORY: in this category groups are created based on the
- *   virtual  course of a course
- * - DEFAULT_GROUP_CATEGORY: When group categories aren't available (platform-
- *   setting),  all groups are created in this 'dummy'-category
- */
-define("VIRTUAL_COURSE_CATEGORY", 1);
-define("DEFAULT_GROUP_CATEGORY", 2);
-/**
  * This library contains some functions for group-management.
  * @author Bart Mollet
  * @package chamilo.library
@@ -61,6 +20,49 @@ define("DEFAULT_GROUP_CATEGORY", 2);
  * be used outside a session.
  */
 class GroupManager {
+    //- VIRTUAL_COURSE_CATEGORY: in this category groups are created based on the virtual  course of a course 
+    CONST VIRTUAL_COURSE_CATEGORY = 1;
+    
+    //DEFAULT_GROUP_CATEGORY: When group categories aren't available (platform-setting),  all groups are created in this 'dummy'-category
+    CONST DEFAULT_GROUP_CATEGORY = 2;
+    
+    /**
+     * infinite
+     */
+    CONST INFINITE  = 99999;
+    /**
+     * No limit on the number of users in a group
+     */
+    CONST MEMBER_PER_GROUP_NO_LIMIT = 0;
+    /**
+     * No limit on the number of groups per user
+     */
+    CONST GROUP_PER_MEMBER_NO_LIMIT = 0;
+    /**
+     * The tools of a group can have 3 states
+     * - not available
+     * - public
+     * - private
+     */
+    CONST TOOL_NOT_AVAILABLE = 0;
+    CONST TOOL_PUBLIC = 1;
+    CONST TOOL_PRIVATE = 2;
+    /**
+     * Constants for the available group tools
+     */
+    CONST GROUP_TOOL_FORUM = 0;
+    CONST GROUP_TOOL_DOCUMENTS = 1;
+    CONST GROUP_TOOL_CALENDAR = 2;
+    CONST GROUP_TOOL_ANNOUNCEMENT = 3;
+    CONST GROUP_TOOL_WORK = 4;
+    CONST GROUP_TOOL_WIKI = 5;
+    CONST GROUP_TOOL_CHAT = 6;
+    
+    
+    
+    
+    
+    
 	//GROUP FUNCTIONS
 	private function __construct() {		
 	}
@@ -173,7 +175,7 @@ class GroupManager {
 		$groups = array ();
 		$thisGroup= array();
 			while ($thisGroup = Database::fetch_array($groupList)) {
-				if ($thisGroup['category_id'] == VIRTUAL_COURSE_CATEGORY) {
+				if ($thisGroup['category_id'] == self::VIRTUAL_COURSE_CATEGORY) {
 					$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
 					$obj = Database::fetch_object(Database::query($sql));
 					$thisGroup['name'] = $obj->title;
@@ -288,7 +290,7 @@ class GroupManager {
 	public static function create_subgroups ($group_id, $number_of_groups) {
 		$course_id = api_get_course_int_id();
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$category_id = self :: create_category('Subgroups', '', TOOL_PRIVATE, TOOL_PRIVATE, 0, 0, 1, 1);
+		$category_id = self :: create_category('Subgroups', '', GroupManager::TOOL_PRIVATE, GroupManager::TOOL_PRIVATE, 0, 0, 1, 1);
 		$users = self :: get_users($group_id);
 		$group_ids = array ();
 
@@ -310,12 +312,12 @@ class GroupManager {
 	 * Create groups from all virtual courses in the given course.
 	 */
 	public static function create_groups_from_virtual_courses() {
-		self :: delete_category(VIRTUAL_COURSE_CATEGORY);
-		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', TOOL_NOT_AVAILABLE, TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
+		self :: delete_category(self::VIRTUAL_COURSE_CATEGORY);
+		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', GroupManager::TOOL_NOT_AVAILABLE, GroupManager::TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
 		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
         $course_id = api_get_course_int_id();
         
-		$sql = "UPDATE ".$table_group_cat." SET id=".VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
+		$sql = "UPDATE ".$table_group_cat." SET id=".self::VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
 		Database::query($sql);
 		$course = api_get_course_info();
 		$course['code'] = $course['sysCode'];
@@ -332,7 +334,7 @@ class GroupManager {
 					$members[] = $user['user_id'];
 				}
 			}
-			$id = self :: create_group($group_course['code'], VIRTUAL_COURSE_CATEGORY, 0, count($members));
+			$id = self :: create_group($group_course['code'], self::VIRTUAL_COURSE_CATEGORY, 0, count($members));
 			self :: subscribe_users($members, $id);
 			$ids[] = $id;
 		}
@@ -668,7 +670,7 @@ class GroupManager {
 					max_student = '".Database::escape_string($maximum_number_of_students)."' ";
 		Database::query($sql);
 		$id = Database::insert_id();
-		if ($id == VIRTUAL_COURSE_CATEGORY) {
+		if ($id == self::VIRTUAL_COURSE_CATEGORY) {
 			$sql = "UPDATE  ".$table_group_category." SET id = ". ($id +1)." WHERE c_id = $course_id AND id = $id";
 			Database::query($sql);
 			return $id +1;
@@ -848,8 +850,10 @@ class GroupManager {
 	 * @return void
 	 */
 	public static function fill_groups ($group_ids) {
+        global $_course;
+        
 		$group_ids = is_array($group_ids) ? $group_ids : array ($group_ids);
-		$group_ids = array_map('intval',$group_ids);
+		$group_ids = array_map('intval', $group_ids);
         
 		if (api_is_course_coach()) {
 			for ($i=0 ; $i< count($group_ids) ; $i++) {
@@ -862,8 +866,7 @@ class GroupManager {
 				return false;                
             }
 		}
-
-		global $_course;
+     		
 		$category 			= self::get_category_from_group($group_ids[0]);
         
 		$groups_per_user 	= $category['groups_per_user'];		
@@ -871,25 +874,23 @@ class GroupManager {
 		$group_user_table 	= Database :: get_course_table(TABLE_GROUP_USER);
 		$session_id 		= api_get_session_id();
 		
-		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['code'], true, $session_id);				
-        $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
+		$complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['code'], true, $session_id);				        
+        $number_groups_per_user = ($groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user);
         
 		/*
 		 * Retrieve all the groups where enrollment is still allowed
 		 * (reverse) ordered by the number of place available
 		 */
         
-        $course_id = api_get_course_int_id();
-        
+        $course_id = api_get_course_int_id();        
 		$sql = "SELECT g.id gid, g.max_student-count(ug.user_id) nbPlaces, g.max_student
 				FROM ".$group_table." g
-				LEFT JOIN  ".$group_user_table." ug
-				ON g.id = ug.group_id
-				WHERE 
-					g.c_id = $course_id AND							 
+				LEFT JOIN  ".$group_user_table." ug ON  
+                    g.c_id = $course_id AND ug.c_id = $course_id  AND g.id = ug.group_id
+				WHERE 					
 					g.id IN (".implode(',', $group_ids).")
 				GROUP BY (g.id)
-				HAVING (nbPlaces > 0 OR g.max_student = ".MEMBER_PER_GROUP_NO_LIMIT.")
+				HAVING (nbPlaces > 0 OR g.max_student = ".GroupManager::MEMBER_PER_GROUP_NO_LIMIT.")
 				ORDER BY nbPlaces DESC";
 		$sql_result = Database::query($sql);
 		$group_available_place = array ();
@@ -976,7 +977,7 @@ class GroupManager {
 		$db_result = Database::query("SELECT max_student FROM $table_group WHERE c_id = $course_id AND id = $group_id");
 		$db_object = Database::fetch_object($db_result);
 		if ($db_object->max_student == 0) {
-			return INFINITE;
+			return self::INFINITE;
 		}
 		return $db_object->max_student;
 	}
@@ -1072,8 +1073,8 @@ class GroupManager {
 		$result = CourseManager :: is_user_subscribed_in_real_or_linked_course($user_id, $course_code);
 		$result = !self :: is_subscribed($user_id, $group_id);
 		$result &= (self :: number_of_students($group_id) < self :: maximum_number_of_students($group_id));
-		if ($category['groups_per_user'] == GROUP_PER_MEMBER_NO_LIMIT) {
-			$category['groups_per_user'] = INFINITE;
+		if ($category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT) {
+			$category['groups_per_user'] = self::INFINITE;
 		}
 		$result &= (self :: user_in_number_of_groups($user_id, $category['id']) < $category['groups_per_user']);
 		$result &= !self :: is_tutor_of_group($user_id, $group_id);
@@ -1411,7 +1412,7 @@ class GroupManager {
 	public static function get_complete_list_of_users_that_can_be_added_to_group ($course_code, $group_id) {
 		global $_course, $_user;
 		$category = self :: get_category_from_group($group_id, $course_code);
-		$number_of_groups_limit = $category['groups_per_user'] == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $category['groups_per_user'];
+		$number_of_groups_limit = $category['groups_per_user'] == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $category['groups_per_user'];
 		$real_course_code = $_course['sysCode'];
 		$real_course_info = Database :: get_course_info($real_course_code);
 		$real_course_user_list = CourseManager :: get_user_list_from_course_code($real_course_code);
@@ -1535,25 +1536,25 @@ class GroupManager {
         }
         
 		switch ($tool) {
-			case GROUP_TOOL_FORUM :
+			case self::GROUP_TOOL_FORUM :
 				$state_key = 'forum_state';
 				break;
-			case GROUP_TOOL_DOCUMENTS :
+			case self::GROUP_TOOL_DOCUMENTS :
 				$state_key = 'doc_state';
 				break;
-			case GROUP_TOOL_CALENDAR :
+			case self::GROUP_TOOL_CALENDAR :
 				$state_key = 'calendar_state';
 				break;
-			case GROUP_TOOL_ANNOUNCEMENT :
+			case self::GROUP_TOOL_ANNOUNCEMENT :
 				$state_key = 'announcements_state';
 				break;
-			case GROUP_TOOL_WORK :
+			case self::GROUP_TOOL_WORK :
 				$state_key = 'work_state';
 				break;
-			case GROUP_TOOL_WIKI :
+			case self::GROUP_TOOL_WIKI :
 				$state_key = 'wiki_state';
 				break;
-			case GROUP_TOOL_CHAT :
+			case self::GROUP_TOOL_CHAT :
 				$state_key = 'chat_state';
 				break;
 			default:
@@ -1570,24 +1571,24 @@ class GroupManager {
         
         if (!empty($category_group_info)) {
             //if exists check the category group status first        
-            if ($category_group_info[$state_key] == TOOL_NOT_AVAILABLE) {
+            if ($category_group_info[$state_key] == GroupManager::TOOL_NOT_AVAILABLE) {
                 return false;                
-            } elseif($category_group_info[$state_key] == TOOL_PRIVATE && !$user_is_in_group) {                
+            } elseif($category_group_info[$state_key] == GroupManager::TOOL_PRIVATE && !$user_is_in_group) {                
                 return false;
             }
         }
         
         //is_user_in_group() is more complete that  the  is_subscribed() function        
         
-		if ($group_info[$state_key] == TOOL_NOT_AVAILABLE) {
+		if ($group_info[$state_key] == GroupManager::TOOL_NOT_AVAILABLE) {
 			return false;
-		} elseif ($group_info[$state_key] == TOOL_PUBLIC) {
+		} elseif ($group_info[$state_key] == self::TOOL_PUBLIC) {
 			return true;
 		} elseif (api_is_allowed_to_edit(false,true)) {
 			return true;
 		} elseif($group_info['tutor_id'] == $user_id) { //this tutor implementation was dropped
 			return true;		
-        } elseif($group_info[$state_key] == TOOL_PRIVATE && !$user_is_in_group) {
+        } elseif($group_info[$state_key] == GroupManager::TOOL_PRIVATE && !$user_is_in_group) {
             return false;
         } else {		
             return $user_is_in_group;
@@ -1647,7 +1648,7 @@ class GroupManager {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $session_id = api_get_session_id();
         $complete_user_list = CourseManager :: get_real_and_linked_user_list($_course['sysCode'], true, $session_id);
-        $number_groups_per_user = ($groups_per_user == GROUP_PER_MEMBER_NO_LIMIT ? INFINITE : $groups_per_user);
+        $number_groups_per_user = ($groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user);
         $course_id = api_get_course_int_id();
         /*
          * Retrieve all the groups where enrollment is still allowed
@@ -1661,7 +1662,7 @@ class GroupManager {
                         ug.c_id = $course_id AND 
                         g.id IN (".implode(',', $group_ids).")
                 GROUP BY (g.id)
-                HAVING (nbPlaces > 0 OR g.max_student = ".MEMBER_PER_GROUP_NO_LIMIT.")
+                HAVING (nbPlaces > 0 OR g.max_student = ".GroupManager::MEMBER_PER_GROUP_NO_LIMIT.")
                 ORDER BY nbPlaces DESC";
         $sql_result = Database::query($sql);
         $group_available_place = array ();

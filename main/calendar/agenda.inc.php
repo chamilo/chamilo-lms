@@ -93,7 +93,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
             $new_group_memberships=array();
             foreach($group_memberships as $id) {
                 // did i have access to the same
-                $has_access = GroupManager::user_has_access(api_get_user_id(),$id,GROUP_TOOL_CALENDAR);
+                $has_access = GroupManager::user_has_access(api_get_user_id(),$id,  GroupManager::GROUP_TOOL_CALENDAR);
                 $result = GroupManager::get_group_properties($id);
                 if ($has_access && $result['calendar_state']!='0' ) {
                     $new_group_memberships[]=$id;
@@ -126,7 +126,7 @@ function get_calendar_items($select_month, $select_year, $select_day = false) {
         elseif (!empty($_SESSION['group'])) {
             if (!empty($group_id)) {
                 $result = GroupManager::get_group_properties($group_id);
-                $has_access = GroupManager::user_has_access(api_get_user_id(),$group_id,GROUP_TOOL_CALENDAR);
+                $has_access = GroupManager::user_has_access(api_get_user_id(),$group_id,GroupManager::GROUP_TOOL_CALENDAR);
                 //echo '<pre>';print_R($result);
 
                 // lastedit
@@ -1434,7 +1434,7 @@ function show_user_group_filter_form() {
 	    $option = "<optgroup label=\"".get_lang("Groups")."\">";
 		foreach($group_list as $this_group) {
 			// echo "<option value=\"agenda.php?isStudentView=true&amp;group=".$this_group['id']."\">".$this_group['name']."</option>";
-			$has_access = GroupManager::user_has_access(api_get_user_id(),$this_group['id'],GROUP_TOOL_CALENDAR);
+			$has_access = GroupManager::user_has_access(api_get_user_id(),$this_group['id'], GroupManager::GROUP_TOOL_CALENDAR);
 			$result = GroupManager::get_group_properties($this_group['id']);
 
 			if ($result['calendar_state']!='0') {

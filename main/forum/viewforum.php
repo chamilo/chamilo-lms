@@ -75,7 +75,7 @@ if (!empty($group_id)) {
     $group_properties           = GroupManager::get_group_properties($group_id);
         
     //User has access in the group?
-    $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GROUP_TOOL_FORUM);
+    $user_has_access_in_group   = GroupManager::user_has_access($userid, $group_id, GroupManager::GROUP_TOOL_FORUM);
     
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
         

@@ -281,7 +281,7 @@ if (is_array($forum_categories_list)) {
                         if ($forum['forum_of_group'] == '0') {    
                             $show_forum = true;
                         } else {
-                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GROUP_TOOL_FORUM); 
+                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GroupManager::GROUP_TOOL_FORUM); 
                         }
                     }
 

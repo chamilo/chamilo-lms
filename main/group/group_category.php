@@ -15,8 +15,6 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-
 if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POST['id']) || isset ($_GET['action']) || isset ($_POST['action']))) {
 	api_not_allowed();
 }
@@ -26,7 +24,7 @@ if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POS
  */
 function check_max_number_of_members($value) {
 	$max_member_no_limit = $value['max_member_no_limit'];
-	if ($max_member_no_limit == MEMBER_PER_GROUP_NO_LIMIT) {
+	if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
 		return true;
 	}
 	$max_member = $value['max_member'];
@@ -38,7 +36,7 @@ function check_max_number_of_members($value) {
  */
 function check_groups_per_user($value) {
 	$groups_per_user = $value['groups_per_user'];
-	if (isset ($_POST['id']) && intval($groups_per_user) != GROUP_PER_MEMBER_NO_LIMIT && GroupManager :: get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user)) {
+	if (isset ($_POST['id']) && intval($groups_per_user) != GroupManager::GROUP_PER_MEMBER_NO_LIMIT && GroupManager::get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user)) {
 		return false;
 	}
 	return true;
@@ -51,7 +49,16 @@ if (api_get_setting('allow_group_categories') == 'true') {
 	} else {
 		$nameTools = get_lang('AddCategory');
 		// Default values for new category
-		$category = array ('groups_per_user' => 1, 'doc_state' => TOOL_PRIVATE, 'work_state' => TOOL_PRIVATE, 'wiki_state' => TOOL_PRIVATE , 'chat_state' => TOOL_PRIVATE, 'calendar_state' => TOOL_PRIVATE, 'announcements_state'=> TOOL_PRIVATE, 'forum_state' => TOOL_PRIVATE, 'max_student' => 0);
+		$category = array(
+            'groups_per_user' => 1, 
+            'doc_state' => GroupManager::TOOL_PRIVATE, 
+            'work_state' => GroupManager::TOOL_PRIVATE, 
+            'wiki_state' => GroupManager::TOOL_PRIVATE , 
+            'chat_state' => GroupManager::TOOL_PRIVATE, 
+            'calendar_state' => GroupManager::TOOL_PRIVATE, 
+            'announcements_state'=> GroupManager::TOOL_PRIVATE, 
+            'forum_state' => GroupManager::TOOL_PRIVATE, 
+            'max_student' => 0);
 	}
 } else {
 	$category = GroupManager :: get_category($_GET['id']);
@@ -102,7 +109,7 @@ $possible_values = array ();
 for ($i = 1; $i <= 10; $i ++) {
 	$possible_values[$i] = $i;
 }
-$possible_values[GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
+$possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
 $group[] = & $form->createElement('select', 'groups_per_user', null, $possible_values);
 $group[] = & $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'));
 $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
@@ -114,7 +121,7 @@ $form->addElement('html', '<br /><br /><div class="sectiontitle" >'.get_lang('De
 $form->addElement('html', '</div>');
 
 // Members per group
-$form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), MEMBER_PER_GROUP_NO_LIMIT);
+$form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
 $group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
 $group[] = & $form->createElement('text', 'max_member', null, array ('size' => 2));
@@ -127,39 +134,39 @@ $form->addElement('checkbox', 'self_reg_allowed', get_lang('GroupSelfRegistratio
 $form->addElement('checkbox', 'self_unreg_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1);
 
 // Documents settings
-$form->addElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'doc_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'doc_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Work settings
-$form->addElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'work_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'work_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Calendar settings
-$form->addElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'calendar_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'calendar_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Announcements settings
-$form->addElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'announcements_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'announcements_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Forum settings
-$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'forum_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'forum_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Wiki Settings
-$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'wiki_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'wiki_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Chat Settings
-$form->addElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), TOOL_NOT_AVAILABLE);
-$form->addElement('radio', 'chat_state', null, get_lang('Public'), TOOL_PUBLIC);
-$form->addElement('radio', 'chat_state', null, get_lang('Private'), TOOL_PRIVATE);
+$form->addElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE);
+$form->addElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
+$form->addElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 
 // Submit
 $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'class="save"');
@@ -167,8 +174,8 @@ $form->addElement('style_submit_button', 'submit', get_lang('PropModify'), 'clas
 // If form validates -> save data
 if ($form->validate()) {
 	$values = $form->exportValues();
-	if ($values['max_member_no_limit'] == MEMBER_PER_GROUP_NO_LIMIT) {
-		$max_member = MEMBER_PER_GROUP_NO_LIMIT;
+	if ($values['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+		$max_member = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 	} else {
 		$max_member = $values['max_member'];
 	}
@@ -198,8 +205,8 @@ echo '</div>';
 
 $defaults = $category;
 $defaults['action'] = $action;
-if ($defaults['max_student'] == MEMBER_PER_GROUP_NO_LIMIT) {
-	$defaults['max_member_no_limit'] = MEMBER_PER_GROUP_NO_LIMIT;
+if ($defaults['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+	$defaults['max_member_no_limit'] = GroupManager::MEMBER_PER_GROUP_NO_LIMIT;
 } else {
 	$defaults['max_member_no_limit'] = 1;
 	$defaults['max_member'] = $defaults['max_student'];

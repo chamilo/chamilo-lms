@@ -188,7 +188,7 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher              
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
     }
     
     if (!$show_work) {

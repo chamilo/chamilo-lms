@@ -467,7 +467,7 @@ class Template {
             $this->assign('js_file_to_string', $js_file_to_string);
             
             //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
+            $extra_headers = api_get_jquery_libraries_js(array('jquery-ui'));
 
             //$extra_headers = '';		
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {

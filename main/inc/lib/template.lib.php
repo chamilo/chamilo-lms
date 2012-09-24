@@ -10,6 +10,10 @@
 require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
+/*use Assetic\Asset\AssetCollection;
+use Assetic\Asset\FileAsset;
+use Assetic\Asset\GlobAsset;*/
+
 class Template {
 
     public $style = 'default'; //see the template folder 
@@ -90,15 +94,6 @@ class Template {
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
-        /*
-          $lexer = new Twig_Lexer($this->twig, array(
-          //'tag_comment'  => array('{*', '*}'),
-          //'tag_comment'  => array('{#', '#}'),
-          //'tag_block'    => array('{', '}'),
-          //'tag_variable' => array('{$', '}'),
-          ));
-          $this->twig->setLexer($lexer); */
 
         //Setting system variables
         $this->set_system_parameters();

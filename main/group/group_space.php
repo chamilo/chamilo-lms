@@ -126,7 +126,7 @@ if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api
     $edit_url =  '<a href="group_edit.php?origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
 }
 
-echo Display::tag('h2', Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group);
+echo Display::page_header(Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group);
 
 if (!empty($current_group['description'])) {
 	echo '<p>'.Security::remove_XSS($current_group['description']).'</p>';
@@ -180,9 +180,9 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 		}
 	}
 echo '</ul>';
-	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').'</b></div>';
+	echo Display::page_subheader(get_lang('Tools'));
 	if (!empty($tools)) {
-		echo '<div style="margin-left:5px; margin-bottom:4px; margin-top:4px;">'.$tools.'</div>';
+		echo $tools;
 	}
 
 } else {
@@ -228,12 +228,11 @@ echo '</ul>';
 			$tools .= "<li style=\"display:inline; margin:5px;\"><a href=\"../chat/chat.php?".api_get_cidreq()."&amp;toolgroup=".$current_group['id']."\">".Display::return_icon('chat.png', get_lang("Chat"), array(), 32)."</a></li>";
 		}
 	}
-
 	echo '</ul>';
 
-	echo '<div class="actions-message" style="margin-bottom:4px;"><b>'.get_lang('Tools').'</b></div>';
+    echo Display::page_subheader(get_lang('Tools'));
 	if (!empty($tools)) {
-		echo '<div style="margin-left:5px; margin-bottom:4px; margin-top:4px;">'.$tools.'</div>';
+		echo $tools;
 	}
 }
 
@@ -254,20 +253,20 @@ if (count($tutors) == 0) {
 		$image_repository = $image_path['dir'];
 		$existing_image = $image_path['file'];
 		$photo= '<img src="'.$image_repository.$existing_image.'" align="absbottom" alt="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'" width="32" height="32" title="'.api_get_person_name($tutor['firstname'], $tutor['lastname']).'" />';
-		$tutor_info .= '<div style="margin-bottom: 5px;"><a href="../user/userInfo.php?origin='.$my_origin.'&amp;uInfo='.$tutor['user_id'].'">'.$photo.'&nbsp;'.Display::tag('span', api_get_person_name($tutor['firstname'], $tutor['lastname']), array('title'=>$username)).'</a></div>';
+		$tutor_info .= '<a href="../user/userInfo.php?origin='.$my_origin.'&amp;uInfo='.$tutor['user_id'].'">'.$photo.'&nbsp;'.Display::tag('span', api_get_person_name($tutor['firstname'], $tutor['lastname']), array('title'=>$username)).'</a>';
 	}
 }
 
-echo '<div class="actions-message" style="margin-bottom:4px;style="margin:4px;"><b>'.get_lang('GroupTutors').'</b></div>';
+echo Display::page_subheader(get_lang('GroupTutors'));
 if (!empty($tutor_info)) {
-	echo '<div style="margin-left:5px;">'.$tutor_info.'</div>';
+	echo $tutor_info;
 }
 echo '<br />';
 
 /*
  * List all the members of the current group
  */
-echo '<b>'.get_lang("GroupMembers").'</b>';
+echo Display::page_subheader(get_lang('GroupMembers'));
 
 $table = new SortableTable('group_users', 'get_number_of_group_users', 'get_group_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 2 : 1);
 $my_cidreq = isset($_GET['cidReq']) ? Security::remove_XSS($_GET['cidReq']) : '';

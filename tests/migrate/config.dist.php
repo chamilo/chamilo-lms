@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This is the configuration file allowing you to connect to the origin
  * database. You should either fill this one in or generate your own
@@ -7,7 +8,7 @@
 /**
  * Define all connection variables
  */
-/* 
+/*
  * The database type allows you to define with database driver to use.
  * Currently allowed values are: mssql. Defaults to: mssql
  */
@@ -44,5 +45,5 @@ $db_name = 'master';
  * Load the real configuration file (except if we're already in config.php)
  */
 if ((basename(__FILE__) != 'config.php') && is_file('config.php')) {
-  include 'config.php'; 
+    include 'config.php';
 }

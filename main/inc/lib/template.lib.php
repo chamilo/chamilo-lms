@@ -12,31 +12,34 @@ require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
 class Template {
 
-    var $style = 'default'; //see the template folder 
-    var $preview_theme = null;
-    var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
-    var $title = null;
-    var $show_header;
-    var $show_footer;
-    var $help;
-    var $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
-    var $show_learnpath = false; // This is a learnpath section or not?
-    var $plugin = null;
-    var $course_id = null;
-    var $user_is_logged_in = false;
-    var $twig = null;
+    public $style = 'default'; //see the template folder 
+    public $preview_theme = null;
+    public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
+    public $title = null;
+    public $show_header;
+    public $show_footer;
+    public $help;
+    public $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
+    public $show_learnpath = false; // This is a learnpath section or not?
+    public $plugin = null;
+    public $course_id = null;
+    public $user_is_logged_in = false;
+    public $twig = null;
+    public $jquery_ui_theme;
 
     /* Loads chamilo plugins */
     var $load_plugins = false;
     var $params = array();
 
     function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
-
         //Page title
         $this->title = $title;
         $this->show_learnpath = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
+            
+         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui 
+        $this->jquery_ui_theme = 'smoothness'; 
 
         //Twig settings        
         Twig_Autoloader::register();
@@ -87,7 +90,6 @@ class Template {
         $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(
@@ -360,7 +362,6 @@ class Template {
         global $disable_js_and_css_files;
         $css = array();
         
-        //$platform_theme = api_get_setting('stylesheets');
         $this->theme = api_get_visual_theme();
 
         if (!empty($this->preview_theme)) {
@@ -387,6 +388,9 @@ class Template {
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
+        
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';         
                
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -427,12 +431,14 @@ class Template {
     
     function set_js_files() {
         global $disable_js_and_css_files, $htmlHeadXtra;
+    
         
         //JS files        
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
+            'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',      
             'thickbox.js',            
             'bootstrap/bootstrap.js',
         );
@@ -466,10 +472,7 @@ class Template {
         if (!$disable_js_and_css_files) {       
             $this->assign('js_file_to_string', $js_file_to_string);
             
-            //Adding jquery ui by default
-            $extra_headers = api_get_jquery_libraries_js(array('jquery-ui'));
-
-            //$extra_headers = '';		
+            $extra_headers = null;            
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {
                     $extra_headers .= $this_html_head . "\n";
@@ -740,5 +743,13 @@ class Template {
 
     public function display($template) {
         echo $this->twig->render($template, $this->params);
+    }
+    
+    function show_page_loaded_info() {   
+        //@todo will be removed before a stable release
+        $mtime = microtime(); 
+        $mtime = explode(" ",$mtime); 
+        $mtime = $mtime[1] + $mtime[0]; 
+        error_log("Page loaded in ".($mtime-START));
     }
 }

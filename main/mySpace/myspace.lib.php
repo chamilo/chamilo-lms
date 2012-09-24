@@ -401,23 +401,11 @@ class MySpace {
 	 * @param string Order direction
 	 * @return array Results
 	 */
-	public function get_course_data_tracking_overview($from, $number_of_items, $column, $direction) {
-		//global $_configuration;
-		// database table definition
-		//$access_url_id = api_get_current_access_url_id();
-	 	//$tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+	public function get_course_data_tracking_overview($from, $number_of_items, $column, $direction) {		
 		$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
-
-		/*if ($_configuration['multiple_access_urls']) {
-			$condition_multi_url = ", $tbl_url_rel_user as url_user WHERE user.user_id=url_user.user_id AND access_url_id='$access_url_id'";
-		}
-
-		global $export_csv;
-		if ($export_csv) {
-			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-		} else {
-			$is_western_name_order = api_is_western_name_order();
-		}*/
+        $from = intval($from);
+        $number_of_items = intval($number_of_items);
+        
 		$sql = "SELECT code AS col0, title AS col1 FROM $main_course_table";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
@@ -441,21 +429,6 @@ class MySpace {
 		$course_code = $row[0];
 		// the table header
 		$return .= '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-		/*$return .= '	<tr>';
-		$return .= '		<th>'.get_lang('Course').'</th>';
-		$return .= '		<th>'.get_lang('AvgTimeSpentInTheCourse').'</th>';
-		$return .= '		<th>'.get_lang('AvgStudentsProgress').'</th>';
-		$return .= '		<th>'.get_lang('AvgCourseScore').'</th>';
-		$return .= '		<th>'.get_lang('AvgExercisesScore').'</th>';
-		$return .= '		<th>'.get_lang('AvgMessages').'</th>';
-		$return .= '		<th>'.get_lang('AvgAssignments').'</th>';
-		$return .= '		<th>'.get_lang('TotalExercisesScoreObtained').'</th>';
-		$return .= '		<th>'.get_lang('TotalExercisesScorePossible').'</th>';
-		$return .= '		<th>'.get_lang('TotalExercisesAnswered').'</th>';
-		$return .= '		<th>'.get_lang('TotalExercisesScorePercentage').'</th>';
-		$return .= '		<th>'.get_lang('FirstLogin').'</th>';
-		$return .= '		<th>'.get_lang('LatestLogin').'</th>';
-		$return .= '	</tr>';*/
 
 		// database table definition
 		$tbl_course_rel_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1236,7 +1209,7 @@ class MySpace {
 	 * Get data for courses list in sortable with pagination
 	 * @return array
 	 */
-	function get_course_data($from, $number_of_items, $column, $direction) {
+	static function get_course_data($from, $number_of_items, $column, $direction) {
 		global $courses, $csv_content, $charset, $session_id;
 
 		// definition database tables
@@ -1244,7 +1217,6 @@ class MySpace {
 		$tbl_course_user 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-		$a_course_students  = array();
 		$course_data = array();
 		$courses_code = array_keys($courses);
 
@@ -1288,8 +1260,7 @@ class MySpace {
 				$avg_messages_in_course     = Tracking::count_student_messages($users, $course_code, $session_id);
 				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);                
 				$avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
-				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
-				                
+				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);				                
 				$avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
 
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);

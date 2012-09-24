@@ -28,7 +28,7 @@ class MigrationCustom {
      * @return string SQL select string to include in the final select
      */
     public function sql_alter_unhash_50($field) {
-        return 'cast(' . $field . ' as varchar(50))';
+        return "cast( $field  as varchar(50)) as $field ";
     }
 
     /**

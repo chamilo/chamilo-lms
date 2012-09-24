@@ -1130,8 +1130,10 @@ class Database {
         if (!empty($params) && !empty($values)) {
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';
             $result = self::query($sql);
+            error_log($sql);
             if ($show_query) {
             	var_dump($sql);
+                error_log($sql);
             }
             return  self::get_last_insert_id();
         }

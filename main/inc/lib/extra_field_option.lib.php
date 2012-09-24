@@ -6,7 +6,10 @@ class ExtraFieldOption extends Model {
      
     public function __construct($type) {
         $this->type = $type;
-        switch ($this->type) {            
+        switch ($this->type) { 
+           case 'course':            
+                $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_OPTIONS);
+                break;
             case 'user':            
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
                 break;
@@ -131,19 +134,25 @@ class ExtraFieldOption extends Model {
         return true;    
     }
     
-    public function save_one_item($params, $show_query = false) {
-        $field_id = intval($params['field_id']);
-        
+    public function save_one_item($params, $show_query = false, $insert_repeated = true) {
+        $field_id = intval($params['field_id']);        
         if (empty($field_id)) {
             return false;
-        }        
-        $params['tms'] = api_get_utc_datetime();
-   
+        }
+        $params['tms'] = api_get_utc_datetime();   
         if (empty($params['option_order'])) {
             $order = self::get_max_order($field_id);
             $params['option_order'] = $order;
         }
-        parent::save($params, $show_query); 
+        if ($insert_repeated) {
+            parent::save($params, $show_query); 
+        } else {
+            
+            $check = self::get_field_option_by_field_and_option($field_id, $params['option_value']);
+            if ($check == false) {
+                parent::save($params, $show_query);    
+            }
+        }
     }
            
     public function get_field_option_by_field_and_option($field_id, $option_value) {

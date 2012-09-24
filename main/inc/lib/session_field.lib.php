@@ -73,13 +73,7 @@ class SessionField extends ExtraField {
         
         $form->addElement('text', 'field_order', get_lang('FieldOrder'), array('class' => 'span1'));
 
-        /* $status_list = $this->get_status_list();         
-          $form->addElement('select', 'status', get_lang('Status'), $status_list); */
-
-    
-
-        if ($action == 'edit') {
-            
+        if ($action == 'edit') {            
             $option = new SessionFieldOption('session');
             if ($defaults['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                 $form->freeze('field_options');

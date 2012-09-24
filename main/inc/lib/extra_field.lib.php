@@ -16,28 +16,35 @@ class ExtraField extends model {
     CONST FIELD_TYPE_TIMEZONE =                11;
     CONST FIELD_TYPE_SOCIAL_PROFILE =          12;
     
-    public $type = 'user'; //or session
+    public $type = 'user'; //or session or course
     public $handler_id = 'user_id';
     
     function __construct($type) {
         $this->type = $type;
         switch ($this->type) {
-            case 'user':            
-                //$this->table_field          = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+            case 'course':                
+                $this->table_field_options  = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_OPTIONS);
+                $this->table_field_values   = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+                
+                //Used for the model
+                $this->table                = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);                
+                $this->handler_id           =  'course_id';              
+                break;            
+            case 'user':                
                 $this->table_field_options  = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
                 $this->table_field_values   = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
                 
                 //Used for the model
-                $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD);                
-                $this->handler_id =  'user_id';              
+                $this->table                = Database::get_main_table(TABLE_MAIN_USER_FIELD);
+                $this->handler_id           =  'user_id';
                 break;
-            case 'session':
-                //$this->table_field          = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+            case 'session':                
                 $this->table_field_options  = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
                 $this->table_field_values   = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-                $this->handler_id =  'session_id'; 
                 
-                $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+                //Used for the model
+                $this->table                = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);                
+                $this->handler_id           = 'session_id';                
             break;                
         }        
     }    
@@ -101,7 +108,8 @@ class ExtraField extends model {
         $types[self::FIELD_TYPE_SOCIAL_PROFILE]  = get_lang('FieldTypeSocialProfile');
         
         switch ($handler) {
-            case 'session':                
+            case 'course':
+            case 'session':              
                 unset($types[self::FIELD_TYPE_TAG]);
                 unset($types[self::FIELD_TYPE_SOCIAL_PROFILE]);            
                 break;
@@ -109,8 +117,7 @@ class ExtraField extends model {
                 break;
         }
         return $types;
-    }
-    
+    }    
         
     public function add_elements($form, $item_id = null) {
         if (empty($form)) {
@@ -186,8 +193,7 @@ class ExtraField extends model {
             return $types[$id];
         }
         return null;    
-    }
-    
+    }    
     
     /**
      * Converts a string like this:
@@ -256,8 +262,7 @@ class ExtraField extends model {
         }        
         return $string;
     }
-    
-        
+            
     function clean_parameters($params) {
         if (!isset($params['field_variable']) || empty($params['field_variable'])) {             
             $params['field_variable'] = trim(strtolower(str_replace(" ","_", $params['field_display_text'])));	            

@@ -5,6 +5,7 @@
  */
 require_once '../../main/inc/global.inc.php';
 require_once 'config.php';
+
 if (is_file(dirname(__FILE__) . '/migration.custom.class.php')) {
     require_once 'migration.custom.class.php';
 } else {

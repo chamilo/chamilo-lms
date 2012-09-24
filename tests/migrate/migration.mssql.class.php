@@ -30,20 +30,25 @@ class MigrationMSSQL extends Migration {
         if (!empty($fields_sql)) {
             $fields_sql = substr($fields_sql, 0, -2);
         }
-        $sql = "SELECT $fields_sql FROM $table";
+        //In order to process X item of each table add TOP X
+        $sql = "SELECT TOP 1 $fields_sql FROM $table";
         //remove
         error_log($sql);
         $this->rows_iterator = mssql_query($sql, $this->c);
         
         if ($this->rows_iterator  === false) {
-            error_log("--- Error with query ".$sql." MSSQL error: ".mssql_get_last_message()."-- \n");
+            error_log("--- Error with query $sql MSSQL error: ".mssql_get_last_message()."-- \n");
         }
     }
 
     public function fetch_row() {        
         return mssql_fetch_row($this->rows_iterator);
     }
+    
+    public function fetch_array() {        
+        return mssql_fetch_array($this->rows_iterator, MSSQL_ASSOC);
+    }
     public function num_rows() {
         return mssql_num_rows($this->rows_iterator);
-    }    
+    }
 }

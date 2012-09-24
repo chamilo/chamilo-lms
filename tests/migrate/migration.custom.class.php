@@ -52,7 +52,7 @@ class MigrationCustom {
         $omigrate['sessions'][$data] = 0;
     }
     
-    public function store_user_data1() {
+    public function store_user_data($data = array()) {
         
     }
 }

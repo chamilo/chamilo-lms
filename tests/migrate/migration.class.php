@@ -128,11 +128,13 @@ class Migration {
                 error_log('No fields found');
                 continue;
             }
-            //if ($this->num_rows) {
-            if (1) {
-                error_log('Records found: '.$this->num_rows);
-                while ($row = $this->fetch_row()) {
-                    error_log(print_r($row, 1));
+            
+            $num_rows = $this->num_rows();
+            
+            if ($num_rows) {            
+                error_log('Records found: '.$num_rows);
+                while ($row = $this->fetch_array()) {
+                    //error_log(print_r($row, 1));
                     $dest_row = array();
                     $first_field = '';
                     foreach ($table['fields_match'] as $id_field => $details) {
@@ -148,13 +150,17 @@ class Migration {
                         $dest_row[$details['dest']] = $dest_data;
                     }
                     if (!empty($table['dest_func'])) {
-                        error_log('Calling MigrationCustom::' . $table['dest_func'] . ' on data recovered: ' . print_r($dest_row, 1));
-                        //$table['dest_func']($dest_row);
+                        error_log('Calling ' . $table['dest_func'] . ' on data recovered: ' . print_r($dest_row, 1));
+                        call_user_func_array($table['dest_func'], array($dest_row));                        
                     } else {
                         $this->errors_stack[] = "No destination data dest_func found. Abandoning data with first field $first_field = " . $dest_row[$first_field];
                     }
-                }
+                }                
                 error_log('Finished processing table ' . $table['orig_table']."\n\n");
+                
+                if ($table['orig_table'] == 'ProgramaAcademico')  {
+                    exit;
+                }
             } else {
                 error_log('No records found');
             }

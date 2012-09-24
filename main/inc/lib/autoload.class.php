@@ -73,6 +73,7 @@ class Autoload
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
         $result['AjaxController'] = '/main/inc/lib/ajax_controller.class.php';
         $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
+        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';        
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';

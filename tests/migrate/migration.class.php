@@ -1,21 +1,59 @@
 <?php
 /**
- * Migration class (ease the migration work)
+ * Scipt defining the Migration class
+ */
+/**
+ * Migration class (ease the migration work). This class *must* be extended
+ * in a database server-specific implementation as migration.[DB].class.php
  */
 class Migration {
+  /**
+   * Origin DB type holder
+   */
   public $odbtype = '';
+  /**
+   * Origin DB host holder
+   */
   public $odbhost = '';
+  /**
+   * Origin DB port holder
+   */
   public $odbport = '';
+  /**
+   * Origin DB user holder
+   */
   public $odbuser = '';
+  /**
+   * Origin DB password holder
+   */
   public $odbpass = '';
+  /**
+   * Origin DB name holder
+   */
   public $odbname = '';
+  /**
+   * Array holding all errors/warnings ocurring during one execution
+   */
   public $errors_stack = array();
-  public $origin_tables = array();
-  public $destination_tables = array();
-  public $relationship_tables = array();
+  /**
+   * Temporary handler for SQL result
+   */
   public $odbrows = null;
   /**
-   *
+   * Temporary holder for the list of users, courses and sessions and their 
+   * data. Store values here (preferably using the same indexes as the
+   * destination database field names) until ready to insert into Chamilo.
+   */
+  public $data_list = array('users'=>array(), 'courses'=>array(), 'sessions'=>array());
+  /**
+   * The constructor assigns all database connection details to the migration
+   * object
+   * @param string The original database's host
+   * @param string The original database's port
+   * @param string The original database's user
+   * @param string The original database's password
+   * @param string The original database's name
+   * @return boolean False on error. Void on success.
    */
   public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname) {
     if (empty($dbhost) || empty($dbport) || empty($dbuser) || empty ($dbpass) || empty($dbname)) {
@@ -30,13 +68,15 @@ class Migration {
     $this->odbname = $dbname;
   }
   /**
-   *
+   * The connect method should be extended by the child class
    */
   public function connect() {
     //extend in child class
   }
   /**
-   *
+   * The migrate method launches the migration process based on an array of
+   * tables and fields matches defined in the given array.
+   * @param array Structured array of matches (see migrate.php)
    */
   public function migrate($matches) {
     $found = false;
@@ -78,7 +118,7 @@ class Migration {
           if ($details['func'] == 'none') {
             $dest_data = $row[$details['orig']];
           } else {
-            $dest_data = MigrationCustom::$details['func']($row[$details['orig']]);
+            $dest_data = MigrationCustom::$details['func']($row[$details['orig']],$this->data_list);
           }
           $dest_row[$details['dest']] = $dest_data;
         }
@@ -91,6 +131,5 @@ class Migration {
       }
       error_log('Finished processing table '.$table['orig_table']);
     }
-    die();
   }
 }

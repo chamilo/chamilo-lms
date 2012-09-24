@@ -1944,7 +1944,7 @@ class UserManager {
 		} else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
-                $condition_date_end = null;                
+                $condition_date_end = null;
             } else {
                 $condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
             }
@@ -1959,7 +1959,8 @@ class UserManager {
                                 session_category.name as session_category_name,
                                 session_category.date_start session_category_date_start,
                                 session_category.date_end session_category_date_end,
-                                nb_days_access_before_beginning
+                                nb_days_access_before_beginning,
+                                nb_days_access_after_end
                                 
                               FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
                                     INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)                             
@@ -1995,6 +1996,7 @@ class UserManager {
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_start']      = $row['date_start'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['date_end']        = $row['date_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_before_beginning']     = $row['nb_days_access_before_beginning'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['nb_days_access_after_end']     = $row['nb_days_access_after_end'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']         = UserManager::get_courses_list_by_session($user_id, $row['id']);
                 
             }

@@ -56,7 +56,6 @@ class CourseRestorer
 	var $file_option;
 	var $set_tools_invisible_by_default;
 	var $skip_content;
-
     var $tools_to_restore = array(                            
                             'announcements',
                             'attendance',
@@ -715,11 +714,10 @@ class CourseRestorer
 	 */
 	function restore_forums() {
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
-			$table_forum 	= Database::get_course_table(TABLE_FORUM);
-
-			$resources 		= $this->course->resources;
+			$table_forum = Database::get_course_table(TABLE_FORUM);
+			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_FORUM] as $id => $forum) {
-                $params = (array)$forum->obj;                
+                $params = (array)$forum->obj;
                 if ($this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id == -1) {
                     $cat_id = $this->restore_forum_category($params['forum_category']);
                 } else {
@@ -731,7 +729,15 @@ class CourseRestorer
                 $params['forum_category'] = $cat_id;    
                 unset($params['forum_id']);
                 
-                $params['forum_comment']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['forum_comment'], $this->course->code, $this->course->destination_path);        
+                $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['forum_comment'], $this->course->code, $this->course->destination_path);        
+                
+                if (!empty($params['forum_image'])) {
+                    $original_forum_image = $this->course->path.'upload/forum/images/'.$params['forum_image'];                    
+                    if (file_exists($original_forum_image)) {
+                        $new_forum_image = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/upload/forum/images/'.$params['forum_image'];                        
+                        @copy($original_forum_image, $new_forum_image);
+                    }
+                }
                 
                 $new_id = Database::insert($table_forum, $params);
 			

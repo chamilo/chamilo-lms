@@ -1311,8 +1311,8 @@ abstract class Question
 				//echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
 			} else {
 				$img = pathinfo($img);
-				$img = $img['filename'];
-				echo ''.Display::return_icon($img.'_na.gif',$explanation).'';
+				$img = $img['filename'].'_na.'.$img['extension'];
+				echo ''.Display::return_icon($img,$explanation).'';
 				//echo '<br>';
 				//echo ''.$explanation.'';
 			}

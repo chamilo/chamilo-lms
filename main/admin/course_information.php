@@ -56,24 +56,21 @@ if (!isset ($_GET['code'])) {
 }
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'course_list.php', "name" => get_lang('Courses'));
-$table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-$code = Database::escape_string($_GET['code']);
-$sql = "SELECT * FROM $table_course WHERE code = '".$code."'";
-$res = Database::query($sql);
-$course = Database::fetch_object($res);
-$tool_name = $course->title.' ('.$course->visual_code.')';
-Display::display_header($tool_name);
-/* <a href="course_create_content.php?course_code=<?php echo $course->code ?>"><?php echo get_lang('AddDummyContentToCourse') ?></a> */
-?>
-<div class="actions">
-<a href="<?php echo api_get_path(WEB_COURSE_PATH).$course->directory; ?>"><?php Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM); ?></a>
-</div>
-<?php 
 
-echo Display::page_header(get_lang('CourseUsage'));
+$course_info = api_get_course_info($_GET['code']);
+$tool_name = $course_info['title'].' ('.$course_info['visual_code'].')';
+Display::display_header($tool_name);
+
+echo '<div class="actions">';
+echo '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['directory'].'">'.Display::display_icon('home.png', get_lang('CourseHomepage'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
+
+echo Display::page_header($tool_name);
+
+echo Display::page_subheader(get_lang('CourseUsage'));
 
 $id_session = intval($_GET['id_session']);
-$table = new SortableTableFromArray(get_course_usage($course->code,$id_session),0,20,'usage_table');
+$table = new SortableTableFromArray(get_course_usage($course_info['code'],$id_session),0,20,'usage_table');
 $table->set_additional_parameters(array ('code' => Security::remove_XSS($_GET['code'])));
 $table->set_other_tables(array('user_table','class_table'));
 $table->set_header(0,get_lang('Tool'), true);
@@ -83,10 +80,10 @@ $table->display();
 /**
  * Show all users subscribed in this course
  */
-echo Display::page_header(get_lang('Users'));
+echo Display::page_subheader(get_lang('Users'));
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-$sql = "SELECT *,cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
+$sql = "SELECT *, cu.status as course_status FROM $table_course_user cu, $table_user u WHERE cu.user_id = u.user_id AND cu.course_code = '".$course_info['code']."' AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
 $res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
@@ -107,7 +104,7 @@ if (Database::num_rows($res) > 0) {
 		$users[] = $user;
 	}
 	$table = new SortableTableFromArray($users,0,20,'user_table');
-	$table->set_additional_parameters(array ('code' => $code));
+	$table->set_additional_parameters(array ('code' => $course_info['code']));
 	$table->set_other_tables(array('usage_table','class_table'));
 	$table->set_header(0,get_lang('OfficialCode'), true);
 	if ($is_western_name_order) {
@@ -122,10 +119,10 @@ if (Database::num_rows($res) > 0) {
 	$table->set_header(5,'', false);
 	$table->display();
 } else {
-	echo get_lang('NoUsersInCourse');
+	echo Display::display_warning_message(get_lang('NoUsersInCourse'));
 }
 
-$session_list = SessionManager::get_session_by_course($course->code);
+$session_list = SessionManager::get_session_by_course($course_info['code']);
 
 $url = api_get_path(WEB_CODE_PATH);
 if (!empty($session_list)) {
@@ -133,41 +130,40 @@ if (!empty($session_list)) {
         $session[0] = Display::url($session[0], $url.'admin/resume_session.php?id_session='.$session['id'] );
         unset($session[1]);
     }
-    echo Display::page_header(get_lang('Sessions')); 
+    echo Display::page_subheader(get_lang('Sessions'));
     $table = new SortableTableFromArray($session_list, 0, 20,'user_table');
     $table->display();
 }
 
-/*$group = new UserGroup();
-$usegroups = $group->get_usergroup_by_course($course->id);*/
+$extra_field = new ExtraField('course');
+$extra_fields = $extra_field->get_all();
 
-/*@todo This should be dissapear classes are a deprecated feature*/ 
-/*
-//Show all classes subscribed in this course
- 
-$table_course_class = Database :: get_main_table(TABLE_MAIN_COURSE_CLASS);
-$table_class 		= Database :: get_main_table(TABLE_MAIN_CLASS);
-$sql = "SELECT * FROM $table_course_class cc, $table_class c WHERE cc.class_id = c.id AND cc.course_code = '".$code."'";
-$res = Database::query($sql);
-if (Database::num_rows($res) > 0) {
-	$data = array ();
-	while ($class = Database::fetch_object($res)) {
-		$row = array ();
-		$row[] = $class->name;
-		$row[] = '<a href="class_information.php?id='.$class->id.'">'.Display::return_icon('synthese_view.gif', get_lang('Edit')).'</a>';
-		$data[] = $row;
-	}
-	echo '<p><b>'.get_lang('AdminClasses').'</b></p>';
-	echo '<blockquote>';
-	$table = new SortableTableFromArray($data,0,20,'class_table');
-	$table->set_additional_parameters(array ('code' => $_GET['code']));
-	$table->set_other_tables(array('usage_table','user_table'));
-	$table->set_header(0,get_lang('Title'));
-	$table->set_header(1,'');
-	$table->display();
-	echo '</blockquote>';
-} else {
-	echo '<p>'.get_lang('NoClassesForThisCourse').'</p>';
-}*/
-/*	FOOTER	*/
+if (!empty($extra_fields)) {
+    echo Display::page_subheader(get_lang('ExtraFields'));
+    echo '<table class="data_table">';
+    foreach ($extra_fields as $field) {
+        if ($field['field_visible'] != '1') {
+            continue;
+        }
+        $obj = new ExtraFieldValue($extra_field->type);
+        $result = $obj->get_values_by_handler_and_field_id($course_info['code'], $field['id'], true);
+        
+        $value = null;        
+        if ($result) {
+            $value = $result['field_value'];
+            
+            if (is_bool($value)) {
+                $value = $value ? get_lang('Yes') : get_lang('No');
+            }            
+        } else {
+            $value = '-';
+        }
+        echo "<tr>";
+        echo "<td> {$field['field_display_text']} </td>";
+        echo "<td> $value </td>";
+        echo "</tr>";    
+    }
+    echo "</table>";
+}
+
 Display::display_footer();

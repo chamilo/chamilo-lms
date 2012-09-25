@@ -26,7 +26,8 @@ if (!in_array($action, array(
         'get_hotpotatoes_exercise_results', 
         'get_work_user_list', 
         'get_timelines', 
-        'get_user_skill_ranking'))
+        'get_user_skill_ranking',
+        'get_usergroups_teacher'))
     ) {
 	api_protect_admin_script(true);
 }

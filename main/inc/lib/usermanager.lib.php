@@ -50,17 +50,16 @@ class UserManager {
             }
         }
                         
-        if (isset($params['user_id'])) {
+        if (isset($params['user_id'])) {            
             unset($params['user_id']);
-        }
-        
-        if ((empty($params['username']))) {
+        }        
+        if (empty($params['username'])) {
             return api_set_failure('provide a username');
         }
         
         // First check wether the login already exists
 		if (!self::is_username_available($params['username'])) {
-            
+            //Already added it            
             if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
                 $user_info = self::get_user_info($params['username']);
                 return $user_info;

@@ -247,24 +247,30 @@ class Migration {
         
         if (!empty($table['dest_func'])) {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
-            $dest_row['return_item_if_already_exists'] = true;
-            
-            $item_result = call_user_func_array($table['dest_func'], array($dest_row, $this->data_list));
+            $dest_row['return_item_if_already_exists'] = true;            
+            $item_result = call_user_func_array($table['dest_func'], array($dest_row));
             
             //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             
             switch ($table['dest_table']) {
                 case 'course':
                     $this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;
-                    /*error_log('lols');
-                    error_log(print_r($dest_row, 1));                    
-                    error_log(print_r($this->data_list['courses'][$dest_row['uidIdCurso']],1));*/
-                    
                     $handler_id = $item_result['code'];                  
                     break;
                 case 'user':
-                    $handler_id = $item_result['user_id']; 
-                    $this->data_list['users_persona'][$dest_row['uidIdPersona']] = $item_result;                    
+                    if (!empty($item_result)) {                        
+                        $handler_id = $item_result['user_id'];
+                        $this->data_list['users_persona'][$dest_row['uidIdPersona']] = $item_result;
+                        error_log(print_r($this->data_list['users_persona'][$dest_row['uidIdPersona']],1));
+                    }
+                    
+                    //error_log('lols');
+                    //error_log(print_r($dest_row, 1));                    
+                    //error_log(print_r($this->data_list['users_persona'][$dest_row['uidIdPersona']],1));
+                    //error_log(print_r($item_result, 1));
+                    if (!empty($dest_row) && $table['orig_table'] == 'Persona' && !empty($dest_row['username'])) {
+                        //exit;
+                    }
                     break;
                 case 'session':
                     $handler_id = $item_result['session_id'];

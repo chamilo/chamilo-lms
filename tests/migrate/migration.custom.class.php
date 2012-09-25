@@ -42,13 +42,13 @@ class MigrationCustom {
     }
     
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {        
-        $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
+        $omigrate['users_persona'][$data] = $row_data;
     }
     
     public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
-        //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
-        
-        $omigrate['users_empleado'][$row_data['uidIdPersona']] = $row_data;
+        //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;        
+        $omigrate['users_empleado'][$data] = $row_data;
+        error_log(print_r($omigrate['users_empleado'][$data],1));      
         //error_log(print_r($omigrate, 1));
         //$omigrate['users']['extra'] = $row_data
     }
@@ -82,13 +82,13 @@ class MigrationCustom {
         
         //error_log(print_r($omigrate['users_empleado'], 1));
         //error_log($data);
-        
-        if (empty($omigrate['users_empleado'][$data]['uidIdPersona'])) {
-            return api_get_user_id();
+        error_log('get_real_teacher_id');
+        if (empty($omigrate['users_empleado'][$data]['uidIdPersona'])) {            
+            return 1;
         } else {
-            error_log('get_real_teacher_id'.$omigrate['users_empleado'][$data]['uidIdPersona']['user_id']);
-            error_log(print_r($omigrate['users_empleado'][$data]['uidIdPersona'], 1));
-            return $omigrate['users_empleado'][$data]['uidIdPersona']['user_id'];
+            $persona_id = $omigrate['users_empleado'][$data]['uidIdPersona'];  
+            error_log(print_r($omigrate['users_persona'][$persona_id],1));            
+            return $omigrate['users_persona'][$persona_id]['user_id'];
         }
         return $omigrate['users_empleado'][$data]['user_id'];
     }
@@ -97,17 +97,17 @@ class MigrationCustom {
         
     }
     
-    public function create_user($data, $data_list = array()) {       
+    public function create_user($data) {       
         //error_log(print_r($data, 1));
         //error_log(print_r($data_list['user'], 1));        
-        $user_id = UserManager::add($data);        
-        return $user_id;
+        $user_info = UserManager::add($data);        
+        return $user_info;
     }
     
-     public function add_course_to_session($data, $data_list = array()) {       
+     public function add_course_to_session($data, &$data_list) {       
         //error_log(print_r($data, 1));
         //error_log(print_r($data_list['user'], 1));        
-        $user_id = UserManager::add($data);        
+        //$user_id = UserManager::add($data);        
         return $user_id;
     }
 

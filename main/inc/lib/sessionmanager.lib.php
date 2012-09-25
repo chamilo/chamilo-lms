@@ -279,7 +279,7 @@ class SessionManager {
             $query .= " LIMIT ".$options['limit'];
         }
         
-        var_dump($query);
+        //var_dump($query);
         
 		$result = Database::query($query);
 		$formatted_sessions = array();

@@ -88,12 +88,14 @@ class CourseManager {
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
+        
         if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_courses']) && $_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
             $num = self::count_courses();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
                 return api_set_failure('PortalCoursesLimitReached');
             }
         }
+        
         if (empty($params['title'])) {
             return false;
         }
@@ -115,7 +117,7 @@ class CourseManager {
             $params['visual_code']      = $keys['currentCourseId'];
             $params['directory']        = $keys['currentCourseRepository'];
 
-            $course_info   = api_get_course_info($params['code']);
+            $course_info = api_get_course_info($params['code']);
 
             if (empty($course_info)) {
                 $course_id      = self::register_course($params);
@@ -132,6 +134,11 @@ class CourseManager {
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
+                    return $course_info;
+                }
+            } else {
+                //Course already exists
+                if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
                     return $course_info;
                 }
             }

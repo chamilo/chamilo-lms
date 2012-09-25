@@ -17,6 +17,107 @@
 class UserManager {
 	private function __construct () {
 	}
+    
+    /* Simple version of create_user */
+    public static function add($params) {
+        global $_configuration;
+        
+        $access_url_id = 1;
+         
+		if (api_get_multiple_access_url()) {		
+            $access_url_id = api_get_current_access_url_id();
+        }
+        
+        //Hosting verifications
+        
+        $status = isset($params['status']) ? $params['status'] : STUDENT;
+        
+        if (api_get_setting('login_is_email') == 'true') {
+            $params['username'] = $params['email'];
+        }
+                
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+            $num = self::get_number_of_users();
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
+                return api_set_failure('portal users limit reached');
+            }
+        }
+        
+		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+            $num = self::get_number_of_users(1);
+            if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
+                return api_set_failure('portal teachers limit reached');
+            }
+        }
+                        
+        if (isset($params['user_id'])) {
+            unset($params['user_id']);
+        }
+        
+        if ((empty($params['username']))) {
+            return api_set_failure('provide a username');
+        }
+        
+        // First check wether the login already exists
+		if (!self::is_username_available($params['username'])) {
+            
+            if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
+                $user_info = self::get_user_info($params['username']);
+                return $user_info;
+            } 
+			return api_set_failure('login-pass already taken');
+		}
+        
+        unset($params['return_item_if_already_exists']);        
+        
+        //Checking the user language
+        $languages = api_get_languages();   
+        if (!in_array($params['language'], $languages['folder'])) {
+            $params['language'] = api_get_setting('platformLanguage');
+        }
+        
+        if (!isset($params['creator_id'])) {
+			$params['creator_id'] = api_get_user_id();
+		}       
+        
+        if (empty($params['encrypt_method'])) {
+			$params['password'] = api_get_encrypted_password($params['password']);            
+		} else {
+			if ($_configuration['password_encryption'] === $params['encrypt_method']) {
+				if ($params['encrypt_method'] == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $params['password'])) {
+					return api_set_failure('encrypt_method invalid');
+				} else if ($params['encrypt_method'] == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $params['password'])) {
+					return api_set_failure('encrypt_method invalid');
+				}
+			} else {
+				return api_set_failure('encrypt_method invalid');
+			}
+		}
+        
+        $params['registration_date'] = api_get_utc_datetime();        
+                     
+        // Database table definition
+		$table = Database::get_main_table(TABLE_MAIN_USER);
+        $user_id = Database::insert($table, $params);
+        
+        if ($user_id) {
+            if (api_get_multiple_access_url()) {		
+				UrlManager::add_user_to_url($user_id, api_get_current_access_url_id());				
+			} else {
+				//we are adding by default the access_url_user table with access_url_id = 1
+				UrlManager::add_user_to_url($user_id, 1);
+			}
+            
+            // Add event to system log			
+			$user_id_manager = api_get_user_id();
+			$user_info = api_get_user_info($user_id);
+			event_system(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
+            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+            return $user_id;      
+        } else {
+            return api_set_failure('error inserting in Database');
+        }
+    }
 
 	/**
 	  * Creates a new user for the platform
@@ -111,7 +212,7 @@ class UserManager {
         
         
 		//@todo replace this date with the api_get_utc_date function big problem with users that are already registered
-		$current_date = date('Y-m-d H:i:s', time());
+		$current_date = api_get_utc_datetime();
 		$sql = "INSERT INTO $table_user
 				SET lastname = 		'".Database::escape_string(trim($lastName))."',
 				firstname = 		'".Database::escape_string(trim($firstName))."',
@@ -170,17 +271,16 @@ class UserManager {
                     @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */              
-			}            
+			}          
 			// Add event to system log			
 			$user_id_manager = api_get_user_id();
 			$user_info = api_get_user_info($return);
 			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
             event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
 
-		} else {
-			//echo "false - failed" ;
+		} else {			
 			$return = false;
-            echo $sql;
+            //echo $sql;
             return api_set_failure('error inserting in Database');
 		}
 
@@ -190,8 +290,7 @@ class UserManager {
 				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
 			}
 		}
-		self::update_extra_field_value($return, 'already_logged_in', 'false');
-        
+		self::update_extra_field_value($return, 'already_logged_in', 'false');        
 		return $return;
 	}
 

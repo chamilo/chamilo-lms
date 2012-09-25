@@ -20,7 +20,6 @@ $sord   = $_REQUEST['sord'];         //asc or desc
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }
-	
 
 if (!in_array($action, array(
         'get_exercise_results', 

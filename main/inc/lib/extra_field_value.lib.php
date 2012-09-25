@@ -10,13 +10,17 @@ class ExtraFieldValue extends Model {
         $extra_field = new ExtraField($this->type);
         $this->handler_id = $extra_field->handler_id;
         switch ($this->type) {
+            case 'course':
+                $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+                $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);                              
+                break;
             case 'user':
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-                $this->table_session_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);                              
+                $this->table_handler_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);                              
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-                $this->table_session_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);                
+                $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);                
             break;
         }
         $this->columns[] = $this->handler_id;
@@ -28,8 +32,8 @@ class ExtraFieldValue extends Model {
     }
     
     public function save_field_values($params) {
-        $session_field = new SessionField();
-        if (empty($params['session_id'])) {
+        $extra_field = new ExtraField($this->type);
+        if (empty($params[$this->handler_id])) {
             return false;            
         }
         
@@ -37,11 +41,11 @@ class ExtraFieldValue extends Model {
         foreach ($params as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') { //an extra field
                 $field_variable = substr($key, 6);
-                $session_field_info = $session_field->get_handler_field_info_by_field_variable($field_variable);                
-                if ($session_field_info) {                
+                $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);                
+                if ($extra_field_info) {                
                     $new_params = array(
-                        'session_id'    => $params['session_id'],
-                        'field_id'      => $session_field_info['id'],
+                        $this->handler_id    => $params[$this->handler_id],
+                        'field_id'      => $extra_field_info['id'],
                         'field_value'   => $value
                     );                    
                     self::save($new_params);
@@ -51,9 +55,8 @@ class ExtraFieldValue extends Model {
     }
     
     public function save($params, $show_query = false) {        
-        $session_field = new SessionField();
-        //$session_field_option = new SessionFieldOption();
-        
+        $extra_field = new ExtraField($this->type);
+                
         //Setting value to insert
         $value = $params['field_value'];       
         
@@ -67,10 +70,10 @@ class ExtraFieldValue extends Model {
         $params['field_value'] = $value_to_insert;
         
         //If field id exists
-        $session_field_info = $session_field->get($params['field_id']);
+        $extra_field_info = $extra_field->get($params['field_id']);
                 
-        if ($session_field_info) {            
-            switch ($session_field_info['field_type']) {
+        if ($extra_field_info) {    
+            switch ($extra_field_info['field_type']) {
                 case ExtraField::FIELD_TYPE_TAG :
                     break;
                 case ExtraField::FIELD_TYPE_RADIO:
@@ -99,20 +102,20 @@ class ExtraFieldValue extends Model {
                     break;
                 case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
                     if (is_array($value)) {                        
-                        if (isset($value['extra_'.$session_field_info['field_variable']]) && 
-                            isset($value['extra_'.$session_field_info['field_variable'].'_second'])
+                        if (isset($value['extra_'.$extra_field_info['field_variable']]) && 
+                            isset($value['extra_'.$extra_field_info['field_variable'].'_second'])
                              ) {
-                            $value_to_insert = $value['extra_'.$session_field_info['field_variable']].'::'.$value['extra_'.$session_field_info['field_variable'].'_second'];                        
+                            $value_to_insert = $value['extra_'.$extra_field_info['field_variable']].'::'.$value['extra_'.$extra_field_info['field_variable'].'_second'];                        
                         } else {
                             $value_to_insert = null;
                         }
                     }
                 default:
                     break;
-            }            
-            $session_field_values = self::get_values_by_handler_and_field_id($params['session_id'], $params['field_id']);            
-            if ($session_field_values) {
-                self::delete_values_by_handler_and_field_id($params['session_id'], $params['field_id']);                
+            }          
+            $field_values = self::get_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);            
+            if ($field_values) {
+                self::delete_values_by_handler_and_field_id($params[$this->handler_id], $params['field_id']);                
             }            
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();            
@@ -122,28 +125,29 @@ class ExtraFieldValue extends Model {
     
     /**
      * 
-     * @param int $session_id
+     * @param int handler_id (session_id, course_id, etc)
      * @param int $field_id
      * @param bool transform the result to a human readable strings
      * @return boolean
      */
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false) {
         $field_id = intval($field_id);
-        $item_id = intval($item_id);
+        $item_id = Database::escape_string($item_id);
         
-        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_session_field} sf ON (s.field_id = sf.id)
+        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
                 WHERE {$this->handler_id} = '$item_id'  AND field_id = '".$field_id."' ORDER BY id";
+        
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {            
             $result = Database::fetch_array($result, 'ASSOC'); 
             if ($transform) {
                 if ($result['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                     if (!empty($result['field_value'])) {
-                        $session_field_option = new SessionFieldOption();
+                        $field_option = new ExtraFieldOption($this->type);
                         $options = explode('::', $result['field_value']);    
-                        // only available for PHP 5.4  :( $result['field_value'] = $session_field_option->get($options[0])['id'].' -> ';
-                        $result = $session_field_option->get($options[0]);
-                        $result_second = $session_field_option->get($options[1]);
+                        // only available for PHP 5.4  :( $result['field_value'] = $field_option->get($options[0])['id'].' -> ';
+                        $result = $field_option->get($options[0]);
+                        $result_second = $field_option->get($options[1]);
                         if (!empty($result)) {
                             $result['field_value'] = $result['option_display_text'].' -> ';
                             $result['field_value'] .= $result_second['option_display_text'];
@@ -168,7 +172,7 @@ class ExtraFieldValue extends Model {
     
     /* Get all values by field id */
     public function get_values_by_field_id($field_id) {        
-        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_session_field} sf ON (s.field_id = sf.id)
+        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
                 WHERE field_id = '".$field_id."' ORDER BY id";
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {            
@@ -185,7 +189,7 @@ class ExtraFieldValue extends Model {
     
     public function delete_values_by_handler_and_field_id($item_id, $field_id) {
         $field_id = intval($field_id);
-        $item_id = intval($item_id);
+        $item_id = Database::escape_string($item_id);
         $sql = "DELETE FROM {$this->table} WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql); 
     }   

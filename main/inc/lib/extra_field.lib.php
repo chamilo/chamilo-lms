@@ -28,7 +28,7 @@ class ExtraField extends model {
                 
                 //Used for the model
                 $this->table                = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);                
-                $this->handler_id           =  'course_id';              
+                $this->handler_id           = 'course_code';              
                 break;            
             case 'user':                
                 $this->table_field_options  = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
@@ -36,7 +36,7 @@ class ExtraField extends model {
                 
                 //Used for the model
                 $this->table                = Database::get_main_table(TABLE_MAIN_USER_FIELD);
-                $this->handler_id           =  'user_id';
+                $this->handler_id           = 'user_id';
                 break;
             case 'session':                
                 $this->table_field_options  = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);

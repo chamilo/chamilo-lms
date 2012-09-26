@@ -156,7 +156,7 @@ class Migration {
             
             // Process the migration of fields from the given table
             $sql_select_fields = self::prepare_field_match($table);
-            $this->select_all($table['orig_table'], $sql_select_fields);
+            $this->select_all($table['orig_table'], $sql_select_fields, $table);
        
             if (count($table['fields_match']) == 0) {
                 error_log('No fields found');
@@ -184,7 +184,7 @@ class Migration {
             
             //Stop here
             if ($table['orig_table'] == 'Matricula')  {
-                error_log(print_r($this->data_list['sessions'], 1));
+                //error_log(print_r($this->data_list['sessions'], 1));
                 exit;
             }
         }

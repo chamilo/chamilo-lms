@@ -22,7 +22,7 @@ class MigrationMSSQL extends Migration {
         return true;
     }
 
-    public function select_all($table, $fields) {
+    public function select_all($table, $fields, $options = array()) {
         $fields_sql = '';
         foreach ($fields as $field) {
             $fields_sql .= $field . ', ';
@@ -32,16 +32,25 @@ class MigrationMSSQL extends Migration {
         }
         //In order to process X item of each table add TOP X
         
-        $top = " TOP 5000 ";
+        $top = " TOP 1000 ";
         if (in_array($table, array('Persona', 'Alumno', 'Empleado'))) {
-            $top = " TOP 10 ";            
+            $top = " TOP 100 ";            
         }
         if ($table == 'ProgramaAcademico') {
-            $top = "  ";    
+            $top = "  TOP 1000 ";    
         }
-        $sql = "SELECT $top $fields_sql FROM $table";
+        
+        $extra = null;
+        if (isset($options) && !empty($options['inner_join'])) {
+            $extra = ' INNER JOIN '.$options['inner_join'].' ON '.$options['on'];
+        }
+        $sql = "SELECT $top $fields_sql FROM $table $extra ";
+        if (!empty($extra)) {
+            error_log(print_r($options,1));
+            error_log($sql);
+        }
         //remove
-        error_log($sql);
+        
         $this->rows_iterator = mssql_query($sql, $this->c);
         
         if ($this->rows_iterator  === false) {

@@ -65,32 +65,48 @@ class MigrationCustom {
     /**
      * Log data from the original users table
      */
-    public function log_original_session_unique_id($data, &$omigrate) {
-        $omigrate['sessions'][$data] = 0;
+    public function log_original_session_unique_id($data, &$omigrate, $row_data) {
+        $omigrate['sessions'][$row_data['uidIdCabProgramaAcademico']] = $row_data;
         return $data;
     }
     
     public function get_real_course_code($data, &$omigrate, $row_data) {
-        /*error_log('get_real_course_code');
-        error_log(print_r($data,1));
-        error_log(print_r($omigrate['courses'][$data], 1));*/
         if (!isset($omigrate['courses'][$data])) {
             error_log("Course not found in data_list array");
             error_log(print_r($data, 1));
-            exit;
+            //exit;
         }
         return $omigrate['courses'][$data]['code'];
     }
     
-    function get_session_id($data, &$omigrate, $row_data) {
-        error_log(print_r($data, 1));
+    function get_session_id_by_programa_id($data, &$omigrate, $row_data) {
+        /*error_log(print_r($data, 1));
         error_log(print_r($row_data, 1));
+        error_log($omigrate['sessions'][$data]);*/
         if (!isset($omigrate['sessions'][$data])) {
             error_log(print_r($omigrate['sessions'], 1));
             error_log("sessions not found in data_list array ");
             exit;
         }
         return $omigrate['sessions'][$data];        
+    }
+    
+    public function get_user_id($data, &$omigrate, $row_data) {
+        //error_log('get_real_teacher_id');
+        //error_log(print_r($data, 1));                
+        //error_log(print_r($omigrate['users_empleado'], 1));        
+        //error_log('get_real_teacher_id');
+        //error_log($data);               
+        if (empty($omigrate['users_alumno'][$data])) {
+            //error_log('not set');
+            return 1;
+        } else {            
+            $persona_id = $omigrate['users_alumno'][$data]['uidIdPersona'];  
+            if (!empty($persona_id)) {
+                return $omigrate['users_persona'][$persona_id]['user_id'];    
+            }
+        }        
+        return $omigrate['users_alumno'][$data]['user_id'];
     }
     
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
@@ -174,14 +190,15 @@ class MigrationCustom {
         return $user_info;
     }
     
-     public function add_user_to_session($data, &$data_list) {       
+    public function add_user_to_session($data, &$data_list, $row_data) {
+         error_log('add_user_to_session');
         error_log(print_r($data, 1));
+        error_log(print_r($row_data, 1));
+        exit;
         //error_log(print_r($data_list['user'], 1));        
         //$user_id = UserManager::add($data);  
          
         //SessionManager::suscribe_users_to_session($data['session_id'], array($data['user_id']));
         return $user_id;
     }
-    
-    
 }

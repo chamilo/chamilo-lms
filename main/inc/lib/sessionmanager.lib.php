@@ -242,6 +242,7 @@ class SessionManager {
                 $inject_extra_fields
                 c.title as course_title,
                 s.id";
+        
 
 		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
                 LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
@@ -279,7 +280,7 @@ class SessionManager {
             $query .= " LIMIT ".$options['limit'];
         }
         
-        //var_dump($query);
+        ///var_dump($query);
         
 		$result = Database::query($query);
 		$formatted_sessions = array();

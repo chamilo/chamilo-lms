@@ -183,7 +183,8 @@ class Migration {
             }
             
             //Stop here
-            if ($table['orig_table'] == 'ProgramaAcademico')  {                
+            if ($table['orig_table'] == 'Matricula')  {
+                error_log(print_r($this->data_list['sessions'], 1));
                 exit;
             }
         }
@@ -209,7 +210,7 @@ class Migration {
     }
     
     function execute_field_match($table, $row, $extra_fields) {
-        error_log('execute_field_match');
+        //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
         $my_extra_fields = isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
@@ -257,7 +258,7 @@ class Migration {
                                 if ($key == 'option_value' && $value == $dest_row[$details['dest']]) {
                                     $value = $option['option_display_text'];                                    
                                     if ($field_type == Extrafield::FIELD_TYPE_SELECT) {
-                                        $value = $option['option_value'];    
+                                        $value = $option['option_display_text'];    
                                     }
                                     //error_log('asi -> ');
                                     //error_log(print_r($option, 1));
@@ -320,7 +321,8 @@ class Migration {
                         //exit;
                     }
                     break;
-                case 'session':
+                case 'session':                     
+                    $this->data_list['sessions'][$dest_row['uidIdCabProgramaAcademico']] = $item_result;
                     $handler_id = $item_result['session_id'];
                     break;
             }
@@ -330,7 +332,7 @@ class Migration {
                 foreach ($extra_fields_to_insert as $params) {
                     //error_log($extra_field_value_obj->handler_id);
                     $params[$extra_field_value_obj->handler_id] =  $handler_id;                         
-                    error_log('$extra_field_value_obj params: ' . print_r($params, 1));
+                    //error_log('$extra_field_value_obj params: ' . print_r($params, 1));
                     $extra_field_value_obj->save($params);    
                 }
             }

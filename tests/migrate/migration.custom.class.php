@@ -67,6 +67,7 @@ class MigrationCustom {
      */
     public function log_original_session_unique_id($data, &$omigrate) {
         $omigrate['sessions'][$data] = 0;
+        return $data;
     }
     
     public function get_real_course_code($data, &$omigrate, $row_data) {
@@ -74,17 +75,28 @@ class MigrationCustom {
         error_log(print_r($data,1));
         error_log(print_r($omigrate['courses'][$data], 1));*/
         if (!isset($omigrate['courses'][$data])) {
-            error_log("Course not found in data_list array $data ");
+            error_log("Course not found in data_list array");
+            error_log(print_r($data, 1));
             exit;
         }
         return $omigrate['courses'][$data]['code'];
     }
     
+    function get_session_id($data, &$omigrate, $row_data) {
+        error_log(print_r($data, 1));
+        error_log(print_r($row_data, 1));
+        if (!isset($omigrate['sessions'][$data])) {
+            error_log(print_r($omigrate['sessions'], 1));
+            error_log("sessions not found in data_list array ");
+            exit;
+        }
+        return $omigrate['sessions'][$data];        
+    }
+    
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
-        //error_log(print_r($omigrate['users_empleado'], 1));
-        //error_log($data);
+        //error_log(print_r($omigrate['users_empleado'], 1));        
         //error_log('get_real_teacher_id');
         //error_log($data);               
         if (empty($omigrate['users_empleado'][$data])) {
@@ -162,10 +174,14 @@ class MigrationCustom {
         return $user_info;
     }
     
-     public function add_course_to_session($data, &$data_list) {       
-        //error_log(print_r($data, 1));
+     public function add_user_to_session($data, &$data_list) {       
+        error_log(print_r($data, 1));
         //error_log(print_r($data_list['user'], 1));        
-        //$user_id = UserManager::add($data);        
+        //$user_id = UserManager::add($data);  
+         
+        //SessionManager::suscribe_users_to_session($data['session_id'], array($data['user_id']));
         return $user_id;
     }
+    
+    
 }

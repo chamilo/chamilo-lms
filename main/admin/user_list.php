@@ -388,38 +388,54 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 
 		$query_admin_table = '';
-		$keyword_admin = '';
+		        
+        $and_conditions = array();
 
 		if ($keyword_status == SESSIONADMIN) {
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
+			$and_conditions[] = ' a.user_id = u.user_id ';
 		}
 
-		$keyword_extra_value = '';
 		
         if (isset($_GET['keyword_extra_data'])) {
         	if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
             	$keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+                $and_conditions[] = " ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
 			}
 		}
 
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-
+		$sql .= $query_admin_table." WHERE ( ";
+        
+        if (!empty($keyword_firstname)) {
+            $and_conditions[] = "u.firstname LIKE '%".$keyword_firstname."%' "; 
+        }
+        if (!empty($keyword_lastname)) {
+            $and_conditions[] = "u.lastname LIKE '%".$keyword_lastname."%' ";
+        }
+        if (!empty($keyword_username)) {
+            $and_conditions[] = "u.username LIKE '%".$keyword_username."%'  ";
+        }
+        if (!empty($keyword_email)) {
+            $and_conditions[] = "u.email LIKE '%".$keyword_email."%' ";
+        }
+        if (!empty($keyword_officialcode)) {
+             $and_conditions[] = "u.official_code LIKE '%".$keyword_officialcode."%' ";
+        }
+        if (!empty($keyword_status)) {
+             $and_conditions[] = "u.status LIKE '".$keyword_status."' ";
+        }
+      
 		if ($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
+			$and_conditions[] =  "  u.active='1' ";
 		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
+			$and_conditions[] = "  u.active='0' ";
 		}
+        if (!empty($and_conditions)) {
+            $sql .= implode(' AND ', $and_conditions);
+        }
 		$sql .= " ) ";
 	}
 

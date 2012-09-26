@@ -55,7 +55,7 @@ $extra_params['autowidth'] = 'true';
 //Height auto 
 $extra_params['height'] = 'auto';
 
-$extra_params['rowList'] = array(10, 20 ,30);
+$extra_params['rowList'] = array(50, 100, 500, 1000);
 
 $result = SessionManager::get_session_columns();
 $columns = $result['columns'];
@@ -260,13 +260,7 @@ $renderer->setElementTemplate('{label} {element}', 'end_date_end');
            
 $options = CourseManager::get_course_list_of_user_as_course_admin(api_get_user_id());
 $form->addElement('select', 'course', get_lang('Course'), $options);
-
-
-//$session_field->add_elements($form);
-
 $form->addElement('button', 'submit', get_lang('Search'), array('id' => 'search_button'));
-
-//$form->display();
 
 echo Display::grid_html('sessions');
 Display::display_footer();

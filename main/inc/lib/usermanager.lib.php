@@ -28,8 +28,7 @@ class UserManager {
             $access_url_id = api_get_current_access_url_id();
         }
         
-        //Hosting verifications
-        
+        //Hosting verifications        
         $status = isset($params['status']) ? $params['status'] : STUDENT;
         
         if (api_get_setting('login_is_email') == 'true') {
@@ -49,14 +48,19 @@ class UserManager {
                 return api_set_failure('portal teachers limit reached');
             }
         }
+        
+        $params['email'] = api_valid_email($params['email']) ? $params['email'] : null;
                         
         if (isset($params['user_id'])) {            
             unset($params['user_id']);
-        }        
+        }
+        
         if (empty($params['username'])) {
             return api_set_failure('provide a username');
         }
         
+        $params['username'] = self::purify_username($params['username']);
+                
         // First check wether the login already exists
 		if (!self::is_username_available($params['username'])) {
             //Already added it            
@@ -111,8 +115,8 @@ class UserManager {
 			$user_id_manager = api_get_user_id();
 			$user_info = api_get_user_info($user_id);
 			event_system(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
-            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
-            return $user_id;      
+            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);            
+            return $user_info;      
         } else {
             return api_set_failure('error inserting in Database');
         }
@@ -981,7 +985,7 @@ class UserManager {
 		$sql = "SELECT * FROM $user_table WHERE username='".$username."'";
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
-			return Database::fetch_array($res);
+			return Database::fetch_array($res, 'ASSOC');
 		}
 		return false;
 	}

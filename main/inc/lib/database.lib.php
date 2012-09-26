@@ -1122,20 +1122,23 @@ class Database {
             return false;
         }
         $filtred_attributes = array();
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';
-            $result = self::query($sql);
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';            
+            $result = self::query($sql);            
             //error_log($sql);
             if ($show_query) {
-            	var_dump($sql);
+            	//var_dump($sql);
                 error_log($sql);
             }
-            return  self::get_last_insert_id();
+            if (!$result) {                
+                error_log("Error in query: $sql");                
+            }
+            return self::get_last_insert_id();
         }
         return false;
     }

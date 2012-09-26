@@ -19,9 +19,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$formSent=0;
-$errorMsg='';
-
 $interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
@@ -250,9 +247,9 @@ if (!empty($categories)) {
 }
 $form->addElement('select', 'session_category_id', get_lang('SessionCategory'), $select_categories, array('id' => 'session_category_id_name', 'class' => null));
 
-//Extra session fields
-$session_field = new SessionField();
-$extra = $session_field->add_elements($form, $id);
+//Extra fields
+$extra_field = new ExtraField('session');
+$extra = $extra_field->add_elements($form, $id);
 
 
 $htmlHeadXtra[] ='

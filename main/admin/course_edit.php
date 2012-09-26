@@ -192,8 +192,7 @@ $form->setDefaults($course);
 
 // Validate form
 if ($form->validate()) {
-	$course = $form->getSubmitValues();
-	$dbName = $_POST['dbName'];
+	$course = $form->getSubmitValues();	
 	$course_code = $course['code'];
 	$visual_code = $course['visual_code'];	
 	$visual_code = CourseManager::generate_course_code($visual_code);   
@@ -212,6 +211,12 @@ if ($form->validate()) {
         }
         $warn = substr($warn,0,-1);
     }
+    
+    $field_value = new ExtraFieldValue('course');
+    $params = $course;
+    $params['course_code'] = $course_code;    
+    $field_value->save_field_values($params); 
+    
     // an extra field
     $extras = array();
     foreach ($course as $key => $value) {

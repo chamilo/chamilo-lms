@@ -489,8 +489,8 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
         } else {
             $paged_questions = $_SESSION['paged_questions'];
         }
-        
-        $course_id = api_get_course_int_id();
+
+        $course_id = $survey_invitation['c_id'];
 
         if (key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {

@@ -61,6 +61,10 @@ define("DEFAULT_GROUP_CATEGORY", 2);
  * be used outside a session.
  */
 class GroupManager {
+    //CLASS CONSTANTS
+    const TOOL_NOT_AVAILABLE = 0;
+    const DEFAULT_GROUP_CATEGORY = 2;
+    const MEMBER_PER_GROUP_NO_LIMIT = 0;
 	//GROUP FUNCTIONS
 	private function __construct() {		
 	}

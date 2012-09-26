@@ -1697,8 +1697,9 @@ class CourseManager {
         $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
-
         $code = Database::escape_string($code);
+        
+        /*
         $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
         $res = Database::query($sql);
         if (Database::num_rows($res) == 0) {
@@ -1707,6 +1708,8 @@ class CourseManager {
         $this_course = Database::fetch_array($res);
 
         self::create_database_dump($code);
+        //@todo we don't use virtual courses anymore
+  
         if (!self::is_virtual_course_from_system_code($code)) {
             // If this is not a virtual course, look for virtual courses that depend on this one, if any
             $virtual_courses = self::get_virtual_courses_linked_to_real_course($code);
@@ -1779,7 +1782,7 @@ class CourseManager {
                 rename($course_dir, $archive_dir);
             }
         }
-
+*/
         // Unsubscribe all classes from the course
         $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
         Database::query($sql);

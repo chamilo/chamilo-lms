@@ -44,9 +44,9 @@ class ExtraFieldValue extends Model {
                 $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($field_variable);                
                 if ($extra_field_info) {                
                     $new_params = array(
-                        $this->handler_id    => $params[$this->handler_id],
-                        'field_id'      => $extra_field_info['id'],
-                        'field_value'   => $value
+                        $this->handler_id   => $params[$this->handler_id],
+                        'field_id'          => $extra_field_info['id'],
+                        'field_value'       => $value
                     );                    
                     self::save($new_params);
                 }

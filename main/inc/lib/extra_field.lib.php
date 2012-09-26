@@ -58,10 +58,10 @@ class ExtraField extends model {
     public function get_all($where_conditions = array()) {
         $options = Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'field_order ASC'));
         
-        $sesion_field_option = new SessionFieldOption();
+        $field_option = new ExtraFieldOption($this->type);
         if (!empty($options)) {
             foreach ($options as &$option) {                
-                $option['options'] = $sesion_field_option->get_field_options_by_field($option['id']);
+                $option['options'] = $field_option->get_field_options_by_field($option['id']);
             }
         }        
         return $options;
@@ -142,11 +142,11 @@ class ExtraField extends model {
         }
 		$extra_data = array();		
         $fields = self::get_all();        
-        $session_field_values = new ExtraFieldValue($this->type);		
+        $field_values = new ExtraFieldValue($this->type);		
 		
 		if (!empty($fields) > 0) {
 			foreach ($fields as $field) {
-                $field_value = $session_field_values->get_values_by_handler_and_field_id($item_id, $field['id']);                    
+                $field_value = $field_values->get_values_by_handler_and_field_id($item_id, $field['id']);                
                 if ($field_value) {
                     $field_value = $field_value['field_value'];                    
                     

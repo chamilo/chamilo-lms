@@ -34,23 +34,24 @@ class MigrationCustom {
     /**
      * Log data from the original users table
      */
-    public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-        //omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
-        $omigrate['users_alumno'][$row_data['uidIdPersona']] = $row_data;
-        //error_log(print_r($omigrate, 1));
-        //$omigrate['users']['extra'] = $row_data
+    public function log_original_user_unique_id($data, &$omigrate, $row_data) {                
+        $omigrate['users_alumno'][$row_data['uidIdPersona']] = $row_data;        
     }
     
-    public function log_original_persona_unique_id($data, &$omigrate, $row_data) {        
-        $omigrate['users_persona'][$data] = $row_data;
+    public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
+        if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
+            $omigrate['users_persona'][$row_data['uidIdPersona']][] = $omigrate['users_persona'][$row_data['uidIdPersona']];
+            $omigrate['users_persona'][$row_data['uidIdPersona']][] = $row_data;
+            //error_log(print_r($row_data, 1));
+            //error_log(print_r($omigrate['users_persona'][$row_data['uidIdPersona']], 1));            
+            error_log('WHAT??');
+        } else {
+            $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
+        }
     }
     
     public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
-        //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;        
-        $omigrate['users_empleado'][$data] = $row_data;
-        error_log(print_r($omigrate['users_empleado'][$data],1));      
-        //error_log(print_r($omigrate, 1));
-        //$omigrate['users']['extra'] = $row_data
+        $omigrate['users_empleado'][$row_data['uidIdPersona']] = $row_data;                
     }
 
     /**
@@ -77,9 +78,7 @@ class MigrationCustom {
     
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
         //error_log('get_real_teacher_id');
-        //error_log(print_r($data, 1));
-        //error_log(print_r($omigrate['users_empleado']), 1);
-        
+        //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));
         //error_log($data);
         error_log('get_real_teacher_id');
@@ -97,10 +96,62 @@ class MigrationCustom {
         
     }
     
-    public function create_user($data) {       
+    public function create_user($data, $omigrate) {       
+        //error_log(print_r($data, 1));  
+        
+        if (empty($data['uidIdPersona'])) {
+            error_log('User does not have a uidIdPersona');
+            error_log(print_r($data, 1));    
+            exit;
+        }
+        
+        if (isset($omigrate['users_persona'][$data['uidIdPersona']])) {
+            ///error_log('persona!');
+        }
+        
+        //Is a teacher
+        if (isset($omigrate['users_empleado'][$data['uidIdPersona']])) {
+            //error_log(print_r($omigrate['users_empleado'][$data['uidIdPersona']], 1));  
+            //error_log(print_r($data, 1));
+            error_log('teacher');
+            $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+            $data['status'] = COURSEMANAGER;                
+        }
+        
+        //Is a student
+        if (isset($omigrate['users_alumno'][$data['uidIdPersona']])) {
+            $uidIdPersona = $data['uidIdPersona'];            
+            $persona_info = $omigrate['users_alumno'][$uidIdPersona];
+            //error_log(print_r($omigrate['users_alumno'][$data['uidIdPersona']], 1));  
+            //error_log(print_r($data, 1));
+            //error_log(print_r($uidIdPersona, 1));
+            //error_log(print_r($persona_info, 1));
+            $data['username'] = strtolower($persona_info['vchCodal']);
+            $data['password'] = $persona_info['chrPasswordT'];
+            $data['status'] = STUDENT;
+            //error_log(print_r($data, 1));error_log('student');            
+        }
+        
+        if (empty($data['username'])) {
+            //Last chance to have a nice username
+            $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+        }
+                
+        if (empty($data['username'])) {
+            error_log('No Username provided');
+            error_log(print_r($data, 1));
+            exit;
+        }
+        
+        unset($data['uidIdPersona']);
+        
+        global $api_failureList;
+        $api_failureList = array();
         //error_log(print_r($data, 1));
-        //error_log(print_r($data_list['user'], 1));        
         $user_info = UserManager::add($data);        
+        if (isset($omigrate['users_empleado'][$data['uidIdPersona']])) {
+            
+        }
         return $user_info;
     }
     
@@ -110,5 +161,4 @@ class MigrationCustom {
         //$user_id = UserManager::add($data);        
         return $user_id;
     }
-
 }

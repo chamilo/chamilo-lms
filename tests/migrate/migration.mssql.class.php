@@ -31,7 +31,12 @@ class MigrationMSSQL extends Migration {
             $fields_sql = substr($fields_sql, 0, -2);
         }
         //In order to process X item of each table add TOP X
-        $sql = "SELECT TOP 2 $fields_sql FROM $table";
+        
+        $top = " TOP 1000 ";
+        if (in_array($table, array('Persona', 'Alumno', 'Empleado'))) {
+            $top = " TOP 10 ";            
+        }
+        $sql = "SELECT $top $fields_sql FROM $table";
         //remove
         error_log($sql);
         $this->rows_iterator = mssql_query($sql, $this->c);

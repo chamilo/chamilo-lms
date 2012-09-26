@@ -58,7 +58,7 @@ class MigrationCustom {
      * Log data from the original users table
      */
     public function log_original_course_unique_id($data, &$omigrate) {
-        $omigrate['courses'][$data] = 0;
+        $omigrate['courses'][$data] = 0; 
         return $data;
     }
 
@@ -73,6 +73,10 @@ class MigrationCustom {
         /*error_log('get_real_course_code');
         error_log(print_r($data,1));
         error_log(print_r($omigrate['courses'][$data], 1));*/
+        if (!isset($omigrate['courses'][$data])) {
+            error_log("Course not found in data_list array $data ");
+            exit;
+        }
         return $omigrate['courses'][$data]['code'];
     }
     
@@ -81,14 +85,17 @@ class MigrationCustom {
         //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));
         //error_log($data);
-        error_log('get_real_teacher_id');
-        if (empty($omigrate['users_empleado'][$data]['uidIdPersona'])) {            
+        //error_log('get_real_teacher_id');
+        //error_log($data);               
+        if (empty($omigrate['users_empleado'][$data])) {
+            //error_log('not set');
             return 1;
-        } else {
+        } else {            
             $persona_id = $omigrate['users_empleado'][$data]['uidIdPersona'];  
-            error_log(print_r($omigrate['users_persona'][$persona_id],1));            
-            return $omigrate['users_persona'][$persona_id]['user_id'];
-        }
+            if (!empty($persona_id)) {
+                return $omigrate['users_persona'][$persona_id]['user_id'];    
+            }
+        }        
         return $omigrate['users_empleado'][$data]['user_id'];
     }
     
@@ -113,7 +120,7 @@ class MigrationCustom {
         if (isset($omigrate['users_empleado'][$data['uidIdPersona']])) {
             //error_log(print_r($omigrate['users_empleado'][$data['uidIdPersona']], 1));  
             //error_log(print_r($data, 1));
-            error_log('teacher');
+            //error_log('teacher');
             $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
             $data['status'] = COURSEMANAGER;                
         }

@@ -60,12 +60,12 @@ class UserManager {
         }
         
         $params['username'] = self::purify_username($params['username']);
-                
+        
         // First check wether the login already exists
 		if (!self::is_username_available($params['username'])) {
             //Already added it            
             if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
-                $user_info = self::get_user_info($params['username']);
+                $user_info = self::get_user_info_simple($params['username']);
                 return $user_info;
             } 
 			return api_set_failure('login-pass already taken');
@@ -502,8 +502,6 @@ class UserManager {
         if (empty($ids)) {
             return false;
         }
-        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-
         $ids = is_array($ids) ? $ids : func_get_args();
         if (!empty($ids)) {
             foreach ($ids as $id) {
@@ -986,6 +984,30 @@ class UserManager {
 		$res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			return Database::fetch_array($res, 'ASSOC');
+		}
+		return false;
+	}
+    
+    	/**
+	 * Get user information
+	 * @param 	string 	The username
+	 * @return array All user information as an associative array
+	 */
+	public static function get_user_info_simple($username) {
+        static $user_list = array();
+        //error_log($sql);		
+        if (isset($user_list[$username])) {
+            //error_log('loaded with static');
+            return $user_list[$username];
+        }        
+        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+		$username = Database::escape_string($username);
+        $sql = "SELECT user_id, firstname, lastname FROM $user_table WHERE username='".$username."'";
+        $res = Database::query($sql);
+		if (Database::num_rows($res) > 0) {
+			$return = Database::fetch_array($res, 'ASSOC');
+            $user_list[$username] = $return;
+            return $return;
 		}
 		return false;
 	}

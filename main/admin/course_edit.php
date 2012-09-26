@@ -168,19 +168,19 @@ $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_l
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 
-$list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
-//@todo this is wrong
-foreach ($list_course_extra_field as $extra_field) {
-	switch ($extra_field['field_type']) {		
-		case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
-			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
-			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
-			$field_display_text=$extra_field['field_display_text'];
-			//$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang('SpecialCourse'), $checked);
-			break;		
-	}
-}
+//Extra fields
+$extra_field = new ExtraField('course');
+$extra = $extra_field->add_elements($form, $course_code);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
+
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values

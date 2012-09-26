@@ -140,7 +140,7 @@ $extra_fields = $extra_field->get_all();
 
 if (!empty($extra_fields)) {
     echo Display::page_subheader(get_lang('ExtraFields'));
-    echo '<table class="data_table">';
+    echo '<table class="data_table">';    
     foreach ($extra_fields as $field) {
         if ($field['field_visible'] != '1') {
             continue;

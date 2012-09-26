@@ -606,6 +606,9 @@ if ($form->validate()) {
             $sql = rtrim($sql, ',');
         }        
     }
+    if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
+        $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
+    }
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
     Database::query($sql);
     

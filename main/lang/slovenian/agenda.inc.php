@@ -75,6 +75,7 @@ $AgendaSortChronologicallyDown = "Padajoče";
 $ItemForUserSelection = "Izbira uporabnikov";
 $IsNotiCalFormatFile = "Datoteka ni v iCal obliki";
 $RepeatEvent = "Ponovi dogodek";
+$SessionCalendar = "Koledar seje";
 $RepeatDate = "Ponovi datum";
 $EndDateMustBeMoreThanStartDate = "Končni datum mora biti kasnejši od začetnega datuma";
 $SelectACourse = "Izberi tečaj";

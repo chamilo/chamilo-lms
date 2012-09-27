@@ -977,6 +977,7 @@ $NumberOfCoursesPrivate = "Número de cursos privados";
 $NumberOfCoursesClosed = "Número de cursos cerrados";
 $NumberOfCoursesTotal = "Número total de cursos";
 $NumberOfUsersActive = "Número de usuarios activos";
+$ReturnToCourseList = "Regreso a lista de cursos";
 $dateFormatShortNumberNoYear = "%d/%m";
 $CourseTutor = "Tutor de curso";
 $StudentInSessionCourse = "Estudiante en un curso de sesión";

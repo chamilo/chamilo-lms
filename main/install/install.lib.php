@@ -1516,7 +1516,7 @@ function get_contact_registration_form() {
     </div>
     <div class="control-group">
             <label class="control-label"><span class="form_required">*</span>'.get_lang('Email').'</label>
-            <div class="controls"><input id="person_name" type="text" name="person_email" size="30" /></div>
+            <div class="controls"><input id="person_email" type="text" name="person_email" size="30" /></div>
     </div>
     <div class="control-group">
             <label class="control-label"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>

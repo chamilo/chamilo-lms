@@ -41,20 +41,102 @@
 </ul>
 <h1>Chamilo&nbsp;Changelog</h1>
 <p>This is our technical changelog, aimed at providing you a list of the new features, small changes and bug fixes as well as the security issues, style changes and known issues that remain present. This changelog is provided version by version, latest versions first and helps you locate when a specific feature has been made available in Chamilo. If you would like a shorter list of features or a list of overall features, please check our website: <a href="http://www.chamilo.org/">http://www.chamilo.org/</a></p>
-<p><i>Note: most #xyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a></i></p>
+<p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a></i></p>
 <p>&nbsp;</p>
 
 
-<h1>Chamilo 1.10.0 - ???, 31st of ???, 2012</h1>
+<h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.10.0 is a major stable version with loads of added features.</p>
+<p>Chamilo 1.9.2 is a minor stable version with a series of improvements on top of 1.9.0.</p>
 
 <h3>Release name</h3>
-<p><a href="http://fr.wikipedia.org/wiki/Vog%C3%BC%C3%A9">Vogüé</a> is a small town in the French region of Rhône-Alpes, and one of the most beautiful villages of France. It features a 12th century, a generally very pretty landscape and is one of the few remote towns in current growth. One of our new development team members chose this familiar town because it inspires stability and diversity.</p>
+<p><a href="http://en.wikipedia.org/wiki/Hanga_Roa">Hanga Roa</a> is the capital city of Rapa Nui, the Easter Island. The entire Rapa Nui culture is filled with mystery and assumptions about where and how the first Rapa Nui people came to be on the island, but it is accepted by many that the main strain came from Polynesia a long time ago. The population there is around 3,300 but warmly welcomes tons of tourists every year, a bit in the image of the small team of Chamilo now serving more than 1.4M users worldwide, with a welcoming 1.9.2 version that will help you get more time to yourself...</p>
 
 <h3>New Features</h3>
+<ul>
+  <li>Course home: Allow for the publication of direct links to learning paths in the sessions (#3367)</li>
+  <li>Global: We now show th teacher's professional "card" when clicking on the teacher's name in the courses list (#3388)</li>
+  <li>Global: Added option to send the student to the courses catalog the first time he logs in (#3898)</li>
+  <li>Exercises: Added "success score" to exercises (#4541)</li>
+  <li>Exercises: Added automated distribution of score in specific question type (#4656)</li>
+  <li>Attendances: Added PDF + print button to attendance sheets (#5069)</li>
+  <li>Assignments: Users can now see if they have already uploaded their assignment (#5145)</li>
+  <li>Global: Added a course-specific registration link to increase speed of auto-registration (#5299)</li>
+  <li>Exercises: Success score for an exercise can now be set manually to allow for specific percentages (#5330)</li>
+  <li>Documents: The images and audio integrated apps now check available space left on disk before saving (#5346)</li>
+  <li>Sessions: Added an "official" start and end date to the sessions</li>
+  <li>Forum: Forum categories, fora and forum threads (but not forum posts to avoid inconsistencies in users property) can now be copied from one course to another (#5462)</li>
+  <li>Users: Added the possibility for teachers to add students to their course through users classes (#5514)</li>
+</ul>
 <h3>Improvements</h3>
+<ul>
+  <li>Exercises: Exercises and questions can now be copied inside or between courses, and be better included into learning paths (#651)</li>
+  <li>Global: Improved WYSIWYG behaviour, now more natural (#1780)</li>
+  <li>Interface: The action icons bar was improved (#2810)</li>
+  <li>Social network: Added an icon to show whether users are on- or offline (#3316)</li>
+  <li>Exercises: Improved interface in true/false/don't know question type (#3370)</li>
+  <li>Learning paths: Fixed a series of small issues with the learning paths edition page (#3533)</li>
+  <li>Global: Improvements on various timezone issues (#3747)</li>
+  <li>Exercises: The test description now only shows on the test start page (#3845)</li>
+  <li>Global: Fixed CSS positionning problem (#4075)</li>
+  <li>Learning paths: Improved error message for too large SCORM files (#4142)</li>
+  <li>Attendances: Reduced steps to create attendance sheets (#4484)</li>
+  <li>Forum: E-mail notifications can now be sent daily only (#4761)</li>
+  <li>Plugins: Improved the BBB 0.8 plugin (#4840 &amp; #5312)</li>
+  <li>Global: Enabled custom pages feature, which allows the system to server specific pages after login to specific user roles (#4850)</li>
+  <li>Survey: Added surveys in item_property tracking (#4923)</li>
+  <li>Global: Disable auto-capitalize when using mobile phones (#5116)</li>
+  <li>Agenda: Improved the personal agenda items system (#5201)</li>
+  <li>Global: Added a link for portal admins to hide the "Popular courses" block (#5268)</li>
+  <li>Social network: Deleting private messages now requires confirmation (#5269)</li>
+  <li>Global: Invalid address errors are now saved to the default error log (#5306)</li>
+  <li>Exercises: Exercises with a pass % of 0 disable the pass % feature (#5383)</li>
+  <li>Exercises: Small aesthetics improvements for true/false/dunno answer type (#5385)</li>
+  <li>Users: Added the registration date in the users lists tables (#5473)</li>
+  <li>Course copy: Improved error message on missing file (#5515)</li>
+  <li>Exercises: Added grey icon for audio questions when exercise is bloqued (#5516)</li>
+</ul>
 <h3>Debugging</h3>
+<ul>
+  <li>Global: Fixed a bug with XLS export encoding (#1831)</li>
+  <li>Documents: Fixed bug editing jpg/png with SVGedit (#3261)</li>
+  <li>Exercises: Fixed missing reports on some questions in test feedback (#3347)</li>
+  <li>Learning paths: Fixed tab-switching issue in LP edition (#3352)</li>
+  <li>Assignments: Fixed issue by which students could send assignments passed the end date (#3918)</li>
+  <li>Global: Fixed issue by which password reminder stopped working in some cases (#4032)</li>
+  <li>Global: Fixed bug by which users lost their sessions when the Wiris plugin was enabled (#4468)</li>
+  <li>Assessments: Fixed issue with the QR code generation in certificates (#5015)</li>
+  <li>Plugins: Fixed issue when installing the BBB plugin when using subdirectories (#5103)</li>
+  <li>Learning paths: Fixed the learning path tracking reset buttong (#5239)</li>
+  <li>Learning paths: Fixed issue with HotPotatoes files paths being shown (#5253)</li>
+  <li>Learning paths: Fixed blanck page when editing a document without title (#5265)</li>
+  <li>Learning paths: Fixed issues in learning paths export (#5286)</li>
+  <li>Social network: Fixed chat box remaining enabled when social network is not (#5295)</li>
+  <li>Exercises: Fixed issue with exercise's start time not being saved (#5301)</li>
+  <li>Migration: Fixed courses disappearing when migrating from 1.8 to 1.9 (#5302)</li>
+  <li>Global: Fixed font preview being different from the final result (#5303)</li>
+  <li>Exercises: Fixed very rare case where the expiration of time when reviewing questions with delete results (#5304)</li>
+  <li>Exercises: Fixed display bug in modal results window (#5311)</li>
+  <li>Social network: Fixed wrong extra text field in reply form in social messaging (#5327)</li>
+  <li>Learning paths: Fixed a fatal error in learner reporting (#5347)</li>
+  <li>Agenda: Fixed wrong month in calendar event popup (#5348)</li>
+  <li>Global: Fixed issue by which profile fields of type select did not unfold (#5351)</li>
+  <li>Sessions: Fixed issue by which access delays did not influence the visibility in courses list (#5353)</li>
+  <li>Global: Fixed online e-mail editor setting (#5356)</li>
+  <li>Exercises: Fixed but in exercises scenario (#5375)</li>
+  <li>Exercixes: Fixed issue with open questions (#5434)</li>
+  <li>Global: Fixed issue when enabling openid without the right config in the right place (#5463)</li>
+  <li>Assignments: Fixed SQL error when adding an assignment (#5484)</li>
+  <li>Global: Fixed FCKEditor error in assessments model creation (#5490)</li>
+  <li>Global: Fixed courses backup (broken by the implementation of forum backup) (#5499)</li>
+  <li>Assessments: Qualification's icon did not appear on tasks (#5517)</li>
+  <li>Exercises: Fixed issue with reviewed question and 0 score (#5517)</li>
+  <li>Global: Fixed missing student view button (#5528)</li>
+  <li>Survey: Fixed issue sending survey invitations by e-mail (#5529)</li>
+  <li>Admin: Fixed name clash between home-made function http_request() and a pre-defined http_request() function (#5531)</li>
+  <li>Users: Problem accessing the course groups (#5537)</li>
+  <li>Social network: An user could not modify its own official code, even if configured to be possible (#5538)</li>
+</ul>
 
 
 <h1>Chamilo 1.9.0 - Vogüé, 31st of July, 2012</h1>

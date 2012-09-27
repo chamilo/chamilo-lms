@@ -12,6 +12,10 @@ require_once 'fileManage.lib.php';
 require_once 'fileUpload.lib.php';
 require_once 'document.lib.php';
 
+//define ("TOOL_NOT_AVAILABLE", "0");
+//define ("TOOL_PUBLIC", "1");
+//define ("TOOL_PRIVATE", "2");
+
 /**
  * infinite
  */
@@ -24,15 +28,6 @@ define("MEMBER_PER_GROUP_NO_LIMIT", "0");
  * No limit on the number of groups per user
  */
 define("GROUP_PER_MEMBER_NO_LIMIT", "0");
-/**
- * The tools of a group can have 3 states
- * - not available
- * - public
- * - private
- */
-define("TOOL_NOT_AVAILABLE", "0");
-define("TOOL_PUBLIC", "1");
-define("TOOL_PRIVATE", "2");
 /**
  * Constants for the available group tools
  */
@@ -62,9 +57,20 @@ define("DEFAULT_GROUP_CATEGORY", 2);
  */
 class GroupManager {
     //CLASS CONSTANTS
+    /**
+     * The tools of a group can have 3 states
+     * - not available
+     * - public
+     * - private
+     */
     const TOOL_NOT_AVAILABLE = 0;
+    const TOOL_PUBLIC = 1;
+    const TOOL_PRIVATE = 2;
+    const VIRTUAL_COURSE_CATEGORY = 1;
     const DEFAULT_GROUP_CATEGORY = 2;
     const MEMBER_PER_GROUP_NO_LIMIT = 0;
+
+    
 	//GROUP FUNCTIONS
 	private function __construct() {		
 	}

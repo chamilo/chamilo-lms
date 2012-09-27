@@ -1002,7 +1002,7 @@ class UserManager {
         }        
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
 		$username = Database::escape_string($username);
-        $sql = "SELECT user_id, firstname, lastname FROM $user_table WHERE username='".$username."'";
+        $sql = "SELECT user_id, username, firstname, lastname FROM $user_table WHERE username='".$username."'";
         $res = Database::query($sql);
 		if (Database::num_rows($res) > 0) {
 			$return = Database::fetch_array($res, 'ASSOC');

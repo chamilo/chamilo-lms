@@ -910,8 +910,9 @@ class IndexManager {
 
                         // Courses inside the current session.
                         $date_session_start = $session['date_start'];
-                        $days_access_before_beginning  = $session['nb_days_access_before_beginning'] * 24 * 3600;
-
+                        $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
+                        $days_access_after_end  = $session['nb_days_access_after_end'];
+                        $date_session_end = $session['date_end'];
                         $session_now = time();
                         $html_courses_session = '';
                         $count_courses_session = 0;
@@ -919,14 +920,19 @@ class IndexManager {
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
+                            $dif_time_after = 0;
                             if ($date_session_start != '0000-00-00') {
                                 if ($is_coach_course) {
-                                    $allowed_time = api_strtotime($date_session_start) - $days_access_before_beginning;
+                                    $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
+                                    if ($session_now > $date_session_end) {
+                                        $dif_time_after = $session_now - api_strtotime($date_session_end);
+                                        $dif_time_after = round($dif_time_after/86400);
+                                    }
                                 } else {
                                     $allowed_time = api_strtotime($date_session_start);
                                 }
                             }
-                            if ($session_now > $allowed_time) {
+                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
                                 //read only and accesible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                     $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);									
@@ -981,20 +987,26 @@ class IndexManager {
                         }
                         $date_session_start             = $session['date_start'];
                         //api_get_session_visibility($session_id);
-                        $days_access_before_beginning   = $session['nb_days_access_before_beginning'] * 24 * 3600;
+                        $days_access_before_beginning   = $session['nb_days_access_before_beginning'];
+                        $days_access_after_end  = $session['nb_days_access_after_end'];
+                        $date_session_end = $session['date_end'];
                         $session_now = time();
                         $html_courses_session = '';
                         $count = 0;
 
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
-                            
+                            $dif_time_after = 0;
                             if ($is_coach_course) {
-                                $allowed_time = api_strtotime($date_session_start) - $days_access_before_beginning;
+                                $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
+                                if ($session_now > $date_session_end) {
+                                        $dif_time_after = $session_now - api_strtotime($date_session_end);
+                                        $dif_time_after = round($dif_time_after/86400);
+                                }
                             } else {
                                 $allowed_time = api_strtotime($date_session_start);
                             }
-                            if ($session_now > $allowed_time) {
+                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                     $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item');
                                     $html_courses_session .= $c[1];

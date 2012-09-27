@@ -123,7 +123,7 @@ class Migration {
                     //error_log('$selected_fields: ' . print_r($selected_fields, 1));
                     
                     //Adding options
-                    if (!empty($options)) {                    
+                    if (!empty($options)) {       
                         $extra_field_option_obj = new ExtraFieldOption($table['dest_table']);
                         $this->select_all($options['orig_table'], $selected_fields);                        
                         $num_rows = $this->num_rows();
@@ -149,11 +149,6 @@ class Migration {
                 }
             }
             
-            if ($table['orig_table'] == 'ProgramaAcademico') {
-                 //error_log(print_r($extra_fields, 1));              
-                 //exit;
-            }            
-            
             // Process the migration of fields from the given table
             $sql_select_fields = self::prepare_field_match($table);
             $this->select_all($table['orig_table'], $sql_select_fields, $table);
@@ -177,15 +172,14 @@ class Migration {
                     }
                     $item++;
                 }                
-                error_log('Finished processing table ' . $table['orig_table']."\n\n");
+                error_log('Finished processing table ' . $table['orig_table']." \n\n");
             } else {
                 error_log('No records found');
             }
             
-            //Stop here
-            if ($table['orig_table'] == 'Matricula')  {
-                //error_log(print_r($this->data_list['sessions'], 1));
-                exit;
+            //Stop here (only for tests)
+            if ($table['orig_table'] == 'ProgramaAcademico')  {
+                exit;          
             }
         }
     }
@@ -209,7 +203,7 @@ class Migration {
         return $sql_select_fields;     
     }
     
-    function execute_field_match($table, $row, $extra_fields) {
+    function execute_field_match($table, $row, $extra_fields) {        
         //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
@@ -227,6 +221,14 @@ class Migration {
             if ($id_field == 0) {
                 $first_field = $details['dest'];
             }
+            
+            if (isset($details['orig'])) {
+                $field_exploded = explode('.', $details['orig']);
+                if (isset($field_exploded[1])) {
+                    $details['orig'] = $field_exploded[1];
+                }
+            }
+            
             // process the fields one by one
             if ($details['func'] == 'none' || empty($details['func'])) {
                 $dest_data = $row[$details['orig']];
@@ -248,9 +250,7 @@ class Migration {
                 if (isset($extra_field['options'])) {
                     $options = $extra_field['options'];
                     $field_type = $extra_field['field_type'];
-                    //error_log(print_r($options, 1));
-                    //error_log(print_r($dest_row, 1));
-                    
+                                        
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $key => $value) {
@@ -259,9 +259,7 @@ class Migration {
                                     $value = $option['option_display_text'];                                    
                                     if ($field_type == Extrafield::FIELD_TYPE_SELECT) {
                                         $value = $option['option_display_text'];    
-                                    }
-                                    //error_log('asi -> ');
-                                    //error_log(print_r($option, 1));
+                                    }                                    
                                     $params = array(                
                                         'field_id'      => $option['field_id'],
                                         'field_value'   => $value,
@@ -277,44 +275,54 @@ class Migration {
                         'field_value'   => $dest_row[$details['dest']],
                     );
                 }
-  //              error_log('adding $extra_fields_to_insert');
-//                error_log(print_r($params, 1));
                 if (!empty($params)) {
                     $extra_fields_to_insert[] = $params;                
                 }
                 unset($dest_row[$details['dest']]);
             }
         }
-        
+                
         if (!empty($table['dest_func'])) {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
-            $dest_row['return_item_if_already_exists'] = true;            
+            $dest_row['return_item_if_already_exists'] = true;
+            
             $item_result = call_user_func_array($table['dest_func'], array($dest_row, $this->data_list));
             
-            error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
-            
+            if ($table['show_in_error_log'] == false) {
+                
+            } else {
+                error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
+            }
+            //After the function was executed fill the $this->data_list array
             switch ($table['dest_table']) {
                 case 'course':
                     //Saving courses in array
-                    $this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;
+                    if ($item_result) {                        
+                        $this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
+                    } else {
+                        error_log('Course Not FOUND');                        
+                        error_log(print_r($item_result, 1));
+                        exit;
+                    }
                     $handler_id = $item_result['code'];                  
                     break;
                 case 'user':
                     if (!empty($item_result)) {                        
                         $handler_id = $item_result['user_id'];
                         //error_log($dest_row['email'].' '.$dest_row['uidIdPersona']);
-                        if (isset($this->data_list['users_persona'][$dest_row['uidIdPersona']])) {
-                            $this->data_list['users_persona'][$dest_row['uidIdPersona']]['extra'] = $item_result;
-                            //error_log(print_r($this->data_list['users_persona'][$dest_row['uidIdPersona']],1));                            
-                        }                        
+                        if (isset($dest_row['uidIdAlumno'])) {
+                            $this->data_list['users_alumno'][$dest_row['uidIdAlumno']]['extra'] = $item_result;
+                        }
+                        if (isset($dest_row['uidIdEmpleado'])) {
+                            //print_r($dest_row['uidIdEmpleado']);exit;                           
+                            $this->data_list['users_empleado'][$dest_row['uidIdEmpleado']]['extra'] = $item_result;
+                        }                                          
                     } else {
                         global $api_failureList;
                         error_log(print_r($api_failureList, 1));
                         //error_log("User can't be generated");
                     }
-                    
-                    //error_log('lols');
-                    //error_log(print_r($dest_row, 1));                    
+                    //error_log(print_r($dest_row, 1));
                     //error_log(print_r($this->data_list['users_persona'][$dest_row['uidIdPersona']],1));
                     //error_log(print_r($item_result, 1));
                     if (!empty($dest_row) && $table['orig_table'] == 'Persona' && !empty($dest_row['username'])) {
@@ -326,13 +334,11 @@ class Migration {
                     $handler_id = $item_result['session_id'];
                     break;
             }
-            //error_log('-->');
-            //error_log(print_r($extra_fields_to_insert, 1));
+            
+            //Saving extra fields of the element
             if (!empty($extra_fields_to_insert)) {
-                foreach ($extra_fields_to_insert as $params) {
-                    //error_log($extra_field_value_obj->handler_id);
-                    $params[$extra_field_value_obj->handler_id] =  $handler_id;                         
-                    //error_log('$extra_field_value_obj params: ' . print_r($params, 1));
+                foreach ($extra_fields_to_insert as $params) {                    
+                    $params[$extra_field_value_obj->handler_id] =  $handler_id;                                             
                     $extra_field_value_obj->save($params);    
                 }
             }

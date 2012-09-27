@@ -33,18 +33,20 @@ class MigrationMSSQL extends Migration {
         //In order to process X item of each table add TOP X
         
         $top = " TOP 1000 ";
-        if (in_array($table, array('Persona', 'Alumno', 'Empleado'))) {
-            $top = " TOP 100 ";            
+        if (in_array($table, array('Empleado', 'Alumno'))) {
+            $top = " TOP 5000 ";            
         }
         if ($table == 'ProgramaAcademico') {
             $top = "  TOP 1000 ";    
         }
-        
+       //$top = null;
+        //$top = " TOP 2500 ";  
         $extra = null;
         if (isset($options) && !empty($options['inner_join'])) {
-            $extra = ' INNER JOIN '.$options['inner_join'].' ON '.$options['on'];
+            $extra = ' '.$options['alias_orig_table'].' INNER JOIN '.$options['inner_join'].' '.$options['alias_join_table'].' ON '.$options['on'];
         }
-        $sql = "SELECT $top $fields_sql FROM $table $extra ";
+        $order = isset($options['order']) ? $options['order'] : null;
+        $sql = "SELECT $top $fields_sql FROM $table $extra $order";
         if (!empty($extra)) {
             error_log(print_r($options,1));
             error_log($sql);

@@ -83,6 +83,7 @@ class CourseManager {
      */
     static function create_course($params) {
         global $_configuration;
+        
         // Check portal limits
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
@@ -137,6 +138,8 @@ class CourseManager {
                     return $course_info;
                 }
             } else {
+                //error_log('Course already exists with params: '.$params['code']);
+                //error_log(print_r($params, 1));
                 //Course already exists
                 if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
                     return $course_info;
@@ -4809,6 +4812,7 @@ class CourseManager {
                         unsubscribe     = '".intval($unsubscribe) . "',
                         visual_code     = '".Database :: escape_string($visual_code) . "'";
             Database::query($sql);
+            //error_log($sql);
 
             $course_id  = Database::get_last_insert_id();
 

@@ -28,14 +28,25 @@ class MigrationCustom {
      * @return string SQL select string to include in the final select
      */
     public function sql_alter_unhash_50($field) {
-        return "cast( $field  as varchar(50)) as $field ";
+        $as_field = explode('.', $field);     
+        if (isset($as_field[1])) {
+            $as_field = $as_field[1];
+        } else {
+            $as_field = $field;
+        }
+        return " cast( $field  as varchar(50)) as $as_field ";
     }
-
+ 
     /**
      * Log data from the original users table
      */
-    public function log_original_user_unique_id($data, &$omigrate, $row_data) {                
-        $omigrate['users_alumno'][$row_data['uidIdPersona']] = $row_data;        
+    public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
+        $omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row_data;
+        return $data;
+    }
+    
+    public function clean_utf8($value) {
+        return utf8_encode($value);        
     }
     
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
@@ -48,10 +59,12 @@ class MigrationCustom {
         } else {
             $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
         }
+        return $data;
     }
     
     public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
-        $omigrate['users_empleado'][$row_data['uidIdPersona']] = $row_data;                
+        $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row_data;
+        return $row_data['uidIdEmpleado'];               
     }
 
     /**
@@ -110,27 +123,28 @@ class MigrationCustom {
     }
     
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
+        $default_teacher_id = 1;
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));        
         //error_log('get_real_teacher_id');
-        //error_log($data);               
-        if (empty($omigrate['users_empleado'][$data])) {
-            //error_log('not set');
-            return 1;
-        } else {            
-            $persona_id = $omigrate['users_empleado'][$data]['uidIdPersona'];  
-            if (!empty($persona_id)) {
-                return $omigrate['users_persona'][$persona_id]['user_id'];    
-            }
-        }        
-        return $omigrate['users_empleado'][$data]['user_id'];
-    }
-    
-    public function store_user_data($data = array()) {
+        //error_log($data);             
+        if (empty($data)) {
+            error_log('No teacher provided');
+            return $default_teacher_id;
+        }
         
+        if (!isset($omigrate['users_empleado'][$data])) {
+            error_log('Teacher not found big problem!');    
+            echo $data;
+            print_r($omigrate['users_empleado'][$data]);
+            //echo $data;exit;
+            return $default_teacher_id;            
+        } else {
+            return isset($omigrate['users_empleado'][$data]['extra']) ? $omigrate['users_empleado'][$data]['extra']['user_id'] : $default_teacher_id;        
+        }        
     }
-    
+     
     public function create_user($data, $omigrate) {       
         //error_log(print_r($data, 1));  
         
@@ -139,37 +153,66 @@ class MigrationCustom {
             error_log(print_r($data, 1));    
             exit;
         }
-        
-        if (isset($omigrate['users_persona'][$data['uidIdPersona']])) {
-            ///error_log('persona!');
-        }
-        
+            
         //Is a teacher
-        if (isset($omigrate['users_empleado'][$data['uidIdPersona']])) {
+        if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {
             //error_log(print_r($omigrate['users_empleado'][$data['uidIdPersona']], 1));  
             //error_log(print_r($data, 1));
             //error_log('teacher');
-            $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+            //$data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);        
             $data['status'] = COURSEMANAGER;                
         }
         
         //Is a student
-        if (isset($omigrate['users_alumno'][$data['uidIdPersona']])) {
-            $uidIdPersona = $data['uidIdPersona'];            
-            $persona_info = $omigrate['users_alumno'][$uidIdPersona];
-            //error_log(print_r($omigrate['users_alumno'][$data['uidIdPersona']], 1));  
-            //error_log(print_r($data, 1));
-            //error_log(print_r($uidIdPersona, 1));
-            //error_log(print_r($persona_info, 1));
-            $data['username'] = strtolower($persona_info['vchCodal']);
-            $data['password'] = $persona_info['chrPasswordT'];
-            $data['status'] = STUDENT;
-            //error_log(print_r($data, 1));error_log('student');            
+        if (isset($omigrate['users_alumno'][$data['uidIdAlumno']])) {
+            $data['status'] = STUDENT;            
         }
         
-        if (empty($data['username'])) {
-            //Last chance to have a nice username
-            $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+        if (!isset($data['username']) || empty($data['username'])) {
+            $data['firstname'] = (string) trim($data['firstname']); 
+            $data['lastname'] = (string) trim($data['lastname']); 
+            
+            if (empty($data['firstname']) && empty($data['lastname'])) {
+                $wanted_user_name = UserManager::purify_username($data['uidIdPersona']);
+                //$wanted_user_name = UserManager::create_unique_username(null, null);                
+            } else {
+                $wanted_user_name = UserManager::create_username($data['firstname'], $data['lastname']);
+            }
+            
+            $extra_data = UserManager::get_extra_user_data_by_value('uidIdPersona', $data['uidIdPersona']);
+            
+            if ($extra_data) {
+                $user_info = api_get_user_info($extra_data['user_id']);
+                error_log("User_already_added {$user_info['username']}");
+                return $user_info;
+            }
+            
+            if (UserManager::is_username_available($wanted_user_name)) {
+                $data['username'] = $wanted_user_name;
+                error_log("username available  $wanted_user_name");
+            } else {
+                //the user already exists?
+                $user_info = UserManager::get_user_info_simple($wanted_user_name);
+                $user_persona = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'uidIdPersona');
+                if (isset($user_persona['uidIdPersona']) && $data['uidIdPersona'] == $user_persona['uidIdPersona']) {
+                    error_log("Skip user already added: {$user_info['username']}");                    
+                    return $user_info;
+                } else {
+                    error_log("homonym $wanted_user_name - {$user_persona['uidIdPersona']} - {$user_info['username']}");       
+                    print_r($data);
+                     //The user has the same firstname and lastname but it has another uiIdPersona could by an homonym  
+                    $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);                    
+                }
+            }
+            
+            if (empty($data['username'])) {
+                //Last chance to have a nice username   
+                if (empty($data['firstname']) && empty($data['lastname'])) {
+                    $data['username'] = UserManager::create_unique_username(uniqid());
+                } else {
+                    $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+                }
+            }
         }
                 
         if (empty($data['username'])) {
@@ -179,26 +222,33 @@ class MigrationCustom {
         }
         
         unset($data['uidIdPersona']);
+        unset($data['uidIdAlumno']);
+        unset($data['uidIdEmpleado']);
         
         global $api_failureList;
         $api_failureList = array();
         //error_log(print_r($data, 1));
-        $user_info = UserManager::add($data);        
-        if (isset($omigrate['users_empleado'][$data['uidIdPersona']])) {
-            
+        $user_info = UserManager::add($data);
+        if (!$user_info) {
+            echo 'error';
         }
         return $user_info;
     }
     
-    public function add_user_to_session($data, &$data_list, $row_data) {
-         error_log('add_user_to_session');
-        error_log(print_r($data, 1));
-        error_log(print_r($row_data, 1));
-        exit;
-        //error_log(print_r($data_list['user'], 1));        
-        //$user_id = UserManager::add($data);  
-         
-        //SessionManager::suscribe_users_to_session($data['session_id'], array($data['user_id']));
-        return $user_id;
+    public function create_course($data) {
+        //Fixes wrong wanted codes
+        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
+        return CourseManager::create_course($data);
+    }
+    public function add_user_to_session($data, $data_list) {
+        error_log('add_user_to_session');
+        
+        if (!empty($data['session_id']) && !empty($data['user_id'])) {
+            SessionManager::suscribe_users_to_session($data['session_id'], array($data['user_id']));
+        } else {
+            error_log('missing data');
+            error_log(print_r($data, 1));                
+            exit;    
+        }        
     }
 }

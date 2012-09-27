@@ -309,7 +309,7 @@ class CourseBuilder {
         while ($obj = Database::fetch_object($db_result)) {            
             $forum_topic = new ForumTopic($obj);
             $this->course->add_resource($forum_topic);
-            $this->build_forum_posts($obj->thread_id, $obj->forum_id);
+            $this->build_forum_posts($obj->thread_id, $obj->forum_id, true);
         }
     }
     
@@ -317,7 +317,7 @@ class CourseBuilder {
      * Build the forum-posts
      * TODO: All tree structure of posts should be built, attachments for example.
      */
-    function build_forum_posts($thread_id = null, $forum_id = null) {
+    function build_forum_posts($thread_id = null, $forum_id = null, $only_first_post = false) {
         $table = Database :: get_course_table(TABLE_FORUM_POST);
         $course_id = api_get_course_int_id();        
         $sql = "SELECT * FROM $table WHERE c_id = $course_id ";
@@ -325,7 +325,8 @@ class CourseBuilder {
             $forum_id = intval($forum_id);
             $thread_id = intval($thread_id);
             $sql     .= " AND thread_id = $thread_id AND forum_id = $forum_id ";
-        }        
+        }
+        $sql .= " ORDER BY post_id ASC LIMIT 1";
         $db_result = Database::query($sql);
         while ($obj = Database::fetch_object($db_result)) {
             $forum_post = new ForumPost($obj);            

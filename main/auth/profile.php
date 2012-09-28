@@ -446,9 +446,8 @@ if ($form->validate()) {
     
     $changeemail = '';
     
-    //If user is sending the email to be changed (input is available and is not freeze )
-    if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {        
-
+    //If user sending the email to be changed (input available and not frozen )
+    if (api_get_setting('profile', 'email') == 'true') {        
         if ($allow_users_to_change_email_with_no_password) {            
             if (!check_user_email($user_data['email'])) {
                 $changeemail = $user_data['email'];
@@ -609,6 +608,7 @@ if ($form->validate()) {
     if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
+
     $sql .= " WHERE user_id  = '".api_get_user_id()."'";
     Database::query($sql);
     

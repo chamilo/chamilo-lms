@@ -55,7 +55,9 @@ class Display {
         self::$global_template->set_help($help);
         if (!empty(self::$preview_style)) {                        
             self::$global_template->preview_theme = self::$preview_style;
-            self::$global_template->set_theme();
+            self::$global_template->set_css_files();
+            self::$global_template->set_js_files();
+            
         }
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);

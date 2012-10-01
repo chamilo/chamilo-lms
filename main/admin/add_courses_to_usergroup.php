@@ -104,9 +104,9 @@ $elements_not_in = $elements_in= array();
 if (!empty($course_list)) {
     foreach($course_list as $item) {        
         if (in_array($item['id'], $course_list_in)) {            
-            $elements_in[$item['id']] = $item['title']." (".$item['code'].")";
+            $elements_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
         } else {
-            $elements_not_in[$item['id']] = $item['title']." (".$item['code'].")";
+            $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
         }
     }
 }
@@ -154,7 +154,7 @@ function search($needle,$type) {
             
             foreach ($list as $row ) {         
                 if (!in_array($row['id'], array_keys($elements_in))) {       
-                    $return .= '<option value="'.$row['id'].'">'.$row['title'].' ('.$row['code'].')</option>';
+                    $return .= '<option value="'.$row['id'].'">'.$row['title'].' ('.$row['visual_code'].')</option>';
                 }
             }
             $return .= '</select>';

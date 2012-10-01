@@ -45,6 +45,8 @@ ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS course_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
+ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
+
 -- Courses changes c_XXX
 
 ALTER TABLE c_lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);

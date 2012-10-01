@@ -468,7 +468,7 @@ DROP TABLE IF EXISTS session;
 CREATE TABLE IF NOT EXISTS session (
   id smallint unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
-  name char(50) NOT NULL default '',
+  name char(150) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
   nbr_users mediumint unsigned NOT NULL default '0',
   nbr_classes mediumint unsigned NOT NULL default '0',   

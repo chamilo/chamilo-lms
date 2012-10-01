@@ -551,7 +551,7 @@ function _api_get_timezone() {
     if ($use_users_timezone == 'true') {
         // Get the timezone based on user preference, if it exists        
         $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
-        if ($timezone_user['timezone'] != null) {
+        if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];
         }
     }

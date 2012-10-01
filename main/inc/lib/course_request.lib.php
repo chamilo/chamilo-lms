@@ -13,9 +13,6 @@
 /**
  * Code
  */
-define(COURSE_REQUEST_PENDING,  0);
-define(COURSE_REQUEST_ACCEPTED, 1);
-define(COURSE_REQUEST_REJECTED, 2);
 
 /**
  * Course request manager

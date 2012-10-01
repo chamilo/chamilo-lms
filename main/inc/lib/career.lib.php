@@ -8,11 +8,6 @@
 /**
  * Code
  */
-require_once 'promotion.lib.php';
-require_once 'fckeditor/fckeditor.php';
-
-define ('CAREER_STATUS_ACTIVE',  1);
-define ('CAREER_STATUS_INACTIVE',0);
 
 /**
  * @package chamilo.library

@@ -157,7 +157,6 @@ define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_ACTIVATED',                    'user_activated');
 define('LOG_USER_DEACTIVATED',                  'user_deactivated');
 
-
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -281,6 +280,34 @@ define('USER_RELATION_TYPE_GOODFRIEND',	4); // should be deprecated is useless
 define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',     6);
 define('USER_RELATION_TYPE_RRHH',		7);
+
+//Course request
+define('COURSE_REQUEST_PENDING',  0);
+define('COURSE_REQUEST_ACCEPTED', 1);
+define('COURSE_REQUEST_REJECTED', 2);
+
+define('SHORTCUTS_HORIZONTAL', 0);
+define('SHORTCUTS_VERTICAL', 1);
+
+//Career
+define ('CAREER_STATUS_ACTIVE',  1);
+define ('CAREER_STATUS_INACTIVE',0);
+
+//Display
+define('MAX_LENGTH_BREADCRUMB', 100);
+
+define('ICON_SIZE_TINY',    16);
+define('ICON_SIZE_SMALL',   22);
+define('ICON_SIZE_MEDIUM',  32);
+define('ICON_SIZE_LARGE',   48);
+define('ICON_SIZE_BIG',     64);
+define('ICON_SIZE_HUGE',    128);
+
+define('SHOW_TEXT_NEAR_ICONS', false);
+
+//Event
+define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
+define ('EVENT_EMAIL_TEMPLATE_INACTIVE',0);
 
 
 /**

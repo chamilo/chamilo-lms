@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-define('SHORTCUTS_HORIZONTAL', 0);
-define('SHORTCUTS_VERTICAL', 1);
-
 class CourseHome {
 
     /**

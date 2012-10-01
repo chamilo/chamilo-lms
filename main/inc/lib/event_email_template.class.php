@@ -8,8 +8,6 @@
 /**
  * Code
  */
-define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
-define ('EVENT_EMAIL_TEMPLATE_INACTIVE',0);
 
 /**
  * @package chamilo.library
@@ -25,8 +23,7 @@ class EventEmailTemplate extends Model {
     
     public function get_all($where_conditions = array()) {
         return Database::select('*',$this->table, array('where'=>$where_conditions,'order' =>'name ASC'));
-    }
-    
+    }    
     
     /**
      * Displays the title + grid

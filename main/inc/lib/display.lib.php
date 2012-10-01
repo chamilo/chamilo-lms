@@ -16,26 +16,6 @@
 /**
  * Code
  */
-define('MAX_LENGTH_BREADCRUMB', 100);
-
-define('ICON_SIZE_TINY',    16);
-define('ICON_SIZE_SMALL',   22);
-define('ICON_SIZE_MEDIUM',  32);
-define('ICON_SIZE_LARGE',   48);
-define('ICON_SIZE_BIG',     64);
-define('ICON_SIZE_HUGE',    128);
-
-define('SHOW_TEXT_NEAR_ICONS', false);
-
-        
-/**
- * Display class
- * contains several public functions dealing with the display of
- * table data, messages, help topics, ...
- *
- * @package chamilo.library
- */
-
 class Display {
     
     /* The main template*/

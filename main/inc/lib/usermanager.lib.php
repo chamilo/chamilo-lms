@@ -36,8 +36,7 @@ class UserManager {
 	/**
 	  * Creates a new user for the platform
 	  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
-	  * 		Roan Embrechts <roan_embrechts@yahoo.com>
-	  *
+	  * @author Roan Embrechts <roan_embrechts@yahoo.com>
 	  * @param	string	Firstname
 	  * @param	string	Lastname
 	  * @param	int   	Status (1 for course tutor, 5 for student, 6 for anonymous)
@@ -55,10 +54,9 @@ class UserManager {
  	  * @param 	array	Extra fields
  	  * @param	string	Encrypt method used if password is given encrypted. Set to an empty string by default
 	  * @return mixed   new user id - if the new user creation succeeds, false otherwise
-	  *
-	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
-	  * if it exists, $_user['user_id'] is the creator id. If a problem arises,
-	  * it stores the error message in global $api_failureList
+	  * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
+          * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
+          * @assert ('Pippin','Took',null,null,'jo','jo') === false
 	  */
 	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false) {
 		global $_user, $_configuration;

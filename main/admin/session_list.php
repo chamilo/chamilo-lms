@@ -55,7 +55,7 @@ $extra_params['autowidth'] = 'true';
 //Height auto 
 $extra_params['height'] = 'auto';
 
-$extra_params['rowList'] = array(50, 100, 500, 1000);
+$extra_params['rowList'] = array(50, 100, 250, 500);
 
 $result = SessionManager::get_session_columns();
 $columns = $result['columns'];

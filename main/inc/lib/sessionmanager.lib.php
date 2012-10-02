@@ -241,15 +241,22 @@ class SessionManager {
                 u.user_id,
                 $inject_extra_fields
                 c.title as course_title,
-                s.id";
+                s.id
+        ";
         
-
-		$query = "$select FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+        if (!empty($options['limit'])) {            
+            $where .= " LIMIT ".$options['limit'];
+        }
+        
+		$query = "$select 
+                FROM $tbl_session s 
+                LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
                 LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
                 LEFT JOIN $tbl_course c ON (src.course_code = c.code)
-				LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-				INNER JOIN $tbl_user u ON s.id_coach = u.user_id ".
+				LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
+				INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
                 $where;
+        
 		global $_configuration;
         
 		if ($_configuration['multiple_access_urls']) {
@@ -258,14 +265,16 @@ class SessionManager {
 			if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
 				$query = "$select
-				 FROM $tbl_session s LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                    FROM $tbl_session s 
+                    LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
 					LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-					INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-					INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                    LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
+					INNER JOIN $tbl_user u ON (s.id_coach = u.user_id)
+					INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id)
 				 $where";
 			}
 		}
-        
+     
 		$query .= ") AS session_table";
 
 		if (!empty($options['where'])) {
@@ -275,12 +284,6 @@ class SessionManager {
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }
-        
-        if (!empty($options['limit'])) {            
-            $query .= " LIMIT ".$options['limit'];
-        }
-        
-        ///var_dump($query);
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
@@ -2307,14 +2310,14 @@ class SessionManager {
         $date_operators = array('gt', 'ge', 'lt', 'le');
 
         $column_model = array (
-                        array('name'=>'name',                'index'=>'name',          'width'=>'120',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
+                        array('name'=>'name',                'index'=>'name',          'width'=>'200',  'align'=>'left', 'search' => 'true', 'searchoptions' => array('sopt' => $operators)),
                         array('name'=>'display_start_date',  'index'=>'display_start_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_today', 'sopt' => $date_operators)),
                         array('name'=>'display_end_date',    'index'=>'display_end_date', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('dataInit' => 'date_pick_one_month', 'sopt' => $date_operators)),
                         array('name'=>'category_name',       'index'=>'category_name', 'hidden' => 'true', 'width'=>'70',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true', 'sopt' => $operators)),
                         //array('name'=>'access_start_date',     'index'=>'access_start_date',    'width'=>'60',   'align'=>'left', 'search' => 'true',  'searchoptions' => array('searchhidden' =>'true')),
                         //array('name'=>'access_end_date',       'index'=>'access_end_date',      'width'=>'60',   'align'=>'left', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true')),
-                        array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),                        
-                        array('name'=>'session_active',         'index'=>'session_active', 'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
+                        array('name'=>'coach_name',           'index'=>'coach_name',     'width'=>'70',   'align'=>'left', 'search' => 'false', 'searchoptions' => array('sopt' => $operators)),                        
+                        array('name'=>'session_active',       'index'=>'session_active', 'width'=>'25',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
                               //for the bottom bar
                               'searchoptions' => array(                                            
                                                 'defaultValue'  => '1', 

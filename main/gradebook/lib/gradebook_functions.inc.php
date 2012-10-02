@@ -614,7 +614,7 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
 }
 
-function create_default_course_gradebook( $course_code = null, $gradebook_model_id = 0) {    
+function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0) {    
     if (api_is_allowed_to_edit(true, true)) {
         if (!isset($course_code) || empty($course_code)) {
             $course_code = api_get_course_id();    
@@ -647,11 +647,8 @@ function create_default_course_gradebook( $course_code = null, $gradebook_model_
             $cat->set_parent_id(0);
             $default_weight_setting = api_get_setting('gradebook_default_weight');
             $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
-            $cat->set_weight($default_weight);
-            
+            $cat->set_weight($default_weight);            
             $cat->set_grade_model_id($gradebook_model_id);
-            
-            
             $cat->set_visible(0);            
             $cat->add();            
             $category_id = $cat->get_id();

@@ -11,6 +11,8 @@
  * during the migration
  */
 class MigrationCustom {
+    
+    public $default_admin_id = 1;
 
     /**
      * The only required method is the 'none' method, which will not trigger
@@ -131,7 +133,7 @@ class MigrationCustom {
     }
     
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
-        $default_teacher_id = 1;
+        $default_teacher_id = $this->default_admin_id;
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));        
@@ -272,7 +274,16 @@ class MigrationCustom {
     
     public function create_course($data) {
         //Fixes wrong wanted codes
-        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);        
+        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);  
+        
+        //Creates an evaluation
+        $data['create_gradebook_evaluation'] = true;
+        $data['gradebook_params'] = array(
+            'name' => 'General',
+            'user_id' => $this->default_admin_id,
+            'weight' => '20',
+            'max' => '20'
+        );
         return CourseManager::create_course($data);
     }
     public function create_session($data) {

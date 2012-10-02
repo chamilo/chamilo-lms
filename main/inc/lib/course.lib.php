@@ -128,6 +128,24 @@ class CourseManager {
                     self::prepare_course_repository($course_info['directory'], $course_info['code']);                    
                     self::fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
                     
+                    //Create an empty gradebook
+                    if (isset($params['create_gradebook_evaluation']) && $params['create_gradebook_evaluation'] == true) {
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                        $category_id = create_default_course_gradebook($course_info['code']);                       
+                                                
+                        if ($category_id && isset($params['gradebook_params'])) {
+                            $eval = new Evaluation();
+                            $eval->set_name($params['gradebook_params']['name']);                        
+                            $eval->set_user_id($params['gradebook_params']['user_id']);
+                            $eval->set_course_code($course_info['code']);
+                            $eval->set_category_id($category_id);
+                            $eval->set_weight($params['gradebook_params']['weight']);	
+                            $eval->set_max($params['gradebook_params']['max']);
+                            $eval->set_visible(0);
+                            $eval->add();                            
+                        }
+                    }
+                    
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
@@ -135,6 +153,8 @@ class CourseManager {
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
+                    
+                    
                     return $course_info;
                 }
             } else {

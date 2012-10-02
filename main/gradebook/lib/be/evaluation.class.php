@@ -246,16 +246,12 @@ class Evaluation implements GradebookItem
 			if (empty($this->type)) {
 				$this->type = 'evaluation';	
 			}
-			$sql .= ", '".api_get_utc_datetime()."'";
-			
-			$sql .= ',\''.Database::escape_string($this->type).'\'';
-			
-			$sql .= ")";
-			
+			$sql .= ", '".api_get_utc_datetime()."'";			
+			$sql .= ',\''.Database::escape_string($this->type).'\'';			
+			$sql .= ")";			
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
-		}
-		else {
+		} else {
 			die('Error in Evaluation add: required field empty');
 		}
 	}

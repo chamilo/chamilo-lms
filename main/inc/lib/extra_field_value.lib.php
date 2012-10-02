@@ -125,7 +125,7 @@ class ExtraFieldValue extends Model {
     
     /**
      * 
-     * @param int handler_id (session_id, course_id, etc)
+     * @param int handler_id (It could be a session_id, course_id or user_id)
      * @param int $field_id
      * @param bool transform the result to a human readable strings
      * @return boolean
@@ -134,9 +134,57 @@ class ExtraFieldValue extends Model {
         $field_id = intval($field_id);
         $item_id = Database::escape_string($item_id);
         
-        $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
-                WHERE {$this->handler_id} = '$item_id'  AND field_id = '".$field_id."' ORDER BY id";
+        $sql = "SELECT s.*, field_type FROM {$this->table} s 
+                INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
+                WHERE {$this->handler_id} = '$item_id'  AND 
+                      field_id = '".$field_id."' 
+                ORDER BY id";        
+        $result = Database::query($sql);        
+        if (Database::num_rows($result)) {            
+            $result = Database::fetch_array($result, 'ASSOC'); 
+            if ($transform) {
+                if (!empty($result['field_value'])) {
+                    switch ($result['field_type']) {
+                        case ExtraField::FIELD_TYPE_DOUBLE_SELECT:
+                    
+                            $field_option = new ExtraFieldOption($this->type);
+                            $options = explode('::', $result['field_value']);    
+                            // only available for PHP 5.4  :( $result['field_value'] = $field_option->get($options[0])['id'].' -> ';
+                            $result = $field_option->get($options[0]);
+                            $result_second = $field_option->get($options[1]);
+                            if (!empty($result)) {
+                                $result['field_value'] = $result['option_display_text'].' -> ';
+                                $result['field_value'] .= $result_second['option_display_text'];
+                            }
+                            break;
+                        case ExtraField::FIELD_TYPE_SELECT:
+                            $field_option = new ExtraFieldOption($this->type);
+                            $extra_field_option_result = $field_option->get_field_option_by_field_and_option($result['field_id'], $result['field_value']);
+                            if (isset($extra_field_option_result[0])) {                                
+                                $result['field_value'] = $extra_field_option_result[0]['option_display_text']; 
+                            }                           
+                            break;
+                    }
+                }
+            }            
+            return $result;
+        } else {
+            return false;
+        }
+    }
+    
+    
+    
+    public function get_values_by_handler_and_field_variable($item_id, $field_variable, $transform = false) {
+        $field_id = intval($field_id);
+        $item_id = Database::escape_string($item_id);
+        $field_variable = Database::escape_string($field_variable);
         
+        $sql = "SELECT s.*, field_type FROM {$this->table} s 
+                INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
+                WHERE   {$this->handler_id} = '$item_id'  AND 
+                        field_variable = '".$field_variable."' 
+                ORDER BY id";        
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {            
             $result = Database::fetch_array($result, 'ASSOC'); 
@@ -158,17 +206,28 @@ class ExtraFieldValue extends Model {
             return $result;
         } else {
             return false;
-        }        
-        /*$field = Database::escape_string($field);
-        $sql_field = "SELECT id FROM {$this->table} WHERE field_variable = '$field'";
-		$result = Database::query($sql_field);
-        if (Database::num_rows($result)) {
-            $r_field = Database::fetch_row($result);
-            return $r_field;
+        }
+    }
+    
+    
+    public function get_item_id_from_field_variable_and_field_value($field_variable, $field_value, $transform = false) {        
+        $field_value = Database::escape_string($field_value);
+        $field_variable = Database::escape_string($field_variable);
+        
+        $sql = "SELECT {$this->handler_id} FROM {$this->table} s
+                INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
+                WHERE  field_value  = '$field_value'  AND 
+                       field_variable = '".$field_variable."' 
+                ";        
+        $result = Database::query($sql);        
+        if (Database::num_rows($result)) {            
+            $result = Database::fetch_array($result, 'ASSOC');            
+            return $result;
         } else {
             return false;
-        }*/
+        }
     }
+    
     
     /* Get all values by field id */
     public function get_values_by_field_id($field_id) {        

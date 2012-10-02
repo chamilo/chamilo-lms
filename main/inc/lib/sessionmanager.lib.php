@@ -169,7 +169,7 @@ class SessionManager {
         
 		$where = 'WHERE 1 = 1 ';
 		$user_id = api_get_user_id();
-        
+                
 		if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}
@@ -215,10 +215,9 @@ class SessionManager {
         $options_by_double = array();
         foreach ($double_fields as $double) {            
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
-            $options_by_double['extra_'.$double['field_variable']] = $my_options;
-            //$options_by_double['extra_'.$double['field_variable'].'_second'] = true;
+            $options_by_double['extra_'.$double['field_variable']] = $my_options;            
         }       
-        
+          
         //var_dump($options_by_double);
         //sc.name as category_name,         
 		$select = "SELECT * FROM (SELECT 
@@ -267,8 +266,9 @@ class SessionManager {
 				$query = "$select
                     FROM $tbl_session s 
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
-					LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                    LEFT JOIN $tbl_session_category sc ON s.session_category_id = sc.id
+					LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id)
+                    LEFT JOIN $tbl_course c ON (src.course_code = c.code)
+                    LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
 					INNER JOIN $tbl_user u ON (s.id_coach = u.user_id)
 					INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id)
 				 $where";
@@ -307,22 +307,21 @@ class SessionManager {
 				switch ($session['visibility']) {
 					case SESSION_VISIBLE_READ_ONLY: //1
 						$session['visibility'] =  get_lang('ReadOnly');
-					break;
+                        break;
 					case SESSION_VISIBLE:           //2
                     case SESSION_AVAILABLE:         //4
 						$session['visibility'] =  get_lang('Visible');
-					break;
+                        break;
 					case SESSION_INVISIBLE:         //3
 						$session['visibility'] =  api_ucfirst(get_lang('Invisible'));
-					break;
+                        break;
                 }
                 
                 //Cleaning double selects
                 //var_dump($session);
                 foreach ($session as $key => &$value) {                    
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
-                        $options = explode('::', $value);
-                        //var_dump($options);
+                        $options = explode('::', $value);                        
                     }
                     $original_key = $key;
                     
@@ -352,7 +351,7 @@ class SessionManager {
                 }
 			}
 		}		
-        //var_dump($formatted_sessions);
+        
 		return $formatted_sessions;
 	}    
     

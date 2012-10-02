@@ -13,10 +13,6 @@
  *
  *  @package chamilo.library
  */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
 
 /**
  * Database class definition

@@ -94,7 +94,7 @@ class MigrationCustom {
     public function get_real_course_code($data, &$omigrate, $row_data) {
         if (!isset($omigrate['courses'][$data])) {
             error_log("Course not found in data_list array");
-            error_log(print_r($data, 1));
+           //error_log(print_r($data, 1));
             //exit;
         }
         return $omigrate['courses'][$data]['code'];
@@ -284,15 +284,37 @@ class MigrationCustom {
         return $session_id;
     }
     
-    public function add_user_to_session($data, $data_list) {
-        error_log('add_user_to_session');
+    public function add_user_to_session($data) {
+        //error_log('add_user_to_session');
+        ///print_r($data);
+       
         
-        if (!empty($data['session_id']) && !empty($data['user_id'])) {
-            SessionManager::suscribe_users_to_session($data['session_id'], array($data['user_id']));
-        } else {
-            error_log('missing data');
-            error_log(print_r($data, 1));                
-            exit;    
-        }        
+        //Search  uidIdPrograma        
+        //Search  uidIdAlumno
+        
+        $extra_field_value = new ExtraFieldValue('session');
+        $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
+        
+        $session_id = null;
+        $user_id = null;
+        
+        if ($result && $result['session_id']) {
+            $session_id = $result['session_id'];   
+         
+        }
+        
+        $extra_field_value = new ExtraFieldValue('user');
+        $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
+        
+        if ($result && $result['user_id']) {               
+            $user_id = $result['user_id'];                   
+        }
+        
+        if (!empty($session_id) && !empty($user_id)){          
+            error_log('Called: add_user_to_session - Subscribing: session_id: '.$session_id. '  user_id: '.$user_id);
+            SessionManager::suscribe_users_to_session($session_id, array($user_id));       
+        } else {            
+            //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].' - No uidIdPersona: '.$data['uidIdPersona']);            
+        }     
     }
 }

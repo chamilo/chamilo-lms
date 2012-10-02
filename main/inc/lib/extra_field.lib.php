@@ -1,6 +1,6 @@
 <?php
 
-class ExtraField extends model {
+class ExtraField extends Model {
     public $columns = array('id', 'field_type', 'field_variable', 'field_display_text', 'field_default_value', 'field_order', 'field_visible', 'field_changeable', 'field_filter', 'tms');   
     
     CONST FIELD_TYPE_TEXT =                    1;

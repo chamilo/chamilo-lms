@@ -108,7 +108,7 @@ class Migration {
                 $build_only = true;
             }
             
-            //Create extra fields
+            //Creating extra fields
             if (isset($table['extra_fields']) && in_array($table['dest_table'], array('course', 'user', 'session'))) {
                 error_log('Inserting (if exists) extra fields for : ' . $table['dest_table']." \n");
                 
@@ -166,9 +166,9 @@ class Migration {
                     //error_log('Loading: ');error_log(print_r($row, 1));
                     self::execute_field_match($table, $row, $extra_fields);
                     $percentage = $item / $num_rows*100;
-                    if (round($percentage) % 100 == 0) {     
+                    if (round($percentage) % 10 == 0) {     
                         $percentage = round($percentage, 3);
-                        error_log("Processing item # $item $percentage%") ;
+                        error_log("Processing item {$table['orig_table']} #$item $percentage%") ;
                     }
                     $item++;
                 }                
@@ -178,7 +178,7 @@ class Migration {
             }
             
             //Stop here (only for tests)
-            if ($table['orig_table'] == 'ProgramaAcademico')  {
+            if ($table['orig_table'] == 'Matricula')  {
                 exit;          
             }
         }
@@ -293,6 +293,7 @@ class Migration {
             } else {
                 error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             }
+            //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             //After the function was executed fill the $this->data_list array
             switch ($table['dest_table']) {
                 case 'course':
@@ -319,19 +320,12 @@ class Migration {
                         }                                          
                     } else {
                         global $api_failureList;
-                        error_log(print_r($api_failureList, 1));
-                        //error_log("User can't be generated");
-                    }
-                    //error_log(print_r($dest_row, 1));
-                    //error_log(print_r($this->data_list['users_persona'][$dest_row['uidIdPersona']],1));
-                    //error_log(print_r($item_result, 1));
-                    if (!empty($dest_row) && $table['orig_table'] == 'Persona' && !empty($dest_row['username'])) {
-                        //exit;
-                    }
+                        error_log(print_r($api_failureList, 1));                        
+                    }       
                     break;
                 case 'session':                     
-                    $this->data_list['sessions'][$dest_row['uidIdCabProgramaAcademico']] = $item_result;
-                    $handler_id = $item_result['session_id'];
+                    $this->data_list['sessions'][$dest_row['uidIdPrograma']] = $item_result;                    
+                    $handler_id = $item_result; //session_id
                     break;
             }
             

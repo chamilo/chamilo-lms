@@ -21,6 +21,10 @@ class MigrationCustom {
     public function none($data) {
         return $data;
     }
+    
+     public function join_horario($data, &$omigrate, $row_data) {
+         return $row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
+     }
 
     /**
      * Transform the uid identifiers from MSSQL to a string
@@ -47,6 +51,10 @@ class MigrationCustom {
     
     public function clean_utf8($value) {
         return utf8_encode($value);        
+    }
+    
+    public function clean_session_name($value, &$omigrate, $row_data) {
+        return self::clean_utf8($row_data['session_name']);        
     }
     
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
@@ -79,7 +87,7 @@ class MigrationCustom {
      * Log data from the original users table
      */
     public function log_original_session_unique_id($data, &$omigrate, $row_data) {
-        $omigrate['sessions'][$row_data['uidIdCabProgramaAcademico']] = $row_data;
+        $omigrate['sessions'][$row_data['uidIdPrograma']] = $row_data;
         return $data;
     }
     
@@ -98,7 +106,7 @@ class MigrationCustom {
         error_log($omigrate['sessions'][$data]);*/
         if (!isset($omigrate['sessions'][$data])) {
             error_log(print_r($omigrate['sessions'], 1));
-            error_log("sessions not found in data_list array ");
+            error_log("Sessions not found in data_list array ");
             exit;
         }
         return $omigrate['sessions'][$data];        
@@ -130,22 +138,23 @@ class MigrationCustom {
         //error_log('get_real_teacher_id');
         //error_log($data);             
         if (empty($data)) {
-            error_log('No teacher provided');
+            //error_log('No teacher provided');
             return $default_teacher_id;
         }
         
         if (!isset($omigrate['users_empleado'][$data])) {
-            error_log('Teacher not found big problem!');    
-            echo $data;
-            print_r($omigrate['users_empleado'][$data]);
+            //error_log(' Teacher not found big problem! ');    
+            //echo $data;
+            //print_r($omigrate['users_empleado'][$data]);
             //echo $data;exit;
             return $default_teacher_id;            
         } else {
+            //error_log('Teacher found: '.$omigrate['users_empleado'][$data]['extra']['user_id']);
             return isset($omigrate['users_empleado'][$data]['extra']) ? $omigrate['users_empleado'][$data]['extra']['user_id'] : $default_teacher_id;        
         }        
     }
-     
-    public function create_user($data, $omigrate) {       
+    
+    public function create_user($data, $omigrate) {
         //error_log(print_r($data, 1));  
         
         if (empty($data['uidIdPersona'])) {
@@ -182,8 +191,9 @@ class MigrationCustom {
             $extra_data = UserManager::get_extra_user_data_by_value('uidIdPersona', $data['uidIdPersona']);
             
             if ($extra_data) {
-                $user_info = api_get_user_info($extra_data['user_id']);
-                error_log("User_already_added {$user_info['username']}");
+                $user_info = api_get_user_info($extra_data[0]);
+                //print_r($extra_data);
+                //error_log("User_already_added - {$user_info['user_id']}  - {$user_info['username']} - {$user_info['firstname']} - {$user_info['lastname']}");
                 return $user_info;
             }
             
@@ -194,14 +204,16 @@ class MigrationCustom {
                 //the user already exists?
                 $user_info = UserManager::get_user_info_simple($wanted_user_name);
                 $user_persona = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'uidIdPersona');
+                
                 if (isset($user_persona['uidIdPersona']) && $data['uidIdPersona'] == $user_persona['uidIdPersona']) {
                     error_log("Skip user already added: {$user_info['username']}");                    
                     return $user_info;
                 } else {
-                    error_log("homonym $wanted_user_name - {$user_persona['uidIdPersona']} - {$user_info['username']}");       
+                    error_log("homonym - wanted_username: $wanted_user_name - uidIdPersona: {$user_persona['uidIdPersona']} - username: {$user_info['username']}");       
                     print_r($data);
                      //The user has the same firstname and lastname but it has another uiIdPersona could by an homonym  
-                    $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);                    
+                    $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);       
+                    error_log("homonym username created ". $data['username']);
                 }
             }
             
@@ -209,8 +221,31 @@ class MigrationCustom {
                 //Last chance to have a nice username   
                 if (empty($data['firstname']) && empty($data['lastname'])) {
                     $data['username'] = UserManager::create_unique_username(uniqid());
+                    error_log("username empty 1". $data['username']);
                 } else {
                     $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);
+                    error_log("username empty 2". $data['username']);
+                }
+            }
+        } else {
+             if (UserManager::is_username_available($data['username'])) {
+                //error_log("username available {$data['username']} ");
+            } else {
+                //the user already exists?
+                $user_info = UserManager::get_user_info_simple($data['username']);
+                $user_persona = UserManager::get_extra_user_data_by_field($user_info['user_id'], 'uidIdPersona');
+               
+                
+                if (isset($user_persona['uidIdPersona']) && (string)$data['uidIdPersona'] == (string)$user_persona['uidIdPersona']) {
+                    //error_log("2 Skip user already added: {$user_info['username']}");                    
+                    return $user_info;
+                } else {
+                    //print_r($user_persona);
+                    //error_log("2 homonym - wanted_username: {$data['username']} - uidIdPersona: {$user_persona['uidIdPersona']} - username: {$user_info['username']}");       
+                    //print_r($data);
+                     //The user has the same firstname and lastname but it has another uiIdPersona could by an homonym  
+                    $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);       
+                    //error_log("2 homonym username created ". $data['username']);                    
                 }
             }
         }
@@ -237,9 +272,18 @@ class MigrationCustom {
     
     public function create_course($data) {
         //Fixes wrong wanted codes
-        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
+        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);        
         return CourseManager::create_course($data);
     }
+    public function create_session($data) {
+        $session_id = SessionManager::add($data);
+        if (!$session_id) {
+            print_r($data);
+            exit;
+        }
+        return $session_id;
+    }
+    
     public function add_user_to_session($data, $data_list) {
         error_log('add_user_to_session');
         

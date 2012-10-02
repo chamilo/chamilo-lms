@@ -113,7 +113,7 @@
 use \ChamiloSession as Session;
 
 //Conditional login
-if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true){
+if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login']['can_login']=== true) {
     $uData = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
     ConditionalLogin::check_conditions($uData);
 
@@ -152,7 +152,7 @@ $login = isset($_POST["login"]) ? $_POST["login"] : '';
 $logging_in = false;
 
 /*  MAIN CODE  */
-
+ 
 if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     // uid is in session => login already done, continue with this value
     $_user['user_id'] = $_SESSION['_user']['user_id'];
@@ -162,6 +162,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $uidReset = true;
     }
 } else {
+  
     if (isset($_user['user_id'])) {
         unset($_user['user_id']);
     }
@@ -212,10 +213,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
     $cas_login=false;
     if ($cas_activated  AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) {
-        require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
+        require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
-    if ( ( isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
+    if ((isset($_POST['login']) AND isset($_POST['password']) ) OR ($cas_login))  {
 
         // $login && $password are given to log in
         if ( $cas_login  && empty($_POST['login']) ) {
@@ -397,15 +398,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
             }
         } //end else login failed
-    } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+    } elseif (api_get_setting('sso_authentication') === 'true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
         /**
          * TODO:
          * - Work on a better validation for webservices paths. Current is very poor and exit
          */
-        $subsso = api_get_setting('sso_authentication_subclass');
-        //require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.class.php'); moved to autologin
+        $subsso = api_get_setting('sso_authentication_subclass');        
         if (!empty($subsso)) {
-            require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php');
+            require_once api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php';
             $subsso = 'sso'.$subsso;
             $osso = new $subsso(); //load the subclass
         } else {
@@ -447,10 +447,9 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     }
                 }
                 if ($matches_domain) { 
-                                        //make all the process of checking
-                                        //if the user exists (delegated to the sso class)
-                                        $osso->check_user();
-
+                    //make all the process of checking
+                    //if the user exists (delegated to the sso class)
+                    $osso->check_user();
                 } else {
                     error_log('Check the sso_referer URL in your script, it doesn\'t match any of the possibilities');
                     //Request comes from unknown source
@@ -461,7 +460,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 }
             }
         }//end logout ... else ... login
-    } elseif (api_get_setting('openid_authentication')=='true') {
+    } elseif (api_get_setting('openid_authentication') == 'true') {
         if (!empty($_POST['openid_url'])) {
             include api_get_path(SYS_CODE_PATH).'auth/openid/login.php';
             openid_begin(trim($_POST['openid_url']), api_get_path(WEB_PATH).'index.php');
@@ -544,6 +543,8 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     //    $gidReset = true;
 } // end else
 
+
+ 
 //Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {
     //if anonymous mode is set, then try to set the current user as anonymous
@@ -827,7 +828,7 @@ $is_courseCoach     = false; //course coach
 $is_sessionAdmin    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
-    
+  
     if (isset($_cid) && $_cid) {
         $my_user_id = isset($user_id) ? intval($user_id) : 0;
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
@@ -878,7 +879,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
                 $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);                
                 $tbl_session_course      = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
+                
                 //Session coach, session admin, course coach admin
                 $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                         FROM $tbl_session session, $tbl_session_course_user session_rcru
@@ -1091,11 +1092,10 @@ if (api_get_setting('student_view_enabled') == "true") {
     }
 }
 
-if (isset($_cid)) {
+if (isset($_cid) && $_cid != '-1') {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $time = api_get_utc_datetime();
     $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";
     Database::query($sql);
 }
-
 Redirect::session_request_uri($logging_in, $user_id);

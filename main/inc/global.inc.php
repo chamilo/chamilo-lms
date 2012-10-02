@@ -55,6 +55,7 @@ if (!$already_installed) {
     die();
 }
 
+
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
@@ -105,29 +106,25 @@ ini_set('auto_detect_line_endings', '1');
 //require_once dirname(__FILE__).'/autoload.inc.php';
 
 /* 
- * Using composer
+ * Using composer see #5523
  */
 
-//Fixes autoloader issue with composer
+//Fixes Htmlpurifier autoloader issue with composer
 define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
-require_once __DIR__.'../../../vendor/autoload.php'; 
 
+require_once __DIR__.'../../../vendor/autoload.php';
+
+require_once $lib_path.'database.constants.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
+require_once $lib_path.'mail.lib.inc.php';
+require_once $lib_path.'fileManage.lib.php';
 
-require_once $lib_path.'database.lib.php';
+
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
-require_once $lib_path.'model.lib.php';
-require_once $lib_path.'course.lib.php';
 require_once $lib_path.'online.inc.php';
-
-//Here we load the new Doctrine class (just for tests)
-//require_once $lib_path.'db.lib.php';
-//$db = new db();
 
 /*  DATABASE CONNECTION  */
 
@@ -320,7 +317,6 @@ if (file_exists($mail_conf)) {
 }
 
 // ===== "who is logged in?" module section =====
-
 
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {

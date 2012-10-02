@@ -28,7 +28,7 @@ if (!isset($_SESSION['chatHistory'])) {
 if (!isset($_SESSION['openChatBoxes'])) {
 	$_SESSION['openChatBoxes'] = array();	
 }
-	
+
 $chat = new Chat();
 
 if ($chat->is_chat_blocked_by_exercises()) {

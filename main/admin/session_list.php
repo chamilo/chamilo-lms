@@ -45,6 +45,7 @@ if (!empty($error_message)) {
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';    
@@ -55,7 +56,7 @@ $extra_params['autowidth'] = 'true';
 //Height auto 
 $extra_params['height'] = 'auto';
 
-$extra_params['rowList'] = array(50, 100, 250, 500);
+$extra_params['rowList'] = array(20, 50, 100, 250, 500);
 
 $result = SessionManager::get_session_columns();
 $columns = $result['columns'];

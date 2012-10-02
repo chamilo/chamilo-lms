@@ -2057,24 +2057,11 @@ class UserManager {
 	 */
 
 	public static function get_extra_user_data_by_value($field_variable, $field_value, $all_visibility = true) {
-		$extra_data = array();
+		//$extra_data = array();
 		$table_user_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$table_user_field_values = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-		$table_user_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
-		$where = '';
-		/*
-		if (is_array($field_variable_array) && is_array($field_value_array)) {
-			if (count($field_variable_array) == count($field_value_array)) {
-				$field_var_count = count($field_variable_array);
-				for ($i = 0; $i < $field_var_count; $i++) {
-					if ($i != 0 && $i != $field_var_count) {
-						$where.= ' AND ';
-					}
-					$where.= "field_variable='".Database::escape_string($field_variable_array[$i])."' AND user_field_options.id='".Database::escape_string($field_value_array[$i])."'";
-				}
-			}
+		//$table_user_field_options = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
 
-		}*/
 		$where = "field_variable='".Database::escape_string($field_variable)."' AND field_value='".Database::escape_string($field_value)."'";
 
 		$sql = "SELECT user_id FROM $table_user_field user_field INNER JOIN $table_user_field_values user_field_values

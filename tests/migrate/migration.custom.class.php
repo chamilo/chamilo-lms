@@ -279,7 +279,7 @@ class MigrationCustom {
         //Creates an evaluation
         $data['create_gradebook_evaluation'] = true;
         $data['gradebook_params'] = array(
-            'name' => 'General',
+            'name' => 'Evaluación general',
             'user_id' => $this->default_admin_id,
             'weight' => '20',
             'max' => '20'

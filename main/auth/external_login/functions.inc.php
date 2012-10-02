@@ -97,6 +97,10 @@ function external_get_user_info($login, $password){
  **/
 function external_add_user($u){
   //Setting default
+  if (empty($u['password']) )
+    $u['password'] = null;
+  if (empty($u['status']) )
+    $u['status'] = 5;
   if (! isset($u['official_code']) )
     $u['official_code'] = '';
   if (! isset($u['language']) )

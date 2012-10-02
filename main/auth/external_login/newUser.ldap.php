@@ -50,6 +50,7 @@ if ($ldap_user !== false) {
   if ($chamilo_uid !==false) {
     $loginFailed = false;
     $_user['user_id'] = $chamilo_uid;
+    $_user['status'] = (isset($chamilo_user['status'])?$chamilo_user['status']:5);
     $_user['uidReset'] = true;  
     Session::write('_user',$_user);
     $uidReset=true;

@@ -482,10 +482,12 @@ CREATE TABLE IF NOT EXISTS session (
   access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
   coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
   coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY  (id),
-  INDEX (session_admin_id),
+  PRIMARY KEY (id),  
   UNIQUE KEY name (name)
 );
+
+ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
+ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 -- --------------------------------------------------------
 

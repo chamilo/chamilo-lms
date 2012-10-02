@@ -54,6 +54,9 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_i
 ALTER TABLE c_item_property ADD INDEX idx_itemprop_id_tool (c_id, tool(8));
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 
+ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
+ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
+
 -- Do not move this 
 UPDATE settings_current SET selected_value = '1.10.0.19730' WHERE variable = 'chamilo_database_version';
 

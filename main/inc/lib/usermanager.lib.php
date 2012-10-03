@@ -3345,12 +3345,12 @@ class UserManager {
 	  	    $category_id  = $row['cat_id'];
 	  	    $cat         = Category::load($category_id);	  		  	
 	  	    $displayscore = ScoreDisplay::instance();
-                    $grade = '';
+            $grade = '';
 	  	    if (isset($cat) && $displayscore->is_custom()) {
-                        $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
-    	            } else {
-    	  	        $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));    	  		
-                    }    	  	    	  	    	  	
+                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);			
+            } else {
+                $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()));    	  		
+            }    	  	    	  	    	  	
 	  	    $row['grade'] = $grade;
 	  	    return $row;
         }

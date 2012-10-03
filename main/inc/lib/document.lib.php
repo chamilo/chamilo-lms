@@ -1409,10 +1409,12 @@ class DocumentManager {
         $date_long_certificate = '';
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
+            $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);
         }
 
         if ($is_preview) {
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
+            $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
         $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
@@ -1427,6 +1429,7 @@ class DocumentManager {
                                                      $teacher_last_name,
                                                      $official_code,
                                                      $date_long_certificate,
+                                                     $date_no_time,
                                                      $course_id,
                                                      $course_info['name'],
                                                      $info_grade_certificate['grade'],
@@ -1443,6 +1446,7 @@ class DocumentManager {
                                                      '((teacher_lastname))',
                                                      '((official_code))',
                                                      '((date_certificate))',
+                                                     '((date_certificate_no_time))',
         											 '((course_code))',
                 									 '((course_title))',
         											 '((gradebook_grade))',

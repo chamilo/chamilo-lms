@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $form_sent = 0;
-$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
+$error_message = '';
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     $error_message = Security::remove_XSS($_GET['message']);
 }

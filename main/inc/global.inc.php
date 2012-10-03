@@ -105,21 +105,23 @@ ini_set('auto_detect_line_endings', '1');
 //Include the libraries that are necessary everywhere
 //require_once dirname(__FILE__).'/autoload.inc.php';
 
-/* 
- * Using composer see #5523
- */
-
 //Fixes Htmlpurifier autoloader issue with composer
 define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
 
+//mpdf constants
 define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 
+//Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
+//Database constants
 require_once $lib_path.'database.constants.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
+
+//Removing support for this files:
+//require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
+//require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
+
 require_once $lib_path.'mail.lib.inc.php';
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'text.lib.php';

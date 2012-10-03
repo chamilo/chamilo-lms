@@ -34,7 +34,7 @@ $interbreadcrumb[] = array("url" => "index.php","name" => get_lang('PlatformAdmi
 $tool_name = get_lang('SessionList');
 Display::display_header($tool_name);
 
-$error_message = ''; // Avoid conflict with the global variable $error_msg (array type) in add_course.conf.php.
+$error_message = '';
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     $error_message = Security::remove_XSS($_GET['message']);
 }

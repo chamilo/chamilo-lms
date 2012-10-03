@@ -112,6 +112,9 @@ ini_set('auto_detect_line_endings', '1');
 //Fixes Htmlpurifier autoloader issue with composer
 define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
 
+define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
+define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
+
 require_once __DIR__.'../../../vendor/autoload.php';
 
 require_once $lib_path.'database.constants.inc.php';
@@ -119,8 +122,6 @@ require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
 require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
 require_once $lib_path.'mail.lib.inc.php';
 require_once $lib_path.'fileManage.lib.php';
-
-
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';

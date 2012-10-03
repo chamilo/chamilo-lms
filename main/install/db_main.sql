@@ -908,6 +908,7 @@ VALUES
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
+('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
 ('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19730','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1252,7 +1253,9 @@ VALUES
 ('enable_webcam_clip', 'true', 'Yes'),
 ('enable_webcam_clip', 'false', 'No'),
 ('session_tutor_reports_visibility', 'true', 'Yes'),
-('session_tutor_reports_visibility', 'false', 'No');
+('session_tutor_reports_visibility', 'false', 'No'),
+('gradebook_show_percentage_in_reports', 'true', 'Yes'),
+('gradebook_show_percentage_in_reports', 'false', 'No');
 
 UNLOCK TABLES;
 

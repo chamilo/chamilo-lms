@@ -403,7 +403,7 @@ class FlatViewTable extends SortableTable
 	/**
 	 * Function used by SortableTable to get total number of items in the table
 	 */
-	function get_total_number_of_items () {
+	function get_total_number_of_items() {
 		return $this->datagen->get_total_users_count();
 	}
 

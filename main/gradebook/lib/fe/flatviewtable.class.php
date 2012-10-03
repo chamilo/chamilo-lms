@@ -488,7 +488,6 @@ class FlatViewTable extends SortableTable
 			$column++;
 		}
 
-		//$this->set_header($column++, get_lang('Total'));	
 		$data_array = $this->datagen->get_data($users_sorting, $from, $this->per_page, $this->offset, $selectlimit);
 
 		$table_data = array();

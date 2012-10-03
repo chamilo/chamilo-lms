@@ -457,8 +457,6 @@ class DocumentManager {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
         
-        //if to_user_id = NULL -> change query (IS NULL)
-        //$to_user_id = (is_null($to_user_id)) ? 'IS NULL' : '= '.$to_user_id;
         if (!is_null($to_user_id)) {
             $to_field = 'last.to_user_id';
             $to_value = $to_user_id;
@@ -492,28 +490,28 @@ class DocumentManager {
         }
 
         //condition for search (get ALL folders and documents)
-        if ($search) {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
-                        FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-                        WHERE docs.id = last.ref
-                        AND last.tool = '".TOOL_DOCUMENT."'
-                        AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit . $condition_session." AND
-            			docs.c_id = {$_course['real_id']} AND
-            			last.c_id = {$_course['real_id']}  ";
-        } else {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
-                        FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-                        WHERE docs.id = last.ref
-                        AND docs.path LIKE '".$path.$added_slash."%'
-                        AND docs.path NOT LIKE '".$path.$added_slash."%/%'
-                        AND last.tool = '".TOOL_DOCUMENT."'
-                        AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit.$condition_session." AND
-            			docs.c_id = {$_course['real_id']} AND
-            			last.c_id = {$_course['real_id']}  ";
-        }
-
+  
+        $sql = "SELECT  docs.id, 
+                        docs.filetype, 
+                        docs.path, 
+                        docs.title, 
+                        docs.comment, 
+                        docs.size, 
+                        docs.readonly, 
+                        docs.session_id, 
+                        last.id_session item_property_session_id, 
+                        last.lastedit_date, 
+                        last.visibility, 
+                        last.insert_user_id
+                    FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs 
+                        ON (docs.id = last.ref AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                    WHERE
+                        docs.path LIKE '".$path.$added_slash."%' AND
+                        docs.path NOT LIKE '".$path.$added_slash."%/%' AND
+                        last.tool = '".TOOL_DOCUMENT."' AND
+                        ".$to_field." = ".$to_value." AND 
+                        last.visibility".$visibility_bit.$condition_session;
+       
         $result = Database::query($sql);
 
         $doc_list = array();
@@ -522,7 +520,6 @@ class DocumentManager {
 
         if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-
                 if (api_is_coach()) {
                     //Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
@@ -533,7 +530,6 @@ class DocumentManager {
                             }
                         }
                     }
-
                     $doc_list[$row['id']] = $row;
                 }
 
@@ -546,17 +542,15 @@ class DocumentManager {
                     //Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql_is_template = "SELECT id FROM $table_template
-                                        WHERE course_code='".$_course['id']."'
-                                        AND user_id='".api_get_user_id()."'
-                                        AND ref_doc='".$row['id']."'";
+                                        WHERE course_code = '".$_course['code']."'
+                                        AND user_id = '".api_get_user_id()."'
+                                        AND ref_doc = '".$row['id']."'";
                     $template_result = Database::query($sql_is_template);
                     $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
                 }
                 //just filling $document_data
                 $document_data[$row['id']] = $row;
             }
-
-
 
             //Only for the student we filter the results see BT#1652
             if (!api_is_coach() && !$is_allowed_to_edit) {
@@ -610,7 +604,7 @@ class DocumentManager {
 
                 //Checking parents visibility
                 $final_document_data = array();
-                foreach($document_data as $row) {
+                foreach ($document_data as $row) {
                 	$is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
                 	if ($is_visible) {
                 		$final_document_data[$row['id']]=$row;

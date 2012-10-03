@@ -17,8 +17,6 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 
 /*	Create the groups */
 
@@ -288,6 +286,7 @@ EOT;
 	/*
 	 * Show form to generate groups from classes subscribed to the course
 	 */
+    /*
 	$classes = ClassManager :: get_classes_in_course($_course['sysCode']);
 	if (count($classes) > 0) {
 		echo '<b>'.get_lang('GroupsFromClasses').'</b>';
@@ -324,7 +323,8 @@ EOT;
 		$create_class_groups_form->setDefaults($defaults);
 		$create_class_groups_form->display();
 		echo '</blockquote>';
-	}
+	}*/
+    
 }
 
 /*	FOOTER */

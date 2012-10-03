@@ -507,23 +507,33 @@ function store_forumcategory($values) {
  * @version february 2006, dokeos 1.8
  */
 function store_forum($values) {
-    global $_course;
-    global $_user;
+    global $_course;    
+    
     $course_id = api_get_course_int_id();
+    $session_id = api_get_session_id();
+    
+    if (isset($values['group_id']) && !empty($values['group_id'])) {
+        $group_id = $values['group_id'];
+    } else {
+        $group_id = api_get_group_id();
+    }
+    
     $table_forums = Database::get_course_table(TABLE_FORUM);
 
     // Find the max forum_order for the given category. The new forum is added at the end => max cat_order + &
     if (is_null($values['forum_category'])) {
         $new_max = null;
     } else {
-        $sql = "SELECT MAX(forum_order) as sort_max FROM ".$table_forums."
-        		WHERE c_id = $course_id AND forum_category='".Database::escape_string($values['forum_category'])."'";
+        $sql = "SELECT MAX(forum_order) as sort_max 
+                FROM ".$table_forums."
+        		WHERE c_id = $course_id AND 
+                      forum_category='".Database::escape_string($values['forum_category'])."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $new_max = $row['sort_max'] + 1;
     }
 
-    $session_id = api_get_session_id();
+    
     $clean_title = Database::escape_string($values['forum_title']);
 
     // Forum images
@@ -595,8 +605,10 @@ function store_forum($values) {
                 forum_of_group='".	Database::escape_string($values['group_forum'])."'
             WHERE c_id = $course_id AND forum_id='".Database::escape_string($values['forum_id'])."'";
             Database::query($sql);
-
-            api_item_property_update($_course, TOOL_FORUM, Database::escape_string($values['forum_id']), 'ForumUpdated', api_get_user_id());
+            
+           
+            api_item_property_update($_course, TOOL_FORUM, Database::escape_string($values['forum_id']), 'ForumUpdated', api_get_user_id(), $group_id);
+            
             $return_message = get_lang('ForumEdited');
     } else {
         $sql_image = '';
@@ -626,8 +638,8 @@ function store_forum($values) {
         Database::query($sql);
         $last_id = Database::insert_id();
         if ($last_id > 0) {
-            api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id());
-            api_set_default_visibility($last_id, TOOL_FORUM);
+            api_item_property_update($_course, TOOL_FORUM, $last_id, 'ForumAdded', api_get_user_id(), $group_id);
+            api_set_default_visibility($last_id, TOOL_FORUM, $group_id);
         }
         $return_message = get_lang('ForumAdded');
     }

@@ -217,6 +217,7 @@ class Template {
     function display_two_col_template() {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
+        $this->show_page_loaded_info();
     }
 
     /**
@@ -711,7 +712,9 @@ class Template {
 
     function show_footer_template() {
         $tpl = $this->get_template('layout/show_footer.tpl');
+        $this->show_page_loaded_info();
         $this->display($tpl);
+        
     }
 
     /* Sets the plugin content in a template variable */
@@ -745,6 +748,9 @@ class Template {
         $mtime = microtime(); 
         $mtime = explode(" ",$mtime); 
         $mtime = $mtime[1] + $mtime[0]; 
-        error_log("Page loaded in ".($mtime-START));
+        error_log('--------------------------------------------------------');
+        error_log("Page loaded in:".($mtime-START));
+        error_log("memory_get_usage: ".format_file_size(memory_get_usage(true)));
+        error_log("memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true)));
     }
 }

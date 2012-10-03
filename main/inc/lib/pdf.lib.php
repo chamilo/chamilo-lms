@@ -6,12 +6,6 @@
 /**
  * Code
  */
-
-/**
- * Class
- * @package chamilo.library
- */
-
 class PDF {
     
     public $pdf;    

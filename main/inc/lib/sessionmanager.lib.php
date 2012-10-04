@@ -1731,6 +1731,14 @@ class SessionManager {
         if (!empty($sessions_by_coach)) {
             $sessions = array_merge($sessions, $sessions_by_coach);
         }
+        //Remove  repeated sessions
+        if (!empty($sessions)) {
+            $clean_sessions = array();        
+            foreach ($sessions as $session) {
+                $clean_sessions[$session['id']] = $session;
+            }
+            $sessions = $clean_sessions;
+        }
         
         if ($check_session_rel_user_visibility) {
             if (!empty($sessions)) {

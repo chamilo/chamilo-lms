@@ -32,9 +32,11 @@ if ($bbb->plugin_enabled) {
                     exit;
                 }        
             } else {
-                $url = $bbb->create_meeting($meeting_params);
-                header('location: '.$url);
-                exit;
+                if ($bbb->is_teacher()) {
+                    $url = $bbb->create_meeting($meeting_params);
+                    header('location: '.$url);
+                    exit;
+                }
             }
         } else {
             $url = 'listing.php';

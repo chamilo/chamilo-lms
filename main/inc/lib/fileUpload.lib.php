@@ -839,15 +839,14 @@ function filter_extension(&$filename) {
  * @param string $title
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true) {
+function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null) {
 	$session_id    = api_get_session_id();
 	$readonly      = intval($readonly);
 	$comment       = Database::escape_string($comment);
 	$path          = Database::escape_string($path);
 	$filetype      = Database::escape_string($filetype);
-	$filesize      = intval($filesize);
-    $title         = htmlspecialchars($title);
-    $title         = Database::escape_string($title);
+	$filesize      = intval($filesize);    
+    $title         = Database::escape_string(htmlspecialchars($title));
     $c_id          = $_course['real_id'];
 	
 	$table_document = Database::get_course_table(TABLE_DOCUMENT);
@@ -858,7 +857,7 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 		$document_id = Database::insert_id();
         if ($document_id) {
             if ($save_visibility) {
-                api_set_default_visibility($document_id, TOOL_DOCUMENT);                
+                api_set_default_visibility($document_id, TOOL_DOCUMENT, $group_id);                
             }
         }        
 		return $document_id;
@@ -1089,7 +1088,7 @@ function create_unexisting_directory($_course, $user_id, $session_id, $to_group_
 	
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) == 0) {
-			$document_id = add_document($_course, $desired_dir_name.$nb, 'folder', 0, $title);			
+			$document_id = add_document($_course, $desired_dir_name.$nb, 'folder', 0, $title, null, 0, true, $to_group_id);          
 			if ($document_id) {
 				// Update document item_property					
 				if ($visibility !== '') {

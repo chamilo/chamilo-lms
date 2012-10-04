@@ -67,20 +67,22 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
                 }
             }
         }
-    } else {        
-        foreach ($folders as $folder_id => & $folder) {
-            $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
-            $label = $folder_titles[$folder];
-            if ($folder == $group_dir) {
-                $label = get_lang('Documents');
-            } else {
-                $path_parts = explode('/', str_replace($group_dir, '', $folder));
-                $label = cut($label, 80);
-                $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-            }
-            $parent_select -> addOption($label, $folder_id);
-            if ($selected != '') {
-                $parent_select->setSelected($folder_id);
+    } else {
+        if (!empty($folders)) {
+            foreach ($folders as $folder_id => & $folder) {
+                $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
+                $label = $folder_titles[$folder];
+                if ($folder == $group_dir) {
+                    $label = get_lang('Documents');
+                } else {
+                    $path_parts = explode('/', str_replace($group_dir, '', $folder));
+                    $label = cut($label, 80);
+                    $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
+                }
+                $parent_select -> addOption($label, $folder_id);
+                if ($selected != '') {
+                    $parent_select->setSelected($folder_id);
+                }
             }
         }
     }

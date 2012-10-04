@@ -90,7 +90,7 @@ $dbl_click_id = 0; // Used for avoiding double-click
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
 /* 	Constants and variables */
-$session_id = api_get_session_id();
+$session_id  = api_get_session_id();
 $course_code = api_get_course_id();
 $to_group_id = api_get_group_id();
 

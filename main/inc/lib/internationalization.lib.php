@@ -25,15 +25,16 @@ define('SPECIAL_CLOSING_TAG', '=]');
 
 define('TIME_NO_SEC_FORMAT',    0);	// 15:23
 define('DATE_FORMAT_SHORT',     1); // Aug 25, 09 
-define('DATE_FORMAT_LONG',      2);	// Aug 25, 09 
-define('DATE_TIME_FORMAT_LONG', 3);	// August 25, 2009 at 03:28 PM 
+define('DATE_FORMAT_LONG',      2);	// Monday August 25, 09 
+define('DATE_FORMAT_LONG_NO_DAY',     10);	// August 25, 2009
+define('DATE_TIME_FORMAT_LONG', 3);	// Monday August 25, 2009 at 03:28 PM 
 
 define('DATE_FORMAT_NUMBER',        4);	// 25.08.09
-define('DATE_TIME_FORMAT_LONG_24H', 5); // August 25, 2009 at 15:28   
-
+define('DATE_TIME_FORMAT_LONG_24H', 5); // August 25, 2009 at 15:28
 define('DATE_TIME_FORMAT_SHORT', 6);	// Aug 25, 2009 at 03:28 PM 
 define('DATE_TIME_FORMAT_SHORT_TIME_FIRST', 7);	// 03:28 PM, Aug 25 2009
-define('DATE_FORMAT_NUMBER_NO_YEAR',  8);	// 25.08
+define('DATE_FORMAT_NUMBER_NO_YEAR',  8);	// 25.08 dd-mm
+define('DATE_FORMAT_ONLY_DAYNAME',  9);	// Monday, Sunday, etc
 
 // Formatting person's name.
 define('PERSON_NAME_COMMON_CONVENTION', 0);	// Formatting a person's name using the pattern as it has been
@@ -690,6 +691,13 @@ function api_format_date($time, $format = null, $language = null) {
 
     if (is_int($format)) {
         switch ($format) {
+            case DATE_FORMAT_ONLY_DAYNAME:
+                $date_format = get_lang('dateFormatOnlyDayName', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+        			$datetype = IntlDateFormatter::SHORT;
+        			$timetype = IntlDateFormatter::NONE;
+        		}
+                break;
             case DATE_FORMAT_NUMBER_NO_YEAR:
                 $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);                                 		                
         		if (IS_PHP_53 && INTL_INSTALLED) {
@@ -732,6 +740,13 @@ function api_format_date($time, $format = null, $language = null) {
                     $timetype = IntlDateFormatter::SHORT;
                 }
                 break;		
+            case DATE_FORMAT_LONG_NO_DAY:
+                $date_format = get_lang('dateFormatLongNoDay', '', $language);
+                if (IS_PHP_53 && INTL_INSTALLED) {
+                    $datetype = IntlDateFormatter::FULL;
+                    $timetype = IntlDateFormatter::SHORT;
+                }
+                break;     
 			case DATE_TIME_FORMAT_SHORT:
                 $date_format = get_lang('dateTimeFormatShort', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {

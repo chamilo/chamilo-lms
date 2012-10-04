@@ -3,13 +3,9 @@
 
 /**
  * This file contains class used like library, provides functions for thematic option inside attendance tool. It's also used like model to thematic_controller (MVC pattern)
+ * Thematic class can be used to instanciate objects or as a library for thematic control
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> SQL fixes 
- * @package chamilo.course_progress
- */
-
-/**
- * Thematic class can be used to instanciate objects or as a library for thematic control
  * @package chamilo.course_progress
  */
 class Thematic
@@ -45,12 +41,10 @@ class Thematic
         }
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(id) AS total_number_of_items FROM $tbl_thematic WHERE c_id = $course_id AND active = 1 $condition_session ";
-		$res = Database::query($sql);
-		$res = Database::query($sql);
+		$res = Database::query($sql);		
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
 	}
-
 
 	/**
 	 * Get the thematics to display on the current page (fill the sortable-table)
@@ -484,8 +478,8 @@ class Thematic
 						$session_star = api_get_session_image(api_get_session_id(), $uinfo['status']);
 					}
 				}
-					
-				$thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_TIME_FORMAT_LONG).$session_star.'</strong></div>';
+                //DATE_TIME_FORMAT_LONG
+				$thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_FORMAT_ONLY_DAYNAME).$session_star.'</strong></div>';
 //				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
 				$thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
 				$thematic_advance_item .= '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';

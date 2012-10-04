@@ -386,7 +386,7 @@ $course_id = api_get_course_int_id();
 
 if (isset ($_GET['deletelink'])) {
 	block_students();
-	$get_delete_link=Security::remove_XSS($_GET['deletelink']);
+	$get_delete_link = intval($_GET['deletelink']);
 	//fixing #5229
 	if (!empty($get_delete_link)) {
 		$link= LinkFactory :: load($get_delete_link);

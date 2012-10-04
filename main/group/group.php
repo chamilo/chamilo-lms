@@ -250,7 +250,7 @@ foreach ($group_cats as $index => $category) {
 					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_WIKI))
 					&& !(api_is_course_coach() && intval($this_group['session_id']) != intval($_SESSION['id_session']))) {
 				$orig = isset($origin) ? $origin : null;
-				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
+				$group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.Security::remove_XSS($this_group['name']).'</a>';
 				if (!empty($_SESSION['_user']['user_id']) && !empty($this_group['id_tutor']) && $_SESSION['_user']['user_id'] == $this_group['id_tutor']) {
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
 				} elseif ($this_group['is_member']) {

@@ -19,6 +19,12 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
+if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+    if (!api_is_platform_admin()) {
+        api_not_allowed(true);
+    }
+}
+
 // access restriction
 if (!api_is_allowed_to_edit()) {
 	 api_not_allowed(true);
@@ -644,7 +650,7 @@ function active_filter($active, $url_params, $row) {
 		$image='error';
 	}
 	if ($row['0']<>$_user['user_id']) { // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-		$result = '<center>'.Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array('border'=>'0', 'style'=>'vertical-align: middle;') , 16).'</center>';
+		$result = Display::return_icon($image.'.png',  get_lang(ucfirst($action)), array() , ICON_SIZE_TINY);
 	}
 	return $result;
 }

@@ -26,7 +26,7 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (empty($_GET['session_id'])) {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;

@@ -1724,12 +1724,26 @@ class SessionManager {
         return Database::store_result($result, 'ASSOC');        
     }
         
-    public static function get_sessions_coached_by_user($coach_id) {
+    public static function get_sessions_coached_by_user($coach_id, $check_session_rel_user_visibility = false) {
         $sessions = self::get_sessions_by_general_coach($coach_id);
         $sessions_by_coach = self::get_sessions_by_coach($coach_id);
 
         if (!empty($sessions_by_coach)) {
             $sessions = array_merge($sessions, $sessions_by_coach);
+        }
+        
+        if ($check_session_rel_user_visibility) {
+            if (!empty($sessions)) {
+                $new_session = array();
+                foreach ($sessions as $session) {
+                    $visibility = api_get_session_visibility($session['id']);
+                    if ($visibility == SESSION_INVISIBLE) {
+                        continue;
+                    }                    
+                    $new_session[] = $session;
+                }
+                $sessions = $new_session;
+            }
         }
         return $sessions;
     }

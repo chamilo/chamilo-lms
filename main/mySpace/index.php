@@ -120,10 +120,6 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 $menu_items = array();
 global $_configuration;
 
-//If is a teacher or admin
-if (api_is_allowed_to_create_course() || api_is_drh()) {
-}
-
 if ($is_platform_admin) {	
 	if ($view == 'admin') {
 		$title = get_lang('CoachList');
@@ -180,7 +176,7 @@ if (empty($session_id)) {
 	
 	//Getting courses followed by a coach (No session courses)
 	$courses  = CourseManager::get_course_list_as_coach($user_id, false);	
-	
+    	
 	if (isset($courses[0])) {
 		$courses = $courses[0]; 
 	}
@@ -190,7 +186,7 @@ if (empty($session_id)) {
     		
 	// Sessions for the coach
 	$sessions 	 	= SessionManager::get_sessions_coached_by_user($user_id);
-        	
+            	
 	//If is drh	
 	if ($is_drh) {
 		$students = array_keys(UserManager::get_users_followed_by_drh($user_id, STUDENT));
@@ -355,6 +351,13 @@ if (empty($session_id)) {
 		$nb_posts = null;
 	}
 } else {
+    
+    $visibility = api_get_session_visibility($session_id);
+    if ($visibility == SESSION_INVISIBLE) {
+        Display::display_warning_message(get_lang('NotAvailable'));
+        Display::display_footer();
+    } 
+
 	$courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
     	   
     //If is drh	
@@ -462,7 +465,10 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
         
         $all_data = array();
         
-		foreach ($sessions as $session) {			
+		foreach ($sessions as $session) {
+            $visibility = api_get_session_visibility($session['id']);
+            
+
 			$count_courses_in_session = count(Tracking::get_courses_followed_by_coach($user_id, $session['id']));
             $count_users_in_session = count(SessionManager::get_users_by_session($session['id'], 0));
 			$row = array();
@@ -470,8 +476,13 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
             $row['display_start_date'] = api_get_local_time($session['display_start_date'], null, null, true);
             $row['display_end_date'] = api_get_local_time($session['display_end_date'], null, null, true);            
             $row['number_student_per_session'] = $count_courses_in_session;
-            $row['courses_per_session'] = $count_users_in_session;			
-			$row['details'] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+            $row['courses_per_session'] = $count_users_in_session;
+            
+            if ($visibility == SESSION_INVISIBLE) {              
+                $row['details'] = '<img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow_na.gif" />';
+            } else {
+                $row['details'] = '<a href="'.api_get_self().'?session_id='.$session['id'].'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+            }            
 			$all_data[] = $row;
 		}
         
@@ -480,10 +491,6 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
                 ".Display::grid_js('sessions', null, $columns, $column_model, $extra_params, $all_data, array())."
             });
             </script>";
-        
-        
-       
-		
 		$nb_sessions_past = $nb_sessions_current = 0;
 		$courses = array();
         

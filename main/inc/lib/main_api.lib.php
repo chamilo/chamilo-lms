@@ -149,6 +149,7 @@ define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
 define('LOG_SESSION_CATEGORY_DELETE',           'session_category_deleted');
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
+define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 
@@ -165,6 +166,7 @@ define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
+define('LOG_PLATFORM_LANGUAGE',                 'default_platform_language');
 define('LOG_CAREER_ID',                         'career_id');
 define('LOG_PROMOTION_ID',                      'promotion_id');
 

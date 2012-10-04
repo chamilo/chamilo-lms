@@ -804,7 +804,13 @@ class IndexManager {
 		$show_create_link = false;
 		$show_course_link = false;
 				
-		$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
+		if ((api_get_setting('allow_users_to_create_courses') == 'false' && !api_is_platform_admin()) || api_is_student()) {
+            $display_add_course_link = false;
+        } else {
+            $display_add_course_link = true;
+        }
+        //$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
+        
 		if ($display_add_course_link) {
 			$show_create_link = true;
 		}

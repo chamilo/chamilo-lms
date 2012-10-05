@@ -16,7 +16,7 @@
 require_once 'openoffice_document.class.php';
 if (api_get_setting('search_enabled') == 'true') {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+    require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
     require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 }
 /**
@@ -211,7 +211,7 @@ class OpenofficeText extends OpenofficeDocument {
                 if (api_get_setting('search_enabled') == 'true') {
                     if (isset($_POST['index_document']) && $_POST['index_document']) {
                         //Display::display_normal_message(print_r($_POST));
-                        $di = new DokeosIndexer();
+                        $di = new ChamiloIndexer();
                         isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                         $di->connectDb(NULL, NULL, $lang);
                         $ic_slide = new IndexableChunk();

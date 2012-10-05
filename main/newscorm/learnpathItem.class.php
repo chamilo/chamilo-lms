@@ -240,8 +240,8 @@ class learnpathItem {
 
 		if (api_get_setting('search_enabled') == 'true') {
 			if (!is_null($this->search_did)) {
-				require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
-				$di = new DokeosIndexer();
+				require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
+				$di = new ChamiloIndexer();
 				$di->remove_document($this->search_did);
 			}
 		}
@@ -2032,7 +2032,7 @@ class learnpathItem {
 		global $charset;
         $course_id = api_get_course_int_id();
 		$lp_item = Database::get_course_table(TABLE_LP_ITEM);
-		require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+		require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
 		$a_terms = split(',', $terms);
 		$i_terms = split(',', $this->get_terms());
 		foreach ($i_terms as $term) {
@@ -2047,7 +2047,7 @@ class learnpathItem {
 		$res = Database::query($terms_update_sql);
 		// Save it to search engine.
 		if (api_get_setting('search_enabled') == 'true') {
-			$di = new DokeosIndexer();
+			$di = new ChamiloIndexer();
 			$di->update_terms($this->get_search_did(), $new_terms);
 		}
 		return true;

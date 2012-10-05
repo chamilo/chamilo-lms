@@ -7,6 +7,7 @@
 /**
  * Code
  */
+
 require_once 'xapian.php';
 require_once dirname(__FILE__) . '/../IndexableChunk.class.php';
 
@@ -297,4 +298,5 @@ abstract class XapianIndexer {
         unset($this->db);
         unset($this->stemmer);
     }
+
 }

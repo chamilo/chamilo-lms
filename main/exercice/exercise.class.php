@@ -1244,7 +1244,7 @@ class Exercise {
 		}
 		$course_id = api_get_course_id();
 
-		require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+		require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
@@ -1280,7 +1280,7 @@ class Exercise {
 		$exercise_description = $all_specific_terms .' '. $this->description;
 		$ic_slide->addValue("content", $exercise_description);
 
-		$di = new DokeosIndexer();
+		$di = new ChamiloIndexer();
 		isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
 		$di->connectDb(NULL, NULL, $lang);
 		$di->addChunk($ic_slide);
@@ -1310,7 +1310,7 @@ class Exercise {
 			$res = Database::query($sql);
 
 			if (Database::num_rows($res) > 0) {
-				require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+				require_once(api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php');
 				require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
 				require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
@@ -1346,7 +1346,7 @@ class Exercise {
 				$exercise_description = $all_specific_terms .' '. $this->description;
 				$ic_slide->addValue("content", $exercise_description);
 
-				$di = new DokeosIndexer();
+				$di = new ChamiloIndexer();
 				isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
 				$di->connectDb(NULL, NULL, $lang);
 				$di->remove_document((int)$se_ref['search_did']);
@@ -1381,8 +1381,8 @@ class Exercise {
 			$res = Database::query($sql);
 			if (Database::num_rows($res) > 0) {
 				$row = Database::fetch_array($res);
-				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
-				$di = new DokeosIndexer();
+				require_once(api_get_path(LIBRARY_PATH) .'search/ChamiloIndexer.class.php');
+				$di = new ChamiloIndexer();
 				$di->remove_document((int)$row['search_did']);
 				unset($di);
 				$tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);

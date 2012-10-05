@@ -781,10 +781,10 @@ abstract class Question
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0 || $addQs) {
-                require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+                require_once(api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php');
                 require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
 
-                $di = new DokeosIndexer();
+                $di = new ChamiloIndexer();
                 if ($addQs) {
                 	$question_exercises = array((int)$exerciseId);
                 } else {

@@ -979,8 +979,8 @@ class DocumentManager {
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row2 = Database::fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php';
-                $di = new DokeosIndexer();
+                require_once api_get_path(LIBRARY_PATH) .'search/ChamiloIndexer.class.php';
+                $di = new ChamiloIndexer();
                 $di->remove_document((int)$row2['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -2273,7 +2273,7 @@ class DocumentManager {
         // TODO: review w$ compatibility
 
         // Use usual exec output lines array to store stdout instead of a temp file
-        // because we need to store it at RAM anyway before index on DokeosIndexer object
+        // because we need to store it at RAM anyway before index on ChamiloIndexer object
         $ret_val = null;
         switch ($doc_mime) {
             case 'text/plain':
@@ -3002,7 +3002,7 @@ class DocumentManager {
                 $file_content = self::get_text_content($doc_path, $doc_mime);
                 $course_code = Database::escape_string($course_code);
 
-                require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
                 $ic_slide = new IndexableChunk();
@@ -3017,7 +3017,7 @@ class DocumentManager {
                 );
 
                 $ic_slide->xapian_data = serialize($xapian_data);
-                $di = new DokeosIndexer();
+                $di = new ChamiloIndexer();
                 $return = $di->connectDb(null, null, $lang);
 
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';

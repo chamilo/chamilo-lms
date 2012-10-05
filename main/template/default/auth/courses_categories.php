@@ -174,12 +174,12 @@ $stok = Security::get_token();
                     $access_type = CourseManager::get_access_link_by_user(api_get_user_id(), $course); 
                    
                     // Go To Course button (only if admin, if course public or if student already subscribed)
-                    if (in_array('enter', $access_type)) {
+                    if ($access_type && in_array('enter', $access_type)) {
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                     }
                     
                     // Register button
-                    if (in_array('register', $access_type)) {
+                    if ($access_type && in_array('register', $access_type)) {
                          echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
                     }
                     

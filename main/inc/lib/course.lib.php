@@ -3721,12 +3721,12 @@ class CourseManager {
             $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);
 
             //Course visibility 
-            if (in_array('register', $access_link)) {
+            if ($access_link && in_array('register', $access_link)) {
                 $stok = Security::get_token();
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
             }
             
-            if (in_array('enter', $access_link)) {
+            if ($access_link && in_array('enter', $access_link)) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
             }
 

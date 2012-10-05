@@ -200,8 +200,8 @@ switch ($action) {
         }
         break;
     case 'copytomyfiles':
-        // Copy a file to general my files user's
-        if (api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {
+        // Copy a file to general my files user's        
+        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {
             $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');

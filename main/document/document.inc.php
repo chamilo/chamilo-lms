@@ -226,9 +226,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             $force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),ICON_SIZE_SMALL).'</a>';
         }
 
-        //copy files to users myfiles
-        
-        if (api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()){
+        //Copy files to users myfiles        
+        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()){
             $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&action=copytomyfiles&id='.$document_data['id'].$req_gid :api_get_self().'?'.api_get_cidreq();
 
             if ($filetype == 'file') {

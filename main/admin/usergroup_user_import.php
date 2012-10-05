@@ -86,6 +86,7 @@ function save_data($users_classes) {
     // Data parsing: purification + conversion (UserName, ClassName) --> (user_is, class_id)
     $csv_data = array();
     if (!empty($users_classes)) {
+        
         foreach ($users_classes as $user_class) {
             $sql1 = "SELECT user_id FROM $user_table WHERE username = '" . Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames)) . "'";
             $res1 = Database::query($sql1);
@@ -103,20 +104,18 @@ function save_data($users_classes) {
     }
 
     // Logic for processing the request (data + UI options).
-
-    if (!empty($csv_data)) {
+    $message = null;
+    if (!empty($csv_data)) {        
         foreach ($csv_data as $class_id => $user_data) {
             $user_list = $user_data['user_list'];
-
             $class_name = $user_data['class_name'];
             $user_list_name = $user_data['user_list_name'];
             $usergroup->subscribe_users_to_usergroup($class_id, $user_list);
-            $message = Display::return_message(get_lang('Class') . ': ' . $class_name . '<br />', 'normal', false);
+            $message .= Display::return_message(get_lang('Class') . ': ' . $class_name . '<br />', 'normal', false);
             $message .= Display::return_message(get_lang('Users') . ': ' . implode(', ', $user_list_name));
-
-            return $message;
         }
-    }
+    }    
+    return $message;
 }
 
 /**

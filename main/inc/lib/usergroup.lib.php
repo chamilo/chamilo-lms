@@ -30,7 +30,7 @@ class UserGroup extends Model {
     }
     
     public function get_id_by_name($name) {
-        $row = Database::select('id', $this->table, array('where' => array('name = ?', $name)),'first');
+        $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)),'first');
         return $row['id'];
     }
 
@@ -266,8 +266,7 @@ class UserGroup extends Model {
                 }
                 Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
             }
-        }
-        
+        }        
     }
 
      /**

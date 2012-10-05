@@ -745,6 +745,7 @@ class Exercise {
 			// insert into the item_property table
 			api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());            
             api_set_default_visibility($this->id, TOOL_QUIZ);
+            
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this->search_engine_save();
 			}
@@ -3396,7 +3397,7 @@ class Exercise {
         
         //Checking visibility in the item_property table
         $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id()); 
-        
+                
         if ($visibility == 0) {        
             $this->active = 0;
         }
@@ -3457,11 +3458,7 @@ class Exercise {
         }
 		return array('value' => $is_visible, 'message' => $message);
 	}
-	
-	function save_attempt() {
-	
-	}
-	
+    
 	function added_in_lp() {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";

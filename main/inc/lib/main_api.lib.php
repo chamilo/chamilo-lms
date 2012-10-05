@@ -6075,7 +6075,24 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         }        
         if (empty($group_id)) {
             $group_id = api_get_group_id();
-        }        
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());            
+        }
+        
+        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+        
+        //Fixes default visibility for tests
+        
+        switch ($original_tool_id) {
+            case TOOL_QUIZ:
+                $objExerciseTmp = new Exercise();
+                $objExerciseTmp->read($item_id);
+                if ($visibility == 'visible') {
+                    $objExerciseTmp->enable();
+                    $objExerciseTmp->save();
+                } else {
+                    $objExerciseTmp->disable();
+                    $objExerciseTmp->save();
+                }
+                break;
+        }
     }
 }

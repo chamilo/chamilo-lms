@@ -174,11 +174,10 @@ if (!empty($attempts)) {
 		case EXERCISE_FEEDBACK_TYPE_EXAM:
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
 			break;
-	}
-	$row = 0;
+	}	
 	$column = 0;
 	foreach ($header_names as $item) {
-		$table->setHeaderContents($row, $column, $item);
+		$table->setHeaderContents(0, $column, $item);
 		$column++;
 	}
 	$row = 1;

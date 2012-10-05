@@ -110,17 +110,15 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     }
     $test              = $track_exercise_info['title'];
     $student_id        = $track_exercise_info['exe_user_id'];
-
     $session_id        = $track_exercise_info['session_id'];
     $lp_id             = $track_exercise_info['orig_lp_id'];
     //$lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
+    
+    $course_info = api_get_course_info();
 
     // Teacher data
-    $teacher_info      = api_get_user_info(api_get_user_id());
-    $user_info         = api_get_user_info($student_id);
-    $student_email     = $user_info['mail'];
-    $from              = $teacher_info['mail'];
+    $teacher_info      = api_get_user_info(api_get_user_id());    
     $from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 
     $url               = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&id_session='.$session_id.'&exerciseId='.$exercise_id;
@@ -159,7 +157,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         $result =Database::query($sql);
         Database::result($result,0,"question");
 
-        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks',teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
+        $query = "UPDATE $TBL_TRACK_ATTEMPT SET marks = '$my_marks', teacher_comment = '$my_comments' WHERE question_id = ".$my_questionid." AND exe_id=".$id;
         Database::query($query);
 
         //Saving results in the track recording table
@@ -177,26 +175,27 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
 
     $totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
     Database::query($totquery);
+    
+    if (isset($_POST['send_notification'])) {
+        //@todo move this somewhere else
+        $subject = get_lang('ExamSheetVCC');
 
-    //@todo move this somewhere else
-    $subject = get_lang('ExamSheetVCC');
+        $message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
+        $message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
+        $message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
 
-    $message  = '<p>'.get_lang('DearStudentEmailIntroduction') . '</p><p>'.get_lang('AttemptVCC');
-    $message .= '<h3>'.get_lang('CourseName'). '</h3><p>'.Security::remove_XSS($course_info['name']).'';
-    $message .= '<h3>'.get_lang('Exercise') . '</h3><p>'.Security::remove_XSS($test);
+        //Only for exercises not in a LP
+        if ($lp_id == 0) {
+            $message .= '<p>'.get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />';
+        }
 
-    //Only for exercises not in a LP
-    if ($lp_id == 0) {
-        $message .= '<p>'.get_lang('ClickLinkToViewComment') . ' <a href="#url#">#url#</a><br />';
+        $message .= '<p>'.get_lang('Regards').'</p>';
+        $message .= $from_name;
+        $message = str_replace("#test#", Security::remove_XSS($test), $message);
+        $message = str_replace("#url#", $url, $message);
+        MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
     }
-
-    $message .= '<p>'.get_lang('Regards').'</p>';
-    $message .= $from_name;
-
-    $message = str_replace("#test#", Security::remove_XSS($test), $message);
-    $message = str_replace("#url#", $url, $message);
-
-    @api_mail_html($student_email, $student_email, $subject, $message, $from_name, $from, array('charset'=>api_get_system_encoding()));
+    
 
     //Updating LP score here
     if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {

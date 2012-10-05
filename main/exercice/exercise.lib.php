@@ -46,7 +46,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	$answerType    = $objQuestionTmp->selectType();
 	$pictureName   = $objQuestionTmp->selectPicture();
 	
-	$html = '';
 	if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
 		// Question is not a hotspot
         
@@ -388,11 +387,11 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }			
             	$s.='</tr>';
 				
-			} elseif ($answerType == FILL_IN_BLANKS) {                
+			} elseif ($answerType == FILL_IN_BLANKS) {               
 				list($answer) = explode('::', $answer);
 				
-				api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);				
-				
+				api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
+                
 				if (isset($user_choice[0]['answer'])) {
 					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
 					$student_answer_list = $student_answer_list[0];
@@ -409,20 +408,22 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				        $value = null;
 				        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
 				        	//Cleaning student answer list
-				            $value = strip_tags($student_answer_list[$i]);				            				            
-				            $value = api_substr($value,1, api_strlen($value)-2);
+				            $value = strip_tags($student_answer_list[$i]);                            
+				            $value = api_substr($value, 1, api_strlen($value)-2);                            
 				            $value = explode('/', $value);
+                            
 				            if (!empty($value[0])) {
 				            	$value = trim($value[0]);
 				            	$value = str_replace('&nbsp;', '',  $value);
-				            }
-				            $answer = api_preg_replace('/\['.$teacher_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);				            
+				            }                            
+                            $teacher_item = api_preg_replace('-', '\-', $teacher_item);
+				            $answer = api_preg_replace('/\['.$teacher_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
 				        }				        				        
 				        $i++;				        
 				    }
 				} else {
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-				}				
+				}
 				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
 				// matching type, showing suggestions and answers

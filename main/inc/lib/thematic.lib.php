@@ -479,7 +479,7 @@ class Thematic
 					}
 				}
                 //DATE_TIME_FORMAT_LONG
-				$thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_FORMAT_ONLY_DAYNAME).$session_star.'</strong></div>';
+				$thematic_advance_item  = '<div><strong>'.api_convert_and_format_date($thematic_advance['start_date'], DATE_FORMAT_LONG).$session_star.'</strong></div>';
 //				$thematic_advance_item .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance['duration'].'</div>';
 				$thematic_advance_item .= '<div>'.$thematic_advance['duration'].' '.get_lang('HourShort').'</div>';
 				$thematic_advance_item .= '<div>'.Security::remove_XSS($thematic_advance['content'], STUDENT).'</div>';
@@ -743,10 +743,8 @@ class Thematic
 						$data[] = $row;
 					}	
 				}
-			}
-		
-		}
-			
+			}		
+		}			
 		return $data;
 	}
 

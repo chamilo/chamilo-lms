@@ -379,9 +379,7 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-if (isset($message)) {
-	Display::display_confirmation_message($message);
-}
+
 
 /*		MAIN CODE*/
 
@@ -427,6 +425,10 @@ if ( api_is_allowed_to_edit(null, true)) {
 	$form->addElement('static', 'additionalactions', null, $actions);
 	$form->display();
 	echo '</div>';
+}
+
+if (isset($message)) {
+	Display::display_confirmation_message($message);
 }
 
 /* 		DISPLAY LIST OF USERS */

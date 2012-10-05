@@ -264,8 +264,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
                                 
-                                //Redo visibility
-                                //api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'visible', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                //Redo visibility                                
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
@@ -277,7 +276,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							return $file_path;
 						} else {
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name);
+							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
 							if ($document_id) {
 								// Put the document in item_property update
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
@@ -309,13 +308,14 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 						chmod($store_path, $files_perm);
 
 						// Put the document data in the database
-						$document_id = add_document($_course, $new_file_path, 'file', $file_size, $document_name);
+						$document_id = add_document($_course, $new_file_path, 'file', $file_size, $document_name, null, 0, true);
 						if ($document_id) {
 							// Update document item_property
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
 						}
 						// If the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course, $upload_path, $user_id);
+                                                        
 						// Display success message to user
 						if ($output){
 							Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.get_lang('UplFileSavedAs').$new_file_path, false);
@@ -340,14 +340,15 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							chmod($store_path, $files_perm);
 
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name);
-                            
+							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
+                                                        
 							if ($document_id) {
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
+                                                        
 							// Display success message to user
 							if ($output){
 								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path, false);
@@ -854,9 +855,9 @@ function add_document($_course, $path, $filetype, $filesize, $title, $comment = 
 	        VALUES ($c_id, '$path','$filetype','$filesize','$title', '$comment', $readonly, $session_id)";
 	
 	if (Database::query($sql)) {
-		$document_id = Database::insert_id();
+		$document_id = Database::insert_id();        
         if ($document_id) {
-            if ($save_visibility) {
+            if ($save_visibility) {              
                 api_set_default_visibility($document_id, TOOL_DOCUMENT, $group_id);                
             }
         }        

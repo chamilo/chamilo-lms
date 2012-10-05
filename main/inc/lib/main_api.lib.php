@@ -6061,10 +6061,7 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
             break;
         case TOOL_QUIZ:
             $tool_id = 'quiz';
-            break;
-        /*case TOOL_GRADEBOOK:        
-            $tool_id = 'gradebook';            */
-            break;
+            break;        
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation'); 
     
@@ -6072,11 +6069,11 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
         $visibility = 'invisible';    
         if ($setting[$tool_id] == 'true') {
             $visibility = 'visible';            
-        }        
-        if (empty($group_id)) {
-            $group_id = api_get_group_id();
         }
         
+        if (empty($group_id)) {
+            $group_id = api_get_group_id();
+        }        
         api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
         
         //Fixes default visibility for tests

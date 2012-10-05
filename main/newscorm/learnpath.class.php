@@ -354,10 +354,9 @@ class learnpath {
                     $res_ins = Database::query($sql_ins);
                 }
             }            
-        }
-            
+        }            
         
-        $this->ordered_items = $this->get_flat_ordered_items_list($this->get_id(), 0, $course_id);
+        $this->ordered_items = self::get_flat_ordered_items_list($this->get_id(), 0, $course_id);
         $this->max_ordered_items = 0;
         foreach ($this->ordered_items as $index => $dummy) {
             if ($index > $this->max_ordered_items && !empty($dummy)) {
@@ -2682,7 +2681,7 @@ class learnpath {
      * @param	integer	Parent ID of the items to look for
      * @return	mixed	Ordered list of item IDs or false on error
      */
-    public function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null) {
+    public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null) {
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         } else {
@@ -9075,7 +9074,7 @@ EOD;
         if (!empty($course_data)) {
             $scorm_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/scorm/'.$this->path;
 
-            $list = $this->get_flat_ordered_items_list($lp_id);
+            $list = self::get_flat_ordered_items_list($lp_id);
             if (!empty($list)) {
                 foreach ($list as $item_id) {
                     $item = $this->items[$item_id];                    

@@ -6,7 +6,6 @@ require_once '../inc/global.inc.php';
 
 // resetting the course id
 $cidReset = true;
-
 $from_myspace = false;
 $from_link = '';
 if (isset($_GET['from']) && $_GET['from'] == 'myspace') {

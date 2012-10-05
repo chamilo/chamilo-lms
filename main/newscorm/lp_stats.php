@@ -16,7 +16,10 @@ require_once 'resourcelinker.inc.php';
 require_once '../exercice/exercise.lib.php';
 
 $course_code = api_get_course_id();
-$user_id = api_get_user_id();
+
+if (empty($user_id)) {
+    $user_id = api_get_user_id();
+}
 
 // Declare variables to be used in lp_stats.php
 
@@ -26,11 +29,9 @@ if (isset($_GET['lp_id']) && isset($lp_id) && !empty($lp_id)) {
 } else {
     if (isset($_SESSION['oLP'])) {
         $lp_id  = $_SESSION['oLP']->get_id();
-        $list   = $_SESSION['oLP']->get_flat_ordered_items_list($lp_id);
+        $list   = learnpath::get_flat_ordered_items_list($lp_id);
     }    
 }
-
-
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -149,7 +150,6 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
 }
 
 //Show lp items
-
 if (is_array($list) && count($list) > 0) {
     foreach ($list as $my_item_id) {
         $extend_this = 0;
@@ -161,47 +161,63 @@ if (is_array($list) && count($list) > 0) {
 
         // Prepare statement to go through each attempt.
         if (!empty($view)) {
-            $sql = "SELECT  iv.status as mystatus, v.view_count as mycount, iv.score as myscore, iv.total_time as mytime, i.id as myid,
-                            i.lp_id as mylpid, iv.lp_view_id as mylpviewid, i.title as mytitle, i.max_score as mymaxscore,
-                            iv.max_score as myviewmaxscore, i.item_type as item_type, iv.view_count as iv_view_count, iv.id as iv_id, path as path
-                    FROM $TBL_LP_ITEM as i INNER JOIN $TBL_LP_ITEM_VIEW as iv  ON (i.id = iv.lp_item_id )
-                    INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id)
+            $sql = "SELECT  
+                            iv.status as mystatus, 
+                            v.view_count as mycount, 
+                            iv.score as myscore, 
+                            iv.total_time as mytime, 
+                            i.id as myid,
+                            i.lp_id as mylpid, 
+                            iv.lp_view_id as mylpviewid, 
+                            i.title as mytitle, 
+                            i.max_score as mymaxscore,
+                            iv.max_score as myviewmaxscore, 
+                            i.item_type as item_type, 
+                            iv.view_count as iv_view_count, 
+                            iv.id as iv_id, 
+                            path
+                    FROM $TBL_LP_ITEM as i 
+                    INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                    INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
             WHERE
-            	i.c_id = $course_id AND
-            	iv.c_id = $course_id AND
-            	v.c_id = $course_id AND i.id = $my_item_id  AND
+                i.id = $my_item_id AND
                 i.lp_id = $lp_id  AND
-                v.user_id = " . $user_id . " AND
+                v.user_id = $user_id AND
                 v.view_count = $view AND v.session_id = $session_id
             ORDER BY iv.view_count $qry_order ";
             //var_dump($sql);
         } else {
-            $sql = "SELECT iv.status as mystatus, v.view_count as mycount, " .
-            " iv.score as myscore, iv.total_time as mytime, i.id as myid, i.lp_id as mylpid, iv.lp_view_id as mylpviewid, " .
-            " i.title as mytitle, i.max_score as mymaxscore, " .
-            " iv.max_score as myviewmaxscore, " .
-            " i.item_type as item_type, iv.view_count as iv_view_count, " .
-            " iv.id as iv_id, path as path " .
-            " FROM $TBL_LP_ITEM as i, $TBL_LP_ITEM_VIEW as iv, $TBL_LP_VIEW as v " .
-            " WHERE i.id = iv.lp_item_id AND
-            	i.c_id = $course_id AND
-            	iv.c_id = $course_id AND
-            	v.c_id = $course_id AND
-                i.id = $my_item_id " .
-            " AND iv.lp_view_id = v.id " .
-            " AND i.lp_id = $lp_id " .
-            " AND v.user_id = " . $user_id . " " .
-            " AND v.session_id = $session_id " .
-            " ORDER BY iv.view_count $qry_order ";
+            $sql = "SELECT 
+                        iv.status as mystatus, 
+                        v.view_count as mycount, 
+                        iv.score as myscore, 
+                        iv.total_time as mytime, 
+                        i.id as myid, 
+                        i.lp_id as mylpid, 
+                        iv.lp_view_id as mylpviewid,
+                        i.title as mytitle, 
+                        i.max_score as mymaxscore, 
+                        iv.max_score as myviewmaxscore, 
+                        i.item_type as item_type, 
+                        iv.view_count as iv_view_count,
+                        iv.id as iv_id, 
+                        path
+                    FROM $TBL_LP_ITEM as i 
+                    INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
+                    INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
+                    WHERE                        
+                        i.id = $my_item_id AND                        
+                        i.lp_id = $lp_id AND 
+                        v.user_id = $user_id AND 
+                        v.session_id = $session_id 
+                   ORDER BY iv.view_count $qry_order ";
         }
-
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
         $time_for_total = 'NaN';
 
         //Extend all + extend scorm?
-        if (($extend_this || $extend_all) && $num > 0) {
-            //var_dump('go');
+        if (($extend_this || $extend_all) && $num > 0) {            
             $row = Database :: fetch_array($result);
             $result_disabled_ext_all = false;
             if ($row['item_type'] == 'quiz') {

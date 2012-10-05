@@ -920,7 +920,7 @@ class CourseHome {
         return $lp_id;
     }
 
-    function get_navigation_items($include_admin_tools = false) {
+    static function get_navigation_items($include_admin_tools = false) {
         $navigation_items = array();        
         $course_id = api_get_course_int_id();
 
@@ -971,7 +971,8 @@ class CourseHome {
                 //link doesn't contain a parameter yet, add course id parameter with ?
                 $parameter_separator = '?';
             }
-            $navigation_items[$key]['link'] .= $parameter_separator.api_get_cidreq();
+            //$navigation_items[$key]['link'] .= $parameter_separator.api_get_cidreq();
+            $navigation_items[$key]['link'] .= $parameter_separator.'cidReq='.api_get_course_id().'&gidReq=0&id_session='.api_get_session_id();
         }
         
         return $navigation_items;
@@ -980,7 +981,7 @@ class CourseHome {
     /**
     * Show a navigation menu
     */
-    function show_navigation_menu() {
+    static function show_navigation_menu() {
         $navigation_items = self::get_navigation_items(true);
         $course_id = api_get_course_id();
 

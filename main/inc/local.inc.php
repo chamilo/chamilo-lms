@@ -135,6 +135,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
 
+
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
 // $cidReq can be set in the index.php file of a course-area
@@ -576,10 +577,9 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 
 // if the requested group is different from the group in session
 $gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
-if ($gidReq && $gidReq != $gid) {
+if (isset($gidReq) && $gidReq != $gid) {
     $gidReset = true;
 }
-
 
 /* USER INIT */
 

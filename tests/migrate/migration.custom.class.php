@@ -12,7 +12,7 @@
  */
 class MigrationCustom {
     
-    public $default_admin_id = 1;
+    const default_admin_id = 1;
 
     /**
      * The only required method is the 'none' method, which will not trigger
@@ -133,7 +133,7 @@ class MigrationCustom {
     }
     
     public function get_real_teacher_id($data, &$omigrate, $row_data) {
-        $default_teacher_id = $this->default_admin_id;
+        $default_teacher_id = self::default_admin_id;
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));        
@@ -280,7 +280,7 @@ class MigrationCustom {
         $data['create_gradebook_evaluation'] = true;
         $data['gradebook_params'] = array(
             'name' => 'Evaluación general',
-            'user_id' => $this->default_admin_id,
+            'user_id' => self::default_admin_id,
             'weight' => '20',
             'max' => '20'
         );

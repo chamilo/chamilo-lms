@@ -38,7 +38,7 @@ class MigrationMSSQL extends Migration {
         }
         
         if (in_array($table, array('ProgramaAcademico', 'Matricula'))) {
-            $top = " ";
+            $top = " TOP 100  ";
         }
       
        //$top = null;

@@ -180,8 +180,7 @@ class ThematicController {
                         $advance_html = null;
                         if (!empty($data)) {
                             foreach ($data as $advance) {                                
-                                //DATE_TIME_FORMAT_LONG
-                                $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_ONLY_DAYNAME) . ' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
+                                $advance_html .= api_convert_and_format_date($advance['start_date'], DATE_FORMAT_LONG) . ' ('.$advance['duration'].' '.get_lang('HourShort').')<br />'.$advance['content'].'<br />';
                             }
                         }
                         $table[] = array($theme['title'], $plan_html, $advance_html);

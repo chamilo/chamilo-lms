@@ -2093,7 +2093,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];
             
-            $question_list_answers[]   = array('question' => $result['open_question'], 'answer' => $result['open_answer']);            
+            $question_list_answers[] = array('question' => $result['open_question'], 'answer' => $result['open_answer']);            
             
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];   
@@ -2174,12 +2174,9 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score_text .= '</div>';
             $total_score_text .= '</div>';
         }
-    }
-    
-    echo $total_score_text;
-    
-    echo $exercise_content;
-    
+    }    
+    echo $total_score_text;   
+    echo $exercise_content;    
     if (!$show_only_score) {
         echo $total_score_text;
     }

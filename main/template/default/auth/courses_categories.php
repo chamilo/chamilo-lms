@@ -118,8 +118,7 @@ $stok = Security::get_token();
             echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
         }
 
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-         
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';         
 
         if (!empty($browse_courses_in_category)) {
 
@@ -170,21 +169,20 @@ $stok = Security::get_token();
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                         echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
                     }
-                    // Get access type for course button ("enter" or "register")
-                    $course['subscribe_allowed'] = $course['subscribe'];
-                    $access_type = CourseManager::get_access_link_by_user(api_get_user_id(),$course);
-                    $sub_btn = '';
-                    // Register button
-                    if (strcmp($access_type,'register')===0) {
-                        $sub_btn = ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
-                    }
+                    
+                    // Get access type for course button ("enter" or/and "register")                    
+                    $access_type = CourseManager::get_access_link_by_user(api_get_user_id(), $course); 
+                   
                     // Go To Course button (only if admin, if course public or if student already subscribed)
-                    if (empty($sub_btn)) {
+                    if (in_array('enter', $access_type)) {
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                     }
-                    // Print register button (if any)
-                    echo $sub_btn;
-
+                    
+                    // Register button
+                    if (in_array('register', $access_type)) {
+                         echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
+                    }
+                    
                     // If user is already subscribed to the course
                     if (!api_is_anonymous() && in_array($course['code'], $user_coursecodes)) {
                         if ($course['unsubscribe'] == UNSUBSCRIBE_ALLOWED) {

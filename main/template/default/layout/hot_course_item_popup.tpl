@@ -14,9 +14,10 @@
                             <h5>{{ hot_course.extra_info.teachers }}</h5>
                             {# hot_course.extra_info.rating_html #}
                         </div>
-                        <p>                                
-                            {{ hot_course.extra_info.go_to_course_button }}
+                        <p>
                             {{ hot_course.extra_info.description_button }}
+                            {{ hot_course.extra_info.go_to_course_button }}
+                            {{ hot_course.extra_info.register_button }}
                         </p>
                     </div>
                 </div>

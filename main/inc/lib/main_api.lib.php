@@ -1338,7 +1338,8 @@ function api_format_course_array($course_data) {
     $_course['categoryName' ]         = $course_data['faName'         ];
 
     $_course['visibility'   ]         = $course_data['visibility'      ];
-    $_course['subscribe_allowed']     = $course_data['subscribe'       ];
+    $_course['subscribe_allowed']     = $course_data['subscribe'];
+    $_course['subscribe']             = $course_data['subscribe'];
     $_course['unsubscribe']           = $course_data['unsubscribe'     ];
   
     $_course['course_language']       = $course_data['course_language'];
@@ -1357,10 +1358,8 @@ function api_format_course_array($course_data) {
     } else {
         $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
     }
-    $_course['course_image'] = $url_image;
-    
-    return $_course;
-    
+    $_course['course_image'] = $url_image;    
+    return $_course;    
 }
 
 

@@ -1527,16 +1527,17 @@ class CourseManager {
         $course_id = $course_info['real_id'];
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-        $sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
+        
+        $sql = "SELECT g.id, g.name
                 FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                LEFT JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
+                INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
                 ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
-                $session_condition
-                GROUP BY g.id
+                $session_condition                
                 ORDER BY g.name";
         $result = Database::query($sql);
-
+        
         while ($group_data = Database::fetch_array($result)) {
+            $group_data[] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;

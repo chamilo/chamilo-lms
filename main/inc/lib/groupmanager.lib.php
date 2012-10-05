@@ -7,7 +7,6 @@
 /**
  * Code
  */
-//require_once 'tablesort.lib.php';moved to autoload
 require_once 'fileManage.lib.php';
 require_once 'fileUpload.lib.php';
 require_once 'document.lib.php';
@@ -832,7 +831,6 @@ class GroupManager {
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row['user_id']; 
         }
-
         return $result;
     }
 
@@ -966,10 +964,14 @@ class GroupManager {
 	 * @param int $group_id
 	 * @return int Number of students in the given group.
 	 */
-	public static function number_of_students ($group_id) {
+	public static function number_of_students ($group_id, $course_id = null) {
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
-		$course_id = api_get_course_int_id();		
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
 		$sql = "SELECT  COUNT(*) AS number_of_students FROM $table_group_user WHERE c_id = $course_id AND group_id = $group_id";
 		$db_result = Database::query($sql);
 		$db_object = Database::fetch_object($db_result);
@@ -1117,10 +1119,10 @@ class GroupManager {
 		$course_id = api_get_course_int_id();
 		
 		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username 
-				FROM ".$table_user." u, ".$table_group_user." ug 
-				WHERE 	ug.c_id = $course_id AND
-						ug.group_id='".$group_id."' AND 
-						ug.user_id=u.user_id". $order_clause;
+				FROM  $table_user u INNER JOIN $table_group_user ug ON (ug.user_id = u.user_id)
+				WHERE ug.c_id = $course_id AND
+					  ug.group_id = $group_id 
+                $order_clause";
 		$db_result = Database::query($sql);
 		$users = array ();
 		while ($user = Database::fetch_object($db_result)) {

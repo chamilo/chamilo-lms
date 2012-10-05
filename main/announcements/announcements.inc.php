@@ -754,7 +754,7 @@ class AnnouncementManager {
     public static function get_course_groups() {
         $session_id = api_get_session_id();
         if ($session_id != 0) {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($session_id));
+            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id);
         } else {
             $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0);
         }

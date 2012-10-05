@@ -1396,7 +1396,8 @@ abstract class Question
         }
         
         $question_title = get_lang("Question").' '.($counter_label).' : '.$this->question;
-	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$question_title.'</h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));        
+	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+        $header .= '<div class="page-header"><h4>'.$question_title.'</h4></div>';
 	    $header .= Display::div($this->description, array('id'=>'question_description'));	    
         return $header;
 	}

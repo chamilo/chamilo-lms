@@ -47,8 +47,9 @@ class MigrationCustom {
      * Log data from the original users table
      */
     public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-        $omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row_data;
-        return $data;
+        $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdAlumno' => $row_data['uidIdAlumno']);
+        $omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row;
+        return $row_data['uidIdAlumno'];
     }
     
     public function clean_utf8($value) {
@@ -62,18 +63,20 @@ class MigrationCustom {
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
         if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
             $omigrate['users_persona'][$row_data['uidIdPersona']][] = $omigrate['users_persona'][$row_data['uidIdPersona']];
-            $omigrate['users_persona'][$row_data['uidIdPersona']][] = $row_data;
+            //$omigrate['users_persona'][$row_data['uidIdPersona']][] = $row_data;
             //error_log(print_r($row_data, 1));
             //error_log(print_r($omigrate['users_persona'][$row_data['uidIdPersona']], 1));            
             error_log('WHAT??');
         } else {
-            $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
+            //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
+            $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data['uidIdPersona'];
         }
         return $data;
     }
     
     public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
-        $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row_data;
+        $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdEmpleado' => $row_data['uidIdEmpleado']);
+        $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row;
         return $row_data['uidIdEmpleado'];               
     }
 
@@ -278,6 +281,7 @@ class MigrationCustom {
         
         //Creates an evaluation
         $data['create_gradebook_evaluation'] = true;
+        $data['language'] = 'spanish';
         $data['gradebook_params'] = array(
             'name' => 'Evaluación general',
             'user_id' => self::default_admin_id,

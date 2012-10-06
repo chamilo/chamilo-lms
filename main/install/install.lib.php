@@ -16,6 +16,7 @@ define('SYSTEM_MAIN_DATABASE_FILE', 'db_main.sql');
 define('COUNTRY_DATA_FILENAME',     'country_data.csv');
 define('COURSES_HTACCESS_FILENAME', 'htaccess.dist');
 define('SYSTEM_CONFIG_FILENAME',    'configuration.dist.php');
+require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
 
 /*      COMMON PURPOSE FUNCTIONS    */
 

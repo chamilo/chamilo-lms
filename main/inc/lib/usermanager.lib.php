@@ -7,24 +7,28 @@
 * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
 */
 /**
- * Code
- */
-
-/**
  * Class
  * @package chamilo.include.user
  */
 class UserManager {
-	private function __construct () {
-	}
+    /**
+     * Empty constructor. This class is mostly static.
+     */
+    private function __construct () {
+    }
     
-    /* Simple version of create_user */
+    /**
+     * Simpler version of create_user(). Doesn't send an e-mail and doesn't manage extra
+     * fields, between other things
+     * @param array Array of user details (array('status'=>...,'username'=>..., ...))
+     * @return mixed Array of user information
+     */
     public static function add($params) {
         global $_configuration;
         
         $access_url_id = 1;
          
-		if (api_get_multiple_access_url()) {		
+        if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();
         }
         
@@ -42,7 +46,7 @@ class UserManager {
             }
         }
         
-		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+        if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
                 return api_set_failure('portal teachers limit reached');
@@ -62,14 +66,14 @@ class UserManager {
         $params['username'] = self::purify_username($params['username']);
         
         // First check wether the login already exists
-		if (!self::is_username_available($params['username'])) {
+        if (!self::is_username_available($params['username'])) {
             //Already added it            
             if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {
                 $user_info = self::get_user_info_simple($params['username']);
                 return $user_info;
             } 
-			return api_set_failure('login-pass already taken');
-		}
+            return api_set_failure('login-pass already taken');
+        }
         
         unset($params['return_item_if_already_exists']);        
         
@@ -80,41 +84,40 @@ class UserManager {
         }
         
         if (!isset($params['creator_id'])) {
-			$params['creator_id'] = api_get_user_id();
-		}       
+            $params['creator_id'] = api_get_user_id();
+        }       
         
         if (empty($params['encrypt_method'])) {
-			$params['password'] = api_get_encrypted_password($params['password']);            
-		} else {
-			if ($_configuration['password_encryption'] === $params['encrypt_method']) {
-				if ($params['encrypt_method'] == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $params['password'])) {
-					return api_set_failure('encrypt_method invalid');
-				} else if ($params['encrypt_method'] == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $params['password'])) {
-					return api_set_failure('encrypt_method invalid');
-				}
-			} else {
-				return api_set_failure('encrypt_method invalid');
-			}
-		}
-        
+            $params['password'] = api_get_encrypted_password($params['password']);            
+        } else {
+            if ($_configuration['password_encryption'] === $params['encrypt_method']) {
+                if ($params['encrypt_method'] == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $params['password'])) {
+                    return api_set_failure('encrypt_method invalid');
+                } else if ($params['encrypt_method'] == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $params['password'])) {
+                    return api_set_failure('encrypt_method invalid');
+                }
+            } else {
+                return api_set_failure('encrypt_method invalid');
+            }
+        }
         $params['registration_date'] = api_get_utc_datetime();        
                      
         // Database table definition
-		$table = Database::get_main_table(TABLE_MAIN_USER);
+        $table = Database::get_main_table(TABLE_MAIN_USER);
         $user_id = Database::insert($table, $params);
         
         if ($user_id) {
             if (api_get_multiple_access_url()) {		
-				UrlManager::add_user_to_url($user_id, api_get_current_access_url_id());				
-			} else {
-				//we are adding by default the access_url_user table with access_url_id = 1
-				UrlManager::add_user_to_url($user_id, 1);
-			}
+                UrlManager::add_user_to_url($user_id, api_get_current_access_url_id());
+            } else {
+                //we are adding by default the access_url_user table with access_url_id = 1
+                UrlManager::add_user_to_url($user_id, 1);
+            }
             
             // Add event to system log			
-			$user_id_manager = api_get_user_id();
-			$user_info = api_get_user_info($user_id);
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
+            $user_id_manager = api_get_user_id();
+            $user_info = api_get_user_info($user_id);
+            event_system(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
             event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);            
             return $user_info;      
         } else {
@@ -122,145 +125,143 @@ class UserManager {
         }
     }
 
-	/**
-	  * Creates a new user for the platform
-	  * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
-	  * 		Roan Embrechts <roan_embrechts@yahoo.com>
-	  *
-	  * @param	string	Firstname
-	  * @param	string	Lastname
-	  * @param	int   	Status (1 for course tutor, 5 for student, 6 for anonymous)
-	  * @param	string	e-mail address
-	  * @param	string	Login
-	  * @param	string	Password
-	  * @param	string	Any official code (optional)
-	  * @param	string	User language	(optional)
-	  * @param	string	Phone number	(optional)
-	  * @param	string	Picture URI		(optional)
-	  * @param	string	Authentication source	(optional, defaults to 'platform', dependind on constant)
-	  * @param	string	Account expiration date (optional, defaults to '0000-00-00 00:00:00')
-	  * @param	int		Whether the account is enabled or disabled by default
- 	  * @param	int		The department of HR in which the user is registered (optional, defaults to 0)
- 	  * @param 	array	Extra fields
- 	  * @param	string	Encrypt method used if password is given encrypted. Set to an empty string by default
-	  * @return mixed   new user id - if the new user creation succeeds, false otherwise
-	  *
-	  * @desc The function tries to retrieve $_user['user_id'] from the global space.
-	  * if it exists, $_user['user_id'] is the creator id. If a problem arises,
-	  * it stores the error message in global $api_failureList
-	  */
-	public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false) {
-		global $_user, $_configuration;
+    /**
+     * Creates a new user for the platform
+     * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
+     * 		Roan Embrechts <roan_embrechts@yahoo.com>
+     *
+     * @param	string	Firstname
+     * @param	string	Lastname
+     * @param	int   	Status (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param	string	e-mail address
+     * @param	string	Login
+     * @param	string	Password
+     * @param	string	Any official code (optional)
+     * @param	string	User language	(optional)
+     * @param	string	Phone number	(optional)
+     * @param	string	Picture URI		(optional)
+     * @param	string	Authentication source	(optional, defaults to 'platform', dependind on constant)
+     * @param	string	Account expiration date (optional, defaults to '0000-00-00 00:00:00')
+     * @param	int		Whether the account is enabled or disabled by default
+     * @param	int		The department of HR in which the user is registered (optional, defaults to 0)
+     * @param 	array	Extra fields
+     * @param	string	Encrypt method used if password is given encrypted. Set to an empty string by default
+     * @return mixed   new user id - if the new user creation succeeds, false otherwise
+     *
+     * @desc The function tries to retrieve $_user['user_id'] from the global space.
+     * if it exists, $_user['user_id'] is the creator id. If a problem arises,
+     * it stores the error message in global $api_failureList
+     */
+    public static function create_user($firstName, $lastName, $status, $email, $loginName, $password, $official_code = '', $language = '', $phone = '', $picture_uri = '', $auth_source = PLATFORM_AUTH_SOURCE, $expiration_date = '0000-00-00 00:00:00', $active = 1, $hr_dept_id = 0, $extra = null, $encrypt_method = '', $send_mail = false) {
+        global $_user, $_configuration;
         $original_password = $password;
         $access_url_id = 1;
         
-		if (api_get_multiple_access_url()) {		
+        if (api_get_multiple_access_url()) {		
             $access_url_id = api_get_current_access_url_id();
         }
         
-		if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 return api_set_failure('portal users limit reached');
             }
         }
         
-		if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+        if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
                 return api_set_failure('portal teachers limit reached');
             }
         }
 
-		$firstName 	= Security::remove_XSS($firstName);
-		$lastName	= Security::remove_XSS($lastName);
-		$loginName 	= Security::remove_XSS($loginName);
-		$phone 		= Security::remove_XSS($phone);
-		
-		// database table definition
-		$table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $firstName 	= Security::remove_XSS($firstName);
+        $lastName	= Security::remove_XSS($lastName);
+        $loginName 	= Security::remove_XSS($loginName);
+        $phone 		= Security::remove_XSS($phone);
 
-    	//Checking the user language
+        // database table definition
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        //Checking the user language
         $languages = api_get_languages();   
         if (!in_array($language, $languages['folder'])) {
             $language = api_get_setting('platformLanguage');
         }
 
-		if ($_user['user_id']) {
-			$creator_id = intval($_user['user_id']);
-		} else {
-			$creator_id = '';
-		}
+        if ($_user['user_id']) {
+            $creator_id = intval($_user['user_id']);
+        } else {
+            $creator_id = '';
+        }
+        // First check wether the login already exists
+        if (!self::is_username_available($loginName)) {
+            return api_set_failure('login-pass already taken');
+        }
         
-		// First check wether the login already exists
-		if (!self::is_username_available($loginName)) {
-			return api_set_failure('login-pass already taken');
-		}
+        //$password = "PLACEHOLDER";
         
-		//$password = "PLACEHOLDER";
-        
-		if (empty($encrypt_method)) {
-			$password = api_get_encrypted_password($password);            
-		} else {
-			if ($_configuration['password_encryption'] === $encrypt_method ) {
-				if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
-					return api_set_failure('encrypt_method invalid');
-				} else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
-					return api_set_failure('encrypt_method invalid');
-				}
-			} else {
-				return api_set_failure('encrypt_method invalid');
-			}
-		}
+        if (empty($encrypt_method)) {
+            $password = api_get_encrypted_password($password);            
+        } else {
+            if ($_configuration['password_encryption'] === $encrypt_method ) {
+                if ($encrypt_method == 'md5' && !preg_match('/^[A-Fa-f0-9]{32}$/', $password)) {
+                    return api_set_failure('encrypt_method invalid');
+                } else if ($encrypt_method == 'sha1' && !preg_match('/^[A-Fa-f0-9]{40}$/', $password)) {
+                    return api_set_failure('encrypt_method invalid');
+                }
+            } else {
+                return api_set_failure('encrypt_method invalid');
+            }
+        }
         
         
-		//@todo replace this date with the api_get_utc_date function big problem with users that are already registered
-		$current_date = api_get_utc_datetime();
-		$sql = "INSERT INTO $table_user
-				SET lastname = 		'".Database::escape_string(trim($lastName))."',
-				firstname = 		'".Database::escape_string(trim($firstName))."',
-				username =			'".Database::escape_string(trim($loginName))."',
-				status = 			'".Database::escape_string($status)."',
-				password = 			'".Database::escape_string($password)."',
-				email = 			'".Database::escape_string($email)."',
-				official_code	= 	'".Database::escape_string($official_code)."',
-				picture_uri 	= 	'".Database::escape_string($picture_uri)."',
-				creator_id  	= 	'".Database::escape_string($creator_id)."',
-				auth_source = 		'".Database::escape_string($auth_source)."',
-				phone = 			'".Database::escape_string($phone)."',
-				language = 			'".Database::escape_string($language)."',
-				registration_date = '".$current_date."',
-				expiration_date = 	'".Database::escape_string($expiration_date)."',
-				hr_dept_id = 		'".Database::escape_string($hr_dept_id)."',
-				active = 			'".Database::escape_string($active)."'";
-		$result = Database::query($sql);
+        //@todo replace this date with the api_get_utc_date function big problem with users that are already registered
+        $current_date = api_get_utc_datetime();
+        $sql = "INSERT INTO $table_user ".
+               "SET lastname =         '".Database::escape_string(trim($lastName))."',".
+               "firstname =         '".Database::escape_string(trim($firstName))."',".
+               "username =            '".Database::escape_string(trim($loginName))."',".
+               "status =             '".Database::escape_string($status)."',".
+               "password =             '".Database::escape_string($password)."',".
+               "email =             '".Database::escape_string($email)."',".
+               "official_code    =     '".Database::escape_string($official_code)."',".
+               "picture_uri     =     '".Database::escape_string($picture_uri)."',".
+               "creator_id      =     '".Database::escape_string($creator_id)."',".
+               "auth_source =         '".Database::escape_string($auth_source)."',".
+               "phone =             '".Database::escape_string($phone)."',".
+               "language =             '".Database::escape_string($language)."',".
+               "registration_date = '".$current_date."',".
+               "expiration_date =     '".Database::escape_string($expiration_date)."',".
+               "hr_dept_id =         '".Database::escape_string($hr_dept_id)."',".
+               "active =             '".Database::escape_string($active)."'";
+        $result = Database::query($sql);
         
-		if ($result) {
-			//echo "id returned";
-			$return = Database::insert_id();			
-			if (api_get_multiple_access_url()) {		
-				UrlManager::add_user_to_url($return, api_get_current_access_url_id());				
-			} else {
-				//we are adding by default the access_url_user table with access_url_id = 1
-				UrlManager::add_user_to_url($return, 1);
-			}
+        if ($result) {
+            //echo "id returned";
+            $return = Database::insert_id();            
+            if (api_get_multiple_access_url()) {        
+                UrlManager::add_user_to_url($return, api_get_current_access_url_id());                
+            } else {
+                //we are adding by default the access_url_user table with access_url_id = 1
+                UrlManager::add_user_to_url($return, 1);
+            }
             
             if (!empty($email) && $send_mail) {
-				$recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
-				$emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                $recipient_name = api_get_person_name($firstName, $lastName, null, PERSON_NAME_EMAIL_ADDRESS);
+                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
 
-				$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
-				$email_admin = api_get_setting('emailAdministrator');
+                $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
+                $email_admin = api_get_setting('emailAdministrator');
 
-				if ($_configuration['multiple_access_urls']) {
-					$access_url_id = api_get_current_access_url_id();
-					if ($access_url_id != -1) {
-						$url = api_get_access_url($access_url_id);
-						$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-					}
-				} else {
-					$emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
-				}                
+                if ($_configuration['multiple_access_urls']) {
+                    $access_url_id = api_get_current_access_url_id();
+                    if ($access_url_id != -1) {
+                        $url = api_get_access_url($access_url_id);
+                        $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $url['url'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                    }
+                } else {
+                    $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($firstName, $lastName)).",\n\n".get_lang('YouAreReg')." ".api_get_setting('siteName') ." ".get_lang('WithTheFollowingSettings')."\n\n".get_lang('Username')." : ". $loginName ."\n". get_lang('Pass')." : ".stripslashes($original_password)."\n\n" .get_lang('Address') ." ". api_get_setting('siteName') ." ". get_lang('Is') ." : ". $_configuration['root_web'] ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
+                }                
 
 
                 /* MANAGE EVENT WITH MAIL */
@@ -274,28 +275,28 @@ class UserManager {
                     @api_mail_html($recipient_name, $email, $emailsubject, $emailbody, $sender_name, $email_admin);  
                 }
                 /* ENDS MANAGE EVENT WITH MAIL */              
-			}          
-			// Add event to system log			
-			$user_id_manager = api_get_user_id();
-			$user_info = api_get_user_info($return);
-			event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+            }          
+            // Add event to system log            
+            $user_id_manager = api_get_user_id();
+            $user_info = api_get_user_info($return);
+            event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
             event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
 
-		} else {			
-			$return = false;
+        } else {            
+            $return = false;
             //echo $sql;
             return api_set_failure('error inserting in Database');
-		}
+        }
 
-		if (is_array($extra) && count($extra) > 0) {
-			$res = true;
-			foreach($extra as $fname => $fvalue) {
-				$res = $res && self::update_extra_field_value($return, $fname, $fvalue);
-			}
-		}
-		self::update_extra_field_value($return, 'already_logged_in', 'false');        
-		return $return;
-	}
+        if (is_array($extra) && count($extra) > 0) {
+            $res = true;
+            foreach($extra as $fname => $fvalue) {
+                $res = $res && self::update_extra_field_value($return, $fname, $fvalue);
+            }
+        }
+        self::update_extra_field_value($return, 'already_logged_in', 'false');        
+        return $return;
+    }
 
 	/**
 	 * Can user be deleted?

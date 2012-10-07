@@ -251,7 +251,7 @@ form .formw input {
     margin-top: 2px;
 }
 
-#accept_licence {
+#accept_licence, #checkbox {
   margin-right: 5px;
   margin-top: -1px;
 }

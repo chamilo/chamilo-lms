@@ -251,6 +251,11 @@ form .formw input {
     margin-top: 2px;
 }
 
+#accept_licence {
+  margin-right: 5px;
+  margin-top: -1px;
+}
+
 /* end chamilo forms fixes */
 
 

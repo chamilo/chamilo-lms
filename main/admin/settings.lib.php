@@ -210,19 +210,20 @@ function handle_stylesheets() {
         echo '</div>';
     }
 
-    $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=stylesheets&showuploadform=true');
+    $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets&showuploadform=true');
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
-    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif');
+    $allowed_file_types = array('css', 'zip', 'jpeg', 'jpg', 'png', 'gif', 'ico');
+    
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'), array('class'=>'save'));
     if ($form->validate() && is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
         $values = $form->exportValues();
-        $picture_element = & $form->getElement('new_stylesheet');
+        $picture_element = $form->getElement('new_stylesheet');        
         $picture = $picture_element->getValue();
-        $result = upload_stylesheet($values, $picture);
+        $result  = upload_stylesheet($values, $picture);
 
         // Add event to the system log.
         $user_id = api_get_user_id();
@@ -351,7 +352,7 @@ function upload_stylesheet($values, $picture) {
                 $file = $zip->statIndex($i);
                 if (substr($file['name'], -1) != '/') {
                     $path_parts = pathinfo($file['name']);
-                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css'))) {
+                    if (!in_array($path_parts['extension'], array('jpg', 'jpeg', 'png', 'gif', 'css', 'ico'))) {
                         $valid = false;
                         $invalid_files[] = $file['name'];
                     }

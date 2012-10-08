@@ -162,9 +162,18 @@ switch ($action) {
         $count      = $obj->get_count();
         break;
     case 'get_usergroups':
-    case 'get_usergroups_teacher':
         $obj        = new UserGroup();
         $count      = $obj->get_count();
+        break;
+    case 'get_usergroups_teacher':
+        $obj        = new UserGroup();
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
+        $course_id = api_get_course_int_id();
+        if ($type == 'registered') {        
+            $count = $obj->get_usergroup_by_course_with_data_count($course_id);
+        } else {
+            $count = $obj->get_count();    
+        }
         break;
     default:
         exit;   
@@ -396,15 +405,22 @@ switch ($action) {
         msort($result, $sidx);
         break;   
     case 'get_usergroups_teacher':
-        $columns = array('name', 'users', 'actions');
-        $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
-        $new_result = array();
-        $course_id = api_get_course_int_id();
-        
+        $columns = array('name', 'users', 'actions');    
+        $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
+        switch ($type) {
+            case 'not_registered':                
+                $options['where'] = array(" usergroup.course_id IS NULL" => ' ');
+                $result = $obj->get_usergroup_not_in_course($options);
+                break;
+            case 'registered':
+                $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
+                $result = $obj->get_usergroup_in_course($options);
+                break;
+        }        
+        $new_result = array();        
         if (!empty($result)) {
             foreach ($result as $group) {                
-                $group['users']      = count($obj->get_users_by_usergroup($group['id']));
-                
+                $group['users'] = count($obj->get_users_by_usergroup($group['id']));                
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url  = 'class.php?action=remove_class_from_course&id='.$group['id'];
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
@@ -412,13 +428,13 @@ switch ($action) {
                     $url  = 'class.php?action=add_class_to_course&id='.$group['id'];
                     $icon = Display::return_icon('add.png', get_lang('Add'));                    
                 }
-                $group['actions']    = Display::url($icon, $url);
-                    
+                $group['actions']    = Display::url($icon, $url);                    
                 $new_result[]        = $group;
             }
-            $result = $new_result;
-        }                    
-        if(!in_array($sidx, $columns)) {
+            $result = $new_result;            
+        }
+        
+        if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
         //Multidimensional sort

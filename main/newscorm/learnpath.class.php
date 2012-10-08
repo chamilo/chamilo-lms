@@ -6086,13 +6086,13 @@ class learnpath {
             reset($arrLP);
         }
 
-        $return .= "\t\t\t\t" . '</select>';
+        $return .= '</select>';
         $return .= '</td>';
         $return .= '</tr>';
         $return .= '<tr>';
         $return .= '<td class="label"><label for="previous">' . get_lang('Position') . ' :</label></td>';
         $return .= '<td class="input">';
-        $return .= "\t\t\t\t" . '<select id="previous" name="previous" size="1">';
+        $return .= '<select id="previous" name="previous" size="1">';
         $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6107,7 +6107,7 @@ class learnpath {
             }
         }
 
-        $return .= "\t\t\t\t" . '</select>';
+        $return .= '</select>';
         $return .= '</td>';
         $return .= '</tr>';
 
@@ -6136,27 +6136,6 @@ class learnpath {
                     }
                 }
             }
-
-            //$return .= '<tr>';
-
-            //$return .= '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').' :</label></td>';
-            //$return .= '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">'.get_lang('NoPrerequisites').'</option>';
-/*
-            foreach ($arrHide as $key => $value) {
-                if ($key == $s_selected_position && $action == 'add') {
-                    $return .= '<option value="' . $key . '" selected="selected">' . $value['value'] . '</option>';
-                }
-                elseif ($key == $id_prerequisite && $action == 'edit') {
-                    $return .= '<option value="' . $key . '" selected="selected">' . $value['value'] . '</option>';
-                } else {
-                    $return .= '<option value="' . $key . '">' . $value['value'] . '</option>';
-                }
-            }
-*/
-            //$return .= "</select></td>";
-            //$return .= '</tr>';
-            //$return .= '<tr>';
-            //$return .= '</tr>';
         }
 
         $return .= '<tr>';
@@ -6171,16 +6150,12 @@ class learnpath {
 
         if (is_numeric($extra_info)) {
             $return .= '<input name="path" type="hidden" value="' . $extra_info . '" />';
-        }
-        elseif (is_array($extra_info)) {
+        } elseif (is_array($extra_info)) {
             $return .= '<input name="path" type="hidden" value="' . $extra_info['path'] . '" />';
         }
-
         $return .= '<input name="type" type="hidden" value="' . TOOL_HOTPOTATOES . '" />';
         $return .= '<input name="post_time" type="hidden" value="' . time() . '" />';
-
         $return .= '</form>';
-
         return $return;
     }
 
@@ -7934,10 +7909,15 @@ class learnpath {
         $return .= '<a href="' . api_get_path(REL_CODE_PATH) . 'exercice/exercise_admin.php?lp_id=' . $this->lp_id . '">' . get_lang('NewExercise') . '</a>';
         $return .= '</li>';
 
-        // Display quizhotpotatoes.
+        // Display hotpotatoes
         while ($row_hot = Database :: fetch_array($res_hot)) {
-            $return .= '<li>';
-            $return .= '<img alt="hp" src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="18px" height="18px" />';
+            $return .= '<li class="lp_resource_element" data_id="'.$row_hot['id'].'" data_type="hotpotatoes" title="'.$row_hot['title'].'" >';
+            
+            $return .= '<a class="moved" href="#">';
+            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+            $return .= '</a> ';
+            
+            $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
         }

@@ -387,43 +387,56 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }			
             	$s.='</tr>';
 				
-			} elseif ($answerType == FILL_IN_BLANKS) {               
+			} elseif ($answerType == FILL_IN_BLANKS) {
 				list($answer) = explode('::', $answer);
-				
-				api_preg_match_all('/\[[^]]+\]/', $answer, $teacher_answer_list);
                 
+                //Correct answer
+				api_preg_match_all('/\[[^]]+\]/', $answer, $correct_answer_list);
+                
+                //Student's answezr
 				if (isset($user_choice[0]['answer'])) {
 					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
 					$student_answer_list = $student_answer_list[0];
 				}
                 
-                if ($debug_mark_answer) {                    
-					$student_answer_list = $teacher_answer_list[0];                    
+                //If debug
+                if ($debug_mark_answer) {
+					$student_answer_list = $correct_answer_list[0];                    
                 }
                 
-				if (!empty($teacher_answer_list) && !empty($student_answer_list)) {
-				    $teacher_answer_list = $teacher_answer_list[0];				    
+				if (!empty($correct_answer_list) && !empty($student_answer_list)) {
+				    $correct_answer_list = $correct_answer_list[0];				    
 				    $i = 0;				    
-				    foreach ($teacher_answer_list as $teacher_item) {				    	
+				    foreach ($correct_answer_list as $correct_item) {
 				        $value = null;
 				        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
+                            
 				        	//Cleaning student answer list
 				            $value = strip_tags($student_answer_list[$i]);                            
 				            $value = api_substr($value, 1, api_strlen($value)-2);                            
 				            $value = explode('/', $value);
                             
-				            if (!empty($value[0])) {
-				            	$value = trim($value[0]);
-				            	$value = str_replace('&nbsp;', '',  $value);
-				            }                            
-                            $teacher_item = api_preg_replace('-', '\-', $teacher_item);
-				            $answer = api_preg_replace('/\['.$teacher_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
+				            if (!empty($value[0])) {				            	
+				            	$value = str_replace('&nbsp;', '',  trim($value[0]));
+				            }
+                            
+                            if (api_strpos($correct_item, '-') !== false) {
+                                $correct_item = api_preg_replace('/-/',  '\-', $correct_item);
+                            }
+                            
+                            if (api_strpos($value, '-') !== false) {
+                                $value = api_preg_replace('/-/',  '\-', $value);
+                            }
+                            
+				            $answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
+                            $answer = str_replace('\-', '-', $answer);
 				        }				        				        
 				        $i++;				        
 				    }
 				} else {
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
 				}
+                
 				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
 				// matching type, showing suggestions and answers

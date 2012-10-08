@@ -2,7 +2,7 @@
 // German language file.
 // Please, use UTF-8 encoding.
 
-FCKLang['DlgAudioTitle'] = 'Insert audio / Audio properties' ;
+FCKLang['DlgAudioTitle'] = 'Audio einfügen/ Audio Eigenschaften' ;
 FCKLang['DlgAudioPlayback'] = 'Playback' ;
 FCKLang['DlgAudioAutoplay'] = 'Autoplay' ;
 ﻿

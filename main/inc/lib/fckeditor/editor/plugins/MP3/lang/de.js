@@ -2,6 +2,6 @@
 // MP3 Dialog.
 // Please, use UTF-8 encoding.
 
-FCKLang["DlgMP3Title"] = "Import MP3" ;
-FCKLang["DlgMP3Upload"] = "From my Computer" ;
-FCKLang["DlgMP3Tab"] = "From course" ;
+FCKLang["DlgMP3Title"] = "MP3 importieren" ;
+FCKLang["DlgMP3Upload"] = "von meinem Computer" ;
+FCKLang["DlgMP3Tab"] = "aus dem Kurs" ;

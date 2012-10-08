@@ -86,37 +86,37 @@ ImageManager.I18N = {
 	"Padding:"										: "Innenabstand:",
 	"Border:"										: "Rand:",
 	"Upload:"										: "Hochladen:",
-	"File name was changed into "		: "File name was changed into ", // not translated yet
-	"start x coordinate"							: "start x coordinate", // not translated yet
-	"start y coordinate"							: "start y coordinate", // not translated yet
-	"height"											: "höhe",
-	"width"											: "breite ",
-	"angle"											: "winkel ",
-	"opacity"										: "opazität",
-	"diagonal length"							: "diagonal length", // not translated yet
-	"Watermarking is disabled."			: "Watermarking is disabled.", // not translated yet
-	"No watermarks were found or all watermarks are to big for the target image."		: "No watermarks were found or all watermarks are to big for the target image.", // not translated yet
+	"File name was changed into "		: "Dateiname wurde geändert zu ",
+	"start x coordinate"							: "X Koordinate Anfang",
+	"start y coordinate"							: "Y Koordinate Anfang",
+	"height"											: "Höhe",
+	"width"											: "Breite ",
+	"angle"											: "Winkel ",
+	"opacity"										: "Opazität",
+	"diagonal length"							: "Diagonale",
+	"Watermarking is disabled."			: "Wasserzeichen wurde deaktiviert.",
+	"No watermarks were found or all watermarks are to big for the target image."		: "Keine Wasserzeichen gefunden oder diese sind zu groß für das Ziel-Bild.",
 	"Please delete all files/folders inside the folder you wish to delete first."				: "Bitte löschen Sie zuerst alle Dateien im Ordner den Sie löschen möchten.",
 	"Invalid folder name, please choose another folder name."									: "Ungültiger Ordnername, bitte wählen sie einen anderen Namen.",
-	"GIF format is not supported, image editing not supported."								: "GIF Format wird nicht unterstützt, Bildbearbeitung wird nicht unterstützt.",
-	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Please do not close the window while uploading a new image! If you do, the original image gets deleted!", // not translated yet
-	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content.", // not translated yet
+	"GIF format is not supported, image editing not supported."								: "GIF Format wird zur Bildbearbeitung nicht unterstützt.",
+	"Please do not close the window while uploading a new image! If you do, the original image gets deleted!" : "Bitte das Fenster während dem Hochladen beim Überschreiben nicht schliessen! Ansonsten wird das Originalbild gelöscht!",
+	"Error: Couldn't update editor window.\nAny image that was edited and saved will still be visible as the old version!\nPlease save and reload the editor content." : "Fehler: Editor kann nicht aktualisiert werde.\nAlle Bilder, die bearbeitet und gespeichert wurden, werden daher nicht korrekt angezeigt!\nBitte nochmals speichern, und den Editor neu laden.",
 
-	"Edit image"                  : "Edit image",
-	"Alt"                         : "Alt",
-	"Align"                       : "Align",
-	"Not Set"                     : "Not Set",
-	"Left"                        : "Left",
-	"Right"                       : "Right",
-	"Texttop"                     : "Text Top",
-	"Absmiddle"                   : "Abs Middle",
-	"Baseline"                    : "Baseline",
-	"Absbottom"                   : "Abs Bottom",
-	"Bottom"                      : "Bottom",
-	"Middle"                      : "Middle",
-	"Top"                         : "Top",
+	"Edit image"                  : "Bild bearbeiten",
+	"Alt"                         : "alternativer Text",
+	"Align"                       : "Ausrichtung",
+	"Not Set"                     : "nicht gesetzt",
+	"Left"                        : "links",
+	"Right"                       : "rechts",
+	"Texttop"                     : "am oberen Schriftrand ausrichten",
+	"Absmiddle"                   : "in jedem Fall mittig ausrichten",
+	"Baseline"                    : "am unteren Schriftrand ausrichten",
+	"Absbottom"                   : "in jedem Fall untenbündig ausrichten",
+	"Bottom"                      : "unten",
+	"Middle"                      : "mitte",
+	"Top"                         : "oben",
 
 	"OK"                          : "OK",
-	"Cancel"                      : "Cancel"
+	"Cancel"                      : "Abbruch"
 
 };

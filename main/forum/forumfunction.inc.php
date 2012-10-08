@@ -199,11 +199,9 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
 	// The title of the forum
     $form->addElement('text', 'forum_title', get_lang('Title'),'class="input_titles" id="forum_title"');
 
-    //$form->applyFilter('forum_title', 'html_filter');
     // The comment of the forum.
     $form->addElement('html_editor', 'forum_comment', get_lang('Description'), null, array('ToolbarSet' => 'Forum', 'Width' => '98%', 'Height' => '200'));
 
-    //$form->applyFilter('forum_comment', 'html_filter');
     // Dropdown list: Forum categories
     $forum_categories = get_forum_categories();
     foreach ($forum_categories as $key => $value) {
@@ -212,74 +210,42 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     $form->addElement('select', 'forum_category', get_lang('InForumCategory'), $forum_categories_titles);
     $form->applyFilter('forum_category', 'html_filter');
 
-    if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD) {
-        // This is for vertical
-        //$form->addElement('radio', 'allow_anonymous', get_lang('AllowAnonymousPosts'), get_lang('Yes'), 1);
-        //$form->addElement('radio', 'allow_anonymous', '', get_lang('No'), 0);
+    if ($_course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD) {        
         // This is for horizontal
-        $group = '';
+        $group = array();
         $group[] =$form->createElement('radio', 'allow_anonymous', null, get_lang('Yes'), 1);
         $group[] =$form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
         $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), '&nbsp;');
     }
-
-    // This is for vertical.
-    //$form->addElement('radio', 'students_can_edit', get_lang('StudentsCanEdit'), get_lang('Yes'), 1);
-    //$form->addElement('radio', 'students_can_edit', '', get_lang('No'), 0);
-    // This is for horizontal.
-
-            /*      if (document.getElementById('id_qualify').style.display == 'none') {
-                    document.getElementById('id_qualify').style.display = 'block';
-                    document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_hide.gif').'&nbsp;".get_lang('AddAnAttachment')."';
-                } else {
-                document.getElementById('options').style.display = 'none';
-                document.getElementById('plus').innerHTML='&nbsp;'.Display::return_icon('div_show.gif').'&nbsp;".get_lang('AddAnAttachment')."';
-                }*/
-
+    
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>','');
     $form->addElement('html', '<div id="options" style="display:none">');
 
-    $group = '';
-    $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
-    $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
+    $group = array();
+    $group[]= $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
+    $group[]= $form->createElement('radio', 'students_can_edit', null, get_lang('No'), 0);
     $form->addGroup($group, 'students_can_edit_group', get_lang('StudentsCanEdit'), '&nbsp;');
 
-    // This is for vertical.
-    //$form->addElement('radio', 'approval_direct', get_lang('ApprovalDirect'), get_lang('Approval'), 1);
-    //$form->addElement('radio', 'approval_direct', '', get_lang('Direct'), 0);
-    // This is for horizontal.
-    $group = '';
+    $group = array();
     $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Approval'), 1);
     $group[] = $form->createElement('radio', 'approval_direct', null, get_lang('Direct'), 0);
-    //$form->addGroup($group, 'approval_direct_group', get_lang('ApprovalDirect'), '&nbsp;');
-
-    // This is for vertical.
-    //$form->addElement('radio', 'allow_attachments', get_lang('AllowAttachments'), get_lang('Yes'), 1);
-    //$form->addElement('radio', 'allow_attachments', '', get_lang('No'), 0);
-    // This is for horizontal.
-    $group = '';
+    
+    $group = array();
     $group[] = $form->createElement('radio', 'allow_attachments', null, get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'allow_attachments', null, get_lang('No'), 0);
-    //$form->addGroup($group, 'allow_attachments_group', get_lang('AllowAttachments'), '&nbsp;');
-
-    // This is for vertical.
-    //$form->addElement('radio', 'allow_new_threads', get_lang('AllowNewThreads'), 1, get_lang('Yes'));
-    //$form->addElement('radio', 'allow_new_threads', '', 0, get_lang('No'));
-    // This is for horizontal.
-    $group = '';
+    
+    $group = array();
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('Yes'),1 );
     $group[] = $form->createElement('radio', 'allow_new_threads', null, get_lang('No'), 0);
     $form->addGroup($group, 'allow_new_threads_group', get_lang('AllowNewThreads'), '&nbsp;');
 
-    $group = '';
+    $group = array();
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Flat'), 'flat');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Threaded'), 'threaded');
     $group[] = $form->createElement('radio', 'default_view_type', null, get_lang('Nested'), 'nested');
     $form->addGroup($group, 'default_view_type_group', get_lang('DefaultViewType'), '&nbsp;');
 
-    //$form->addElement('static','Group', '<br /><strong>'.get_lang('GroupSettings').'</strong>');
-
-    // Dropdown list: Groups.
+    // Dropdown list: Groups
     $groups = GroupManager::get_group_list();
     $groups_titles[0] = get_lang('NotAGroupForum');
     foreach ($groups as $key => $value) {
@@ -288,7 +254,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     $form->addElement('select', 'group_forum', get_lang('ForGroup'), $groups_titles);
 
     // Public or private group forum
-    $group='';
+    $group = array();
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Public'), 'public');
     $group[] = $form->createElement('radio', 'public_private_group_forum', null, get_lang('Private'), 'private');
     $form->addGroup($group, 'public_private_group_forum_group', get_lang('PublicPrivateGroupForum'), '&nbsp;');
@@ -329,7 +295,7 @@ function show_add_forum_form($inputvalues = array(), $lp_id) {
     $form->addRule('forum_title', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('forum_category', get_lang('ThisFieldIsRequired'), 'required');
 
-    // Settings the defaults.
+    // Settings the defaults
     if (empty($inputvalues) || !is_array($inputvalues)) {
         $defaults['allow_anonymous_group']['allow_anonymous'] = 0;
         $defaults['students_can_edit_group']['students_can_edit'] = 0;
@@ -2064,7 +2030,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     global $current_forum;
     global $_user;
     global $origin;
-
+    
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     // Setting the class and text of the form title and submit button.
     if ($_GET['action'] == 'quote') {
@@ -2076,7 +2042,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     } elseif ($_GET['action'] == 'replymessage') {
         $class = 'save';
         $text = get_lang('ReplyToMessage');
-    }else {
+    } else {
         $class = 'add';
         $text = get_lang('CreateThread');
     }
@@ -2090,11 +2056,11 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     $form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
     $form->setConstants(array('forum' => '5'));
 
-    $form->addElement('header', '', $text);
+    $form->addElement('header', $text);
 
     // Settting the form elements.
-    $form->addElement('hidden', 'forum_id', strval(intval($my_forum)));
-    $form->addElement('hidden', 'thread_id', strval(intval($my_thread)));
+    $form->addElement('hidden', 'forum_id', intval($my_forum));
+    $form->addElement('hidden', 'thread_id', intval($my_thread));
     $form->addElement('hidden', 'gradebook', $my_gradebook);
 
     // If anonymous posts are allowed we also display a form to allow the user to put his name or username in.
@@ -2103,8 +2069,8 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
         $form->applyFilter('poster_name', 'html_filter');
     }
 
-    $form->addElement('text', 'post_title', get_lang('Title'),'class="input_titles"');
-    //$form->applyFilter('post_title', 'html_filter');
+    $form->addElement('text', 'post_title', get_lang('Title'));
+    
     $form->addElement('html_editor', 'post_text', get_lang('Text'), true,
         api_is_allowed_to_edit(null, true)
             ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '300')
@@ -2112,32 +2078,33 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
     );
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-    //$form->applyFilter('post_text', 'html_filter');
-
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()">
     						  <span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>');
 
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
+    
+    if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ) {
 
-    if( (api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread) ) {
-
-        //Loading gradebook select
-        load_gradebook_select_in_tool($form);
-
-        // Thread qualify
-        $form->applyFilter('numeric_calification', 'html_filter');
-        if(Gradebook::is_active()){
+        // Thread qualify        
+        if (Gradebook::is_active()){
+            //Loading gradebook select
+            load_gradebook_select_in_tool($form);        
             $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript:if(this.checked==true){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
-        }else{
+        } else{
             $form->addElement('hidden', 'thread_qualify_gradebook', false);
         }
 
-        $form -> addElement('html', '<div id="options_field" style="display:none">');
-        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'),'Style="width:40px"');
+        $form->addElement('html', '<div id="options_field" style="display:none">');
+        
+        $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'));
+        $form->applyFilter('numeric_calification', 'html_filter');
+        
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'));
         $form->applyFilter('calification_notebook_title', 'html_filter');
+        
         $form->addElement('text', 'weight_calification', get_lang('QualifyWeight'),'value="0.00" Style="width:40px" onfocus="javascript: this.select();"');
         $form->applyFilter('weight_calification', 'html_filter');
+        
         $form->addElement('html', '</div>');
     }
 
@@ -2149,8 +2116,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
         $form->addElement('checkbox', 'thread_sticky', '', get_lang('StickyPost'));
     }
 
-    if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
-        //$form->add_resource_button();
+    if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {        
         $values = $form->exportValues();
     }
 
@@ -2183,7 +2149,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '') {
         // When we are quoting a message then we have to put that message into the wysiwyg editor.
         // Note: The style has to be hardcoded here because using class="quote" didn't work.
         if ($action == 'quote') {
-            $defaults['post_text'] = '<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%; font-style: italic;">'.get_lang('Quoting').' '.api_get_person_name($values['firstname'], $values['lastname']).':</div><div style="color: #006600; font-size: 90%;	font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';
+            $defaults['post_text'] = '<div>&nbsp;</div><div style="margin: 5px;"><div style="font-size: 90%; font-style: italic;">'.get_lang('Quoting').' '.api_get_person_name($values['firstname'], $values['lastname']).':</div><div style="color: #006600; font-size: 90%;	font-style: italic; background-color: #FAFAFA; border: #D1D7DC 1px solid; padding: 3px;">'.prepare4display($values['post_text']).'</div></div><div>&nbsp;</div><div>&nbsp;</div>';        
         }
     }
     $form->setDefaults(isset($defaults) ? $defaults : null);
@@ -2546,18 +2512,15 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         api_is_allowed_to_edit(null, true)
             ? array('ToolbarSet' => 'Forum', 'Width' => '100%', 'Height' => '400')
             : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
-    );
-    //$form->applyFilter('post_text', 'html_filter');
+    );    
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-
     $form->addElement('advanced_settings', '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).''.get_lang('AdvancedParameters').'</span></a>');
 
     $form->addElement('html', '<div id="id_qualify" style="display:none">');
 
-    if (!isset($_GET['edit'])) {
-        $form->addElement('label', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
-        $form->applyFilter('numeric_calification', 'html_filter');
-        if(Gradebook::is_active()){
+    if (!isset($_GET['edit'])) {                
+        if (Gradebook::is_active()) {
+            $form->addElement('label', '<strong>'.get_lang('AlterQualifyThread').'</strong>');
             $form->addElement('checkbox', 'thread_qualify_gradebook', '', get_lang('QualifyThreadGradebook'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
             
             $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5, $_GET['thread'], api_get_session_id());
@@ -2583,10 +2546,14 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
         load_gradebook_select_in_tool($form);
 
         $form->addElement('text', 'numeric_calification', get_lang('QualificationNumeric'), 'value="'.$current_thread['thread_qualify_max'].'" style="width:40px"');
+        $form->applyFilter('numeric_calification', 'html_filter');
+        
         $form->addElement('text', 'calification_notebook_title', get_lang('TitleColumnGradebook'), 'value="'.$current_thread['thread_title_qualify'].'"');
         $form->applyFilter('calification_notebook_title', 'html_filter');
-        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, '') , 'value="'.$current_thread['thread_weight'].'" style="width:40px"');
+        
+        $form->addElement('text', 'weight_calification', array(get_lang('QualifyWeight'), null, '') , 'value="'.$current_thread['thread_weight'].'" style="width:40px"');        
         $form->applyFilter('weight_calification', 'html_filter');
+        
         $form->addElement('html', '</div>');
     }
 
@@ -2617,13 +2584,10 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     if ($current_forum['allow_attachments'] == '1' || api_is_allowed_to_edit(null, true)) {
         if (empty($form_values) && !isset($_POST['SubmitPost'])) {
             //edit_added_resources('forum_post', $current_post['post_id']);
-        }
-        //$form->add_resource_button();
+        }        
     }
 
-
     $form->addElement('html', '</div>');
-
     $form->addElement('style_submit_button', 'SubmitPost', get_lang('ModifyThread'), 'class="save"');
 
     // Setting the default values for the form elements.

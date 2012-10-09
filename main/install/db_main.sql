@@ -458,7 +458,7 @@ CREATE TABLE IF NOT EXISTS php_session (
   session_time int NOT NULL default '0',
   session_start int NOT NULL default '0',
   session_value mediumtext NOT NULL,
-  PRIMARY KEY  (session_id)
+  PRIMARY KEY (session_id)
 );
 
 --
@@ -466,7 +466,7 @@ CREATE TABLE IF NOT EXISTS php_session (
 --
 DROP TABLE IF EXISTS session;
 CREATE TABLE IF NOT EXISTS session (
-  id smallint unsigned NOT NULL auto_increment,
+  id MEDIUMINT unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
   name char(150) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
@@ -496,12 +496,13 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
-  id_session smallint unsigned NOT NULL default '0',
-  course_code char(40) NOT NULL default '',
+  id_session MEDIUMINT unsigned NOT NULL default '0',
+  course_id INT NOT NULL default '0',
   nbr_users smallint unsigned NOT NULL default '0',
-  PRIMARY KEY  (id_session,course_code),
-  KEY course_code (course_code)
+  PRIMARY KEY  (id_session, course_id)
 );
+
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
 
 -- --------------------------------------------------------
 
@@ -510,16 +511,18 @@ CREATE TABLE IF NOT EXISTS session_rel_course (
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
-  id_session smallint unsigned NOT NULL default '0',
-  course_code char(40) NOT NULL default '',
+  id_session MEDIUMINT unsigned NOT NULL default '0',
+  course_id INT NOT NULL default '0',
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY  (id_session,course_code,id_user),
-  KEY id_user (id_user),
-  KEY course_code (course_code)
+  PRIMARY KEY (id_session, course_id, id_user)  
 );
+
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_category_code (category_code);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
 
 -- --------------------------------------------------------
 
@@ -536,7 +539,6 @@ CREATE TABLE IF NOT EXISTS session_rel_user (
   moved_at datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (id_session, id_user, relation_type)
 );
-
 
 DROP TABLE IF EXISTS session_field;
 CREATE TABLE IF NOT EXISTS session_field (

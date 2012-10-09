@@ -22,7 +22,6 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'false', 'No');
 
-
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('gradebook_show_percentage_in_reports', NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment', NULL, NULL, 0),
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_show_percentage_in_reports', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_show_percentage_in_reports', 'false', 'No');
@@ -51,6 +50,21 @@ CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment
 CREATE TABLE IF NOT EXISTS course_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
 ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
+ALTER TABLE session MODIFY COLUMN id MEDIUMINT unsigned NOT NULL;
+
+ALTER TABLE session_rel_course MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
+ALTER TABLE session_rel_course ADD COLUMN course_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
+ALTER TABLE session_rel_course DROP PRIMARY KEY;
+ALTER TABLE session_rel_course ADD PRIMARY KEY (id_session, course_id);
+
+ALTER TABLE session_rel_course_rel_user MODIFY COLUMN id_session MEDIUMINT unsigned NOT NULL;
+ALTER TABLE session_rel_course_rel_user ADD COLUMN course_id INT NOT NULL DEFAULT '0';
+ALTER TABLE session_rel_course_rel_user DROP PRIMARY KEY;
+ALTER TABLE session_rel_course_rel_user ADD PRIMARY KEY (id_session, course_id, id_user);
+
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
 
 -- Courses changes c_XXX
 

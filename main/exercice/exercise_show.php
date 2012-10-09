@@ -32,7 +32,6 @@ if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
 
-
 if ($origin == 'learnpath')
     api_protect_course_script(false, false, true);
 else
@@ -69,7 +68,6 @@ $is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || a
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
-
 
 //No track info
 if (empty($track_exercise_info)) {
@@ -119,9 +117,9 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $fromlink = '';
 
-$interbreadcrumb[]=array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-$interbreadcrumb[]=array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
-$interbreadcrumb[]=array("url" => "#","name" => get_lang('Result'));
+$interbreadcrumb[]= array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+$interbreadcrumb[]= array("url" => "overview.php?exerciseId=".$exercise_id.'&id_session='.api_get_session_id(),"name" => $objExercise->name);
+$interbreadcrumb[]= array("url" => "#","name" => get_lang('Result'));
 
 $this_section = SECTION_COURSES;
 

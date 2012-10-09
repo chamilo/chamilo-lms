@@ -2187,7 +2187,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score_text .= '</div>';
             $total_score_text .= '</div>';
         }
-    }    
+    }
+    
     echo $total_score_text;   
     echo $exercise_content;    
     if (!$show_only_score) {

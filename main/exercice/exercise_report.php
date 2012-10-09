@@ -27,7 +27,6 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // Access control
 api_protect_course_script(true, false, true);
 
-
 // including additional libraries
 require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
@@ -259,7 +258,7 @@ Display :: display_header($nameTools);
 
 $actions = Display::div($actions, array('class'=> 'actions'));
 
-$extra =  '<script type="text/javascript">
+$extra =  '<script>
     $(document).ready(function() {
 
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -305,17 +304,9 @@ if ($is_allowedToEdit)
     echo $extra;
 
 echo $actions;
-//echo $content;
-/*
-
-$tpl = new Template($nameTools);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
-*/
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_results&exerciseId='.$exercise_id.'&filter_by_user='.$filter_user;
 
-//$activeurl = '?sidx=session_active';
 $action_links = '';
 
 //Generating group list

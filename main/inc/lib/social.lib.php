@@ -782,6 +782,7 @@ class SocialManager extends UserManager {
                 // reduce image
                 $name = $user_info['complete_name'];
                 $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+                //$user_status = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), array('height' => '22px', 'width' => '22px')) : null;
                 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
                     $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';                                                                             
@@ -790,7 +791,7 @@ class SocialManager extends UserManager {
                     $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);                                        
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';                                                                        
                 }           
-                $name = '<a href="'.$url.'">'.$status_icon.$name.'</a><br>';
+                $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
                 $html .= '<li class="span'.($column_size/3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';                
             }            
             $counter = $_SESSION['who_is_online_counter'];

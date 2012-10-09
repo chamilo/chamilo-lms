@@ -387,7 +387,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }			
             	$s.='</tr>';
 				
-			} elseif ($answerType == FILL_IN_BLANKS) {
+			} elseif ($answerType == FILL_IN_BLANKS) {                
 				list($answer) = explode('::', $answer);
                 
                 //Correct answer
@@ -417,26 +417,17 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				            $value = explode('/', $value);
                             
 				            if (!empty($value[0])) {				            	
-				            	$value = str_replace('&nbsp;', '',  trim($value[0]));
-				            }
-                            
-                            if (api_strpos($correct_item, '-') !== false) {
-                                $correct_item = api_preg_replace('/-/',  '\-', $correct_item);
-                            }
-                            
-                            if (api_strpos($value, '-') !== false) {
-                                $value = api_preg_replace('/-/',  '\-', $value);
-                            }
-                            
-				            $answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
-                            $answer = str_replace('\-', '-', $answer);
-				        }				        				        
+				            	$value = str_replace('&nbsp;', '',  trim($value[0]));                                
+				            }                                
+                            $correct_item = preg_quote($correct_item);                            
+				            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);                            
+                            //$answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
+				        }		        				        
 				        $i++;				        
 				    }
-				} else {
+				} else {                    
 					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
 				}
-                
 				$s .= '<tr><td>'.$answer.'</td></tr>';
             } elseif ($answerType == MATCHING) {
 				// matching type, showing suggestions and answers

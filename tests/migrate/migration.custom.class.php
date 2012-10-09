@@ -293,6 +293,8 @@ class MigrationCustom {
         $data['create_gradebook_evaluation'] = true;
         //Specific to ICPNA, set the default language to English
         $data['language'] = 'english';
+        $data['visibility'] = COURSE_VISIBILITY_REGISTERED;
+        
         $data['gradebook_params'] = array(
             'name' => 'General evaluation',
             'user_id' => self::default_admin_id,

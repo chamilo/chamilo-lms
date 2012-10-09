@@ -145,9 +145,9 @@ class Migration {
             }
             
             //Stop here (only for tests)
-//            if ($table['orig_table'] == 'Matricula')  {
-//                exit;          
-//            }
+            if ($table['orig_table'] == 'ProgramaAcademico')  {
+                //exit;          
+            }
         }
     }
     
@@ -184,7 +184,7 @@ class Migration {
         }        
         $extra_fields_to_insert = array();
         
-        foreach ($table['fields_match'] as $id_field => $details) { 
+        foreach ($table['fields_match'] as $id_field => $details) {
             if ($id_field == 0) {
                 $first_field = $details['dest'];
             }
@@ -225,7 +225,7 @@ class Migration {
                                 if ($key == 'option_value' && $value == $dest_row[$details['dest']]) {
                                     $value = $option['option_display_text'];                                    
                                     if ($field_type == Extrafield::FIELD_TYPE_SELECT) {
-                                        $value = $option['option_display_text'];    
+                                        $value = $option['option_value']; 
                                     }                                    
                                     $params = array(                
                                         'field_id'      => $option['field_id'],
@@ -266,7 +266,7 @@ class Migration {
                 case 'course':
                     //Saving courses in array
                     if ($item_result) {                        
-                        $this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
+                        //$this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
                     } else {
                         error_log('Course Not FOUND');                        
                         error_log(print_r($item_result, 1));
@@ -279,11 +279,11 @@ class Migration {
                         $handler_id = $item_result['user_id'];
                         //error_log($dest_row['email'].' '.$dest_row['uidIdPersona']);
                         if (isset($dest_row['uidIdAlumno'])) {
-                            $this->data_list['users_alumno'][$dest_row['uidIdAlumno']]['extra'] = $item_result;
+                            //$this->data_list['users_alumno'][$dest_row['uidIdAlumno']]['extra'] = $item_result;
                         }
                         if (isset($dest_row['uidIdEmpleado'])) {
                             //print_r($dest_row['uidIdEmpleado']);exit;                           
-                            $this->data_list['users_empleado'][$dest_row['uidIdEmpleado']]['extra'] = $item_result;
+                            //$this->data_list['users_empleado'][$dest_row['uidIdEmpleado']]['extra'] = $item_result;
                         }                                          
                     } else {
                         global $api_failureList;
@@ -304,11 +304,12 @@ class Migration {
                 }
             }
         } else {
-            $this->errors_stack[] = "No destination data dest_func found. Abandoning data with first field $first_field = " . $dest_row[$first_field];
+           // $this->errors_stack[] = "No destination data dest_func found. Abandoning data with first field $first_field = " . $dest_row[$first_field];
         }
         unset($extra_fields_to_insert); //remove to free up memory
         return $dest_row;
     }
+    
     /**
      * Helper function to create extra fields in the Chamilo database
      * @param Array An array containing an 'extra_fields' entry with details about the required extra fields
@@ -325,8 +326,7 @@ class Migration {
             $extra_field_id = $extra_field_obj->save($extra_field);
                     
             $selected_fields = self::prepare_field_match($options);
-            //error_log('$selected_fields: ' . print_r($selected_fields, 1));
-            
+                        
             //Adding options
             if (!empty($options)) {       
                 $extra_field_option_obj = new ExtraFieldOption($table['dest_table']);

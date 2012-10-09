@@ -32,7 +32,7 @@ class MigrationMSSQL extends Migration {
         }
         //In order to process X item of each table add TOP X
         
-	$top = null;
+        $top = null;
         $top = " TOP 1000 ";
         if (in_array($table, array('Empleado', 'Alumno'))) {
             $top = " TOP 1000 ";            

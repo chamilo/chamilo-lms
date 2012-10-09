@@ -173,8 +173,6 @@ class ExtraFieldValue extends Model {
         }
     }
     
-    
-    
     public function get_values_by_handler_and_field_variable($item_id, $field_variable, $transform = false) {
         $field_id = intval($field_id);
         $item_id = Database::escape_string($item_id);

@@ -61,6 +61,7 @@ class MigrationCustom {
         return self::clean_utf8($row_data['session_name']);        
     }
     
+    /** @deprecated */
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
 /* Temporarily commented
         if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
@@ -77,6 +78,7 @@ class MigrationCustom {
         return $data;
     }
     
+    /** @deprecated */
     public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
         $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdEmpleado' => $row_data['uidIdEmpleado']);
         $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row;
@@ -85,6 +87,7 @@ class MigrationCustom {
 
     /**
      * Log data from the original users table
+      @deprecated
      */
     public function log_original_course_unique_id($data, &$omigrate) {
         $omigrate['courses'][$data] = 0; 
@@ -93,19 +96,22 @@ class MigrationCustom {
 
     /**
      * Log data from the original users table
+     * @deprecated
      */
     public function log_original_session_unique_id($data, &$omigrate, $row_data) {
         $omigrate['sessions'][$row_data['uidIdPrograma']] = $row_data;
         return $data;
     }
     
-    public function get_real_course_code($data, &$omigrate, $row_data) {
-        if (!isset($omigrate['courses'][$data])) {
-            error_log("Course not found in data_list array");
-           //error_log(print_r($data, 1));
-            //exit;
+    public function get_real_course_code($data, &$omigrate, $row_data) {        
+        $extra_field = new ExtraFieldValue('course');
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);
+        
+        if ($values) {
+            return $values['code'];
+        } else {
+            error_log("Course not found in DB");
         }
-        return $omigrate['courses'][$data]['code'];
     }
     
     function get_session_id_by_programa_id($data, &$omigrate, $row_data) {
@@ -120,6 +126,7 @@ class MigrationCustom {
         return $omigrate['sessions'][$data];        
     }
     
+    /* Not used */
     public function get_user_id($data, &$omigrate, $row_data) {
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
@@ -138,18 +145,28 @@ class MigrationCustom {
         return $omigrate['users_alumno'][$data]['user_id'];
     }
     
-    public function get_real_teacher_id($data, &$omigrate, $row_data) {
+    public function get_real_teacher_id($uidIdPersona, &$omigrate, $row_data) {
         $default_teacher_id = self::default_admin_id;
         //error_log('get_real_teacher_id');
         //error_log(print_r($data, 1));                
         //error_log(print_r($omigrate['users_empleado'], 1));        
         //error_log('get_real_teacher_id');
         //error_log($data);             
-        if (empty($data)) {
+        if (empty($uidIdPersona)) {
             //error_log('No teacher provided');
             return $default_teacher_id;
         }
         
+        $extra_field = new ExtraFieldValue('user');
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPersona', $uidIdPersona);
+        
+        if ($values) {
+            return $values['user_id'];
+        } else {
+            return $default_teacher_id; 
+        }
+        
+        /*
         if (!isset($omigrate['users_empleado'][$data])) {
             //error_log(' Teacher not found big problem! ');    
             //echo $data;
@@ -159,7 +176,7 @@ class MigrationCustom {
         } else {
             //error_log('Teacher found: '.$omigrate['users_empleado'][$data]['extra']['user_id']);
             return isset($omigrate['users_empleado'][$data]['extra']) ? $omigrate['users_empleado'][$data]['extra']['user_id'] : $default_teacher_id;        
-        }        
+        } */       
     }
     
     /**
@@ -279,7 +296,7 @@ class MigrationCustom {
         if (!$user_info) {
             echo 'error';
         }
-        UserManager::update_extra_field_value($user_info['user_id'],'uidIdPersona',$id_persona);
+        UserManager::update_extra_field_value($user_info['user_id'], 'uidIdPersona', $id_persona);
         return $user_info;
     }
     /**
@@ -321,8 +338,6 @@ class MigrationCustom {
     public function add_user_to_session($data) {
         //error_log('add_user_to_session');
         ///print_r($data);
-       
-        
         //Search  uidIdPrograma        
         //Search  uidIdAlumno
         
@@ -333,8 +348,7 @@ class MigrationCustom {
         $user_id = null;
         
         if ($result && $result['session_id']) {
-            $session_id = $result['session_id'];   
-         
+            $session_id = $result['session_id'];
         }
         
         $extra_field_value = new ExtraFieldValue('user');

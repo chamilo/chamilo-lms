@@ -25,7 +25,7 @@ class MigrationCustom {
     }
     
      public function join_horario($data, &$omigrate, $row_data) {
-         return $row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
+         return '('.$row_data['chrIdHorario'].') '.$row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
      }
 
     /**
@@ -47,8 +47,9 @@ class MigrationCustom {
      * Log data from the original users table
      */
     public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-        $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdAlumno' => $row_data['uidIdAlumno']);
-        $omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row;
+//Temporarily commented (see how it goes without that)
+        //$row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdAlumno' => $row_data['uidIdAlumno']);
+        //$omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row;
         return $row_data['uidIdAlumno'];
     }
     
@@ -61,6 +62,7 @@ class MigrationCustom {
     }
     
     public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
+/* Temporarily commented
         if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
             $omigrate['users_persona'][$row_data['uidIdPersona']][] = $omigrate['users_persona'][$row_data['uidIdPersona']];
             //$omigrate['users_persona'][$row_data['uidIdPersona']][] = $row_data;
@@ -71,6 +73,7 @@ class MigrationCustom {
             //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
             $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data['uidIdPersona'];
         }
+*/
         return $data;
     }
     
@@ -159,6 +162,13 @@ class MigrationCustom {
         }        
     }
     
+    /**
+     * Manage the user creation, including checking if the user hasn't been 
+     * created previously
+     * @param array User data
+     * @param object List of migrated things
+     * @return array User info (from Chamilo DB)
+     */
     public function create_user($data, $omigrate) {
         //error_log(print_r($data, 1));  
         
@@ -175,10 +185,7 @@ class MigrationCustom {
             //error_log('teacher');
             //$data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);        
             $data['status'] = COURSEMANAGER;                
-        }
-        
-        //Is a student
-        if (isset($omigrate['users_alumno'][$data['uidIdAlumno']])) {
+        } else {     
             $data['status'] = STUDENT;            
         }
         
@@ -260,7 +267,7 @@ class MigrationCustom {
             error_log(print_r($data, 1));
             exit;
         }
-        
+        $id_persona = $data['uidIdPersona']; 
         unset($data['uidIdPersona']);
         unset($data['uidIdAlumno']);
         unset($data['uidIdEmpleado']);
@@ -272,24 +279,32 @@ class MigrationCustom {
         if (!$user_info) {
             echo 'error';
         }
+        UserManager::update_extra_field_value($user_info['user_id'],'uidIdPersona',$id_persona);
         return $user_info;
     }
-    
+    /**
+     * Manages the course creation based on the rules in db_matches.php
+     */
     public function create_course($data) {
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);  
         
         //Creates an evaluation
         $data['create_gradebook_evaluation'] = true;
-        $data['language'] = 'spanish';
+        //Specific to ICPNA, set the default language to English
+        $data['language'] = 'english';
         $data['gradebook_params'] = array(
-            'name' => 'Evaluación general',
+            'name' => 'General evaluation',
             'user_id' => self::default_admin_id,
             'weight' => '20',
             'max' => '20'
         );
         return CourseManager::create_course($data);
     }
+    /**
+     * Manages the session creation, based on data provided by the rules
+     * in db_matches.php
+     */
     public function create_session($data) {
         $session_id = SessionManager::add($data);
         if (!$session_id) {
@@ -298,7 +313,9 @@ class MigrationCustom {
         }
         return $session_id;
     }
-    
+    /**
+     * Assigns a user to a session based on rules in db_matches.php
+     */
     public function add_user_to_session($data) {
         //error_log('add_user_to_session');
         ///print_r($data);

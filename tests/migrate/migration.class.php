@@ -99,54 +99,21 @@ class Migration {
         
         $extra_fields = array();
                 
+        // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $table) {
             error_log('Found table ' . $table['orig_table']);
             $build_only = false;
             
             if (empty($table['dest_table'])) {
+                //If there is no destination for this table, report
                 error_log(' ... which is just for data building');
                 $build_only = true;
             }
             
-            //Creating extra fields
+            // Creating extra fields if necessary inside Chamilo (to store 
+            // original fields)
             if (isset($table['extra_fields']) && in_array($table['dest_table'], array('course', 'user', 'session'))) {
-                error_log('Inserting (if exists) extra fields for : ' . $table['dest_table']." \n");
-                
-                foreach ($table['extra_fields'] as $extra_field) {
-                    $options = $extra_field['options'];
-                    unset($extra_field['options']);
-                    
-                    $extra_field_obj = new ExtraField($table['dest_table']);
-                    $extra_field_id = $extra_field_obj->save($extra_field);
-                    
-                    $selected_fields = self::prepare_field_match($options);
-                    //error_log('$selected_fields: ' . print_r($selected_fields, 1));
-                    
-                    //Adding options
-                    if (!empty($options)) {       
-                        $extra_field_option_obj = new ExtraFieldOption($table['dest_table']);
-                        $this->select_all($options['orig_table'], $selected_fields);                        
-                        $num_rows = $this->num_rows();
-
-                        if ($num_rows) {
-                            $data_to_insert = array();
-                            $data_to_insert['field_id'] = $extra_field_id;
-
-                            while ($row = $this->fetch_array()) { 
-                                $data = self::execute_field_match($options, $row);                                
-                                $data_to_insert = array_merge($data_to_insert, $data);                                                              
-                                $extra_field_option_obj->save_one_item($data_to_insert, false, false);
-                                //error_log(print_r($extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']], 1));
-                                $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['options'][] = $data_to_insert;                                
-                                $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['field_type'] = $extra_field['field_type'];
-                            }
-                            //$extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['selected_option'] = 
-                            //error_log('$data: ' . print_r($data_to_insert, 1));
-                        }
-                    } else {
-                        $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']] = $extra_field_id;
-                    }
-                }
+                $extra_fields = self::_create_extra_fields($table);
             }
             
             // Process the migration of fields from the given table
@@ -178,9 +145,9 @@ class Migration {
             }
             
             //Stop here (only for tests)
-            if ($table['orig_table'] == 'Matricula')  {
-                exit;          
-            }
+//            if ($table['orig_table'] == 'Matricula')  {
+//                exit;          
+//            }
         }
     }
     
@@ -217,7 +184,7 @@ class Migration {
         }        
         $extra_fields_to_insert = array();
         
-        foreach ($table['fields_match'] as $id_field => $details) {       
+        foreach ($table['fields_match'] as $id_field => $details) { 
             if ($id_field == 0) {
                 $first_field = $details['dest'];
             }
@@ -339,6 +306,52 @@ class Migration {
         } else {
             $this->errors_stack[] = "No destination data dest_func found. Abandoning data with first field $first_field = " . $dest_row[$first_field];
         }
+        unset($extra_fields_to_insert); //remove to free up memory
         return $dest_row;
+    }
+    /**
+     * Helper function to create extra fields in the Chamilo database
+     * @param Array An array containing an 'extra_fields' entry with details about the required extra fields
+     * @return void
+     */
+    private function _create_extra_fields(&$table) {
+        error_log('Inserting (if exists) extra fields for : ' . $table['dest_table']." \n");
+        foreach ($table['extra_fields'] as $extra_field) {
+            error_log('Preparing for insertion of extra field '.$extra_field['field_display_text']."\n");
+            $options = $extra_field['options'];
+            unset($extra_field['options']);
+            
+            $extra_field_obj = new ExtraField($table['dest_table']);
+            $extra_field_id = $extra_field_obj->save($extra_field);
+                    
+            $selected_fields = self::prepare_field_match($options);
+            //error_log('$selected_fields: ' . print_r($selected_fields, 1));
+            
+            //Adding options
+            if (!empty($options)) {       
+                $extra_field_option_obj = new ExtraFieldOption($table['dest_table']);
+                $this->select_all($options['orig_table'], $selected_fields);                        
+                $num_rows = $this->num_rows();
+
+                if ($num_rows) {
+                    $data_to_insert = array();
+                    $data_to_insert['field_id'] = $extra_field_id;
+
+                    while ($row = $this->fetch_array()) { 
+                        $data = self::execute_field_match($options, $row);                                
+                        $data_to_insert = array_merge($data_to_insert, $data);                                                              
+                        $extra_field_option_obj->save_one_item($data_to_insert, false, false);
+                        //error_log(print_r($extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']], 1));
+                        $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['options'][] = $data_to_insert;                                
+                        $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['field_type'] = $extra_field['field_type'];
+                    }
+                    //$extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']]['selected_option'] = 
+                    //error_log('$data: ' . print_r($data_to_insert, 1));
+                }
+            } else {
+                $extra_fields[$table['dest_table']]['extra_field_'.$extra_field['field_variable']] = $extra_field_id;
+            }
+        }
+        return $extra_fields;
     }
 }

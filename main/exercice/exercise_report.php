@@ -60,11 +60,11 @@ $filter_user    = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
 if (empty($exercise_id)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 if (!$is_allowedToEdit) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 if (!empty($exercise_id))

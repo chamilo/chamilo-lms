@@ -74,7 +74,7 @@ if (isset ($_GET['id'])) {
 	// Update settings of existing category
 	$action = 'update_settings';
 	$form = new FormValidator('group_category', 'post', '?id='.$category['id']);
-	$form->addElement('header','',$nameTools);
+	$form->addElement('header', $nameTools);
 	$form->addElement('hidden', 'id');
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary

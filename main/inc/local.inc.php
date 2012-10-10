@@ -715,12 +715,16 @@ if (isset($cidReset) && $cidReset) {
                 }
             }
         }
+        
         //Deleting session info
         if (api_get_session_id()) {
             Session::erase('id_session');
             Session::erase('session_name');
         }
-        Session::erase('_gid');
+        
+        if (api_get_group_id()) {
+            Session::erase('_gid');
+        }
     }
 } else {
     

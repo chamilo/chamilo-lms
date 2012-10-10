@@ -295,8 +295,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                         exit;
                                     }
-                                } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
-                                    //var_dump($current_access_url_id, $my_url_list); exit;
+                                } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want                                    
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
@@ -575,12 +574,6 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
 
-// if the requested group is different from the group in session
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
-if (isset($gidReq) && $gidReq != $gid) {
-    $gidReset = true;
-}
-
 /* USER INIT */
 
 if (isset($uidReset) && $uidReset) {    // session data refresh requested
@@ -690,6 +683,11 @@ if (isset($cidReset) && $cidReset) {
                 Session::erase('id_session');
             }
             
+            if (!empty($_GET['gidReq'])) {
+                $_SESSION['_gid'] = intval($_GET['gidReq']);
+            } else {
+                Session::erase('_gid');
+            } 
 
             if (!isset($_SESSION['login_as'])) {
                 //Course login
@@ -722,11 +720,11 @@ if (isset($cidReset) && $cidReset) {
             Session::erase('id_session');
             Session::erase('session_name');
         }
+        Session::erase('_gid');
     }
 } else {
     
-    // Continue with the previous values
-    
+    // Continue with the previous values    
     if (empty($_SESSION['_course']) && !empty($_SESSION['_cid'])) {
         //Just in case $_course is empty we try to load if the c_id still exists
         $_course = api_get_course_info($_SESSION['_cid']);
@@ -739,16 +737,17 @@ if (isset($cidReset) && $cidReset) {
             Session::write('_course',   $_course);
         }
     }
-    
+   
     if (empty($_SESSION['_course']) OR empty($_SESSION['_cid'])) { //no previous values...
         $_cid         = -1;        //set default values that will be caracteristic of being unset
         $_course      = -1;
     } else {
+         
         $_cid      = $_SESSION['_cid'   ];
         $_course   = $_SESSION['_course'];
 
-           // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
-           // Moreover, if we want to track a course with another session it can be usefull
+        // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
+        // Moreover, if we want to track a course with another session it can be usefull
         if (!empty($_GET['id_session'])) {
             $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
@@ -756,7 +755,11 @@ if (isset($cidReset) && $cidReset) {
             list($_SESSION['session_name']) = Database::fetch_array($rs);
             $_SESSION['id_session']         = intval($_GET['id_session']);
         }
-
+        
+        if (!empty($_REQUEST['gidReq'])) {
+            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);        
+        }
+        
         if (!isset($_SESSION['login_as'])) {
             $save_course_access = true;
 
@@ -818,6 +821,13 @@ if (isset($cidReset) && $cidReset) {
     }
 }
 
+// if the requested group is different from the group in session
+$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
+var_dump($gid);
+if (isset($gidReq) && $gidReq != $gid) {
+    $gidReset = true;
+}
+
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
@@ -832,8 +842,7 @@ $is_courseCoach     = false; //course coach
 //Course - User permissions
 $is_sessionAdmin    = false;
 
-if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
-    
+if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {    
     if (isset($_cid) && $_cid) {
         $my_user_id = isset($user_id) ? intval($user_id) : 0;
         $variable = 'accept_legal_'.$my_user_id.'_'.$_course['real_id'].'_'.$session_id;
@@ -870,7 +879,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             $is_courseAdmin      = (bool) ($cuData['status'] == 1 );
             $is_courseTutor      = (bool) ($cuData['tutor_id' ] == 1 );
             $is_courseMember     = true;
-
           
             $_courseUser['role'] = $cuData['role'];
             Session::write('_courseUser',$_courseUser);
@@ -1051,8 +1059,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 }
 
 /*  GROUP INIT */
-
-if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
+if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested    
     if ($gidReq && $_cid && !empty($_course['real_id'])) { // have keys to search data
         $group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
@@ -1068,10 +1075,11 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
         Session::erase('_gid');
     }
 } elseif (isset($_SESSION['_gid'])) { // continue with the previous values
-    $_gid = $_SESSION ['_gid'];
+    $_gid = $_SESSION['_gid'];
 } else { //if no previous value, assign caracteristic undefined value
     $_gid = -1;
 }
+
 
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {

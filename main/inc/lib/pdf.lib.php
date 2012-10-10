@@ -8,10 +8,7 @@
  */
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 require_once _MPDF_PATH.'mpdf.php';
-/**
- * Class
- * @package chamilo.library
- */
+
 class PDF {
     
     public $pdf;    
@@ -45,8 +42,8 @@ class PDF {
         $this->params['course_code'] = isset($params['course_code']) ? $params['course_code'] : api_get_course_id();
         $this->params['add_signatures'] = isset($params['add_signatures']) ? $params['add_signatures'] : false;        
         
-        $this->pdf = $pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
-    } 
+        $this->pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
+    }
     
     function html_to_pdf_with_template($content)  {        
         Display :: display_no_header();
@@ -207,16 +204,27 @@ class PDF {
                     $elements = $doc->getElementsByTagName('img');                    
                     if (!empty($elements)) {
                         foreach ($elements as $item) {                    
-                            $old_src = $item->getAttribute('src');
-                            
+                            $old_src = $item->getAttribute('src');                                                        
                             if (strpos($old_src, 'http') === false) {
-                                if (strpos($old_src, '/main/default_course_document') === false) {   
-                                    $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
-                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
-                                    $new_path = $document_path.$old_src_fixed;                                    
-                                    $document_html= str_replace($old_src, $new_path, $document_html);                            
+                                if (strpos($old_src, '/main/default_course_document') === false) {
+                                    if (api_get_path(REL_PATH) != '/') {
+                                        $old_src = str_replace(api_get_path(REL_PATH), '', $old_src);    
+                                    }
+                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
+                                    //$old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
+                                    $new_path = $document_path.$old_src_fixed;
+                                    $document_html= str_replace($old_src, $new_path, $document_html);
                                 }                                                       	
-                            }                                    
+                            } else {
+                                //Check if this is a complete URL
+                                /*if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') === false) {                                    
+                                    
+                                } else {
+                                    $old_src_fixed = str_replace(api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
+                                    $new_path = $document_path.$old_src_fixed;
+                                    $document_html= str_replace($old_src, $new_path, $document_html);
+                                }*/
+                            }                        
                         }
                     }
                 }
@@ -224,11 +232,11 @@ class PDF {
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
-                                                                              // At the moment the title is retrieved from the html document itself.
+                                                                         // At the moment the title is retrieved from the html document itself.
+                //echo $document_html;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
-                }
-                
+                }                
                 if (!empty($document_html)) {                	
                     $this->pdf->WriteHTML($document_html.$page_break, 2);
                 }

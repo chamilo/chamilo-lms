@@ -50,11 +50,12 @@ $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TR
 $TBL_TRACK_HOTPOTATOES_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
-$course_id      = api_get_course_int_id();
-$hotpotatoes_path    = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
-$filter_user    = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$course_id            = api_get_course_int_id();
+$hotpotatoes_path     = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
+$filter_user          = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
+
 
 if (empty($hotpotatoes_path)) {
     api_not_allowed();
@@ -64,34 +65,35 @@ if (!$is_allowedToEdit) {
     api_not_allowed();
 }
 
-if (!empty($exercise_id))
-    $parameters['exerciseId'] = $exercise_id;
-if (!empty($_GET['path'])) {
-    $parameters['path'] = Security::remove_XSS($_GET['path']);
+if (!empty($_REQUEST['path'])) {
+    $parameters['path'] = Security::remove_XSS($_REQUEST['path']);
 }
+
+
+
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-
         $load_extra_data = false;
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
         
-        require_once 'exercise_result.class.php';
-        switch ($_GET['export_format']) {
-            case 'xls' :
-                $export = new ExerciseResult();
-                $export->exportCompleteReportXLS($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+        require_once 'hotpotatoes_exercise_result.class.php';
+        // @todo make xls export work
+//        switch ($_GET['export_format']) {
+//            case 'xls' :
+//                $export = new ExerciseResult();
+//                $export->exportCompleteReportXLS($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
+//                exit;
+//                break;
+//            case 'csv' :
+//            default :
+                $export = new HotpotatoesExerciseResult();
+                $export->exportCompleteReportCSV($documentPath, $hotpotatoes_path);
                 exit;
-                break;
-            case 'csv' :
-            default :
-                $export = new ExerciseResult();
-                $export->exportCompleteReportCSV($documentPath, null, $load_extra_data, null, $_GET['exerciseId'], $_GET['hotpotato_name']);
-                exit;
-                break;
-        }
+//                break;
+//        }
     } else {
         api_not_allowed(true);
     }
@@ -215,10 +217,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actions .='<a href="live_stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actions .='<a href="stats.php?' . api_get_cidreq() . '&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'),'', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
-                     Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS($hotpotatoes_path).' ">'.Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
     $actions .= '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -292,8 +291,8 @@ $extra =  '<script type="text/javascript">
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $form = new FormValidator('report', 'post', null, null, array('class' => 'form-vertical'));
 $form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', array('id' => 'export_format_csv_label'));
-$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
-$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
+//$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
+//$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';
@@ -302,13 +301,6 @@ if ($is_allowedToEdit)
     echo $extra;
 
 echo $actions;
-//echo $content;
-/*
-
-$tpl = new Template($nameTools);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
-*/
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_hotpotatoes_exercise_results&path='.$hotpotatoes_path.'&filter_by_user='.$filter_user;
 
@@ -333,15 +325,16 @@ if ($is_allowedToEdit || $is_tutor) {
 	$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'),
                         get_lang('Group'), get_lang('StartDate'),  get_lang('Score'),  get_lang('Actions'));
 
-    //Column config
+  //Column config
+  // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
 	$column_model   = array(
-                        array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'true'),
-                        array('name'=>'login',          'hidden'=>'true',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'group_name',		'index'=>'group_id',        'width'=>'40',   'align'=>'left', 'search' => 'false'),
-						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
-						array('name'=>'score',			'index'=>'exe_result',	    'width'=>'50',   'align'=>'left', 'search' => 'false'),
-						array('name'=>'actions',        'index'=>'actions',         'width'=>'60',  'align'=>'left', 'search' => 'false')
+                        array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'lastname',		    'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'false'),
+                        array('name'=>'login',          'hidden'=>'true',       'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'false'),
+                        array('name'=>'group_name',		  'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'false'),
+            						array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
+            						array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
+            						array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
                        );
 
     $action_links = '
@@ -362,7 +355,7 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
-$extra_params['rowList'] = array(10, 20 ,30);
+$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
 
 ?>
 <script>
@@ -436,10 +429,10 @@ $(function() {
     <?php } ?>
 });
 </script>
-<form id="export_report_form" method="post" action="exercise_report.php">
+<form id="export_report_form" method="post" action="hotpotatoes_exercise_report.php">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
-    <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" />
+    <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path ?>" />
 </form>
 <?php
 

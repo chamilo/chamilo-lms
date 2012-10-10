@@ -62,7 +62,7 @@ class HotpotatoesExerciseResult
 	 * @param	integer		User ID. Optional. If no user ID is provided, we take all the results. Defauts to null
 	 */
 //	function _getExercisesReporting($document_path, $user_id = null, $filter = 0, $hotpotato_name = null) {
-	function _getExercisesReporting($document_path, $hotpotato_name = null, $user_id = null, $filter = 0) {
+	function _getExercisesReporting($document_path, $hotpotato_name) {
 		$return = array();
 
     $TBL_EXERCISES          = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -141,14 +141,12 @@ class HotpotatoesExerciseResult
 					$title = basename($hpresults[$i]['exe_name']);
 				}
 				if(empty($user_id)) {
-				    $return[$i]['email'] = $hpresults[$i]['email'];
+			    $return[$i]['email'] = $hpresults[$i]['email'];
 					$return[$i]['first_name'] = $hpresults[$i]['userpart1'];
 					$return[$i]['last_name'] = $hpresults[$i]['userpart2'];
 				}
 				$return[$i]['title'] = $title;
-				$return[$i]['start_date']  = api_get_local_time($results[$i]['exstart']);
-                $return[$i]['end_date']    = api_get_local_time($results[$i]['exdate']);
-                $return[$i]['duration']    = $results[$i]['duration'];
+				$return[$i]['exe_date']  = $hpresults[$i]['exe_date'];
 
 				$return[$i]['result'] = $hpresults[$i]['exe_result'];
 				$return[$i]['max'] = $hpresults[$i]['exe_weighting'];
@@ -164,32 +162,31 @@ class HotpotatoesExerciseResult
 	 * @param	boolean		Whether to include user fields or not
 	 * @return	boolean		False on error
 	 */
-	public function exportCompleteReportCSV($document_path='',$user_id=null, $export_user_fields = false, $export_filter = 0, $exercise_id = 0, $hotpotato_name = null) {
+	public function exportCompleteReportCSV($document_path='', $hotpotato_name) {
 		global $charset;
-		$this->_getExercisesReporting($document_path,$user_id, $export_filter, $exercise_id, $hotpotato_name);
+		$this->_getExercisesReporting($document_path, $hotpotato_name);
 		$filename = 'exercise_results_'.date('YmdGis').'.csv';
 		if(!empty($user_id)) {
 			$filename = 'exercise_results_user_'.$user_id.'_'.date('YmdGis').'.csv';
 		}
 		$data = '';
 
-
-        if (api_is_western_name_order()) {
-            if(!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
-            }
-            if(!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
-            }
-        } else {
-            if(!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
-            }
-            if(!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
-            }
+    if (api_is_western_name_order()) {
+        if(!empty($this->results[0]['first_name'])) {
+            $data .= get_lang('FirstName').';';
         }
-        $data .= get_lang('Email').';';
+        if(!empty($this->results[0]['last_name'])) {
+            $data .= get_lang('LastName').';';
+        }
+    } else {
+        if(!empty($this->results[0]['last_name'])) {
+            $data .= get_lang('LastName').';';
+        }
+        if(!empty($this->results[0]['first_name'])) {
+            $data .= get_lang('FirstName').';';
+        }
+    }
+    $data .= get_lang('Email').';';
 
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
@@ -202,25 +199,23 @@ class HotpotatoesExerciseResult
 
 		$data .= get_lang('Title').';';
 		$data .= get_lang('StartDate').';';
-        $data .= get_lang('EndDate').';';
-        $data .= get_lang('Duration'). ' ('.get_lang('MinMinutes').') ;';
 		$data .= get_lang('Score').';';
 		$data .= get_lang('Total').';';
-        $data .= get_lang('Status').';';
 		$data .= "\n";
+
+    error_log("HUBC |||".serialize($this->results)."|||");
 
 		//results
 		foreach($this->results as $row) {
+      if (api_is_western_name_order()) {
+          $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+          $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+      } else {
+          $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
+          $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
+      }
 
-            if (api_is_western_name_order()) {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-            } else {
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['last_name']), ENT_QUOTES, $charset)).';';
-                $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset)).';';
-            }
-
-            $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+      $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
 
 			if ($export_user_fields) {
 				//show user fields data, if any, for this user
@@ -231,12 +226,9 @@ class HotpotatoesExerciseResult
 			}
 
 			$data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['title']), ENT_QUOTES, $charset)).';';
-			$data .= str_replace("\r\n",'  ',$row['start_date']).';';
-            $data .= str_replace("\r\n",'  ',$row['end_date']).';';
-            $data .= str_replace("\r\n",'  ',$row['duration']).';';
+			$data .= str_replace("\r\n",'  ',$row['exe_date']).';';
 			$data .= str_replace("\r\n",'  ',$row['result']).';';
 			$data .= str_replace("\r\n",'  ',$row['max']).';';
-            $data .= str_replace("\r\n",'  ',$row['status']).';';
 			$data .= "\n";
 		}
 

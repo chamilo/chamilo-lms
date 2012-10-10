@@ -93,7 +93,7 @@ class HotpotatoesExerciseResult
             WHERE   tu.user_id=tth.exe_user_id AND
                     tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
                     tth.exe_name = '$hotpotato_name'
-            ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+            ORDER BY tth.exe_cours_id ASC, tth.exe_date ASC";
 		} else {
       $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
       // get only this user's results
@@ -103,7 +103,7 @@ class HotpotatoesExerciseResult
                       WHERE   exe_user_id = '" . $user_id . "' AND
                               exe_cours_id = '" . Database :: escape_string($cid) . "' AND
                               tth.exe_name = '$hotpotato_name'
-                      ORDER BY exe_cours_id ASC, exe_date DESC";
+                      ORDER BY exe_cours_id ASC, exe_date ASC";
 		}
 
 		$results = array();

@@ -153,6 +153,9 @@ define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 
+
+define('LOG_HOMEPAGE_CHANGED',                  'homepage_changed');
+
 define('LOG_PROMOTION_CREATE',                  'promotion_created');
 define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');

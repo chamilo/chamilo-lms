@@ -23,16 +23,12 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-/*	Libraries & settings */
-
 $group_id = api_get_group_id();
-
-/*	Constants & variables */
 $current_group = GroupManager :: get_group_properties($group_id);
 
-/*	Header */
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
+$interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 
 $is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
 
@@ -192,19 +188,6 @@ $group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'
 $group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
-
-// Tutors: this has been replaced with the new tutors code
-//$tutors = GroupManager :: get_all_tutors();
-//$possible_tutors[0] = get_lang('GroupNoTutor');
-//foreach ($tutors as $index => $tutor)
-//{
-//	$possible_tutors[$tutor['user_id']] = api_get_person_name($tutor['lastname'], $tutor['firstname']);
-//}
-//$group = array ();
-//$group[] = & $form->createElement('select', 'tutor_id', null, $possible_tutors);
-//$group[] = & $form->createElement('static', null, null, '&nbsp;&nbsp;<a href="../user/user.php">'.get_lang('AddTutors').'</a>');
-//$form->addGroup($group, 'tutor_group', get_lang('GroupTutor'), '', false);
-
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array();
@@ -233,7 +216,6 @@ $group[] = $form->createElement('radio', 'work_state', get_lang('GroupWork'), ge
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC);
 $group[] = $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE);
 $form->addGroup($group, '', Display::return_icon('work.png', get_lang('GroupWork') , array(), ICON_SIZE_SMALL).' '.get_lang('GroupWork'), '', false);
-
 
 // Calendar settings
 $group = array();
@@ -300,10 +282,11 @@ if ($form->validate()) {
     //var_dump(count($_POST['group_members']), $max_member, GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 	$cat = GroupManager :: get_category_from_group($current_group['id']);      
     if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        header('Location:group_edit.php?show_message='.get_lang('GroupTooMuchMembers'));
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&show_message_warning='.get_lang('GroupTooMuchMembers'));
     } else {
-        header('Location: '.$values['referer'].'?action=show_msg&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+        header('Location: '.api_get_self().'?'.api_get_cidreq().'&show_message_sucess='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
     }
+    exit;
 }
 
 $defaults = $current_group;
@@ -317,11 +300,6 @@ if ($defaults['maximum_number_of_students'] == GroupManager::MEMBER_PER_GROUP_NO
 	$defaults['max_member_no_limit'] = 1;
 	$defaults['max_member'] = $defaults['maximum_number_of_students'];
 }
-$referer = parse_url($_SERVER['HTTP_REFERER']);
-$referer = basename($referer['path']);
-if ($referer != 'group_space.php' && $referer != 'group.php') {
-	$referer = 'group.php';
-}
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 	$keyword_name = Security::remove_XSS($_GET['keyword']);
@@ -329,18 +307,17 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
 }
 
 Display :: display_header($nameTools, 'Group');
-?>
-<div class="actions">
-<a href="group_space.php"><?php echo Display::return_icon('back.png', get_lang('ReturnTo').' '.get_lang('GroupSpace'),'',ICON_SIZE_MEDIUM); ?></a>
-</div>
-<?php
 
-if (isset($_GET['show_message'])) {
-	echo Display::display_error_message($_GET['show_message']);
+//@todo fix this
+if (isset($_GET['show_message_warning'])) {
+	echo Display::display_warning_message($_GET['show_message_warning']);
 }
-$defaults['referer'] = $referer;
+
+if (isset($_GET['show_message_sucess'])) {
+    echo Display::display_normal_message($_GET['show_message_sucess']);
+}
+
 $form->setDefaults($defaults);
 $form->display();
 
-/*	FOOTER */
 Display :: display_footer();

@@ -28,12 +28,13 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 /*	MAIN CODE */
 
 $group_id = api_get_group_id();
+
 $user_id = api_get_user_id();
 
 $current_group = GroupManager :: get_group_properties($group_id);
 
 if (empty($current_group)) {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 $this_section = SECTION_COURSES;

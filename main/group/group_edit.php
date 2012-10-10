@@ -113,9 +113,9 @@ function check_group_members($value) {
 /*	MAIN CODE */
 
 // Build form
-$form = new FormValidator('group_edit');
+$form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 
-$form->addElement('header', '', $nameTools);
+$form->addElement('header', $nameTools);
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'referer');
 
@@ -137,8 +137,7 @@ foreach ($complete_user_list as $index => $user) {
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array();
 $selected_tutors = array();
-foreach ($group_tutor_list as $index => $user) {
-    //$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], .$user['lastname']);
+foreach ($group_tutor_list as $index => $user) {    
     $selected_tutors[] = $user['user_id'];
 }
 

@@ -1111,11 +1111,14 @@ class GroupManager {
 	 * @return array An array with information of all users from the given group.
 	 *               (user_id, firstname, lastname, email)
 	 */
-	public static function get_subscribed_users ($group_id) {
+	public static function get_subscribed_users($group_id) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
-		$group_id = Database::escape_string($group_id);
+        if (empty($group_id)) {
+            return array();
+        }
+		$group_id = intval($group_id);
 		$course_id = api_get_course_int_id();
 		
 		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username 
@@ -1124,7 +1127,7 @@ class GroupManager {
 					  ug.group_id = $group_id 
                 $order_clause";
 		$db_result = Database::query($sql);
-		$users = array ();
+		$users = array();
 		while ($user = Database::fetch_object($db_result)) {
 			$member['user_id']   = $user->user_id;
 			$member['firstname'] = $user->firstname;

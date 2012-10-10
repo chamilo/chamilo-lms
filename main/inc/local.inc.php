@@ -823,7 +823,6 @@ if (isset($cidReset) && $cidReset) {
 
 // if the requested group is different from the group in session
 $gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
-var_dump($gid);
 if (isset($gidReq) && $gidReq != $gid) {
     $gidReset = true;
 }

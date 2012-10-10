@@ -83,27 +83,27 @@ class HotpotatoesExerciseResult
     }
 
 		if (empty($user_id)) {
-      $sql="SELECT ".(api_is_western_name_order() ? "firstname as userpart1, lastname userpart2" : "lastname as userpart1, firstname as userpart2").",
-              email,
-              tth.exe_name,
-              tth.exe_result,
-              tth.exe_weighting,
-              tth.exe_date
-              FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
-              WHERE   tu.user_id=tth.exe_user_id AND
-                      tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                      tth.exe_name = '$hotpotato_name'
-              ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
+    $sql="SELECT firstname as userpart1, lastname as userpart2 ,
+            email,
+            tth.exe_name,
+            tth.exe_result,
+            tth.exe_weighting,
+            tth.exe_date
+            FROM $TBL_TRACK_HOTPOTATOES tth, $TBL_USER tu
+            WHERE   tu.user_id=tth.exe_user_id AND
+                    tth.exe_cours_id = '" . Database :: escape_string($cid) . "' AND
+                    tth.exe_name = '$hotpotato_name'
+            ORDER BY tth.exe_cours_id ASC, tth.exe_date DESC";
 		} else {
-            $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
-			      // get only this user's results
-
-            $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
-                            FROM $TBL_TRACK_HOTPOTATOES
-                            WHERE   exe_user_id = '" . $user_id . "' AND
-                                    exe_cours_id = '" . Database :: escape_string($cid) . "' AND
-                                    tth.exe_name = '$hotpotato_name'
-                            ORDER BY exe_cours_id ASC, exe_date DESC";
+      $user_id_and = ' AND te.exe_user_id = ' . api_get_user_id() . ' ';
+      // get only this user's results
+  
+      $sql = "SELECT '', exe_name, exe_result , exe_weighting, exe_date
+                      FROM $TBL_TRACK_HOTPOTATOES
+                      WHERE   exe_user_id = '" . $user_id . "' AND
+                              exe_cours_id = '" . Database :: escape_string($cid) . "' AND
+                              tth.exe_name = '$hotpotato_name'
+                      ORDER BY exe_cours_id ASC, exe_date DESC";
 		}
 
 		$results = array();
@@ -203,8 +203,6 @@ class HotpotatoesExerciseResult
 		$data .= get_lang('Total').';';
 		$data .= "\n";
 
-    error_log("HUBC |||".serialize($this->results)."|||");
-
 		//results
 		foreach($this->results as $row) {
       if (api_is_western_name_order()) {
@@ -249,6 +247,8 @@ class HotpotatoesExerciseResult
 		}
 		header('Content-Description: '.$filename);
 		header('Content-transfer-encoding: binary');
+		// @todo add this utf-8 header for all csv files
+		echo "\xEF\xBB\xBF";  // force utf-8 header of csv file
 		echo $data;
 		return true;
 	}

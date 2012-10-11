@@ -37,16 +37,17 @@ require_once 'back_compat.inc.php';
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
     global $_configuration;
-    $debug = 0;
+    $debug = 5;
     $return = '';
     if ($debug > 0) { error_log('In save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions) > 0 ? $interactions[0] : '').'","'.$core_exit.'")', 0); }
-    //$objResponse = new xajaxResponse();
+    
     require_once 'learnpath.class.php';
     require_once 'scorm.class.php';
     require_once 'aicc.class.php';
     require_once 'learnpathItem.class.php';
     require_once 'scormItem.class.php';
     require_once 'aiccItem.class.php';
+    
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
         if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
@@ -66,9 +67,15 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if (!is_a($mylp, 'learnpath')) { return ''; }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
-    if ($prereq_check === true) { // Launch the prerequisites check and set error if needed.
+    
+    $mylpi = $mylp->items[$item_id];    
+    //This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
+    $mylpi->set_lp_view($view_id);
+    
+    if ($prereq_check === true) { 
+        // Launch the prerequisites check and set error if needed
 
-        $mylpi =& $mylp->items[$item_id];
+        //$mylpi =& $mylp->items[$item_id];
         //$mylpi->set_lp_view($view_id);
         if (isset($max) && $max != -1)  {
             $mylpi->max_score = $max;
@@ -142,6 +149,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         //return $objResponse;
         return $return;
     }
+    
     $mystatus_in_db = $mylpi->get_status(true);
     if ($mystatus_in_db != 'completed' && $mystatus_in_db != 'passed' && $mystatus_in_db != 'browsed' && $mystatus_in_db != 'failed') {
          $mystatus_in_memory = $mylpi->get_status(false);
@@ -154,9 +162,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         $mystatus = $mystatus_in_db;
     }
     $mytotal = $mylp->get_total_items_count_without_chapters();
-    $mycomplete = $mylp->get_complete_items_count();
+    $mycomplete = $mylp->get_complete_items_count();    
     $myprogress_mode = $mylp->get_progress_bar_mode();
     $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
+    if ($debug > 1) { error_log("myprogress_mode $myprogress_mode", 0); }
+    if ($debug > 1) { error_log("mytotal $mytotal", 0); }
+    if ($debug > 1) { error_log("mycomplete $mycomplete", 0); }
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type() != 'sco') {

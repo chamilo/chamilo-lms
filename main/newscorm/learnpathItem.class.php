@@ -1003,7 +1003,7 @@ class learnpathItem {
 		if ($check_db) {
 			if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status(): checking db', 0); }
 			$table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-			$sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";
+			$sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";            
 			if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status() - Checking DB: '.$sql, 0); }
 
 			$res = Database::query($sql);
@@ -1012,7 +1012,7 @@ class learnpathItem {
 				if ($update_local) {
 					$this->set_status($row['status']);
 				}
-				if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'], 0); }
+				if (self::debug > 2) { error_log('New LP - In learnpathItem::get_status() - Returning db value '.$row['status'], 0); }                
 				return $row['status'];
 			}
 		} else {

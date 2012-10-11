@@ -1451,7 +1451,7 @@ class learnpath {
         $i = 0;
         foreach ($this->items as $id => $dummy) {
             // Trying failed and browsed considered "progressed" as well.
-            if ($this->items[$id]->status_is(array (
+            if ($this->items[$id]->status_is(array(
                     'completed',
                     'passed',
                     'succeeded',
@@ -1515,12 +1515,12 @@ class learnpath {
         }
         $total = 0;
         foreach ($this->items as $temp2) {
-            if (!in_array($temp2->get_type(), array (
+            if (!in_array($temp2->get_type(), array(
                     'dokeos_chapter',
                     'chapter',
                     'dir'
                 )))
-                $total++;
+            $total++;
         }
         return $total;
     }

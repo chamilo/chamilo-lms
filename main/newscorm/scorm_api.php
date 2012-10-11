@@ -1092,32 +1092,35 @@ function chamilo_void_save_asset(myscore,mymax)
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message,priority) {
-    if(scorm_logs == 0) {return false;}
-    if(scorm_logs>priority){ /* fixed see http://support.chamilo.org/issues/370 */
-        if($("#lp_log_name") && $("#log_content")){
+    //scorm_logs = 10000;
+    if (scorm_logs == 0) { return false; }
+    if (scorm_logs > priority) { 
+        /* fixed see http://support.chamilo.org/issues/370 */
+        if ($("#lp_log_name") && $("#log_content")){
             $("#log_content").append("SCORM: " + message + "<br/>");
         }
-    params = {
-        msg: "SCORM: " + message,
-        debug: scorm_logs
-    };
-    $.ajax({
-        type: "POST",
-        data: params,
-        url: "lp_ajax_log.php",
-        dataType: "script",
-        async: true
-    });
-
+        params = {
+            msg: "SCORM: " + message,
+            debug: scorm_logs
+        };
+        $.ajax({
+            type: "POST",
+            data: params,
+            url: "lp_ajax_log.php",
+            dataType: "script",
+            async: true
+        });
+        //console.log(message);
     }
 }
+
 /**
  * Logs information about LMS activity into the log frame
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message, priority){
-    if (lms_logs>=priority) {
+    if (lms_logs >= priority) {
     if ($("#lp_log_name") && $("#log_content")) {
         $("#log_content").append("LMS: " + message + "<br />");
     }
@@ -1133,7 +1136,7 @@ function logit_lms(message, priority){
         async: true
         });
     }
-    console.log(message);
+    //console.log(message);
 }
 
 /**

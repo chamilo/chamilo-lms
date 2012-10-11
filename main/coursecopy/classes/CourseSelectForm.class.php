@@ -140,14 +140,7 @@ class CourseSelectForm
 			echo get_lang('DestinationCourse').' : '.$course_infos['title'];
 			echo '</h3>';
 		}
-
-		echo '<p>';
-		echo get_lang('SelectResources');
-		echo '</p>';
-
-        Display::display_normal_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
-
-		echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
+        echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
@@ -163,6 +156,12 @@ class CourseSelectForm
         $forum_categories = array();
         $forums = array();
         $forum_topics = array();
+        
+        echo '<p>';
+		echo get_lang('SelectResources');
+		echo '</p>';
+
+        Display::display_normal_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
         
         foreach ($course->resources as $type => $resources) {            
             if (count($resources) > 0) {

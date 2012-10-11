@@ -67,9 +67,15 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if (!is_a($mylp, 'learnpath')) { return ''; }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
-    if ($prereq_check === true) { // Launch the prerequisites check and set error if needed.
+    
+    $mylpi = $mylp->items[$item_id];    
+    //This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
+    $mylpi->set_lp_view($view_id);
+    
+    if ($prereq_check === true) { 
+        // Launch the prerequisites check and set error if needed
 
-        $mylpi =& $mylp->items[$item_id];
+        //$mylpi =& $mylp->items[$item_id];
         //$mylpi->set_lp_view($view_id);
         if (isset($max) && $max != -1)  {
             $mylpi->max_score = $max;
@@ -156,7 +162,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         $mystatus = $mystatus_in_db;
     }
     $mytotal = $mylp->get_total_items_count_without_chapters();
-    $mycomplete = $mylp->get_complete_items_count();
+    $mycomplete = $mylp->get_complete_items_count();    
     $myprogress_mode = $mylp->get_progress_bar_mode();
     $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
     if ($debug > 1) { error_log("myprogress_mode $myprogress_mode", 0); }

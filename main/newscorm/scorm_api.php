@@ -1116,8 +1116,8 @@ function logit_scorm(message,priority) {
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
-function logit_lms(message,priority){
-    if(lms_logs>=priority){
+function logit_lms(message, priority){
+    if (lms_logs>=priority) {
     if ($("#lp_log_name") && $("#log_content")) {
         $("#log_content").append("LMS: " + message + "<br />");
     }
@@ -1131,9 +1131,11 @@ function logit_lms(message,priority){
         url: "lp_ajax_log.php",
         dataType: "script",
         async: true
-    });
+        });
     }
+    console.log(message);
 }
+
 /**
  * Update the Table Of Contents frame, by changing CSS styles, mostly
  * @param	string	Action to be taken
@@ -1255,39 +1257,42 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
     logit_lms('could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
 
-    if (mode == ''){mode='%';}
-    if (nbr_total == 0){nbr_total=1;}
+    if (mode == '') { 
+        mode='%'; 
+    }
+    
+    if (nbr_total == 0) {
+        nbr_total=1;
+    }
+    
     var percentage = (nbr_complete/nbr_total)*100;
     percentage = Math.round(percentage);
 
-    var pr_text  = $("#progress_text");
-    var progress_bar  = $("#progress_bar_value");
-   
-     
-   progress_bar.css('width', percentage + "%");
+    var pr_text = $("#progress_text");
+    var progress_bar = $("#progress_bar_value");     
+    progress_bar.css('width', percentage + "%");
        
     /*
     var pr_full  = $("#progress_img_full");
     var pr_empty = $("#progress_img_empty");
     pr_full.attr('width',percentage*1.2);
-    pr_empty.attr('width',(100-percentage)*1.2);
-    
+    pr_empty.attr('width',(100-percentage)*1.2);    
     */
 
-        var mytext = '';
-        switch(mode){
-            case 'abs':
-                mytext = nbr_complete + '/' + nbr_total;
-                break;
-            case '%':
-            default:
-                mytext = percentage + '%';
-                break;
-        }
+    var mytext = '';
+    switch(mode){
+        case 'abs':
+            mytext = nbr_complete + '/' + nbr_total;
+            break;
+        case '%':
+        default:
+            mytext = percentage + '%';
+            break;
+    }
     pr_text.html(mytext);
-
     return true;
 }
+
 /**
  * Analyses the variables that have been modified through this SCO's life and
  * put them into an array for later shipping to lp_ajax_save_item.php

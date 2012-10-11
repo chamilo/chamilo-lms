@@ -1172,10 +1172,26 @@ class DocumentManager {
         $condition = "AND id_session IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
-        //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
-        //so we remove that string in order to find correctly the origin file
-        if (strpos($doc_path, 'HotPotatoes_files')) {
-//            $doc_path = substr($doc_path, 0, strlen($doc_path) - 8);
+        /* 
+        When using hotpotatoes files, a new html files are generated in the hotpotatoes folder
+        to display the test.
+        The genuine html file is copied to math4.htm(user_id).t.html
+        Images files are not copied, and keep same name.
+        To check the html file visibility, we don't have to check file math4.htm(user_id).t.html but file math4.htm
+        In this case, we have to remove (user_id).t.html to check the visibility of the file
+        For images, we just check the path of the image file.
+        
+        Exemple of hotpotatoes folder :
+          A.jpg
+          maths4-consigne.jpg
+          maths4.htm
+          maths4.htm1.t.html
+          maths4.htm52.t.html
+          maths4.htm654.t.html
+          omega.jpg
+          theta.jpg
+        */
+        if (strpos($doc_path, 'HotPotatoes_files') && preg_match("/\.t\.html$/", $doc_path)) {
             $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
 

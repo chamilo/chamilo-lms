@@ -278,13 +278,12 @@ if ($form->validate()) {
 		GroupManager :: subscribe_users($values['group_members'], $current_group['id']);
 	}
 
-	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
-    //var_dump(count($_POST['group_members']), $max_member, GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
+	// Returning to the group area (note: this is inconsistent with the rest of chamilo)    
 	$cat = GroupManager :: get_category_from_group($current_group['id']);      
     if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        header('Location: '.api_get_self().'?'.api_get_cidreq().'&show_message_warning='.get_lang('GroupTooMuchMembers'));
+        header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
     } else {
-        header('Location: '.api_get_self().'?'.api_get_cidreq().'&show_message_sucess='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
+        header('Location: group.php?'.api_get_cidreq(true, false).'&action=success_message&msg='.get_lang('GroupSettingsModified').'&category='.$cat['id']);
     }
     exit;
 }

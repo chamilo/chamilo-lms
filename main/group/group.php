@@ -92,6 +92,12 @@ if (isset($_GET['action'])) {
 		case 'show_msg' :
 			Display :: display_confirmation_message($my_msg);
 			break;
+        case 'warning_message' :
+			Display :: display_warning_message($my_msg);
+			break;
+        case 'success_message' :
+			Display :: display_confirmation_message($my_msg);
+			break;
 	}
 }
 

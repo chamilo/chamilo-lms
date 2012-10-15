@@ -243,6 +243,8 @@ function load_personal_templates($user_id = 0) {
 
 function load_empty_template() {
     global $css, $js;
+    /* <?php echo $css; ?>
+        <?php echo $js; ?> */
     ?>
 <Template title="<?php echo s2('Empty'); ?>" image="<?php echo api_get_path(WEB_PATH).'home/default_platform_document/template_thumb/empty.gif'; ?>">
     <Description></Description>
@@ -250,9 +252,7 @@ function load_empty_template() {
         <![CDATA[
            <html>
            <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
-            <?php echo $css; ?>
-            <?php echo $js; ?>
+               <meta charset="<?php echo api_get_system_encoding(); ?>" />        
            </head>
            <body  dir="<?php echo api_get_text_direction(); ?>">
            </body>

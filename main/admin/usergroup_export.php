@@ -34,9 +34,9 @@ if ($form->validate()) {
     $header = array(array('name', 'description'));
 	$data = $user_group->get_all_for_export();    
     $data = array_merge($header, $data);    
-    $filename = 'export_classes_'.date('Y-m-d_H-i-s');    
+    $filename = 'export_classes_'.api_get_local_time();    
     Export::export_table_csv($data,$filename);
-
+    exit;
 }
 Display :: display_header($tool_name);
 $form->display();

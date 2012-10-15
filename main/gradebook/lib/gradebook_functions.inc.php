@@ -541,7 +541,7 @@ function register_user_info_about_certificate($cat_id, $user_id, $score_certific
  */
 function get_certificate_by_user_id($cat_id, $user_id) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    echo $sql_get_date = 'SELECT * FROM ' . $table_certificate . ' WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
+    $sql_get_date = 'SELECT * FROM ' . $table_certificate . ' WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
     $rs_get_date = Database::query($sql_get_date);
     $row = Database::fetch_array($rs_get_date, 'ASSOC');
     return $row;

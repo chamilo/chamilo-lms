@@ -869,6 +869,11 @@ class Display {
 
         $obj->datatype  = 'json';
         
+        //Default row quantity
+        if (!isset($extra_params['rowList'])) {
+            $extra_params['rowList'] = array(50, 100, 200);
+        }
+        
         $json = '';
         if (!empty($extra_params['datatype'])) {
             $obj->datatype  = $extra_params['datatype'];

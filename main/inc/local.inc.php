@@ -634,7 +634,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
 if (isset($cidReset) && $cidReset) {
     // Course session data refresh requested or empty data
-    if ($cidReq) {    
+    if ($cidReq) {
         $_course = api_get_course_info($cidReq);
         
         if (!empty($_course)) {                             
@@ -665,7 +665,7 @@ if (isset($cidReset) && $cidReset) {
             }
             
             if (!empty($_GET['gidReq'])) {
-                $_SESSION['_gid'] = intval($_GET['gidReq']);
+                $_SESSION['_gid'] = intval($_GET['gidReq']);                
             } else {
                 Session::erase('_gid');
             } 
@@ -730,6 +730,8 @@ if (isset($cidReset) && $cidReset) {
          
         $_cid      = $_SESSION['_cid'   ];
         $_course   = $_SESSION['_course'];
+        
+        
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
@@ -741,8 +743,18 @@ if (isset($cidReset) && $cidReset) {
             $_SESSION['id_session']         = intval($_GET['id_session']);
         }
         
+        
         if (!empty($_REQUEST['gidReq'])) {
-            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);        
+            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
+            
+            $group_table = Database::get_course_table(TABLE_GROUP);
+            $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
+                $gpData = Database::fetch_array($result);
+                $_gid = $gpData ['id'];
+                Session::write('_gid', $_gid);
+            }
         }
         
         if (!isset($_SESSION['login_as'])) {
@@ -807,10 +819,12 @@ if (isset($cidReset) && $cidReset) {
 }
 
 // if the requested group is different from the group in session
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
+/*
+$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;
 if (isset($gidReq) && $gidReq != $gid) {
     $gidReset = true;
-}
+}*/
+
 
 /*  COURSE / USER REL. INIT */
 
@@ -1043,7 +1057,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
 }
 
 /*  GROUP INIT */
-if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested    
+/*
+if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) {
+    // session data refresh requested    
     if ($gidReq && $_cid && !empty($_course['real_id'])) { // have keys to search data
         $group_table = Database::get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
@@ -1063,7 +1079,7 @@ if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // ses
 } else { //if no previous value, assign caracteristic undefined value
     $_gid = -1;
 }
-
+*/
 
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {

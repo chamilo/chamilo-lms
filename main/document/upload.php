@@ -301,5 +301,4 @@ if ($nav_info ['name'] == 'Internet Explorer') {
 	$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
 	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');	
 }
-
 Display::display_footer();

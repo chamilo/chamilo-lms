@@ -371,3 +371,4 @@ foreach ($group_cats as $index => $category) {
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 	Display::display_footer();
 }
+Session::erase('_gid');

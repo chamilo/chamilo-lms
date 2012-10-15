@@ -2227,8 +2227,7 @@ class DocumentManager {
         $base_work_dir    = $sys_course_path.$course_dir;
 
         if (isset($files['file'])) {
-            $upload_ok = process_uploaded_file($files['file'], $show_output);
-            
+            $upload_ok = process_uploaded_file($files['file'], $show_output);            
             if ($upload_ok) {
                 // File got on the server without problems, now process it
                 $new_path = handle_uploaded_document($course_info, $files['file'], $base_work_dir, $path, api_get_user_id(), api_get_group_id(), null, $unzip, $if_exists, $show_output);

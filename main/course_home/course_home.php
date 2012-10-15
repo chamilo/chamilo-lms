@@ -267,3 +267,5 @@ $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
+
+Session::erase('_gid');

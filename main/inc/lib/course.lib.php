@@ -1537,7 +1537,7 @@ class CourseManager {
         $result = Database::query($sql);
         
         while ($group_data = Database::fetch_array($result)) {
-            $group_data[] = GroupManager::number_of_students($group_data['id'], $course_id);
+            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;

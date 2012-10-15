@@ -511,12 +511,6 @@ if ($modifyAnswers) {
                 <td colspan="2" valign="bottom">
                     <?php
                     $navigator_info = api_get_navigator();
-
-//cancel button
-                    /*
-                     * <input type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" >
-                     * <button type="submit" class="cancel" name="cancelAnswers" value="<?php echo get_lang('Cancel'); ?>" onclick="javascript:if(!confirm('<?php echo addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))); ?>')) return false;" ><?php echo get_lang('Cancel'); ?></button> 
-                     * */
                     //ie6 fix
                     if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                         ?>
@@ -664,7 +658,7 @@ if ($modifyAnswers) {
                                         <td align="left">
                                             <br />
                                             <textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%">
-                                                        <?php echo stripslashes(htmlentities($comment[$i])); ?>
+                                            <?php echo Security::remove_XSS($comment[$i]); ?>
                                             </textarea>
                                             <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="delineation" />
                                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />

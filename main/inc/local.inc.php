@@ -587,7 +587,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
+        $sql = "SELECT user.*, a.user_id is_admin, login.login_date 
             FROM $user_table
             LEFT JOIN $admin_table a
             ON user.user_id = a.user_id
@@ -602,37 +602,18 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-
-            $_user ['firstName']        = $uData ['firstname' ];
-            $_user ['lastName' ]        = $uData ['lastname'  ];
-            $_user ['mail'     ]        = $uData ['email'     ];
-            $_user ['lastLogin']        = $uData ['login_date'];
-            $_user ['official_code']    = $uData ['official_code'];
-            $_user ['picture_uri']      = $uData ['picture_uri'];
-            $_user ['user_id']          = $uData ['user_id'];
-            $_user ['language']         = $uData ['language'];
-            $_user ['auth_source']      = $uData ['auth_source'];
-            $_user ['theme']            = $uData ['theme'];
-            $_user ['status']           = $uData ['status'];
-
+            
+            $_user =  _api_format_user($uData, false);            
+            $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');                  
+            
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
 
             Session::write('_user',$_user);
             UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
-            Session::write('is_platformAdmin',$is_platformAdmin);
+            Session::write('is_platformAdmin', $is_platformAdmin);
             Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
-
-            // If request_uri is setted we have to go further to have course permissions
-            /*if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-                if (isset($_SESSION['noredirection'])) {
-                    //If we just want to reset info without redirecting user
-                    unset($_SESSION['noredirection']);
-                } else {
-                    LoginRedirection::redirect();
-                }
-            }*/
         } else {
             header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");

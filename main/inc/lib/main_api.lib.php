@@ -162,9 +162,11 @@ define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
 define('LOG_SESSION_CATEGORY_DELETE',           'session_category_deleted');
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
+define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 
+define('LOG_HOMEPAGE_CHANGED',                  'homepage_changed');
 define('LOG_PROMOTION_CREATE',                  'promotion_created');
 define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
@@ -178,6 +180,7 @@ define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
+define('LOG_PLATFORM_LANGUAGE',                 'default_platform_language');
 define('LOG_CAREER_ID',                         'career_id');
 define('LOG_PROMOTION_ID',                      'promotion_id');
 
@@ -1270,10 +1273,15 @@ function api_get_anonymous_id() {
  *
  * @see Uri.course_params
  */
-function api_get_cidreq() {
-    return empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']).
-            (api_get_session_id() == 0 ? '&amp;id_session=0' : '&amp;id_session='.api_get_session_id()).
-            (api_get_group_id() == 0 ? '&amp;gidReq=0' : '&amp;gidReq='.api_get_group_id());
+function api_get_cidreq($add_session_id = true, $add_group_id = true) {
+     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+     if ($add_session_id) {
+        $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
+}
+     if ($add_group_id) {
+        $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+     }
+     return $url;
 }
 /**
  * Returns the current course info array.
@@ -1386,6 +1394,7 @@ function api_format_course_array($course_data) {
 
     $_course['visibility'   ]         = $course_data['visibility'      ];
     $_course['subscribe_allowed']     = $course_data['subscribe'       ];
+    $_course['subscribe']             = $course_data['subscribe'];
     $_course['unsubscribe']           = $course_data['unsubscribe'     ];
   
     $_course['course_language']       = $course_data['course_language'];
@@ -6175,7 +6184,7 @@ function api_is_global_chat_enabled(){
 /** 
  * @todo Fix tool_visible_by_default_at_creation labels 
  */
-function api_set_default_visibility($item_id, $tool_id) {
+function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;
 
     switch ($tool_id) {
@@ -6199,27 +6208,38 @@ function api_set_default_visibility($item_id, $tool_id) {
         case TOOL_QUIZ:
             $tool_id = 'quiz';
             break;
-        /*case TOOL_GRADEBOOK:        
-            $tool_id = 'gradebook';            */
-            break;
     }
     $setting = api_get_setting('tool_visible_by_default_at_creation'); 
    
-    if (isset($setting[$tool_id])) {
-        //$visibility_boolean = false;
-        $visibility = 'invisible';        
+    if (isset($setting[$tool_id])) {        
+        $visibility = 'invisible';    
         if ($setting[$tool_id] == 'true') {
-            $visibility = 'visible';
-            //$visibility_boolean = true;
+            $visibility = 'visible';            
         }
-        //Hack for gradebook because we don't use the item property table
-        /*
-        if ($tool_id == TOOL_GRADEBOOK) {
-            return $visibility_boolean;
-        }*/
-        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), api_get_group_id(), null, null, null, api_get_session_id());    
+        
+        if (empty($group_id)) {
+            $group_id = api_get_group_id();
+        }        
+        api_item_property_update(api_get_course_info(), $original_tool_id, $item_id, $visibility, api_get_user_id(), $group_id, null, null, null, api_get_session_id());
+        
+        //Fixes default visibility for tests
+        
+        switch ($original_tool_id) {
+            case TOOL_QUIZ:
+                $objExerciseTmp = new Exercise();
+                $objExerciseTmp->read($item_id);
+                if ($visibility == 'visible') {
+                    $objExerciseTmp->enable();
+                    $objExerciseTmp->save();
+                } else {
+                    $objExerciseTmp->disable();
+                    $objExerciseTmp->save();
+                }
+                break;
+        }
     }
 }
+
 
 function api_get_datetime_picker_js($htmlHeadXtra) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';

@@ -11,7 +11,7 @@ FCKLang['Folder']             = 'Verzeichnis' ;
 FCKLang['CreateNewFolder']    = 'Verzeichnis erstellen' ;
 FCKLang['UploadFile']         = 'Datei hochladen' ;
 FCKLang['Upload']             = 'Datei' ;
-FCKLang['UploadSelectFileFirst'] = 'Please, select a file before pressing the upload button.' ;
+FCKLang['UploadSelectFileFirst'] = 'Vor dem Drücken des Upload-Buttons bitte eine Datei auswählen.' ;
 
 FCKLang['ResourceTypeRoot']   = 'Wurzelverzeichnis' ;
 FCKLang['ResourceTypeAudio']  = 'Audio' ;
@@ -19,21 +19,21 @@ FCKLang['ResourceTypeFlash']  = 'Flash' ;
 FCKLang['ResourceTypeImages'] = 'Bilder' ;
 FCKLang['ResourceTypeVideo']  = 'Video' ;
 
-FCKLang['FileSuccessfullyUploaded'] = 'Your file has been successfully uploaded.' ;
-FCKLang['FileRenamed'] = 'A file with the same name is already available. The uploaded file has been renamed to ' ;
-FCKLang['InvalidFileType'] = 'Invalid file type.' ;
-FCKLang['SecurityError'] = 'Security error. You probably don\'t have enough permissions to upload. Please check your server.' ;
-FCKLang['ConnectorDisabled'] = 'The upload feature (connector) is disabled.' ;
-FCKLang['UploadError'] = 'Error on file upload. Error number: ' ;
-FCKLang['UploadInProgress'] = '(Upload in progress, please wait...)' ;
+FCKLang['FileSuccessfullyUploaded'] = 'Deine Datei wurde erfolgreich hochgeladen.' ;
+FCKLang['FileRenamed'] = 'Eine Datei mit gleichem Namen existiert bereits. Die hochgeladene Datei wurde daher umbenannt zu ' ;
+FCKLang['InvalidFileType'] = 'Ungültiger Dateityp.' ;
+FCKLang['SecurityError'] = 'Sicherheits-Warnung. Du hast wahrscheinlich keine Upload-Berechtigung. Bitte Verzeichnisrechte/User überprüfen.' ;
+FCKLang['ConnectorDisabled'] = 'Der Upload (connector) ist deaktiviert.' ;
+FCKLang['UploadError'] = 'Fehler beim Hochladen. Fehler-Nummer: ' ;
+FCKLang['UploadInProgress'] = '(Upload, bitte warten...)' ;
 
-FCKLang['NewFolderName'] = 'Type the name of the new folder:' ;
-FCKLang['NewFolderNameRequest'] = 'Please, type the folder name.' ;
-FCKLang['FolderAlreadyExists'] = 'Folder already exists.' ;
-FCKLang['InvalidFolderName'] = 'Invalid folder name.' ;
-FCKLang['NoPermissionsToCreateFolder'] = 'You have no permissions to create the folder.' ;
-FCKLang['UnknownErrorCreatingFolder'] = 'Unknown error creating folder.' ;
-FCKLang['ErrorCreatingFolder'] = 'Error creating folder. Error number: ' ;
+FCKLang['NewFolderName'] = 'Bitte neuen Verzeichnis-Namen angeben:' ;
+FCKLang['NewFolderNameRequest'] = 'Bitte Ordner benennen.' ;
+FCKLang['FolderAlreadyExists'] = 'Verzeichnis existiert bereits.' ;
+FCKLang['InvalidFolderName'] = 'Ungültiger Ordner-Name.' ;
+FCKLang['NoPermissionsToCreateFolder'] = 'Berechtigung zur Ordnererstellung fehlt.' ;
+FCKLang['UnknownErrorCreatingFolder'] = 'Unbekannter Fehler beim Erstellen des Ordners.' ;
+FCKLang['ErrorCreatingFolder'] = 'Fehler beim Erstellen des Ordners. Fehler-Nummer: ' ;
 
-FCKLang['ServerDidNotReturnProperXmlData'] = 'The server didn\'t reply with a proper XML data. Please check your configuration.' ;
+FCKLang['ServerDidNotReturnProperXmlData'] = 'Der Server antwortete nicht mit korrekten XML-Daten. Bitte Konfiguration prüfen.' ;
 

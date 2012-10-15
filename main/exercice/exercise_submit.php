@@ -673,7 +673,6 @@ if ($time_control) {
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
-//echo Display::div($objExercise->description, array('id'=> 'exercise_description', 'class'=>'exercise_description'));
 if (!empty($objExercise->description)) {
     echo Display::generate_accordion(array( array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)));
 }
@@ -1022,7 +1021,6 @@ if (!empty($error)) {
 				$remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
 				$exercise_actions    .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
 			}
-
 			echo Display::div($exercise_actions, array('class'=>'form-actions'));
 		echo '</div>';
 

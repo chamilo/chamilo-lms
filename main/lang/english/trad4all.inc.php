@@ -976,6 +976,7 @@ $NumberOfCoursesPrivate = "Number of private courses";
 $NumberOfCoursesClosed = "Number of closed courses";
 $NumberOfCoursesTotal = "Total number of courses";
 $NumberOfUsersActive = "Number of active users";
+$ReturnToCourseList = "Return to the course list";
 $dateFormatShortNumberNoYear = "%d/%m";
 $CourseTutor = "Course tutor";
 $StudentInSessionCourse = "Student in session course";
@@ -1379,4 +1380,5 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
+$dateFormatLongNoDay = "%d %B %Y";
 ?>

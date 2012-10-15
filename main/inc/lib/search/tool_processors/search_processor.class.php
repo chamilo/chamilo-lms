@@ -1,8 +1,10 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.include.search
  */
+
 /**
  * Base class to make tool processors
  *
@@ -16,6 +18,7 @@
  * @package chamilo.include.search
  */
 abstract class search_processor {
+
     /**
      * Search engine api results
      */

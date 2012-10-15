@@ -2,13 +2,13 @@
 // Video Dialog.
 // Please, use UTF-8 encoding.
 
-FCKLang["DlgEmbedMoviesTitle"]  = "Insert video / Video properties" ;
-FCKLang["DlgEmbedMoviesAutosize"] = "Auto size" ;
-FCKLang["DlgEmbedMoviesGotoBar"] = "Show gotobar" ;
-FCKLang["DlgEmbedMoviesStatusbar"] = "Show statusbar" ;
-FCKLang["DlgEmbedMoviesControls"] = "Show controls" ;
-FCKLang["DlgEmbedMoviesPositionControls"] = "Position controls" ;
+FCKLang["DlgEmbedMoviesTitle"]  = "Video einfügen / Video Eigenschaften" ;
+FCKLang["DlgEmbedMoviesAutosize"] = "automatische Skalierung" ;
+FCKLang["DlgEmbedMoviesGotoBar"] = "Zeige gotobar" ;
+FCKLang["DlgEmbedMoviesStatusbar"] = "Zeige Statusbar" ;
+FCKLang["DlgEmbedMoviesControls"] = "Zeige Kontrollelemente" ;
+FCKLang["DlgEmbedMoviesPositionControls"] = "Positioniere Kontrollelemente" ;
 FCKLang["DlgEmbedMoviesTracker"] = "Tracker" ;
-FCKLang["DlgEmbedMoviesAudioControls"] = "Audio controls" ;
-FCKLang["DlgEmbedMoviesExtensionSupported"] = "Only a mpg, mpeg, mp4, avi, wmv, mov or asf file extension is allowed." ;
+FCKLang["DlgEmbedMoviesAudioControls"] = "Audio Kontrollelemente" ;
+FCKLang["DlgEmbedMoviesExtensionSupported"] = "Nur mpg, mpeg, mp4, avi, wmv, mov oder asf Dateien sind erlaubt." ;
 

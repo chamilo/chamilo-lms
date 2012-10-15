@@ -37,7 +37,7 @@ if(isset($_GET['id_session'])) {
 }
 
 /* ACCESS RIGHTS */
-api_protect_course_script();
+api_protect_course_script(true);
 
 // Configuration settings
 $display_announcement_list	 = true;
@@ -72,7 +72,6 @@ $course_id = api_get_course_int_id();
 /*	Tracking	*/
 event_access_tool(TOOL_ANNOUNCEMENT);
 
-
 /*	POST TO	*/
 $safe_emailTitle = $_POST['emailTitle'];
 $safe_newContent = $_POST['newContent'];
@@ -81,7 +80,7 @@ $content_to_modify = $title_to_modify 	= '';
 
 if (!empty($_POST['To'])) {
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-		api_not_allowed();
+		api_not_allowed(true);
 	}
 	$display_form = true;
 
@@ -115,7 +114,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show")) {
 // display the form
 if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] == "") || (!empty($_GET['action']) && $_GET['action'] == 'edit') || !empty($_POST['To'])) {
 	if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
-		api_not_allowed();
+		api_not_allowed(true);
 	}
 	$display_form = true;
 }

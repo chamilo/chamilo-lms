@@ -20,9 +20,9 @@
  * Please, use UTF-8 encoding.
  */
 
-FCKLang.WikilinkBtn			= 'Insert/Edit Wiki link' ;
-FCKLang.WikilinkDlgTitle	= 'Wiki link' ;
-FCKLang.WikilinkDlgName		= 'Wiki link name' ;
-FCKLang.WikilinkErrNoName	= 'Please type the wiki link name.' ;
-FCKLang.WikilinkErrNameInUse	= 'The specified name is already in use.';
-FCKLang.WikilinkHelp            = 'TIP: Also, you can create a wiki link without using this button. To create a new page or create a link to an existing one using wiki links, edit a page and add [[page title]] or [[name of link|title of page]] to its content.';
+FCKLang.WikilinkBtn			= 'Wiki Link einfügen/ändern' ;
+FCKLang.WikilinkDlgTitle	= 'Wiki Link' ;
+FCKLang.WikilinkDlgName		= 'Name des Links' ;
+FCKLang.WikilinkErrNoName	= 'Bitte den Namen des Links eingeben.' ;
+FCKLang.WikilinkErrNameInUse	= 'Der angegebene Name ist bereits in Verwendung.';
+FCKLang.WikilinkHelp            = 'Hinweis: Wiki-Links können auch ohne diesen Button erstellt werden. Um eine neue Seite oder einen Link auf eine existierende Seite zu erstellen, reicht es, eine bereits existierende Seite zu modifizieren und [[Titel der Seite]] oder [[Name des Links|Titel der Seite]] zum bestehenden Inhalt hinzuzufügen.';

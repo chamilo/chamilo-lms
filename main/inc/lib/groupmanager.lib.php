@@ -7,7 +7,6 @@
 /**
  * Code
  */
-//require_once 'tablesort.lib.php';moved to autoload
 require_once 'fileManage.lib.php';
 require_once 'fileUpload.lib.php';
 require_once 'document.lib.php';
@@ -195,6 +194,7 @@ class GroupManager {
 		}
 		return $groups;
 	}
+    
 	/**
 	 * Create a group
 	 * @param string $name The name for this group
@@ -202,19 +202,21 @@ class GroupManager {
 	 * @param int $places How many people can subscribe to the new group
 	 */
 	public static function create_group ($name, $category_id, $tutor, $places) {
-		global $_course,$_user;
-		isset($_SESSION['id_session'])?$my_id_session = intval($_SESSION['id_session']):$my_id_session=0;
+		global $_course;		
+        $table_group = Database :: get_course_table(TABLE_GROUP);
+        
+        $session_id = api_get_session_id();
+        $course_id  = api_get_course_int_id();
+        
 		$currentCourseRepository = $_course['path'];
-		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$table_forum = Database :: get_course_table(TABLE_FORUM);
-		$category = self :: get_category($category_id);
 		
-		$course_id = api_get_course_int_id();
+		$category = self :: get_category($category_id);
 
 		if (intval($places) == 0) {
 			//if the amount of users per group is not filled in, use the setting from the category
 			$places = $category['max_student'];
 		}
+        
 		 $sql = "INSERT INTO ".$table_group." SET
 				c_id = $course_id , 
 				category_id='".Database::escape_string($category_id)."', 
@@ -228,55 +230,62 @@ class GroupManager {
 				chat_state = '".$category['chat_state']."', 
 				self_registration_allowed = '".$category['self_reg_allowed']."',  
 				self_unregistration_allowed = '".$category['self_unreg_allowed']."', 
-				session_id='".Database::escape_string($my_id_session)."'";
+				session_id='".Database::escape_string($session_id)."'";
 		Database::query($sql);
 		$lastId = Database::insert_id();
+        
+        if ($lastId) {
+            $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
+            $my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
+            $unique_name = create_unexisting_directory($_course, api_get_user_id(), $session_id, $lastId, NULL, $my_path, $desired_dir_name);               
+       
+            /* Stores the directory path into the group table */
+            $sql = "UPDATE ".$table_group." SET name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' 
+                    WHERE c_id = $course_id AND id ='".$lastId."'";
 
-		$desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
+            Database::query($sql);
 
-		$my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
-		$unique_name = create_unexisting_directory($_course,$_user['user_id'], api_get_session_id(), $lastId,NULL,$my_path, $desired_dir_name);
-		/* Stores the directory path into the group table */
-		$sql = "UPDATE ".$table_group." SET name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."' 
-				WHERE c_id = $course_id AND id ='".$lastId."'";
+            // create a forum if needed
+            if ($category['forum_state'] >= 0) {
+                require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
+                require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
-		Database::query($sql);
-
-		// create a forum if needed
-		if ($category['forum_state'] >= 0) {
-			require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
-			require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
-
-			$forum_categories = get_forum_categories();
-			$values['forum_title'] = $name;
-			$counter = 0;
-			foreach ($forum_categories as $key=>$value) {
-				if ($counter==0) {
-					$forum_category_id = $key;
-				}
-				$counter++;
-			}
-			// A sanity check.
-			if (empty($forum_category_id)) {
-				$forum_category_id = 0;
-			}
-			$values['forum_category'] = $forum_category_id;
-			$values['allow_anonymous_group']['allow_anonymous'] = 0;
-			$values['students_can_edit_group']['students_can_edit'] = 0;
-			$values['approval_direct_group']['approval_direct'] = 0;
-			$values['allow_attachments_group']['allow_attachments'] = 1;
-			$values['allow_new_threads_group']['allow_new_threads'] = 1;
-			$values['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
-			$values['group_forum'] = $lastId;
-			if ($category['forum_state'] == '1') {
-				$values['public_private_group_forum_group']['public_private_group_forum']='public';
-			} elseif  ($category['forum_state'] == '2') {
-				$values['public_private_group_forum_group']['public_private_group_forum']='private';
-			} elseif  ($category['forum_state'] == '0') {
-				$values['public_private_group_forum_group']['public_private_group_forum']='unavailable';
-			}
-			store_forum($values);
-		}
+                $forum_categories = get_forum_categories();
+                
+                $values = array();
+                $values['forum_title'] = $name;                
+                $values['group_id'] = $lastId;
+                
+                $counter = 0;
+                foreach ($forum_categories as $key=>$value) {
+                    if ($counter==0) {
+                        $forum_category_id = $key;
+                    }
+                    $counter++;
+                }
+                // A sanity check.
+                if (empty($forum_category_id)) {
+                    $forum_category_id = 0;
+                }
+                $values['forum_category'] = $forum_category_id;
+                $values['allow_anonymous_group']['allow_anonymous'] = 0;
+                $values['students_can_edit_group']['students_can_edit'] = 0;
+                $values['approval_direct_group']['approval_direct'] = 0;
+                $values['allow_attachments_group']['allow_attachments'] = 1;
+                $values['allow_new_threads_group']['allow_new_threads'] = 1;
+                $values['default_view_type_group']['default_view_type']=api_get_setting('default_forum_view');
+                $values['group_forum'] = $lastId;
+                if ($category['forum_state'] == '1') {
+                    $values['public_private_group_forum_group']['public_private_group_forum']='public';
+                } elseif  ($category['forum_state'] == '2') {
+                    $values['public_private_group_forum_group']['public_private_group_forum']='private';
+                } elseif  ($category['forum_state'] == '0') {
+                    $values['public_private_group_forum_group']['public_private_group_forum']='unavailable';
+                }
+                store_forum($values);
+            }
+        }
+     
 		return $lastId;
 	}
 	/**
@@ -822,7 +831,6 @@ class GroupManager {
         while ($row = Database::fetch_array($rs)) {
             $result[] = $row['user_id']; 
         }
-
         return $result;
     }
 
@@ -956,10 +964,14 @@ class GroupManager {
 	 * @param int $group_id
 	 * @return int Number of students in the given group.
 	 */
-	public static function number_of_students ($group_id) {
+	public static function number_of_students ($group_id, $course_id = null) {
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
-		$course_id = api_get_course_int_id();		
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
 		$sql = "SELECT  COUNT(*) AS number_of_students FROM $table_group_user WHERE c_id = $course_id AND group_id = $group_id";
 		$db_result = Database::query($sql);
 		$db_object = Database::fetch_object($db_result);
@@ -1099,20 +1111,23 @@ class GroupManager {
 	 * @return array An array with information of all users from the given group.
 	 *               (user_id, firstname, lastname, email)
 	 */
-	public static function get_subscribed_users ($group_id) {
+	public static function get_subscribed_users($group_id) {
 		$table_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY u.firstname, u.lastname' : ' ORDER BY u.lastname, u.firstname';
-		$group_id = Database::escape_string($group_id);
+        if (empty($group_id)) {
+            return array();
+        }
+		$group_id = intval($group_id);
 		$course_id = api_get_course_int_id();
 		
 		$sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username 
-				FROM ".$table_user." u, ".$table_group_user." ug 
-				WHERE 	ug.c_id = $course_id AND
-						ug.group_id='".$group_id."' AND 
-						ug.user_id=u.user_id". $order_clause;
+				FROM  $table_user u INNER JOIN $table_group_user ug ON (ug.user_id = u.user_id)
+				WHERE ug.c_id = $course_id AND
+					  ug.group_id = $group_id 
+                $order_clause";
 		$db_result = Database::query($sql);
-		$users = array ();
+		$users = array();
 		while ($user = Database::fetch_object($db_result)) {
 			$member['user_id']   = $user->user_id;
 			$member['firstname'] = $user->firstname;
@@ -1684,7 +1699,7 @@ class GroupManager {
         //first sort by user_id to filter out duplicates
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'user_id');
         $complete_user_list = self :: filter_duplicates($complete_user_list, 'user_id');
-        $complete_user_list = self :: filter_only_students($complete_user_list);
+        //$complete_user_list = self :: filter_only_students($complete_user_list);
         //now sort by # of group left
         $complete_user_list = TableSort :: sort_table($complete_user_list, 'number_groups_left', SORT_DESC);           
         return $complete_user_list;    

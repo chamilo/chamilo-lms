@@ -22,6 +22,7 @@ class UserGroup extends Model {
         $this->usergroup_rel_user_table     =  Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table   =  Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table  =  Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+        $this->table_course                = Database::get_main_table(TABLE_MAIN_COURSE);
 	}
 
     public function get_count() {
@@ -29,8 +30,12 @@ class UserGroup extends Model {
         return $row['count'];
     }
     
+    public function get_usergroup_by_course_with_data_count($course_id) {
+        $row = Database::select('count(*) as count', $this->usergroup_rel_course_table, array('where' => array('course_id = ?' => $course_id)), 'first');
+        return $row['count'];
+    }
     public function get_id_by_name($name) {
-        $row = Database::select('id', $this->table, array('where' => array('name = ?', $name)),'first');
+        $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)),'first');
         return $row['id'];
     }
 
@@ -72,8 +77,35 @@ class UserGroup extends Model {
         return $array;
     }
     
+    public function get_usergroup_in_course($options = array()) {        
+        $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup 
+                INNER JOIN  {$this->table} u 
+                ON (u.id = usergroup.usergroup_id)
+                INNER JOIN {$this->table_course} c
+                ON (usergroup.course_id = c.id) 
+               ";                
+        $conditions = Database::parse_conditions($options);
+        $sql .= $conditions;        
+        $result = Database::query($sql);
+        $array = Database::store_result($result, 'ASSOC');        
+        return $array;
+    }
+    
+    public function get_usergroup_not_in_course($options = array()) {        
+        $sql = "SELECT DISTINCT u.* FROM {$this->usergroup_rel_course_table} usergroup 
+                RIGHT JOIN {$this->table} u 
+                ON (u.id = usergroup.usergroup_id)                
+               ";                
+        $conditions = Database::parse_conditions($options);
+        $sql .= $conditions;        
+        $result = Database::query($sql);
+        $array = Database::store_result($result, 'ASSOC');        
+        return $array;
+    }
+    
     public function get_usergroup_by_course($course_id) {
-        $results = Database::select('usergroup_id', $this->usergroup_rel_course_table, array('where'=>array('course_id = ?'=> $course_id)));
+        $options = array('where' => array('course_id = ?' => $course_id));        
+        $results = Database::select('usergroup_id', $this->usergroup_rel_course_table, $options);
         $array = array();
         if (!empty($results)) {
             foreach($results as $row) {
@@ -175,13 +207,7 @@ class UserGroup extends Model {
             foreach($delete_items as $session_id) {
                 if (!empty($user_list)) {
                     foreach($user_list as $user_id) {
-
                         SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-                        /*foreach ($course_list as $course_data) {
-                            foreach($user_list as $user_id) {
-                                CourseManager::subscribe_user($user_id, $course_data['code'], $session_id);
-                            }
-                        }*/
                     }
                 }
                 Database::delete($this->usergroup_rel_session_table, array('usergroup_id = ? AND session_id = ?'=>array($usergroup_id, $session_id)));
@@ -197,13 +223,6 @@ class UserGroup extends Model {
                 if (!empty($user_list)) {
                     SessionManager::suscribe_users_to_session($session_id, $user_list, null, false);
                 }
-                /*
-                $course_list = SessionManager::get_course_list_by_session_id($id);
-                foreach ($course_list as $course_data) {
-                    foreach($user_list as $user_id) {
-                        CourseManager::subscribe_user($user_id, $course_data['code'], $id);
-                    }
-                }*/
             }
         }
     }

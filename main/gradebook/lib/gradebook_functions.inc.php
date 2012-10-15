@@ -84,7 +84,9 @@ function update_resource_from_course_gradebook($link_id, $course_code, $weight) 
  * @return   bool    false on error, true on success
  */
 function remove_resource_from_course_gradebook($link_id) {
-    if ( empty($link_id) ) { return false; }    
+    if (empty($link_id)) {
+        return false;
+    }
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "DELETE FROM $l WHERE id = ".(int)$link_id;
@@ -367,7 +369,9 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
  * @return   bool    false on error, true on success
  */
 function get_resource_from_course_gradebook($link_id) {
-    if ( empty($link_id) ) { return false; }    
+    if (empty($link_id)) {
+        return false;
+    }
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
     $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;    
@@ -542,7 +546,7 @@ function register_user_info_about_certificate ($cat_id, $user_id, $score_certifi
 */
 function get_certificate_by_user_id ($cat_id,$user_id) {
 	$table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-	$sql_get_date='SELECT * FROM '.$table_certificate.' WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
+    $sql_get_date = 'SELECT * FROM ' . $table_certificate . ' WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
 	$rs_get_date=Database::query($sql_get_date);
 	$row =Database::fetch_array($rs_get_date,'ASSOC');
 	return $row;

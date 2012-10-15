@@ -92,6 +92,12 @@ if (isset($_GET['action'])) {
 		case 'show_msg' :
 			Display :: display_confirmation_message($my_msg);
 			break;
+        case 'warning_message' :
+			Display :: display_warning_message($my_msg);
+			break;
+        case 'success_message' :
+			Display :: display_confirmation_message($my_msg);
+			break;
 	}
 }
 
@@ -250,7 +256,7 @@ foreach ($group_cats as $index => $category) {
 					GroupManager::user_has_access($_user['user_id'], $this_group['id'], GroupManager::GROUP_TOOL_WIKI))
 					&& !(api_is_course_coach() && intval($this_group['session_id']) != intval($_SESSION['id_session']))) {
 				$orig = isset($origin) ? $origin : null;
-				$group_name = '<a href="group_space.php?'.api_get_cidreq().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.stripslashes($this_group['name']).'</a>';
+				$group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.Security::remove_XSS($this_group['name']).'</a>';
 				if (!empty($_SESSION['_user']['user_id']) && !empty($this_group['id_tutor']) && $_SESSION['_user']['user_id'] == $this_group['id_tutor']) {
 					$group_name .= ' ('.get_lang('OneMyGroups').')';
 				} elseif ($this_group['is_member']) {
@@ -307,10 +313,10 @@ foreach ($group_cats as $index => $category) {
 
 			// Edit-links
 			if (api_is_allowed_to_edit(false, true)  && !(api_is_course_coach() && intval($this_group['session_id']) != intval($_SESSION['id_session']))) {
-				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq().'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';								
-				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.Display::return_icon('clean.png',get_lang('EmptyGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';				
-				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.Display::return_icon('fill.png',get_lang('FillGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+				$edit_actions = '<a href="group_edit.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';								
+				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category['id'].'&amp;action=empty_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.Display::return_icon('clean.png',get_lang('EmptyGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';				
+				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category['id'].'&amp;action=fill_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.Display::return_icon('fill.png',get_lang('FillGroup'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+				$edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category['id'].'&amp;action=delete_one&amp;id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 				$row[] = $edit_actions;
 			}
 			if (!empty($this_group['nbMember'])) {

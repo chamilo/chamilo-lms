@@ -23,7 +23,7 @@ class Course
 	 * Create a new Course-object
 	 */
 	function __construct() {
-		$this->resources    = array ();
+		$this->resources    = array();
 		$this->code         = '';
 		$this->path         = '';
 		$this->backup_path  = '';

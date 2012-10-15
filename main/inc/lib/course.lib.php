@@ -1582,16 +1582,17 @@ class CourseManager {
         $course_id = $course_info['real_id'];
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-        $sql = "SELECT g.id, g.name, COUNT(gu.id) userNb
+        
+        $sql = "SELECT g.id, g.name
                 FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                LEFT JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
+                INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
                 ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
-                $session_condition
-                GROUP BY g.id
+                $session_condition                
                 ORDER BY g.name";
         $result = Database::query($sql);
-
+        
         while ($group_data = Database::fetch_array($result)) {
+            $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;
@@ -3690,13 +3691,16 @@ class CourseManager {
             $course_info = api_get_course_info($my_course['course_code']);            
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
+            $my_course['extra_info']['register_button'] = '';
             $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);
 
             //Course visibility 
-            if (0 === strcmp($access_link,'register')) {
+            if ($access_link && in_array('register', $access_link)) {
                 $stok = Security::get_token();
-                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
-            } elseif (0 === strcmp($access_link,'enter')) {
+                $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
+            }
+            
+            if ($access_link && in_array('enter', $access_link)) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
             }
 
@@ -3779,31 +3783,41 @@ class CourseManager {
         if (empty($uid) or empty($course)) { return false; }
         if (empty($user_courses)) {
             // get the array of courses to which the user is subscribed
-            $user_courses = CourseManager::get_courses_list_by_user_id($uid);
+            $user_courses = CourseManager::get_courses_list_by_user_id($uid);            
             foreach ($user_courses as $k => $v) {
                 $user_courses[$k] = $v['real_id'];
             }            
         }
         
-        $is_admin = api_is_platform_admin_by_id($uid);
-        // Register button
-        if (!api_is_anonymous($uid) && !$is_admin
-          && ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-          && $course['subscribe_allowed'] == SUBSCRIBE_ALLOWED
-          && (!in_array($course['real_id'], $user_courses) || empty($user_courses))
-          ) {
-            return 'register';
+        if (!isset($course['real_id']) && empty($course['real_id'])) {
+            $course = api_get_course_info($course['code']);
         }
+        
+        $is_admin = api_is_platform_admin_by_id($uid);
+        $options =  array();
+        
+        // Register button
+        if (!api_is_anonymous($uid) && 
+            !$is_admin && 
+            (
+                ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || 
+                $course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
+            ) && 
+            $course['subscribe'] == SUBSCRIBE_ALLOWED &&
+            (!in_array($course['real_id'], $user_courses) || empty($user_courses))
+          ) {
+            $options[]= 'register';
+        }
+        
         // Go To Course button (only if admin, if course public or if student already subscribed)
         if ($is_admin
           || $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
           || (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
           || (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
         ) {
-            return 'enter';
+            $options[]=  'enter';
         }
-        // Print register button (if any)
-        return false;
+        return $options;        
     }
     
     // TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.

@@ -11,6 +11,12 @@ $this_section = SECTION_COURSES;
 // notice for unauthorized people.
 api_protect_course_script(true);
 
+if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+    if (!api_is_platform_admin()) {
+        api_not_allowed(true);
+    }
+}
+
 $tool_name = get_lang('ImportUsersToACourse');
 
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("Users"));

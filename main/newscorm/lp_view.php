@@ -67,7 +67,7 @@ $user_id        = api_get_user_id();
 $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
 
-$htmlHeadXtra[] = '<script  src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
 
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
@@ -110,13 +110,13 @@ unset($_SESSION['objExercise']);
 unset($_SESSION['questionList']);
 
 // additional APIs
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
+$htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
 // Document API
 $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
 var sv_sco = \''.$_REQUEST['lp_id'].'\';
@@ -126,7 +126,6 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
 /**
  * Get a link to the corresponding document.
  */
-
 
 if ($debug) { 
     error_log(" src: $src ");
@@ -274,9 +273,8 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 
 // Not in fullscreen mode.
 Display::display_reduced_header($nameTools);
-//$displayAudioRecorder = (api_get_setting('service_visio', 'active') == 'true') ? true : false;
+
 // Check if audio recorder needs to be in studentview.
-//$course_id = $_SESSION['_course']['id'];
 if ($_SESSION['status'][$course_code] == 5) {
 	$audio_recorder_studentview = true;
 } else {
@@ -288,12 +286,6 @@ $_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
 $margin_left = '305px';
-
-/*
-if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
-    $display_none = ';display:none;';
-    /$margin_left = '12px';
-}*/
 
 //Media player code
 
@@ -384,7 +376,7 @@ if (Database::num_rows($res_media) > 0) {
         <!-- end media player layout -->
 
         <!-- TOC layout -->
-        <div id="toc_id" name="toc_name"  style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
+        <div id="toc_id" name="toc_name" style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
 

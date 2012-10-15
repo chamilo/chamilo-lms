@@ -90,7 +90,7 @@ $dbl_click_id = 0; // Used for avoiding double-click
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 
 /* 	Constants and variables */
-$session_id = api_get_session_id();
+$session_id  = api_get_session_id();
 $course_code = api_get_course_id();
 $to_group_id = api_get_group_id();
 
@@ -200,8 +200,8 @@ switch ($action) {
         }
         break;
     case 'copytomyfiles':
-        // Copy a file to general my files user's
-        if (api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {
+        // Copy a file to general my files user's        
+        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && api_get_user_id() != 0 && !api_is_anonymous()) {
             $document_info = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
@@ -1114,8 +1114,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 
         // Last edit date
         
-        $last_edit_date = api_get_local_time($document_data['lastedit_date']);        
-        $display_date = date_to_str_ago($last_edit_date);
+        $last_edit_date = api_get_local_time($document_data['lastedit_date']);      
+        $display_date = date_to_str_ago($last_edit_date).' <div class="muted"><small>'.$last_edit_date."</small></div>";
         $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
         // Admins get an edit column
 
@@ -1232,7 +1232,7 @@ if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and
 $table->set_header($column++, get_lang('Type'), true, array('style' => 'width:30px;'));
 $table->set_header($column++, get_lang('Name'));
 $table->set_header($column++, get_lang('Size'), true, array('style' => 'width:50px;'));
-$table->set_header($column++, get_lang('Date'), true, array('style' => 'width:105px;'));
+$table->set_header($column++, get_lang('Date'), true, array('style' => 'width:150px;'));
 // Admins get an edit column
 if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
     $table->set_header($column++, get_lang('Actions'), false, array('class' => 'td_actions'));

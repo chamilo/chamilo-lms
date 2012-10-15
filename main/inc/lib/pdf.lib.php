@@ -205,11 +205,23 @@ class PDF {
                             
                             if (strpos($old_src, 'http') === false) {
                                 if (strpos($old_src, '/main/default_course_document') === false) {   
-                                    $old_src_fixed = str_replace('/courses/'.$course_data['path'].'/document/', '', $old_src);
-                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
+                                    if (api_get_path(REL_PATH) != '/') {
+                                        $old_src = str_replace(api_get_path(REL_PATH), '', $old_src);    
+                                    }
+                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
+                                    //$old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
                                     $new_path = $document_path.$old_src_fixed;                                    
                                     $document_html= str_replace($old_src, $new_path, $document_html);                            
                                 }                                                       	
+                            } else {
+                                //Check if this is a complete URL
+                                /*if (strpos($old_src, 'courses/'.$course_data['path'].'/document/') === false) {                                    
+                                    
+                                } else {
+                                    $old_src_fixed = str_replace(api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/', '', $old_src);
+                                    $new_path = $document_path.$old_src_fixed;
+                                    $document_html= str_replace($old_src, $new_path, $document_html);
+                                }*/
                             }                                    
                         }
                     }
@@ -219,6 +231,7 @@ class PDF {
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
                                                                               // At the moment the title is retrieved from the html document itself.
+                //echo $document_html;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }

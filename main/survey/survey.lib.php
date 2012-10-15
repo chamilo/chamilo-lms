@@ -68,6 +68,7 @@ class survey_manager {
 		}
 		$my_course_info = api_get_course_info($my_course_id);
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
+        
 		if ($shared != 0) {
 			$table_survey	= Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
             $sql = "SELECT * FROM $table_survey WHERE survey_id='".Database::escape_string($survey_id)."' ";
@@ -93,17 +94,13 @@ class survey_manager {
 			$return['survey_thanks'] 		= $return['surveythanks'];
 			$return['survey_type'] 		    = $return['survey_type'];
 			$return['one_question_per_page']= $return['one_question_per_page'];
-
 			$return['show_form_profile']	= $return['show_form_profile'];
 			$return['input_name_list']		= $return['input_name_list'];
-
 			$return['shuffle']				= $return['shuffle'];
 			$return['parent_id']			= $return['parent_id'];
 			$return['survey_version']		= $return['survey_version'];
-			return $return;
-		} else {
-			return $return;
-		}
+        }
+        return $return;
 	}
 
 	/**
@@ -3792,9 +3789,7 @@ class SurveyUtil {
 		// Database table to store the invitations data
 		$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
-		$survey_invitations = array();
-		$survey_invitations = SurveyUtil::get_invitations($survey_data['survey_code']);
-		$already_invited = array();
+		$survey_invitations = SurveyUtil::get_invitations($survey_data['survey_code']);		
 		$already_invited = SurveyUtil::get_invited_users($survey_data['code']);
 
 		// Remind unanswered is a special version of remind all reminder
@@ -3854,7 +3849,7 @@ class SurveyUtil {
 	static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text) {
 		global $_user, $_course, $_configuration;
 
-		$portal_url = api_get_path(WEB_PATH);
+		$portal_url = api_get_path(WEB_CODE_PATH);
 		if ($_configuration['multiple_access_urls']) {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -3862,8 +3857,9 @@ class SurveyUtil {
 				$portal_url = $url['url'];
 			}
 		}
+        
 		// Replacing the **link** part with a valid link for the user
-		$survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode='.$invitation_code;
+		$survey_link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['code'].'&invitationcode='.$invitation_code;
 		$text_link = '<a href="'.$survey_link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n".get_lang('OrCopyPasteTheFollowingUrl')." <br />\r\n ".$survey_link;
 
 		$replace_count = 0;
@@ -3871,6 +3867,22 @@ class SurveyUtil {
 		if ($replace_count < 1) {
 			$full_invitation_text = $full_invitation_text."<br />\r\n<br />\r\n".$text_link;
 		}
+        
+        // Sending the mail
+		$sender_name  = api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
+		$sender_email = $_user['mail'];
+        $sender_user_id = api_get_user_id();
+
+		$replyto = array();
+		if (api_get_setting('survey_email_sender_noreply') == 'noreply') {
+			$noreply = api_get_setting('noreply_email_address');
+			if (!empty($noreply)) {
+				$replyto['Reply-to'] = $noreply;
+				$sender_name = $noreply;
+				$sender_email = $noreply;
+                $sender_user_id = null;
+			}
+		}   
 
 		// Optionally: finding the e-mail of the course user
 		if (is_numeric($invitedUser)) {
@@ -3880,25 +3892,14 @@ class SurveyUtil {
 			$row = Database::fetch_array($result);
 			$recipient_email = $row['email'];
 			$recipient_name = api_get_person_name($row['firstname'], $row['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+            
+            MessageManager::send_message($invitedUser, $invitation_title, $full_invitation_text, null, null, null, null, null, null, $sender_user_id);
+            
 		} else {
 			/** @todo check if the address is a valid email	 */
-			$recipient_email = $invitedUser;
+			$recipient_email = $invitedUser;        
+            @api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
 		}
-
-		// Sending the mail
-		$sender_name  = api_get_person_name($_user['firstName'], $_user['lastName'], null, PERSON_NAME_EMAIL_ADDRESS);
-		$sender_email = $_user['mail'];
-
-		$replyto = array();
-		if (api_get_setting('survey_email_sender_noreply') == 'noreply') {
-			$noreply = api_get_setting('noreply_email_address');
-			if (!empty($noreply)) {
-				$replyto['Reply-to'] = $noreply;
-				$sender_name = $noreply;
-				$sender_email = $noreply;
-			}
-		}        
-		@api_mail_html($recipient_name, $recipient_email, $invitation_title, $full_invitation_text, $sender_name, $sender_email, $replyto);
 	}
 
 	/**

@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * This script retrieves a list of terms that have xapian documents
@@ -17,7 +18,7 @@ if (empty($_GET['term']) || empty($_GET['prefix']) || !in_array($_GET['operator'
 }
 
 require_once dirname(__FILE__) . '../../../global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
+require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloQuery.php';
 
 /**
  * search with filter and build base array avoding repeated terms
@@ -31,8 +32,8 @@ function get_usual_sf_terms($filter, $specific_fields) {
 
     if (is_array($dkterms) && is_array($dkterms[1])) {
         foreach ($specific_fields as $specific_field) {
-            foreach($dkterms[1] as $obj) {
-                foreach ($obj['sf-'.$specific_field['code']] as $raw_term) {
+            foreach ($dkterms[1] as $obj) {
+                foreach ($obj['sf-' . $specific_field['code']] as $raw_term) {
                     if (count($raw_term['name']) > 1) {
                         $normal_term = substr($raw_term['name'], 1);
                         $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
@@ -51,7 +52,7 @@ $operator = $_GET['operator'];
 $specific_fields = get_specific_field_list();
 $sf_terms = array();
 
-if ( ($cid=api_get_course_id()) != -1) { // with cid
+if (($cid = api_get_course_id()) != -1) { // with cid
     // course filter
     $filter[] = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
     // term filter
@@ -62,16 +63,14 @@ if ( ($cid=api_get_course_id()) != -1) { // with cid
     }
 
     $sf_terms = get_usual_sf_terms($filter, $specific_fields);
-
 } else { // without cid
     if ($term != '__all__') {
         $filter[] = chamilo_get_boolean_query($prefix . $term);
 
         $sf_terms = get_usual_sf_terms($filter, $specific_fields);
-
     } else { // no cid and all/any terms
         foreach ($specific_fields as $specific_field) {
-            foreach(xapian_get_all_terms(1000, $specific_field['code']) as $raw_term) {
+            foreach (xapian_get_all_terms(1000, $specific_field['code']) as $raw_term) {
                 if (count($raw_term['name']) > 1) {
                     $normal_term = substr($raw_term['name'], 1);
                     $sf_terms[$specific_field['code']][$normal_term] = $normal_term;
@@ -79,13 +78,12 @@ if ( ($cid=api_get_course_id()) != -1) { // with cid
             }
         }
     }
-
 }
 
 // build array to return
 foreach ($sf_terms as $sf_prefix => $term_group) {
     //if (count($tem_group) > 0) {
-    $first_term = array('__all__' => ($operator=='or'? '-- Any --': '-- All -- '));
+    $first_term = array('__all__' => ($operator == 'or' ? '-- Any --' : '-- All -- '));
     //}
     if ($sf_prefix != $prefix) {
         $terms_list[] = array(

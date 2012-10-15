@@ -67,20 +67,22 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
                 }
             }
         }
-    } else {        
-        foreach ($folders as $folder_id => & $folder) {
-            $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
-            $label = $folder_titles[$folder];
-            if ($folder == $group_dir) {
-                $label = get_lang('Documents');
-            } else {
-                $path_parts = explode('/', str_replace($group_dir, '', $folder));
-                $label = cut($label, 80);
-                $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
-            }
-            $parent_select -> addOption($label, $folder_id);
-            if ($selected != '') {
-                $parent_select->setSelected($folder_id);
+    } else {
+        if (!empty($folders)) {
+            foreach ($folders as $folder_id => & $folder) {
+                $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
+                $label = $folder_titles[$folder];
+                if ($folder == $group_dir) {
+                    $label = get_lang('Documents');
+                } else {
+                    $path_parts = explode('/', str_replace($group_dir, '', $folder));
+                    $label = cut($label, 80);
+                    $label = str_repeat('&nbsp;&nbsp;&nbsp;', count($path_parts) - 2).' &mdash; '.$label;
+                }
+                $parent_select -> addOption($label, $folder_id);
+                if ($selected != '') {
+                    $parent_select->setSelected($folder_id);
+                }
             }
         }
     }
@@ -224,9 +226,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             $force_download_html = ($size==0)?'':'<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.Display::return_icon($forcedownload_icon, get_lang('Download'), array(),ICON_SIZE_SMALL).'</a>';
         }
 
-        //copy files to users myfiles
-        
-        if (api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()){
+        //Copy files to users myfiles        
+        if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('users_copy_files') == 'true' && !api_is_anonymous()){
             $copy_myfiles_link = ($filetype == 'file') ? api_get_self().'?'.api_get_cidreq().'&action=copytomyfiles&id='.$document_data['id'].$req_gid :api_get_self().'?'.api_get_cidreq();
 
             if ($filetype == 'file') {

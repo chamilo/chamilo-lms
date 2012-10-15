@@ -291,7 +291,7 @@ if (is_array($forum_categories_list)) {
 
                         $forum_image = '';
 
-                        echo '<td width="20">';
+                        echo '<td width="20px">';
 
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
@@ -303,14 +303,13 @@ if (is_array($forum_categories_list)) {
                             if (!empty($image_size)) {
                                 if ($image_size['width'] > 100 || $image_size['height'] > 100) {
                                     //limit display width and height to 100px
-                                    $img_attributes = 'width="100" height="100"';
+                                    $img_attributes = ' style="width:100px" width="100px" height="100px"';
                                 }
                                 $forum_image =  "<img src=\"$image_path\" $img_attributes>";
                             } else {
                                 $forum_image = '';
                             }
                             echo $forum_image;
-
                         } else {
                             if ($forum['forum_of_group'] !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {

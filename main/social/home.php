@@ -25,8 +25,7 @@ api_block_anonymous_users();
 if (api_get_setting('allow_social_tool') !='true' ) {
     $url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
     header('Location: '.$url);
-    exit;
-    
+    exit;    
     api_not_allowed();
 }
 

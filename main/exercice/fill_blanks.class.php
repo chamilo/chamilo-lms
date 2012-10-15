@@ -68,10 +68,10 @@ class FillBlanks extends Question
 
 			//take the complete string except after the last '::'
 			$defaults['answer'] = '';
-			for($i=0;$i<($sz-1);$i++) {
+			for ($i=0;$i<($sz-1);$i++) {
 				$defaults['answer'] .= $pre_array[$i];
 			}
-			$a_weightings = explode(',',$is_set_switchable[0]);
+			$a_weightings = explode(',', $is_set_switchable[0]);
 		} else {
 			$defaults['answer'] = get_lang('DefaultTextInBlanks');
 		}

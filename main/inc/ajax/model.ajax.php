@@ -26,7 +26,8 @@ if (!in_array($action, array(
         'get_hotpotatoes_exercise_results', 
         'get_work_user_list', 
         'get_timelines', 
-        'get_user_skill_ranking'))
+        'get_user_skill_ranking',
+        'get_usergroups_teacher'))
     ) {
 	api_protect_admin_script(true);
 }
@@ -225,9 +226,18 @@ switch ($action) {
         $count      = $obj->get_count();
         break;
     case 'get_usergroups':
-    case 'get_usergroups_teacher':
         $obj        = new UserGroup();
         $count      = $obj->get_count();
+        break;
+    case 'get_usergroups_teacher':
+        $obj        = new UserGroup();
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
+        $course_id = api_get_course_int_id();
+        if ($type == 'registered') {        
+            $count = $obj->get_usergroup_by_course_with_data_count($course_id);
+        } else {
+        $count      = $obj->get_count();
+        }
         break;
     default:
         exit;   
@@ -491,11 +501,20 @@ switch ($action) {
             $result = $new_result;
         }*/  
         break;
-   case 'get_usergroups_teacher':
+      case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
-        $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
+        $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
+        switch ($type) {
+            case 'not_registered':                
+                $options['where'] = array(" usergroup.course_id IS NULL" => ' ');
+                $result = $obj->get_usergroup_not_in_course($options);
+                break;
+            case 'registered':
+                $options['where'] = array(" usergroup.course_id = ? " =>  $course_id);
+                $result = $obj->get_usergroup_in_course($options);
+                break;
+        }        
         $new_result = array();
-        $course_id = api_get_course_int_id();
         
         if (!empty($result)) {
             foreach ($result as $group) {                

@@ -604,7 +604,7 @@ class AnnouncementManager {
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected) {
 
-        echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
+        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -656,7 +656,7 @@ class AnnouncementManager {
         $ref_array_users = self::get_course_users();
 
         // we construct the form of the already selected groups / users
-        echo "<select id=\"selectedform\" name=\"selectedform[]\" size=\"5\" multiple style=\"width:200px\" width=\"200px\">";
+        echo '<select id="selectedform" name="selectedform[]" size="7" multiple class="span4">';
         if (is_array($to_already_selected)) {
             foreach ($to_already_selected as $groupuser) {
                 list($type, $id) = explode(":", $groupuser);
@@ -754,7 +754,7 @@ class AnnouncementManager {
     public static function get_course_groups() {
         $session_id = api_get_session_id();
         if ($session_id != 0) {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), intval($session_id));
+            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id);
         } else {
             $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0);
         }

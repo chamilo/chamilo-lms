@@ -378,9 +378,7 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
 }
 
-if (isset($message)) {
-	Display::display_confirmation_message($message);
-}
+
 
 /*		MAIN CODE*/
 
@@ -403,11 +401,18 @@ if ( api_is_allowed_to_edit(null, true)) {
     }
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=csv">'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&amp;type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a> ';
-    $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+        $actions .= '<a href="user_import.php?'.api_get_cidreq().'&action=import">'.Display::return_icon('import_csv.png', get_lang('ImportUsersToACourse'),'',ICON_SIZE_MEDIUM).'</a> ';
+    }
+    
     $actions .= '<a href="user.php?'.api_get_cidreq().'&action=export&type=pdf">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_MEDIUM).'</a> ';
     $actions .= "<a href=\"../group/group.php?".api_get_cidreq()."\">".Display::return_icon('group.png', get_lang("GroupUserManagement"),'',ICON_SIZE_MEDIUM)."</a>";
     
-    $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';    
+    if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
+        $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';    
+    }
+    
     //$actions .= ' <a class="btn" href="social_groups.php?'.api_get_cidreq().'">'.get_lang('SocialGroups').'</a>';
 		
 	// Build search-form
@@ -419,6 +424,10 @@ if ( api_is_allowed_to_edit(null, true)) {
 	$form->addElement('static', 'additionalactions', null, $actions);
 	$form->display();
 	echo '</div>';
+}
+
+if (isset($message)) {
+	Display::display_confirmation_message($message);
 }
 
 /* 		DISPLAY LIST OF USERS */

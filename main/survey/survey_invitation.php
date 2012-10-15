@@ -49,6 +49,7 @@ if (!isset($_GET['survey_id']) OR !is_numeric($_GET['survey_id'])) {
 
 $survey_id = Security::remove_XSS($_GET['survey_id']);
 $survey_data = survey_manager::get_survey($survey_id);
+
 if (empty($survey_data)) {
 	Display :: display_header($tool_name);
 	Display :: display_error_message(get_lang('InvallidSurvey'), false);
@@ -107,9 +108,13 @@ echo '		<th>'.get_lang('InvitationDate').'</th>';
 echo '		<th>'.get_lang('Answered').'</th>';
 echo '	</tr>';
 
-$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email FROM $table_survey_invitation survey_invitation
-			LEFT JOIN $table_user user ON  survey_invitation.user = user.user_id
-			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."'";
+$course_id = api_get_course_int_id();
+
+$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email 
+            FROM $table_survey_invitation survey_invitation
+			LEFT JOIN $table_user user ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
+			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
+
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
 	if (!$_GET['view'] || $_GET['view'] == 'invited' || ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) || ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))) {

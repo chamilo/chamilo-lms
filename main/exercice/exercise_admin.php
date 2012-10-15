@@ -27,7 +27,7 @@ if(!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 				document.getElementById(\'options\').style.display = \'block\';
@@ -132,15 +132,15 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 		}
 		</script>';
 
-    // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
-$htmlHeadXtra[] = '<script type="text/javascript">
+// to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#exercise_title").focus();
 }
 $(document).ready(function () {
     setFocus();
 }); 
-    window.onload=advanced_parameters;
+window.onload=advanced_parameters;
 </script>';
 
 // INIT EXERCISE
@@ -194,16 +194,12 @@ if ($form->validate()) {
 	} else {
 		if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
 			if (!empty($_POST['lp_id'])){			
-				$lp_id=Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
-			}
-			else{
-				$lp_id=Security::remove_XSS($_GET['lp_id']);
-			}
-			
+				$lp_id = Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
+			} else {
+				$lp_id = Security::remove_XSS($_GET['lp_id']);
+			}			
 			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";		
-		}	
-		else{
-			
+        } else {			
 	    	echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 	}

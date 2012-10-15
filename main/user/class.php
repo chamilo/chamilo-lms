@@ -10,10 +10,18 @@
 $language_file = array('registration','admin');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+
 /**
  * MAIN CODE	
  */
 api_protect_course_script();
+
+if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
+    if (!api_is_platform_admin()) {
+        api_not_allowed(true);
+    }
+}
+
 
 $tool_name = get_lang("Classes");
 
@@ -21,15 +29,24 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
-Display :: display_header($tool_name, "User");
 
-echo Display::page_header($tool_name);
+$type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
+
+Display :: display_header($tool_name, "User");
 
 $usergroup = new UserGroup();
 
 if (api_is_allowed_to_edit()) {
-	//echo '<a class="btn" href="subscribe_class.php?'.api_get_cidreq().'">'.get_lang("AddClassesToACourse").'</a><br />';
+    echo '<div class="actions">';
+    if ($type == 'registered') {
+        echo '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.Display::return_icon('add.png', get_lang("AddClassesToACourse"), array(), ICON_SIZE_MEDIUM).'</a>';        
+    } else {
+        echo '<a href="class.php?'.api_get_cidreq().'&type=registered">'.Display::return_icon('empty_evaluation.png', get_lang("Classes"), array(), ICON_SIZE_MEDIUM).'</a>';
+    }
+    echo '</div>';
 }
+
+echo Display::page_header($tool_name);
 
 if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -48,15 +65,11 @@ if (api_is_allowed_to_edit()) {
             break;
     }
 }
-/*
-		SHOW LIST OF CLASSES
-*/
-
-
 
 //jqgrid will use this URL to do the selects
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher';
+
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = array(get_lang('Name'), get_lang('Users'), get_lang('Actions'));

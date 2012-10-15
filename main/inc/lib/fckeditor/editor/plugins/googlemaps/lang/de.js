@@ -42,4 +42,4 @@ FCKLang.GMapsClickToAddMarker = 'Klicken Sie auf die Karte um eine Ortsmarke zu 
 FCKLang.GMapsDeleteMarker = 'Ortsmarke löschen';
 FCKLang.GMapsAddMarker = 'Neue Ortsmarke setzen';
 
-FCKLang.GMaps_MissingKey = 'You must enter the Google Maps Key for your domain.' ;
+FCKLang.GMaps_MissingKey = 'Bitte einen gültigen Google Maps Key für Deine Domain angeben.' ;

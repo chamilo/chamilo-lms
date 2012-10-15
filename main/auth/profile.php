@@ -18,9 +18,9 @@ $cidReset = true;
 require_once '../inc/global.inc.php';
 
 if (api_get_setting('allow_social_tool') == 'true') {
-	$this_section = SECTION_SOCIAL;
+    $this_section = SECTION_SOCIAL;
 } else {
-	$this_section = SECTION_MYPROFILE;
+    $this_section = SECTION_MYPROFILE;
 }
 
 $_SESSION['this_section'] = $this_section;
@@ -34,11 +34,11 @@ $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/
 
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
-	if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
-			document.forms["profile"].submit();
-	} else {
-		return false;
-	}
+    if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
+            document.forms["profile"].submit();
+    } else {
+        return false;
+    }
 }
 function show_image(image,width,height) {
 	width = parseInt(width) + 20;
@@ -578,7 +578,7 @@ if ($form->validate()) {
 
 	//change email
 	if ($allow_users_to_change_email_with_no_password) {	    
-        if (!empty($changeemail) && in_array('email', $available_values_to_modify)) {
+        if (in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
         }
         if (isset($password) && in_array('password', $available_values_to_modify)) {
@@ -593,9 +593,7 @@ if ($form->validate()) {
         if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {            
-            if (!empty($changeemail)) {
-                $sql .= " email = '".Database::escape_string($changeemail)."',";
-            }
+            $sql .= " email = '".Database::escape_string($changeemail)."',";
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } elseif (isset($password) && in_array('password', $available_values_to_modify)) {
@@ -605,6 +603,9 @@ if ($form->validate()) {
             // remove trailing , from the query we have so far
             $sql = rtrim($sql, ',');
         }        
+    }
+    if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
+        $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);

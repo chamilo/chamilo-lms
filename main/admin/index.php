@@ -397,7 +397,7 @@ function check_system_version() {
             'adminname' => api_get_setting('administratorName').' '.api_get_setting('administratorSurname'),
         );
 
-        $res = http_request('version.chamilo.org', 80, '/version.php', $data); 
+        $res = _http_request('version.chamilo.org', 80, '/version.php', $data); 
         
         if ($res !== false) {
             $version_info = $res;
@@ -427,7 +427,7 @@ function check_system_version() {
  * @param bool   Include HTTP Request headers?
  * @param bool   Include HTTP Response headers?
  */
-function http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 1, $req_hdr = false, $res_hdr = false) {
+function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 1, $req_hdr = false, $res_hdr = false) {
     $verb = 'GET';
     $ret = '';
     $getdata_str = count($getdata) ? '?' : '';

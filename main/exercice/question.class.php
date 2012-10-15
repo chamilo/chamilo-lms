@@ -781,10 +781,10 @@ abstract class Question
             $res = Database::query($sql);
 
             if (Database::num_rows($res) > 0 || $addQs) {
-                require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+                require_once(api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php');
                 require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
 
-                $di = new DokeosIndexer();
+                $di = new ChamiloIndexer();
                 if ($addQs) {
                 	$question_exercises = array((int)$exerciseId);
                 } else {
@@ -1311,8 +1311,8 @@ abstract class Question
 				//echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
 			} else {
 				$img = pathinfo($img);
-				$img = $img['filename'];
-				echo ''.Display::return_icon($img.'_na.gif',$explanation).'';
+				$img = $img['filename'].'_na.'.$img['extension'];
+				echo ''.Display::return_icon($img,$explanation).'';
 				//echo '<br>';
 				//echo ''.$explanation.'';
 			}
@@ -1395,8 +1395,9 @@ abstract class Question
             }            
         }
         
-        $question_title = get_lang("Question").' '.($counter_label).' : '.$this->question;
-	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div><h4>'.$question_title.'</h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));        
+        $question_title = $this->question;
+	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.get_lang("Question").' '.($counter_label).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+        $header .= '<div class="page-header"><h4>'.$question_title.'</h4></div>';
 	    $header .= Display::div($this->description, array('id'=>'question_description'));	    
         return $header;
 	}

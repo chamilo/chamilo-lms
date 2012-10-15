@@ -120,7 +120,7 @@ class Attendance
 				FROM $tbl_attendance att
 				WHERE c_id = $course_id AND $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";        
-        var_dump($sql);exit;
+        
 		$res = Database::query($sql);
 		$attendances = array ();
 

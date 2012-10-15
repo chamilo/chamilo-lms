@@ -745,6 +745,7 @@ class Exercise {
 			// insert into the item_property table
 			api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());            
             api_set_default_visibility($this->id, TOOL_QUIZ);
+            
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this->search_engine_save();
 			}
@@ -1244,7 +1245,7 @@ class Exercise {
 		}
 		$course_id = api_get_course_id();
 
-		require_once api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php';
+		require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 		require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
@@ -1280,7 +1281,7 @@ class Exercise {
 		$exercise_description = $all_specific_terms .' '. $this->description;
 		$ic_slide->addValue("content", $exercise_description);
 
-		$di = new DokeosIndexer();
+		$di = new ChamiloIndexer();
 		isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
 		$di->connectDb(NULL, NULL, $lang);
 		$di->addChunk($ic_slide);
@@ -1310,7 +1311,7 @@ class Exercise {
 			$res = Database::query($sql);
 
 			if (Database::num_rows($res) > 0) {
-				require_once(api_get_path(LIBRARY_PATH) . 'search/DokeosIndexer.class.php');
+				require_once(api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php');
 				require_once(api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php');
 				require_once(api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php');
 
@@ -1346,7 +1347,7 @@ class Exercise {
 				$exercise_description = $all_specific_terms .' '. $this->description;
 				$ic_slide->addValue("content", $exercise_description);
 
-				$di = new DokeosIndexer();
+				$di = new ChamiloIndexer();
 				isset($_POST['language'])? $lang=Database::escape_string($_POST['language']): $lang = 'english';
 				$di->connectDb(NULL, NULL, $lang);
 				$di->remove_document((int)$se_ref['search_did']);
@@ -1381,8 +1382,8 @@ class Exercise {
 			$res = Database::query($sql);
 			if (Database::num_rows($res) > 0) {
 				$row = Database::fetch_array($res);
-				require_once(api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php');
-				$di = new DokeosIndexer();
+				require_once(api_get_path(LIBRARY_PATH) .'search/ChamiloIndexer.class.php');
+				$di = new ChamiloIndexer();
 				$di->remove_document((int)$row['search_did']);
 				unset($di);
 				$tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -3396,7 +3397,7 @@ class Exercise {
         
         //Checking visibility in the item_property table
         $visibility = api_get_item_visibility(api_get_course_info(), TOOL_QUIZ, $this->id, api_get_session_id()); 
-        
+                
         if ($visibility == 0) {        
             $this->active = 0;
         }
@@ -3457,11 +3458,7 @@ class Exercise {
         }
 		return array('value' => $is_visible, 'message' => $message);
 	}
-	
-	function save_attempt() {
-	
-	}
-	
+    
 	function added_in_lp() {
 		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
 		$sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";

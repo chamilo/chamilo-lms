@@ -220,8 +220,8 @@ class DocumentManager {
             'wmlc' => 'application/vnd.wap.wmlc',
             'wmls' => 'text/vnd.wap.wmlscript',
             'wmlsc' => 'application/vnd.wap.wmlscriptc',
-            'wma' => 'video/x-ms-wma',
-            'wmv' => 'audio/x-ms-wmv',
+            'wma' => 'audio/x-ms-wma',
+            'wmv' => 'video/x-ms-wmv',
             'wrl' => 'model/vrml',
             'xbm' => 'image/x-xbitmap',
             'xht' => 'application/xhtml+xml',
@@ -492,27 +492,26 @@ class DocumentManager {
         }
 
         //condition for search (get ALL folders and documents)
-        if ($search) {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
-                        FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-                        WHERE docs.id = last.ref
-                        AND last.tool = '".TOOL_DOCUMENT."'
-                        AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit . $condition_session." AND
-            			docs.c_id = {$_course['real_id']} AND
-            			last.c_id = {$_course['real_id']}  ";
-        } else {
-            $sql = "SELECT docs.id, docs.filetype, docs.path, docs.title, docs.comment, docs.size, docs.readonly, docs.session_id, last.id_session item_property_session_id, last.lastedit_date, last.visibility, last.insert_user_id
-                        FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-                        WHERE docs.id = last.ref
-                        AND docs.path LIKE '".$path.$added_slash."%'
-                        AND docs.path NOT LIKE '".$path.$added_slash."%/%'
-                        AND last.tool = '".TOOL_DOCUMENT."'
-                        AND ".$to_field." = ".$to_value."
-                        AND last.visibility".$visibility_bit.$condition_session." AND
-            			docs.c_id = {$_course['real_id']} AND
-            			last.c_id = {$_course['real_id']}  ";
-        }
+        $sql = "SELECT  docs.id, 
+                        docs.filetype, 
+                        docs.path, 
+                        docs.title, 
+                        docs.comment, 
+                        docs.size, 
+                        docs.readonly, 
+                        docs.session_id, 
+                        last.id_session item_property_session_id, 
+                        last.lastedit_date, 
+                        last.visibility, 
+                        last.insert_user_id
+                    FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs 
+                        ON (docs.id = last.ref AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                    WHERE
+                        docs.path LIKE '".$path.$added_slash."%' AND
+                        docs.path NOT LIKE '".$path.$added_slash."%/%' AND
+                        last.tool = '".TOOL_DOCUMENT."' AND
+                        ".$to_field." = ".$to_value." AND 
+                        last.visibility".$visibility_bit.$condition_session;
 
         $result = Database::query($sql);
 
@@ -546,7 +545,7 @@ class DocumentManager {
                     //Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
                     $sql_is_template = "SELECT id FROM $table_template
-                                        WHERE course_code='".$_course['id']."'
+                                        WHERE course_code = '".$_course['code']."'
                                         AND user_id='".api_get_user_id()."'
                                         AND ref_doc='".$row['id']."'";
                     $template_result = Database::query($sql_is_template);
@@ -985,8 +984,8 @@ class DocumentManager {
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
                 $row2 = Database::fetch_array($res);
-                require_once api_get_path(LIBRARY_PATH) .'search/DokeosIndexer.class.php';
-                $di = new DokeosIndexer();
+                require_once api_get_path(LIBRARY_PATH) .'search/ChamiloIndexer.class.php';
+                $di = new ChamiloIndexer();
                 $di->remove_document((int)$row2['search_did']);
             }
             $sql = 'DELETE FROM %s WHERE course_code=\'%s\' AND tool_id=\'%s\' AND ref_id_high_level=%s LIMIT 1';
@@ -1178,10 +1177,26 @@ class DocumentManager {
         $condition = "AND id_session IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
-        //When using hotpotatoes files, new files are generated in the hotpotatoe folder, if user_id=1 does the exam a new html file will be generated: hotpotatoe.html.(user_id).t.html
-        //so we remove that string in order to find correctly the origin file
-        if (strpos($doc_path, 'HotPotatoes_files')) {
-            // $doc_path = substr($doc_path, 0, strlen($doc_path) - 8); // issue #5359
+        /* 
+        When using hotpotatoes files, a new html files are generated in the hotpotatoes folder
+        to display the test.
+        The genuine html file is copied to math4.htm(user_id).t.html
+        Images files are not copied, and keep same name.
+        To check the html file visibility, we don't have to check file math4.htm(user_id).t.html but file math4.htm
+        In this case, we have to remove (user_id).t.html to check the visibility of the file
+        For images, we just check the path of the image file.
+        
+        Exemple of hotpotatoes folder :
+          A.jpg
+          maths4-consigne.jpg
+          maths4.htm
+          maths4.htm1.t.html
+          maths4.htm52.t.html
+          maths4.htm654.t.html
+          omega.jpg
+          theta.jpg
+        */
+        if (strpos($doc_path, 'HotPotatoes_files') && preg_match("/\.t\.html$/", $doc_path)) {
             $doc_path = substr($doc_path, 0, strlen($doc_path) - 7 - strlen(api_get_user_id()));
         }
 
@@ -1415,13 +1430,15 @@ class DocumentManager {
         $date_long_certificate = '';
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
+            $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);
         }
 
         if ($is_preview) {
             $date_long_certificate = api_convert_and_format_date(api_get_utc_datetime());
+            $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         }
 
-        $url = api_get_path(WEB_PATH).'certificates/?id='.$info_grade_certificate['id'];
+        $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$info_grade_certificate['id'];
         //replace content
         $info_to_replace_in_content_html     = array($first_name,
                                                      $last_name,
@@ -1431,6 +1448,7 @@ class DocumentManager {
                                                      $teacher_last_name,
                                                      $official_code,
                                                      $date_long_certificate,
+                                                     $date_no_time,
                                                      $course_id,
                                                      $course_info['name'],
                                                      $info_grade_certificate['grade'],
@@ -1446,6 +1464,7 @@ class DocumentManager {
                                                      '((teacher_lastname))',
                                                      '((official_code))',
                                                      '((date_certificate))',
+                                                     '((date_certificate_no_time))',
         											 '((course_code))',
                 									 '((course_title))',
         											 '((gradebook_grade))',
@@ -2178,7 +2197,7 @@ class DocumentManager {
         return $return;
     }
 
-    public function export_to_pdf($document_id, $course_code) {
+    public static function export_to_pdf($document_id, $course_code) {
         require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
         $course_data    = api_get_course_info($course_code);
         $document_data  = self::get_document_data_by_id($document_id, $course_code);
@@ -2271,7 +2290,7 @@ class DocumentManager {
         // TODO: review w$ compatibility
 
         // Use usual exec output lines array to store stdout instead of a temp file
-        // because we need to store it at RAM anyway before index on DokeosIndexer object
+        // because we need to store it at RAM anyway before index on ChamiloIndexer object
         $ret_val = null;
         switch ($doc_mime) {
             case 'text/plain':
@@ -3000,7 +3019,7 @@ class DocumentManager {
                 $file_content = self::get_text_content($doc_path, $doc_mime);
                 $course_code = Database::escape_string($course_code);
 
-                require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+                require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 
                 $ic_slide = new IndexableChunk();
@@ -3015,7 +3034,7 @@ class DocumentManager {
                 );
 
                 $ic_slide->xapian_data = serialize($xapian_data);
-                $di = new DokeosIndexer();
+                $di = new ChamiloIndexer();
                 $return = $di->connectDb(null, null, $lang);
 
                 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';

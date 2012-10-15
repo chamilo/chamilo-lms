@@ -502,14 +502,12 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 						
 					list($d_year, $d_month, $d_day) = explode('-', $parts[0]);
 					list($d_hour, $d_minute) = explode(':', $parts[1]);
+                    
+                    $qualification_input[] = FormValidator :: createElement('text', 'qualification');
+                    $form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
 						
-                    if (Gradebook::is_active()) {
-                        
-                        $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);
-                        
-                        $qualification_input[] = FormValidator :: createElement('text', 'qualification');
-                        $form_folder -> addGroup($qualification_input, 'qualification', get_lang('QualificationNumeric'));
-                        
+                    if (Gradebook::is_active()) {                        
+                        $link_info = is_resource_in_course_gradebook(api_get_course_id(), LINK_STUDENTPUBLICATION, $id2);                        
                         $form_folder -> addElement('checkbox', 'make_calification', null, get_lang('MakeQualifiable'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');                                                                                   
                             
                         if (!empty($link_info)) {

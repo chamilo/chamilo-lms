@@ -108,6 +108,12 @@
 *    @package chamilo.include
 */
 
+/*
+	 INIT SECTION
+	 variables should be initialised here
+ */
+
+//require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
 
 use \ChamiloSession as Session;
@@ -569,11 +575,6 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
     $gidReset = true;    // As groups depend from courses, group id is reset
 }
 
-// if the requested group is different from the group in session
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
-if ($gidReq && $gidReq != $gid) {
-    $gidReset = true;
-}
 
 
 /* USER INIT */
@@ -589,7 +590,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
         $admin_table    = Database::get_main_table(TABLE_MAIN_ADMIN);
         $track_e_login  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql = "SELECT user.*, a.user_id is_admin, UNIX_TIMESTAMP(login.login_date) login_date
+        $sql = "SELECT user.*, a.user_id is_admin, login.login_date 
             FROM $user_table
             LEFT JOIN $admin_table a
             ON user.user_id = a.user_id
@@ -605,17 +606,8 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
 
             $uData = Database::fetch_array($result);
 
-            $_user ['firstName']        = $uData ['firstname' ];
-            $_user ['lastName' ]        = $uData ['lastname'  ];
-            $_user ['mail'     ]        = $uData ['email'     ];
-            $_user ['lastLogin']        = $uData ['login_date'];
-            $_user ['official_code']    = $uData ['official_code'];
-            $_user ['picture_uri']      = $uData ['picture_uri'];
-            $_user ['user_id']          = $uData ['user_id'];
-            $_user ['language']         = $uData ['language'];
-            $_user ['auth_source']      = $uData ['auth_source'];
-            $_user ['theme']            = $uData ['theme'];
-            $_user ['status']           = $uData ['status'];
+            $_user =  _api_format_user($uData, false);            
+            $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');                  
 
             $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
@@ -626,15 +618,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             Session::write('is_platformAdmin',$is_platformAdmin);
             Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
 
-            // If request_uri is setted we have to go further to have course permissions
-            /*if (empty($_SESSION['request_uri']) || !isset($_SESSION['request_uri'])) {
-                if (isset($_SESSION['noredirection'])) {
-                    //If we just want to reset info without redirecting user
-                    unset($_SESSION['noredirection']);
-                } else {
-                    LoginRedirection::redirect();
-                }
-            }*/
         } else {
             header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");
@@ -685,6 +668,11 @@ if (isset($cidReset) && $cidReset) {
                 Session::erase('id_session');
             }
             
+            if (!empty($_GET['gidReq'])) {
+                $_SESSION['_gid'] = intval($_GET['gidReq']);
+            } else {
+                Session::erase('_gid');
+            } 
 
             if (!isset($_SESSION['login_as'])) {
                 //Course login
@@ -716,6 +704,9 @@ if (isset($cidReset) && $cidReset) {
         if (api_get_session_id()) {
             Session::erase('id_session');
             Session::erase('session_name');
+        }
+        if (api_get_group_id()) {
+            Session::erase('_gid');
         }
     }
 } else {
@@ -752,6 +743,9 @@ if (isset($cidReset) && $cidReset) {
             $_SESSION['id_session']         = intval($_GET['id_session']);
         }
 
+        if (!empty($_REQUEST['gidReq'])) {
+            $_SESSION['_gid'] = intval($_REQUEST['gidReq']);        
+        }
         if (!isset($_SESSION['login_as'])) {
             $save_course_access = true;
 
@@ -813,6 +807,11 @@ if (isset($cidReset) && $cidReset) {
     }
 }
 
+// if the requested group is different from the group in session
+$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
+if (isset($gidReq) && $gidReq != $gid) {
+    $gidReset = true;
+}
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();

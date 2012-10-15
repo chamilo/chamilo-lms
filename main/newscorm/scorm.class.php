@@ -386,11 +386,11 @@ class scorm extends learnpath {
 
                 // Code for indexing, now only index specific fields like terms and the title.
                 if (!empty($_POST['index_document'])) {
-                    require_once api_get_path(LIBRARY_PATH).'search/DokeosIndexer.class.php';
+                    require_once api_get_path(LIBRARY_PATH).'search/ChamiloIndexer.class.php';
                     require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
                     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-                    $di = new DokeosIndexer();
+                    $di = new ChamiloIndexer();
                     isset($_POST['language']) ? $lang = Database::escape_string($_POST['language']) : $lang = 'english';
                     $di->connectDb(NULL, NULL, $lang);
                     $ic_slide = new IndexableChunk();

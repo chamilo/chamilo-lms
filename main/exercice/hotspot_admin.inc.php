@@ -86,7 +86,6 @@ if ($submitAnswers || $buttonBack) {
             if ($debug > 0) {
                 echo str_repeat('&nbsp;', 4) . '$answerType is HOT_SPOT' . "<br />\n";
             }
-
             $reponse[$i] = trim($reponse[$i]);
             $comment[$i] = trim($comment[$i]);
             $weighting[$i] = $weighting[$i]; // it can be float
@@ -113,7 +112,6 @@ if ($submitAnswers || $buttonBack) {
                 break;
             }
         }  // end for()
-
 
         if (empty($msgErr)) {
             for ($i = 1; $i <= $nbrAnswers; $i++) {
@@ -236,6 +234,7 @@ if ($submitAnswers || $buttonBack) {
                 break;
             }
         }  // end for()
+        
         //now the noerror section    
         $select_question_noerror = $_POST['select_question_noerror'];
         $lp_noerror = $_POST['lp_noerror'];
@@ -560,8 +559,6 @@ if ($modifyAnswers) {
                             <th width="5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
                             <th><?php echo get_lang('HotspotDescription'); ?> *</th>				
                         <?php if ($answerType == HOT_SPOT_DELINEATION) echo '<th >' . get_lang('Thresholds') . '</th>'; ?>
-
-
                         <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
                                 <th><?php echo get_lang('Comment'); ?></th>					  
                             <?php if ($answerType == HOT_SPOT_DELINEATION) echo '<th >' . get_lang('Scenario') . '</th>'; ?>					  
@@ -728,7 +725,7 @@ if ($modifyAnswers) {
                                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="0;0|0|0" />
                                         </td>							 
                                         <td colspan="2"  align="left">
-                                            <textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea>
+                                            <textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
                                         </td>
 
                                                         <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
@@ -789,11 +786,11 @@ if ($modifyAnswers) {
                                         </td>
 
                                         <td valign="top" align="left">
-                                            <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="20" />							  		
+                                            <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" size="20" />							  		
                                         </td>
 
                                         <td colspan="2"  align="left">
-                                            <textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo stripslashes(htmlentities($comment[$i])); ?></textarea>
+                                            <textarea wrap="virtual" rows="3" cols="25" name="comment[<?php echo $i; ?>]" style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
                                             <input type="hidden" name="hotspot_type[<?php echo $i; ?>]" value="oar" />
                                             <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php echo (empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]); ?>" />
                                         </td>
@@ -836,7 +833,7 @@ if ($modifyAnswers) {
                                         <div style="height: 15px; width: 15px; background-color: <?php echo $hotspot_colors[$i]; ?>"> </div>
                                     </td>					  			
                                     <td valign="top" align="left">
-                                        <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo htmlentities($reponse[$i]); ?>" size="45" />
+                                        <input type="text" name="reponse[<?php echo $i; ?>]" value="<?php echo Security::remove_XSS($reponse[$i]); ?>" size="45" />
                                     </td>
 
                                     <?php
@@ -939,7 +936,7 @@ if ($modifyAnswers) {
                                                 <?php echo get_lang('LearnerHasNoMistake'); ?>												
                                 </td>							 
                                 <td colspan="2"  align="left">
-                                    <textarea wrap="virtual" rows="3" cols="25" name="comment_noerror" style="width: 100%"><?php echo stripslashes(htmlentities($comment_noerror)); ?></textarea>
+                                    <textarea wrap="virtual" rows="3" cols="25" name="comment_noerror" style="width: 100%"><?php echo Security::remove_XSS($comment_noerror); ?></textarea>
                                 </td>
 
                                                 <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) { ?>
@@ -980,7 +977,7 @@ if ($modifyAnswers) {
             </tr>
             <tr>
                 <td colspan="2" valign="top" style="border-top:none">
-                    <script type="text/javascript">
+                    <script>
                         <!--
                         // Version check based upon the values entered above in "Globals"
                         var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);

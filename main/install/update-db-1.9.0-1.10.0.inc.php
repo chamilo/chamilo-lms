@@ -103,9 +103,12 @@ if (defined('SYSTEM_INSTALLATION')) {
         
         if (INSTALL_TYPE_UPDATE == 'update') {
             $session_table = "$dbNameForm.session";
+            $session_rel_course_table = "$dbNameForm.session_rel_course";
+            $session_rel_course_rel_user_table = "$dbNameForm.session_rel_course_rel_user";
+            $course_table = "$dbNameForm.course";
             
             //Fixes new changes in sessions
-            $sql = "SELECT id, date_start, date_end, nb_days_access_before_beginning, nb_days_access_after_end  FROM $session_table ";
+            $sql = "SELECT id, date_start, date_end, nb_days_access_before_beginning, nb_days_access_after_end FROM $session_table ";
             $result = iDatabase::query($sql);
             while ($session = Database::fetch_array($result)) {
                 $session_id = $session['id'];
@@ -126,7 +129,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 }
                 
                 //Fixing end_date
-                if (isset($session['date_end']) && !empty($session['date_end']) && $session['date_end'] != '0000-00-00') {                    
+                if (isset($session['date_end']) && !empty($session['date_end']) && $session['date_end'] != '0000-00-00') {
                     $datetime =  $session['date_end'].' 00:00:00';
                     $update_sql = "UPDATE $session_table SET display_end_date = '$datetime' , access_end_date = '$datetime' WHERE id = $session_id";
                     iDatabase::query($update_sql);                    
@@ -140,6 +143,22 @@ if (defined('SYSTEM_INSTALLATION')) {
                     }
                 }                                
             }
+            
+            //Fixes new changes session_rel_course
+            $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_table sc ON sc.course_code = c.code";
+            $result = iDatabase::query($sql);
+            while ($row = Database::fetch_array($result)) {
+                 $sql = "UPDATE $session_rel_course_table SET course_id = {$row['id']} WHERE course_code = {$row['course_code']} AND id_session = {$row['id_session']} ";
+                 iDatabase::query($sql);     
+            }
+            
+            //Fixes new changes in session_rel_course_rel_user
+            $sql = "SELECT id_session, sc.course_code, c.id FROM $course_table c INNER JOIN $session_rel_course_rel_user_table sc ON sc.course_code = c.code";
+            $result = iDatabase::query($sql);
+            while ($row = Database::fetch_array($result)) {
+                 $sql = "UPDATE $session_rel_course_rel_user_table SET course_id = {$row['id']} WHERE course_code = {$row['course_code']} AND id_session = {$row['id_session']} ";
+                 iDatabase::query($sql);     
+            }            
         }        
     }    
 } else {

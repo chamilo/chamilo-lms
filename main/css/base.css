@@ -259,6 +259,9 @@ form .formw input {
 #main_content .span9 {
   float: left;
 }
+#main_content .span6 {
+  width: 565px;
+}
 
 
 /* New changes Chamilo 1.9 */
@@ -4677,4 +4680,10 @@ i.size-32.icon-new-work{
 
 #filepaths input{
     margin-bottom:5px;    
+}
+.section-social #main_content .span3 {
+  float: left;
+}
+.section-social #main_content .span9 {
+  float: right;
 }

@@ -1055,7 +1055,11 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
             $row[] = $document_data['path'];
         }
-
+        
+        if (DocumentManager::is_folder_to_avoid($document_data['path'])) {
+            continue;
+        }
+/*
         // Hide HotPotatoes Certificates and all css folders
         if ($document_data['path'] == '/HotPotatoes_files' || $document_data['path'] == '/certificates' || basename($document_data['path']) == 'css') {
             continue;
@@ -1074,7 +1078,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         //Admin setting for Hide/Show chat history folder
         if (api_get_setting('show_chat_folder') == 'false' && $document_data['path'] == '/chat_files') {
             continue;
-        }
+        }*/
 
         // Show the owner of the file only in groups
         $user_link = '';
@@ -1104,7 +1108,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 
         // Comments => display comment under the document name
         $display_size = format_file_size($size);
-        $row[] = '<span style="display:none;">' . $size . '</span>' . $invisibility_span_open . $display_size . $invisibility_span_close;
+        $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 
         // Last edit date
         

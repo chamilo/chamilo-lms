@@ -31,7 +31,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
         $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('".$folder_sql."')";
         $res = Database::query($sql);
         $folder_titles = array();
-        while ($obj = Database::fetch_object($res)) {
+        while ($obj = Database::fetch_object($res)) {        
             $folder_titles[$obj->path] = $obj->title;
         }
     }
@@ -86,8 +86,8 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
             }
         }
     }
-    $form = $form->toHtml();
-    return $form;
+    $html = $form->toHtml();
+    return $html;
 }
 
 

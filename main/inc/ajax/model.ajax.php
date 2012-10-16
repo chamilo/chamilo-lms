@@ -130,11 +130,6 @@ switch ($action) {
 	case 'get_hotpotatoes_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';		
         $hotpot_path = $_REQUEST['path'];
-        if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {            
-            $filter_user = intval($_GET['filter_by_user']);
-            $where_condition .= " AND thp.exe_user_id  = '$filter_user'";
-           
-        } 
 		$count = get_count_exam_hotpotatoes_results($hotpot_path);        
 		break;
     case 'get_sessions':           
@@ -260,10 +255,7 @@ switch ($action) {
         //used inside get_exam_results_data()
 		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
-        if (!$is_allowedToEdit) {
-            $columns = array('exe_date',  'score',  'actions');
-        }
-		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path,'', $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
+		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');            
@@ -417,7 +409,7 @@ switch ($action) {
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         switch ($type) {
             case 'not_registered':                
-                $options['where'] = array(" usergroup.course_id IS NULL" => ' ');
+                $options['where'] = array(" course_id != ? " => $course_id);
                 $result = $obj->get_usergroup_not_in_course($options);
                 break;
             case 'registered':

@@ -3402,6 +3402,10 @@ a:active{
 
 }
 
+/*#homepage, #hot_courses, #announcements {*/
+#main_content section{
+    margin-left: 5px;
+}
 .welcome_course li {
     float:left;
     list-style-type: none;

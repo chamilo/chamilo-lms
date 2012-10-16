@@ -17,10 +17,10 @@
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
         float: left;     
     }
-    #main_content .span6 {
+    #top_main_content .span6 {
         width: 450px;
     }
-    .section-social #main_content .span3 {
+    .section-social #top_main_content .span3 {
         width: 200px;
     }
 }
@@ -61,17 +61,17 @@
    .subnav .nav > li > a:hover,
    .subnav .dropdown-menu a:hover {
     }
-    .section-social #main_content .span3 {
+    .section-social #top_main_content .span3 {
         width: 190px;
     }
-    #main_content .span4, #main_content .span5 {
+    #top_main_content .span4, #top_main_content .span5 {
         width: 250px;
         margin-left: 5px;
     }
-    #main_content .span6 {
+    #top_main_content .span6 {
         width: 340px;
     }
-    #main_content .span9 {
+    #top_main_content .span9 {
         width: 500px;
         margin-left: 5px;
     }
@@ -181,29 +181,29 @@
                 border-radius: 4px 4px 0 0;
     }
 
-    .section-social #main_content .span3 {
+    .section-social #top_main_content .span3 {
         width: 170px;
     }
-    .section-social #main_content .span4 {
+    .section-social #top_main_content .span4 {
         width: 200px;
         margin-left: 5px;
         float: right;
     }
-    .section-social #main_content .span5 {
+    .section-social #top_main_content .span5 {
         width: 240px;
         margin-left: 5px;
         float: left;
     }
-    #main_content .span6 {
+    #top_main_content .span6 {
         width: 328px;
         float: left;
         margin-left: 5px;
     }
-    #main_content .span9 {
+    #top_main_content .span9 {
         width: 420px;
         margin-left: 5px;
     }
-    .section-social #main_content .span9 {
+    .section-social #top_main_content .span9 {
         width: 480px;
         margin-left: 5px;
     }
@@ -325,68 +325,68 @@
     .subbav .dropdown-menu a:hover {
         background-color: #555;
     }
-    #main_content .span3 #login_block {
+    #top_main_content .span3 #login_block {
         width: 280px;
         float: left;
     }
-    #main_content .span3 #help_block {
+    #top_main_content .span3 #help_block {
         width: 100px;
         float: right;
         margin-left: 10px;
         margin-right: 10px;
     }
-    .section-social #main_content .span3 {
+    .section-social #top_main_content .span3 {
         width: 170px;
     }
-    .section-social #main_content .span4 {
+    .section-social #top_main_content .span4 {
         width: 200px;
         margin-left: 5px;
         float: right;
     }
-    .section-social #main_content .span5 {
+    .section-social #top_main_content .span5 {
         width: 240px;
         margin-left: 5px;
         float: left;
     }
-    #main_content .span6 {
+    #top_main_content .span6 {
         width: 400px;
         /*min-height: 200px;*/
     }
-    #main_content .span9 {
+    #top_main_content .span9 {
         width: 390px;
         margin-left: 5px;
     }
-    #main_content .span9 #announcements .span6 {
+    #top_main_content .span9 #announcements .span6 {
         width: 320px;
     }
-    #main_content #hot_courses .span9 .thumbnail {
+    #top_main_content #hot_courses .span9 .thumbnail {
         width: 80px;
         float: left;
     }
-    #main_content #hot_courses .span9 .well_border {
+    #top_main_content #hot_courses .span9 .well_border {
         padding: 8px;
     }
-    #main_content #hot_courses .span9 .span6 {
+    #top_main_content #hot_courses .span9 .span6 {
         width: 250px;
         float: right;
         min-height: auto;
     }
-    .section-social #main_content .span9, .section-mycourses #main_content .span9 {
+    .section-social #top_main_content .span9, .section-mycourses #top_main_content .span9 {
         width: 480px;
         margin-left: 5px;
     }
-    .section-mycampus #main_content .span3, .section-mycourses #main_content .span3 {
+    .section-mycampus #top_main_content .span3, .section-mycourses #top_main_content .span3 {
         float: left;
         width: 100%;
     }
-    .section-mycampus #main_content .span3 #user_image_block, .section-mycampus #main_content .span3 #profile_block,
-    .section-mycourses #main_content .span3 #user_image_block, .section-mycourses #main_content .span3 #profile_block {
+    .section-mycampus #top_main_content .span3 #user_image_block, .section-mycampus #top_main_content .span3 #profile_block,
+    .section-mycourses #top_main_content .span3 #user_image_block, .section-mycourses #top_main_content .span3 #profile_block {
         margin: 5px;
         width: 192px;
         float: left;
     }
-    .section-mycampus #main_content .span3 #course_block, .section-mycampus #main_content .span3 #help_block, .section-mycampus #main_content .span3 #skill_block,
-    .section-mycourses #main_content .span3 #course_block, .section-mycourses #main_content .span3 #help_block, .section-mycourses #main_content .span3 #skill_block {
+    .section-mycampus #top_main_content .span3 #course_block, .section-mycampus #top_main_content .span3 #help_block, .section-mycampus #top_main_content .span3 #skill_block,
+    .section-mycourses #top_main_content .span3 #course_block, .section-mycourses #top_main_content .span3 #help_block, .section-mycourses #top_main_content .span3 #skill_block {
         margin: 5px;
         width: 192px;
         float: left;
@@ -405,11 +405,11 @@
     .navbar .brand {
          font-size: 14px;
     }
-    #main_content .span3 #login_block {
+    #top_main_content .span3 #login_block {
         width: 160px;
         float: left;
     }
-    #main_content .span3 #help_block {
+    #top_main_content .span3 #help_block {
         width: 60px;
         float: right;
         margin-left: 10px;
@@ -430,10 +430,10 @@
     .subnav .navbar-inner .in{
         margin-top: 45px 
     }
-    #main_content .span3 #login_block {
+    #top_main_content .span3 #login_block {
         width: 180px;
     }
-    #main_content .span3 #help_block {
+    #top_main_content .span3 #help_block {
         width: 100px;
     }
 }

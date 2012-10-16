@@ -714,9 +714,10 @@ class CourseManager {
                     }
                 } else {
                     $students_in_course = SessionManager::get_users_by_session($session_id, '0');
-
-                    foreach($students_in_course as $user_item) {
-                        $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+                    if (is_array($students_in_course)) {
+                        foreach($students_in_course as $user_item) {
+                            $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+                        }
                     }
                 }
             }

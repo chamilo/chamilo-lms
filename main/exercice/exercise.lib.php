@@ -799,11 +799,11 @@ function get_count_exam_results($exercise_id, $extra_where_conditions) {
 }
 
 function get_count_exam_hotpotatoes_results($in_hotpot_path) {
-    return get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true);
+    return get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true, '');
 }
 
 //function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false) {
+function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition) {
     
     $tab_res = array();
     $course_code = api_get_course_id();
@@ -826,7 +826,7 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     }
     
     // get a number of sorted results
-    $sql .= " ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
+    $sql .= " $where_condition ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
     
     $res = Database::query($sql);
     while ($data = Database::fetch_array($res)) {

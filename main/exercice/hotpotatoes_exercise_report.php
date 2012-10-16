@@ -62,7 +62,7 @@ if (empty($hotpotatoes_path)) {
 }
 
 if (!$is_allowedToEdit) {
-    api_not_allowed();
+   // api_not_allowed();
 }
 
 if (!empty($_REQUEST['path'])) {
@@ -347,6 +347,17 @@ if ($is_allowedToEdit || $is_tutor) {
         // may be empty string but is defined
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
+} else {
+    //The order is important you need to check the the $column variable in the model.ajax.php file
+	$columns        = array(get_lang('StartDate'),  get_lang('Score'),  get_lang('Actions'));
+
+  //Column config
+  // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
+	$column_model   = array(
+                        array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
+            			array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
+            			array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
+                       );
 }
 
 //Autowidth

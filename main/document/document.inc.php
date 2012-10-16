@@ -255,9 +255,9 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     preg_match('/ogg$/i', urldecode($url))) {
                 return '<span style="float:left" ' . $visibility_class . '>' . $title . '</span>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             } elseif (
-            //Show preview sith yoxview
-            //preg_match('/html$/i', urldecode($url))  || 
-            //preg_match('/htm$/i',  urldecode($url))  ||
+                    //Show preview sith yoxview
+                    //preg_match('/html$/i', urldecode($url))  || 
+                    //preg_match('/htm$/i',  urldecode($url))  ||
                     preg_match('/swf$/i', urldecode($url)) ||
                     preg_match('/png$/i', urldecode($url)) ||
                     preg_match('/gif$/i', urldecode($url)) ||
@@ -296,17 +296,17 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     $sound_preview = DocumentManager::generate_media_preview($counter);
                     return $sound_preview;
                 } elseif (
-                //Show preview sith yoxview
-                //preg_match('/html$/i', urldecode($url))  || 
-                //preg_match('/htm$/i',  urldecode($url))  ||
-                        preg_match('/swf$/i', urldecode($url)) ||
-                        preg_match('/png$/i', urldecode($url)) ||
-                        preg_match('/gif$/i', urldecode($url)) ||
-                        preg_match('/jpg$/i', urldecode($url)) ||
-                        preg_match('/jpeg$/i', urldecode($url)) ||
-                        preg_match('/bmp$/i', urldecode($url)) ||
-                        preg_match('/svg$/i', urldecode($url)) ||
-                        (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
+                    //Show preview sith yoxview
+                    //preg_match('/html$/i', urldecode($url))  || 
+                    //preg_match('/htm$/i',  urldecode($url))  ||
+                    preg_match('/swf$/i', urldecode($url)) ||
+                    preg_match('/png$/i', urldecode($url)) ||
+                    preg_match('/gif$/i', urldecode($url)) ||
+                    preg_match('/jpg$/i', urldecode($url)) ||
+                    preg_match('/jpeg$/i', urldecode($url)) ||
+                    preg_match('/bmp$/i', urldecode($url)) ||
+                    preg_match('/svg$/i', urldecode($url)) ||
+                    (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
                     //$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//with yoxview
                     $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid; //without yoxview
@@ -526,7 +526,10 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         }
         $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
     } else {
-        if ($is_certificate_mode) {
+        //Edit button
+        if (in_array($path, DocumentManager::get_system_folders())) {
+            $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'), '', ICON_SIZE_SMALL);
+        } elseif ($is_certificate_mode ) {
             // gradebook category doesn't seem to be taken into account
             $modify_icons = '<a href="edit_document.php?' . api_get_cidreq() . '&amp;id=' . $document_id . $req_gid . '&curdirpath=/certificates">' . Display::return_icon('edit.png', get_lang('Modify'), '', ICON_SIZE_SMALL) . '</a>';
         } else {
@@ -552,10 +555,10 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 }
             }
         }
-        if ($is_certificate_mode) {
-            $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
-            $modify_icons .= '&nbsp;' . Display::return_icon($visibility_icon . '.png', get_lang('VisibilityCannotBeChanged'), array(), ICON_SIZE_SMALL) . '</a>';
-            Display::return_icon($visibility_icon . '.png', get_lang('VisibilityCannotBeChanged'), array(), ICON_SIZE_SMALL) . '</a>';
+        
+        //Move button        
+        if ($is_certificate_mode || in_array($path, DocumentManager::get_system_folders())) {
+            $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';            
         } else {
             if (api_get_session_id()) {
                 if ($document_data['session_id'] == api_get_session_id()) {
@@ -566,6 +569,12 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             } else {
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;move=' . $document_id . $req_gid . '">' . Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
             }
+        }
+        
+        //Visibility button
+        if ($is_certificate_mode) {
+            $modify_icons .= '&nbsp;' . Display::return_icon($visibility_icon . '.png', get_lang('VisibilityCannotBeChanged'), array(), ICON_SIZE_SMALL) . '</a>';
+        } else {
             if (api_is_allowed_to_edit() || api_is_platform_admin()) {
                 if ($visibility_icon == 'invisible') {
                     $tip_visibility = get_lang('Show');
@@ -575,7 +584,9 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;' . $visibility_command . '=' . $id . $req_gid . '&amp;' . $sort_params . '">' . Display::return_icon($visibility_icon . '.png', $tip_visibility, '', ICON_SIZE_SMALL) . '</a>';
             }
         }
-        if (in_array($path, array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates'))) {
+        
+        //Delete button    
+        if (in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {
             if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id()) == $id) {

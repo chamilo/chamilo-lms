@@ -3175,8 +3175,20 @@ class DocumentManager {
         if (api_get_setting('show_chat_folder') == 'false') {
             $folders_to_avoid[] =  '/chat_files';
         }
-        return in_array($path, $folders_to_avoid);
-        
+        return in_array($path, $folders_to_avoid);        
+    }
+    
+    static function get_system_folders() {
+        $system_folders = array(
+            '/certificates',    
+            '/chat_files',
+            '/images',
+            '/flash',
+            '/audio',
+            '/video',
+            '/shared_folder'
+        );
+        return $system_folders;
     }
 }
 //end class DocumentManager

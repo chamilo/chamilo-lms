@@ -1059,26 +1059,6 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         if (DocumentManager::is_folder_to_avoid($document_data['path'])) {
             continue;
         }
-/*
-        // Hide HotPotatoes Certificates and all css folders
-        if ($document_data['path'] == '/HotPotatoes_files' || $document_data['path'] == '/certificates' || basename($document_data['path']) == 'css') {
-            continue;
-        }
-
-        //Admin setting for Hide/Show the folders of all users
-        if (api_get_setting('show_users_folders') == 'false' && ($document_data['path'] == '/shared_folder' || strstr($document_data['path'], 'shared_folder_session_'))) {
-            continue;
-        }
-
-        //Admin setting for Hide/Show Default folders to all users
-        if (api_get_setting('show_default_folders') == 'false' && ($document_data['path'] == '/images' || $document_data['path'] == '/flash' || $document_data['path'] == '/audio' || $document_data['path'] == '/video')) {
-            continue;
-        }
-
-        //Admin setting for Hide/Show chat history folder
-        if (api_get_setting('show_chat_folder') == 'false' && $document_data['path'] == '/chat_files') {
-            continue;
-        }*/
 
         // Show the owner of the file only in groups
         $user_link = '';

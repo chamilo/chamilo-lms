@@ -350,15 +350,46 @@
     }
     #main_content .span6 {
         width: 400px;
-        min-height: 200px;
+        /*min-height: 200px;*/
     }
     #main_content .span9 {
-        width: 420px;
+        width: 390px;
         margin-left: 5px;
     }
-    .section-social #main_content .span9 {
+    #main_content .span9 #announcements .span6 {
+        width: 320px;
+    }
+    #main_content #hot_courses .span9 .thumbnail {
+        width: 80px;
+        float: left;
+    }
+    #main_content #hot_courses .span9 .well_border {
+        padding: 8px;
+    }
+    #main_content #hot_courses .span9 .span6 {
+        width: 250px;
+        float: right;
+        min-height: auto;
+    }
+    .section-social #main_content .span9, .section-mycourses #main_content .span9 {
         width: 480px;
         margin-left: 5px;
+    }
+    .section-mycampus #main_content .span3, .section-mycourses #main_content .span3 {
+        float: left;
+        width: 100%;
+    }
+    .section-mycampus #main_content .span3 #user_image_block, .section-mycampus #main_content .span3 #profile_block,
+    .section-mycourses #main_content .span3 #user_image_block, .section-mycourses #main_content .span3 #profile_block {
+        margin: 5px;
+        width: 192px;
+        float: left;
+    }
+    .section-mycampus #main_content .span3 #course_block, .section-mycampus #main_content .span3 #help_block, .section-mycampus #main_content .span3 #skill_block,
+    .section-mycourses #main_content .span3 #course_block, .section-mycourses #main_content .span3 #help_block, .section-mycourses #main_content .span3 #skill_block {
+        margin: 5px;
+        width: 192px;
+        float: left;
     }
 }
 

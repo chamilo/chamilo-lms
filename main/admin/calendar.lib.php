@@ -1248,11 +1248,8 @@ function show_add_form($id = '') {
 	$content=stripslashes($content);
 	$title=stripslashes($title);
 	// we start a completely new item, we do not come from the resource linker
-	if ($_GET['originalresource']!=="no" and $_GET['action']=="add")
-	{
-
-		$_SESSION["formelements"]=null;
-		//unset_session_resources();//--------------------------------------------------------------------------------------
+	if ($_GET['originalresource']!=="no" and $_GET['action']=="add") {
+		$_SESSION["formelements"]=null;		
 	}
 ?>
 

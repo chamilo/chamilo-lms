@@ -3,6 +3,12 @@
 /* Phone */
 
 @media (max-width: 320px) {    
+    header #header_center, header #header_right, header #header_left {
+        display:none;
+    }    
+    .navbar {
+      margin-top: 1em;
+    }
     .navbar .brand {
          font-size: 14px;
     }
@@ -24,7 +30,12 @@
 }
 
 @media (max-width: 480px) {
-    
+    header #header_center, header #header_right, header #header_left {
+        display:none;
+    }    
+    .navbar {
+      margin-top: 1em;
+    }
     .subnav .navbar-inner .in{
         margin-top: 45px 
     }
@@ -56,10 +67,6 @@
     .subnav .nav > li > a, .navbar .dropdown-menu a {        
         color: white;        
     }
-    
-    header #header_center, header #header_right {
-        display:none;
-    }    
     
     /* Footer fixes */
     

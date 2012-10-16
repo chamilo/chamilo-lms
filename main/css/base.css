@@ -253,6 +253,12 @@ form .formw input {
 
 /* end chamilo forms fixes */
 
+#main_content .span3 {
+  float: right;
+}
+#main_content .span9 {
+  float: left;
+}
 
 
 /* New changes Chamilo 1.9 */

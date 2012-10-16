@@ -12,6 +12,16 @@
     .navbar .brand {
          font-size: 14px;
     }
+    #main_content .span3 #login_block {
+        width: 160px;
+        float: left;
+    }
+    #main_content .span3 #help_block {
+        width: 60px;
+        float: right;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
     
     /* No view as link*/
     #view_as_link {
@@ -26,6 +36,12 @@
     /* In order to avoid clicking in the main title instead of the expand button */
     .subnav .navbar-inner .in{
         margin-top: 45px 
+    }
+    #main_content .span3 #login_block {
+        width: 180px;
+    }
+    #main_content .span3 #help_block {
+        width: 100px;
     }
 }
 
@@ -121,6 +137,16 @@
     .subbav .nav > li > a:hover,
     .subbav .dropdown-menu a:hover {
         background-color: #555;
+    }
+    #main_content .span3 #login_block {
+        width: 280px;
+        float: left;
+    }
+    #main_content .span3 #help_block {
+        width: 100px;
+        float: right;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 }
 

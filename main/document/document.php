@@ -1056,7 +1056,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $row[] = $document_data['path'];
         }
         
-        if (DocumentManager::is_folder_to_avoid($document_data['path'])) {
+        if (DocumentManager::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
             continue;
         }
 

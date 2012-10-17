@@ -1764,8 +1764,10 @@ function attach_glossary_into_scorm(type) {
         return false;
     }
     //logit_lms('attach_glossary_into_scorm', 0);
-    var doc = f.contentWindow ? f.contentWindow.document :
-    f.contentDocument ? f.contentDocument : f.document;
+    
+    try {
+        var doc = f.contentWindow ? f.contentWindow.document : f.contentDocument ? f.contentDocument : f.document;
+    } catch (ex) { }    
 
     var $frame_content = $('body',doc);
     var my_text=$frame_content.html();

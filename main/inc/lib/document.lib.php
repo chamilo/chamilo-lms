@@ -2854,8 +2854,7 @@ class DocumentManager {
 
                         // Show the "image name" not the filename of the image.
                         if ($lp_id) {
-                            //LP URL
-                            //$lp_id = $this->lp_id;
+                            //LP URL                            
                             $url = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url . '&document_id=' . $key;
@@ -2871,7 +2870,8 @@ class DocumentManager {
                         if (!file_exists($img_sys_path . $icon)) {
                             $img = $img_path . 'icons/16/default_small.gif';
                         }
-
+                        
+                
                         $link = Display::url('<img alt="" src="' . $img . '" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));
 
                         if ($lp_id == false) {

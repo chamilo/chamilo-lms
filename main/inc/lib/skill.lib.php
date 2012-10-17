@@ -724,6 +724,10 @@ class Skill extends Model {
     
     /**
      * Get skills tree as a simplified JSON structure
+     * @param int user id
+     * @param int skill id
+     * @param bool return a flat array or not
+     * @param int depth of the skills
      * 
      */
     public function get_skills_tree_json($user_id = null, $skill_id = null, $return_flat_array = false, $main_depth = 2) {        

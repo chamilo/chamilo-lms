@@ -392,22 +392,19 @@ class DisplayGradebook
 			$item_value =0;
 			$item_total = 0;
             $item_total_value = 0;     
-            //var_dump($sum_categories_weight_array);
             
 			for ($count=0; $count < count($evals_links); $count++) {
 				$item           = $evals_links[$count];
 				$score          = $item->calc_score($user_id);
                 $divide			= ( ($score[1])==0 ) ? 1 : $score[1];
                 
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                
-                $item_value     = $score[0]/$divide;
-                //$item_value     = $item_value*$item->get_weight();
+                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];                
+                //$item_value     = $score[0]/$divide;
                 $item_value     = $score[0]/$divide*$item->get_weight()*$sub_cat_percentage/$main_weight;
-                //var_dump($score[0].' '.$divide.' '.$item->get_weight().' - '.$item_value.' '.$sub_cat_percentage);
                 $item_value_total +=$item_value;
 			}            
             $item_total = $main_weight;
+            
 			$total_score = array($item_value_total, $item_total);       
 			$scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
@@ -422,7 +419,7 @@ class DisplayGradebook
             $header = '<div class="actions"><table>';            
 			$header .= '<tr>';
 			if (!$selectcat == '0') {
-				$header .= '<td style=" "><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('RootCat'),'',ICON_SIZE_MEDIUM).'</a></td>';
+				$header .= '<td><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('RootCat'),'',ICON_SIZE_MEDIUM).'</a></td>';
 			}
 			$header .= '<td>' . get_lang('CurrentCategory') . '</td>' .
 					'<td><form name="selector"><select name="selectcat" onchange="document.selector.submit()">';

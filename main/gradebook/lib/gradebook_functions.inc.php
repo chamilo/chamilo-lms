@@ -591,7 +591,7 @@ function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null) {
     return $list_certificate;
 }
 
-function get_user_certificate_content($user_id, $course_code, $is_preview = false) {
+function get_user_certificate_content($user_id, $course_code, $is_preview = false, $hide_print_button = false) {
     //generate document HTML    
     $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
 
@@ -605,8 +605,10 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
     //add print header
-    $print = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
-    $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+    if ($hide_print_button == false) {
+        $print = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
+        $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
+    }
 
     //add header
     $new_content_html = $new_content[0] . $print . '</head>' . $new_content_html;

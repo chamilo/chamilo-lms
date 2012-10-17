@@ -617,7 +617,7 @@ if (empty ($_GET['selectcat'])) {
 }
 $simple_search_form='';
 
-if (isset ($_GET['studentoverview'])) {    
+if (isset($_GET['studentoverview'])) {    
     //@todo this code also seems to be deprecated ...    
 	$cats= Category :: load($category);
 	$stud_id= (api_is_allowed_to_edit() ? null : $stud_id);
@@ -732,81 +732,13 @@ if ($category != '0') {
 	$course_id     = Database::get_course_by_category($category_id);
 	$show_message  = $cat->show_message_resource_delete($course_id);
     
-	if ($show_message=='') {
-
+	if ($show_message == '') {
 		//student
 		if (!api_is_allowed_to_edit()) {
-
-			// generating the total score for a course			
-			$cats_course     = Category :: load ($category_id, null, null, null, null, null, false);	
-                        		
-			$alleval_course  = $cats_course[0]->get_evaluations($stud_id,true);
-			$alllink_course  = $cats_course[0]->get_links($stud_id,true);
-			
-			$evals_links = array_merge($alleval_course, $alllink_course);
-			$item_value = 0;
-			$item_total = 0;
-            
-            //@todo move these in a function            
-            $sum_categories_weight_array = array();     
-            if (isset($cats_course) && !empty($cats_course)) {            
-                $categories = Category::load(null, null, null, $category_id);
-                if (!empty($categories)) {
-                    foreach($categories as $category) {                  
-                        $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
-                    }
-                } else {
-                    $sum_categories_weight_array[$category_id] = $cats_course[0]->get_weight();
-                }
-            }
-              
-			$item_total_value = 0;      
-            $item_value = 0;      
-           
-			for ($count=0; $count < count($evals_links); $count++) {
-				$item = $evals_links[$count];
-				$score = $item->calc_score($stud_id);
-				
-				$score_denom    = ($score[1]==0) ? 1 : $score[1];
-				$item_value     = $score[0]/$score_denom*$item->get_weight();
-                
-                $item_total         += $item->get_weight();                
-                $item_total_value   += $item_value;                                
-			}			
-                        
-		    $item_total_value = (float)$item_total_value;            
-			
-			$cattotal = Category :: load($category_id);
-            
-			$scoretotal= $cattotal[0]->calc_score(api_get_user_id());            
-					
-			//Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global
-            $scoredisplay = ScoreDisplay :: instance();
-            
-			//$my_score_in_gradebook =  round($scoretotal[0],2);
-            $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
-			
-			//Show certificate
-			$certificate_min_score = $cats[0]->get_certificate_min_score();	            		
-			
-			$scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT); //a student always sees only the teacher's repartition
-			//var_dump($certificate_min_score, $item_total_value);
-			if (isset($certificate_min_score) && $item_total_value >= $certificate_min_score) {
-				$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());								
-				if (empty($my_certificate)) {
-					register_user_info_about_certificate($category_id, api_get_user_id(), $my_score_in_gradebook, api_get_utc_datetime());
-					$my_certificate = get_certificate_by_user_id($cats[0]->get_id(), api_get_user_id());
-				}
-				
-				if (!empty($my_certificate)) {
-					$url  = api_get_path(WEB_PATH) .'certificates/index.php?id='.$my_certificate['id'];	
-					$certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));					
-					echo '<div class="actions" align="right">';					
-					echo Display::url($url, $url, array('target'=>'_blank'));
-					echo $certificates;
-					echo '</div>';
-				}
-			}
+            $certificate_html = Category::register_user_certificate($category_id, $stud_id);
+            if ($certificate_html) {
+                echo $certificate_html;
+            }            
 		} //end hack
 	}
 }

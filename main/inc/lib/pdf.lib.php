@@ -116,14 +116,17 @@ class PDF {
         }
         
         $course_data = array();
+        
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
+        } else {
+            $course_data = api_get_course_info();
         }
         
         //clean styles and javascript document
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
-            '@<style[^>]*?>.*?</style>@si'
+            '@<style[^>]*?>.*?</style>@si'                    
             );
             
         //Formatting the pdf
@@ -184,17 +187,14 @@ class PDF {
                 }
                 
                 $document_html = @file_get_contents($file);
-                $document_html = preg_replace($clean_search, '', $document_html);   
-                
+                $document_html = preg_replace($clean_search, '', $document_html);                  
+                                
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
-                
-                //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
-                
+ 
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../','',$document_html);            
-                    //$document_path = api_get_path(WEB_COURSE_PATH).$course_data['path'].'/document/';
+                    $document_html= str_replace('../','',$document_html);                    
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
                                
                     $doc = new DOMDocument();           
@@ -210,8 +210,7 @@ class PDF {
                                     if (api_get_path(REL_PATH) != '/') {
                                         $old_src = str_replace(api_get_path(REL_PATH), '', $old_src);    
                                     }
-                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
-                                    //$old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src_fixed);                                    
+                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);                                                                     
                                     $new_path = $document_path.$old_src_fixed;
                                     $document_html= str_replace($old_src, $new_path, $document_html);
                                 }                                                       	

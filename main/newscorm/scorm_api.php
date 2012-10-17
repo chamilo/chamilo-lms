@@ -209,12 +209,12 @@ $(document).ready( function() {
   $("#content_id").load( function() {
 
     // Add a right margin see BT#1607
-    if (frames['content_name']) {
+    /*if (frames['content_name']) {
         // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
         try {
             frames['content_name'].document.body.style.margin="0 12px 0px 5px";
         } catch (ex) { }
-    }
+    }*/
     olms.info_lms_item[0]=olms.info_lms_item[1];
 
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {

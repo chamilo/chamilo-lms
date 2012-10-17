@@ -68,7 +68,8 @@ $platform_theme = api_get_setting('stylesheets'); // Plataform's css.
 $my_style       = $platform_theme;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.lp_minipanel.js" type="text/javascript" language="javascript"></script>';
-
+/*
+ * already added in lp_controller.php
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
@@ -77,7 +78,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setti
 </script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js" type="text/javascript" language="javascript"></script>';
-}
+}*/
 
 $htmlHeadXtra[] = '<script>
 $(document).ready(function(){
@@ -95,7 +96,6 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
         });        
         </script>';
 }
-
 
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();

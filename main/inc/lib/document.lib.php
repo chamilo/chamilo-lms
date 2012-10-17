@@ -3153,6 +3153,11 @@ class DocumentManager {
        if (strstr($path, 'HotPotatoes_files')) {
            return true;
        }
+       
+       //Certificate results
+       if (strstr($path, 'certificates')) {
+           return true;
+       }
 
         //Admin setting for Hide/Show the folders of all users
         if (api_get_setting('show_users_folders') == 'false') {

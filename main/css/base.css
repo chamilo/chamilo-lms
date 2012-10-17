@@ -253,13 +253,13 @@ form .formw input {
 
 /* end chamilo forms fixes */
 
-#main_content .span3 {
+#top_main_content .span3 {
   float: right;
 }
-#main_content .span9 {
+#top_main_content .span9 {
   float: left;
 }
-#main_content .span6 {
+#top_main_content .span6 {
   width: 565px;
 }
 
@@ -2020,6 +2020,10 @@ input.maininput:focus {
     margin-bottom: 20px;
 }
 
+#course_tools .span4 {
+    width: 250px;
+}
+
 .big_icon img {
     padding:5px;
     -moz-border-radius:10px;
@@ -3412,7 +3416,7 @@ a:active{
 }
 
 /*#homepage, #hot_courses, #announcements {*/
-#main_content section{
+#top_main_content section{
     margin-left: 5px;
 }
 .welcome_course li {

@@ -112,7 +112,7 @@ $htmlHeadXtra[] = '<script>
                 var action = datos.split(":")[0];                
                 if (action && action == "confirm") {
                     var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetTheUserWithTheDefaultPortalLanguage').'</div><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn\">' . get_lang('MakeUnavailable') . '</a>";
+                    var sure = "<div class=\"warning-message\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'</div><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn\">' . get_lang('MakeUnavailable') . '</a>";
                     $("#id_content_message").html(sure);
 				}
 		} });

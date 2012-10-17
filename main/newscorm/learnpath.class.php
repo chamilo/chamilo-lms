@@ -5031,7 +5031,15 @@ class learnpath {
         $elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
+            
             $title_cut = cut($arrLP[$i]['title'], 25);
+            
+            //Link for the documents
+            if ($arrLP[$i]['item_type'] == 'document') {
+                $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id;
+                $title_cut = Display::url($title_cut, $url);
+            }
+            
             if (($i % 2) == 0) {
                 $oddclass = 'row_odd';
             } else {
@@ -5084,7 +5092,8 @@ class learnpath {
             $move_item_icon = '';
 			$edit_icon = '';
 			$delete_icon = '';
-            $audio_icon = '';$prerequisities_icon = '';
+            $audio_icon = '';
+            $prerequisities_icon = '';
 
             if ($is_allowed_to_edit) {
                 if (!$update_audio OR $update_audio <> 'true') {
@@ -7652,7 +7661,6 @@ class learnpath {
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_item_form($row['item_type'], get_lang('MoveCurrentChapter'), 'move', $item_id, $row);
                     break;
-
                 case 'dokeos_module' :
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_item_form($row['item_type'], 'Move th current module:', 'move', $item_id, $row);
@@ -7918,19 +7926,19 @@ class learnpath {
             $return .= '</a> ';
             
             $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">' . ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
+            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']).'&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
+                        ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
         }
 
         while ($row_quiz = Database :: fetch_array($res_quiz)) {
             $return .= '<li class="lp_resource_element" data_id="'.$row_quiz['id'].'" data_type="quiz" title="'.$row_quiz['title'].'" >';
-
+            
             $return .= '<a class="moved" href="#">';
             $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
             $return .= '</a> ';
-
+            
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-
             $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' .
                         Security :: remove_XSS(cut($row_quiz['title'], 80)).
                         '</a>';
@@ -7987,14 +7995,7 @@ class learnpath {
      * Creates a list with all the student publications in it
      * @return unknown
      */
-    public function get_student_publications() {
-        //$course_id = api_get_course_int_id();
-        //$tbl_student = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
-        //$session_id = api_get_session_id();
-        //$condition_session = api_get_session_condition($session_id);
-        //$sql_student = "SELECT * FROM $tbl_student  WHERE c_id = ".$course_id." $condition_session  ORDER BY title ASC";
-        //$res_student = Database::query($sql_student);
-        //$return .= '<div class="lp_resource_header"' . " onclick=\"javascript: if(document.getElementById('resStudent').style.display == 'block') {document.getElementById('resStudent').style.display = 'none';} else {document.getElementById('resStudent').style.display = 'block';}\"" . '><img alt="" src="../img/lp_' . TOOL_STUDENTPUBLICATION . '.gif" style="margin-right:5px;" title="" />' . get_lang('Student_publication') . '</div>';
+    public function get_student_publications() {        
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';

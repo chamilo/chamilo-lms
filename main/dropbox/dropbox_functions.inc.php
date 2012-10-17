@@ -5,13 +5,12 @@
 * This file contains additional dropbox functions. Initially there were some
 * functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya adding c_id support
 */
-
-//require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#category_title").focus();
 }
@@ -308,9 +307,10 @@ function get_dropbox_categories($filter = '') {
  * @return array The details of this category
  */
 function get_dropbox_category($id) {
-    global $dropbox_cnf;    
+    global $dropbox_cnf;
+    $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }    
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".$id."'";
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
         return array();
@@ -657,15 +657,17 @@ function removeUnusedFiles() {
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM " . dropbox_cnf('tbl_file') . " f
-			LEFT JOIN " . dropbox_cnf('tbl_person') . " p ON f.id = p.file_id
-			WHERE f.c_id = $course_id AND p.c_id = $course_id AND p.user_id IS NULL";
+			LEFT JOIN " . dropbox_cnf('tbl_person') . " p 
+            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id )
+			WHERE p.user_id IS NULL";
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
+        
 		//delete the selected files from the post and file tables
         $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id='" . $res['id'] . "'";
-        $result1 = Database::query($sql);
+        Database::query($sql);
         $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id='" . $res['id'] . "'";
-        $result1 = Database::query($sql);
+        Database::query($sql);
 
 		//delete file from server
         @unlink( dropbox_cnf('sysPath') . '/' . $res['filename']);
@@ -691,9 +693,8 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
-			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON f.id = p.file_id
-			WHERE f.c_id = $course_id AND p.c_id = $course_id AND
-			p.dest_user_id = '" . $mailingPseudoId . "'";
+			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result)))
@@ -725,11 +726,11 @@ function removeMoreIfMailing($file_id) {
 	    $mailingPseudoId = $res['dest_user_id'];
 	    if ($mailingPseudoId > dropbox_cnf('mailingIdBase')) {
 	        $sql = "DELETE FROM " . dropbox_cnf('tbl_person') . " WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
-	        $result1 = Database::query($sql);
+	        Database::query($sql);
 
 	        $sql = "UPDATE " . dropbox_cnf('tbl_file') .
 	            " SET uploader_id='" . api_get_user_id() . "' WHERE c_id = $course_id AND uploader_id='" . $mailingPseudoId . "'";
-	        $result1 = Database::query($sql);
+	        Database::query($sql);
         }
     }
 }
@@ -744,10 +745,6 @@ function dropbox_cnf($variable) {
     return $GLOBALS['dropbox_cnf'][$variable];
 }
 
-
-/**
-*
-*/
 function store_add_dropbox() {
 	global $dropbox_cnf;
 	global $_user;

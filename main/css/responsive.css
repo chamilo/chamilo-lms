@@ -21,7 +21,7 @@
         float: left;     
     }
     #top_main_content .span6 {
-        width: 450px;
+        width: 440px;
     }
     .section-social #top_main_content .span3 {
         width: 200px;
@@ -38,6 +38,7 @@
     }
 }
 
+/* Normal tablet or normal-screen phone */
 @media (max-width: 979px) {
     /* Remove any padding from the body */
     body {
@@ -47,11 +48,7 @@
     #topbar_push {
         height: 0px;
     }
-}
 
-/* Normal tablet or normal-screen phone */
-
-@media (min-width: 768px) and (max-width: 978px) {
     /* No topbar */
     #topbar {
         display:none;
@@ -90,6 +87,9 @@
     /* Space between course tools */
     #course_tools .row .span4 {
         width: 220px;
+    }
+    .section-mycourses #top_main_content .span9 #main_content .well .pull-right, .section-mycampus #top_main_content .span9 #hot_courses .pull-right {
+        display: none;
     }
 }
 

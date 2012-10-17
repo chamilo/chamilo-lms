@@ -93,8 +93,9 @@ class UserGroup extends Model {
     }
     
     public function get_usergroup_not_in_course($options = array()) {        
-        $sql = "SELECT * FROM {$this->usergroup_rel_course_table} urc
-                JOIN {$this->table} u 
+        $sql = "SELECT DISTINCT * 
+                FROM {$this->usergroup_rel_course_table} urc
+                RIGHT JOIN {$this->table} u 
                 ON (u.id = urc.usergroup_id)                
                ";              
         $conditions = Database::parse_conditions($options);

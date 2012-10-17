@@ -409,7 +409,7 @@ switch ($action) {
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         switch ($type) {
             case 'not_registered':                
-                $options['where'] = array(" course_id != ? " => $course_id);
+                $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
                 $result = $obj->get_usergroup_not_in_course($options);
                 break;
             case 'registered':

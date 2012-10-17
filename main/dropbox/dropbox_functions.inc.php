@@ -1057,7 +1057,7 @@ function zip_download($array) {
 	// place to temporarily stash the zipfiles
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH);
 
-	array_map('intval', $array);
+	$array = array_map('intval', $array);
 
 	// note: we also have to add the check if the user has received or sent this file.
 	$sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description

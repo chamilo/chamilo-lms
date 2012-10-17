@@ -1569,7 +1569,7 @@ class Exercise {
 			$sql_fields = "";
 			$sql_fields_values = "";
 		}
-		array_map('intval', $questionList);
+		$questionList = array_map('intval', $questionList);
 		
 		$weight = Database::escape_string($weight);
         $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)

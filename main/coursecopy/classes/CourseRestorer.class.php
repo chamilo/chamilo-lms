@@ -66,9 +66,9 @@ class CourseRestorer
                             'forums',
                            // 'forum_topics',
                             'glossary',
-                            'quizzes',                                     
-                            'learnpaths',
+                            'quizzes', 
                             'links', 
+                            'learnpaths',                       
                             'surveys',
                             //'scorm_documents', ??
                             'tool_intro',
@@ -324,16 +324,7 @@ class CourseRestorer
 		    		if (!is_dir($path.'document'.$new)) {		    			
 						$created_dir = create_unexisting_directory($course_info, api_get_user_id(), $my_session_id, 0, 0 ,$path.'document', $new, $title, $visibility);
 		    		}
-		    	} elseif ($document->file_type == DOCUMENT) {
-		    	    /*
-                    echo 'option'; var_dump($this->file_option);
-                    echo 'file type'; var_dump($document->file_type);
-                    echo 'session'; var_dump($session_id);
-                    echo 'file _exists';  var_dump($path.$document->path); var_dump(file_exists($path.$document->path));
-                    */                   
-                    //echo '---->';var_dump($path.dirname($document->path));
-                    
-                    
+		    	} elseif ($document->file_type == DOCUMENT) {		                     
                     //Checking if folder exists in the database otherwise we created it 
                     $dir_to_create = dirname($document->path);                    
                     if (!empty($dir_to_create) && $dir_to_create != 'document' && $dir_to_create != '/') {
@@ -994,6 +985,7 @@ class CourseRestorer
 			}
 		}
 	}
+    
 	/**
 	 * Restore course-description
 	 */
@@ -1024,6 +1016,7 @@ class CourseRestorer
 			}
 		}
 	}
+    
 	/**
 	 * Restore announcements
 	 */
@@ -1248,6 +1241,7 @@ class CourseRestorer
 		}
 		return $new_id;
 	}
+    
 	/**
 	 * Restore surveys
 	 */
@@ -1272,7 +1266,6 @@ class CourseRestorer
 				$survey->intro 		  = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->intro, $this->course->code, $this->course->destination_path);
 				$survey->surveythanks = DocumentManager::replace_urls_inside_content_html_from_copy_course($survey->surveythanks, $this->course->code, $this->course->destination_path);
 
-				$doc = '';
 				$sql = "INSERT INTO ".$table_sur." " ."SET
 						c_id = ".$this->destination_course_id." ,
 						code = '".self::DBUTF8escapestring($survey->code)."', " .
@@ -1400,7 +1393,6 @@ class CourseRestorer
 		$sql = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND code='".self::DBUTF8escapestring($survey_code)."'";
 		$result = Database::query($sql);
 		if(Database::num_rows($result) > 0) return false; else return true;
-
 	}
 
 	/**
@@ -1568,7 +1560,7 @@ class CourseRestorer
                     if ($item['item_type'] == 'sco') {
                         $path = self::DBUTF8escapestring($item['path']);                        
                     } else {
-                        $path = self::DBUTF8escapestring($item['path']);
+                        $path = self::DBUTF8escapestring($item['path']);                    
                         $path = $this->get_new_id($item['item_type'], $path);
                     }                
 
@@ -1793,12 +1785,15 @@ class CourseRestorer
             return $ref;
         }
 
-		if ($tool == 'hotpotatoes') { $tool = 'document'; }
+		if ($tool == 'hotpotatoes') { 
+            $tool = 'document'; 
+        }
 		if (!empty($this->course->resources[$tool][$ref]->destination_id)) {
 			return $this->course->resources[$tool][$ref]->destination_id;
 		}
 		return '';
 	}
+    
 	/**
 	 * Restore glossary
 	 */

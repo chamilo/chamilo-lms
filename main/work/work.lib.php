@@ -1522,10 +1522,11 @@ function get_count_work($work_id) {
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
     $sql = "SELECT  count(*) as count
-            FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) 
+            FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id AND prop.tool='work' AND work.active = 1 AND prop.visibility <> 2 AND work.c_id = $course_id ) 
                     INNER JOIN $user_table u  ON (work.user_id = u.user_id)                         
             WHERE $extra_conditions $where_condition $condition_session ";
     
+        
     $result = Database::query($sql);
     
     $users_with_work = 0;    

@@ -103,7 +103,7 @@ function save_data($users_classes) {
             $user_list = $user_data['user_list'];
             $class_name = $user_data['class_name'];
             $user_list_name = $user_data['user_list_name'];
-            $usergroup->subscribe_users_to_usergroup($class_id, $user_list);
+            $usergroup->subscribe_users_to_usergroup($class_id, $user_list, false);
             $message .= Display::return_message(get_lang('Class') . ': ' . $class_name . '<br />', 'normal', false);
             $message .= Display::return_message(get_lang('Users') . ': ' . implode(', ', $user_list_name));
         }

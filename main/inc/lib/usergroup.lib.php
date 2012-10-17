@@ -293,7 +293,7 @@ class UserGroup extends Model {
      * @param   int     usergroup id
      * @param   array   list of user ids
      */
-    function subscribe_users_to_usergroup($usergroup_id, $list) {
+    function subscribe_users_to_usergroup($usergroup_id, $list, $delete_users_not_present_in_list = true) {
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list  = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
@@ -308,17 +308,18 @@ class UserGroup extends Model {
                 }
             }
         }
+        
         if (!empty($current_list)) {
             foreach($current_list as $user_id) {
         	   if (!in_array($user_id, $list)) {
                     $delete_items[] = $user_id;
                 }
             }
-        }
+        }        
 
         //Deleting items
-        if (!empty($delete_items)) {
-            foreach($delete_items as $user_id) {
+        if (!empty($delete_items) && $delete_users_not_present_in_list) {
+            foreach ($delete_items as $user_id) {
                 //Removing courses
                 if (!empty($course_list)) {
                     foreach($course_list as $course_id) {

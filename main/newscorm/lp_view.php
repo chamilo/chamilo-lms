@@ -36,7 +36,7 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-$lp_id      = intval($_GET['lp_id']);
+$lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
@@ -119,7 +119,7 @@ $htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" langua
 $htmlHeadXtra[] = '<script>
 var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
-var sv_sco = \''.$_REQUEST['lp_id'].'\';
+var sv_sco = \''.intval($_REQUEST['lp_id']).'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
@@ -241,6 +241,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         	$lp_item_view_id  = $row_last_attempt[0];
             $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime
                               WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
+            
             if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
 

@@ -10,14 +10,10 @@
  */
 require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-$time = time();
 require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
 
-header('Content-Type: text/html; charset='.api_get_system_encoding());
+$time = time();
 
-/**
- * Initialization
- */
 $doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), urldecode($_GET['file']));
 $cid                = api_get_course_id();
 $document_path      = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -27,19 +23,14 @@ $learnpath_id       = $_REQUEST['learnpath_id'];
 $learnpath_item_id  = $_REQUEST['learnpath_item_id'];
 $time               = $_REQUEST['time'];
 
-/**
- * Read content
- */
 $user_id = api_get_user_id();
 $full_file_path = $document_path.$doc_url;
 my_delete($full_file_path.$user_id.'.t.html');
 $content = ReadFileCont($full_file_path.$user_id.'.t.html');
 
 if ($content == '') {
-
 	$content = ReadFileCont($full_file_path);
 	$mit = "function Finish(){";
-
 	$js_content = "var SaveScoreVariable = 0; \n".
 				"function mySaveScore()\n".
 				"{\n". 
@@ -66,30 +57,15 @@ if ($content == '') {
 	$posthref = "<!-- BeginTopNavButtons -->";
 	$newcontent = str_replace($prehref, $posthref, $newcontent);
 
-
 	if (CheckSubFolder($full_file_path.$user_id.'.t.html') == 0) {
 		$newcontent = ReplaceImgTag($newcontent);
 	}
-
-} else {
-	//my_delete($full_file_path.$user_id.'.t.html');
+} else {	
 	$newcontent = $content;
 }
 
 WriteFileCont($full_file_path.$user_id.'.t.html', $newcontent);
-
-/*	$prehref="javascript:void(0);";
-	$posthref=$_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
-	$newcontent = str_replace($prehref,$posthref,$newcontent);
-
-	$prehref="class=\"GridNum\" onclick=";
-	$posthref="class=\"GridNum\" onMouseover=";
-	$newcontent = str_replace($prehref,$posthref,$newcontent);
-*/
-
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
-//	echo $document_web_path.$doc_url.$user_id.'.t.html';
-//	exit;
 
 // Adjustung the header's height according to the current visual theme.
 // This is not the elegant solution, but it helps for the moment.
@@ -151,7 +127,7 @@ if ($origin!='learnpath') {
 	<?php
 } else {
 	?>
-	<script type='text/javascript'>
+	<script>
 		s='<?php echo $document_web_path.$doc_url.$user_id; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
 		//document.write(s);
 		window.location=s;

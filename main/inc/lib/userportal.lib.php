@@ -709,7 +709,8 @@ class IndexManager {
 		return $html;
 	}
     
-    function return_user_image_block() {        
+    function return_user_image_block() {		
+		$img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);		
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');		
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';

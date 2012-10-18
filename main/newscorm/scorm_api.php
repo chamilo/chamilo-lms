@@ -39,6 +39,7 @@ require_once 'scorm.class.php';
 $file							= (empty($_SESSION['file'])?'':$_SESSION['file']);
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
+
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item',0);
     exit;
@@ -1539,22 +1540,21 @@ function switch_item(current_item, next_item){
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-        params='';
-        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-        params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
-        params += '&status='+lesson_status+'&t='+session_time;
-        params += '&suspend='+suspend_data+'&loc='+lesson_location;
-        params += '&core_exit='+lms_item_core_exit;
-        if ( olms.lms_lp_type==1) {
-          $.ajax({
+    params='';
+    params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+    params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
+    params += '&status='+lesson_status+'&t='+session_time;
+    params += '&suspend='+suspend_data+'&loc='+lesson_location;
+    params += '&core_exit='+lms_item_core_exit;
+    if ( olms.lms_lp_type == 1) {
+        $.ajax({
             type:"POST",
             data: params,
             url: "lp_ajax_save_item.php",
             dataType: "script",
             async: false
-            }
-        );
-       }
+        });
+    }
 }
 /**
  * Save a SCORM item's variables, getting its SCORM values from

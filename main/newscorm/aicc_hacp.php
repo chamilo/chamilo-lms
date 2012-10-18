@@ -149,7 +149,8 @@ if (!empty($_REQUEST['command'])) {
             }
             //error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data, 0);
             // Treat the incoming request:
-            $msg_array = aicc::parse_ini_string_quotes_safe($hacp_aicc_data, array('core_lesson', 'core_vendor'));
+            $aicc = new aicc();
+            $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, array('core_lesson', 'core_vendor'));
             //error_log('Message is now in this form: '.print_r($msg_array, true), 0);
             foreach ($msg_array as $key => $dummy) {
                 switch (strtolower($key)) {

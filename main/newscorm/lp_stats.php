@@ -59,7 +59,7 @@ if ($origin != 'tracking') {
 
 $output = '';
 
-// Check if the user asked for the "extend all" option.
+//Extend all button
 $extend_all_link = '';
 $extend_all = 0;
 if ($origin == 'tracking') {
@@ -78,13 +78,25 @@ if ($origin != 'tracking') {
     $output .= Display::page_header(get_lang('ScormMystatus'));
 }
 
-$output .= '<table class="data_table"><tr>' .
-        '<th width="16">' . $extend_all_link . '</td>' .
-        '<th colspan="4" class="title"><div class="mystatusfirstrow">' . get_lang('ScormLessonTitle') . "</div></td>" .
-        '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormStatus') . "</div></td>" .
-        '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormScore') . "</div></td>" .
-        '<th colspan="2" class="title"><div class="mystatusfirstrow">' . get_lang('ScormTime') . "</div></td>" .
-        '<th class="title"><div class="mystatusfirstrow">' . get_lang('Actions') . '</div></td></tr>';
+$output .= '<table class="data_table">
+            <tr>
+                <th width="16">' . $extend_all_link . '</th>
+                <th colspan="4">
+                    ' . get_lang('ScormLessonTitle') .'
+                </th>
+                <th colspan="2">
+                    ' . get_lang('ScormStatus') . '
+                </th>
+                <th colspan="2">
+                    ' . get_lang('ScormScore') . '
+                </th>
+                <th colspan="2">
+                    ' . get_lang('ScormTime') . '
+                </th>
+                <th>
+                    ' . get_lang('Actions') . '
+                </th>
+           </tr>';
 
 // Going through the items using the $items[] array instead of the database order ensures
 // we get them in the same order as in the imsmanifest file, which is rather random when using
@@ -238,7 +250,7 @@ if (is_array($list) && count($list) > 0) {
                     $result_disabled_ext_all = true;
                 }
             }
-
+            
             // If there are several attempts, and the link to extend has been clicked, show each attempt...
             if (($counter % 2) == 0) {
                 $oddclass = 'row_odd';
@@ -260,21 +272,22 @@ if (is_array($list) && count($list) > 0) {
                 $title = Security::remove_XSS($title);
                 $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4" class="content">
-                                    <div class="mystatus">'.$title.'</div>
+                                <td colspan="4">
+                                    '.$title.'
                                 </td>
-                                <td colspan="2" class="content"></td>
-                                <td colspan="2" class="content"></td>
-                                <td colspan="2" class="content"></td>
-                                <td class="content"></td></tr>';
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td colspan="2"></td>
+                                <td></td>
+                            </tr>';
             }
-
             $counter++;
 
             do {
                 // Check if there are interactions below.
                 $extend_attempt_link = '';
                 $extend_this_attempt = 0;
+                
                 if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) && !$extend_all) {
                     if (!empty($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                         // The extend button for this attempt has been clicked.
@@ -299,6 +312,7 @@ if (is_array($list) && count($list) > 0) {
 
                 $time = learnpathItem :: get_scorm_time('js', $row['mytime']);
                 $scoIdentifier = $row['myid'];
+                
                 if ($score == 0) {
                     $maxscore = $row['mymaxscore'];
                 } else {
@@ -354,13 +368,13 @@ if (is_array($list) && count($list) > 0) {
                         }
                     }
                     $output .= '<tr class="' . $oddclass . '">
-                                <td></td>
-                                <td>' . $extend_attempt_link . '</td>
-                                <td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . '</td>
-                                <td colspan="2">' . Display::label($my_lesson_status, $class_status) . '</td>
-                                <td colspan="2"><div class="mystatus" align="center">' . $view_score . '</div></td>
-                                <td colspan="2"><div class="mystatus">' . $time . '</div></td>
-                                <td></td>
+                                    <td></td>
+                                    <td>' . $extend_attempt_link . '</td>
+                                    <td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . '</td>
+                                    <td colspan="2">' . Display::label($my_lesson_status, $class_status) . '</td>
+                                    <td colspan="2">' . $view_score . '</td>
+                                    <td colspan="2">' . $time . '</td>
+                                    <td></td>
                                 </tr>';
 
                     if (!empty($export_csv)) {
@@ -386,6 +400,7 @@ if (is_array($list) && count($list) > 0) {
 
                 if ($extend_this_attempt OR $extend_all) {
                     $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
+                                        
                     foreach ($list1 as $id => $interaction) {
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';
@@ -402,21 +417,41 @@ if (is_array($list) && count($list) > 0) {
                             }
                             $student_response = implode(',', $content_student_response);
                         }
-                        $output .= "<tr class='$oddclass'>" . '<td></td>' . '<td></td>' . '<td>&nbsp;</td>' . '<td>' . $interaction['order_id'] . '</td>' . '<td>' . $interaction['id'] . '</td>'
-                                . '<td colspan="2">' . $interaction['type'] . "</td>"
-                                . '<td>' . $student_response . "</td>" . '<td>' . $interaction['result'] . "</td>" . '<td>' . $interaction['latency'] . "</td>" . '<td>' . $interaction['time'] . "</td><td></td></tr>";
+                        $output .= '<tr class="'.$oddclass.'">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>'.$interaction['order_id'] . '</td>
+                                        <td>'.$interaction['id'] . '</td>
+                                        <td colspan="2">' . $interaction['type'].'</td>
+                                        <td>'.$student_response . '</td>
+                                        <td>'.$interaction['result'] . '</td>
+                                        <td>'.$interaction['latency'] . '</td>
+                                        <td>'.$interaction['time'] . '</td>
+                                        <td></td>
+                                    </tr>';
                         $counter++;
-                    }
+                    }                    
                     $list2 = learnpath :: get_iv_objectives_array($row['iv_id']);
+                    
                     foreach ($list2 as $id => $interaction) {
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';
                         } else {
                             $oddclass = 'row_even';
                         }
-                        $output .= "<tr class='$oddclass'>" . '<td></td>' . '<td></td>' . '<td>&nbsp;</td>' . '<td>' . $interaction['order_id'] . '</td>' . '<td colspan="2">' . $interaction['objective_id'] . '</td>' .
-                                '<td colspan="2">' . $interaction['status'] . "</td>\n" .
-                                '<td>' . $interaction['score_raw'] . "</td>" . '<td>' . $interaction['score_max'] . "</td>" . '<td>' . $interaction['score_min'] . "</td><td></td></tr>";
+                        $output .= '<tr class="'.$oddclass.'">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>' . $interaction['order_id'] . '</td>
+                                        <td colspan="2">' . $interaction['objective_id'] . '</td>
+                                        <td colspan="2">' . $interaction['status'] .'</td>
+                                        <td>' . $interaction['score_raw'] . '</td>
+                                        <td>' . $interaction['score_max'] . '</td>
+                                        <td>' . $interaction['score_min'] . '</td>
+                                        <td></td>
+                                     </tr>';
                         $counter++;
                     }
                 }
@@ -779,10 +814,10 @@ if (is_array($list) && count($list) > 0) {
                                             <td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>
                                             <td colspan="2">' . Display::label($my_lesson_status, $class_status) . '</td>
                                             <td colspan="2">
-                                                <div class="mystatus" align="center">' . $view_score . '</div>
+                                                ' . $view_score . '
                                             </td>
                                             <td colspan="2">
-                                                <div class="mystatus">' . $time_attemp . '</div>
+                                                ' . $time_attemp . '
                                             </td>';
                             if ($origin != 'tracking') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {

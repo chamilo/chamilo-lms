@@ -2548,12 +2548,12 @@ class learnpath {
      * @todo 	Translate labels
      */
     public function get_iv_objectives_array($lp_iv_id = 0) {
-        $course_id = api_get_course_int_id();
-        $list = array();
+        $course_id = api_get_course_int_id();        
         $table = Database :: get_course_table(TABLE_LP_IV_OBJECTIVE);
         $sql = "SELECT * FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id ORDER BY order_id ASC";
         $res = Database::query($sql);
         $num = Database :: num_rows($res);
+        $list = array();
         if ($num > 0) {
             $list[] = array (
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),

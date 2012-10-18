@@ -246,22 +246,9 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
-/*
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'yoxview/yox.js"></script>';
-$htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
-*/
-
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
-
-
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
-//automatic loading the course language for yoxview
-/*$yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-$lang_yoxview  = api_get_language_isocode();
-$lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
-*/
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
 $file_list = $format_list = '';
@@ -297,14 +284,6 @@ foreach ($docs_and_folders  as $file) {
  
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready( function() {
-	   /*
-    $(".yoxview").yoxview({ 
-        lang: "'.$lang_yoxview.'",
-        flashVideoPlayerPath: "'.$mediaplayer_path.'",
-        allowInternalLinks:true,
-        defaultDimensions: { iframe: { width: 800}},              
-    });*/
-        
     //Experimental changes to preview mp3, ogg files        
      '.$jquery.'              
     //Keep this down otherwise the jquery player will not work

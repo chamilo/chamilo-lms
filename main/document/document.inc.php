@@ -255,7 +255,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     preg_match('/ogg$/i', urldecode($url))) {
                 return '<span style="float:left" ' . $visibility_class . '>' . $title . '</span>' . $force_download_html . $send_to . $copy_to_myfiles . $open_in_new_window_link . $pdf_icon;
             } elseif (
-                    //Show preview sith yoxview
+                    //Show preview
                     //preg_match('/html$/i', urldecode($url))  || 
                     //preg_match('/htm$/i',  urldecode($url))  ||
                     preg_match('/swf$/i', urldecode($url)) ||
@@ -296,7 +296,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     $sound_preview = DocumentManager::generate_media_preview($counter);
                     return $sound_preview;
                 } elseif (
-                    //Show preview sith yoxview
+                    //Show preview
                     //preg_match('/html$/i', urldecode($url))  || 
                     //preg_match('/htm$/i',  urldecode($url))  ||
                     preg_match('/swf$/i', urldecode($url)) ||
@@ -308,12 +308,10 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     preg_match('/svg$/i', urldecode($url)) ||
                     (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
-                    //$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//with yoxview
-                    $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid; //without yoxview
-                    //return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).Display::return_icon('shared.png', get_lang('ResourceShared'), array()).'</a>';//with yoxview
-                    return '<a href="' . $url . '" class="yoxview" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>'; //without yoxview
+                    $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid;
+                    return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                 } else {
-                    return '<a href="' . $url . '" class="yoxview" title="' . $tooltip_title_alt . '" target="yoxview"' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
+                    return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
                 }
             } else {
                 return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . Display::return_icon('shared.png', get_lang('ResourceShared'), array()) . '</a>';
@@ -327,7 +325,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                     $sound_preview = DocumentManager::generate_media_preview($counter);
                     return $sound_preview;
                 } elseif (
-                //Show preview sith yoxview
+                        //Show preview
                         preg_match('/html$/i', urldecode($url)) ||
                         preg_match('/htm$/i', urldecode($url)) ||
                         preg_match('/swf$/i', urldecode($url)) ||
@@ -339,12 +337,10 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
                         preg_match('/svg$/i', urldecode($url)) ||
                         (preg_match('/wav$/i', urldecode($url)) && preg_match('/_chnano_.wav$/i', urldecode($url)) && api_get_setting('enable_nanogong') == 'true')
                 ) {
-                    //$url = 'showinframesmin.php?'.api_get_cidreq().'&id='.$document_data['id'].$req_gid;//with yoxview
-                    $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid; //without yoxview
-                    //return '<a href="'.$url.'" class="yoxview" title="'.$tooltip_title_alt.'" target="yoxview"'.$visibility_class.' style="float:left">'.build_document_icon_tag($filetype, $path).'</a>';//with yoxview
-                    return '<a href="' . $url . '" class="yoxview" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . '</a>'; //without yoxview
+                    $url = 'showinframes.php?' . api_get_cidreq() . '&id=' . $document_data['id'] . $req_gid; //without preview
+                    return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . '</a>';
                 } else {
-                    return '<a href="' . $url . '" class="yoxview" title="' . $tooltip_title_alt . '" target="yoxview"' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . '</a>';
+                    return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" ' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . '</a>';
                 }
             } else {
                 return '<a href="' . $url . '" title="' . $tooltip_title_alt . '" target="' . $target . '"' . $visibility_class . ' style="float:left">' . build_document_icon_tag($filetype, $path) . '</a>';

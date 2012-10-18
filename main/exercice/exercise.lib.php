@@ -803,7 +803,7 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path) {
 }
 
 //function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition) {
+function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null) {
     
     $tab_res = array();
     $course_code = api_get_course_id();

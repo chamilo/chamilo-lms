@@ -268,6 +268,7 @@ class learnpath {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
                     }
                     $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
+                    
                     if ($this->debug > 2) {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
                     }
@@ -306,7 +307,11 @@ class learnpath {
             // Setting the view in the item object.
             if (is_object($this->items[$row['id']])) {
                 $this->items[$row['id']]->set_lp_view($this->lp_view_id, $course_id);
-            }
+                if ($this->items[$row['id']]->get_type() == TOOL_HOTPOTATOES) {
+                    $this->items[$row['id']]->current_start_time = 0;
+                    $this->items[$row['id']]->current_stop_time	= 0;                    
+                }
+            }        
         }
         
         if ($this->debug > 2) {
@@ -368,6 +373,8 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
+      
+        
     }
 
     /**

@@ -73,7 +73,8 @@ $result = array(
 $convert_enc = array('%25','%0D','%0A','%09','%20','%2D','%2F','%3B','%3F','%7B','%7D','%7C','%5C','%5E','%7E','%5B','%5D','%60','%23','%3E','%3C','%22');
 $convert_dec = array('%',"\r","\n","\t",' ','-','/',';','?','{','}','|','\\','^','~','[',']','`','#','>','<','"');
 $crlf = "\r\n";
-$tab = "\t";
+//$tab = "\t";
+$tab = "";
 $s_ec = 'error='; //string for error code
 $s_et = 'error_text='; //string for error text
 $s_ad = 'aicc_data='; //string for aicc_data
@@ -98,7 +99,8 @@ if (!empty($_REQUEST['command'])) {
             }
             $error_code = 0;
             $error_text = $errors[$error_code];
-            $result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
+            //$result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad.$crlf;
+            $result = $s_ec.$error_code.$crlf.$s_et.$error_text.$crlf.$s_ad;
             $result .= '[Core]'.$crlf;
             $result .= $tab.'Student_ID='.$_user['user_id'].$crlf;
             $result .= $tab.'Student_Name='.api_get_person_name($_user['firstName'], $_user['lastName']).$crlf;
@@ -123,7 +125,7 @@ if (!empty($_REQUEST['command'])) {
             //$result .= '[Student_Preferences]'.$crlf;
 
             //error_log('Returning message: '.$result,0);
-            $result = str_replace($convert_dec, $convert_enc, $result);
+            //$result = str_replace($convert_dec, $convert_enc, $result);
             //error_log('Returning message (encoded): '.$result,0);
             break;
         case 'putparam':

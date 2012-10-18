@@ -303,6 +303,9 @@ $column_model_courses   = array(
     array('name'=>'lp_count',           'index'=>'lp_count',            'width'=>'180px',  'align'=>'left',  'sortable'=>'true')
 );
 
+$extra_params_courses['height'] = '100%'; 
+$extra_params_courses['autowidth'] = 'true'; //use the width of the parent
+
 //$extra_params_courses['gridview'] = "false";
 /*$extra_params_courses['rowNum'] = 9000;
 

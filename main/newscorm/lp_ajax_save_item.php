@@ -36,8 +36,7 @@ require_once 'back_compat.inc.php';
  * @param   string  Core exit SCORM string
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
-    global $_configuration;
-    $debug = 5;
+    global $_configuration;    
     $return = '';
     if ($debug > 0) { error_log('In save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions) > 0 ? $interactions[0] : '').'","'.$core_exit.'")', 0); }
     
@@ -74,7 +73,6 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     
     if ($prereq_check === true) { 
         // Launch the prerequisites check and set error if needed
-
         //$mylpi =& $mylp->items[$item_id];
         //$mylpi->set_lp_view($view_id);
         if (isset($max) && $max != -1)  {
@@ -117,8 +115,10 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($time == intval(strval($time)) && $time > 1000000) {
                 $real_time = time() - $time;
                 //$real_time += $mylpi->get_total_time();
+                if ($debug > 1) { error_log('Calling $real_time '.$real_time.' ', 0); }
                 $mylpi->set_time($real_time, 'int');
             } else {
+                if ($debug > 1) { error_log('Calling $time '.$time.' ', 0); }
                 $mylpi->set_time($time);
             }
             if ($debug > 1) { error_log('Done calling set_time from xajax - now '.$mylpi->get_total_time(), 0); }

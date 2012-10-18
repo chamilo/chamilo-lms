@@ -1017,6 +1017,17 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     }
         
+    if (!$is_platformAdmin) {
+        if (!$is_courseMember && isset($_course['registration_code']) && !empty($_course['registration_code'])) {
+            $is_courseMember    = false;
+            $is_courseAdmin     = false;
+            $is_courseTutor     = false;
+            $is_courseCoach     = false;
+            $is_sessionAdmin    = false;
+            $is_allowed_in_course = false;
+        }
+    }
+           
     // check the session visibility
     if ($is_allowed_in_course == true) {
 
@@ -1055,31 +1066,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
     $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
 }
-
-/*  GROUP INIT */
-/*
-if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) {
-    // session data refresh requested    
-    if ($gidReq && $_cid && !empty($_course['real_id'])) { // have keys to search data
-        $group_table = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
-            $gpData = Database::fetch_array($result);
-            $_gid = $gpData ['id'];
-            Session::write('_gid',$_gid);
-        } else {
-            Session::erase('_gid');
-        }
-    } elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
-        Session::erase('_gid');
-    }
-} elseif (isset($_SESSION['_gid'])) { // continue with the previous values
-    $_gid = $_SESSION['_gid'];
-} else { //if no previous value, assign caracteristic undefined value
-    $_gid = -1;
-}
-*/
 
 //set variable according to student_view_enabled choices
 if (api_get_setting('student_view_enabled') == "true") {

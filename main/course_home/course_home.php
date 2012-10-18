@@ -153,10 +153,6 @@ if ($_GET['action'] == 'subscribe') {
         if (!empty($msg)) {
             $show_message .= Display::return_message(get_lang($msg));
         }
-//    } else {
-        // @todo The message should be improved here to make it clear that
-        // the subscription was not effective
-        //api_not_allowed(true);
     }
 }
 

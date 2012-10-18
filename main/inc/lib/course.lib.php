@@ -3820,9 +3820,9 @@ class CourseManager {
         if (!isset($course['real_id']) && empty($course['real_id'])) {
             $course = api_get_course_info($course['code']);
         }
-        
+                
         $is_admin = api_is_platform_admin_by_id($uid);
-        $options =  array();
+        $options = array();
         
         // Register button
         if (!api_is_anonymous($uid) && 
@@ -3838,10 +3838,10 @@ class CourseManager {
         }
         
         // Go To Course button (only if admin, if course public or if student already subscribed)
-        if ($is_admin
-          || $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
-          || (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-          || (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+        if ($is_admin || 
+            $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
+            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) || 
+            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)            
         ) {
             $options[]=  'enter';
         }

@@ -57,11 +57,6 @@ class GroupManager {
     CONST GROUP_TOOL_WIKI = 5;
     CONST GROUP_TOOL_CHAT = 6;
     
-    
-    
-    
-    
-    
 	//GROUP FUNCTIONS
 	private function __construct() {		
 	}
@@ -72,8 +67,7 @@ class GroupManager {
         
         $sql = "SELECT * FROM $table_group WHERE c_id = $course_id ";
         $result = Database::query($sql);
-        return Database::store_result($result, 'ASSOC');
-            
+        return Database::store_result($result, 'ASSOC');            
     }
     
 	/**
@@ -122,13 +116,10 @@ class GroupManager {
 						g.self_registration_allowed,
 						g.self_unregistration_allowed,
 						g.session_id,
-						ug.user_id is_member,
-						COUNT(ug2.id) number_of_members
+						ug.user_id is_member						
 					FROM ".$table_group." g
 					LEFT JOIN ".$table_group_user." ug
-					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id
-					LEFT JOIN ".$table_group_user." ug2
-					ON ug2.group_id = g.id AND ug2.c_id = $course_id";
+					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
 		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $_SESSION['studentview'] == 'studentview') {
 			$sql = "SELECT g.id,
 						g.name,
@@ -139,13 +130,10 @@ class GroupManager {
 						g.self_registration_allowed,
 						g.self_unregistration_allowed,
 						g.session_id,
-						ug.user_id is_member,
-						COUNT(ug2.id) number_of_members
+						ug.user_id is_member						
 					FROM ".$table_group." g
 					LEFT JOIN ".$table_group_user." ug
-					ON ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id
-					LEFT JOIN ".$table_group_user." ug2  
-					ON ug2.group_id = g.id AND ug2.c_id = $course_id";			
+					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";			
 		}
 				
 		$sql .= " WHERE 1=1 ";
@@ -171,26 +159,28 @@ class GroupManager {
 			return array();
 		}
 
-		$groups = array ();
+		$groups = array();
 		$thisGroup= array();
-			while ($thisGroup = Database::fetch_array($groupList)) {
-				if ($thisGroup['category_id'] == self::VIRTUAL_COURSE_CATEGORY) {
-					$sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
-					$obj = Database::fetch_object(Database::query($sql));
-					$thisGroup['name'] = $obj->title;
-				}
-				
-				if($thisGroup['session_id']!=0) {
-					$sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
-					$rs_session = Database::query($sql_session);
-					if (Database::num_rows($rs_session)>0) {
-						$thisGroup['session_name'] = Database::result($rs_session,0,0);
-					} else {
-						//the session has probably been removed, so the group is now orphaned
-					}
-				}
-				$groups[] = $thisGroup;
+        while ($thisGroup = Database::fetch_array($groupList)) {
+            /*if ($thisGroup['category_id'] == self::VIRTUAL_COURSE_CATEGORY) {
+                $sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
+                $obj = Database::fetch_object(Database::query($sql));
+                $thisGroup['name'] = $obj->title;
+            }*/
 
+            $thisGroup['number_of_members'] = count(GroupManager::get_subscribed_users($thisGroup['id']));
+            //$thisGroup['number_of_members'] = GroupManager::get_subscribed_users($category);
+
+            if ($thisGroup['session_id']!=0) {
+                $sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
+                $rs_session = Database::query($sql_session);
+                if (Database::num_rows($rs_session)>0) {
+                    $thisGroup['session_name'] = Database::result($rs_session,0,0);
+                } else {
+                    //the session has probably been removed, so the group is now orphaned
+                }
+            }
+            $groups[] = $thisGroup;
 		}
 		return $groups;
 	}
@@ -772,7 +762,7 @@ class GroupManager {
 	 * @param int $group_id The group
          * @return array list of user id
 	 */
-	public static function get_users ($group_id, $load_extra_info = false) {
+	public static function get_users($group_id, $load_extra_info = false) {
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
 		$course_id = api_get_course_int_id();
@@ -789,7 +779,7 @@ class GroupManager {
 		return $users;
 	}
     
-    public function get_members_and_tutors($group_id) {
+    public static function get_members_and_tutors($group_id) {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $tutor_user_table = Database :: get_course_table(TABLE_GROUP_TUTOR);
         $course_id = api_get_course_int_id();
@@ -806,8 +796,7 @@ class GroupManager {
 		$res = Database::query($sql);		
 		while ($obj = Database::fetch_object($res)) {            
             $users[] = api_get_user_info($obj->user_id);            
-		}
-        
+		}        
 		return $users;        
     }
         

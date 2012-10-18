@@ -31,26 +31,24 @@ $content = ReadFileCont($full_file_path.$user_id.'.t.html');
 if ($content == '') {
 	$content = ReadFileCont($full_file_path);
 	$mit = "function Finish(){";
-	$js_content = "var SaveScoreVariable = 0; \n".
-				"function mySaveScore()\n".
-				"{\n". 
-				"   if (SaveScoreVariable==0)\n".
-				"		{\n".
-				"			SaveScoreVariable = 1;\n".
-				"			if (C.ie)\n".
-				"			{\n".
-				"				document.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score=\"+Score;\n".
-				"				//window.alert(Score);\n".
-				"			}\n".
-				"			else\n".
-				"			{\n".
-				"				window.location.href = \"".api_get_path(WEB_PATH)."main/exercice/"."savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score=\"+Score;\n".
-				"			}\n".
-				"		}\n".
-				"}\n".
-				"// Must be included \n".
-				"function Finish(){\n".
-				" mySaveScore();";
+	$js_content = "
+        //Code added - start
+        var SaveScoreVariable = 0;   
+        function mySaveScore() {            
+            if (SaveScoreVariable==0) {
+                SaveScoreVariable = 1;
+                    if (C.ie) {
+                        document.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+						//window.alert(Score);
+                    } else {
+                        window.location.href = '".api_get_path(WEB_PATH)."main/exercice/savescores.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&time=".Security::remove_XSS($time)."&test=".$doc_url."&uid=".$user_id."&cid=".$cid."&score='+Score;
+                    }
+						}
+				}				
+				function Finish(){
+                    mySaveScore();
+        //Code added - end
+    ";
 
 	$newcontent = str_replace($mit, $js_content, $content);
 	$prehref = "<!-- BeginTopNavButtons -->";
@@ -67,49 +65,44 @@ if ($content == '') {
 WriteFileCont($full_file_path.$user_id.'.t.html', $newcontent);
 $doc_url = GetFolderPath($doc_url).urlencode(basename($doc_url));
 
-// Adjustung the header's height according to the current visual theme.
-// This is not the elegant solution, but it helps for the moment.
-$header_heights = array(
-	'academica' => 105,
-	'baby_orange' => 105,
-	'blue_lagoon' => 105,
-	'chamilo' => 178,
-	'chamilo_electric_blue' => 178,
-	'chamilo_green' => 178,
-	'chamilo_orange' => 178,
-	'chamilo_red' => 178,
-	'cool_blue' => 105,
-	'corporate' => 105,
-	'cosmic_campus' => 178,
-	'delicious_bordeaux' => 105,
-	'dokeos_blue' => 105,
-	'dokeos_classic' => 105,
-	'dokeos_classic_2D' => 105,
-	'empire_green' => 105,
-	'fruity_orange' => 105,
-	'medical' => 130,
-	'public_admin' => 130,
-	'royal_purple' => 105,
-	'silver_line' => 105,
-	'sober_brown' => 130,
-	'steel_grey' => 105,
-	'tasty_olive' => 105
-);
-$header_height = $header_heights[api_get_visual_theme()];
-if (empty($header_height)) {
-	$header_height = 178;
+$documentPath= api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$my_file = Security::remove_XSS($_GET['file']);
+$my_file = str_replace(array('../','\\..','\\0','..\\'),array('','','',''),urldecode($my_file));
+
+$title = GetQuizName($my_file,$documentPath);
+if ($title =='') {
+	$title = basename($my_file);
+}
+$nameTools = $title;
+$noPHP_SELF=true;
+if (isset($_SESSION['gradebook'])){
+	$gradebook=	$_SESSION['gradebook'];
 }
 
-?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
-<title><?php echo get_lang('Exercices').' - '.api_get_software_name(); ?></title>
-</head>
-<?php
+if (!empty($gradebook) && $gradebook=='view') {
+	$interbreadcrumb[]= array (
+			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+			'name' => get_lang('ToolGradebook')
+		);
+}
+$htmlHeadXtra[]  = '
+<script>
+    var height = window.innerHeight;
+    $(document).ready( function(){
+        $("iframe").css("height", height)
+    });
+</script>';
+
+$interbreadcrumb[]= array ("url"=>"./exercice.php", "name"=> get_lang('Exercices'));
+if ($origin == 'learnpath') {
+    Display::display_reduced_header($nameTools,"Exercise");
+} else {
+    Display::display_header($nameTools,"Exercise");
+}
+$url = $document_web_path.$doc_url.$user_id.'.t.html?time='.Security::remove_XSS($time);
+echo '<iframe id="hotpotatoe" width="100%" frameborder="0" src="'.$url.'"><iframe>';
+exit;
+
 
 if ($origin!='learnpath') {
 	?>
@@ -128,8 +121,7 @@ if ($origin!='learnpath') {
 } else {
 	?>
 	<script>
-		s='<?php echo $document_web_path.$doc_url.$user_id; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';
-		//document.write(s);
+		s='<?php echo $document_web_path.$doc_url.$user_id; ?>.t.html?time=<?php echo Security::remove_XSS($time); ?>';		
 		window.location=s;
 	</script>
 	<?php

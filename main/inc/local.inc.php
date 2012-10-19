@@ -751,7 +751,9 @@ if (isset($cidReset) && $cidReset) {
                 $gpData = Database::fetch_array($result);
                 $_gid = $gpData ['id'];
                 Session::write('_gid', $_gid);
+            }
         }
+        
         if (!isset($_SESSION['login_as'])) {
             $save_course_access = true;
 

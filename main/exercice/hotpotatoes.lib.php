@@ -108,6 +108,9 @@ function SetComment($path, $comment) {
  * @return   string    The file contents or false on security error
  */
 function ReadFileCont($full_file_path) {
+    if (empty($full_file_path)) {
+        return false;
+    }
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH))) {
         if (is_file($full_file_path)) {
             if (!($fp = fopen(urldecode($full_file_path), 'r'))) {

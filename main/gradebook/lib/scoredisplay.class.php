@@ -245,10 +245,37 @@ class ScoreDisplay
 			}
 			$sql .= "(NULL, '".$display['score']."', '".Database::escape_string($display['display'])."', ".$category_id.", ".intval($scorecolpercent).")";
 			$count++;
-		}
-        
+		}        
 		Database::query($sql);
 	}
+    
+    public function insert_defaults($category_id) {
+        if (empty($category_id)) {
+            return false;
+        }
+        
+        //Get this from DB settings
+        $display = array(
+            50 => get_lang('GradebookFailed'),
+            60 => get_lang('GradebookPoor'),
+            70 => get_lang('GradebookFair'),
+            80 => get_lang('GradebookGood'),
+            90 => get_lang('GradebookOutstanding'),
+            100 => get_lang('GradebookExcellent')            
+        );
+        
+        $tbl_display = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
+        foreach($display as $value => $text) {
+            $params = array(
+                'score' => $value,
+                'display' => $text,
+                'category_id' => $category_id,
+                'score_color_percent' => 0,
+            );
+            Database::insert($tbl_display, $params);            
+        }
+        Database::query($sql);        
+    }
     
     public function get_number_decimals() {
         $number_decimals = api_get_setting('gradebook_number_decimals');        

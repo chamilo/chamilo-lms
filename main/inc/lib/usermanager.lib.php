@@ -3265,17 +3265,17 @@ class UserManager {
 		// variable initialisation
 		$course_list_sql = '';
 		$course_list = array();
-		if(!empty($code_special_courses)){
+		if(!empty($code_special_courses)) {
 			$course_list_sql = "SELECT course.code k, course.directory d, course.visual_code c, course.db_name db, course.title i, course.tutor_name t, course.course_language l, course_rel_user.status s, course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-											FROM    ".$tbl_course_user." course_rel_user
-											LEFT JOIN ".$tbl_course." course
-											ON course.code = course_rel_user.course_code
-											LEFT JOIN ".$tbl_user_course_category." user_course_category
-											ON course_rel_user.user_course_cat = user_course_category.id
-											$join_access_url
-											WHERE  $code_special_courses $where_access_url
-											GROUP BY course.code
-											ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
+                                FROM    ".$tbl_course_user." course_rel_user
+                                LEFT JOIN ".$tbl_course." course
+                                ON course.code = course_rel_user.course_code
+                                LEFT JOIN ".$tbl_user_course_category." user_course_category
+                                ON course_rel_user.user_course_cat = user_course_category.id
+                                $join_access_url
+                                WHERE  $code_special_courses $where_access_url
+                                GROUP BY course.code
+                                ORDER BY user_course_category.sort,course.title,course_rel_user.sort ASC";
 			$course_list_sql_result = Database::query($course_list_sql);
 			while ($result_row = Database::fetch_array($course_list_sql_result)) {
 				$course_list[] = $result_row;
@@ -3728,6 +3728,17 @@ class UserManager {
         $user_id = intval($user_id);
         if (self::is_admin($user_id)) {
             $sql = "DELETE FROM $table_admin WHERE user_id = '".$user_id."'";
+            Database::query($sql);
+        }
+    }
+    
+    static function update_all_user_languages($from, $to) {
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $from = Database::escape_string($from);
+        $to = Database::escape_string($to);
+        
+        if (!empty($to) && !empty($from)) {
+            $sql = "UPDATE $table_user SET language = '$to' WHERE language = '$from'";
             Database::query($sql);
         }
     }

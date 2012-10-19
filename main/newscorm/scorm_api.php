@@ -39,6 +39,7 @@ require_once 'scorm.class.php';
 $file							= (empty($_SESSION['file'])?'':$_SESSION['file']);
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
+
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item',0);
     exit;
@@ -209,12 +210,12 @@ $(document).ready( function() {
   $("#content_id").load( function() {
 
     // Add a right margin see BT#1607
-    if (frames['content_name']) {
+    /*if (frames['content_name']) {
         // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
         try {
             frames['content_name'].document.body.style.margin="0 12px 0px 5px";
         } catch (ex) { }
-    }
+    }*/
     olms.info_lms_item[0]=olms.info_lms_item[1];
 
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
@@ -1539,22 +1540,21 @@ function switch_item(current_item, next_item){
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-        params='';
-        params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
-        params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
-        params += '&status='+lesson_status+'&t='+session_time;
-        params += '&suspend='+suspend_data+'&loc='+lesson_location;
-        params += '&core_exit='+lms_item_core_exit;
-        if ( olms.lms_lp_type==1) {
-          $.ajax({
+    params='';
+    params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
+    params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
+    params += '&status='+lesson_status+'&t='+session_time;
+    params += '&suspend='+suspend_data+'&loc='+lesson_location;
+    params += '&core_exit='+lms_item_core_exit;
+    if ( olms.lms_lp_type == 1) {
+        $.ajax({
             type:"POST",
             data: params,
             url: "lp_ajax_save_item.php",
             dataType: "script",
             async: false
-            }
-        );
-       }
+        });
+    }
 }
 /**
  * Save a SCORM item's variables, getting its SCORM values from
@@ -1764,8 +1764,10 @@ function attach_glossary_into_scorm(type) {
         return false;
     }
     //logit_lms('attach_glossary_into_scorm', 0);
-    var doc = f.contentWindow ? f.contentWindow.document :
-    f.contentDocument ? f.contentDocument : f.document;
+    
+    try {
+        var doc = f.contentWindow ? f.contentWindow.document : f.contentDocument ? f.contentDocument : f.document;
+    } catch (ex) { }    
 
     var $frame_content = $('body',doc);
     var my_text=$frame_content.html();

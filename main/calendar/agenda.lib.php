@@ -693,13 +693,9 @@ class Agenda {
     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
     * @return html code
     */
-    function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array()) {
+    static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array()) {
         $html = '<select id="users_to_send_id" data-placeholder="'.get_lang('Select').'" name="users_to_send[]" multiple="multiple" style="width:250px" class="chzn-select">';
     
-        // adding the groups to the select form        
-        if (isset($to_already_selected) && $to_already_selected==='everyone') {            
-        }        
-        
         $html .=  '<option value="everyone">'.get_lang('Everyone').'</option>';
         
         if (is_array($group_list)) {
@@ -737,6 +733,52 @@ class Agenda {
         return $html; 
     }
     
+    static function construct_not_selected_select_form_validator($form, $group_list = null, $user_list = null, $to_already_selected = array()) {
+               
+        $params = array(
+            'id' => 'users_to_send_id',
+            'data-placeholder'=> get_lang('Select'), 
+            'multiple' => 'multiple', 
+            'style' => 'width:250px', 
+            'class' => 'chzn-select'
+        );
+        
+        $select = $form->addElement('select', 'users_to_send', get_lang('To'), null, $params);
+        
+        $select->addOption(get_lang('Everyone'), 'everyone');
+        
+        $options = array();
+        if (is_array($group_list)) {            
+            foreach ($group_list as $this_group) {                
+                if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
+                    // $to_already_selected is the array containing the groups (and users) that are already selected
+                    $count_users = isset($this_group['count_users']) ? $this_group['count_users'] : $this_group['userNb']; 
+                    $count_users = " &ndash; $count_users ".get_lang('Users');                    
+                    $options[] = array('text' => $this_group['name'].$count_users, 'value' => "GROUP:".$this_group['id']);                    
+                }
+            }            
+            $select->addOptGroup($options, get_lang('Groups'));
+            $html .= '</optgroup>';            
+        }
+        
+        // adding the individual users to the select form
+        if (is_array($group_list)) {
+            $options = array();
+            foreach ($user_list as $this_user) {
+                // $to_already_selected is the array containing the users (and groups) that are already selected
+                if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'],$to_already_selected)) {
+                    //$username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+                    // @todo : add title attribute $username in the jqdialog window. wait for a chosen version to inherit title attribute
+                    // from <option> to <li>
+                    //$html .= '<option title="'.$username.'" value="USER:'.$this_user['user_id'].'">'.api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].') </option>';
+                    $options[] = array('text' => api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')', 
+                                       'value' => "USER:".$this_user['user_id']);                    
+                }
+            }        
+            $select->addOptGroup($options, get_lang('Users'));
+        }
+    }
+    
     /**
     * This function separates the users from the groups
     * users have a value USER:XXX (with XXX the dokeos id
@@ -770,6 +812,83 @@ class Agenda {
             
         }
         return $send_to;
+    }
+   
+    static function show_form($params = array()) {
+        $form = new FormValidator('add_event', 'POST', api_get_self().'?'.api_get_cidreq(), null, array('enctype' => 'multipart/form-data'));
+        $id = isset($params['id']) ? $params['id'] : null;
+        
+        if ($id) {
+            $form_title = get_lang('ModifyCalendarItem');
+            $button = get_lang('ModifyEvent');            
+        } else {
+            $form_title = get_lang('AddCalendarItem');
+            $button = get_lang('AgendaAdd');
+        }
+  
+        $form->addElement('header', $form_title);
+        $form->addElement('hidden', 'id', $id);
+        $form->addElement('hidden', 'action', $params['action']);
+        $form->addElement('hidden', 'id_attach', $params['id_attach']);
+        
+        $form->addElement('text', 'title', get_lang('ItemTitle'));
+        
+        $group_id = api_get_group_id();
+        
+        if (isset ($group_id) && !empty($group_id)) {
+            $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$group_id.'");    
+            $form->addElement('hidden', 'to', 'true');    
+        } else {
+            self::show_to_form($form, $to);            
+        }
+        
+        $form->addElement('text', 'start_date', get_lang('StartDate'));
+        $form->addElement('text', 'end_date', get_lang('EndDate'));
+        
+        if (empty($id)) {
+            $form->addElement('advanced_settings', '<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
+                                   <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
+                                </a>');
+            $form->addElement('html', '<div style="display:block">');
+            
+            $form->addElement('checkbox', 'repeat', null, get_lang('RepeatEvent'));
+            
+            $repeat_events = array(
+                'daily' => get_lang('RepeatDaily'),
+                'weekly' => get_lang('RepeatWeekly'),
+                'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
+                'yearly' => get_lang('RepeatYearly')                
+            );
+            
+            $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $repeat_events);            
+            $form->addElement('text', 'repeat_end_day', get_lang('RepeatEnd'));            
+            $form->addElement('html', '</div>');
+            
+            if(!api_is_allowed_to_edit(null,true)) {
+                $toolbar = 'AgendaStudent';
+            } else {
+                $toolbar = 'Agenda';
+            }            
+            //$form->addElement('html_editor', 'content', get_lang('Description'), null, array('ToolbarSet' => $toolbar, 'Width' => '100%', 'Height' => '200'));
+            
+            $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
+            $form->addElement('text', 'file_comment', get_lang('Comment'));
+        }
+        
+        $form->addElement('button', 'submit', $button);        
+        $form->display();
+    }
+    
+    
+    static function show_to_form($form, $to_already_selected) {        
+        $order = 'lastname';
+        if (api_is_western_name_order) {
+            $order = 'firstname';    
+        }
+        $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);    
+        $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+
+        self::construct_not_selected_select_form_validator($form, $group_list, $user_list, $to_already_selected);
     }
     
 	

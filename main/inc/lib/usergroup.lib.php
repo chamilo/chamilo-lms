@@ -92,10 +92,11 @@ class UserGroup extends Model {
     }
     
     public function get_usergroup_not_in_course($options = array()) {        
-        $sql = "SELECT DISTINCT u.* FROM {$this->usergroup_rel_course_table} usergroup 
+        $sql = "SELECT DISTINCT * 
+                FROM {$this->usergroup_rel_course_table} urc
                 RIGHT JOIN {$this->table} u 
-                ON (u.id = usergroup.usergroup_id)                
-               ";                
+                ON (u.id = urc.usergroup_id)                
+               ";              
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
         $result = Database::query($sql);
@@ -294,7 +295,7 @@ class UserGroup extends Model {
      * @param   int     usergroup id
      * @param   array   list of user ids
      */
-    function subscribe_users_to_usergroup($usergroup_id, $list) {
+    function subscribe_users_to_usergroup($usergroup_id, $list, $delete_users_not_present_in_list = true) {
         $current_list = self::get_users_by_usergroup($usergroup_id);
         $course_list  = self::get_courses_by_usergroup($usergroup_id);
         $session_list = self::get_sessions_by_usergroup($usergroup_id);
@@ -309,17 +310,18 @@ class UserGroup extends Model {
                 }
             }
         }
+        
         if (!empty($current_list)) {
             foreach($current_list as $user_id) {
         	   if (!in_array($user_id, $list)) {
                     $delete_items[] = $user_id;
                 }
             }
-        }
+        }        
 
         //Deleting items
-        if (!empty($delete_items)) {
-            foreach($delete_items as $user_id) {
+        if (!empty($delete_items) && $delete_users_not_present_in_list) {
+            foreach ($delete_items as $user_id) {
                 //Removing courses
                 if (!empty($course_list)) {
                     foreach($course_list as $course_id) {

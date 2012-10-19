@@ -478,7 +478,8 @@ $(document).ready(function() {
                     <h3>{{ "Legend"|get_lang }}</h3>                
                 </div>
                 <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br /><br />
-                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br />                
+                <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br /><br />
+                <div><a class="btn btn-small" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a></div>
             </div>                
         </div>
             

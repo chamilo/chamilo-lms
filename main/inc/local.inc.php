@@ -296,7 +296,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                         exit;
                                     }
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want
-                                    //var_dump($current_access_url_id, $my_url_list); exit;
                                     if (in_array(1, $my_url_list)) { //Check if this admin have the access_url_id = 1 which means the principal
                                         ConditionalLogin::check_conditions($uData);
                                         $_user['user_id'] = $uData['user_id'];
@@ -745,6 +744,13 @@ if (isset($cidReset) && $cidReset) {
 
         if (!empty($_REQUEST['gidReq'])) {
             $_SESSION['_gid'] = intval($_REQUEST['gidReq']);        
+            $group_table = Database::get_course_table(TABLE_GROUP);
+            $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
+            $result = Database::query($sql);
+            if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
+                $gpData = Database::fetch_array($result);
+                $_gid = $gpData ['id'];
+                Session::write('_gid', $_gid);
         }
         if (!isset($_SESSION['login_as'])) {
             $save_course_access = true;
@@ -808,10 +814,11 @@ if (isset($cidReset) && $cidReset) {
 }
 
 // if the requested group is different from the group in session
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : '';
+/*
+$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;
 if (isset($gidReq) && $gidReq != $gid) {
     $gidReset = true;
-}
+}*/
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
@@ -1003,6 +1010,16 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
         }
     }
         
+    if (!$is_platformAdmin) {
+        if (!$is_courseMember && isset($_course['registration_code']) && !empty($_course['registration_code'])) {
+            $is_courseMember    = false;
+            $is_courseAdmin     = false;
+            $is_courseTutor     = false;
+            $is_courseCoach     = false;
+            $is_sessionAdmin    = false;
+            $is_allowed_in_course = false;
+        }
+    }
     // check the session visibility
     if ($is_allowed_in_course == true) {
 
@@ -1040,29 +1057,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     $is_courseCoach       = isset($_SESSION ['is_courseCoach']) ? $_SESSION ['is_courseCoach'] : false;
     $is_courseMember      = isset($_SESSION ['is_courseMember']) ? $_SESSION ['is_courseMember'] : false;
     $is_allowed_in_course = isset($_SESSION ['is_allowed_in_course']) ? $_SESSION ['is_allowed_in_course'] : false;
-}
 
-/*  GROUP INIT */
-
-if ((isset($gidReset) && $gidReset) || (isset($cidReset) && $cidReset)) { // session data refresh requested
-    if ($gidReq && $_cid && !empty($_course['real_id'])) { // have keys to search data
-        $group_table = Database::get_course_table(TABLE_GROUP);
-        $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
-            $gpData = Database::fetch_array($result);
-            $_gid = $gpData ['id'];
-            Session::write('_gid',$_gid);
-        } else {
-            Session::erase('_gid');
-        }
-    } elseif (isset($_SESSION['_gid']) or isset($_gid)) { // Keys missing => not anymore in the group - course relation
-        Session::erase('_gid');
-    }
-} elseif (isset($_SESSION['_gid'])) { // continue with the previous values
-    $_gid = $_SESSION ['_gid'];
-} else { //if no previous value, assign caracteristic undefined value
-    $_gid = -1;
 }
 
 //set variable according to student_view_enabled choices

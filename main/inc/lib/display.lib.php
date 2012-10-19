@@ -1269,7 +1269,7 @@ class Display {
 			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
 			
-        $html .= Display::span(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id));			
+        $html .= Display::span(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));			
         $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
 		
         if ($add_div_wrapper) {

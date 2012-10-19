@@ -709,23 +709,14 @@ class IndexManager {
 		return $html;
 	}
     
-    function return_user_image_block() {
-        	
-		//Always show the user image
-		$img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
-		$no_image = false;
-		if ($img_array['file'] == 'unknown.jpg') {
-			$no_image = true;
-		}
-		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-		
+    function return_user_image_block() {		
+		$img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);		
+		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');		
         if (api_get_setting('allow_social_tool') == 'true') {
-            if (!$no_image) {
-				$profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
-			} else {
-				$profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
-			}
-		}        
+            $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
+        } else {
+            $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
+        }		     
         $html = self::show_right_block(null, $profile_content, 'user_image_block', array('style' => 'text-align:center;'));
         return $html;
     }

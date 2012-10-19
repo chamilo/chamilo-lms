@@ -5,13 +5,12 @@
 * This file contains additional dropbox functions. Initially there were some
 * functions in the init files also but I have moved them over
 * to one file 		-- Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya adding c_id support
 */
-
-//require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#category_title").focus();
 }
@@ -308,9 +307,10 @@ function get_dropbox_categories($filter = '') {
  * @return array The details of this category
  */
 function get_dropbox_category($id) {
-    global $dropbox_cnf;    
+    global $dropbox_cnf;
+    $course_id = api_get_course_int_id();
     if (empty($id) or $id != intval($id)) { return array(); }    
-    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE cat_id='".$id."'";
+    $sql = "SELECT * FROM ".$dropbox_cnf['tbl_category']." WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
     if ($res === false) {
         return array();
@@ -657,15 +657,17 @@ function removeUnusedFiles() {
     // select all files that aren't referenced anymore
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM " . dropbox_cnf('tbl_file') . " f
-			LEFT JOIN " . dropbox_cnf('tbl_person') . " p ON f.id = p.file_id
-			WHERE f.c_id = $course_id AND p.c_id = $course_id AND p.user_id IS NULL";
+			LEFT JOIN " . dropbox_cnf('tbl_person') . " p 
+            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id )
+			WHERE p.user_id IS NULL";
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
+        
 		//delete the selected files from the post and file tables
         $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id='" . $res['id'] . "'";
-        $result1 = Database::query($sql);
+        Database::query($sql);
         $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id='" . $res['id'] . "'";
-        $result1 = Database::query($sql);
+        Database::query($sql);
 
 		//delete file from server
         @unlink( dropbox_cnf('sysPath') . '/' . $res['filename']);
@@ -691,9 +693,8 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
     $mailingPseudoId = intval($mailingPseudoId);
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
-			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON f.id = p.file_id
-			WHERE f.c_id = $course_id AND p.c_id = $course_id AND
-			p.dest_user_id = '" . $mailingPseudoId . "'";
+			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result)))
@@ -725,11 +726,11 @@ function removeMoreIfMailing($file_id) {
 	    $mailingPseudoId = $res['dest_user_id'];
 	    if ($mailingPseudoId > dropbox_cnf('mailingIdBase')) {
 	        $sql = "DELETE FROM " . dropbox_cnf('tbl_person') . " WHERE c_id = $course_id AND user_id='" . $mailingPseudoId . "'";
-	        $result1 = Database::query($sql);
+	        Database::query($sql);
 
 	        $sql = "UPDATE " . dropbox_cnf('tbl_file') .
 	            " SET uploader_id='" . api_get_user_id() . "' WHERE c_id = $course_id AND uploader_id='" . $mailingPseudoId . "'";
-	        $result1 = Database::query($sql);
+	        Database::query($sql);
         }
     }
 }
@@ -744,10 +745,6 @@ function dropbox_cnf($variable) {
     return $GLOBALS['dropbox_cnf'][$variable];
 }
 
-
-/**
-*
-*/
 function store_add_dropbox() {
 	global $dropbox_cnf;
 	global $_user;
@@ -1045,6 +1042,7 @@ function store_feedback() {
 * @todo integrate some cleanup function that removes zip files that are older than 2 days
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya  Addin c_id support
 * @version march 2006
 */
 function zip_download($array) {
@@ -1056,22 +1054,20 @@ function zip_download($array) {
 
 	$sys_course_path = api_get_path(SYS_COURSE_PATH);
 
-	// zip library for creation of the zipfile
-	require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
-
 	// place to temporarily stash the zipfiles
 	$temp_zip_dir = api_get_path(SYS_COURSE_PATH);
 
-	array_map('intval', $array);
+	$array = array_map('intval', $array);
 
 	// note: we also have to add the check if the user has received or sent this file.
-	$sql = "SELECT distinct file.filename, file.title, file.author, file.description
-			FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person
-			WHERE file.c_id = $course_id AND
-			person.c_id = $course_id AND
-			file.id IN (".implode(', ',$array).")
-			AND file.id=person.file_id
-			AND person.user_id='".api_get_user_id()."'";
+	$sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description
+			FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
+            ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
+            INNER JOIN ".$dropbox_cnf['tbl_post']." post
+            ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
+			WHERE   file.id IN (".implode(', ',$array).") AND 
+                    file.id = person.file_id AND
+                    (person.user_id = '".api_get_user_id()."' OR post.dest_user_id = '".api_get_user_id()."' ) ";
 	$result = Database::query($sql);
 	$files = array();
 	while ($row = Database::fetch_array($result)) {
@@ -1084,23 +1080,6 @@ function zip_download($array) {
 	foreach ($files as $key => $value) {
 		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 	}
-
-	/*
-	 * @todo if you want the overview code fix it by yourself
-	 *
-	// Step 1: create the overview file and add it to the zip
-	$overview_file_content = generate_html_overview($files, array('filename'), array('title'));
-	$overview_file = $temp_zip_dir.'overview'.replace_dangerous_char(api_is_western_name_order() ? $_user['firstname'].' '.$_user['lastname'] : $_user['lastname'].' '.$_user['firstname'], 'strict').'.html';
-	$handle = fopen($overview_file, 'w');
-	fwrite($handle, $overview_file_content);
-	// todo: find a different solution for this because even 2 seconds is no guarantee.
-	sleep(2);*/
-
-	// Step 4: we add the overview file
-	//$zip_folder->add($overview_file, PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_COURSE_PATH).$_course['path'].'/temp');
-
-	// Step 5: send the file for download;
-
 	$name = 'dropbox-'.api_get_utc_datetime().'.zip';
 	DocumentManager::file_send_for_download($temp_zip_file, true, $name);
 	@unlink($temp_zip_file);

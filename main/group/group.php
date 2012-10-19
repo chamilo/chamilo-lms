@@ -161,22 +161,16 @@ if (api_is_allowed_to_edit(false, true)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
 	echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
-	if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP),api_get_session_id(), api_get_course_int_id()) > 0) {
-		//echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_view.gif').'&nbsp;'.get_lang('GroupOverview').'</a>&nbsp;';
+	if (CourseManager::count_rows_course_table(Database::get_course_table(TABLE_GROUP),api_get_session_id(), api_get_course_int_id()) > 0) {		
 		echo '<a href="group_overview.php?'.api_get_cidreq().'">'.Display::return_icon('group_summary.png', get_lang('GroupOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
-
 	if (api_get_setting('allow_group_categories') == 'true') {
 		echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.Display::return_icon('new_folder.png', get_lang('AddCategory'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
-		//echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('edit_group.gif').'&nbsp;'.get_lang('PropModify').'</a>&nbsp;';
-		echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('settings.png', get_lang('PropModify'),'',ICON_SIZE_MEDIUM).'</a>';
-	}
-	//echo Display::return_icon('csv.gif', get_lang('ExportAsCSV')).'<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.get_lang('ExportAsCSV').'</a> ';
-	echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';
-	//echo '<a href="group_creation.php?'.api_get_cidreq().'">'.Display::return_icon('group_add_big.gif').'&nbsp;'.get_lang('NewGroupCreate').'</a>&nbsp;';
-	echo '<a href="../user/user.php?'.api_get_cidreq().'">'.Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'),'',ICON_SIZE_MEDIUM).'</a>';
-	
+        echo '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.Display::return_icon('settings.png', get_lang('PropModify'),'',ICON_SIZE_MEDIUM).'</a>';
+	}	
+	echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.Display::return_icon('export_excel.png', get_lang('ExportAsXLS'),'',ICON_SIZE_MEDIUM).'</a>';	
+	echo '<a href="../user/user.php?'.api_get_cidreq().'">'.Display::return_icon('user.png', get_lang('GoTo').' '.get_lang('Users'),'',ICON_SIZE_MEDIUM).'</a>';	
 }
 
 $group_cats = GroupManager :: get_categories();
@@ -188,6 +182,7 @@ echo '</div>';
 /*
  * List all categories
  */
+
 
 foreach ($group_cats as $index => $category) {
 	$group_list = array ();
@@ -228,8 +223,7 @@ foreach ($group_cats as $index => $category) {
 				
 		$group_data = array();
 		
-		foreach ($group_list as $index => $this_group) {
-		    
+		foreach ($group_list as $index => $this_group) {		    
 
 			// Validacion when belongs to a session
 			$session_img = api_get_session_image($this_group['session_id'], $_user['status']);
@@ -359,11 +353,6 @@ foreach ($group_cats as $index => $category) {
 		}
 		$table->display();
 	}
-	/*
-	elseif ($in_category) {
-		echo get_lang('NoGroupsAvailable');
-	}
-	*/
 }
 
 /*	FOOTER */
@@ -371,3 +360,4 @@ foreach ($group_cats as $index => $category) {
 if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
 	Display::display_footer();
 }
+$_SESSION['_gid'] = 0;

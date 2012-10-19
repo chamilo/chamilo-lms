@@ -51,6 +51,8 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
      * @access    private
      */
     var $_options = array();
+    
+    var $_optgroups = array();
 
     /**
      * Default values of the SELECT
@@ -299,7 +301,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
      * @access    public
      * @return    void
      */
-    function addOption($text, $value, $attributes=null)
+    function addOption($text, $value, $attributes = null, $return_array = false)
     {
         if (null === $attributes) {
             $attributes = array('value' => (string)$value);
@@ -316,7 +318,31 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
             }
             $this->_updateAttrArray($attributes, array('value' => (string)$value));
         }
-        $this->_options[] = array('text' => $text, 'attr' => $attributes);
+        if ($return_array) {
+            return array('text' => $text, 'attr' => $attributes);
+        } else {
+            $this->_options[] = array('text' => $text, 'attr' => $attributes);
+        }
+    } // end func addOption
+    
+    
+        /**
+     * Adds a new OPTION to the SELECT
+     *
+     * @param     string    $text       Display text for the OPTION
+     * @param     string    $value      Value for the OPTION
+     * @param     mixed     $attributes Either a typical HTML attribute string
+     *                                  or an associative array
+     * @since     1.0
+     * @access    public
+     * @return    void
+     */
+    function addOptGroup($options, $label)
+    {        
+        foreach ($options as &$option) {
+            $option[] = $this->addOption($option['text'], $option['value'], null, true);
+        }        
+        $this->_optgroups[] = array('label' => $label, 'options' => $options);        
     } // end func addOption
 
     // }}}
@@ -508,7 +534,17 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
                 $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
                             $option['text'] . "</option>\n";
             }
-
+            
+            foreach ($this->_optgroups as $optgroup) {                
+                $strHtml .= $tabs . "\t<optgroup label=" . $optgroup['label'].">";                           
+                
+                foreach($optgroup['options'] as $option)  {
+                    $strHtml .= $tabs . "\t<option" . $this->_getAttrString($option['attr']) . '>' .
+                            $option['text'] . "</option>\n";
+                }
+                
+                $strHtml .= "</optgroup>\n";
+            }
             return $strHtml . $tabs . '</select>';
         }
     } //end func toHtml

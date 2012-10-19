@@ -106,7 +106,6 @@ if (api_get_session_id() != 0) {
     $group_member_with_upload_rights = $group_member_with_upload_rights && api_is_allowed_to_session_edit(false, true);
 }
 
-
 //Setting group variables 
 if (api_get_group_id()) {        
     // Get group info
@@ -118,20 +117,17 @@ if (api_get_group_id()) {
     if ($group_properties['doc_state'] == 2) {
         // Documents are private
         if ($is_allowed_to_edit || GroupManager :: is_user_in_group(api_get_user_id(), api_get_group_id())) {
-            // Only courseadmin or group members (members + tutors) allowed
-            $req_gid = '&amp;gidReq=' . api_get_group_id();
+            // Only courseadmin or group members (members + tutors) allowed            
             $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
             $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq=' . api_get_group_id(), 'name' => get_lang('GroupSpace') . ' ' . $group_properties['name']);
             //they are allowed to upload
             $group_member_with_upload_rights = true;
         } else {
-            $to_group_id = 0;
-            $req_gid = '';
+            $to_group_id = 0;            
         }
     } elseif ($group_properties['doc_state'] == 1) {
         // Documents are public
-        $to_group_id = api_get_group_id();
-        $req_gid = '&amp;gidReq=' . api_get_group_id();
+        $to_group_id = api_get_group_id();        
         $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
         $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq=' . api_get_group_id(), 'name' => get_lang('GroupSpace') . ' ' . $group_properties['name']);
         //allowed to upload?
@@ -140,14 +136,12 @@ if (api_get_group_id()) {
             $group_member_with_upload_rights = true;
         }
     } else { // Documents not active for this group
-        $to_group_id = 0;
-        $req_gid = '';
+        $to_group_id = 0;        
     }
     $_SESSION['group_member_with_upload_rights'] = $group_member_with_upload_rights;
 } else {
     $_SESSION['group_member_with_upload_rights'] = false;
-    $to_group_id = 0;
-    $req_gid = '';
+    $to_group_id = 0;    
 }
 
 //Actions
@@ -488,22 +482,12 @@ if (isset($_GET['createdir'])) {
 }
 
 $js_path = api_get_path(WEB_LIBRARY_PATH) . 'javascript/';
-/*
-  $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'yoxview/yox.js"></script>';
-  $htmlHeadXtra[] = api_get_js('yoxview/yoxview-init.js');
- */
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="' . $js_path . 'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="' . $js_path . 'jquery-jplayer/jquery.jplayer.min.js"></script>';
 //$htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.inspector.js"></script>';
 
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH) . 'mediaplayer/player.swf';
-
-//automatic loading the course language for yoxview
-/* $yoxview_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
-  $lang_yoxview  = api_get_language_isocode();
-  $lang_yoxview = isset($yoxview_code_translation_table[$lang_yoxview]) ? $yoxview_code_translation_table[$lang_yoxview] : $lang_yoxview;
- */
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
 $count = 1;
@@ -531,16 +515,8 @@ if (!empty($docs_and_folders))
         }
     }
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready( function() {    
-	   /*
-    $(".yoxview").yoxview({ 
-        lang: "' . $lang_yoxview . '",
-        flashVideoPlayerPath: "' . $mediaplayer_path . '",
-        allowInternalLinks:true,
-        defaultDimensions: { iframe: { width: 800}},              
-    });*/
-        
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {        
     //Experimental changes to preview mp3, ogg files        
      ' . $jquery . '            
 });
@@ -928,7 +904,7 @@ if ($curdirpath != '/' && $curdirpath != $group_properties['directory'] && !$is_
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
     ?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)) . $req_gid; ?>">
+    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)); ?>">
         <?php Display::display_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM); ?></a>
     <?php
 }
@@ -944,14 +920,14 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     // Create new document
     if (!$is_certificate_mode) {
         ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
             <?php Display::display_icon('new_document.png', get_lang('CreateDoc'), '', ICON_SIZE_MEDIUM); ?></a>
         <?php
         // Create new draw
         if (api_get_setting('enabled_support_svg') == 'true') {
             if (api_browser_support('svg')) {
                 ?>
-                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
                     <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>&nbsp;
                 <?php
             } else {
@@ -962,7 +938,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         // Create new paint
         if (api_get_setting('enabled_support_pixlr') == 'true') {
             ?>
-            <a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+            <a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
                 <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM); ?></a>
             <?php
         }
@@ -971,7 +947,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		// Record an image clip from my webcam
 		if (api_get_setting('enable_webcam_clip') == 'true') {
 		?>
-			<a href="webcam_clip.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id.$req_gid; ?>">
+			<a href="webcam_clip.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
 		   	<?php Display::display_icon('webcam.png', get_lang('WebCamClip'),'',ICON_SIZE_MEDIUM); ?></a>
 		<?php
 		}	
@@ -979,7 +955,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		// Record audio (nanogong)
         if (api_get_setting('enable_nanogong') == 'true') {
             ?>
-            <a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+            <a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
                 <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
             <?php
         }
@@ -987,7 +963,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 		// Record  audio (wami record)
         if (api_get_setting('enable_wami_record') == 'true') {
             ?>
-            <a href="record_audio_wami.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>">
+            <a href="record_audio_wami.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
                 <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
             <?php
         }
@@ -997,7 +973,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             $dt2a = 'google';
             $req_dt2a = '&amp;dt2a=' . $dt2a;
             ?>
-            <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id . $req_gid . $req_dt2a; ?>">
+            <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id. $req_dt2a; ?>">
                 <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM); ?></a>
             <?php
         }
@@ -1006,22 +982,22 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
     // Create new certificate
     if ($is_certificate_mode) {
         ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
+        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
             <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM); ?></a>
         <?php
     }
     // File upload link
     if ($is_certificate_mode) {
-        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
+        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id.'">';
         echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM) . '</a>';
     } else {
-        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id . $req_gid . '">';
+        echo '<a href="upload.php?' . api_get_cidreq() . '&id=' . $current_folder_id.'">';
         echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM) . '</a>';
     }
     // Create directory
     if (!$is_certificate_mode) {
         ?>
-        <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id . $req_gid; ?>&createdir=1">
+        <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>&createdir=1">
             <?php Display::display_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM); ?></a>
         <?php
     }
@@ -1061,24 +1037,8 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
             $row[] = $document_data['path'];
         }
-
-        // Hide HotPotatoes Certificates and all css folders
-        if ($document_data['path'] == '/HotPotatoes_files' || $document_data['path'] == '/certificates' || basename($document_data['path']) == 'css') {
-            continue;
-        }
-
-        //Admin setting for Hide/Show the folders of all users
-        if (api_get_setting('show_users_folders') == 'false' && ($document_data['path'] == '/shared_folder' || strstr($document_data['path'], 'shared_folder_session_'))) {
-            continue;
-        }
-
-        //Admin setting for Hide/Show Default folders to all users
-        if (api_get_setting('show_default_folders') == 'false' && ($document_data['path'] == '/images' || $document_data['path'] == '/flash' || $document_data['path'] == '/audio' || $document_data['path'] == '/video')) {
-            continue;
-        }
-
-        //Admin setting for Hide/Show chat history folder
-        if (api_get_setting('show_chat_folder') == 'false' && $document_data['path'] == '/chat_files') {
+        
+        if (DocumentManager::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
             continue;
         }
 
@@ -1110,7 +1070,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 
         // Comments => display comment under the document name
         $display_size = format_file_size($size);
-        $row[] = '<span style="display:none;">' . $size . '</span>' . $invisibility_span_open . $display_size . $invisibility_span_close;
+        $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 
         // Last edit date
         

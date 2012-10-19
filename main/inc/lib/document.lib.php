@@ -457,8 +457,6 @@ class DocumentManager {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT     = Database::get_course_table(TABLE_DOCUMENT);
         
-        //if to_user_id = NULL -> change query (IS NULL)
-        //$to_user_id = (is_null($to_user_id)) ? 'IS NULL' : '= '.$to_user_id;
         if (!is_null($to_user_id)) {
             $to_field = 'last.to_user_id';
             $to_value = $to_user_id;
@@ -472,12 +470,7 @@ class DocumentManager {
         $to_user_id = Database::escape_string($to_user_id);
         $to_value	= Database::escape_string($to_value);
 
-        //if they can't see invisible files, they can only see files with visibility 1
-        //$visibility_bit = ' = 1';
-        //if they can see invisible files, only deleted files (visibility 2) are filtered out
-        //if ($can_see_invisible) {
         $visibility_bit = ' <> 2';
-        //}
 
         //the given path will not end with a slash, unless it's the root '/'
         //so no root -> add slash
@@ -487,9 +480,6 @@ class DocumentManager {
         $current_session_id = api_get_session_id();
         $condition_session = " AND (id_session = '$current_session_id' OR id_session = '0')";
 
-        if (!$can_see_invisible) {
-            //$condition_session = " AND (id_session = '$current_session_id' ) ";
-        }
 
         //condition for search (get ALL folders and documents)
         $sql = "SELECT  docs.id, 
@@ -505,11 +495,10 @@ class DocumentManager {
                         last.visibility, 
                         last.insert_user_id
                     FROM  ".$TABLE_ITEMPROPERTY."  AS last INNER JOIN ".$TABLE_DOCUMENT."  AS docs 
-                        ON (docs.id = last.ref AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
+                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                     WHERE
                         docs.path LIKE '".$path.$added_slash."%' AND
                         docs.path NOT LIKE '".$path.$added_slash."%/%' AND
-                        last.tool = '".TOOL_DOCUMENT."' AND
                         ".$to_field." = ".$to_value." AND 
                         last.visibility".$visibility_bit.$condition_session;
 
@@ -575,7 +564,6 @@ class DocumentManager {
                 foreach($my_repeat_ids as $id) {
                     foreach($doc_list as $row ) {
                         if ($id == $row['id']) {
-                            //var_dump($row['visibility'].' - '.$row['session_id'].' - '.$row['item_property_session_id']);
                             if ($row['visibility'] == 0 && $row['item_property_session_id'] == 0) {
                                 $delete_repeated[$id] = true;
                             }
@@ -586,17 +574,13 @@ class DocumentManager {
                     }
                 }
 
-                //var_dump($delete_repeated);
 
                 foreach($doc_list as $key=>$row) {
-                    //&& !in_array($row['id'],$my_repeat_ids)
-                    //var_dump($row['id'].' - '.$row['visibility']);
                     if (in_array($row['visibility'], array('0','2')) && !in_array($row['id'],$my_repeat_ids) ) {
                         $ids_to_remove[] = $row['id'];
                         unset($doc_list[$key]);
                     }
                 }
-                //var_dump($ids_to_remove);
 
                 foreach($document_data as $row) {
                     if (in_array($row['id'], $ids_to_remove)) {
@@ -643,19 +627,21 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
-            $sql = "SELECT DISTINCT docs.id, path FROM  ".$TABLE_ITEMPROPERTY."  AS last, ".$TABLE_DOCUMENT."  AS docs
-					WHERE 	docs.id 			= last.ref AND
+            $sql = "SELECT DISTINCT docs.id, path 
+                    FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                    ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
+					WHERE 	
 							docs.filetype 		= 'folder' AND
-							last.tool 			= '".TOOL_DOCUMENT."' AND
 							last.to_group_id	= ".$to_group_id." AND
-            				last.visibility 	<> 2 $condition_session AND
-                            last.c_id           = {$_course['real_id']} AND
-            				docs.c_id 			= {$_course['real_id']} ";
+            				last.visibility 	<> 2 $condition_session ";
 
             $result = Database::query($sql);
 
             if ($result && Database::num_rows($result) != 0) {
                 while ($row = Database::fetch_array($result, 'ASSOC')) {
+                    if (DocumentManager::is_folder_to_avoid($row['path'])) {
+                        continue;
+                    }
                     $document_folders[$row['id']] = $row['path'];
                 }
                 //sort($document_folders);
@@ -1367,7 +1353,7 @@ class DocumentManager {
      * @param string The course code
      * @return string The html content of the certificate
      */
-    function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
+    static function replace_user_info_into_html($user_id, $course_code, $is_preview = false) {
         $user_id 		= intval($user_id);
         $course_info 	= api_get_course_info($course_code);
         $tbl_document 	= Database::get_course_table(TABLE_DOCUMENT);
@@ -1626,10 +1612,14 @@ class DocumentManager {
                         $sources = $attributes[$attr];
                         foreach ($sources as $source) {
                             //skip what is obviously not a resource
-                            if (strpos($source, '+this.')) continue; //javascript code - will still work unaltered
-                            if (strpos($source, '.') === false) continue; //no dot, should not be an external file anyway
-                            if (strpos($source, 'mailto:')) continue; //mailto link
-                            if (strpos($source, ';') && !strpos($source, '&amp;')) continue; //avoid code - that should help
+                            if (strpos($source, '+this.'))
+                                continue; //javascript code - will still work unaltered
+                            if (strpos($source, '.') === false)
+                                continue; //no dot, should not be an external file anyway
+                            if (strpos($source, 'mailto:'))
+                                continue; //mailto link
+                            if (strpos($source, ';') && !strpos($source, '&amp;'))
+                                continue; //avoid code - that should help
 
                             if ($attr == 'value') {
                                 if (strpos($source , 'mp3file')) {
@@ -1881,9 +1871,7 @@ class DocumentManager {
                 '))' .
                 '|' .
             // '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
-                '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
-            $attrString,
-            $regs
+                    '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/', $attrString, $regs
             );
 
         } catch (Exception $e) {
@@ -2355,8 +2343,7 @@ class DocumentManager {
                 $content .= $line."\n";
             }
             return $content;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -2888,7 +2875,6 @@ class DocumentManager {
     					// Show the "image name" not the filename of the image.
     					if ($lp_id) {
     						//LP URL
-    						//$lp_id = $this->lp_id;
     						$url  = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' .$lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url.'&document_id='.$key;
@@ -2934,7 +2920,9 @@ class DocumentManager {
 
         if (!empty($document_data)) {
             //if admin or course teacher, allow anyway
-            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id,$course_code)) { return true; }
+            if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
+                return true;
+            }
             $course_info = api_get_course_info($course_code);
     		if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
     			$visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
@@ -3154,6 +3142,64 @@ class DocumentManager {
 
     public static function get_web_odf_extension_list(){
         return array('ods', 'odt');
+    }
+    public static function is_folder_to_avoid($path, $is_certificate_mode = false) {
+        $folders_to_avoid = array(
+            '/HotPotatoes_files',
+            '/certificates',
+        );
+
+        if (basename($path) == 'css') {
+            return true;
+        }
+
+        //Skip hotpotatoes results
+        if (strstr($path, 'HotPotatoes_files')) {
+            return true;
+        }
+
+        if ($is_certificate_mode == false) {
+            //Certificate results
+            if (strstr($path, 'certificates')) {
+                return true;
+            }
+        }
+
+        //Admin setting for Hide/Show the folders of all users
+        if (api_get_setting('show_users_folders') == 'false') {
+            $folders_to_avoid[] = '/shared_folder';
+
+            if (strstr($path, 'shared_folder_session_')) {
+                return true;
+            }
+        }
+
+        //Admin setting for Hide/Show Default folders to all users
+        if (api_get_setting('show_default_folders') == 'false') {
+            $folders_to_avoid[] = '/images';
+            $folders_to_avoid[] = '/flash';
+            $folders_to_avoid[] = '/audio';
+            $folders_to_avoid[] = '/video';
+        }
+
+        //Admin setting for Hide/Show chat history folder
+        if (api_get_setting('show_chat_folder') == 'false') {
+            $folders_to_avoid[] = '/chat_files';
+        }
+        return in_array($path, $folders_to_avoid);
+    }
+
+    static function get_system_folders() {
+        $system_folders = array(
+            '/certificates',
+            '/chat_files',
+            '/images',
+            '/flash',
+            '/audio',
+            '/video',
+            '/shared_folder'
+        );
+        return $system_folders;
     }
 }
 //end class DocumentManager

@@ -873,24 +873,28 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     if (isset($course_info) && isset($course_info['visibility'])) {
     	switch ($course_info['visibility']) {
     		default:
-    		case 0: //Completely closed: the course is only accessible to the teachers.
+    		case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
     			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
     				$is_visible = true;
     			}
     			break;
-    		case 1: //Private - access authorized to course members only
+    		case COURSE_VISIBILITY_REGISTERED: //Private - access authorized to course members only - 1
     			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
     				$is_visible = true;
     			}
     			break;
-    		case 2: // Open - access allowed for users registered on the platform
+    		case COURSE_VISIBILITY_OPEN_PLATFORM: // Open - access allowed for users registered on the platform - 2
     			if (api_get_user_id() && !api_is_anonymous()) {
     				$is_visible = true;
     			}
     			break;
-    		case 3: //Open - access allowed for the whole world
+    		case COURSE_VISIBILITY_OPEN_WORLD: //Open - access allowed for the whole world - 3
     			$is_visible = true;
     			break;
+    	}
+        //If pasword is set and user is not registered to the course then the course is not visible
+        if ($is_allowed_in_course == false & isset($course_info['registration_code']) && !empty($course_info['registration_code'])) {
+            $is_visible = false;
     	}
     }
     
@@ -1403,6 +1407,8 @@ function api_format_course_array($course_data) {
     $_course['show_score']            = $course_data['show_score']; //used in the work tool    
     $_course['department_name']       = $course_data['department_name'];
     $_course['department_url']        = $course_data['department_url' ];    
+    //Course password
+    $_course['registration_code']     = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota']            = $course_data['disk_quota'];    
     $_course['course_public_url']     = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/index.php';
     

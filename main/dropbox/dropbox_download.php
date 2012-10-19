@@ -29,41 +29,45 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*	DOWNLOAD A FOLDER */
 $course_id = api_get_course_int_id();
 
+$user_id = api_get_user_id();
+
 if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] == 'downloadcategory' AND isset($_GET['sent_received'])) {
 	// step 1: constructingd' the sql statement. Due to the nature off the classes of the dropbox the categories for sent files are stored in the table
 	// dropbox_file while the categories for the received files are stored in dropbox_post. It would have been more elegant if these could be stored
 	// in dropbox_person (which stores the link file-person)
 	// Therefore we have to create to separate sql statements to find which files are in the categorie (depending if we zip-download a sent category or a
 	// received category)
+    
 	if ($_GET['sent_received'] == 'sent') {
 		// here we also incorporate the person table to make sure that deleted sent documents are not included.
-		$sql = "SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person
-				WHERE file.uploader_id='".Database::escape_string($_user['user_id'])."'
-				AND file.cat_id='".Database::escape_string($_GET['cat_id'])."'
-				AND person.user_id='".Database::escape_string($_user['user_id'])."'
-				AND person.file_id=file.id
-				" ;
+		$sql = "SELECT DISTINCT file.id, file.filename, file.title 
+                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person 
+                ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
+				WHERE 
+                    file.uploader_id = $user_id AND 
+                    file.cat_id='".intval($_GET['cat_id'])."'  AND 
+                    person.user_id = $user_id";
 	}
+    
 	if ($_GET['sent_received'] == 'received') {
-		$sql = "SELECT DISTINCT file.id, file.filename, file.title FROM ".$dropbox_cnf['tbl_file']." file, ".$dropbox_cnf['tbl_person']." person, ".$dropbox_cnf['tbl_post']." post
-				WHERE
-                file.c_id = $course_id AND
-                person.c_id = $course_id AND 
-                post.c_id = $course_id AND  
-				post.cat_id='".Database::escape_string($_GET['cat_id'])."'
-				AND person.user_id='".Database::escape_string($_user['user_id'])."'
-				AND person.file_id=file.id
-				AND post.file_id=file.id
-				" ;
-	}
+		$sql = "SELECT DISTINCT file.id, file.filename, file.title 
+                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
+                ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
+                INNER JOIN ".$dropbox_cnf['tbl_post']." post
+                ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
+				WHERE 
+                    post.cat_id = ".intval($_GET['cat_id'])." AND 
+                    post.dest_user_id = $user_id" ;
+	}    
+    
 	$result = Database::query($sql);
 	while ($row = Database::fetch_array($result)) {
 		$files_to_download[] = $row['id'];
-	}
+	}    
 	if (!is_array($files_to_download) OR empty($files_to_download)) {
 		header('location: index.php?view='.Security::remove_XSS($_GET['sent_received']).'&error=ErrorNoFilesInFolder');
 		exit;
-	}
+	}    
 	zip_download($files_to_download);
 	exit;
 }
@@ -88,6 +92,7 @@ if (user_can_download_file($_GET['id'], api_get_user_id())) {
 }
 
 /*		ERROR IF NOT ALLOWED TO DOWNLOAD */
+
 
 if (!$allowed_to_download) {
 	Display::display_header($nameTools, 'Dropbox');

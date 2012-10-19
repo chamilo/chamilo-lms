@@ -3692,13 +3692,11 @@ class TrackingCourseLog {
          
 			if ($export_csv) {
 			    if (empty($session_id)) {
-			        $user_row[11] = strip_tags($user_row[11]);  
-                    $user_row[12] = strip_tags($user_row[12]);
+                    $user_row = array_map('strip_tags', $user_row);
 				    unset($user_row[14]);
 				    unset($user_row[15]);
                 } else {
-                    $user_row[10] = strip_tags($user_row[10]);
-                    $user_row[11] = strip_tags($user_row[11]);
+                    $user_row = array_map('strip_tags', $user_row);
                     unset($user_row[13]);
                     unset($user_row[14]);
                 }

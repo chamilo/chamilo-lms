@@ -710,7 +710,7 @@ class CourseBuilder {
 		}	
         
         if (!empty($id_list)) {
-            array_map('intval', $id_list);
+            $id_list = array_map('intval', $id_list);
             $sql .=" AND id IN (".implode(', ', $id_list).") ";
         }
         

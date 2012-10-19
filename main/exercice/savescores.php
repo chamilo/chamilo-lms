@@ -52,11 +52,10 @@ $jscript2run = '';
  */
 function save_scores($file, $score) {
 	global $origin, $_user, $_cid,
-		$TABLETRACK_HOTPOTATOES;
+	$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
-	$weighting = 100; // 100%
-	$reallyNow = time();
-	$date = date("Y-m-d H:i:s", $reallyNow);
+	$weighting = 100; // 100%	
+	$date = api_get_utc_datetime();
 
 	if ($_user['user_id']) {
 		$user_id = $_user['user_id'];
@@ -74,7 +73,7 @@ function save_scores($file, $score) {
 			'".Database::escape_string($_cid)."',
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
-	$res = Database::query($sql);
+	Database::query($sql);
 
 	if ($origin == 'learnpath') {
 		//if we are in a learning path, save the score in the corresponding
@@ -89,29 +88,13 @@ function save_scores($file, $score) {
 save_scores($test, $score);
 
 // Back
-if ($origin != 'learnpath') {
-	// $url = "Hpdownload.php?doc_url=".$test."&cid=".$cid; // back to the test
+if ($origin != 'learnpath') {	
 	$url = "exercice.php"; // back to exercices
 	$jscript2run .= '<script>'."window.open('$url', '_top', '')".'</script>';
 	echo $jscript2run;
 } else {
-?>
-<!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
-<link rel='stylesheet' type='text/css' href='../css/<?php echo api_get_setting('stylesheets');?>/scorm.css' />
-<?php echo $jscript2run; ?>
-</head>
-<body dir="<?php echo api_get_text_direction(); ?>">
-<br />
-<div class='message'>
-<?php echo get_lang('HotPotatoesFinished'); ?>
-</div>
-</body>
-</html>
-<?php
+    $htmlHeadXtra[] = $jscript2run;
+    Display::display_header();
+    echo get_lang('HotPotatoesFinished');
+    Display::display_footer();
 }
-?>

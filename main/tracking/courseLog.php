@@ -276,15 +276,12 @@ if ($_GET['studentlist'] == 'false') {
         }
         echo '</table></div>';
         
-    } else {
-        //echo '<tr><td>'.get_lang('NoLearningPath').'</td></tr>';
+    } else {        
         if ($export_csv) {
             $temp = array(get_lang('NoLearningPath', ''), '');
             $csv_content[] = $temp;
         }
-    }
-
-    
+    }   
     
     // Exercices tracking.
     echo '<div class="report_section">
@@ -302,6 +299,8 @@ if ($_GET['studentlist'] == 'false') {
         $csv_content[] = array('', '');
         $csv_content[] = $temp;
     }
+    
+    $course_path_params = '&cidReq='.$course_code.'&id_session='.$session_id;
 
     if (Database::num_rows($rs) > 0) {
         $student_ids = array_keys($a_students);
@@ -316,7 +315,9 @@ if ($_GET['studentlist'] == 'false') {
             }
             $count_students = ($count_students == 0 || is_null($count_students) || $count_students == '') ? 1 : $count_students;
             $quiz_avg_score = round(($quiz_avg_score / $count_students), 2).'%';
-            echo '<tr><td>'.$quiz['title'].'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
+            $url = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$quiz['id'].$course_path_params;
+            
+            echo '<tr><td>'.Display::url($quiz['title'], $url).'</td><td align="right">'.$quiz_avg_score.'</td></tr>';
             if ($export_csv) {
                 $temp = array($quiz['title'], $quiz_avg_score);
                 $csv_content[] = $temp;
@@ -371,8 +372,7 @@ if ($_GET['studentlist'] == 'false') {
                 '.Display::page_subheader(Display::return_icon('acces_tool.gif', get_lang('ToolsMostUsed')).get_lang('ToolsMostUsed')).'
             <table class="data_table">';
 
-    $tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);
-    
+    $tools_most_used = Tracking::get_tools_most_used_by_course($course_code, $session_id);    
 
     if ($export_csv) {
         $temp = array(get_lang('ToolsMostUsed'), '');
@@ -416,12 +416,12 @@ if ($_GET['studentlist'] == 'false') {
         $csv_content[] = $temp;
     }
 
-    if (!empty($documents_most_downloaded)) {
+    if (!empty($documents_most_downloaded)) {        
         foreach ($documents_most_downloaded as $row) {
-            echo '	<tr>
-                        <td>'.$row['down_doc_path'].'</td>
-                        <td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
-                    </tr>';
+            echo '<tr>
+                    <td>'.Display::url($row['down_doc_path'], api_get_path(WEB_CODE_PATH).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params).'</td>
+                    <td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
+                  </tr>';
             if ($export_csv) {
                 $temp = array($row['down_doc_path'], $row['count_down'].' '.get_lang('Clicks', ''));
                 $csv_content[] = $temp;
@@ -452,9 +452,10 @@ if ($_GET['studentlist'] == 'false') {
     }
 
     if (!empty($links_most_visited)) {
+        
         foreach ($links_most_visited as $row) {
             echo '	<tr>
-                        <td>'.$row['title'].'</td>
+                        <td>'.Display::url($row['title'].' ('.$row['url'].')', $row['url']).'</td>
                         <td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td>
                     </tr>';
             if ($export_csv){
@@ -521,22 +522,9 @@ if ($_GET['studentlist'] == 'false') {
             echo $extra_field_select;
         }              
         $form->display();
-    
-        // END : form to remind inactives susers
-        /*
-        if ($export_csv) {
-            $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
-        } else {
-            $is_western_name_order = api_is_western_name_order();
-        }*/
-        
+
         //PERSON_NAME_DATA_EXPORT is buggy    
         $is_western_name_order = api_is_western_name_order();
-        
-        //$sort_by_first_name = api_sort_by_first_name();
-    
-        //$tracking_column = isset($_GET['tracking_column']) ? $_GET['tracking_column'] : 0;
-        //$tracking_direction = isset($_GET['tracking_direction']) ? $_GET['tracking_direction'] : 'DESC';
 
         if ($export_csv) {
             $csv_content = array();

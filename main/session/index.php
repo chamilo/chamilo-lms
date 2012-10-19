@@ -310,6 +310,9 @@ $column_model_courses   = array(
     array('name'=>'lp_count',           'index'=>'lp_count',            'width'=>'180px',  'align'=>'left',  'sortable'=>'true')
 );
 
+$extra_params_courses['height'] = '100%'; 
+$extra_params_courses['autowidth'] = 'true'; //use the width of the parent
+
 //$extra_params_courses['gridview'] = "false";
 /*$extra_params_courses['rowNum'] = 9000;
 
@@ -324,7 +327,7 @@ $extra_params_courses['pgbuttons'] = false;*/
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
-                        array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true'),
+                        array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'true'));
 $extra_params = array();   
 /*
@@ -341,6 +344,9 @@ $extra_params['height'] = "100%";
 //$extra_params['autowidth'] = 'true'; //use the width of the parent
 //$extra_params['forceFit'] = 'true'; //use the width of the parent
 //$extra_params['altRows'] = 'true'; //zebra style
+
+$extra_params['height'] = '100%'; 
+$extra_params['autowidth'] = 'true'; //use the width of the parent
                         
 //Per course grid settings
 $url_by_course = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_course&session_id='.$session_id.'&course_id='.$course_id;
@@ -350,16 +356,17 @@ $extra_params_course['groupingView'] = array('groupCollapse'    => false,
 											 'groupField'       => array('course'),
                                              'groupColumnShow'  => array('false'),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));
-//$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                          
-                              
+$extra_params_course['autowidth'] = 'true'; //use the width of the parent                                 
+$extra_params_course['height'] = "100%";
+
 //Per Week grid
 $url_week           = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id.'&course_id='.$course_id;
 $column_week        = array(get_lang('PeriodWeek'), get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_week_model  = array (
-                          array('name'=>'week',     'index'=>'week',    'width'=>'50',  'align'=>'left', 'sortable'=>'false'),       
-                          array('name'=>'date',     'index'=>'date',    'width'=>'113', 'align'=>'left', 'sortable'=>'false'),
-                          array('name'=>'course',   'index'=>'course',  'width'=>'282', 'align'=>'left', 'sortable'=>'true'),
-                          array('name'=>'lp',       'index'=>'lp',      'width'=>'416', 'align'=>'left', 'sortable'=>'true'));
+                          array('name'=>'week',     'index'=>'week',    'width'=>'40',  'align'=>'left', 'sortable'=>'false'),       
+                          array('name'=>'date',     'index'=>'date',    'width'=>'120', 'align'=>'left', 'sortable'=>'false'),
+                          array('name'=>'course',   'index'=>'course',  'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
+                          array('name'=>'lp',       'index'=>'lp',      'width'=>'440', 'align'=>'left', 'sortable'=>'true'));
 
 $extra_params_week = array();            
 $extra_params_week['grouping'] = 'true';
@@ -370,21 +377,23 @@ $extra_params_week['groupingView'] = array('groupCollapse'     => false,
                                            'groupOrder'        => array('desc'),
                                            'groupColumnShow'   => 'false',
                                            'groupText'         => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
-//$extra_params_week['autowidth'] = 'true'; //use the width of the parent
+$extra_params_week['autowidth'] = 'true'; //use the width of the parent
+$extra_params_week['height'] = '100%'; 
 
 //MyQCM grid
 $column_exercise        = array(get_lang('Status'), get_lang('ExerciseStartDate'), get_lang('Course'), get_lang('Exercise'),get_lang('Attempts'), get_lang('Result'), get_lang('BestResultInCourse'), get_lang('Ranking'));
 $column_exercise_model  = array(
                                 array('name'=>'status',     'index'=>'status',     'width'=>'40', 'align'=>'left',   'sortable'=>'false'),
                                 array('name'=>'date',       'index'=>'date',       'width'=>'130','align'=>'left',   'sortable'=>'true'),
-                                array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true'),
+                                array('name'=>'course',     'index'=>'course',     'width'=>'200','align'=>'left',   'sortable'=>'true', 'wrap_cell' => 'true'),
                                 array('name'=>'exercise',   'index'=>'exercise',   'width'=>'200','align'=>'left',   'sortable'=>'false'),                                
                                 array('name'=>'attempt',    'index'=>'attempt',    'width'=>'60', 'align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'result',     'index'=>'result',     'width'=>'120','align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'best_result','index'=>'best_result','width'=>'140','align'=>'center', 'sortable'=>'true'),
                                 array('name'=>'position',   'index'=>'position',   'width'=>'55', 'align'=>'center', 'sortable'=>'true')
                                 );                                
-$extra_params_exercise['height'] = '300';                                                        
+$extra_params_exercise['height'] = '100%';
+$extra_params_exercise['autowidth'] = 'true';
 //$extra_params_exercise['sortname'] = 'status';
 //$extra_params_exercise['sortorder'] = 'desc';                                
 //$extra_params_exercise['grouping'] = 'true';
@@ -453,7 +462,7 @@ $headers        = array(get_lang('Courses'), get_lang('LearningPaths'), get_lang
 $sub_header     = array(get_lang('AllLearningPaths'), get_lang('PerWeek'), get_lang('ByCourse'));
 
 //Sub headers data
-$lp_tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')),'sub_tab');
+$lp_tabs           =  Display::tabs($sub_header, array(Display::grid_html('list_default'), Display::grid_html('list_week'), Display::grid_html('list_course')), 'sub_tab');
 $courses_tab       =  Display::grid_html('courses');
 //Main headers data
 echo Display::tabs($headers, array($courses_tab, $lp_tabs, Display::grid_html('exercises'), $my_reporting));

@@ -20,16 +20,14 @@ class ScoreDisplayForm extends FormValidator
 {
 	function ScoreDisplayForm($form_name, $action= null) {
 		parent :: __construct($form_name, 'post', $action);
-		$displayscore= ScoreDisplay :: instance();
+		$displayscore = ScoreDisplay :: instance();
 		$customdisplays = $displayscore->get_custom_score_display_settings();
         
-		$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
+		$nr_items = (count($customdisplays)!='0') ? count($customdisplays) : '1';
 		$this->setDefaults(array (            
             'scorecolpercent' => $displayscore->get_color_split_value()                
 		));
-        
-        //var_dump($displayscore->get_color_split_value() );
-        
+                
 		$this->addElement('hidden', 'maxvalue', '100');
 		$this->addElement('hidden', 'minvalue', '0');
 		$counter= 1;
@@ -45,15 +43,13 @@ class ScoreDisplayForm extends FormValidator
 				$counter++;
 			}
 		}
-		$scorecol = array ();
+		$scorecol = array();
 
 		//settings for the colored score
 		$this->addElement('header', get_lang('ScoreEdit'));		
         
-        if ($displayscore->is_coloring_enabled()) {
-            
-            $this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');
-            
+        if ($displayscore->is_coloring_enabled()) {            
+            $this->addElement('html', '<b>' . get_lang('ScoreColor') . '</b>');            
             $this->addElement('text', 'scorecolpercent', array(get_lang('Below'), get_lang('WillColorRed'), '%'), array (
                 'size' => 5,
                 'maxlength' => 5,
@@ -71,12 +67,8 @@ class ScoreDisplayForm extends FormValidator
 
 		//Settings for the scoring system
 
-		if ($displayscore->is_custom()) {          
-            
-            $this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');
-            //$this->addElement('checkbox', 'enablescore', null, get_lang('EnableScoringSystem'), null);
-        
-			//$this->addElement('checkbox', 'includeupperlimit', null, get_lang('IncludeUpperLimit'), null);
+		if ($displayscore->is_custom()) {            
+            $this->addElement('html', '<br /><b>' . get_lang('ScoringSystem') . '</b>');            
 			$this->addElement('static', null, null, get_lang('ScoreInfo'));
 			$scorenull[]= & $this->CreateElement('static', null, null, get_lang('Between'));
 			$this->setDefaults(array (

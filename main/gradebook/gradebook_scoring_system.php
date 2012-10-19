@@ -16,38 +16,35 @@ require_once 'lib/fe/scoredisplayform.class.php';
 require_once 'lib/scoredisplay.class.php';
 
 api_block_anonymous_users();
-//api_protect_admin_script();
 
 if (api_get_setting('teachers_can_change_score_settings') != 'true') {
     api_not_allowed();
 }
 
-$htmlHeadXtra[]= '
-  <script>
-  function plusItem(item) {
-		document.getElementById(item).style.display = "inline";
-    	document.getElementById("plus-"+item).style.display = "none";
-   	 	document.getElementById("min-"+(item-1)).style.display = "none";
-   	 	document.getElementById("min-"+(item)).style.display = "inline";
-   	 	document.getElementById("plus-"+(item+1)).style.display = "inline";
-	 	document.getElementById("txta-"+(item)).value = "100";
-	 	document.getElementById("txta-"+(item-1)).value = "";
-  }
+$htmlHeadXtra[]= '<script>
+function plusItem(item) {
+    document.getElementById(item).style.display = "inline";
+    document.getElementById("plus-"+item).style.display = "none";
+    document.getElementById("min-"+(item-1)).style.display = "none";
+    document.getElementById("min-"+(item)).style.display = "inline";
+    document.getElementById("plus-"+(item+1)).style.display = "inline";
+    document.getElementById("txta-"+(item)).value = "100";
+    document.getElementById("txta-"+(item-1)).value = "";
+}
 
-  function minItem(item) {
+function minItem(item) {
     if (item != 1) {
-     document.getElementById(item).style.display = "none";
-	 document.getElementById("txta-"+item).value = "";
-	 document.getElementById("txtb-"+item).value = "";
-     document.getElementById("plus-"+item).style.display = "inline";
-     document.getElementById("min-"+(item-1)).style.display = "inline";
-	 document.getElementById("txta-"+(item-1)).value = "100";
-
-	}
-	if (item = 1) {
-		document.getElementById("min-"+(item)).style.display = "none";
-	}
+        document.getElementById(item).style.display = "none";
+        document.getElementById("txta-"+item).value = "";
+        document.getElementById("txtb-"+item).value = "";
+        document.getElementById("plus-"+item).style.display = "inline";
+        document.getElementById("min-"+(item-1)).style.display = "inline";
+        document.getElementById("txta-"+(item-1)).value = "100";
     }
+    if (item = 1) {
+        document.getElementById("min-"+(item)).style.display = "none";
+    }
+}
 </script>';
 
 $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1', 'name' => get_lang('ToolGradebook'));
@@ -55,7 +52,13 @@ $interbreadcrumb[] = array ('url' => $_SESSION['gradebook_dest'].'?selectcat=1',
 $select_cat = intval($_GET['selectcat']);
 $displayscore= ScoreDisplay :: instance();
 $customdisplays = $displayscore->get_custom_score_display_settings();
-$nr_items =(count($customdisplays)!='0')?count($customdisplays):'1';
+
+$nr_items = (count($customdisplays) != '0' )? count($customdisplays) : '1';
+
+//Insert defaults
+if (empty($customdisplays)) {
+    //$displayscore->insert_defaults($select_cat);    
+}
 
 $scoreform= new ScoreDisplayForm('scoring_system_form', api_get_self() . '?selectcat=' . $select_cat);
 if ($scoreform->validate()) {

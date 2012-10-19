@@ -62,8 +62,8 @@ class Certificate extends Model {
         //Setting the qr and html variables
         if (isset($certificate_id) && !empty($this->certification_user_path)) {
             $pathinfo = pathinfo($this->certificate_data['path_certificate']);
-            $this->html_file        = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
-            $this->qr_file            = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
+            $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+            $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         }        
     }
     
@@ -99,11 +99,10 @@ class Certificate extends Model {
      * the teacher from the gradebook tool to re-generate the certificate because
      * the original version wa flawed.
      */
-    public function delete($id = null) {
-        
+    public function delete($force_delete = false) {        
         if (!empty($this->certificate_data)) {
                          
-            if (!is_null($this->html_file) || $this->html_file!='' || strlen($this->html_file)) {
+            if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
                 //Deleting HTML file                
                 if (is_file($this->html_file)) {
                     @unlink($this->html_file);
@@ -116,8 +115,8 @@ class Certificate extends Model {
                 //Deleting QR code PNG image file                
                 if (is_file($this->qr_file)) {
                     @unlink($this->qr_file);
-                }                
-                if ($delete_db) {
+                }
+                if ($delete_db || $force_delete) {
                     return parent::delete($this->certificate_data['id']);
                 }                
             } else {
@@ -131,7 +130,7 @@ class Certificate extends Model {
      *     Generates an HTML Certificate and fills the path_certificate field in the DB 
      * */
     
-    public function generate() {
+    public function generate($params = array()) {
         //The user directory should be set
         if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
             return false;
@@ -139,6 +138,8 @@ class Certificate extends Model {
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
+        
+        $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
         
         $my_category = Category :: load($this->certificate_data['cat_id']);
                 
@@ -166,8 +167,8 @@ class Certificate extends Model {
             $skill->add_skill_to_user($this->user_id, $this->certificate_data['cat_id']);            
     
             if (is_dir($this->certification_user_path)) {
-                if (!empty($this->certificate_data)) {    
-                    $new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false);
+                if (!empty($this->certificate_data)) { 
+                    $new_content_html = get_user_certificate_content($this->user_id, $my_category[0]->get_course_code(), false, $params['hide_print_button']);
                                         
                     if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
                         $name = $this->certificate_data['path_certificate'];
@@ -225,7 +226,6 @@ class Certificate extends Model {
             Database::query($sql);
         }
     }
-
     
     /**
      * 

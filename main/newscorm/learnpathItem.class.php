@@ -1059,7 +1059,7 @@ class learnpathItem {
 				} else {
 					$start = $this->current_start_time;
 					$stop = $this->current_stop_time;
-				}
+				}                
 				if (!empty($start)) {
 					if (!empty($stop)) {
 						$time = $stop - $start;
@@ -1227,7 +1227,7 @@ class learnpathItem {
 				// Small exception for start time, to avoid amazing values.
 				$this->current_start_time = time();
 			}*/
-			// If we don't init start time here, the time is sometimes calculated from the las start time.
+			// If we don't init start time here, the time is sometimes calculated from the last start time.
 			$this->current_start_time = time();
 
 			//error_log('New LP - reinit blocked by setting', 0);
@@ -1888,26 +1888,26 @@ class learnpathItem {
 
 		 	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		 	// Get the lp_item_view with the highest view_count.
-		 	$sql = "SELECT * FROM $item_view_table WHERE c_id = $course_id AND lp_item_id = ".$this->get_id()." " .
-		 			" AND lp_view_id = ".$lp_view_id." ORDER BY view_count DESC";
-
-            //error_log('sql9->'.$sql);
+		 	$sql = "SELECT * FROM $item_view_table 
+                    WHERE   c_id = $course_id AND 
+                            lp_item_id = ".$this->get_id()." AND
+                            lp_view_id = ".$lp_view_id." 
+                    ORDER BY view_count DESC";
 
 		 	if (self::debug > 2) { error_log('New LP - In learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql, 0); }
 		 	$res = Database::query($sql);
 		 	if (Database::num_rows($res) > 0) {
 		 		$row = Database::fetch_array($res);
-		 		$this->db_item_view_id  = $row['id'];
-		 		$this->attempt_id 		= $row['view_count'];
-				$this->current_score	= $row['score'];
-				$this->current_data		= $row['suspend_data'];
-				$this->view_max_score 	= $row['max_score'];
-				//$this->view_min_score 	= $row['min_score'];
-				$this->status			= $row['status'];
-				$this->current_start_time	= $row['start_time'];
-				$this->current_stop_time 	= $this->current_start_time + $row['total_time'];
-				$this->lesson_location  = $row['lesson_location'];
-				$this->core_exit		= $row['core_exit'];
+		 		$this->db_item_view_id      = $row['id'];
+		 		$this->attempt_id           = $row['view_count'];
+				$this->current_score        = $row['score'];
+				$this->current_data         = $row['suspend_data'];
+				$this->view_max_score       = $row['max_score'];				
+				$this->status               = $row['status'];				 
+                $this->current_start_time	= $row['start_time'];                
+                $this->current_stop_time 	= $this->current_start_time + $row['total_time'];
+				$this->lesson_location      = $row['lesson_location'];
+				$this->core_exit            = $row['core_exit'];
 			 	if (self::debug > 2) { error_log('New LP - In learnpathItem::set_lp_view() - Updated item object with database values', 0); }
 
 			 	// Now get the number of interactions for this little guy.
@@ -2066,7 +2066,7 @@ class learnpathItem {
 	 * @param	string	Time as given by SCORM
 	 * @return  void
 	 */
-	public function set_time($scorm_time, $format = 'scorm') {
+	public function set_time($scorm_time, $format = 'scorm') {        
    		if (self::debug > 0) { error_log('New LP - In learnpathItem::set_time('.$scorm_time.')', 0); }
 	 	if ($scorm_time == 0 and ($this->type!='sco') and $this->current_start_time != 0) {
 	 		$my_time = time() - $this->current_start_time;
@@ -2084,7 +2084,7 @@ class learnpathItem {
 					$sec = $res[3];
 					// Getting total number of seconds spent.
 			 		$total_sec = $hour*3600 + $min*60 + $sec;
-   		     		        $this->scorm_update_time($total_sec);
+                    $this->scorm_update_time($total_sec);
 			 	}
 	 		} elseif ($format == 'int') {
      			$this->scorm_update_time($scorm_time);
@@ -2178,40 +2178,39 @@ class learnpathItem {
 	/**
      * Special scorm update time function. This function will update time directly into db for scorm objects
      **/
-    public function scorm_update_time($total_sec=0) {
-        $course_id = api_get_course_int_id();
+    public function scorm_update_time($total_sec=0) {        
         //Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
         $course_id = api_get_course_int_id();
-        $get_view_sql='SELECT total_time, status FROM '.$item_view_table.'
-                     WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-      $result=Database::query($get_view_sql);
-      $row=Database::fetch_array($result);
-      if (!isset($row['total_time'])) {
-        $total_time = 0;
-      } else {
-        $total_time = $row['total_time'];
-      }
+        $get_view_sql = 'SELECT total_time, status FROM '.$item_view_table.'
+                         WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+        $result=Database::query($get_view_sql);
+        $row=Database::fetch_array($result);
+        if (!isset($row['total_time'])) {
+            $total_time = 0;
+        } else {
+            $total_time = $row['total_time'];
+        }
 
-      //Step 2.1 : if normal mode total_time = total_time + total_sec
-      if (api_get_setting('scorm_cumulative_session_time') != 'false'){
-        $total_time +=$total_sec;
-        //$this->last_scorm_session_time = $total_sec;
-      }
-      //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
-      else{
-        $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
-        $this->last_scorm_session_time = $total_sec;
-      }
-      //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
-      $case_completed=array('completed','passed','browsed','failed'); //TODO COMPLETE
-      if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
-        $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".'
-                          WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-        $result=Database::query($update_view_sql);
-      }
+        //Step 2.1 : if normal mode total_time = total_time + total_sec
+        if (api_get_setting('scorm_cumulative_session_time') != 'false'){
+            $total_time +=$total_sec;
+            //$this->last_scorm_session_time = $total_sec;
+        } else {
+            //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
+            $total_time = $total_time - $this->last_scorm_session_time + $total_sec;
+            $this->last_scorm_session_time = $total_sec;
+        }
+        //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
+        $case_completed=array('completed','passed','browsed','failed'); //TODO COMPLETE
+        if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
+            $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".'
+                             WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+            $result=Database::query($update_view_sql);
+        }
     }
+        
     /**
     * Set the total_time to 0 into db
     **/

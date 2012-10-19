@@ -305,10 +305,10 @@ if (isset ($group_properties)) {
 }
 
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']), null, array('class' =>'form-vertical' ));
+$form = new FormValidator('create_document','post',api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']), null, array('class' =>'form-vertical' ));
 
 // form title
-$form->addElement('header', '', $nameTools);
+$form->addElement('header', $nameTools);
 
 if ($is_certificate_mode) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
@@ -492,7 +492,7 @@ if ($form->validate()) {
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
 	if (strpos($content, '/css/frames.css') === false) {
-		$content = str_replace('</head>', '<style> body{margin:10px;}</style> <link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
+		$content = str_replace('</head>', '<style> body{margin:10px;}</style><link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
 	}	
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
@@ -555,8 +555,8 @@ if ($form->validate()) {
 				}
 				$certificate_condition = '&certificate=true';
 			}
-			header('Location: document.php?id='.$folder_id.$selectcat.$certificate_condition);
-			exit ();
+			header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
+			exit();
 		} else {
 			Display :: display_header($nameTools, 'Doc');
 			Display :: display_error_message(get_lang('Impossible'));

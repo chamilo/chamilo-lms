@@ -583,7 +583,8 @@ class Dropbox_Person
 			}
 		}
 		// Delete entries in person table concerning received works
-		Database::query("DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'");
+        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";        
+		Database::query($sql);
 		removeUnusedFiles();	// Check for unused files
 	}
 

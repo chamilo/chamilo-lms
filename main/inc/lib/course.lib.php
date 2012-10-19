@@ -739,10 +739,12 @@ class CourseManager {
                     }
                 } else {
                     $students_in_course = SessionManager::get_users_by_session($session_id, '0');
-                    foreach ($students_in_course as $user_item) {
-                        if ($user_item['moved_to'] == 0) {
-                            $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
-                        }                        
+                    if (is_array($students_in_course)) {
+                        foreach ($students_in_course as $user_item) {
+                            if ($user_item['moved_to'] == 0) {
+                                $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
+                            }                        
+                        }
                     }
                 }
             }
@@ -3809,15 +3811,15 @@ class CourseManager {
             $options[]= 'register';
         }
         
-        // Go To Course button (only if admin, if course public or if student already subscribed)
-        if ($is_admin
-          || $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
-          || (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-          || (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+         // Go To Course button (only if admin, if course public or if student already subscribed)
+        if ($is_admin || 
+            $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
+            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) || 
+            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)            
         ) {
             $options[]=  'enter';
         }
-        return $options;        
+        return $options;          
     }
     
     // TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.

@@ -298,7 +298,7 @@ $(document).ready(function() {
                 <span class="label label-info">{{ "SkillsYouAcquired"|get_lang }}</span><br />
                 <span class="label label-warning">{{ "SkillsYouCanLearn"|get_lang }}</span><br />
                 <span class="label label-important">{{ "SkillsSearchedFor"|get_lang }}</span><br /><br />
-                <div><a href="/user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a></div>
+                <div><a class="btn btn-small" href="{{ _p.web }}user_portal.php">{{ "ReturnToCourseList"|get_lang }}</a></div>
             </div>                
         </div>
             

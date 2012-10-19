@@ -216,9 +216,11 @@ if (!$is_certificate_mode) {
 	echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()));
 }
 
-$params = Uri::course_params();
+/*$params = Uri::course_params();
 $params['id'] = Request::get('id');
-$action = Uri::here($params, false);
+$action = Uri::here($params, false);*/
+
+$action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
 $form = new FormValidator('upload', 'POST', $action.'#tabs-2', '', 'enctype="multipart/form-data"');
 $form->addElement('hidden', 'id', $document_id);
@@ -301,5 +303,4 @@ if ($nav_info ['name'] == 'Internet Explorer') {
 	$headers = array(get_lang('Send') , get_lang('Send').' ('.get_lang('Simple').')');
 	echo Display::tabs($headers, array($multiple_form, $simple_form),'tabs');	
 }
-
 Display::display_footer();

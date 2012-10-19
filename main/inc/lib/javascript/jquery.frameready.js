@@ -200,14 +200,19 @@ jQuery.isFrameReady = function(fn){
     var frs = fr["settings"];
 
     if (fr.done) { return false; };
-
+    
     var fx = eval(fr.target);
+    
     $d.log(fn, ": New Pass. Checking target");
     // make sure we have a target
     if (typeof fx !== "undefined") {
+        
         $d.log(fn, ": Found target.  Checking DOM");
-        var fd = fx.document;
-
+        
+        try {
+            var fd = fx.document;
+        } catch (ex) { }
+        
         // make sure we have a DOM
         if (fd && fd.getElementsByTagName && fd.getElementById && fd.body && fd.body.innerHTML.length) {
 

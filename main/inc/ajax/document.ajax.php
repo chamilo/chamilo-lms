@@ -10,11 +10,9 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 $action = $_REQUEST['a'];
 switch($action) {	
 	case 'upload_file':
-		api_protect_course_script(true);
-		
+		api_protect_course_script(true);		
 		//User access same as upload.php
-		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-		
+		$is_allowed_to_edit = api_is_allowed_to_edit(null, true);		
 		// This needs cleaning!
 		if (api_get_group_id()) {   
 		    if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), api_get_group_id())) { // Only courseadmin or group members allowed        

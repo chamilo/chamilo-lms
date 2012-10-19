@@ -153,10 +153,6 @@ if ($_GET['action'] == 'subscribe') {
         if (!empty($msg)) {
             $show_message .= Display::return_message(get_lang($msg));
         }
-//    } else {
-        // @todo The message should be improved here to make it clear that
-        // the subscription was not effective
-        //api_not_allowed(true);
     }
 }
 
@@ -267,3 +263,5 @@ $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
+
+Session::erase('_gid');

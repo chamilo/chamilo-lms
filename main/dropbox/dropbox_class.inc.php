@@ -282,33 +282,30 @@ class Dropbox_SentWork extends Dropbox_Work
 
         $table_post = $dropbox_cnf['tbl_post'];
         $table_person = $dropbox_cnf['tbl_person'];
-        $session_id = intval($_SESSION['id_session']);
+        $session_id = api_get_session_id();
         $uploader_id = $this->uploader_id;
 		// Insert data in dropbox_post and dropbox_person table for each recipient
 		foreach ($this->recipients as $rec) {
             $file_id = (int)$this->id;
             $user_id = (int)$rec['id'];            
-			$sql = "INSERT INTO $table_post 
-                        (c_id, file_id, dest_user_id, session_id) 
-                    VALUES 
-                        ($course_id, $file_id, $user_id, $session_id)";
-	        $result = Database::query($sql);	// If work already exists no error is generated
+			$sql = "INSERT INTO $table_post (c_id, file_id, dest_user_id, session_id) 
+                    VALUES ($course_id, $file_id, $user_id, $session_id)";
+	        $result = Database::query($sql);	
+            // If work already exists no error is generated
 
             /**
              * Poster is already added when work is created - not so good to split logic 
              */
-            if($user_id != $user_id){
+            //if ($user_id != $user_id) {
                 // Insert entries into person table
-                $sql = "INSERT INTO $table_person 
-                            (c_id, file_id, user_id)
-                        VALUES 
-                            ($course_id, $file_id, $user_id)";
+                $sql = "INSERT INTO $table_person (c_id, file_id, user_id)
+                        VALUES ($course_id, $file_id, $user_id)";
 
                 // Do not add recipient in person table if mailing zip or just upload.
                 if (!$justSubmit) {
                     $result = Database::query($sql);	// If work already exists no error is generated
                 }
-            }
+            //}
 
 			// Update item_property table for each recipient
 			global $_course, $dropbox_cnf;
@@ -392,45 +389,33 @@ class Dropbox_Person
 
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
-		$course_id = api_get_course_int_id();
-		
+				
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
 		// Find all entries where this person is the recipient
-		 $sql = "SELECT r.file_id, r.cat_id FROM $post_tbl r, $person_tbl p ".
-			" WHERE ".
-			" r.c_id = $course_id AND ".
-			" p.c_id = $course_id AND ". 
-			" r.dest_user_id = ".intval($this->userId)." AND ".
-		 	" r.file_id      = p.file_id $condition_session AND ".
-		 	" r.c_id = $course_id AND ".
-		 	" p.c_id = $course_id ";
-
-		//if (intval($_SESSION['id_session']>0)) { $sql .= " AND r.session_id = ".intval($_SESSION['id_session']); }
-
+		 $sql = "SELECT DISTINCT r.file_id, r.cat_id 
+                    FROM $post_tbl r INNER JOIN $person_tbl p 
+                    ON (r.dest_user_id = p.user_id AND r.c_id = $course_id AND p.c_id = $course_id )
+                WHERE
+                    r.dest_user_id = ".intval($this->userId)." AND 
+                    r.file_id      = p.file_id $condition_session ";
+        
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {
 			$temp = new Dropbox_Work($res['file_id']);
-			$temp -> category = $res['cat_id'];
+			$temp->category = $res['cat_id'];
 			$this->receivedWork[] = $temp;
 		}
 
 		// Find all entries where this person is the sender/uploader
 		$sql = "SELECT f.id
-				FROM $file_tbl f, $person_tbl p
-				WHERE 
-				f.c_id = $course_id AND
-                p.c_id = $course_id AND
-				f.uploader_id 	= '".Database::escape_string($this->userId)."' AND 
-				f.uploader_id 	= p.user_id AND 
-				f.id 			= p.file_id $condition_session AND
-				f.c_id 			= $course_id AND
-		 		p.c_id 			= $course_id				 
-		";
-
-		//if(intval($_SESSION['id_session']>0)) { $sql .= " AND f.session_id = ".intval($_SESSION['id_session']); }
-
+				FROM $file_tbl f INNER JOIN $person_tbl p
+				ON (f.uploader_id = p.user_id AND f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+                WHERE 
+                    f.uploader_id 	= '".Database::escape_string($this->userId)."'                     
+                    $condition_session
+                ";
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {
 			$this->sentWork[] = new Dropbox_SentWork($res['id']);

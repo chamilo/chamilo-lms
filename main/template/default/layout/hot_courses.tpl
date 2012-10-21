@@ -32,7 +32,7 @@ $(document).ready( function() {
                     </a>
                 </span>
                 {% endif %}
-                {{ "HottestCourses"|display_page_header }}
+                {{ "HottestCourses"|display_page_subheader }}
             </div>            
                 
             {% include 'default/layout/hot_course_item.tpl' %}

@@ -380,7 +380,13 @@ function check_user_password($password){
  * @uses Gets user ID from global variable
  */
 function check_user_email($email) {
-   
+    $user_id = api_get_user_id();
+    if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
+    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+    $email = Database::escape_string($email);
+    $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
+    $result = Database::query($sql_password);
+    return Database::num_rows($result) != 0;
 }
 
 /*        MAIN CODE */

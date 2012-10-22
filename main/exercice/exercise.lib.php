@@ -721,10 +721,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 function get_exercise_track_exercise_info($exe_id) {
 	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
 	$exe_id = intval($exe_id);
     $result = array();
     if (!empty($exe_id)) {
-	   $sql_fb_type = 'SELECT * FROM '.$TBL_EXERCICES.' as e INNER JOIN '.$TBL_TRACK_EXERCICES.' as te  ON (e.id=te.exe_exo_id) WHERE te.exe_id='.$exe_id;
+	   $sql_fb_type = "SELECT q.*, tee.*
+	                    FROM $TBL_EXERCICES as q
+	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
+	                    ON q.id=tee.exe_exo_id
+	                    INNER JOIN $TBL_COURSE c
+	                    ON c.code = tee.exe_cours_id
+	                    WHERE tee.exe_id=$exe_id
+	                    AND q.c_id=c.id";	   
+	   
 	   $res_fb_type = Database::query($sql_fb_type);
 	   $result      = Database::fetch_array($res_fb_type, 'ASSOC');
     }

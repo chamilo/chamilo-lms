@@ -380,13 +380,7 @@ function check_user_password($password){
  * @uses Gets user ID from global variable
  */
 function check_user_email($email) {
-    $user_id = api_get_user_id();
-    if ($user_id != strval(intval($user_id)) || empty($email)) { return false; }
-    $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $email = Database::escape_string($email);
-    $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND email='".$email."'";
-    $result = Database::query($sql_password);
-    return Database::num_rows($result) != 0;
+   
 }
 
 /*        MAIN CODE */
@@ -444,7 +438,7 @@ if ($form->validate()) {
     }
     
     
-    $changeemail = '';
+
     
     //If user sending the email to be changed (input available and not frozen )
     if (api_get_setting('profile', 'email') == 'true') {        
@@ -452,7 +446,8 @@ if ($form->validate()) {
             if (!check_user_email($user_data['email'])) {
                 $changeemail = $user_data['email'];
                 //$_SESSION['change_email'] = 'success';
-            }        
+            }  
+                     
         } else {
             //Normal behaviour
             if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
@@ -577,10 +572,10 @@ if ($form->validate()) {
 
     //change email
     if ($allow_users_to_change_email_with_no_password) {        
-        if (in_array('email', $available_values_to_modify)) {
+        if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
         }
-        if (isset($password) && in_array('password', $available_values_to_modify)) {
+        if (!empty($changeemail) && isset($password) && in_array('password', $available_values_to_modify)) {
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } else {            
@@ -589,7 +584,10 @@ if ($form->validate()) {
         }        
     } else {
         //normal behaviour
-        if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
+        if(empty($changeemail) && isset($password)) {
+            $sql .= " email = y@u.com";
+        }
+        if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {            
             $sql .= " email = '".Database::escape_string($changeemail)."',";

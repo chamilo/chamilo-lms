@@ -136,7 +136,9 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-$form->addRule('email', get_lang('EmailWrong'), 'required');
+if (api_get_setting('registration', 'email') == 'true') {
+    $form->addRule('email', get_lang('EmailWrong'), 'required');
+}
 
 if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);

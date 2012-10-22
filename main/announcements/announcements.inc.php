@@ -610,8 +610,10 @@ class AnnouncementManager {
             foreach ($group_list as $this_group) {
                 if (is_array($to_already_selected)) {
                     if (!in_array("GROUP:" . $this_group['id'], $to_already_selected)) { // $to_already_selected is the array containing the groups (and users) that are already selected
-                        echo "<option value=\"GROUP:" . $this_group['id'] . "\">",
-                        "G: ", $this_group['name'], " - " . $this_group['userNb'] . " " . get_lang('Users') .
+                        $user_label = ($this_group['userNb'] > 0) ? get_lang('Users') : get_lang('LowerCaseUser') ;
+                        $user_disabled = ($this_group['userNb'] > 0) ? "" : "disabled=disabled" ;
+                        echo "<option $user_disabled value=\"GROUP:" . $this_group['id'] . "\">",
+                        "G: ", $this_group['name'], " - " . $this_group['userNb'] . " " . $user_label .
                         "</option>";
                     }
                 }
@@ -754,9 +756,9 @@ class AnnouncementManager {
     public static function get_course_groups() {
         $session_id = api_get_session_id();
         if ($session_id != 0) {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id);
+            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id, 1);
         } else {
-            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0);
+            $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), 0, 1);
         }
         return $new_group_list;
     }

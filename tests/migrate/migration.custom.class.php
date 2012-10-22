@@ -47,9 +47,6 @@ class MigrationCustom {
      * Log data from the original users table
      */
     public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-//Temporarily commented (see how it goes without that)
-        //$row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdAlumno' => $row_data['uidIdAlumno']);
-        //$omigrate['users_alumno'][$row_data['uidIdAlumno']] = $row;
         return $row_data['uidIdAlumno'];
     }
     
@@ -108,16 +105,13 @@ class MigrationCustom {
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);
         
         if ($values) {
-            return $values['code'];
+            return $values['course_code'];
         } else {
             error_log("Course not found in DB");
         }
     }
     
-    function get_session_id_by_programa_id($data, &$omigrate, $row_data) {
-        /*error_log(print_r($data, 1));
-        error_log(print_r($row_data, 1));
-        error_log($omigrate['sessions'][$data]);*/
+    function get_session_id_by_programa_id($data, &$omigrate, $row_data) {        
         if (!isset($omigrate['sessions'][$data])) {
             error_log(print_r($omigrate['sessions'], 1));
             error_log("Sessions not found in data_list array ");
@@ -127,12 +121,7 @@ class MigrationCustom {
     }
     
     /* Not used */
-    public function get_user_id($data, &$omigrate, $row_data) {
-        //error_log('get_real_teacher_id');
-        //error_log(print_r($data, 1));                
-        //error_log(print_r($omigrate['users_empleado'], 1));        
-        //error_log('get_real_teacher_id');
-        //error_log($data);               
+    public function get_user_id($data, &$omigrate, $row_data) {        
         if (empty($omigrate['users_alumno'][$data])) {
             //error_log('not set');
             return 1;
@@ -146,12 +135,7 @@ class MigrationCustom {
     }
     
     public function get_real_teacher_id($uidIdPersona, &$omigrate, $row_data) {
-        $default_teacher_id = self::default_admin_id;
-        //error_log('get_real_teacher_id');
-        //error_log(print_r($data, 1));                
-        //error_log(print_r($omigrate['users_empleado'], 1));        
-        //error_log('get_real_teacher_id');
-        //error_log($data);             
+        $default_teacher_id = self::default_admin_id;        
         if (empty($uidIdPersona)) {
             //error_log('No teacher provided');
             return $default_teacher_id;
@@ -187,8 +171,6 @@ class MigrationCustom {
      * @return array User info (from Chamilo DB)
      */
     public function create_user($data, $omigrate) {
-        //error_log(print_r($data, 1));  
-        
         if (empty($data['uidIdPersona'])) {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));    
@@ -196,15 +178,16 @@ class MigrationCustom {
         }
             
         //Is a teacher
-        if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {
-            //error_log(print_r($omigrate['users_empleado'][$data['uidIdPersona']], 1));  
-            //error_log(print_r($data, 1));
-            //error_log('teacher');
-            //$data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);        
+        if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {            
             $data['status'] = COURSEMANAGER;                
         } else {     
             $data['status'] = STUDENT;            
         }
+        
+        if (isset($data['uidIdEmpleado'])) {
+            $data['status'] = COURSEMANAGER;
+        }
+        
         
         if (!isset($data['username']) || empty($data['username'])) {
             $data['firstname'] = (string) trim($data['firstname']); 
@@ -299,6 +282,7 @@ class MigrationCustom {
         UserManager::update_extra_field_value($user_info['user_id'], 'uidIdPersona', $id_persona);
         return $user_info;
     }
+    
     /**
      * Manages the course creation based on the rules in db_matches.php
      */
@@ -326,9 +310,15 @@ class MigrationCustom {
      */
     public function create_session($data) {
         $session_id = SessionManager::add($data);
+        //error_log('create_session');
+        //error_log($data['course_code']);
         if (!$session_id) {
-            print_r($data);
-            exit;
+            //error_log($session_id);
+            error_log('failed create_session');
+            //print_r($data);
+            //exit;
+        } else{
+            //error_log('session_id created');            
         }
         return $session_id;
     }
@@ -336,14 +326,9 @@ class MigrationCustom {
      * Assigns a user to a session based on rules in db_matches.php
      */
     public function add_user_to_session($data) {
-        //error_log('add_user_to_session');
-        ///print_r($data);
-        //Search  uidIdPrograma        
-        //Search  uidIdAlumno
-        
         $extra_field_value = new ExtraFieldValue('session');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
-        
+        //error_log('$result[session_id]: '.$result['session_id']);
         $session_id = null;
         $user_id = null;
         
@@ -353,14 +338,15 @@ class MigrationCustom {
         
         $extra_field_value = new ExtraFieldValue('user');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
-        
+        //error_log('$result[user_id]: '.$result['user_id']);
         if ($result && $result['user_id']) {               
             $user_id = $result['user_id'];                   
         }
         
-        if (!empty($session_id) && !empty($user_id)){          
+        if (!empty($session_id) && !empty($user_id)) {          
             error_log('Called: add_user_to_session - Subscribing: session_id: '.$session_id. '  user_id: '.$user_id);
             SessionManager::suscribe_users_to_session($session_id, array($user_id));       
+            //exit;
         } else {            
             //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].' - No uidIdPersona: '.$data['uidIdPersona']);            
         }     

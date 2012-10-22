@@ -345,7 +345,7 @@ class MigrationCustom {
         
         if (!empty($session_id) && !empty($user_id)) {          
             error_log('Called: add_user_to_session - Subscribing: session_id: '.$session_id. '  user_id: '.$user_id);
-            SessionManager::suscribe_users_to_session($session_id, array($user_id));       
+            SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);       
             //exit;
         } else {            
             //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].' - No uidIdPersona: '.$data['uidIdPersona']);            

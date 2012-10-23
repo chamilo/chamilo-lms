@@ -166,6 +166,7 @@ class SessionManager {
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);        
         $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);        
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
                 
 		$where = 'WHERE 1 = 1 ';
 		$user_id = api_get_user_id();
@@ -197,7 +198,7 @@ class SessionManager {
             $extra_fields = $options['extra'];
             if (!empty($extra_fields)) {
                 foreach ($extra_fields as $extra) {
-                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fv.field_value, NULL ) as {$extra['field']} , ";
+                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fvo.option_display_text, NULL ) as {$extra['field']} , ";
                     if (isset($extra_fields_info[$extra['id']])) {
                         $info = $extra_fields_info[$extra['id']];                        
                     } else {
@@ -246,12 +247,18 @@ class SessionManager {
         if (!empty($options['where'])) {
             //var_dump($inject_extra_fields);
             //var_dump($options);
-            if (!empty($options['extra'])) {
+            if (!empty($options['extra'])) {                
+                 
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+                //var_dump($options['where']);
+                $options['where'] = str_replace('AND', 'OR', $options['where']);
+                
                 foreach ($options['extra'] as $extra) {
-                    $options['where'] = str_replace($extra['field'], 'fv.field_value', $options['where']);        
+                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);        
                 }
-            }            
+            }     
             $options['where'] = str_replace('course_title', 'c.title', $options['where']);
+            
             $where .= ' AND '.$options['where'];           
 		}           
         
@@ -264,6 +271,7 @@ class SessionManager {
         //INNER JOIN $tbl_course c ON (src.course_code = c.code OR src.course_code = NULL)
 		$query = "$select FROM $tbl_session s 
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                    INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fv.field_id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
                     LEFT JOIN $tbl_course c ON (src.course_code = c.code)
                     LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) 
@@ -293,10 +301,9 @@ class SessionManager {
 
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
-        }
-        
+        }        
         //error_log($query);
-        //echo $query;
+       // echo $query;
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
@@ -357,13 +364,13 @@ class SessionManager {
                 }
                 
                 //Magic filter
-                /*
+                
                 if (isset($formatted_sessions[$session_id])) {                    
                     $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
                 } else {
                     $formatted_sessions[$session_id] = $session;
-                }*/
-                $formatted_sessions[] = $session;
+                }
+                //$formatted_sessions[] = $session;
 			}
 		}		
         

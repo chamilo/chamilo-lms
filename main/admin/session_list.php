@@ -65,6 +65,7 @@ $extra_params['groupingView'] = array(  'groupCollapse'    => false,
                                         'groupColumnShow'  => array(false),
                                         'groupText'        => array('<b>'.get_lang('Session').' {0}</b>'));
 */
+
 $result = SessionManager::get_session_columns();
 $columns = $result['columns'];
 $column_model = $result['column_model'];
@@ -80,12 +81,6 @@ $extra_params['postData'] =array (
                                         //'groups' => $groups
                                 )                                
 );
-/*
-     $filters = array('filters' => array( "groupOp" => "AND", 
-                                        "rules" => $rules));
-    
-     $filters = json_encode($filters);
- var_dump($filters);*/
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {

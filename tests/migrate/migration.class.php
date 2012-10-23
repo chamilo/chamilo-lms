@@ -101,12 +101,12 @@ class Migration {
                 
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $table) {
-            error_log('Found table ' . $table['orig_table']);
+            error_log('Found table ' . $table['orig_table'] . ' in db_matches');
             $build_only = false;
             
             if (empty($table['dest_table'])) {
                 //If there is no destination for this table, report
-                error_log(' ... which is just for data building');
+                error_log(' ... which is just for data collection');
                 $build_only = true;
             }
             

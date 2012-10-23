@@ -107,7 +107,7 @@ class MigrationCustom {
         if ($values) {
             return $values['course_code'];
         } else {
-            error_log("Course not found in DB");
+            error_log("Course ".print_r($data,1)." not found in DB");
         }
     }
     
@@ -171,6 +171,7 @@ class MigrationCustom {
      * @return array User info (from Chamilo DB)
      */
     public function create_user($data, $omigrate) {
+        //error_log('In create_user, receiving '.print_r($data,1));
         if (empty($data['uidIdPersona'])) {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));    
@@ -178,7 +179,7 @@ class MigrationCustom {
         }
             
         //Is a teacher
-        if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {            
+        if (isset($data['uidIdEmpleado'])) {            
             $data['status'] = COURSEMANAGER;                
         } else {     
             $data['status'] = STUDENT;            
@@ -221,7 +222,7 @@ class MigrationCustom {
                     error_log("Skip user already added: {$user_info['username']}");                    
                     return $user_info;
                 } else {
-                    error_log("homonym - wanted_username: $wanted_user_name - uidIdPersona: {$user_persona['uidIdPersona']} - username: {$user_info['username']}");       
+                    error_log("Homonym - wanted_username: $wanted_user_name - uidIdPersona: {$user_persona['uidIdPersona']} - username: {$user_info['username']}");       
                     print_r($data);
                      //The user has the same firstname and lastname but it has another uiIdPersona could by an homonym  
                     $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);       
@@ -287,6 +288,7 @@ class MigrationCustom {
      * Manages the course creation based on the rules in db_matches.php
      */
     public function create_course($data) {
+        //error_log('In create_course, received '.print_r($data,1));
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);  
         
@@ -328,7 +330,7 @@ class MigrationCustom {
     public function add_user_to_session($data) {
         $extra_field_value = new ExtraFieldValue('session');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
-        //error_log('$result[session_id]: '.$result['session_id']);
+        error_log('data[uidIdPrograma] '.$data['uidIdPrograma'].' returned $result[session_id]: '.$result['session_id']);
         $session_id = null;
         $user_id = null;
         
@@ -338,17 +340,17 @@ class MigrationCustom {
         
         $extra_field_value = new ExtraFieldValue('user');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
-        //error_log('$result[user_id]: '.$result['user_id']);
+        error_log('data[uidIdPersona] '.$data['uidIdPersona'].' returned $result[user_id]: '.$result['user_id']);
         if ($result && $result['user_id']) {               
             $user_id = $result['user_id'];                   
         }
         
         if (!empty($session_id) && !empty($user_id)) {          
-            error_log('Called: add_user_to_session - Subscribing: session_id: '.$session_id. '  user_id: '.$user_id);
+            //error_log('Called: add_user_to_session - Subscribing: session_id: '.$session_id. '  user_id: '.$user_id);
             SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);       
             //exit;
         } else {            
-            //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].' - No uidIdPersona: '.$data['uidIdPersona']);            
+            //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].'='.$session_id.' - No uidIdPersona: '.$data['uidIdPersona'].'='.$user_id);            
         }     
     }
 }

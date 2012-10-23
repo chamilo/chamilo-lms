@@ -55,13 +55,13 @@ class ExtraField extends Model {
     }
     
         
-    public function get_all($where_conditions = array()) {
+    public function get_all($where_conditions = array(), $order_field_options_by = null) {
         $options = Database::select('*', $this->table, array('where'=>$where_conditions, 'order' =>'field_order ASC'));
         
         $field_option = new ExtraFieldOption($this->type);
         if (!empty($options)) {
             foreach ($options as &$option) {                
-                $option['options'] = $field_option->get_field_options_by_field($option['id']);
+                $option['options'] = $field_option->get_field_options_by_field($option['id'], false, $order_field_options_by);
             }
         }        
         return $options;

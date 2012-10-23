@@ -216,7 +216,7 @@ class ExtraFieldValue extends Model {
                 INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
                 WHERE  field_value  = '$field_value'  AND 
                        field_variable = '".$field_variable."' 
-                ";        
+                ";                   
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {            
             $result = Database::fetch_array($result, 'ASSOC');            

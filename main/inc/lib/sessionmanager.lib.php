@@ -166,7 +166,7 @@ class SessionManager {
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);        
         $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);        
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        
+                
 		$where = 'WHERE 1 = 1 ';
 		$user_id = api_get_user_id();
                 
@@ -243,14 +243,28 @@ class SessionManager {
                 c.title as course_title,
                 s.id ";
         
+        if (!empty($options['where'])) {
+            //var_dump($inject_extra_fields);
+            //var_dump($options);
+            if (!empty($options['extra'])) {
+                foreach ($options['extra'] as $extra) {
+                    $options['where'] = str_replace($extra['field'], 'fv.field_value', $options['where']);        
+                }
+            }            
+            $options['where'] = str_replace('course_title', 'c.title', $options['where']);
+            $where .= ' AND '.$options['where'];           
+		}           
+        
         if (!empty($options['limit'])) {            
             $where .= " LIMIT ".$options['limit'];
         }
         
+        //LEFT JOIN $tbl_course c ON (src.course_id = c.id)
+         
 		$query = "$select FROM $tbl_session s 
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
-                    LEFT JOIN $tbl_course c ON (src.course_id = c.id)
+                    LEFT JOIN $tbl_course c ON (src.course_code = c.code)
                     LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) 
                     INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
                     $where;
@@ -262,31 +276,26 @@ class SessionManager {
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
 				$where.= " AND ar.access_url_id = $access_url_id ";
-				$query = "$select ".
-                    "FROM $tbl_session s ".
-                    "LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-					" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
-                    "LEFT JOIN $tbl_course c ON (src.course_id = c.id) ".
-                    "LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) ".
-					"INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
-					"INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) ".
-				" $where";
+				$query = "$select 
+                    FROM $tbl_session s 
+                    LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) 
+					LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
+                    LEFT JOIN $tbl_course c ON (src.course_code = c.code)
+                    LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id)
+					INNER JOIN $tbl_user u ON (s.id_coach = u.user_id)
+					INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id)
+                    $where";
 			}
 		}
      
 		$query .= ") AS session_table";
 
-		if (!empty($options['where'])) {
-		   $query .= ' WHERE '.$options['where'];
-		}
-             
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }
         
         error_log($query);
-        //echo $query;
-        
+        //echo $query;        
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
@@ -2357,8 +2366,8 @@ class SessionManager {
         //Inject extra session fields
         $session_field = new SessionField();
         $session_field_option = new SessionFieldOption();
-        $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1))); 
-
+        $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1)), 'option_display_text'); 
+                
         $rules = array();
         /*
         $now = new DateTime();
@@ -2438,7 +2447,7 @@ class SessionManager {
                     $rules[] = array('field' => 'extra_'.$field['field_variable'].'_second', 'op' => 'cn');
                     continue;
                 } else {            
-                    $search_options['value'] = $session_field_option->get_field_options_to_string($field['id']);    
+                    $search_options['value'] = $session_field_option->get_field_options_to_string($field['id'], false, 'option_display_text');    
                 }
 
                 $column_model[] = array(

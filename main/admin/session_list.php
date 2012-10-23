@@ -180,7 +180,7 @@ $(function() {
     prmSearch = {
         multipleSearch : true, 
         overlay : false, 
-        width: 600,
+        width: 'auto',
         caption: '<?php echo addslashes(get_lang('Search')); ?>',
         formclass:'data_table',
         onSearch : function() {

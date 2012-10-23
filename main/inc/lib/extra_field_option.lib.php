@@ -29,8 +29,8 @@ class ExtraFieldOption extends Model {
         return $row['count'];
     }
     
-    public function get_field_options_to_string($field_id) {
-        $options = self::get_field_options_by_field($field_id);
+    public function get_field_options_to_string($field_id,  $add_id_in_array = false, $ordered_by = null) {
+        $options = self::get_field_options_by_field($field_id, $add_id_in_array, $ordered_by);
         $new_options = array();        
         if (!empty($options)) {
             foreach ($options as $option) {

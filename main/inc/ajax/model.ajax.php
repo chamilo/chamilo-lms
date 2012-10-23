@@ -17,6 +17,16 @@ $limit  = intval($_REQUEST['rows']); //quantity of rows
 $sidx   = $_REQUEST['sidx'];         //index (field) to filter         
 $sord   = $_REQUEST['sord'];         //asc or desc
 
+if (strpos(strtolower($sidx), 'asc') !== false) {
+    $sidx = str_replace(array('asc', ','), '', $sidx);
+    $sord = 'asc';
+}
+
+if (strpos(strtolower($sidx), 'desc') !== false) {
+    $sidx = str_replace(array('desc', ','), '', $sidx);
+    $sord = 'desc';
+}
+
 if (!in_array($sord, array('asc','desc'))) {
     $sord = 'desc'; 
 }

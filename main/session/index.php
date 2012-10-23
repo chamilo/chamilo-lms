@@ -56,12 +56,14 @@ $final_array     = array();
 
 if (!empty($new_session_list)) {
     foreach ($new_session_list as $item) {
-        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;    
+        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;  
+         
         if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
         	$final_array[$my_session_id]['name'] = $item['session_name'];
             
             //Get all courses by session where I'm subscribed
             $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
+           
                                
             foreach ($my_course_list as $my_course) {
                 $course = array();
@@ -433,7 +435,7 @@ $(function() {
          
 <?php
      //Displays js code to use a jqgrid
-     echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
+     echo Display::grid_js('courses',       false,             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
      echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');
      echo Display::grid_js('list_course',   $url_by_course, $columns,         $column_model,$extra_params_course,array(),'');
      echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');     

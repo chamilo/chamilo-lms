@@ -840,14 +840,18 @@ class Display {
     public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '', $width_fix = false) {
         $obj = new stdClass();
 
-        if (!empty($url))
+        if (!empty($url)) {
             $obj->url  = $url;
+            $obj->datatype  = 'json';
+        } else {
+            $obj->datatype  = 'local';
+        }
 
         $obj->colNames = $column_names;
         $obj->colModel = $column_model;
         $obj->pager    = '#'.$div_id.'_pager';
 
-        $obj->datatype  = 'json';
+        
         
         //Default row quantity
         if (!isset($extra_params['rowList'])) {

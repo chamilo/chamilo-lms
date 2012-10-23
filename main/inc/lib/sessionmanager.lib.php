@@ -220,40 +220,40 @@ class SessionManager {
           
         //var_dump($options_by_double);
         //sc.name as category_name,         
-		$select = "SELECT * FROM (SELECT ".
-				" IF ( ".
-					" (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR ".
-					" (s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR ".
-					" (s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR ".
-					" ('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date) ".
-				" , 1, 0) ".
-				" as session_active, ". 
-				"s.name, ".
-                "s.nbr_courses, ".
-                "s.nbr_users, ".
-                "s.display_start_date, ".
-                "s.display_end_date, ".
-                "$coach_name, ".    
-                "access_start_date, ".
-                "access_end_date, ".
-                "s.visibility, ".
-                "u.user_id, ".
-                "$inject_extra_fields ".
-                "c.title as course_title, ".
-                "s.id ";
+		$select = "
+                SELECT * FROM (
+                    SELECT 
+                        IF (
+                            (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR 
+                            (s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR 
+                            (s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR 
+                            ('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date) 
+                        , 1, 0) as session_active, 
+                s.name, 
+                s.nbr_courses, 
+                s.nbr_users, 
+                s.display_start_date, 
+                s.display_end_date, 
+                $coach_name, 
+                access_start_date, 
+                access_end_date, 
+                s.visibility, 
+                u.user_id,
+                $inject_extra_fields
+                c.title as course_title,
+                s.id ";
         
         if (!empty($options['limit'])) {            
             $where .= " LIMIT ".$options['limit'];
         }
         
-		$query = "$select ".
-                "FROM $tbl_session s ".
-                "LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-                "LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
-                " LEFT JOIN $tbl_course c ON (src.course_id = c.id)" .
-				" LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) ".
-				" INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
-                $where;
+		$query = "$select FROM $tbl_session s 
+                    LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
+                    LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
+                    LEFT JOIN $tbl_course c ON (src.course_id = c.id)
+                    LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) 
+                    INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
+                    $where;
         
 		global $_configuration;
         
@@ -284,7 +284,10 @@ class SessionManager {
             $query .= " ORDER BY ".$options['order'];
         }
         
-error_log($query);
+        error_log($query);
+        //echo $query;
+        
+        
 		$result = Database::query($query);
 		$formatted_sessions = array();
                 

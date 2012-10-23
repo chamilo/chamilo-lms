@@ -356,7 +356,7 @@ $extra_params_course = array();
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupCollapse'    => false,
 											 'groupField'       => array('course'),
-                                             'groupColumnShow'  => array('false'),
+                                             'groupColumnShow'  => array(false),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent                                 
 $extra_params_course['height'] = "100%";
@@ -377,7 +377,7 @@ $extra_params_week['groupingView'] = array('groupCollapse'     => false,
 										   'groupDataSorted'   => false,
 										   'groupField'        => array('week'),
                                            'groupOrder'        => array('desc'),
-                                           'groupColumnShow'   => 'false',
+                                           'groupColumnShow'   => false,
                                            'groupText'         => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%'; 

@@ -54,10 +54,17 @@ if (isset($_REQUEST['keyword'])) {
 //Autowidth             
 $extra_params['autowidth'] = 'true';
 //Height auto 
-$extra_params['height'] = 'auto';
+$extra_params['height'] = '100%'; 
 
 $extra_params['rowList'] = array(20, 50, 100, 250, 500);
 
+/*
+$extra_params['grouping'] = 'true';
+$extra_params['groupingView'] = array(  'groupCollapse'    => false,
+                                        'groupField'       => array('name'),
+                                        'groupColumnShow'  => array(false),
+                                        'groupText'        => array('<b>'.get_lang('Session').' {0}</b>'));
+*/
 $result = SessionManager::get_session_columns();
 $columns = $result['columns'];
 $column_model = $result['column_model'];

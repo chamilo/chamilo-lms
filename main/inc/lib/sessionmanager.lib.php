@@ -216,13 +216,13 @@ class SessionManager {
         foreach ($double_fields as $double) {            
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
             $options_by_double['extra_'.$double['field_variable']] = $my_options;            
-        }       
-          
+        }
+                  
         //var_dump($options_by_double);
         //sc.name as category_name,         
 		$select = "
                 SELECT * FROM (
-                    SELECT 
+                    SELECT DISTINCT
                         IF (
                             (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR 
                             (s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR 
@@ -260,7 +260,8 @@ class SessionManager {
         }
         
         //LEFT JOIN $tbl_course c ON (src.course_id = c.id)
-         
+        //LEFT JOIN $tbl_course c ON (src.course_code = c.code)
+        //INNER JOIN $tbl_course c ON (src.course_code = c.code OR src.course_code = NULL)
 		$query = "$select FROM $tbl_session s 
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
@@ -294,8 +295,8 @@ class SessionManager {
             $query .= " ORDER BY ".$options['order'];
         }
         
-        error_log($query);
-        //echo $query;        
+        //error_log($query);
+        //echo $query;
         
 		$result = Database::query($query);
 		$formatted_sessions = array();
@@ -356,11 +357,13 @@ class SessionManager {
                 }
                 
                 //Magic filter
+                /*
                 if (isset($formatted_sessions[$session_id])) {                    
                     $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
                 } else {
                     $formatted_sessions[$session_id] = $session;
-                }
+                }*/
+                $formatted_sessions[] = $session;
 			}
 		}		
         
@@ -2360,7 +2363,7 @@ class SessionManager {
                         ),   
                         //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                         array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'course_title',    'index'=>'course_title',   'width'=>'40',  'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
+                        array('name'=>'course_title',    'index'=>'course_title',   'width'=>'50',   'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
         ); 
 
         //Inject extra session fields
@@ -2369,19 +2372,6 @@ class SessionManager {
         $fields = $session_field->get_all(array('field_visible = ? AND field_filter = ?' => array(1, 1)), 'option_display_text'); 
                 
         $rules = array();
-        /*
-        $now = new DateTime();
-        $now->add(new DateInterval('P30D'));
-        $one_month = $now->format('Y-m-d H:m:s');*/
-
-        //$rules[] = array( "field" => "name", "op" => "cn", "data" => "");
-        //$rules[] = array( "field" => "category_name", "op" => "cn", "data" => "");
-        //$rules[] = array( "field" => "course_title", "op" => "cn", "data" => '');
-        //$rules[] = array( "field" => "display_start_date", "op" => "ge", "data" => api_get_local_time());
-        //$rules[] = array( "field" => "display_end_date", "op" => "le", "data" => api_get_local_time($one_month));
-        
-//        var_dump($fields);exit;
-
         if (!empty($fields)) {
             foreach ($fields as $field) {
                 $search_options = array();

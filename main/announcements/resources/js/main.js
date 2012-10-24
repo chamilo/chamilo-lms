@@ -155,11 +155,14 @@ function move(fbox, tbox) {
     var arrFbox = [];
     var arrTbox = [];
     var arrLookup = [];
+    var arrFboxIsDisabled = []; // if this from checkbox after move is disabled or not
+    var arrTboxIsDisabled = []; // if this to checkbox after move is disabled or not
 
     var i;
     for (i = 0; i < tbox.options.length; i++) {
         arrLookup[tbox.options[i].text] = tbox.options[i].value;
         arrTbox[i] = tbox.options[i].text;
+        arrTboxIsDisabled[i] = tbox.options[i].disabled;
     }
 
     var fLength = 0;
@@ -177,6 +180,7 @@ function move(fbox, tbox) {
         else 
         {
             arrFbox[fLength] = fbox.options[i].text;
+            arrFboxIsDisabled[fLength] = fbox.options[i].disabled;
             fLength++;
         }
     }
@@ -229,6 +233,9 @@ function move(fbox, tbox) {
         var no = new Option();
         no.value = arrLookup[arrFbox[c]];
         no.text = arrFbox[c];
+        if (arrFboxIsDisabled[c]) {
+            no.disabled = "disabled";
+        }
         fbox[c] = no;
     }
     for (c = 0; c < arrTbox.length; c++) 
@@ -236,6 +243,9 @@ function move(fbox, tbox) {
         var no = new Option();
         no.value = arrLookup[arrTbox[c]];
         no.text = arrTbox[c];
+        if (arrTboxIsDisabled[c]) {
+            no.disabled = "disabled";
+        }        
         tbox[c] = no;
     }
 }

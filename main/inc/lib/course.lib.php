@@ -1521,20 +1521,31 @@ class CourseManager {
      * Get the list of groups from the course
      * @param   string  Course code
      * @param   int     Session ID (optional)
+     * @param   boolean get empty groups (optional)
      * @return  array   List of groups info
      */
-    public static function get_group_list_of_course($course_code, $session_id = 0) {
+    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
         $course_info = Database::get_course_info($course_code);
         $course_id = $course_info['real_id'];
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
         
-        $sql = "SELECT g.id, g.name
-                FROM ".Database::get_course_table(TABLE_GROUP)." AS g
-                INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
-                ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
-                $session_condition                
-                ORDER BY g.name";
+        if ($in_get_empty_group == 0) {
+            // get only groups that are not empty
+            $sql = "SELECT DISTINCT g.id, g.name
+                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g
+                    INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
+                    ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
+                    $session_condition                
+                    ORDER BY g.name";
+                }
+        else {
+            // get all groups even if they are empty
+            $sql = "SELECT g.id, g.name
+                    FROM ".Database::get_course_table(TABLE_GROUP)." AS g 
+                    $session_condition 
+                    AND c_id = $course_id";
+        }
         $result = Database::query($sql);
         
         while ($group_data = Database::fetch_array($result)) {

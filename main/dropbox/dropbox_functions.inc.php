@@ -522,20 +522,8 @@ function display_add_form() {
     	}
     	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
     }
-
-	?>
-
-    <select name="recipients[]" size="
-	<?php
-	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) {
-		echo 10;
-	} else {
-		echo 6;
-	}
-
-	?>" multiple style="width: 350px;">
-	<?php
-
+    
+    echo '<select name="recipients[]" size="10" multiple class="span4">';	
 	/*
 		Create the options inside the select box:
 		List all selected users their user id as value and a name string as display

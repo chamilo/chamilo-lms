@@ -2,9 +2,9 @@
 <link href="http://www.chamilo.org/documentation.php" rel="help" />
 <link href="http://www.chamilo.org/team.php" rel="author" />
 <link href="http://www.chamilo.org" rel="copyright" />
-{{ prefetch}}
+{{ prefetch }}
 {{ favico }}
-<link rel="apple-touch-icon" href="{{ _p.web}}apple-touch-icon.png" />
+<link rel="apple-touch-icon" href="{{ _p.web }}apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="Generator" content="{{ _s.software_name }} {{ _s.system_version|slice(0,1) }}" />
 {#  Use the latest engine in ie8/ie9 or use google chrome engine if available  #}

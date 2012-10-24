@@ -204,7 +204,7 @@ if (($action == 'deletereceivedfile' OR $action == 'deletesentfile') AND isset($
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	$dropboxfile = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
 	if ($action == 'deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
 		$message = get_lang('ReceivedFileDeleted');
@@ -309,9 +309,7 @@ if ($action != 'add') {
 		}
 	}
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -367,9 +365,7 @@ if ($action != 'add') {
 
 	/*	RECEIVED FILES */
 
-	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
-
+	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_received_category']) AND $_GET['view_received_category'] != '') {
 			$view_dropbox_category_received = $_GET['view_received_category'];
@@ -378,7 +374,7 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
 
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
@@ -519,9 +515,7 @@ if ($action != 'add') {
 
 	/*	SENT FILES */
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -530,8 +524,8 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+        
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
 

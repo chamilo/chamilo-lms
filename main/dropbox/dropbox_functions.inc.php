@@ -684,7 +684,10 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
 			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
-			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
+			WHERE 
+                p.dest_user_id = '" . $mailingPseudoId . "' AND 
+                p.c_id = $course_id 
+            ";
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result)))

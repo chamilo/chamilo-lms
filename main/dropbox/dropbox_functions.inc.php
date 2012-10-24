@@ -646,8 +646,10 @@ function removeUnusedFiles() {
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM " . dropbox_cnf('tbl_file') . " f
 			LEFT JOIN " . dropbox_cnf('tbl_person') . " p 
-            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id )
-			WHERE p.user_id IS NULL";
+            ON (f.id = p.file_id)
+			WHERE p.user_id IS NULL AND
+                  f.c_id = $course_id 
+            ";
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
         

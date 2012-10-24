@@ -26,7 +26,7 @@ $config['ToolbarSets']['Normal'] = array(
    	array('UnorderedList','OrderedList','Rule'),
 	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('FontFormat','FontName','FontSize','Bold','Italic','Underline','TextColor','BGColor'),
-	array('FitWindow')
+	array('Source', 'FitWindow')
 );
 
 // This is the visible toolbar set when the editor is maximized.

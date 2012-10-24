@@ -652,9 +652,9 @@ function removeUnusedFiles() {
     while ($res = Database::fetch_array($result)) {
         
 		//delete the selected files from the post and file tables
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
         Database::query($sql);
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
         Database::query($sql);
 
 		//delete file from server

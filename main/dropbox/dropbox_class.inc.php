@@ -67,7 +67,7 @@ class Dropbox_Work {
 	 * @param unknown_type $arg6
 	 * @return Dropbox_Work
 	 */
-	function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null) {
+	function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null) {
 		if (func_num_args() > 1)  {
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
 		}  else  {
@@ -232,7 +232,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $arg7
 	 * @return Dropbox_SentWork
 	 */
-	function Dropbox_SentWork($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null) {
+	function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null) {
 		if (func_num_args() > 1) {
 		    $this->_createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
 		} else {
@@ -326,14 +326,13 @@ class Dropbox_SentWork extends Dropbox_Work
 	 */
 	function _createExistingSentWork ($id) {
 		global $dropbox_cnf;
+        
+        $id = intval($id);
 		
 		$course_id = api_get_course_int_id(); 
 
 		// Call constructor of Dropbox_Work object
 		$this->Dropbox_Work($id);
-
-		// Do sanity check. The sanity check for ex-coursemembers is already done in base constructor
-		settype($id, 'integer') or die(get_lang('GeneralError').' (code 211)'); // Set $id to correct type
 
 		// Fill in recipients array
 		$this->recipients = array();
@@ -341,16 +340,21 @@ class Dropbox_SentWork extends Dropbox_Work
 				FROM ".$dropbox_cnf['tbl_post']."
 				WHERE c_id = $course_id AND file_id='".Database::escape_string($id)."'";
         $result = Database::query($sql);
-		while ($res = Database::fetch_array($result)) {
+		while ($res = Database::fetch_array($result, 'ASSOC')) {
+            
 			// Check for deleted users
 			$dest_user_id = $res['dest_user_id'];
-			$recipientName = getUserNameFromId($dest_user_id);
+			$user_info = api_get_user_info($dest_user_id);
 			//$this->category = $res['cat_id'];
-			if (!$recipientName) {
+			if (!$user_info) {
 				$this->recipients[] = array('id' => -1, 'name' => get_lang('Unknown', ''));
 			} else {
-				$this->recipients[] = array('id' => $dest_user_id, 'name' => $recipientName, 'user_id' => $dest_user_id,
-				    'feedback_date' => $res['feedback_date'], 'feedback' => $res['feedback']);
+				$this->recipients[] = array(
+                    'id' => $dest_user_id, 
+                    'name' => $user_info['complete_name'], 
+                    'user_id' => $dest_user_id,
+				    'feedback_date' => $res['feedback_date'], 
+                    'feedback' => $res['feedback']);
 			}
 		}
 	}
@@ -375,15 +379,15 @@ class Dropbox_Person
 	 * @param unknown_type $isCourseTutor
 	 * @return Dropbox_Person
 	 */
-	function Dropbox_Person ($userId, $isCourseAdmin, $isCourseTutor) {
+	function __construct($userId, $isCourseAdmin, $isCourseTutor) {
 	    $course_id = api_get_course_int_id(); 
         
 		// Fill in properties
-		$this->userId = $userId;
-		$this->isCourseAdmin = $isCourseAdmin;
-		$this->isCourseTutor = $isCourseTutor;
-		$this->receivedWork = array();
-		$this->sentWork = array();
+		$this->userId           = $userId;
+		$this->isCourseAdmin    = $isCourseAdmin;
+		$this->isCourseTutor    = $isCourseTutor;
+		$this->receivedWork     = array();
+		$this->sentWork         = array();
 
 		// Note: perhaps include an ex coursemember check to delete old files
 
@@ -393,8 +397,9 @@ class Dropbox_Person
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
+        
 		// Find all entries where this person is the recipient
-		 $sql = "SELECT DISTINCT r.file_id, r.cat_id 
+		$sql = "SELECT DISTINCT r.file_id, r.cat_id 
                     FROM $post_tbl r INNER JOIN $person_tbl p 
                     ON (r.dest_user_id = p.user_id AND r.c_id = $course_id AND p.c_id = $course_id )
                 WHERE
@@ -568,7 +573,7 @@ class Dropbox_Person
 			}
 		}
 		// Delete entries in person table concerning received works
-        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id='".$this->userId."' AND file_id='".$id."'";        
+        $sql = "DELETE FROM ".$dropbox_cnf['tbl_person']." WHERE c_id = $course_id AND user_id = '".$this->userId."' AND file_id ='".$id."'";        
 		Database::query($sql);
 		removeUnusedFiles();	// Check for unused files
 	}

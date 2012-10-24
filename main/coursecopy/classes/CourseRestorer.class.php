@@ -1153,6 +1153,7 @@ class CourseRestorer
                 
 				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 				$order = 0;                
+                                
 				foreach ($quiz->question_ids as $index => $question_id) {
 					$qid = $this->restore_quiz_question($question_id);
 					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;					
@@ -1168,8 +1169,8 @@ class CourseRestorer
 	 */
 	function restore_quiz_question($id) {
 		$resources = $this->course->resources;        
-		$question = $resources[RESOURCE_QUIZQUESTION][$id];   
-                
+		$question = $resources[RESOURCE_QUIZQUESTION][$id];
+                        
 		$new_id = 0;
 
 		if (is_object($question)) {
@@ -1203,7 +1204,16 @@ class CourseRestorer
                     $t[$answer['position']] = $answer;
                 }
                 foreach ($t as $index => $answer) {
-                    $sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '".$index."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
+                    $sql = "INSERT INTO ".$table_ans." SET 
+                            c_id = ".$this->destination_course_id." , 
+                            id = '".$index."', question_id = '".$new_id."', 
+                            answer = '".self::DBUTF8escapestring($answer['answer'])."', 
+                            correct = '".$answer['correct']."', 
+                            comment = '".self::DBUTF8escapestring($answer['comment'])."', 
+                            ponderation = '".$answer['ponderation']."', 
+                            position = '".$answer['position']."', 
+                            hotspot_coordinates = '".$answer['hotspot_coordinates']."', 
+                            hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
 			} else {
@@ -1213,7 +1223,17 @@ class CourseRestorer
 					$answer['answer']  = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['answer'], $this->course->code, $this->course->destination_path);
 					$answer['comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($answer['comment'], $this->course->code, $this->course->destination_path);
 
-					$sql = "INSERT INTO ".$table_ans." SET c_id = ".$this->destination_course_id." , id= '". ($index +1)."',question_id = '".$new_id."', answer = '".self::DBUTF8escapestring($answer['answer'])."', correct = '".$answer['correct']."', comment = '".self::DBUTF8escapestring($answer['comment'])."', ponderation='".$answer['ponderation']."', position = '".$answer['position']."', hotspot_coordinates = '".$answer['hotspot_coordinates']."', hotspot_type = '".$answer['hotspot_type']."'";
+					$sql = "INSERT INTO ".$table_ans." SET 
+                                c_id = ".$this->destination_course_id." , 
+                                id = '". ($index + 1)."', 
+                                question_id = '".$new_id."', 
+                                answer = '".self::DBUTF8escapestring($answer['answer'])."', 
+                                correct = '".$answer['correct']."', 
+                                comment = '".self::DBUTF8escapestring($answer['comment'])."', 
+                                ponderation = '".$answer['ponderation']."', 
+                                position = '".$answer['position']."', 
+                                hotspot_coordinates = '".$answer['hotspot_coordinates']."', 
+                                hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
 				}
 			}
@@ -1234,6 +1254,7 @@ class CourseRestorer
                 }
                 $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=>array($new_id, $this->destination_course_id))));
                 foreach ($new_answers as $answer_item) {
+                    $params = array();
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
                     $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
                 }
@@ -1959,8 +1980,7 @@ class CourseRestorer
 	}
     
     function DBUTF8_array($array) {        
-        if (UTF8_CONVERT) {
-            
+        if (UTF8_CONVERT) {            
             foreach ($array as &$item)  {
                 $item = utf8_encode($item);
             }

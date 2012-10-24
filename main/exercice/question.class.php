@@ -1171,6 +1171,7 @@ abstract class Question
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
 		}
+        
 		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
 		$form->addElement('advanced_settings','

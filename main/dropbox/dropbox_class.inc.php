@@ -67,7 +67,7 @@ class Dropbox_Work {
 	 * @param unknown_type $arg6
 	 * @return Dropbox_Work
 	 */
-	function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null) {
+	function Dropbox_Work($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null) {
 		if (func_num_args() > 1)  {
 		    $this->_createNewWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6);
 		}  else  {
@@ -232,7 +232,7 @@ class Dropbox_SentWork extends Dropbox_Work
 	 * @param unknown_type $arg7
 	 * @return Dropbox_SentWork
 	 */
-	function __construct($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null) {
+	function Dropbox_SentWork($arg1, $arg2 = null, $arg3 = null, $arg4 = null, $arg5 = null, $arg6 = null, $arg7 = null) {
 		if (func_num_args() > 1) {
 		    $this->_createNewSentWork($arg1, $arg2, $arg3, $arg4, $arg5, $arg6, $arg7);
 		} else {
@@ -379,7 +379,7 @@ class Dropbox_Person
 	 * @param unknown_type $isCourseTutor
 	 * @return Dropbox_Person
 	 */
-	function __construct($userId, $isCourseAdmin, $isCourseTutor) {
+	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor) {
 	    $course_id = api_get_course_int_id(); 
         
 		// Fill in properties

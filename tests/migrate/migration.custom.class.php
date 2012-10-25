@@ -448,6 +448,9 @@ class MigrationCustom {
     static function add_evaluation_type($params) {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION_TYPE);
         if (!empty($params['name']) && !empty($params['external_id'])) {
+            if (isset($params['return_item_if_already_exists'])) {
+                unset($params['return_item_if_already_exists']);
+            }
             Database::insert($table, $params);
         }        
     }
@@ -458,7 +461,7 @@ class MigrationCustom {
         $sql = "SELECT * FROM $table WHERE external_id = $external_id";
         $result = Database::query($sql);        
         if (Database::num_rows($result)) {
-            $result = Database::store_result($sql);    
+            $result = Database::fetch_array($result, 'ASSOC');
             return $result['id'];
         }
         return false;        
@@ -466,8 +469,8 @@ class MigrationCustom {
     
     static function create_gradebook_links($data){
         error_log('create_gradebook_links');
+        $session_id = isset($data['session_id']) ? $data['session_id'] : null;
         
-        $session_id = $data['session_d'];
         if (!empty($session_id)) {
             $course_list = SessionManager::get_course_list_by_session_id($session_id);
             if (!empty($course_list)) {
@@ -476,6 +479,7 @@ class MigrationCustom {
                     //Get gradebook
                     $gradebook = new Gradebook();
                     $gradebooks = $gradebook->get_all(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    print_r($gradebooks);
                 } else {
                     error_log("Something is wrong with the course ");    
                 }

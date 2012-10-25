@@ -50,12 +50,15 @@ define('TABLE_MAIN_COURSE_REQUEST',         'course_request');
 // Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY',     'gradebook_category');
 define('TABLE_MAIN_GRADEBOOK_EVALUATION',   'gradebook_evaluation');
+define('TABLE_MAIN_GRADEBOOK_EVALUATION_TYPE',   'gradebook_evaluation_type');
 define('TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG', 'gradebook_linkeval_log');
 define('TABLE_MAIN_GRADEBOOK_RESULT',       'gradebook_result');
 define('TABLE_MAIN_GRADEBOOK_RESULT_LOG',   'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK',         'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE',  'gradebook_certificate');
+
+
 
 //Profiling
 define('TABLE_MAIN_USER_FIELD',         'user_field');

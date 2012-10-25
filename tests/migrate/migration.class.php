@@ -95,7 +95,6 @@ class Migration {
     public function migrate($matches) { 
         error_log("\n".'------------ Migration->migrate function called ------------'."\n");        
         $extra_fields = array();
-                
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $table) {
             error_log('Found table ' . $table['orig_table'] . ' in db_matches');
@@ -142,7 +141,7 @@ class Migration {
             }
             
             //Stop here (only for tests)
-            if ($table['orig_table'] == 'ProgramaAcademico')  {
+            if ($table['orig_table'] == 'gradebook_evaluation_type')  {
                 exit;
             }
         }
@@ -326,6 +325,8 @@ class Migration {
      * @return void
      */
     private function _create_extra_fields(&$table) {
+        $extra_fields = array();
+        
         error_log('Inserting (if exists) extra fields for : ' . $table['dest_table']." \n");
         foreach ($table['extra_fields'] as $extra_field) {
             error_log('Preparing for insertion of extra field '.$extra_field['field_display_text']."\n");

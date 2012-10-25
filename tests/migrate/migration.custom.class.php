@@ -173,7 +173,7 @@ class MigrationCustom {
      * @param object List of migrated things
      * @return array User info (from Chamilo DB)
      */
-    public function create_user($data, $omigrate) {
+    static function create_user($data, $omigrate) {
         //error_log('In create_user, receiving '.print_r($data,1));
         if (empty($data['uidIdPersona'])) {
             error_log('User does not have a uidIdPersona');
@@ -437,15 +437,56 @@ class MigrationCustom {
                         error_log("Thematic saved: $thematic_id");
                     } else {
                         error_log("Thematic NOT saved");
-                    }                    
+                    }
                 }                
-                
             } else {
                 error_log("No courses in session $session_id ");
+            }            
+        }        
+    }
+    
+    static function add_evaluation_type($params) {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION_TYPE);
+        if (!empty($params['name']) && !empty($params['external_id'])) {
+            Database::insert($table, $params);
+        }        
+    }
+    
+    static function get_evaluation_type($external_id) {
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION_TYPE);
+        $external_id = intval($external_id);
+        $sql = "SELECT * FROM $table WHERE external_id = $external_id";
+        $result = Database::query($sql);        
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($sql);    
+            return $result['id'];
+        }
+        return false;        
+    }
+    
+    static function create_gradebook_links($data){
+        error_log('create_gradebook_links');
+        
+        $session_id = $data['session_d'];
+        if (!empty($session_id)) {
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    //Get gradebook
+                    $gradebook = new Gradebook();
+                    $gradebooks = $gradebook->get_all(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                } else {
+                    error_log("Something is wrong with the course ");    
+                }
+                
+            } else {
+                error_log("NO course found for session id: $session_id");    
             }
             
+        } else {
+            error_log("NO session id found: $session_id");
         }
         
     }
-    
 }

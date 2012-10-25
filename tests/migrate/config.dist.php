@@ -40,6 +40,41 @@ $db_pass = 'password';
  * Defaults to: master
  */
 $db_name = 'master';
+//second DB 
+$db_name2 = 'master2';
+
+
+$config = array(    
+    'type' => $db_type,
+    'host' => $db_host,
+    'port' => $db_port,
+    'db_user' => $db_user,
+    'db_pass' => $db_pass,
+    'db_name' => $db_name,    
+);
+
+$config2 = array(    
+    'type' => $db_type,
+    'host' => $db_host,
+    'port' => $db_port,
+    'db_user' => $db_user,
+    'db_pass' => $db_pass,
+    'db_name' => $db_name2,    
+);
+
+$servers = array(
+    array(  'name'          => 'Old ms',
+            'filename'      => 'db_matches.php',   
+            'connection'    => $config,
+            'active'        => false
+    ),
+    array(  'name' => 'with e class stuff',
+            'filename'      => 'db_matches_2.php',   
+            'connection'    => $config2,
+            'active'        => true
+    ),    
+);
+
 
 /**
  * Load the real configuration file (except if we're already in config.php)

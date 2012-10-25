@@ -71,5 +71,33 @@ ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
+/*
+CREATE TABLE IF NOT EXISTS transacciones (
+    id  int unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    sede int unsigned NOT NULL,
+    tipo_id int unsigned NOT NULL,
+    system_transaction_id int unsigned NOT NULL,
+    orig varchar(255),
+    dest varchar(255),
+    tms varchar(255)  
+);
+
+CREATE TABLE IF NOT EXISTS tipo_transaccion (
+    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
+    titulo varchar(255)    
+);*/
+
+CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
+    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
+    name varchar(255),
+    external_id INT unsigned NOT NULL DEFAULT 0
+);
+
+ALTER TABLE gradebook_evaluation ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
+ALTER TABLE gradebook_link ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
+
+INSERT INTO settings_options(variable,value,display_text) VALUES ('last_transaction_id','0');
+
+
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20039' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20147' WHERE variable = 'chamilo_database_version';

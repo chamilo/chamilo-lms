@@ -911,7 +911,7 @@ VALUES
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
 ('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.19730','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.20147','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1403,6 +1403,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     default_lowest_eval_exclude TINYINT default null,
   PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     id int unsigned NOT NULL auto_increment,
@@ -1417,22 +1418,26 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     visible int NOT NULL,
     type varchar(40) NOT NULL default 'evaluation',
     locked int NOT NULL DEFAULT 0,
+    evaluation_type_id INT NOT NULL DEFAULT 0
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE IF NOT EXISTS gradebook_link (
-  id int NOT NULL auto_increment,
-  type int NOT NULL,
-  ref_id int NOT NULL,
-  user_id int NOT NULL,
-  course_code varchar(40) NOT NULL,
-  category_id int NOT NULL,
-  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
-  weight float NOT NULL,
-  visible int NOT NULL,
-  locked int NOT NULL DEFAULT 0,
-  PRIMARY KEY  (id)
+    id int NOT NULL auto_increment,
+    type int NOT NULL,
+    ref_id int NOT NULL,
+    user_id int NOT NULL,
+    course_code varchar(40) NOT NULL,
+    category_id int NOT NULL,
+    created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
+    weight float NOT NULL,
+    visible int NOT NULL,
+    locked int NOT NULL DEFAULT 0,
+    evaluation_type_id INT NOT NULL DEFAULT 0
+    PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_result;
 CREATE TABLE IF NOT EXISTS gradebook_result (
   id int NOT NULL auto_increment,
@@ -1442,6 +1447,7 @@ CREATE TABLE IF NOT EXISTS gradebook_result (
   score float unsigned default NULL,
   PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_score_display;
 CREATE TABLE IF NOT EXISTS gradebook_score_display (
   id int NOT NULL auto_increment,
@@ -1451,7 +1457,15 @@ CREATE TABLE IF NOT EXISTS gradebook_score_display (
   score_color_percent float unsigned NOT NULL default 0,
   PRIMARY KEY (id)
 );
+
 ALTER TABLE gradebook_score_display ADD INDEX(category_id);
+
+DROP TABLE IF EXISTS gradebook_evaluation_type;
+CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
+    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
+    name varchar(255),
+    external_id INT unsigned NOT NULL DEFAULT 0
+);
 
 DROP TABLE IF EXISTS user_field;
 CREATE TABLE IF NOT EXISTS user_field (
@@ -1467,6 +1481,7 @@ CREATE TABLE IF NOT EXISTS user_field (
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
 DROP TABLE IF EXISTS user_field_options;
 CREATE TABLE IF NOT EXISTS user_field_options (
     id	int NOT NULL auto_increment,
@@ -1477,6 +1492,7 @@ CREATE TABLE IF NOT EXISTS user_field_options (
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
+
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE IF NOT EXISTS user_field_values(
     id	bigint	NOT NULL auto_increment,

@@ -3875,7 +3875,8 @@ class CourseManager {
             $query = "SELECT 1 FROM ".$course_table." WHERE code='".$keys_course_id."' LIMIT 0,1";
             $result = Database::query($query);
 
-            if ($keys_course_id == DEFAULT_COURSE || Database::num_rows($result)) {
+            //if ($keys_course_id == DEFAULT_COURSE || Database::num_rows($result)) {
+            if (Database::num_rows($result)) {
                 $keys_are_unique = false;
                 $try_new_fsc_id ++;
                 $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);

@@ -23,17 +23,16 @@ class SessionModel extends model {
             
     public function __construct() {
         $this->table = Database::get_main_table(TABLE_MAIN_SESSION);        
-    }
-    
+    }    
     
     public function clean_parameters($params) {
         //Convert dates          
-        $params['display_start_date']       = api_get_utc_datetime($params['display_start_date'], true);
-        $params['display_end_date']         = api_get_utc_datetime($params['display_end_date'], true);
-        $params['access_start_date']        = api_get_utc_datetime($params['access_start_date'], true);
-        $params['access_end_date']          = api_get_utc_datetime($params['access_end_date'], true);
-        $params['coach_access_start_date']  = api_get_utc_datetime($params['coach_access_start_date'], true);
-        $params['coach_access_end_date']    = api_get_utc_datetime($params['coach_access_end_date'], true);
+        $params['display_start_date']       = isset($params['display_start_date']) ? api_get_utc_datetime($params['display_start_date'], true) : null;
+        $params['display_end_date']         = isset($params['display_end_date']) ? api_get_utc_datetime($params['display_end_date'], true) : null;
+        $params['access_start_date']        = isset($params['access_start_date']) ? api_get_utc_datetime($params['access_start_date'], true) : null;
+        $params['access_end_date']          = isset($params['access_end_date']) ? api_get_utc_datetime($params['access_end_date'], true) : null;
+        $params['coach_access_start_date']  = isset($params['coach_access_start_date']) ? api_get_utc_datetime($params['coach_access_start_date'], true) : null;
+        $params['coach_access_end_date']    = isset($params['coach_access_end_date']) ? api_get_utc_datetime($params['coach_access_end_date'], true) : null;
         $params['id_coach']                 = is_array($params['id_coach']) ? $params['id_coach'][0] : $params['id_coach'];
                
         if (empty($params['access_end_date'])) {

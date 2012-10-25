@@ -78,8 +78,9 @@ class UserManager {
         unset($params['return_item_if_already_exists']);        
         
         //Checking the user language
-        $languages = api_get_languages();   
-        if (!in_array($params['language'], $languages['folder'])) {
+        $languages = api_get_languages();
+        
+        if (!isset($params['language']) || !in_array($params['language'], $languages['folder'])) {
             $params['language'] = api_get_setting('platformLanguage');
         }
         

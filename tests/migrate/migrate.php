@@ -6,6 +6,10 @@
 require_once '../../main/inc/global.inc.php';
 require_once 'config.php';
 
+require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
+
+error_reporting(-1);
+
 if (is_file(dirname(__FILE__) . '/migration.custom.class.php')) {
     require_once 'migration.custom.class.php';
 } else {
@@ -28,7 +32,8 @@ $m->connect();
  * Prepare the arrays of matches that will allow for the migration
  */
 $migrate = array();
-include 'db_matches.php';
+include 'db_matches_2.php';
 $m->migrate($matches);
+//$m->load_transactions($matches['transactions']);
 print_r($m->errors_stack);
 echo "OK so far\n";

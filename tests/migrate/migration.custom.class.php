@@ -20,20 +20,24 @@ class MigrationCustom {
      * @param mixed Data
      * @param mixed Unaltered data
      */
-    public function none($data) {
+    static function none($data) {
         return $data;
     }
     
-     public function join_horario($data, &$omigrate, $row_data) {
-         return '('.$row_data['chrIdHorario'].') '.$row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
-     }
+    static function join_horario($data, &$omigrate, $row_data) {
+        return '('.$row_data['chrIdHorario'].') '.$row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
+    }
+    
+    static function clean_date_time($date) {
+        return substr($date, 0, 19);
+    }
 
     /**
      * Transform the uid identifiers from MSSQL to a string
      * @param string Field name
      * @return string SQL select string to include in the final select
      */
-    public function sql_alter_unhash_50($field) {
+    static function sql_alter_unhash_50($field) {
         $as_field = explode('.', $field);     
         if (isset($as_field[1])) {
             $as_field = $as_field[1];
@@ -46,20 +50,20 @@ class MigrationCustom {
     /**
      * Log data from the original users table
      */
-    public function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-        return $row_data['uidIdAlumno'];
+    static function log_original_user_unique_id($data, &$omigrate, $row_data) {        
+        //return $row_data['uidIdAlumno'];
     }
     
-    public function clean_utf8($value) {
+    static function clean_utf8($value) {
         return utf8_encode($value);        
     }
     
-    public function clean_session_name($value, &$omigrate, $row_data) {
+    static function clean_session_name($value, &$omigrate, $row_data) {
         return self::clean_utf8($row_data['session_name']);        
     }
     
     /** @deprecated */
-    public function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
+    static function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
 /* Temporarily commented
         if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
             $omigrate['users_persona'][$row_data['uidIdPersona']][] = $omigrate['users_persona'][$row_data['uidIdPersona']];
@@ -76,7 +80,7 @@ class MigrationCustom {
     }
     
     /** @deprecated */
-    public function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
+    static function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
         $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdEmpleado' => $row_data['uidIdEmpleado']);
         $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row;
         return $row_data['uidIdEmpleado'];               
@@ -86,7 +90,7 @@ class MigrationCustom {
      * Log data from the original users table
       @deprecated
      */
-    public function log_original_course_unique_id($data, &$omigrate) {
+    static function log_original_course_unique_id($data, &$omigrate) {
         $omigrate['courses'][$data] = 0; 
         return $data;
     }
@@ -95,15 +99,14 @@ class MigrationCustom {
      * Log data from the original users table
      * @deprecated
      */
-    public function log_original_session_unique_id($data, &$omigrate, $row_data) {
+    static function log_original_session_unique_id($data, &$omigrate, $row_data) {
         $omigrate['sessions'][$row_data['uidIdPrograma']] = $row_data;
         return $data;
     }
     
-    public function get_real_course_code($data, &$omigrate, $row_data) {        
+    static function get_real_course_code($data, &$omigrate, $row_data) {        
         $extra_field = new ExtraFieldValue('course');
-        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);
-        
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);        
         if ($values) {
             return $values['course_code'];
         } else {
@@ -111,31 +114,31 @@ class MigrationCustom {
         }
     }
     
-    function get_session_id_by_programa_id($data, &$omigrate, $row_data) {        
-        if (!isset($omigrate['sessions'][$data])) {
-            error_log(print_r($omigrate['sessions'], 1));
-            error_log("Sessions not found in data_list array ");
-            exit;
-        }
-        return $omigrate['sessions'][$data];        
+    static function get_session_id_by_programa_id($data, &$omigrate, $row_data) {        
+        $extra_field = new ExtraFieldValue('session');
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data);        
+        if ($values) {
+            return $values['session_id'];
+        } else {
+            //error_log("session id not found in DB");
+        }      
     }
     
     /* Not used */
-    public function get_user_id($data, &$omigrate, $row_data) {        
-        if (empty($omigrate['users_alumno'][$data])) {
-            //error_log('not set');
-            return 1;
-        } else {            
-            $persona_id = $omigrate['users_alumno'][$data]['uidIdPersona'];  
-            if (!empty($persona_id)) {
-                return $omigrate['users_persona'][$persona_id]['user_id'];    
-            }
-        }        
-        return $omigrate['users_alumno'][$data]['user_id'];
+    static function get_user_id_by_persona_id($uidIdPersona, &$omigrate, $row_data) {        
+        //error_log('get_user_id_by_persona_id');
+        $extra_field = new ExtraFieldValue('user');
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPersona', $uidIdPersona);        
+        if ($values) {
+            return $values['user_id'];
+        } else {
+            return 0;
+        }
     }
+
     
-    public function get_real_teacher_id($uidIdPersona, &$omigrate, $row_data) {
-        $default_teacher_id = self::default_admin_id;        
+    static function get_real_teacher_id($uidIdPersona, &$omigrate, $row_data) {
+        $default_teacher_id = self::default_admin_id;       
         if (empty($uidIdPersona)) {
             //error_log('No teacher provided');
             return $default_teacher_id;
@@ -170,7 +173,7 @@ class MigrationCustom {
      * @param object List of migrated things
      * @return array User info (from Chamilo DB)
      */
-    public function create_user($data, $omigrate) {
+    static function create_user($data, $omigrate) {
         if (empty($data['uidIdPersona'])) {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));    
@@ -178,12 +181,13 @@ class MigrationCustom {
         }
             
         //Is a teacher
-        if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {            
+        /*if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {            
             $data['status'] = COURSEMANAGER;                
         } else {     
-            $data['status'] = STUDENT;            
-        }
+            $data['status'] = STUDENT;    
+        }*/
         
+        $data['status'] = STUDENT;
         if (isset($data['uidIdEmpleado'])) {
             $data['status'] = COURSEMANAGER;
         }
@@ -286,7 +290,7 @@ class MigrationCustom {
     /**
      * Manages the course creation based on the rules in db_matches.php
      */
-    public function create_course($data) {
+    static function create_course($data) {
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);  
         
@@ -304,11 +308,12 @@ class MigrationCustom {
         );
         return CourseManager::create_course($data);
     }
+    
     /**
      * Manages the session creation, based on data provided by the rules
      * in db_matches.php
      */
-    public function create_session($data) {
+    static function create_session($data) {
         $session_id = SessionManager::add($data);
         //error_log('create_session');
         //error_log($data['course_code']);
@@ -322,10 +327,11 @@ class MigrationCustom {
         }
         return $session_id;
     }
+    
     /**
      * Assigns a user to a session based on rules in db_matches.php
      */
-    public function add_user_to_session($data) {
+    static function add_user_to_session($data) {
         $extra_field_value = new ExtraFieldValue('session');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
         //error_log('$result[session_id]: '.$result['session_id']);
@@ -351,4 +357,93 @@ class MigrationCustom {
             //error_log('Called: add_user_to_session - No idPrograma: '.$data['uidIdPrograma'].' - No uidIdPersona: '.$data['uidIdPersona']);            
         }     
     }
+    
+    static function create_attendance($data) {        
+        error_log('create_attendance');
+        $session_id = $data['session_id'];
+        $user_id = $data['user_id'];
+        
+        if (!empty($session_id) && !empty($user_id)) {
+            $attendance = new Attendance();            
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            $attendance_id = null;
+            exit;
+            if (!empty($course_list)) {
+                $course = current($course_list);            
+                //Creating attendance
+                if (isset($course['code'])) {
+                    $course_info = api_get_course_info($course['code']);
+                    
+                    $attendance->set_course_id($course_info['code']);
+                    $attendance->set_course_int_id($course_info['real_id']);
+                    $attendance->set_session_id($session_id);
+
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+                    if (empty($attendance_list)) {
+                        $attendance->set_name('Asistencia');
+                        $attendance->set_description('');
+                        //$attendance->set_attendance_qualify_title($_POST['attendance_qualify_title']);
+                        //$attendance->set_attendance_weight($_POST['attendance_weight']);
+                        $link_to_gradebook = false;              			    			
+                        //$attendance->category_id = $_POST['category_id'];
+                        $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);                
+                        //only 1 course per session
+                    } else {
+                        $attendance_data = current($attendance_list);
+                        $attendance_id = $attendance_data['id'];
+                    }            
+            
+                    if ($attendance_id) {               
+                        $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
+                        if (empty($cal_info)) {
+                            $attendance->set_date_time($data['fecha']);
+                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+                        } else {
+                            $cal_id = $cal_info['id'];
+                        }                
+                        $users_present = array($user_id);
+                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id);	                
+                    } else {
+                        error_log('No attendance_id created');
+                    }
+                } else {
+                    error_log("Course not found for session: $session_id");
+                }
+            }
+        } else {
+            error_log("Missing data: session: $session_id - user_id: $user_id");
+        }
+    }
+    
+    static function create_thematic($data) {
+        error_log('create_attendance');
+        $session_id = $data['session_id'];
+                
+        if (!empty($session_id)) {
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                $course_info = api_get_course_info($course_data['code']);
+                
+                if (!empty($course_data)) {
+                    $thematic = new Thematic();
+                    $thematic->set_course_int_id($course_info['real_id']);
+                    $thematic->set_session_id($session_id);
+                    $thematic->set_thematic_attributes(null, $data['title'], $data['description'], $session_id);
+                    $thematic_id = $thematic->thematic_save();
+                    if ($thematic_id) {
+                        error_log("Thematic saved: $thematic_id");
+                    } else {
+                        error_log("Thematic NOT saved");
+                    }                    
+                }                
+                
+            } else {
+                error_log("No courses in session $session_id ");
+            }
+            
+        }
+        
+    }
+    
 }

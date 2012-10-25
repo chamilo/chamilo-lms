@@ -72,7 +72,7 @@ class Migration {
             $this->errors_stack[] = 'All origin database params must be given. Received ' . print_r(func_get_args(), 1);
             return false;
         }
-        $this->odbtype = $dbtype;
+        //$this->odbtype = $dbtype;
         $this->odbhost = $dbhost;
         $this->odbport = $dbport;
         $this->odbuser = $dbuser;
@@ -92,11 +92,8 @@ class Migration {
      * tables and fields matches defined in the given array.
      * @param array Structured array of matches (see migrate.php)
      */
-    public function migrate($matches) {
-        $found = false;
-        $table_idx = -1;
-        error_log("\n".'------------ Migration->migrate function called ------------'."\n");
-        
+    public function migrate($matches) { 
+        error_log("\n".'------------ Migration->migrate function called ------------'."\n");        
         $extra_fields = array();
                 
         // Browsing through 1st-level arrays in db_matches.php
@@ -146,49 +143,61 @@ class Migration {
             
             //Stop here (only for tests)
             if ($table['orig_table'] == 'ProgramaAcademico')  {
-                //exit;          
+                exit;
+            }
+        }
+    }
+    
+    function load_transactions($transactions) {        
+        $actions = array(); //load actions from Mysql
+        foreach ($actions as $action_data) {
+            if (in_array($action_data['action'], $transactions)) {
+                $function_to_call = $transactions[$action_data['action']];
+                $function_to_call($action_data['params']);
             }
         }
     }
     
     function prepare_field_match($table) {        
         $sql_select_fields = array();
-        foreach ($table['fields_match'] as $details) {
-            if (empty($details['orig'])) {
-                //Ignore if the field declared in $matches doesn't exist in
-                // the original database
-                continue;
+        if (!empty($table['fields_match'])) {
+            foreach ($table['fields_match'] as $details) {
+                if (empty($details['orig'])) {
+                    //Ignore if the field declared in $matches doesn't exist in
+                    // the original database
+                    continue;
+                }
+                $sql_select_fields[$details['orig']] = $details['orig'];
+                // If there is something to alter in the SQL query, rewrite the entry
+                if (!empty($details['sql_alter'])) {
+                    $func_alter = $details['sql_alter'];
+                    $sql_select_fields[$details['orig']] = MigrationCustom::$func_alter($details['orig']);
+                }
+                //error_log('Found field ' . $details['orig'] . ' to be selected as ' . $sql_select_fields[$details['orig']]);
             }
-            $sql_select_fields[$details['orig']] = $details['orig'];
-            // If there is something to alter in the SQL query, rewrite the entry
-            if (!empty($details['sql_alter'])) {
-                $func_alter = $details['sql_alter'];
-                $sql_select_fields[$details['orig']] = MigrationCustom::$func_alter($details['orig']);
-            }
-            //error_log('Found field ' . $details['orig'] . ' to be selected as ' . $sql_select_fields[$details['orig']]);
         }
         return $sql_select_fields;     
     }
     
-    function execute_field_match($table, $row, $extra_fields) {        
+    function execute_field_match($table, $row, $extra_fields = array()) {        
         //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
-        $my_extra_fields = isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
+        
+        $my_extra_fields = isset($table['dest_table']) && isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
         $extra_field_obj = null;
         $extra_field_value_obj = null;
         
         if (!empty($table['dest_table'])) {
             $extra_field_obj = new Extrafield($table['dest_table']);        
             $extra_field_value_obj = new ExtraFieldValue($table['dest_table']);
-        }        
-        $extra_fields_to_insert = array();
-        
+        }
+                
+        $extra_fields_to_insert = array();        
         foreach ($table['fields_match'] as $id_field => $details) {
             if ($id_field == 0) {
                 $first_field = $details['dest'];
             }
-            
             if (isset($details['orig'])) {
                 $field_exploded = explode('.', $details['orig']);
                 if (isset($field_exploded[1])) {
@@ -199,7 +208,7 @@ class Migration {
             // process the fields one by one
             if ($details['func'] == 'none' || empty($details['func'])) {
                 $dest_data = $row[$details['orig']];
-            } else {
+            } else {                
                 $dest_data = MigrationCustom::$details['func']($row[$details['orig']], $this->data_list, $row);
             }
             
@@ -246,19 +255,20 @@ class Migration {
                     $extra_fields_to_insert[] = $params;                
                 }
                 unset($dest_row[$details['dest']]);
-            }
+            }            
         }
-                
+  
+        
         if (!empty($table['dest_func'])) {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
             $dest_row['return_item_if_already_exists'] = true;
             
             $item_result = call_user_func_array($table['dest_func'], array($dest_row, $this->data_list));
             
-            if ($table['show_in_error_log'] == false) {
+            if (isset($table['show_in_error_log']) && $table['show_in_error_log'] == false) {
                 
             } else {
-                error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
+                //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             }
             //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             //After the function was executed fill the $this->data_list array
@@ -291,7 +301,7 @@ class Migration {
                     }       
                     break;
                 case 'session':                     
-                    $this->data_list['sessions'][$dest_row['uidIdPrograma']] = $item_result;                    
+                    //$this->data_list['sessions'][$dest_row['uidIdPrograma']] = $item_result;                    
                     $handler_id = $item_result; //session_id
                     break;
             }
@@ -319,7 +329,7 @@ class Migration {
         error_log('Inserting (if exists) extra fields for : ' . $table['dest_table']." \n");
         foreach ($table['extra_fields'] as $extra_field) {
             error_log('Preparing for insertion of extra field '.$extra_field['field_display_text']."\n");
-            $options = $extra_field['options'];
+            $options = isset($extra_field['options']) ? $extra_field['options'] : null;
             unset($extra_field['options']);
             
             $extra_field_obj = new ExtraField($table['dest_table']);

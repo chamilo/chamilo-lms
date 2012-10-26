@@ -52,8 +52,8 @@ if (!empty($servers)) {
             $m->migrate($matches);
             //$m->load_transactions($matches['transactions']);
             print_r($m->errors_stack);
-            echo "OK so far\n";
-            echo "---- End loading server-----";
+            //echo "OK so far\n";
+            echo "\n ---- End loading server----- \n";
         } else {
             error_log("db_matches not activated: {$server_info['name']} {$server_info['filename']}");
         }        

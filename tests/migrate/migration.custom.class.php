@@ -369,9 +369,10 @@ class MigrationCustom {
             $attendance = new Attendance();            
             $course_list = SessionManager::get_course_list_by_session_id($session_id);
             $attendance_id = null;
-            exit;
+          
             if (!empty($course_list)) {
-                $course = current($course_list);            
+                $course = current($course_list);
+             
                 //Creating attendance
                 if (isset($course['code'])) {
                     $course_info = api_get_course_info($course['code']);
@@ -380,7 +381,8 @@ class MigrationCustom {
                     $attendance->set_course_int_id($course_info['real_id']);
                     $attendance->set_session_id($session_id);
 
-                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);                    
+                    
                     if (empty($attendance_list)) {
                         $attendance->set_name('Asistencia');
                         $attendance->set_description('');
@@ -388,23 +390,30 @@ class MigrationCustom {
                         //$attendance->set_attendance_weight($_POST['attendance_weight']);
                         $link_to_gradebook = false;              			    			
                         //$attendance->category_id = $_POST['category_id'];
-                        $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);                
+                        $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);                        
+                        error_log("Attendance added course code: {$course['code']} session_id: $session_id");
                         //only 1 course per session
                     } else {
-                        $attendance_data = current($attendance_list);
+                        $attendance_data = current($attendance_list);                        
                         $attendance_id = $attendance_data['id'];
                     }            
-            
-                    if ($attendance_id) {               
+                    
+                    if ($attendance_id) {
+                        //Attendance date exists?
                         $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
-                        if (empty($cal_info)) {
-                            $attendance->set_date_time($data['fecha']);
-                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
-                        } else {
+              
+                        if ($cal_info && isset($cal_info['id'])) {
                             $cal_id = $cal_info['id'];
-                        }                
+                        } else {
+                            //Creating the attendance date
+                            $attendance->set_date_time($data['fecha']);
+                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);                     
+                        }                      
+                        
+                        //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id);
-                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id);	                
+                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false);
+                        exit;
                     } else {
                         error_log('No attendance_id created');
                     }

@@ -41,7 +41,9 @@ $actions = array(
     'attendance_delete_select', 
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
-    'attendance_sheet_list_no_edit'
+    'attendance_sheet_list_no_edit',
+    'lock_attendance',
+    'unlock_attendance'
 );
 
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
@@ -82,6 +84,8 @@ if (!empty($attendance_id)) {
 	// attendance data by id
 	$attendance_data = $attendance->get_attendance_by_id($attendance_id);
 }
+
+$htmlHeadXtra[] = api_get_jqgrid_js();
 
 $htmlHeadXtra[] = '<script>
 		
@@ -219,7 +223,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 }
 // distpacher actions to controller
 switch ($action) {	
-	case 'attendance_list':	
+	case 'attendance_list':        
         $attendance_controller->attendance_list();
 		break;
 	case 'attendance_add':
@@ -249,9 +253,10 @@ switch ($action) {
         } else { 
             api_not_allowed();            
         }
-		 break;									
-	case 'attendance_sheet_list':    
-        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, true);
+		 break;
+	case 'attendance_sheet_list':
+        $edit_content = api_is_allowed_to_edit(null, true);
+        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, $edit_content);
 		break;
     case 'attendance_sheet_list_no_edit':
         $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, false);

@@ -34,12 +34,9 @@
 	 * @param boolean   true for listing history (optional)
 	 * @param array 	message for showing by action['edit','add','delete'] (optional) 
 	 */
-	public function attendance_list($history=false,$messages=array()) {		
-		$attendance = new Attendance();
-		$data = array();
-		
+	public function attendance_list($history = false, $messages = array()) {		
 		// render to the view
-		$this->view->set_data($data);
+		$this->view->set_data(array());
 		$this->view->set_layout('layout'); 
 		$this->view->set_template('attendance_list');		       
 		$this->view->render();				
@@ -163,8 +160,7 @@
 	 * @param int	attendance id
 	 */
 	public function attendance_delete($attendance_id) {
-		$attendance = new Attendance();   
-		//$attendance_id = intval($attendance_id);
+		$attendance = new Attendance();		
 		if (!empty($attendance_id)) {
 			$affected_rows = $attendance->attendance_delete($attendance_id);
 		}		
@@ -179,8 +175,7 @@
 	 * @param int	attendance id
 	 */
 	public function attendance_restore($attendance_id) {
-		$attendance = new Attendance();   
-		//$attendance_id = intval($attendance_id);
+		$attendance = new Attendance();   		
 		if (!empty($attendance_id)) {
 			$affected_rows = $attendance->attendance_restore($attendance_id);
 		}		
@@ -200,7 +195,7 @@
     public function lock_attendance($action, $attendance_id) {
         $attendance = new Attendance();
         $attendance_id = intval($attendance_id);
-
+        
         if ($action == 'lock_attendance') {
             $result = $attendance->lock_attendance($attendance_id);
         } else {
@@ -223,13 +218,19 @@
 	 * @param string action
 	 * @param int	 attendance id
 	 */
-	public function attendance_sheet($action, $attendance_id, $student_id = 0, $edit = true) {		
+	public function attendance_sheet($action, $attendance_id, $user_id = 0, $edit = true) {		
 		$attendance = new Attendance();				        
 		$data = array();
-		$data['attendance_id'] = $attendance_id;		
+		$data['attendance_id']   = $attendance_id;		
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 		
 		$filter_type = 'today';
+        
+        if (!empty($user_id)) {
+            $user_id = intval($user_id);
+        } else {
+            $user_id = api_get_user_id();	
+        }
         
 		if (!empty($_REQUEST['filter'])) {
 			$filter_type = $_REQUEST['filter'];
@@ -238,22 +239,13 @@
         if ($edit == true) {            
             if (api_is_allowed_to_edit(null, true)) {
                 $data['users_presence'] = $attendance->get_users_attendance_sheet($attendance_id);	            
-            } else {
-                
             }
         } else {
-            if (!empty($student_id)) {
-                $user_id = intval($student_id);
-            } else {
-                $user_id = api_get_user_id();	
-            }
-            
             if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {                
                 $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id);                
             } else {
                 $data['users_presence']  = $attendance->get_users_attendance_sheet($attendance_id, $user_id);            
-            }
-            
+            }            
             $data['faults']  = $attendance->get_faults_of_user($user_id, $attendance_id);
             $data['user_id'] = $user_id;
         }

@@ -36,8 +36,7 @@ class Attendance
 	 * @see SortableTable#get_total_number_of_items()
 	 */
 	static function get_number_of_attendances() {
-		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-        
+		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);        
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
@@ -88,7 +87,8 @@ class Attendance
 	 * @param   string  Order (ASC,DESC)
 	 * @see SortableTable#get_table_data($from)
 	 */
-	static function get_attendance_data($from, $number_of_items, $column, $direction) {
+	static function get_attendance_data($from = 0, $number_of_items = 20, $column = 1, $direction = 'desc') {
+        
         $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
@@ -112,16 +112,17 @@ class Attendance
         }
         
 		$sql = "SELECT
-                    att.id AS col0,
-                    att.name AS col1,
-                    att.description AS col2,
-                    att.attendance_qualify_max AS col3,
-                    att.locked AS col4,
-                    att.active AS col5,
+                    att.id,
+                    att.name,
+                    att.description,
+                    att.attendance_qualify_max,
+                    att.locked,
+                    att.active,
                     att.session_id
 				FROM $tbl_attendance att
 				WHERE c_id = $course_id AND $active_plus $condition_session
-				ORDER BY col$column $direction LIMIT $from,$number_of_items ";        
+				ORDER BY $column $direction 
+                LIMIT $from, $number_of_items ";        
         
 		$res = Database::query($sql);        
 		$attendances = array();
@@ -131,81 +132,92 @@ class Attendance
 			$param_gradebook = '&gradebook='.$_SESSION['gradebook'];
 		}
         $user_info = api_get_user_info();
-		while ($attendance = Database::fetch_row($res)) {
-		    
+		while ($attendance = Database::fetch_array($res,'ASSOC')) {            
+            $id = $attendance['id'];            
 			$student_param = '';
 			if (api_is_drh() && ($_GET['student_id'])) {
 				$student_param = '&student_id='.Security::remove_XSS($_GET['student_id']);
-			}
-			
+			}			
             $session_star = '';
             
-            if (api_get_session_id() == $attendance[6]) {
+            if (api_get_session_id() == $attendance['session_id']) {
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
-            if ($attendance[5] == 1) {
+            
+            if ($attendance['locked'] == 1) {
+                $attendance['name'] = "<del>".$attendance['name']."</del>";
                 if (api_is_allowed_to_edit(null, true)) {
                     //Link to edit
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
+                    $attendance['name'] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$param_gradebook.$student_param.'">'.$attendance['name'].'</a>'.$session_star;
                 } else {
                     //Link to view
-                    $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
-                }
-                
+                    $attendance['name'] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list_no_edit&attendance_id='.$id.$param_gradebook.$student_param.'">'.$attendance['name'].'</a>'.$session_star;
+                }                
             } else {
-                $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'"><del>'.$attendance[1].'</del></a>'.$session_star;
+                $attendance['name'] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$param_gradebook.$student_param.'">'.$attendance['name'].'</a>'.$session_star;
             }
-			$attendance[3] = '<center>'.$attendance[3].'</center>';
+            
+            //description
+			$attendance['description'] = '<center>'.$attendance['description'].'</center>';
+            
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
 				$actions .= '<center>';
 
                 if (api_is_platform_admin()) {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
-                    if ($attendance[5] == 1) {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
-                    } else {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), ICON_SIZE_SMALL).'</a>';
-                        $attendance[2] = '<del>'.$attendance[2].'</del>';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$id.$param_gradebook.'">'.
+                                    Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+                    
+                    if ($attendance['locked'] == 0) {
+                    //    $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     }
+                    
+                    if ($attendance['active'] == 1) {
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';                        
+                    } else {
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$id.$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), ICON_SIZE_SMALL).'</a>';                        
+                    }
+                    
                 } else {
-                    $is_locked_attendance = self::is_locked_attendance($attendance[0]);
+                    $is_locked_attendance = self::is_locked_attendance($attendance['id']);
                     if ($is_locked_attendance) {
                         $actions .= Display::return_icon('edit_na.png',get_lang('Edit')).'&nbsp;';
                         $actions .= Display::return_icon('delete_na.png',get_lang('Delete'));
                     } else {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$id.$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$id.$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
                     }
                 }
 
                 // display lock/unlock icon
-                $is_done_all_calendar = $att->is_all_attendance_calendar_done($attendance[0]);
+                $is_done_all_calendar = $att->is_all_attendance_calendar_done($id);
 
                 if ($is_done_all_calendar) {
-                    $locked   = $attendance[4];
+                    $locked  = $attendance['attendance_qualify_max'];                    
                     if ($locked == 0) {
                         if (api_is_platform_admin()) {
                             $message_alert = get_lang('AreYouSureToLockTheAttendance');
                         } else {
                             $message_alert = get_lang('UnlockMessageInformation');
                         }
-                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('unlock.png',get_lang('LockAttendance')).'</a>';
+                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$id.$param_gradebook.'">'.
+                                    Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
                     } else {                                        
                         if (api_is_platform_admin()) {
-                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('locked.png',get_lang('UnlockAttendance')).'</a>';
+                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$id.$param_gradebook.'">'.
+                                    Display::return_icon('lock.png', get_lang('UnlockAttendance')).'</a>';
                         } else {
                             $actions .= '&nbsp;'.Display::return_icon('locked_na.png',get_lang('LockedAttendance'));
                         }
                     }
                 } 
                 $actions .= '</center>';
-				$attendances[] = array($attendance[0], $attendance[1], $attendance[2], $attendance[3],$actions);
-			} else {
-				$attendance[0] = '&nbsp;';
-				$attendances[] = array($attendance[0], $attendance[1], $attendance[2], $attendance[3]);
+                $attendance['actions'] = $actions;
+				$attendances[] = $attendance;                
+			} else {				
+				$attendances[] = $attendance;                
 			}
-		}
+		}        
 		return $attendances;
 	}
 
@@ -505,31 +517,34 @@ class Attendance
 
         // get last edit type
         $calendar_data = $this->get_attendance_calendar_by_id($calendar_id);
+        
         $lastedit_type = self::DONE_ATTENDANCE_LOG_TYPE;
-        if ($calendar_data['done_attendance']) {
+        if (isset($calendar_data['done_attendance']) && $calendar_data['done_attendance']) {
             $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
         }
-
-		// Save users present in class
-		foreach ($users_present as $user_present) {
-			$uid = intval($user_present);
-			// check if user already was registered with the $calendar_id
-			$sql = "SELECT user_id FROM $tbl_attendance_sheet WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id = '$calendar_id'";
-			$rs  = Database::query($sql);			
-			if (Database::num_rows($rs) == 0) {
-				$sql = "INSERT INTO $tbl_attendance_sheet SET 
-						c_id					= $course_id, 
-						user_id 				= '$uid', 
-						attendance_calendar_id 	= '$calendar_id', 
-						presence 				= 1";
-				Database::query($sql);
-				$affected_rows += Database::affected_rows();
-			} else {
-				$sql = "UPDATE $tbl_attendance_sheet SET presence = 1 WHERE c_id = $course_id AND user_id ='$uid' AND attendance_calendar_id = '$calendar_id'";
-				Database::query($sql);
-				$affected_rows += Database::affected_rows();
-			}
-		}
+        
+        if (!empty($users_present)) {
+            // Save users present in class
+            foreach ($users_present as $user_present) {
+                $uid = intval($user_present);
+                // check if user already was registered with the $calendar_id
+                $sql = "SELECT user_id FROM $tbl_attendance_sheet WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id = '$calendar_id'";
+                $rs  = Database::query($sql);			
+                if (Database::num_rows($rs) == 0) {
+                    $sql = "INSERT INTO $tbl_attendance_sheet SET 
+                            c_id					= $course_id, 
+                            user_id 				= '$uid', 
+                            attendance_calendar_id 	= '$calendar_id', 
+                            presence 				= 1";
+                    Database::query($sql);
+                    $affected_rows += Database::affected_rows();
+                } else {
+                    $sql = "UPDATE $tbl_attendance_sheet SET presence = 1 WHERE c_id = $course_id AND user_id ='$uid' AND attendance_calendar_id = '$calendar_id'";
+                    Database::query($sql);
+                    $affected_rows += Database::affected_rows();
+                }
+            }
+        }
 
 		// save users absent in class
         if ($save_user_absents) {
@@ -1092,7 +1107,7 @@ class Attendance
                         attendance_id = '$attendance_id'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
+            return Database::fetch_array($result, 'ASSOC');
         } else {
             return false;
         }

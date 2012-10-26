@@ -618,8 +618,9 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
 }
 
-function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0) {    
-    if (api_is_allowed_to_edit(true, true)) {
+function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0) {
+    $category_id = null;
+    //if (api_is_allowed_to_edit(true, true)) {
         if (!isset($course_code) || empty($course_code)) {
             $course_code = api_get_course_id();    
         }        
@@ -661,7 +662,7 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
             $row = Database::fetch_array($res);
             $category_id = $row['id'];
         }
-    }
+    //}
     return $category_id;
 }
 function load_gradebook_select_in_tool($form) {     
@@ -669,7 +670,9 @@ function load_gradebook_select_in_tool($form) {
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
     
-    create_default_course_gradebook();
+    if (api_is_allowed_to_edit(true, true)) {
+        create_default_course_gradebook();
+    }
                 
     //Cat list
     $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);    

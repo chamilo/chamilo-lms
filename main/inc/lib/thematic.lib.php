@@ -93,8 +93,8 @@ class Thematic
 				WHERE c_id = $course_id AND active = 1 $condition_session
 				ORDER BY col2 LIMIT $from,$number_of_items ";
 		$res = Database::query($sql);
-		
-		$thematics = array ();
+        		
+		$thematics = array();
 
 		$param_gradebook = '';
 		if (isset($_SESSION['gradebook'])) {
@@ -156,7 +156,7 @@ class Thematic
 		// Database table definition
 		$tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
 		$session_id     = $this->get_session_id();
-        $course_id = $this->get_course_int_id();
+        $course_id      = $this->get_course_int_id();
         
 		if ($use_session) {
 		    $condition_session = api_get_session_condition($session_id);
@@ -235,7 +235,7 @@ class Thematic
 	 * @param	int		Thematic id (optional), get list by id
 	 * @return	array	Thematic data
 	 */
-	 public function get_thematic_list($thematic_id = null, $course_code = null, $session_id = null) {
+    public function get_thematic_list($thematic_id = null, $course_code = null, $session_id = null) {
 
 	 	// set current course and session
 	 	$tbl_thematic   = Database :: get_course_table(TABLE_THEMATIC);
@@ -274,7 +274,22 @@ class Thematic
 		}
 		return $data;
 	 }
-
+    
+    public function get_thematic_by_title($title) {
+        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
+        $course_id = $this->get_course_int_id();
+        //$session_id = $this->get_session_id();
+        
+        $title = Database::escape_string($title);
+        
+        $sql = "SELECT * FROM $tbl_thematic WHERE c_id = $course_id AND title = $title";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            return Database::fetch_array($result, 'ASSOC');
+        }
+        return false;
+    }
+     
 	/**
 	 * insert or update a thematic
 	 * @return int last thematic id
@@ -493,11 +508,9 @@ class Thematic
 	 	
 	public function get_thematic_advance_div($data) {		
 		$return_array = array();
-        $uinfo = api_get_user_info();
-		
+        $uinfo = api_get_user_info();		
 		foreach ($data as $thematic_id => $thematic_advance_data) {
-			foreach ($thematic_advance_data as $key => $thematic_advance) {
-						
+			foreach ($thematic_advance_data as $key => $thematic_advance) {						
 				$session_star = '';
 				if (api_is_allowed_to_edit(null, true)) {
 					if ($thematic_advance['session_id'] !=0) {
@@ -517,15 +530,14 @@ class Thematic
 	 
 	 public function get_thematic_plan_div($data) {
 	 	$final_return = array();
-        $uinfo = api_get_user_info();
-	
+        $uinfo = api_get_user_info();        
 		foreach ($data as $thematic_id => $thematic_plan_data) {
 			$new_thematic_plan_data = array();
-			foreach($thematic_plan_data as $thematic_item) {
+			foreach ($thematic_plan_data as $thematic_item) {
 				$thematic_simple_list[] = $thematic_item['description_type'];
 				$new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;
-			}			
-				 
+			}	
+            	 
 			$new_id = ADD_THEMATIC_PLAN;			
 			if (!empty($thematic_simple_list)) {
 				foreach($thematic_simple_list as $item) {				
@@ -557,7 +569,7 @@ class Thematic
 				 	 	$no_data  = false;
 					}
 				}
-			}							
+			}
 			if ($no_data) {
 				$return .= '<div><em>'.get_lang('StillDoNotHaveAThematicPlan').'</em></div>';
 			}
@@ -719,8 +731,7 @@ class Thematic
 	    $items_from_session = api_get_item_property_by_tool('thematic_plan', api_get_course_id(), api_get_session_id());
 	    	 	
 		$thematic_plan_complete_list  = array();
-		$thematic_plan_id_list = array();
-		
+		$thematic_plan_id_list = array();		
 		
 		if (!empty($items_from_course)) {
 			foreach($items_from_course as $item) {				
@@ -735,21 +746,20 @@ class Thematic
 				$thematic_plan_complete_list[$item['ref']] = $item;
 			}
 		}
-		if (!empty($thematic_plan_id_list)) {		
+		if (!empty($thematic_plan_id_list)) {
 			$sql = "SELECT tp.id, thematic_id, tp.title, description, description_type, t.session_id
 			        FROM $tbl_thematic_plan tp INNER JOIN $tbl_thematic t 
-                          ON (t.id=tp.thematic_id) 			        
-                    WHERE   t.c_id = $course_id AND 
-                            tp.c_id = $course_id  $condition AND 
-                            tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+                    ON (t.id = tp.thematic_id AND t.c_id = $course_id AND tp.c_id = $course_id)
+                    WHERE 1 = 1 $condition AND 
+                         tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 			
 			$rs = Database::query($sql);
 			
-			if (Database::num_rows($rs)) {
-				if (!isset($thematic_id) && !isset($description_type)) {		
+			if (Database::num_rows($rs)) {                
+				if (!isset($thematic_id) && !isset($description_type)) {                    
 					// group all data group by thematic id
 					$tmp = array();					
-					while ($row = Database::fetch_array($rs,'ASSOC')) {					    
+					while ($row = Database::fetch_array($rs, 'ASSOC')) {                        
 	                    $tmp[] = $row['thematic_id'];
 	                    if (in_array($row['thematic_id'], $tmp)) {                        
 	                        $row['session_id'] = $thematic_plan_complete_list[$row['id']];                        
@@ -763,7 +773,7 @@ class Thematic
 					}	
 				}
 			}		
-		}			
+		}        
 		return $data;
 	}
 
@@ -780,16 +790,17 @@ class Thematic
 		$title 		 = Database::escape_string($this->thematic_plan_title);
 		$description = Database::escape_string($this->thematic_plan_description);
 		$description_type = intval($this->thematic_plan_description_type);		
+        
 		$user_id     = api_get_user_id();        
         $course_id   = $this->get_course_int_id();
         $course_info = api_get_course_info_by_id($course_id);
         
-        $session_id = $this->get_session_id();
+        $session_id  = $this->get_session_id();
 	
 		$list        = api_get_item_property_by_tool('thematic_plan', $course_info['code'], $session_id);
 		
 		$elements_to_show = array();
-		foreach($list as $value) {
+		foreach ($list as $value) {
 		    $elements_to_show[]= $value['ref'];
 		}
 		$condition = '';
@@ -798,12 +809,13 @@ class Thematic
 		}
 		// check thematic plan type already exists
 		$sql = "SELECT id FROM $tbl_thematic_plan 
-                WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = '$description_type'";		
+                WHERE  c_id = $course_id AND 
+                       thematic_id = $thematic_id AND 
+                       description_type = '$description_type'";		        
 		$rs	 = Database::query($sql);        
 		
 		$affected_rows = 0;
-		if (Database::num_rows($rs) > 0) {
-		    //if (!empty($thematic_plan_data)) {
+		if (Database::num_rows($rs) > 0) {		    
             $row_thematic_plan = Database::fetch_array($rs);
             $thematic_plan_id = $row_thematic_plan['id'];
             
@@ -813,11 +825,13 @@ class Thematic
             $update = false;            
             if (in_array($thematic_plan_id, $elements_to_show)) {
                 $update = true;
-            }           
+            }
             
             if ($update) {
     			// update
-    			$upd = "UPDATE $tbl_thematic_plan SET title = '$title', description = '$description' 
+    			$upd = "UPDATE $tbl_thematic_plan SET 
+                            title = '$title', 
+                            description = '$description' 
                         WHERE c_id = $course_id AND id = $thematic_plan_id";
     			Database::query($upd);
     			$affected_rows = Database::affected_rows();

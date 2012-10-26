@@ -363,7 +363,7 @@ class MigrationCustom {
     static function create_attendance($data) {        
         error_log('create_attendance');
         $session_id = $data['session_id'];
-        $user_id = $data['user_id'];
+        $user_id    = $data['user_id'];
         
         if (!empty($session_id) && !empty($user_id)) {
             $attendance = new Attendance();            
@@ -381,8 +381,7 @@ class MigrationCustom {
                     $attendance->set_course_int_id($course_info['real_id']);
                     $attendance->set_session_id($session_id);
 
-                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);                    
-                    
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);                            
                     if (empty($attendance_list)) {
                         $attendance->set_name('Asistencia');
                         $attendance->set_description('');
@@ -397,23 +396,22 @@ class MigrationCustom {
                         $attendance_data = current($attendance_list);                        
                         $attendance_id = $attendance_data['id'];
                     }            
-                    
+               
                     if ($attendance_id) {
                         //Attendance date exists?
-                        $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
-              
+                        $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);                             
                         if ($cal_info && isset($cal_info['id'])) {
                             $cal_id = $cal_info['id'];
                         } else {
                             //Creating the attendance date
                             $attendance->set_date_time($data['fecha']);
-                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);                     
-                        }                      
-                        
+                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+                            error_log("Creating attendance calendar $cal_id");
+                        }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id);
-                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false);
-                        exit;
+                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false, false);
+                        error_log("Adding calendar to user: $user_id to calendar: $cal_id");                        
                     } else {
                         error_log('No attendance_id created');
                     }

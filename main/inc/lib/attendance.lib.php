@@ -68,7 +68,8 @@ class Attendance
         $condition_session = api_get_session_condition($session_id);
 
 		// Get attendance data
-		$sql = "SELECT id, name, attendance_qualify_max FROM $tbl_attendance 
+		$sql = "SELECT id, name, attendance_qualify_max 
+                FROM $tbl_attendance 
 		        WHERE c_id = $course_id AND active = 1 $condition_session ";
 		$rs  = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
@@ -144,8 +145,11 @@ class Attendance
                 $session_star = api_get_session_image(api_get_session_id(), $user_info['status']);
             }
             
-            if ($attendance['locked'] == 1) {
+            if ($attendance['active'] == 0) {
                 $attendance['name'] = "<del>".$attendance['name']."</del>";
+            }
+            
+            if ($attendance['locked'] == 1) {                
                 if (api_is_allowed_to_edit(null, true)) {
                     //Link to edit
                     $attendance['name'] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$id.$param_gradebook.$student_param.'">'.$attendance['name'].'</a>'.$session_star;
@@ -283,7 +287,7 @@ class Attendance
 		// add link to gradebook
 		if ($link_to_gradebook && !empty($this->category_id)) {
 			$description = '';
-			$link_info = is_resource_in_course_gradebook($course_code,7,$last_id,$session_id);
+			$link_info = is_resource_in_course_gradebook($course_code, 7, $last_id, $session_id);
             $link_id = $link_info['id'];
 			if (!$link_info) {
 				add_resource_to_course_gradebook($this->category_id, $course_code, 7, $last_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
@@ -443,10 +447,11 @@ class Attendance
         $current_session_id  = $this->get_session_id();
         
 		if (!empty($current_session_id)) {
-			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, $current_session_id,'','lastname');
+			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, $current_session_id,'', 'lastname');
 		} else {
 			$a_course_users = CourseManager :: get_user_list_from_course_code($current_course_id, 0, '','lastname');
 		}
+                
 		// get registered users inside current course
 		$a_users = array();
 		foreach ($a_course_users as $key =>$user_data) {
@@ -457,7 +462,7 @@ class Attendance
 			$user_status_in_session = null;
 			$user_status_in_course  = null;
 			
-			if (api_get_session_id()) {
+			if ($current_session_id) {
                 $user_status_in_session = SessionManager::get_user_status_in_course_session($uid, $current_course_id, $current_session_id);                
 			} else {
 			    $user_status_in_course = CourseManager::get_user_in_course_status($uid, $current_course_id);
@@ -496,13 +501,13 @@ class Attendance
 	}
 
 	/**
-	 * add attendaces sheet inside table
+	 * Add attendaces sheet inside table
 	 * @param 	int	   attendance calendar id
 	 * @param  	array  present users during current class (array with user_ids)
 	 * @param	int	   attendance id
 	 * @return 	int    affected rows
 	 */
-	public function attendance_sheet_add($calendar_id, $users_present, $attendance_id, $save_user_absents = true) {
+	public function attendance_sheet_add($calendar_id, $users_present, $attendance_id, $save_user_absents = true, $done_attendance = true) {
 		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
 		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		
@@ -568,12 +573,14 @@ class Attendance
                 }
             }
         }
+        
+        if ($done_attendance) {
+            // update done_attendance inside attendance calendar table
+            $sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1 WHERE c_id = $course_id AND id = '$calendar_id'";
+            Database::query($sql);
+        }
 
-		// update done_attendance inside attendance calendar table
-		$sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1 WHERE c_id = $course_id AND id = '$calendar_id'";
-		Database::query($sql);
-
-		// Save user's results
+		// Save user's results        
 		$this->update_users_results($user_ids, $attendance_id);
 
         if ($affected_rows) {
@@ -712,8 +719,7 @@ class Attendance
 		$user_id 		= intval($user_id);
 		$attendance_id 	= intval($attendance_id);
 		$results = array();
-		$attendance_data 	= $this->get_attendance_by_id($attendance_id);
-		
+		$attendance_data 	= $this->get_attendance_by_id($attendance_id);		
 		$calendar_count 	= $this->get_number_of_attendance_calendar($attendance_id);
 		
 		$total_done_attendance 	= $attendance_data['attendance_qualify_max'];
@@ -724,22 +730,22 @@ class Attendance
 		//$total_done_attendance = $calendar_count;
 
 		// calculate results
-		$faults = $total_done_attendance - $attendance_user_score;	
-		
+		$faults = $total_done_attendance - $attendance_user_score;		
 		$faults = $faults > 0 ? $faults:0;
 		$faults_porcent = $calendar_count > 0 ?round(($faults*100)/$calendar_count,0):0;
 		$results['faults'] 			= $faults;
 		$results['total']			= $calendar_count;
 		$results['faults_porcent'] 	= $faults_porcent;
-		$color_bar = '';
-
+        
+		$color_bar = 'success';
 		if ($faults_porcent > 25  ) {
-			$color_bar = '#F11';
-		} else if ($faults_porcent > 10) {
-			$color_bar = '#F90';
-		}
+			$color_bar = 'important';
+		} elseif ($faults_porcent > 10) {
+			$color_bar = 'warning';
+		} elseif ($faults_porcent > 1) {
+            $color_bar = 'info';
+        }
 		$results['color_bar'] = $color_bar;
-
 		return $results;
 	}
 

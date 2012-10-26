@@ -7,6 +7,7 @@ require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
 require_once 'config.php';
 
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
+require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 error_reporting(-1);
 

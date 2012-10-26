@@ -411,7 +411,7 @@ class MigrationCustom {
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id);
                         $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false, false);
-                        error_log("Adding calendar to user: $user_id to calendar: $cal_id");                        
+                        error_log("Adding calendar to user: $user_id to calendar: $cal_id");             
                     } else {
                         error_log('No attendance_id created');
                     }
@@ -430,16 +430,31 @@ class MigrationCustom {
                 
         if (!empty($session_id)) {
             $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 $course_info = api_get_course_info($course_data['code']);
-                
+                            
                 if (!empty($course_data)) {
                     $thematic = new Thematic();
                     $thematic->set_course_int_id($course_info['real_id']);
-                    $thematic->set_session_id($session_id);
-                    $thematic->set_thematic_attributes(null, $data['title'], $data['description'], $session_id);
-                    $thematic_id = $thematic->thematic_save();
+                    $thematic->set_session_id($session_id);                    
+                    $thematic_info = $thematic->get_thematic_by_title($data['thematic']);
+                    
+                    if (empty($thematic_info)) {
+                        $thematic->set_thematic_attributes(null, $data['thematic'], null, $session_id);
+                        $thematic_id = $thematic->thematic_save();                 
+                    } else {
+                        $thematic_id = isset($thematic_info['id']) ? $thematic_info['id'] : null;
+                    }
+                    
+                    if ($thematic_id) {                    
+                        $thematic->set_thematic_plan_attributes($thematic_id, $data['thematic_plan'], null, 6);
+                        $thematic->thematic_plan_save();
+                    }
+                    
+                    error_log("Adding thematic id : $thematic_id to session: $session_id to course: {$course_data['code']} real_id: {$course_data['real_id']}");
+                        
                     if ($thematic_id) {
                         error_log("Thematic saved: $thematic_id");
                     } else {
@@ -447,9 +462,9 @@ class MigrationCustom {
                     }
                 }                
             } else {
-                error_log("No courses in session $session_id ");
-            }            
-        }        
+                error_log("No courses in session $session_id ");                   
+            }
+        }
     }
     
     static function add_evaluation_type($params) {

@@ -409,11 +409,12 @@ class UrlManager
 		return $result;
 	}
 
-	public static function add_course_to_url($course_code, $url_id=1)
+	public static function add_course_to_url($course_code, $url_id = 1)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		if (empty($url_id)) $url_id=1;
-		$count = UrlManager::relation_url_course_exist($course_code,$url_id);
+		$count = UrlManager::relation_url_course_exist($course_code, $url_id);
+        $result = false;
 		if (empty($count)) {
 			$sql = "INSERT INTO $table_url_rel_course
            			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);

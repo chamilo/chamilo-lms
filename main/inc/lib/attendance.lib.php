@@ -90,7 +90,7 @@ class Attendance
 	 */
 	static function get_attendance_data($from, $number_of_items, $column, $direction) {
         $tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-        $course_id = api_get_course_int_id();
+        $course_id = api_get_course_int_id;
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
         $column = intval($column);
@@ -214,7 +214,7 @@ class Attendance
 	public function get_attendance_by_id($attendance_id) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
 		$attendance_id = intval($attendance_id);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
 	    $attendance_data = array();
 		$sql = "SELECT *  FROM $tbl_attendance WHERE c_id = $course_id AND  id = '$attendance_id'";
 		$res = Database::query($sql);
@@ -292,8 +292,8 @@ class Attendance
 		$session_id         = api_get_session_id();
 		$user_id            = api_get_user_id();
 		$attendance_id      = intval($attendance_id);
-		$course_code        = api_get_course_id();
-        $course_id          = api_get_course_int_id();
+		$course_code        = $this->get_course_id();
+        $course_id          = $this->get_course_int_id();
 		$title_gradebook	= Database::escape_string($this->attendance_qualify_title);
 		$value_calification = 0;
 		$weight_calification= floatval($this->attendance_weight);
@@ -334,7 +334,7 @@ class Attendance
 		global $_course;
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id 		= api_get_user_id();
-        $course_id      = api_get_course_int_id();
+        $course_id      = $this->get_course_int_id();
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -369,7 +369,7 @@ class Attendance
 		global $_course;
 		$tbl_attendance	= Database :: get_course_table(TABLE_ATTENDANCE);
 		$user_id 		= api_get_user_id();
-		$course_id      = api_get_course_int_id();
+		$course_id      = $this->get_course_int_id();
 		if (is_array($attendance_id)) {
 			foreach ($attendance_id as $id) {
 				$id	= intval($id);
@@ -401,7 +401,7 @@ class Attendance
      */
     public function lock_attendance($attendance_id, $lock = true) {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
         $attendance_id = intval($attendance_id);
         $locked = ($lock)?1:0;
         $upd = "UPDATE $tbl_attendance SET locked = $locked WHERE c_id = $course_id AND id = $attendance_id";
@@ -505,7 +505,7 @@ class Attendance
             $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
         }
 
-		// save users present in class
+		// Save users present in class
 		foreach ($users_present as $user_present) {
 			$uid = intval($user_present);
 			// check if user already was registered with the $calendar_id
@@ -548,10 +548,10 @@ class Attendance
 		}
 
 		// update done_attendance inside attendance calendar table
-		$sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1 WHERE  c_id = $course_id AND id = '$calendar_id'";
+		$sql = "UPDATE $tbl_attendance_calendar SET done_attendance = 1 WHERE c_id = $course_id AND id = '$calendar_id'";
 		Database::query($sql);
 
-		// save users' results
+		// Save user's results
 		$this->update_users_results($user_ids, $attendance_id);
 
         if ($affected_rows) {
@@ -570,11 +570,10 @@ class Attendance
 	 * @return 	void
 	 */
 	public function update_users_results($user_ids, $attendance_id) {
-		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
-		$tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+		$tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);		
 		$tbl_attendance_result  = Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$tbl_attendance			= Database::get_course_table(TABLE_ATTENDANCE);
-        $course_id              = api_get_course_int_id();
+        $course_id              = $this->get_course_int_id();
         
 		$attendance_id = intval($attendance_id);
 		// fill results about presence of students
@@ -591,7 +590,7 @@ class Attendance
 				$count_presences = 0;
 				if (count($calendar_ids) > 0) {
 					$sql = "SELECT count(presence) as count_presences FROM $tbl_attendance_sheet 
-					        WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id IN(".implode(',',$calendar_ids).") AND presence = 1";
+					        WHERE c_id = $course_id AND user_id = '$uid' AND attendance_calendar_id IN (".implode(',', $calendar_ids).") AND presence = 1";
 					$rs_count  = Database::query($sql);
 					$row_count = Database::fetch_array($rs_count);
 					$count_presences = $row_count['count_presences'];
@@ -633,7 +632,7 @@ class Attendance
         * @return  int     Affected rows
         */
     public function save_attendance_sheet_log($attendance_id, $lastedit_date, $lastedit_type, $lastedit_user_id, $calendar_date_value = null) {
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
 
         // define table
         $tbl_attendance_sheet_log = Database::get_course_table(TABLE_ATTENDANCE_SHEET_LOG);
@@ -821,7 +820,7 @@ class Attendance
 			$calendar_ids[] = $cal['id'];
 		}
 		
-		$course_id = api_get_course_int_id();
+		$course_id = $this->get_course_int_id();
 
 		$data = array();
 		if (empty($user_id)) {
@@ -873,7 +872,7 @@ class Attendance
 	public function get_next_attendance_calendar_id($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$attendance_id = intval($attendance_id);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
         
 		$sql = "SELECT id FROM $tbl_attendance_calendar 
 		        WHERE c_id = $course_id AND attendance_id = '$attendance_id' AND done_attendance = 0 ORDER BY date_time limit 1";
@@ -893,7 +892,7 @@ class Attendance
 	 */
 	public function get_next_attendance_calendar_datetime($attendance_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
 		$attendance_id = intval($attendance_id);
 		$sql = "SELECT id, date_time FROM $tbl_attendance_calendar WHERE c_id = $course_id AND attendance_id = '$attendance_id' AND done_attendance = 0 ORDER BY date_time limit 1";
 		$rs = Database::query($sql);
@@ -915,7 +914,7 @@ class Attendance
 		$tbl_attendance_result 	= Database::get_course_table(TABLE_ATTENDANCE_RESULT);
 		$user_id = intval($user_id);
 		$attendance_id = intval($attendance_id);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
 		$sql = "SELECT score FROM $tbl_attendance_result WHERE c_id = $course_id AND user_id='$user_id' AND attendance_id='$attendance_id'";
 		$rs = Database::query($sql);
 		$score = 0;
@@ -934,7 +933,7 @@ class Attendance
 	public function get_attendance_calendar_by_id($calendar_id) {
 		$tbl_attendance_calendar = Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
 		$calendar_id = intval($calendar_id);
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
 		$sql = "SELECT * FROM $tbl_attendance_calendar WHERE c_id = $course_id AND id = '$calendar_id' ";
 		$rs = Database::query($sql);
 		$data = array();
@@ -1017,7 +1016,7 @@ class Attendance
 		$sql = "SELECT count(id) FROM $tbl_attendance_calendar 
                 WHERE c_id = $course_id AND attendance_id = '$attendance_id'";
 		$rs = Database::query($sql);
-                $row = Database::fetch_row($rs);
+        $row = Database::fetch_row($rs);
 		$count = $row[0];
 		return $count;
 	}
@@ -1036,8 +1035,8 @@ class Attendance
 		$rs = Database::query($sql);
 		$count = 0;
 		if (Database::num_rows($rs) > 0) {
-                    $row = Database::fetch_row($rs);
-                    $count = $row[0];
+            $row = Database::fetch_row($rs);
+            $count = $row[0];
 		}
 		return $count;
 	}

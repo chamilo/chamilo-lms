@@ -248,7 +248,7 @@ class Evaluation implements GradebookItem
 			}
 			$sql .= ", '".api_get_utc_datetime()."'";			
 			$sql .= ',\''.Database::escape_string($this->type).'\'';			
-			$sql .= ")";			
+			$sql .= ")";            
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
 		} else {

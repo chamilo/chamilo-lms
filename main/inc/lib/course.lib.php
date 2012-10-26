@@ -128,11 +128,10 @@ class CourseManager {
                     self::prepare_course_repository($course_info['directory'], $course_info['code']);                    
                     self::fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
                     
-                    //Create an empty gradebook
+                    //Create an empty gradebook                    
                     if (isset($params['create_gradebook_evaluation']) && $params['create_gradebook_evaluation'] == true) {
                         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
-                        $category_id = create_default_course_gradebook($course_info['code']);                       
-                                                
+                        $category_id = create_default_course_gradebook($course_info['code']);
                         if ($category_id && isset($params['gradebook_params'])) {
                             $eval = new Evaluation();
                             $eval->set_name($params['gradebook_params']['name']);                        
@@ -142,10 +141,9 @@ class CourseManager {
                             $eval->set_weight($params['gradebook_params']['weight']);	
                             $eval->set_max($params['gradebook_params']['max']);
                             $eval->set_visible(0);
-                            $eval->add();                            
+                            $eval->add();                 
                         }
-                    }
-                    
+                    }                    
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
@@ -153,8 +151,6 @@ class CourseManager {
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
-                    
-                    
                     return $course_info;
                 }
             } else {
@@ -4321,8 +4317,7 @@ class CourseManager {
     static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null) {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
-        }
-        global $_configuration;
+        }        
         $course_id = intval($course_id);
 
         if (empty($course_id)) {
@@ -4747,17 +4742,17 @@ class CourseManager {
         $title              = $params['title'];
         $code               = $params['code'];
         $visual_code        = $params['visual_code'];
-        $directory          = $params['directory'];
-        $tutor_name         = $params['tutor_name'];
+        $directory          = isset($params['directory']) ? $params['directory'] : null;
+        $tutor_name         = isset($params['tutor_name']) ? $params['tutor_name'] : null;
         //$description        = $params['description'];
 
-        $category_code      = $params['category_code'];
+        $category_code      = isset($params['category_code']) ? $params['category_code'] : null;
         $course_language    = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting('platformLanguage');
         $user_id            = empty($params['user_id']) ? api_get_user_id() : intval($params['user_id']);
-        $department_name    = $params['department_name'];
-        $department_url     = $params['department_url'];
-        $disk_quota         = $params['disk_quota'];
-
+        $department_name    = isset($params['department_name']) ? $params['department_name'] : null;
+        $department_url     = isset($params['department_url']) ? $params['department_url'] : null;
+        $disk_quota         = isset($params['disk_quota']) ? $params['disk_quota'] : null;
+        
         if (!isset($params['visibility'])) {
             $default_course_visibility = api_get_setting('courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
@@ -4770,10 +4765,9 @@ class CourseManager {
         }
         $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
         $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
-
-        $expiration_date    = $params['expiration_date'];
-        $teachers           = $params['teachers'];
-        $status             = $params['status'];
+        $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;        
+        $teachers           = isset($params['teachers']) ? $params['teachers'] : null;
+        $status             = isset($params['status']) ? $params['status'] : null;
 
         $TABLECOURSE		 	= Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER 		= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -4893,9 +4887,8 @@ class CourseManager {
                     }
                 }
 
-                // Adding the course to an URL.
-                global $_configuration;            
-                if ($_configuration['multiple_access_urls']) {
+                // Adding the course to an URL                  
+                if (api_is_multiple_url_enabled()) {
                     $url_id = 1;
                     if (api_get_current_access_url_id() != -1) {
                         $url_id = api_get_current_access_url_id();

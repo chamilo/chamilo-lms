@@ -42,8 +42,8 @@ class MigrationMSSQL extends Migration {
             $top = " TOP 1000  ";
         }
       
-       //$top = null;
-        $top = " TOP 1000 ";  
+        //$top = null;
+        $top = " TOP 10 " ;
         $extra = null;
         if (isset($options) && !empty($options['inner_join'])) {
             $extra = ' '.$options['alias_orig_table'].' INNER JOIN '.$options['inner_join'].' '.$options['alias_join_table'].' ON '.$options['on'];

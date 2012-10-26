@@ -291,10 +291,10 @@ class MigrationCustom {
     /**
      * Manages the course creation based on the rules in db_matches.php
      */
-    public function create_course($data) {
+    static function create_course($data) {
         //error_log('In create_course, received '.print_r($data,1));
         //Fixes wrong wanted codes
-        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);  
+        $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
         
         //Creates an evaluation
         $data['create_gradebook_evaluation'] = true;
@@ -303,12 +303,14 @@ class MigrationCustom {
         $data['visibility'] = COURSE_VISIBILITY_REGISTERED;
         
         $data['gradebook_params'] = array(
-            'name' => 'General evaluation',
-            'user_id' => self::default_admin_id,
-            'weight' => '20',
-            'max' => '20'
+            'name'      => 'General evaluation',
+            'user_id'   => self::default_admin_id,
+            'weight'    => '20',
+            'max'       => '20'
         );
-        return CourseManager::create_course($data);
+        $course_data = CourseManager::create_course($data);
+        var_dump($course_data['code']);
+        return $course_data;
     }
     
     /**
@@ -501,17 +503,19 @@ class MigrationCustom {
                     //Get gradebook
                     $gradebook = new Gradebook();
                     $gradebooks = $gradebook->get_all(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    var_dump($course_data['code'], $session_id);
                     print_r($gradebooks);
+                    exit;
                 } else {
                     error_log("Something is wrong with the course ");    
                 }
-                
+                exit;
             } else {
-                error_log("NO course found for session id: $session_id");    
+                //error_log("NO course found for session id: $session_id");    
             }
             
         } else {
-            error_log("NO session id found: $session_id");
+            //error_log("NO session id found: $session_id");
         }
         
     }

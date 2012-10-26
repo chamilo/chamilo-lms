@@ -285,7 +285,7 @@
 			$data['next_attendance_calendar_id']       = $attendance->get_next_attendance_calendar_id($attendance_id);			
 			$data['next_attendance_calendar_datetime'] = $attendance->get_next_attendance_calendar_datetime($attendance_id);			
 		} else {		    
-		    $data['attendant_calendar_all']            = $attendance->get_attendance_calendar($attendance_id);		    
+		    $data['attendant_calendar_all']            = $attendance->get_attendance_calendar($attendance_id);	    
 			$data['attendant_calendar']                = $attendance->get_attendance_calendar($attendance_id, $filter_type);
 		}
         

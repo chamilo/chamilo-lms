@@ -9,8 +9,7 @@
  * @package chamilo.course_progress
  */
 class Thematic
-{	
-	private $session_id;
+{		
 	private $thematic_id;
 	private $thematic_title;
 	private $thematic_content;

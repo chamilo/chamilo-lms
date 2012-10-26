@@ -949,7 +949,7 @@ class CourseBuilder {
 		$sql = 'SELECT * FROM '.$table_attendance.' WHERE c_id = '.$course_id.' AND session_id = 0 ';
 		$db_result = Database::query($sql);
 		while ($row = Database::fetch_array($db_result,'ASSOC')) {
-			$obj = new Attendance($row);
+			$obj = new CourseCopyAttendance($row);
 			$sql = 'SELECT * FROM '.$table_attendance_calendar.' WHERE c_id = '.$course_id.' AND attendance_id = '.$row['id'];
 				
 			$result = Database::query($sql);

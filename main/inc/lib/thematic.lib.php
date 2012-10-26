@@ -310,7 +310,7 @@ class Thematic
 			}
 		} else {
 			// update
-			$sql = "UPDATE $tbl_thematic SET title = '$title', content = '$content', session_id = $session_id WHERE id = $id AND c_id = {$this->course_int_id}";
+			$sql = "UPDATE $tbl_thematic SET title = '$title', content = '$content', session_id = $session_id WHERE id = $id AND c_id = $course_id";
 			Database::query($sql);
 			$last_id = $id;
 			if (Database::affected_rows()) {
@@ -389,10 +389,10 @@ class Thematic
 	 * Get the total number of thematic advance inside current course
 	 * @see SortableTable#get_total_number_of_items()
 	 */
-	public function get_number_of_thematic_advances() {
+	public static function get_number_of_thematic_advances() {
 		global $thematic_id;
 		$tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
-        $course_id = $this->get_course_int_id();
+        $course_id = api_get_course_int_id();
         			
 		$sql = "SELECT COUNT(id) AS total_number_of_items 
                 FROM $tbl_thematic_advance 
@@ -411,7 +411,7 @@ class Thematic
 	 * @param   string  Order (ASC,DESC)
 	 * @see SortableTable#get_table_data($from)
 	 */
-	public function get_thematic_advance_data($from, $number_of_items, $column, $direction) {
+	public static function get_thematic_advance_data($from, $number_of_items, $column, $direction) {
 		global $thematic_id;
 		$tbl_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
 		$thematic_data = self::get_thematic_list($thematic_id);
@@ -423,7 +423,7 @@ class Thematic
 	    }
 		$data = array();
 		
-		$course_id = $this->get_course_int_id();		
+		$course_id = api_get_course_int_id();		
 		
 		if (api_is_allowed_to_edit(null, true)) {
 		    
@@ -799,7 +799,7 @@ class Thematic
 		// check thematic plan type already exists
 		$sql = "SELECT id FROM $tbl_thematic_plan 
                 WHERE c_id = $course_id AND thematic_id = $thematic_id AND description_type = '$description_type'";		
-		$rs	 = Database::query($sql);
+		$rs	 = Database::query($sql);        
 		
 		$affected_rows = 0;
 		if (Database::num_rows($rs) > 0) {
@@ -827,7 +827,7 @@ class Thematic
             } else {            
                 // insert
     			$ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type) 
-    					VALUES ($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";    		
+    					VALUES ($course_id, $thematic_id, '$title', '$description', $description_type) ";    		
     			Database::query($ins);
                 $last_id = Database::insert_id();
     			$affected_rows = Database::affected_rows();
@@ -838,7 +838,7 @@ class Thematic
 		} else {		    
 			// insert
 			$ins = "INSERT INTO $tbl_thematic_plan (c_id, thematic_id, title, description, description_type) 
-					VALUES($this->course_int_id, $thematic_id, '$title', '$description', $description_type) ";			
+					VALUES($course_id, $thematic_id, '$title', '$description', $description_type) ";			
 			Database::query($ins);
             $last_id = Database::insert_id();
 			$affected_rows = Database::affected_rows();

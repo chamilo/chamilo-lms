@@ -353,6 +353,7 @@ class ThematicController {
      * render to thematic_advance.php 
      */
     public function thematic_advance($action) {
+        require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
         $thematic = new Thematic();
         $attendance = new Attendance();

@@ -419,7 +419,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				            if (!empty($value[0])) {				            	
 				            	$value = str_replace('&nbsp;', '',  trim($value[0]));                                
 				            }                                
-                            $correct_item = preg_quote($correct_item);                            
+                            $correct_item = preg_quote($correct_item);
+                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
 				            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);                            
                             //$answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
 				        }		        				        

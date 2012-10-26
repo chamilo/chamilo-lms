@@ -35,15 +35,15 @@ class MigrationMSSQL extends Migration {
         $top = null;
         //$top = " TOP 1000 ";
         if (in_array($table, array('Empleado', 'Alumno'))) {
-            //$top = " TOP 10000 ";            
+            $top = " TOP 10000 ";            
         }
         
         if (in_array($table, array('ProgramaAcademico', 'Matricula'))) {
-            $top = " TOP 1000  ";
+            $top = " TOP 100000 ";
         }
       
         //$top = null;
-        $top = " TOP 10 " ;
+        //$top = " TOP 10 " ;
         $extra = null;
         if (isset($options) && !empty($options['inner_join'])) {
             $extra = ' '.$options['alias_orig_table'].' INNER JOIN '.$options['inner_join'].' '.$options['alias_join_table'].' ON '.$options['on'];

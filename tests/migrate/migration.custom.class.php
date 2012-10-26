@@ -296,20 +296,22 @@ class MigrationCustom {
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
         
-        //Creates an evaluation
-        $data['create_gradebook_evaluation'] = true;
+        
+        
         //Specific to ICPNA, set the default language to English
         $data['language'] = 'english';
         $data['visibility'] = COURSE_VISIBILITY_REGISTERED;
         
+        //Creates an evaluation
+        $data['create_gradebook_evaluation'] = false;
+        /*
         $data['gradebook_params'] = array(
             'name'      => 'General evaluation',
             'user_id'   => self::default_admin_id,
             'weight'    => '20',
             'max'       => '20'
-        );
-        $course_data = CourseManager::create_course($data);
-        var_dump($course_data['code']);
+        );*/
+        $course_data = CourseManager::create_course($data);        
         return $course_data;
     }
     
@@ -318,9 +320,18 @@ class MigrationCustom {
      * in db_matches.php
      */
     static function create_session($data) {
+        //Hack to add the default gradebook course to the session course
+        $data['create_gradebook_evaluation'] = true;        
+        $data['gradebook_params'] = array(
+            'name'      => 'General evaluation',
+            'user_id'   => self::default_admin_id,
+            'weight'    => '20',
+            'max'       => '20'
+        );
+        
+        //Here the $data variable has $data['course_code'] that will be added when creating the session
         $session_id = SessionManager::add($data);
-        //error_log('create_session');
-        //error_log($data['course_code']);
+        //error_log('create_session');        
         if (!$session_id) {
             //error_log($session_id);
             error_log('failed create_session');

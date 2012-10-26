@@ -255,8 +255,7 @@ class Migration {
                 }
                 unset($dest_row[$details['dest']]);
             }            
-        }
-  
+        }  
         
         if (!empty($table['dest_func'])) {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
@@ -274,7 +273,7 @@ class Migration {
             switch ($table['dest_table']) {
                 case 'course':
                     //Saving courses in array
-                    if ($item_result) {                        
+                    if ($item_result) {                  
                         //$this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
                     } else {
                         error_log('Course Not FOUND');                        

@@ -88,6 +88,36 @@ class SessionManager {
             
             if (isset($params['course_code'])) {                
                 self::add_courses_to_session($session_id, array($params['course_code']));
+                
+                //Update default course gradebook to the session if exists
+                $create_gradebook_evaluation = isset($params['create_gradebook_evaluation']) ? $params['create_gradebook_evaluation']  : false;
+                if ($create_gradebook_evaluation) {
+                    
+                    require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                    $category_id = create_default_course_gradebook($params['course_code'], false, $session_id);
+                    if ($category_id && isset($params['gradebook_params'])) {
+                        $eval = new Evaluation();                        
+                        $eval->set_name($params['gradebook_params']['name']);
+                        $eval->set_user_id($params['gradebook_params']['user_id']);
+                        $eval->set_course_code($params['course_code']);
+                        $eval->set_category_id($category_id);
+                        $eval->set_weight($params['gradebook_params']['weight']);	
+                        $eval->set_max($params['gradebook_params']['max']);
+                        $eval->set_visible(0);
+                        $eval->add();                        
+                    }
+                    
+                    /*$tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+                    $sql = "SELECT id FROM $tbl_gradebook_category WHERE course_code = {$params['course_code']} AND session_id = 0 LIMIT 1";
+                    $result = Database::query($sql);
+                    if (Database::num_rows($result)) {
+                        $gradebook_data = Database::fetch_array($result, 'ASSOC');
+                        if (!empty($gradebook_data)) {
+                            $sql = "UPDATE SET session_id = $session_id WHERE id = {$gradebook_data['id']}";
+                            Database::query($sql);
+                        }
+                    }*/
+                }
             }
         } else {
             if (isset($params['return_item_if_already_exists']) && $params['return_item_if_already_exists']) {

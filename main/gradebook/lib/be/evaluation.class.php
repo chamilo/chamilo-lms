@@ -10,9 +10,7 @@
  */
 class Evaluation implements GradebookItem
 {
-
-// PROPERTIES
-
+    // PROPERTIES
 	private $id;
 	private $name;
 	private $description;
@@ -23,9 +21,7 @@ class Evaluation implements GradebookItem
 	private $weight;
 	private $eval_max;
 	private $visible;
-
-    // CONSTRUCTORS
-
+    
     function __construct() {    	
     }
 
@@ -83,7 +79,7 @@ class Evaluation implements GradebookItem
 		return isset($this->locked) && $this->locked == 1 ? true : false ;
 	}  
     
-	public function set_id ($id) {
+	public function set_id($id) {
 		$this->id = $id;
 	}
 
@@ -130,7 +126,6 @@ class Evaluation implements GradebookItem
 	public function set_locked ($locked) {
 		$this->locked = $locked;
 	}
-    
     
     // CRUD FUNCTIONS
 
@@ -226,7 +221,7 @@ class Evaluation implements GradebookItem
 			}
 			if (isset($this->category)) {
 				$sql .= ', category_id';
-			}
+			}            
 			$sql .= ', created_at';
 			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
@@ -242,10 +237,10 @@ class Evaluation implements GradebookItem
 			}
 			if (isset($this->category)) {
 				 $sql .= ','.intval($this->get_category_id());
-			}
+			}            
 			if (empty($this->type)) {
 				$this->type = 'evaluation';	
-			}
+			}            
 			$sql .= ", '".api_get_utc_datetime()."'";			
 			$sql .= ',\''.Database::escape_string($this->type).'\'';			
 			$sql .= ")";            

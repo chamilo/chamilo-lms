@@ -618,13 +618,16 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
 }
 
-function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0) {
+function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0, $session_id = null) {
     $category_id = null;
     //if (api_is_allowed_to_edit(true, true)) {
         if (!isset($course_code) || empty($course_code)) {
             $course_code = api_get_course_id();    
-        }        
-        $session_id = api_get_session_id();
+        }
+        
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
+        }
         
         $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
@@ -638,9 +641,8 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
         if (Database::num_rows($res)<1){
             //there is no unique category for this course+session combination,
             $cat = new Category();
-            if (!empty($session_id)) {
-                $my_session_id=api_get_session_id();
-                $s_name = api_get_session_name($my_session_id);
+            if (!empty($session_id)) {                
+                $s_name = api_get_session_name($session_id);
                 $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
                 $cat->set_session_id($session_id);
             } else {

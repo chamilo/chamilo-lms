@@ -36,7 +36,6 @@ class ThematicController {
         $thematic = new Thematic();
         $data = array();
         $error = false;
-        $msg_add = false;
 
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
@@ -215,7 +214,7 @@ class ThematicController {
             $data['thematic_id'] = $thematic_id;
         }
 
-        if ($action == 'thematic_details') {
+        if ($action == 'thematic_details') {    
             if (isset($thematic_id)) {
                 $thematic_data_result = $thematic->get_thematic_list($thematic_id);
                 if (!empty($thematic_data_result)) {
@@ -230,8 +229,8 @@ class ThematicController {
             }
 
             //Second column
-            $thematic_plan_data = $thematic->get_thematic_plan_data();            
-
+            $thematic_plan_data = $thematic->get_thematic_plan_data();
+            
             //Third column
             $thematic_advance_data = $thematic->get_thematic_advance_list(null, null, true);
 
@@ -271,13 +270,22 @@ class ThematicController {
                     if ($_POST['thematic_plan_token'] == $_SESSION['thematic_plan_token']) {
                         if (api_is_allowed_to_edit(null, true)) {
 
-                            $title_list = $_REQUEST['title'];
-                            //$description_list   = $_REQUEST['desc'];
-                            $description_list = $_REQUEST['description'];
-                            $description_type = $_REQUEST['description_type'];
-                            for ($i = 1; $i < count($title_list) + 1; $i++) {
-                                $thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title_list[$i], $description_list[$i], $description_type[$i]);
-                                $affected_rows = $thematic->thematic_plan_save();
+                            $title_list         = $_REQUEST['title'];
+                            $description_list   = $_REQUEST['description'];
+                            $description_type   = $_REQUEST['description_type'];               
+                            $delete_list        = $_REQUEST['delete'];
+                            
+                            foreach ($title_list as $id => $title) {
+                                $thematic_plan_id = $id;
+                                if (!$thematic->get_thematic_data_by_id($id)) {
+                                    $thematic_plan_id = null;
+                                }
+                                $thematic->set_thematic_plan_attributes($_REQUEST['thematic_id'], $title, $description_list[$id], $description_type[$id], $thematic_plan_id);                                
+                                if (isset($delete_list[$id]) && !empty($delete_list[$id])) {                                    
+                                     $thematic->thematic_plan_delete();
+                                } else {
+                                    $affected_rows = $thematic->thematic_plan_save();    
+                                }
                             }
                             unset($_SESSION['thematic_plan_token']);
                             $data['message'] = 'ok';
@@ -306,11 +314,12 @@ class ThematicController {
             }
         }
 
-
+        $thematic_id = intval($_GET['thematic_id']);
+        
         if ($action == 'thematic_plan_list') {
             $data['thematic_plan_data'] = $thematic->get_thematic_plan_data($thematic_id);
         }
-        $thematic_id = intval($_GET['thematic_id']);
+        
         $description_type = intval($_GET['description_type']);
 
         if (!empty($thematic_id) && !empty($description_type)) {
@@ -332,6 +341,7 @@ class ThematicController {
 
         $data['thematic_id'] = $thematic_id;
         $data['action'] = $action;
+        
         $data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();
         $data['default_thematic_plan_icon'] = $thematic->get_default_thematic_plan_icon();
         $data['next_description_type'] = $thematic->get_next_description_type($thematic_id);

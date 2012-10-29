@@ -35,7 +35,7 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
 	api_not_allowed();	
 }
 $course_exits = CourseManager::course_exists($cidReq);

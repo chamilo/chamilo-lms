@@ -1202,22 +1202,14 @@ class Tracking {
 			$tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
 
 			// At first, courses where $coach_id is coach of the course //
-
-			/*$sql = 'SELECT 1
-			FROM ' . $tbl_session_course_user . ' AS session_course_user
-			INNER JOIN ' . $tbl_session_course . ' AS session_course
-			ON session_course.course_code = session_course_user.course_code
-			AND id_coach=' . $coach_id . '
-			WHERE id_user=' . $student_id;*/
-
+            
 			$sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';
-
 			$result = Database::query($sql);
 			if (Database::num_rows($result) > 0) {
 				return true;
 			}
 
-			// Then, courses where $coach_id is coach of the session    //
+			// Then, courses where $coach_id is coach of the session
 
 			$sql = 'SELECT session_course_user.id_user
                         FROM ' . $tbl_session_course_user . ' as session_course_user
@@ -1231,11 +1223,8 @@ class Tracking {
 			if (Database::num_rows($result) > 0) {
 				return true;
 			}
-
 			return false;
-
 		}
-
 
 		/**
 		 * Get courses followed by coach

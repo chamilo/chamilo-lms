@@ -691,11 +691,10 @@ class SessionManager {
 		$session_info 		= api_get_session_info($id_session);
         
         if ($session_info) {
-            $session_name 		= $session_info['name'];    
+            $session_name 		= $session_info['name'];
         } else {
             return false;
-        }
-		
+        }		
 
 		//from function parameter		
 	   	if (empty($session_visibility)) {
@@ -723,8 +722,7 @@ class SessionManager {
 			$course_list[] = $row['course_code'];
 		}        
         
-		if ($send_email) {
-		    //global $_configuration;
+		if ($send_email) {		    
 			//sending emails only
 			if (is_array($user_list) && count($user_list)>0) {
 				foreach ($user_list as $user_id) {                    
@@ -732,14 +730,7 @@ class SessionManager {
                         $subject = '['.get_setting('siteName').'] '.get_lang('YourReg').' '.get_setting('siteName');
                         $user_info = api_get_user_info($user_id);
                         $content	= get_lang('Dear')." ".stripslashes($user_info['complete_name']).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');                        
-                        MessageManager::send_message($user_id, $subject, $content, array(), array(), null, null, null, null, null);                        
-                        					    
-					    /*$emailheaders = 'From: '.get_setting('administratorName').' '.get_setting('administratorSurname').' <'.get_setting('emailAdministrator').">\n";
-					    $emailheaders .= 'Reply-To: '.get_setting('emailAdministrator');
-		
-					    $emailbody	= get_lang('Dear')." ".stripslashes(api_get_person_name($firstname, $lastname)).",\n\n".sprintf(get_lang('YouAreRegisterToSessionX'), $session_name) ." \n\n" .get_lang('Address') ." ". get_setting('siteName') ." ". get_lang('Is') ." : ". api_get_path(WEB_PATH) ."\n\n". get_lang('Problem'). "\n\n". get_lang('Formula').",\n\n".get_setting('administratorName')." ".get_setting('administratorSurname')."\n". get_lang('Manager'). " ".get_setting('siteName')."\nT. ".get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".get_setting('emailAdministrator');
-			
-					    @api_send_mail($emailto, $emailsubject, $emailbody, $emailheaders);*/
+                        MessageManager::send_message($user_id, $subject, $content, array(), array(), null, null, null, null, null);                                     
 					}
 				}
 			}
@@ -781,12 +772,12 @@ class SessionManager {
 			$rs = Database::query($sql);
 			list($nbr_users) = Database::fetch_array($rs);
 			// update the session-course relation to add the users total
-			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+			$update_sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
 			Database::query($update_sql);
 		}
 
 		// Delete users from the session
-		if ($empty_users===true) {
+		if ($empty_users === true) {
 			Database::query("DELETE FROM $tbl_session_rel_user WHERE id_session = $id_session AND relation_type<>".SESSION_RELATION_TYPE_RRHH."");
 		}
 		
@@ -794,11 +785,12 @@ class SessionManager {
 		$nbr_users = 0;		
 		foreach ($user_list as $enreg_user) {
 	        $enreg_user = Database::escape_string($enreg_user);			
-			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user) VALUES ('$id_session','$enreg_user')";			
+			$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user) VALUES ('$id_session', '$enreg_user')";			
             Database::query($insert_sql);
             
             //Reset moved_to just in case
-            $update_sql = "UPDATE $tbl_session_rel_user SET moved_to = 0 , moved_status = 0, moved_at ='0000-00-00 00:00:00' WHERE  id_session = $id_session AND id_user = $enreg_user";                        
+            $update_sql = "UPDATE $tbl_session_rel_user SET moved_to = 0, moved_status = 0, moved_at ='0000-00-00 00:00:00' 
+                           WHERE id_session = $id_session AND id_user = $enreg_user";                        
             Database::query($update_sql);
             $nbr_users++;
 		}
@@ -807,10 +799,10 @@ class SessionManager {
 		$nbr_users = count($user_list);		
         if ($empty_users) {
             // update number of users in the session            
-            $update_sql = "UPDATE $tbl_session SET nbr_users= $nbr_users WHERE id='$id_session' ";
+            $update_sql = "UPDATE $tbl_session SET nbr_users = $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);
         } else {
-            $update_sql = "UPDATE $tbl_session SET nbr_users= nbr_users + $nbr_users WHERE id='$id_session' ";
+            $update_sql = "UPDATE $tbl_session SET nbr_users = nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
 
@@ -846,7 +838,7 @@ class SessionManager {
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         // update the session-course relation to add the users total
-        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users = $nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
         Database::query($update_sql);
     }
 
@@ -935,15 +927,13 @@ class SessionManager {
      public static function add_courses_to_session ($id_session, $course_list, $empty_courses=true) {
      	// security checks
      	if ($id_session!= strval(intval($id_session))) { return false; }
-	   	//foreach($course_list as $intCourse){
-	   	//	if ($intCourse!= strval(intval($intCourse))) { return false; }
-	   	//}
+	   	
 	   	// initialisation
 		$tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 		$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 		$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-		$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+		
      	// get general coach ID
 		$id_coach = Database::query("SELECT id_coach FROM $tbl_session WHERE id=$id_session");
 		$id_coach = Database::fetch_array($id_coach);
@@ -1057,51 +1047,16 @@ class SessionManager {
         );
         $session_field = new SessionField();
         $field_id = $session_field->save($params);
-        return $field_id;/*
-        
-		$t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-		$fieldvarname 	= Database::escape_string($fieldvarname);
-		$fieldtitle 	= Database::escape_string($fieldtitle);
-		$fieldtype = (int)$fieldtype;
-		$time = api_get_utc_datetime();
-        
-		$sql_field = "SELECT id FROM $t_sf WHERE field_variable = '$fieldvarname'";
-		$res_field = Database::query($sql_field);
-
-		$r_field = Database::fetch_row($res_field);
-
-		if (Database::num_rows($res_field)>0) {
-			$field_id = $r_field[0];
-		} else {
-			// save new fieldlabel into course_field table
-			$sql = "SELECT MAX(field_order) FROM $t_sf";
-			$res = Database::query($sql);
-
-			$order = 0;
-			if (Database::num_rows($res)>0) {
-				$row = Database::fetch_row($res);
-				$order = $row[0]+1;
-			}
-
-			$sql = "INSERT INTO $t_sf
-                    SET field_type = '$fieldtype',
-                    field_variable = '$fieldvarname',
-                    field_display_text = '$fieldtitle',
-                    field_order = '$order',
-                    tms = '$time'";
-			Database::query($sql);
-			$field_id = Database::insert_id();
-		}
-		return $field_id;*/
+        return $field_id;
 	}
 
-/**
- * Update an extra field value for a given session
- * @param	integer	Course ID
- * @param	string	Field variable name
- * @param	string	Field value
- * @return	boolean	true if field updated, false otherwise
- */
+    /**
+     * Update an extra field value for a given session
+     * @param	integer	Course ID
+     * @param	string	Field variable name
+     * @param	string	Field value
+     * @return	boolean	true if field updated, false otherwise
+     */
 	public static function update_session_extra_field_value ($session_id, $fname, $fvalue = null) {
         
         $session_field_value = new SessionFieldValue();

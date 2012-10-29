@@ -286,7 +286,7 @@ class Thematic
                 WHERE   c_id = $course_id AND 
                         session_id = $session_id AND 
                         title = $title AND 
-                        active = 1";
+                        active = 1";        
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             return Database::fetch_array($result, 'ASSOC');

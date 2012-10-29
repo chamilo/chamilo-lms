@@ -91,10 +91,10 @@ class SessionManager {
                 
                 //Update default course gradebook to the session if exists
                 $create_gradebook_evaluation = isset($params['create_gradebook_evaluation']) ? $params['create_gradebook_evaluation']  : false;
-                if ($create_gradebook_evaluation) {
-                    
+                if ($create_gradebook_evaluation) {                    
                     require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
                     $category_id = create_default_course_gradebook($params['course_code'], false, $session_id);
+                    /*
                     if ($category_id && isset($params['gradebook_params'])) {
                         $eval = new Evaluation();                        
                         $eval->set_name($params['gradebook_params']['name']);
@@ -105,7 +105,7 @@ class SessionManager {
                         $eval->set_max($params['gradebook_params']['max']);
                         $eval->set_visible(0);
                         $eval->add();                        
-                    }
+                    }*/
                     
                     /*$tbl_gradebook_category = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
                     $sql = "SELECT id FROM $tbl_gradebook_category WHERE course_code = {$params['course_code']} AND session_id = 0 LIMIT 1";

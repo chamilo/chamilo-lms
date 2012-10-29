@@ -322,12 +322,12 @@ class MigrationCustom {
     static function create_session($data) {
         //Hack to add the default gradebook course to the session course
         $data['create_gradebook_evaluation'] = true;        
-        $data['gradebook_params'] = array(
+        /*$data['gradebook_params'] = array(
             'name'      => 'General evaluation',
             'user_id'   => self::default_admin_id,
             'weight'    => '20',
             'max'       => '20'
-        );
+        );*/
         
         //Here the $data variable has $data['course_code'] that will be added when creating the session
         $session_id = SessionManager::add($data);
@@ -403,12 +403,13 @@ class MigrationCustom {
                         $link_to_gradebook = false;              			    			
                         //$attendance->category_id = $_POST['category_id'];
                         $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);                        
-                        error_log("Attendance added course code: {$course['code']} session_id: $session_id");
-                        //only 1 course per session
+                        error_log("Attendance added course code: {$course['code']} - session_id: $session_id");
+                        //only 1 course per session                
                     } else {
                         $attendance_data = current($attendance_list);                        
                         $attendance_id = $attendance_data['id'];
-                    }            
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course['code']} - session_id: $session_id");
+                    }
                
                     if ($attendance_id) {
                         //Attendance date exists?
@@ -438,7 +439,7 @@ class MigrationCustom {
     }
     
     static function create_thematic($data) {
-        error_log('create_attendance');
+        error_log('create_thematic');
         $session_id = $data['session_id'];
                 
         if (!empty($session_id)) {
@@ -447,37 +448,43 @@ class MigrationCustom {
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 $course_info = api_get_course_info($course_data['code']);
-                            
+                
                 if (!empty($course_data)) {
                     $thematic = new Thematic();
                     $thematic->set_course_int_id($course_info['real_id']);
-                    $thematic->set_session_id($session_id);                    
+                    $thematic->set_session_id($session_id);                   
                     $thematic_info = $thematic->get_thematic_by_title($data['thematic']);
                     
                     if (empty($thematic_info)) {
                         $thematic->set_thematic_attributes(null, $data['thematic'], null, $session_id);
-                        $thematic_id = $thematic->thematic_save();                 
+                        $thematic_id = $thematic->thematic_save();
+                        error_log("Thematic added to course code: {$course_info['code']} - session_id: $session_id");
                     } else {
-                        $thematic_id = isset($thematic_info['id']) ? $thematic_info['id'] : null;
+                        $thematic_id = isset($thematic_info['id']) ? $thematic_info['id'] : null;                        
+                        error_log("Thematic id #$thematic_id found in course: {$course_info['code']} - session_id: $session_id");
                     }
                     
                     if ($thematic_id) {                    
                         $thematic->set_thematic_plan_attributes($thematic_id, $data['thematic_plan'], null, 6);
                         $thematic->thematic_plan_save();
+                        error_log("Saving plan attributes: {$data['thematic_plan']}");
                     }
-                    
-                    error_log("Adding thematic id : $thematic_id to session: $session_id to course: {$course_data['code']} real_id: {$course_data['real_id']}");
+                    error_log("Adding thematic id : $thematic_id to session: $session_id to course: {$course_info['code']} real_id: {$course_info['real_id']}");
                         
                     if ($thematic_id) {
                         error_log("Thematic saved: $thematic_id");
                     } else {
                         error_log("Thematic NOT saved");
                     }
-                }                
+                }
+                
+                if ($course_info['code'] != 'B05') {
+                    //exit;
+                }
             } else {
                 error_log("No courses in session $session_id ");                   
             }
-        }
+        }        
     }
     
     static function add_evaluation_type($params) {
@@ -502,8 +509,8 @@ class MigrationCustom {
         return false;        
     }
     
-    static function create_gradebook_links($data){
-        error_log('create_gradebook_links');
+    static function create_gradebook_evaluation($data){
+        error_log('create_gradebook_evaluation');
         $session_id = isset($data['session_id']) ? $data['session_id'] : null;
         
         if (!empty($session_id)) {
@@ -513,12 +520,35 @@ class MigrationCustom {
                 if (isset($course_data['code'])) {
                     //Get gradebook
                     $gradebook = new Gradebook();
-                    $gradebooks = $gradebook->get_all(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
-                    var_dump($course_data['code'], $session_id);
-                    print_r($gradebooks);
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");                    
+                    if (!empty($gradebook)) {                        
+                        error_log("Gradebook exists");
+                        echo 'parameters';
+                        var_dump($data);
+                        
+                        
+                        $eval = new Evaluation();
+                        $eval->set_name($data['gradebook_description']);
+                        $eval->set_description($data['gradebook_description']);
+                        $eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
+                        $eval->set_user_id(self::default_admin_id);
+                        $eval->set_course_code($course_data['code']);                        
+                        $eval->set_category_id($gradebook['id']);
+                        
+                        //harcoded values
+                        $eval->set_weight(10);	
+                        $eval->set_max(20);
+                        $eval->set_visible(1);
+                        $eval->add();
+                        
+                    } else {
+                        error_log("Gradebook does not exists");
+                    }
+                    
                     exit;
                 } else {
-                    error_log("Something is wrong with the course ");    
+                    error_log("Something is wrong with the course ");
                 }
                 exit;
             } else {

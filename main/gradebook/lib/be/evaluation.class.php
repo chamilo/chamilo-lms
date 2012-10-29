@@ -20,7 +20,8 @@ class Evaluation implements GradebookItem
 	private $created_at;
 	private $weight;
 	private $eval_max;
-	private $visible;
+	private $visible;    
+    private $evaluation_type_id;
     
     function __construct() {    	
     }
@@ -127,6 +128,14 @@ class Evaluation implements GradebookItem
 		$this->locked = $locked;
 	}
     
+    public function get_evaluation_type_id() {
+        return isset($this->evaluation_type_id) ? $this->evaluation_type_id : 0;
+    }
+    
+    public function set_evaluation_type_id($id) {
+        $this->evaluation_type_id = intval($id);
+    }
+    
     // CRUD FUNCTIONS
 
 	/**
@@ -222,7 +231,9 @@ class Evaluation implements GradebookItem
 			if (isset($this->category)) {
 				$sql .= ', category_id';
 			}            
-			$sql .= ', created_at';
+			$sql .= ', created_at';            
+            $sql .= ', evaluation_type_id';
+            
 			$sql .= ',type';
 			$sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
 					.','.intval($this->get_user_id())
@@ -237,13 +248,16 @@ class Evaluation implements GradebookItem
 			}
 			if (isset($this->category)) {
 				 $sql .= ','.intval($this->get_category_id());
-			}            
+			}
+            
+            $sql .= ','.intval($this->get_evaluation_type_id());
 			if (empty($this->type)) {
 				$this->type = 'evaluation';	
 			}            
 			$sql .= ", '".api_get_utc_datetime()."'";			
 			$sql .= ',\''.Database::escape_string($this->type).'\'';			
-			$sql .= ")";            
+			$sql .= ")";       
+            
 			Database::query($sql);
 			$this->set_id(Database::insert_id());
 		} else {
@@ -492,9 +506,7 @@ class Evaluation implements GradebookItem
 		}
 		$this->save();
 	}
-
-
-
+    
 	/**
 	 * Retrieve evaluations where a student has results for
 	 * and return them as an array of Evaluation objects
@@ -523,8 +535,6 @@ class Evaluation implements GradebookItem
 		return $alleval;
     }
 
-
-
     /**
      * Get a list of students that do not have a result record for this evaluation
      */
@@ -546,7 +556,6 @@ class Evaluation implements GradebookItem
 		return $db_users;
     }
 
-
     /**
      * Find evaluations by name
      * @param string $name_mask search string
@@ -565,10 +574,7 @@ class Evaluation implements GradebookItem
 		return $foundevals;
     }
 
-
-
-// Other methods implementing GradebookItem
-
+    // Other methods implementing GradebookItem
     public function get_item_type() {
 		return 'E';
 	}

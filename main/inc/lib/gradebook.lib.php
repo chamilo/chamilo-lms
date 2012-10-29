@@ -19,7 +19,6 @@ class Gradebook extends Model {
         $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
         $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK); 
     }
-    
         
     /**
      * Returns true if the gradebook is active and visible in a course, false
@@ -150,8 +149,7 @@ class Gradebook extends Model {
         $result = Database::query($sql);         
         $result = Database::store_result($result,'ASSOC');
         return $result;
-    }
-    
+    }    
     
     /**
      * Displays the title + grid

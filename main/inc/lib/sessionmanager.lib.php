@@ -680,7 +680,7 @@ class SessionManager {
 	public static function suscribe_users_to_session($id_session, $user_list, $session_visibility = SESSION_VISIBLE_READ_ONLY, $empty_users = true, $send_email = false) {
 
 	  	if ($id_session!= strval(intval($id_session))) return false;
-	   	foreach($user_list as $intUser){
+	   	foreach ($user_list as $intUser){
 	   		if ($intUser!= strval(intval($intUser))) return false;
 	   	}
 	   	$tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -689,7 +689,13 @@ class SessionManager {
 	   	$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
 
 		$session_info 		= api_get_session_info($id_session);
-		$session_name 		= $session_info['name'];
+        
+        if ($session_info) {
+            $session_name 		= $session_info['name'];    
+        } else {
+            return false;
+        }
+		
 
 		//from function parameter		
 	   	if (empty($session_visibility)) {

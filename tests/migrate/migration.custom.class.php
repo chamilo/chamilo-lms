@@ -524,24 +524,26 @@ class MigrationCustom {
                     error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");                    
                     if (!empty($gradebook)) {                        
                         error_log("Gradebook exists");
-                        echo 'parameters';
-                        var_dump($data);
-                        
-                        
-                        $eval = new Evaluation();
-                        $eval->set_name($data['gradebook_description']);
-                        $eval->set_description($data['gradebook_description']);
-                        $eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
-                        $eval->set_user_id(self::default_admin_id);
-                        $eval->set_course_code($course_data['code']);                        
-                        $eval->set_category_id($gradebook['id']);
-                        
-                        //harcoded values
-                        $eval->set_weight(10);	
-                        $eval->set_max(20);
-                        $eval->set_visible(1);
-                        $eval->add();
-                        
+                        //echo 'parameters';
+                        //
+                        //Check if gradebook exists
+                        $eval = new Evaluation();                        
+                        $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
+                                                
+                        if (empty($evals_found)) {                        
+                            $eval->set_name($data['gradebook_description']);
+                            $eval->set_description($data['gradebook_description']);
+                            $eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
+                            $eval->set_user_id(self::default_admin_id);
+                            $eval->set_course_code($course_data['code']);                        
+                            $eval->set_category_id($gradebook['id']);
+
+                            //harcoded values
+                            $eval->set_weight(10);	
+                            $eval->set_max(20);
+                            $eval->set_visible(1);
+                            $eval->add();
+                        }                        
                     } else {
                         error_log("Gradebook does not exists");
                     }

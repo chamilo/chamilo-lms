@@ -44,6 +44,9 @@ ALTER TABLE grade_components ADD COLUMN count_elements INT DEFAULT 0;
 CREATE TABLE IF NOT EXISTS session_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS course_field_options (id int NOT NULL auto_increment, field_id int NOT NULL, option_value text, option_display_text varchar(255), option_order int, tms DATETIME NOT NULL default '0000-00-00 00:00:00', PRIMARY KEY (id));
 
+ALTER TABLE session_field_values ADD INDEX idx_session_field_options_field_id(field_id);
+ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id (session_id);
+
 ALTER TABLE session MODIFY COLUMN name CHAR(150) NOT NULL DEFAULT '';
 ALTER TABLE session MODIFY COLUMN id MEDIUMINT unsigned NOT NULL;
 
@@ -100,4 +103,4 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('last_transact
 
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20147' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20169' WHERE variable = 'chamilo_database_version';

@@ -233,7 +233,7 @@ class UserGroup extends Model {
      * @param   int     usergroup id
      * @param   array   list of course ids (integers)
      */
-    function subscribe_courses_to_usergroup($usergroup_id, $list) {
+    function subscribe_courses_to_usergroup($usergroup_id, $list, $delete_groups = true) {
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
 
@@ -253,8 +253,10 @@ class UserGroup extends Model {
                 }
             }
         }
-
-        self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
+        
+        if ($delete_groups) {
+            self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
+        }
 
         //Addding new relationships
         if (!empty($new_items)) {
@@ -265,7 +267,6 @@ class UserGroup extends Model {
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
-
                 $params = array('course_id'=>$course_id, 'usergroup_id'=>$usergroup_id);
                 Database::insert($this->usergroup_rel_course_table, $params);
             }

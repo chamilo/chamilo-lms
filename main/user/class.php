@@ -54,7 +54,7 @@ if (api_is_allowed_to_edit()) {
         case 'add_class_to_course':
             $id = $_GET['id'];
             if (!empty($id)) {
-                $usergroup->subscribe_courses_to_usergroup($id, array(api_get_course_int_id()));
+                $usergroup->subscribe_courses_to_usergroup($id, array(api_get_course_int_id()), false);
             }
             break;
         case 'remove_class_from_course':

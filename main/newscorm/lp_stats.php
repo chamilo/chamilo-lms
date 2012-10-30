@@ -697,8 +697,13 @@ if (is_array($list) && count($list) > 0) {
                         $output .= "<tr class='$oddclass'>";
                     }
                     
-                    //$item_path_url =                     
-                    //$url_link = Display::url($title, $item_path, array('class' => 'ajax'));
+                    if (($is_allowed_to_edit || api_is_drh()) && isset($_GET['lp_id']) && isset($course_code)) {                        
+                        $lp = new learnpath($course_code, $_GET['lp_id'], api_get_user_id());                                         
+                        $lp->set_course_int_id($course_id);
+                        $item_path_url = $lp->get_link('http', $my_id, false);                    
+                        $item_path_url .= "&width=600";
+                        $title = Display::url($title, $item_path_url, array('class' => 'ajax'));
+                    }
                     
                     $output .= '<td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>

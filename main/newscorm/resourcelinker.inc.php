@@ -1608,13 +1608,15 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
  * @param id_in_path  - the unique index in the items table
  */
-function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_path) {
-    $_course 		= Database::get_course_info($course_code);
+function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path) {
     $tbl_lp_item 	= Database::get_course_table(TABLE_LP_ITEM);
+    
+    $course_info = api_get_course_info_by_id($course_id);    
+    $course_id = $course_info['real_id'];
+    $course_code = $course_info['code'];
+    
     $learnpath_id 	= intval($learnpath_id);
     $id_in_path		= intval($id_in_path);
-    
-    $course_id = $_course['real_id'];
     
     $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
@@ -1625,7 +1627,7 @@ function rl_get_resource_link_for_learnpath($course_code, $learnpath_id, $id_in_
     $id = (strcmp($row_item['path'], '') == 0) ? '0' : $row_item['path'];
     $origin = 'learnpath';
     $main_dir_path = api_get_path(WEB_CODE_PATH);
-    $main_course_path = api_get_path(WEB_COURSE_PATH).$_course['directory'].'/';
+    $main_course_path = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/';
 
     $link = '';
 

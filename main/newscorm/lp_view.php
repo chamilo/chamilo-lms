@@ -142,7 +142,7 @@ foreach ($get_toc_list as $toc) {
 }
 
 if (!isset($src)) {
-    $src = '';
+    $src = null;
     switch ($lp_type) {
         case 1:
             $_SESSION['oLP']->stop_previous_item();
@@ -154,8 +154,7 @@ if (!isset($src)) {
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 $file_info = pathinfo($file_info['path']);
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
-                    //$src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?src='.$src;
+                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {                    
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset

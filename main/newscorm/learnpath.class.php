@@ -77,6 +77,16 @@ class learnpath {
     public $publicated_on   = '';
     public $expired_on      = '';
     public $ref = null;
+    
+    public $course_int_id;
+    
+    public function get_course_int_id() {
+        return isset($this->course_int_id) ? $this->course_int_id : api_get_course_int_id();
+    }
+    
+    public function set_course_int_id($course_id) {
+        return $this->course_int_id = intval($course_id);
+    }
 
     /**
      * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
@@ -2916,7 +2926,8 @@ class learnpath {
      * @return	string	Link to the lp_item resource
      */
     public function get_link($type = 'http', $item_id = null, $provided_toc = false) {
-        $course_id = api_get_course_int_id();
+        $course_id = $this->get_course_int_id();
+                        
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_link(' . $type . ',' . $item_id . ')', 0);
         }
@@ -2979,18 +2990,16 @@ class learnpath {
                 error_log('New LP - In learnpath::get_link() - $lp_item_type ' . $lp_item_type, 0);
             }
                         
-            // Now go through the specific cases to get the end of the path.
-
+            // Now go through the specific cases to get the end of the path
             // @todo Use constants instead of int values.
-            var_dump($lp_type);
+            
             switch ($lp_type) {
                 case 1 :
                     if ($lp_item_type == 'dokeos_chapter') {
                         $file = 'lp_content.php?type=dir';
                     } else {
-                        require_once 'resourcelinker.inc.php';
-                                               
-                        $file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);   
+                        require_once 'resourcelinker.inc.php';                                               
+                        $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);   
                         
                         if ($this->debug > 0) {
                             error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
@@ -3097,7 +3106,7 @@ class learnpath {
                                 list ($decoded) = explode('?', $decoded);
                                 if (!is_file(realpath($sys_course_path . '/scorm/' . $lp_path . '/' . $decoded))) {
                                     require_once 'resourcelinker.inc.php';
-                                    $file = rl_get_resource_link_for_learnpath(api_get_course_id(), $this->get_id(), $item_id);
+                                    $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);
                                     if (empty($file)) {
                                         $file = 'blank.php?error=document_not_found';
                                     } else {

@@ -259,7 +259,8 @@ if (is_array($list) && count($list) > 0) {
             }
             $extend_link = '';
             if (!empty($inter_num)) {
-                $extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '"><img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '"  border="0"></a>' . "\n";
+                $extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '">
+                                <img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '"  border="0"></a>';
             }
             $title = $row['mytitle'];
 
@@ -269,7 +270,7 @@ if (is_array($list) && count($list) > 0) {
 
             if ($row['item_type'] != 'dokeos_chapter') {
                 $correct_test_link = '-';
-                $title = Security::remove_XSS($title);
+                $title = Security::remove_XSS($title);                
                 $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
@@ -639,18 +640,33 @@ if (is_array($list) && count($list) > 0) {
 
                     if ($origin != 'tracking' && $origin != 'tracking_course') {
                         $my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
-                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . api_get_user_id() . '" AND orig_lp_id = "' . $lp_id . '" AND orig_lp_item_id = "' . $row['myid'] . '" AND exe_cours_id="' . $course_code . '" AND status <> "incomplete" AND session_id = ' . $session_id . ' ORDER BY exe_date DESC ';
+                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
+                                             WHERE  exe_exo_id="' . $row['path'] . '" AND 
+                                                    exe_user_id="' . api_get_user_id() . '" AND 
+                                                    orig_lp_id = "' . $lp_id . '" AND 
+                                                    orig_lp_item_id = "' . $row['myid'] . '" AND 
+                                                    exe_cours_id="' . $course_code . '" AND 
+                                                    status <> "incomplete" AND 
+                                                    session_id = ' . $session_id . ' 
+                                            ORDER BY exe_date DESC ';
                     } else {
                         $my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']) . '&origin=' . Security::remove_XSS($_GET['origin'] . $from_link);
-                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' WHERE exe_exo_id="' . $row['path'] . '" AND exe_user_id="' . $student_id . '" AND orig_lp_id = "' . $lp_id . '" AND orig_lp_item_id = "' . $row['myid'] . '" AND exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND status <> "incomplete" AND session_id = ' . $session_id . '  ORDER BY exe_date DESC ';
+                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
+                                             WHERE   exe_exo_id="' . $row['path'] . '" AND 
+                                                    exe_user_id="' . $student_id . '" AND 
+                                                    orig_lp_id = "' . $lp_id . '" AND 
+                                                    orig_lp_item_id = "' . $row['myid'] . '" AND 
+                                                    exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND 
+                                                    status <> "incomplete" AND 
+                                                    session_id = ' . $session_id . '  
+                                             ORDER BY exe_date DESC ';
                     }
 
                     $resultLastAttempt = Database::query($sql_last_attempt);
                     $num = Database :: num_rows($resultLastAttempt);
                     if ($num > 0) {
                         if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['lp_item_id']) && $_GET['lp_item_id'] == $my_id)) {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
-                            $extend_attempt = 1;
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';                            
                         } else {
                             $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttemptsByExercise') . '"></a>';
                         }
@@ -664,29 +680,43 @@ if (is_array($list) && count($list) > 0) {
                 $title = Security::remove_XSS($title);
 
                 if ((isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id && false)) {
-                    $output .= '<tr class=' . $oddclass . '><td>' . $extend_link . '</td><td colspan="4"><div class="mystatus">' . $title . '</div></td>';
-                    $output .= '<td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td colspan="2">&nbsp;</td><td>' . $correct_test_link . '</td></tr>';
-                    $output .= "</tr>";
+                    
+                    $output .= '<tr class =' . $oddclass . '>
+                                    <td>' . $extend_link . '</td>
+                                    <td colspan="4">' . $title . '</td>
+                                    <td colspan="2">&nbsp;</td>
+                                    <td colspan="2">&nbsp;</td>
+                                    <td colspan="2">&nbsp;</td>
+                                    <td>' . $correct_test_link . '</td>
+                                </tr>';
+                    $output .= '</tr>';
                 } else {
                     if ((isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id ) && (isset($_GET['lp_item_id']) && $_GET['lp_item_id'] == $my_id)) {
                         $output .= "<tr class='$oddclass'>";
                     } else {
                         $output .= "<tr class='$oddclass'>";
                     }
-                    $output .= '<td>' . $extend_link . '</td><td colspan="4"><div class="mystatus">' . $title . '</div></td>';
-                    $output .= '<td colspan="2">' . Display::label($my_lesson_status, $class_status) . "</td>" . '<td colspan="2"><div class="mystatus" align="center">';
+                    
+                    //$item_path_url =                     
+                    //$url_link = Display::url($title, $item_path, array('class' => 'ajax'));
+                    
+                    $output .= '<td>'.$extend_link.'</td>
+                                <td colspan="4">' . $title . '</td>
+                                <td colspan="2">' . Display::label($my_lesson_status, $class_status) .'</td>
+                                <td colspan="2">';
                     if ($row['item_type'] == 'quiz') {
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
-                        } else {
-                            //   $output .= ($score == 0 ? '0/'.float_format($maxscore, 1) : ($maxscore == 0 ? $score : float_format($score, 1) . '/' . float_format($maxscore, 1)));
+                        } else {                            
                             $output .= show_score($score, $maxscore, false);
                         }
                     } else {
                         $output .= ($score == 0 ? '/' : ($maxscore == 0 ? $score : $score . '/' . $maxscore));
                     }
-                    $output .= '</div></td><td colspan="2"><div class="mystatus">' . $time .'</div></td><td>'.$correct_test_link.'</td>';
-                    $output .= "</tr>";
+                    $output .= '</td>
+                                <td colspan="2">'.$time.'</td>
+                                 <td>'.$correct_test_link.'</td>';
+                    $output .= '</tr>';
                 }
 
                 if (!empty($export_csv)) {
@@ -784,21 +814,16 @@ if (is_array($list) && count($list) > 0) {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
-                                // Show only float when need it.
-                                //$my_score  = float_format( $my_score, 1);
-                                //$my_maxscore =float_format($my_maxscore, 1);
-                                if ($my_score == 0) {
-                                    //$view_score = 	'0/'.$my_maxscore;
+                                // Show only float when need it                                
+                                if ($my_score == 0) {                                    
                                     $view_score = show_score(0, $my_maxscore, false);
                                 } else {
                                     if ($my_maxscore == 0) {
                                         $view_score = $my_score;
-                                    } else {
-                                        //$view_score = $my_score . '/' . $my_maxscore;
+                                    } else {                                        
                                         $view_score = show_score($my_score, $my_maxscore, false);
                                     }
-                                }
-                                //$view_score = ($my_score == 0 ? '0.00/'.$my_maxscore : ($my_maxscore == 0 ? $my_score : $my_score . '/' . $my_maxscore));
+                                }                                
                             }
                             $my_lesson_status = $row_attempts['status'];
 
@@ -824,14 +849,14 @@ if (is_array($list) && count($list) > 0) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></td>';
                                 } else {
                                     $output .= '<td><a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $course_code . $from_link . '" target="_parent">
-                                        <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></a></td>';
+                                                    <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></a></td>';
                                 }
                             } else {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                 } else {
                                     $output .= '<td><a href="../exercice/exercise_show.php?cidReq=' . $course_code . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
-                                        <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                     <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                 }
                             }
                             $output .= '</tr>';

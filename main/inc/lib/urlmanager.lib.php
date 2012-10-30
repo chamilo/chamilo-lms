@@ -166,7 +166,7 @@ class UrlManager
         } else {
             $order_clause = $order_by;
         }
-		$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
+		$sql="SELECT u.user_id, lastname, firstname, username, official_code, access_url_id
 			FROM $tbl_user u
 			INNER JOIN $table_url_rel_user
 			ON $table_url_rel_user.user_id = u.user_id

@@ -239,8 +239,16 @@ $url_list = UrlManager::get_url_data();
     ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
-
-<!-- Users -->
+<tr>
+    <td>
+    <h3>
+    <?php 
+            $total_users = count($nosessionUsersList) +  count($sessionUsersList); 
+            echo get_lang('TotalAvailableUsers').' '.$total_users;
+    ?>
+    </h3>
+    </td>
+</tr>
 <tr>
   <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> : <?php echo count($nosessionUsersList); ?></b>
   </td>

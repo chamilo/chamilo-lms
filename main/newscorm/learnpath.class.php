@@ -187,6 +187,7 @@ class learnpath {
         $session = api_get_session_condition($session_id);
         // Now get the latest attempt from this user on this LP, if available, otherwise create a new one.
         $lp_table = Database::get_course_table(TABLE_LP_VIEW);
+        
         // Selecting by view_count descending allows to get the highest view_count first.
         $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session ORDER BY view_count DESC";
         
@@ -268,7 +269,7 @@ class learnpath {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - calling learnpathItem', 0);
                     }
                     $oItem = new learnpathItem($row['id'], $user_id, $course_id, $row);
-                    
+                                        
                     if ($this->debug > 2) {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - end calling learnpathItem', 0);
                     }
@@ -2943,11 +2944,10 @@ class learnpath {
         $item_id 			= Database::escape_string($item_id);
 
         $sql = "SELECT l.lp_type as ltype, l.path as lpath, li.item_type as litype, li.path as lipath, li.parameters as liparams
-        		FROM $lp_table l, $lp_item_table li
-        		WHERE 	l.c_id = $course_id AND
-        				li.c_id = $course_id AND
-        				li.id = $item_id AND
-        				li.lp_id = l.id";
+        		FROM $lp_table l 
+                INNER JOIN $lp_item_table li 
+                    ON (li.lp_id = l.id AND l.c_id = $course_id AND li.c_id = $course_id )
+        		WHERE li.id = $item_id ";
         if ($this->debug > 2) {
             error_log('New LP - In learnpath::get_link() - selecting item ' . $sql, 0);
         }
@@ -2961,13 +2961,7 @@ class learnpath {
             $lp_item_params = $row['liparams'];
             if (empty ($lp_item_params) && strpos($lp_item_path, '?') !== false) {
                 list ($lp_item_path, $lp_item_params) = explode('?', $lp_item_path);
-            }
-            //$lp_item_params = '?'.$lp_item_params;
-
-            //add ? if none - left commented to give freedom to scorm implementation
-            //if(substr($lp_item_params,0,1)!='?'){
-            //	$lp_item_params = '?'.$lp_item_params;
-            //}
+            }            
             $sys_course_path = api_get_path(SYS_COURSE_PATH) . api_get_course_path();
             if ($type == 'http') {
                 $course_path = api_get_path(WEB_COURSE_PATH) . api_get_course_path(); //web path
@@ -2988,6 +2982,7 @@ class learnpath {
             // Now go through the specific cases to get the end of the path.
 
             // @todo Use constants instead of int values.
+            var_dump($lp_type);
             switch ($lp_type) {
                 case 1 :
                     if ($lp_item_type == 'dokeos_chapter') {
@@ -3011,7 +3006,11 @@ class learnpath {
                             // check how much attempts of a exercise exits in lp
                             $lp_item_id = $this->get_current_item_id();
                             $lp_view_id = $this->get_view_id();
-                            $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
+                            
+                            $prevent_reinit = null;
+                            if (isset($this->items[$this->current])) {
+                                $prevent_reinit = $this->items[$this->current]->get_prevent_reinit();
+                            }
                             
                             if (empty($provided_toc)) {                                
                                 if ($this->debug > 0) {

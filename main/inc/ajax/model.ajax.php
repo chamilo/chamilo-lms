@@ -406,10 +406,10 @@ switch ($action) {
         break;   
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');    
-        $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
+        $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");        
         switch ($type) {
             case 'not_registered':                
-                $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
+                $options['course_id'] = $course_id;
                 $result = $obj->get_usergroup_not_in_course($options);
                 break;
             case 'registered':
@@ -419,7 +419,7 @@ switch ($action) {
         }        
         $new_result = array();        
         if (!empty($result)) {
-            foreach ($result as $group) {                
+            foreach ($result as $group) {
                 $group['users'] = count($obj->get_users_by_usergroup($group['id']));                
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url  = 'class.php?action=remove_class_from_course&id='.$group['id'];

@@ -11,9 +11,6 @@ $language_file = array('registration','admin');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-/**
- * MAIN CODE	
- */
 api_protect_course_script();
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
@@ -68,7 +65,6 @@ if (api_is_allowed_to_edit()) {
 
 //jqgrid will use this URL to do the selects
 
-
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
@@ -103,7 +99,5 @@ $(function() {
 });
 </script>
 <?php
-
 $usergroup->display_teacher_view();
-
 Display :: display_footer();

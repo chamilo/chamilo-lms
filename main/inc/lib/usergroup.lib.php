@@ -87,17 +87,23 @@ class UserGroup extends Model {
                ";                
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
-        $result = Database::query($sql);
+        $result = Database::query($sql);        
         $array = Database::store_result($result, 'ASSOC');        
         return $array;
     }
     
     public function get_usergroup_not_in_course($options = array()) {        
-        $sql = "SELECT DISTINCT * 
-                FROM {$this->usergroup_rel_course_table} urc
-                RIGHT JOIN {$this->table} u 
-                ON (u.id = urc.usergroup_id)                
-               ";              
+        $course_id = intval($options['course_id']);        
+        unset($options['course_id']);
+        if (empty($course_id)) {
+            return false;
+        }
+        $sql = "SELECT DISTINCT u.id, name 
+                FROM {$this->table} u
+                LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
+                ON (u.id = urc.usergroup_id AND course_id = $course_id)
+                WHERE course_id is NULL
+        ";
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
         $result = Database::query($sql);

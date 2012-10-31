@@ -3395,6 +3395,23 @@ a:active{
     margin-right: 4px;
 }
 
+.teacher_online {
+    background: url("teacher.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.student_online {
+    background: url("student.png") no-repeat scroll right center transparent;
+    height: 16px;
+    width: 17px;
+    display: inline-block;
+    margin-right: 4px;
+}
+
+
 #online_grid_container .thumbnail .caption {
     text-align:center;
 }

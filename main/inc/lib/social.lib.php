@@ -782,7 +782,7 @@ class SocialManager extends UserManager {
                 // reduce image
                 $name = $user_info['complete_name'];
                 $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-                //$user_status = $user_info['status'] == 1 ? Display::return_icon('teacher.png', get_lang('Teacher'), array('height' => '22px', 'width' => '22px')) : null;
+                $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
                 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
                     $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';                                                                             

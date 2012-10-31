@@ -2234,7 +2234,7 @@ class Exercise {
 							$resfill = Database::query($queryfill);
 							$str = Database::result($resfill,0,'answer');
 
-							preg_match_all('#\[([^[]*)\]#', $str, $arr);
+							api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
 							$str = str_replace('\r\n', '', $str);
 							$choice = $arr[1];
 

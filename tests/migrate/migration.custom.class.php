@@ -584,17 +584,26 @@ class MigrationCustom {
                         $eval = new Evaluation();                        
                         $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
                         
-                        if (!empty($evals_found)) {                            
-                            $evaluation = current($evals_found);                            
+                        if (!empty($evals_found)) {            
+                            $evaluation = current($evals_found);
+                            $eval_id = $evaluation->get_id();
+                            
                             //Eval found                            
-                            $res = new Result();
-                            $res->set_evaluation_id($evaluation->get_id());
-                            $res->set_user_id($user_id);
-                            //if no scores are given, don't set the score
-                            $res->set_score($data['nota']);
-                            $res->add();
-                            error_log("Result saved :)");                            
-                        }                           
+                            $res = new Result();                            
+                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            if (empty($check_result)) {
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+                                //if no scores are given, don't set the score
+                                $res->set_score($data['nota']);
+                                $res->add();
+                                error_log("Result saved :)");
+                            } else {
+                                error_log("Result already added ");
+                            }
+                        } else {
+                            error_log("Evaluation not found ");
+                        }
                     } else {
                         error_log("Gradebook does not exists");
                     }                    
@@ -656,17 +665,22 @@ class MigrationCustom {
                             error_log("eval id loaded : $eval_id");     
                         }
                                                 
-                        if ($eval_id) {                                                   
+                        if ($eval_id) {
                             $res = new Result();
-                            $res->set_evaluation_id($eval_id);
-                            $res->set_user_id($user_id);
-                            //if no scores are given, don't set the score
-                            $res->set_score($data['nota']);
-                            $res->add();
-                            error_log("Result Added :)");                            
-                            exit;
+                            //Check if already exists                            
+                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            if (empty($check_result)) {
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+                                //if no scores are given, don't set the score
+                                $res->set_score($data['nota']);
+                                $res->add();
+                                error_log("Result Added :)");
+                            } else {
+                                error_log("Result already added ");
+                            }                            
                         } else {
-                            error_log("error while creating an Eval ");
+                            error_log("Evaluation not detected");
                         }                                  
                     } else {
                         error_log("Gradebook does not exists");
@@ -676,8 +690,7 @@ class MigrationCustom {
                 }                
             } else {
                 error_log("NO course found for session id: $session_id");    
-            }
-            
+            }            
         } else {
             error_log("NO session id found: $session_id");
         }

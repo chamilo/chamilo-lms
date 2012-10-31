@@ -28,6 +28,9 @@ class MigrationCustom {
         return '('.$row_data['chrIdHorario'].') '.$row_data['chrHoraInicial'].' '.$row_data['chrHoraFinal'];
     }
     
+    /**
+     * Converts 2008-02-01 12:20:20.540 to  2008-02-01 12:20:20 
+     */
     static function clean_date_time($date) {
         return substr($date, 0, 19);
     }
@@ -522,15 +525,13 @@ class MigrationCustom {
                     $gradebook = new Gradebook();
                     $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
                     error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");                    
-                    if (!empty($gradebook)) {                        
-                        error_log("Gradebook exists");
-                        //echo 'parameters';
-                        //
+                    if (!empty($gradebook)) {               
+                        //error_log("Gradebook exists {$gradebook['id']}");
                         //Check if gradebook exists
                         $eval = new Evaluation();                        
                         $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
                                                 
-                        if (empty($evals_found)) {                        
+                        if (empty($evals_found)) {                      
                             $eval->set_name($data['gradebook_description']);
                             $eval->set_description($data['gradebook_description']);
                             $eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
@@ -543,23 +544,69 @@ class MigrationCustom {
                             $eval->set_max(20);
                             $eval->set_visible(1);
                             $eval->add();
-                        }                        
+                            error_log("Gradebook evaluation was created!!");
+                        } else {
+                            error_log("Gradebook evaluation was already created :( ");
+                        }                 
                     } else {
                         error_log("Gradebook does not exists");
-                    }
-                    
-                    exit;
+                    }                    
                 } else {
                     error_log("Something is wrong with the course ");
-                }
-                exit;
+                }                
             } else {
-                //error_log("NO course found for session id: $session_id");    
+                error_log("NO course found for session id: $session_id");    
             }
             
         } else {
-            //error_log("NO session id found: $session_id");
-        }
+            error_log("NO session id found: $session_id");
+        }     
+    }
+    
+    static function add_gradebook_result($data) {
+        error_log('add_gradebook_result');
+        $session_id = isset($data['session_id']) ? $data['session_id'] : null;
+        $user_id = isset($data['user_id']) ? $data['user_id'] : null;        
         
+        if (!empty($session_id) && !empty($user_id)) {
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    //Get gradebook
+                    $gradebook = new Gradebook();
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");                    
+                    if (!empty($gradebook)) {                  
+                        error_log("Gradebook exists: {$gradebook['id']}");
+                        
+                        //Check if gradebook exists
+                        $eval = new Evaluation();                        
+                        $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+                        
+                        if (!empty($evals_found)) {                            
+                            $evaluation = current($evals_found);                            
+                            //Eval found                            
+                            $res = new Result();
+                            $res->set_evaluation_id($evaluation->get_id());
+                            $res->set_user_id($user_id);
+                            //if no scores are given, don't set the score
+                            $res->set_score($data['nota']);
+                            $res->add();
+                            error_log("Evaluation found :)");                            
+                        }                           
+                    } else {
+                        error_log("Gradebook does not exists");
+                    }                    
+                } else {
+                    error_log("Something is wrong with the course ");
+                }                
+            } else {
+                error_log("NO course found for session id: $session_id");    
+            }
+            
+        } else {
+            error_log("NO session id found: $session_id");
+        }
     }
 }

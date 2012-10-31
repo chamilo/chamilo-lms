@@ -1,4 +1,6 @@
-<?php // External login module : LDAP
+<?php
+
+// External login module : LDAP
 /**
  * This file is included by main/inc/local.inc.php when extldap is activated, a user try to login 
  * and chamilo does not find his user
@@ -33,36 +35,35 @@
  *          - index.php?loginFailed=1&error=account_inactive
  *          - index.php?loginFailed=1&error=user_password_incorrect 
  *          - index.php?loginFailed=1&error=unrecognize_sso_origin');
- **/
-
+ * */
 
 use \ChamiloSession as Session;
 
-require_once dirname(__FILE__).'/ldap.inc.php';
-require_once dirname(__FILE__).'/functions.inc.php';
+require_once dirname(__FILE__) . '/ldap.inc.php';
+require_once dirname(__FILE__) . '/functions.inc.php';
 
-$ldap_user = extldap_authenticate($login,$password);
+$ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {
-  $chamilo_user = extldap_get_chamilo_user($ldap_user);
-  //username is not on the ldap, we have to use $login variable
-  $chamilo_user['username'] = $login;
-  $chamilo_uid = external_add_user($chamilo_user);
-  if ($chamilo_uid !==false) {
-    $loginFailed = false;
-    $_user['user_id'] = $chamilo_uid;
-    $_user['status'] = (isset($chamilo_user['status'])?$chamilo_user['status']:5);
-    $_user['uidReset'] = true;  
-    Session::write('_user',$_user);
-    $uidReset=true;
-    // Is user admin? 
-    if ($chamilo_user['admin']=== true){
-			$is_platformAdmin           = true;
-      Database::query("INSERT INTO admin values ('$chamilo_uid')");
+    $chamilo_user = extldap_get_chamilo_user($ldap_user);
+    //username is not on the ldap, we have to use $login variable
+    $chamilo_user['username'] = $login;
+    $chamilo_uid = external_add_user($chamilo_user);
+    if ($chamilo_uid !== false) {
+        $loginFailed = false;
+        $_user['user_id'] = $chamilo_uid;
+        $_user['status'] = (isset($chamilo_user['status']) ? $chamilo_user['status'] : 5);
+        $_user['uidReset'] = true;
+        Session::write('_user', $_user);
+        $uidReset = true;
+        // Is user admin? 
+        if ($chamilo_user['admin'] === true) {
+            $is_platformAdmin = true;
+            Database::query("INSERT INTO admin values ('$chamilo_uid')");
+        }
     }
-  }
-  event_login();
+    event_login();
 } else {
-  $loginFailed = true;
-  $uidReset = false;
-  unset($_user['user_id']);
+    $loginFailed = true;
+    $uidReset = false;
+    unset($_user['user_id']);
 }

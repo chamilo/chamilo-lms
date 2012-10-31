@@ -352,7 +352,7 @@ class MigrationCustom {
     static function add_user_to_session($data) {
         $extra_field_value = new ExtraFieldValue('session');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
-        error_log('data[uidIdPrograma] '.$data['uidIdPrograma'].' returned $result[session_id]: '.$result['session_id']);
+        //error_log('data[uidIdPrograma] '.$data['uidIdPrograma'].' returned $result[session_id]: '.$result['session_id']);
         $session_id = null;
         $user_id = null;
         
@@ -362,7 +362,7 @@ class MigrationCustom {
         
         $extra_field_value = new ExtraFieldValue('user');
         $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
-        error_log('data[uidIdPersona] '.$data['uidIdPersona'].' returned $result[user_id]: '.$result['user_id']);
+        //error_log('data[uidIdPersona] '.$data['uidIdPersona'].' returned $result[user_id]: '.$result['user_id']);
         if ($result && $result['user_id']) {               
             $user_id = $result['user_id'];                   
         }
@@ -531,7 +531,7 @@ class MigrationCustom {
                         $eval = new Evaluation();                        
                         $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
                                                 
-                        if (empty($evals_found)) {                      
+                        if (empty($evals_found)) {                  
                             $eval->set_name($data['gradebook_description']);
                             $eval->set_description($data['gradebook_description']);
                             $eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
@@ -593,8 +593,81 @@ class MigrationCustom {
                             //if no scores are given, don't set the score
                             $res->set_score($data['nota']);
                             $res->add();
-                            error_log("Evaluation found :)");                            
+                            error_log("Result saved :)");                            
                         }                           
+                    } else {
+                        error_log("Gradebook does not exists");
+                    }                    
+                } else {
+                    error_log("Something is wrong with the course ");
+                }                
+            } else {
+                error_log("NO course found for session id: $session_id");    
+            }
+            
+        } else {
+            error_log("NO session id found: $session_id");
+        }
+    }
+    
+    static function add_gradebook_result_with_evaluation($data) {
+        error_log('add_gradebook_result_with_evaluation');
+        $session_id = isset($data['session_id']) ? $data['session_id'] : null;
+        $user_id = isset($data['user_id']) ? $data['user_id'] : null;
+        
+        //Default evaluation title
+        $title = 'Evaluación General';
+        
+        if (!empty($session_id) && !empty($user_id)) {
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    //Get gradebook
+                    $gradebook = new Gradebook();
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");                    
+                    if (!empty($gradebook)) {                  
+                        error_log("Gradebook exists: {$gradebook['id']}");
+                        
+                        //Creates                        
+                        $eval = new Evaluation();
+                        $evals_found = $eval->load(null, null, $course_data['code'], $gradebook['id'], null, null, $title);
+                                                
+                        if (empty($evals_found)) {
+                            $eval->set_name($title);                            
+                            //$eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
+                            $eval->set_user_id(self::default_admin_id);
+                            $eval->set_course_code($course_data['code']);                        
+                            $eval->set_category_id($gradebook['id']);
+
+                            //harcoded values
+                            $eval->set_weight(20);	
+                            $eval->set_max(20);
+                            $eval->set_visible(1);
+                            $eval->add();
+                            error_log("Gradebook evaluation was created!!");
+                            $eval_id = $eval->get_id();
+                            error_log("eval id created: $eval_id");     
+                        } else {
+                            $eval = current($evals_found);
+                            error_log("Gradebook evaluation already exists ");
+                            $eval_id = $eval->get_id();
+                            error_log("eval id loaded : $eval_id");     
+                        }
+                                                
+                        if ($eval_id) {                                                   
+                            $res = new Result();
+                            $res->set_evaluation_id($eval_id);
+                            $res->set_user_id($user_id);
+                            //if no scores are given, don't set the score
+                            $res->set_score($data['nota']);
+                            $res->add();
+                            error_log("Result Added :)");                            
+                            exit;
+                        } else {
+                            error_log("error while creating an Eval ");
+                        }                                  
                     } else {
                         error_log("Gradebook does not exists");
                     }                    

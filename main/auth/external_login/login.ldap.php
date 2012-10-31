@@ -1,4 +1,6 @@
-<?php // External login module : LDAP
+<?php
+
+// External login module : LDAP
 /**
  *
  * This file is included in main/inc/local.inc.php at user login if the user have 'external_ldap' in 
@@ -34,35 +36,39 @@
  *  - index.php?loginFailed=1&error=user_password_incorrect 
  *  - index.php?loginFailed=1&error=unrecognize_sso_origin');
  *
- **/
+ * */
 
 use \ChamiloSession as Session;
 
-require_once dirname(__FILE__).'/ldap.inc.php';
-require_once dirname(__FILE__).'/functions.inc.php';
-
-$ldap_user = extldap_authenticate($login,$password);
+require_once dirname(__FILE__) . '/ldap.inc.php';
+require_once dirname(__FILE__) . '/functions.inc.php';
+error_log('Entering login.ldap.php');
+$ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {
-  $chamilo_user = extldap_get_chamilo_user($ldap_user);
-  //userid is not on the ldap, we have to use $uData variable from local.inc.php
-  $chamilo_user['user_id'] = $uData['user_id'];
+    error_log('extldap_authenticate works');
+    $chamilo_user = extldap_get_chamilo_user($ldap_user);
+    //userid is not on the ldap, we have to use $uData variable from local.inc.php
+    $chamilo_user['user_id'] = $uData['user_id'];
+    
+    error_log("chamilo_user found user_id: {$uData['user_id']}");
 
-  //Update user info
-  if(isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo'])
-  {
-    external_update_user($chamilo_user);
-  }
+    //Update user info
+    if (isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo']) {
+        external_update_user($chamilo_user);
+        error_log("Calling external_update_user");
+    }
 
-  $loginFailed = false;
-  $_user['user_id'] = $chamilo_user['user_id'];
-  $_user['status'] = (isset($chamilo_user['status'])?$chamilo_user['status']:5);
-  $_user['uidReset'] = true;  
-  Session::write('_user',$_user);
-  $uidReset=true;
-  event_login();
-
+    $loginFailed = false;
+    $_user['user_id'] = $chamilo_user['user_id'];
+    $_user['status'] = (isset($chamilo_user['status']) ? $chamilo_user['status'] : 5);
+    $_user['uidReset'] = true;
+    Session::write('_user', $_user);
+    $uidReset = true;
+    event_login();
+    error_log("Calling event_login");
 } else {
-  $loginFailed = true;
-  $uidReset = false;
-  unset($_user['user_id']);
+    error_log('extldap_authenticate error');
+    $loginFailed = true;
+    $uidReset = false;
+    unset($_user['user_id']);
 }

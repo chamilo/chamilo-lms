@@ -1126,7 +1126,7 @@ class Database {
         $return_value = '';
         foreach ($conditions as $type_condition => $condition_data) {
             $type_condition = strtolower($type_condition);
-             switch($type_condition) {
+             switch ($type_condition) {
                 case 'where':
                     foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
@@ -1157,7 +1157,7 @@ class Database {
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
                     }
-                break;
+                    break;
                 case 'order':
                     $order_array = $condition_data;
                     

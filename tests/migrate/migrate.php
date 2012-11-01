@@ -42,7 +42,7 @@ if (!empty($servers)) {
             require_once $file;
             $class = 'Migration' . strtoupper($db_type);
             $m = new $class($config_info['host'], $config_info['port'], $config_info['db_user'], $config_info['db_pass'], $config_info['db_name']);
-            $m->connect();
+            //$m->connect();
             
             /**
              * Prepare the arrays of matches that will allow for the migration
@@ -50,9 +50,17 @@ if (!empty($servers)) {
             
             $migrate = array();
             include $server_info['filename'];
-            $m->migrate($matches);
-            //$m->load_transactions($matches['transactions']);
-            print_r($m->errors_stack);
+            //Default migration from MSSQL to Chamilo MySQL
+            //$m->migrate($matches);
+            
+            //Getting transactions from MSSQL (via webservices)
+            $m->search_transactions($matches['web_service_calls']['url'], $matches['web_service_calls']['params']);
+            
+            //Load transactions saved before
+            
+            $m->load_transactions($matches['actions']);            
+            
+            //print_r($m->errors_stack);
             //echo "OK so far\n";
             echo "\n ---- End loading server----- \n";
         } else {
@@ -60,5 +68,3 @@ if (!empty($servers)) {
         }        
     }
 }
-
-

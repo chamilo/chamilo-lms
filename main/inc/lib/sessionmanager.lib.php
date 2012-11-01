@@ -805,8 +805,6 @@ class SessionManager {
             $update_sql = "UPDATE $tbl_session SET nbr_users = nbr_users + $nbr_users WHERE id='$id_session' ";
             Database::query($update_sql);           
         }
-
-
 	}
     
     function subscribe_users_to_session_course($user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY ) {

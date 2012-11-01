@@ -49,13 +49,6 @@ class MigrationCustom {
         }
         return " cast( $field  as varchar(50)) as $as_field ";
     }
- 
-    /**
-     * Log data from the original users table
-     */
-    static function log_original_user_unique_id($data, &$omigrate, $row_data) {        
-        //return $row_data['uidIdAlumno'];
-    }
     
     static function clean_utf8($value) {
         return utf8_encode($value);        
@@ -65,49 +58,7 @@ class MigrationCustom {
         return self::clean_utf8($row_data['session_name']);        
     }
     
-    /** @deprecated */
-    static function log_original_persona_unique_id($data, &$omigrate, $row_data) {  
-/* Temporarily commented
-        if (isset($omigrate['users_persona'][$row_data['uidIdPersona']])) {
-            $omigrate['users_persona'][$row_data['uidIdPersona']][] = $omigrate['users_persona'][$row_data['uidIdPersona']];
-            //$omigrate['users_persona'][$row_data['uidIdPersona']][] = $row_data;
-            //error_log(print_r($row_data, 1));
-            //error_log(print_r($omigrate['users_persona'][$row_data['uidIdPersona']], 1));            
-            error_log('WHAT??');
-        } else {
-            //$omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data;
-            $omigrate['users_persona'][$row_data['uidIdPersona']] = $row_data['uidIdPersona'];
-        }
-*/
-        return $data;
-    }
-    
-    /** @deprecated */
-    static function log_original_teacher_unique_id($data, &$omigrate, $row_data) {        
-        $row = array('uidIdPersona' => $row_data['uidIdPersona'], 'uidIdEmpleado' => $row_data['uidIdEmpleado']);
-        $omigrate['users_empleado'][$row_data['uidIdEmpleado']] = $row;
-        return $row_data['uidIdEmpleado'];               
-    }
-
-    /**
-     * Log data from the original users table
-      @deprecated
-     */
-    static function log_original_course_unique_id($data, &$omigrate) {
-        $omigrate['courses'][$data] = 0; 
-        return $data;
-    }
-
-    /**
-     * Log data from the original users table
-     * @deprecated
-     */
-    static function log_original_session_unique_id($data, &$omigrate, $row_data) {
-        $omigrate['sessions'][$row_data['uidIdPrograma']] = $row_data;
-        return $data;
-    }
-    
-    static function get_real_course_code($data, &$omigrate, $row_data) {        
+    static function get_real_course_code($data) {        
         $extra_field = new ExtraFieldValue('course');
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);        
         if ($values) {
@@ -117,9 +68,9 @@ class MigrationCustom {
         }
     }
     
-    static function get_session_id_by_programa_id($data, &$omigrate, $row_data) {        
+    static function get_session_id_by_programa_id($uidIdProgram) {        
         $extra_field = new ExtraFieldValue('session');
-        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data);        
+        $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $uidIdProgram);        
         if ($values) {
             return $values['session_id'];
         } else {
@@ -128,7 +79,7 @@ class MigrationCustom {
     }
     
     /* Not used */
-    static function get_user_id_by_persona_id($uidIdPersona, &$omigrate, $row_data) {        
+    static function get_user_id_by_persona_id($uidIdPersona) {
         //error_log('get_user_id_by_persona_id');
         $extra_field = new ExtraFieldValue('user');
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPersona', $uidIdPersona);        
@@ -138,9 +89,8 @@ class MigrationCustom {
             return 0;
         }
     }
-
     
-    static function get_real_teacher_id($uidIdPersona, &$omigrate, $row_data) {
+    static function get_real_teacher_id($uidIdPersona) {
         $default_teacher_id = self::default_admin_id;       
         if (empty($uidIdPersona)) {
             //error_log('No teacher provided');
@@ -694,5 +644,134 @@ class MigrationCustom {
         } else {
             error_log("NO session id found: $session_id");
         }
+    }
+    
+    //añadir usuario: usuario_agregar UID
+    static function transaction_usuario_agregar($data) {
+         $uidIdPersonaId = $data['item_id'];
+         $orig_uidIdPersonaId = $data['orig_id'];
+         $dest_uidIdPersonaId = $data['dest_id'];         
+         //Add user call the webservice
+    }
+    
+    //eliminar usuario usuario_eliminar UID
+    static function transaction_usuario_eliminar($data) {
+        $uidIdPersonaId = $data['item_id'];
+        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
+        if ($user_id) {
+            UserManager::delete_user($user_id);
+        }        
+    }
+    
+    //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
+    static function transaction_usuario_editar($data) {
+        $uidIdPersonaId = $data['item_id'];
+        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
+        if ($user_id) {
+            //Edit user
+        }   
+    }
+    
+    //cambiar usuario de progr. académ. (de A a B, de A a nada, de nada a A) (como estudiante o profesor) usuario_matricula UID ORIG DEST
+    static function transaction_usuario_matricula($data) {
+        
+    }
+    
+    //Cursos
+    //añadir curso curso_agregar CID
+    static function transaction_curso_agregar($data) {
+        
+    }
+    //eliminar curso curso_eliminar CID
+    static function transaction_curso_eliminar($data) {
+        
+    }
+    //editar detalles de curso curso_editar CID
+    static function transaction_curso_editar($data) {
+        
+    }
+    
+    //cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
+    static function transaction_curso_matricula($data) {
+        
+    }
+    //cambiar intensidad pa_cambiar_fase_intensidad CID ORIG DEST (id de "intensidadFase")
+    static function transaction_pa_cambiar_fase_intensidad($data) {
+        
+    }
+    
+    //Programas académicos
+    //añadir p.a. pa_agregar PID
+    //eliminar p.a. pa_eliminar PID
+    //editar detalles de p.a. pa_editar PID
+    //cambiar aula pa_cambiar_aula PID ORIG DEST
+    //cambiar horario pa_cambiar_horario PID ORIG DEST
+    //cambiar sede pa_cambiar_sede PID ORIG DEST
+
+    //        Horario
+    //            añadir horario_agregar HID
+    static function transaction_horario_agregar($data) {
+        
+    }
+    //            eliminar horario_eliminar HID
+    static function transaction_horario_eliminar($data) {
+        
+    }
+    //            editar horario_editar HID
+    static function transaction_horario_editar($data) {
+        
+    }
+    // Aula
+    //            añadir aula_agregar AID
+    static function transaction_aula_agregar($data) {
+        
+    }
+    //            eliminar aula_eliminar AID
+    static function transaction_aula_eliminar($data) {
+        
+    }
+    //            editar aula_editor AID
+    static function transaction_aula_editar($data) {
+        
+    }
+    //        Sede
+    //            añadir aula_agregar SID
+    static function transaction_sede_agregar($data) {
+        
+    }
+    //            eliminar aula_eliminar SID
+    static function transaction_sede_eliminar($data) {
+        
+    }
+    //            editar aula_editar SID
+    static function transaction_sede_editar($data) {
+        
+    }
+    //
+    //        Frecuencia
+    //            añadir frec FID
+    static function transaction_frecuencia_agregar($data) {
+        
+    }
+    //            eliminar Freca_eliminar FID
+    static function transaction_frecuencia_eliminar($data) {
+        
+    }
+    //             editar aula_editar FID
+    static function transaction_frecuencia_editar($data) {
+        
+    }
+    //
+    //        Intensidad/Fase
+    //            añadir intfase_agregar IID
+    static function transaction_intfase_agregar($data) {
+        
+    }
+    //            eliminar intfase_eliminar IID
+    static function transaction_intfase_eliminar($data) {
+        
+    }
+    //            editar intfase_editar IID
+    static function transaction_intfase_editar($data) {
     }
 }

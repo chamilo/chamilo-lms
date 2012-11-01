@@ -1148,7 +1148,7 @@ class Database {
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
-        $conditions = self::parse_conditions($conditions);        
+        $conditions = self::parse_conditions($conditions);
         
         //@todo we could do a describe here to check the columns ...
         $clean_columns = '';
@@ -1161,8 +1161,7 @@ class Database {
                 $clean_columns = (string)$columns;
             }
         }
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
-        //var_dump($sql);
+        $sql    = "SELECT $clean_columns FROM $table_name $conditions";        
         $result = self::query($sql);
         $array = array();
         //if (self::num_rows($result) > 0 ) {
@@ -1183,7 +1182,7 @@ class Database {
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
      * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     * @param   array
+     * @param array
      * @todo lot of stuff to do here
     */
     static function parse_conditions($conditions) {        

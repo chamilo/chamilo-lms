@@ -18,12 +18,20 @@ If it complains because it can't find config.m4, you can still build the extensi
   make install
   make test
 
+In the ./configure line above, if you use Ubuntu, it is likely you php-config
+will have to be declared as /usr/bin/php-config. Check it with 
+"which php-config".
+
 Once you have XHProf installed, you should enable it. Open your php.ini or 
 /etc/php5/conf.d/xhprof.ini and type:
 
   [xhprof]
   extension=xhprof.so
   xhprof.output_dir="/tmp"
+
+If you use PHP 5.4, you will need to download xhprof from Git:
+git clone git://github.com/facebook/xhprof.git
+and sudo, make, make install
 
 Combine with Chamilo
 --------------------

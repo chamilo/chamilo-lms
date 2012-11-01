@@ -1,0 +1,4 @@
+To enable XHProf on your computer, add this to your VirtualHost configuration:
+
+        php_value auto_prepend_file /var/www/chamilo/tests/xhprof/header.php
+        php_value auto_append_file /var/www/chamilo/tests/xhprof/footer.php

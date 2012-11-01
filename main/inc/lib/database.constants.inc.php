@@ -340,3 +340,6 @@ define('TABLE_TIMELINE',                    'timeline');
 //Gradebook model
 define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
+
+define('TABLE_MIGRATION_TRANSACTION',           'migration_transaction');
+define('TABLE_MIGRATION_TRANSACTION_STATUS',    'migration_transaction_status');

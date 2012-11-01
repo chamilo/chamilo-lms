@@ -915,7 +915,7 @@ VALUES
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
 ('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.10.0.20169','DatabaseVersion','', NULL, NULL, 0);
+('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -3088,3 +3088,27 @@ CREATE TABLE usergroup_rel_question (
     usergroup_id int unsigned not null,
     coefficient float(6,2)
 );
+
+DROP TABLE IF EXISTS migration_transaction;
+CREATE TABLE migration_transaction (
+  id int not null primary key AUTO_INCREMENT,
+  branch int not null default 0,
+  action char(20),
+  item_id char(36),
+  orig_id char(36),
+  dest_id char(36),
+  status_id tinyint not null default 0,
+  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+);
+
+DROP TABLE IF EXISTS migration_transaction_status;
+CREATE TABLE migration_transaction_status (
+  id tinyint not null PRIMARY KEY AUTO_INCREMENT,
+  title char(20)
+);
+
+INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
+
+-- Do not move this 
+UPDATE settings_current SET selected_value = '1.10.0.20197' WHERE variable = 'chamilo_database_version';

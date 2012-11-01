@@ -272,7 +272,7 @@ class Migration {
         error_log("Transaction updated #{$params['id']}");
         
         //Failed - do something else
-        if ($params['status_id'] == 3) {
+        if ($params['status_id'] == MigrationCustom::TRANSACTION_STATUS_FAILED) {
             //event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null) {
             event_system('transaction_error', 'transaction_id', $params['id'], $params['time_update']);
         }
@@ -326,19 +326,20 @@ class Migration {
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
                             $result = MigrationCustom::$function_to_call($transaction);
+                            
                             error_log("Calling function $function_to_call");
                             if ($result) {
                                 //Updating transaction
                                 self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status']));                        
                             } else {
                                 //failed
-                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => 3));
+                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
                             }
                         } else {
                             //	method does not exist
                             error_log("Function does $function_to_call not exists");
                             //Failed
-                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => 3));
+                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
                         }
                     }
                 } else {

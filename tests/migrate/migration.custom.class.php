@@ -148,8 +148,7 @@ class MigrationCustom {
         $data['status'] = STUDENT;
         if (isset($data['uidIdEmpleado'])) {
             $data['status'] = COURSEMANAGER;
-        }
-        
+        }       
         
         if (!isset($data['username']) || empty($data['username'])) {
             $data['firstname'] = (string) trim($data['firstname']); 
@@ -328,7 +327,7 @@ class MigrationCustom {
         }     
     }
     
-    static function create_attendance($data) {        
+    static function create_attendance($data) {    
         error_log('create_attendance');
         $session_id = $data['session_id'];
         $user_id    = $data['user_id'];
@@ -668,7 +667,7 @@ class MigrationCustom {
                     'message' => "User was created : $user_id",
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
-            } else  {
+            } else {
                 return array(
                     'message' => "User was not created : $uidIdPersonaId",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
@@ -684,11 +683,18 @@ class MigrationCustom {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
-            UserManager::delete_user($user_id);
-            return array(
-                'message' => "User was deleted : $user_id",
-                'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+            $result = UserManager::delete_user($user_id);
+            if ($result) {
+                return array(
+                    'message' => "User was deleted : $user_id",
+                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return array(
+                    'message' => "User was NOT deleted : $user_id error while calling function UserManager::delete_user",
+                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            }
         } else {
             return array(
                 'message' => "User was not found : $uidIdPersonaId",
@@ -701,7 +707,7 @@ class MigrationCustom {
     static function transaction_usuario_editar($data, $web_service_details) {
         $uidIdPersonaId = $data['item_id'];
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
-        if ($user_id) {            
+        if ($user_id) {
             $user_info = $web_service_details['class']::usuarioDetalles($uidIdPersonaId);
             if ($user_info['error'] == false) {     
                 //Edit user
@@ -728,6 +734,7 @@ class MigrationCustom {
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
         $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+        
         if (empty($user_id)) {
             return array(
                 'message' => "User does not exists: $uidIdPersona",
@@ -750,7 +757,7 @@ class MigrationCustom {
                 );                
             } else {
                 return array(
-                    'message' => "Session does not exists $uidIdProgramaDestination - Move Session A to Session B",
+                    'message' => "Session ids were not correctly setup session_id 1: $session_id Session id 2 $uidIdProgramaDestination - Move Session A to Session B",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -790,7 +797,7 @@ class MigrationCustom {
     //Cursos
     //añadir curso curso_agregar CID
     static function transaction_curso_agregar($data, $web_service_details) {
-        $uidCursoId = $data['item_id'];        
+        $uidCursoId = $data['item_id'];  
         $course_info = $web_service_details['class']::cursoDetalles($uidCursoId);
         if ($course_info['error'] == false) { 
             $course_code = CourseManager::create_course($course_info);
@@ -832,16 +839,18 @@ class MigrationCustom {
     static function transaction_curso_editar($data, $web_service_details) {
         $course_code = self::get_real_course_code($data['item_id']);        
         if (!empty($course_code)) {        
-            $course_info = $web_service_details['class']::cursoDetalles($data['item_id']);
-            if ($course_info['error'] == false) {
+            $course_info = api_get_course_info($course_code);
+            $data_to_update = $web_service_details['class']::cursoDetalles($data['item_id']);
+            if ($data_to_update['error'] == false) {
                 //do some cleaning
-                CourseManager::update_attributes($course_info['real_id'], $course_info);
+                $data_to_update['code'] = $course_info['code'];
+                CourseManager::update($data_to_update);
                 return array(
                         'message' => "Course was updated $course_code ",
                         'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
             } else {
-                return $course_info;
+                return $data_to_update;
             }            
          } else {
             return array(

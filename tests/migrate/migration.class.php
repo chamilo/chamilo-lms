@@ -146,56 +146,83 @@ class Migration {
             }
         }
     }
-
-    function search_transactions($url, $params) {
-        $libpath = api_get_path(LIBRARY_PATH);
-        error_log('search_transactions');     
-
-        // Create the client instance        
-        error_log("Looking $url");
+    
+    function soap_call($web_service_params, $function_name, $params = array()) {
+        // Create the client instance
+        $url = $web_service_params['url'];        
+        error_log("\nCalling function '$function_name' in $url with params: ");        
+        var_dump($params);
 
         try {
             $client = new SoapClient($url);
         } catch (SoapFault $fault) {
             $error = 1;
             die('Error connecting');
-        }        
-        $client->debug_flag = true;     
-        try {
-            $user_details = $client->retornaDatos($params);
-        } catch (SoapFault $fault) {
-            $error = 2;
-            die('Problem querying service');
-        }
-
-        if (!empty($user_details)) {
-            $xml = $user_details->retornaDatosResult->any;
-            // Cut the invalid XML and extract the valid chunk with the data
-            $stripped_xml = strstr($xml, '<diffgr:diffgram');
-            $xml = simplexml_load_string($stripped_xml);
-            //print_r($xml);
-            foreach ($xml->NewDataSet as $user) { //this is a "Table" object
-                $u = $user->Table;
-                //here we have the data, so if this whole block is integrated into a funcion, return
-                echo 'firstname: ' . $u->vchprimernombre . ' ' . $u->vchsegundonombre . "\n" . 'lastname: ' . $u->vchpaterno . ' ' . $u->vchmaterno . "\n";
-            }
-        } else {
-            //echo 'User was not recovered, activate the debug=true in the registration.soap.php file and see the error logs'."\n";
         }
         
-        //Called transactions from Web service
-        //transacciones_detalles(id_last_transaction=0, transactions_number=10)
-            
-        //Add transactions here
-        $params = array(
-            'action' => 'usuario_agregar',
-            'item_id' =>  '1',
-            'orig_id' => '0',
-            'branch_id' => '1',
-            'dest_id' => null,
-            'status_id' => 0
-        );        
-        self::add_transaction($params);        
+        $client->debug_flag = true;     
+        try {            
+            $data = $client->$function_name($params);            
+        } catch (SoapFault $fault) {
+            $error = 2;
+            die("Problem querying service - $function_name");
+        }
+        
+        if (!empty($data)) {
+            error_log("Calling {$web_service_params['class']}::$function_name");
+            $result = $web_service_params['class']::$function_name($data);           
+        } else {
+            error_log('No data found');
+        }
+        error_log("\n--End--");
+    }
+
+    function search_transactions($web_service_params) {
+        $libpath = api_get_path(LIBRARY_PATH);
+        error_log('search_transactions');
+        
+        //Testing transactions
+        
+        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 1, 'cantidad' => 10));
+
+        $result = self::soap_call($web_service_params, 'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        $result = self::soap_call($web_service_params, 'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
+        $result = self::soap_call($web_service_params, 'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
+        
+        $result = self::soap_call($web_service_params, 'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params, 'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params, 'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params, 'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params, 'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
+        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));
+        
+        if (!empty($result)) {
+            error_log(count($result)." transactions found: ");
+            foreach ($result as $transaction_info) {
+                /*
+                id transaccion
+                id sede
+                id accion
+                id
+                origen
+                destino
+                timestamp                 
+                 */
+                //Add transactions here
+                $params = array(
+                    'action' => 'usuario_agregar',
+                    'item_id' =>  '1',
+                    'orig_id' => '0',
+                    'branch_id' => $transaction_info['sede'],
+                    'dest_id' => null,
+                    'status_id' => 0
+                );        
+                $transaction_id = self::add_transaction($params);
+                if ($transaction_id) {
+                    error_log("Transaction #$transaction_id was created");
+                }
+            }
+        }
     }
     
     function add_transaction($params) {
@@ -263,6 +290,7 @@ class Migration {
     }
     
     function update_transaction($params) {
+        return false;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (empty($params['id'])) {
             error_log('No transaction id provided during update_transaction');
@@ -281,7 +309,8 @@ class Migration {
 
     /* Load transactions */
 
-    function load_transactions($actions) {
+    function load_transactions($matches) {
+        $actions = $matches['actions'];
         
         //Getting transactions of the migration_transaction table
         $branches = self::get_branches();
@@ -304,6 +333,7 @@ class Migration {
 
                     //Looping transactions
                     foreach ($transactions as $transaction) {
+                        
                         //Calculating percentage
                         $percentage = $item / $count * 100;
                         if (round($percentage) % 10 == 0) {
@@ -325,7 +355,7 @@ class Migration {
                         //Loading function
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
-                            $result = MigrationCustom::$function_to_call($transaction);
+                            $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
                             
                             error_log("Calling function $function_to_call");
                             if ($result) {

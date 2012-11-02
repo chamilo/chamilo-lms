@@ -75,7 +75,7 @@ class CourseManager {
     CONST COURSE_FIELD_TYPE_CHECKBOX = 10;
 
     var $columns = array();
-
+    
     /**
      * Creates a course
      * @param   array   with the columns in the main.course table
@@ -169,6 +169,101 @@ class CourseManager {
             }
         }
         return false;
+    }
+    
+    static function update($params) {
+        $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
+            
+        $course_code = $params['code'];
+        $visual_code = $params['visual_code'];
+
+        $field_value = new ExtraFieldValue('course');        
+        $params['course_code'] = $course_code; 
+        $field_value->save_field_values($params); 
+
+        /*$tutor_id = $params['tutor_name'];
+        $tutor_name=$platform_teachers[$tutor_id];*/
+
+        $teachers = $params['group']['course_teachers'];
+
+        $title = $params['title'];
+        $category_code = $params['category_code'];
+        $department_name = $params['department_name'];
+        $department_url = $params['department_url'];
+        $course_language = $params['course_language'];
+
+        $course['disk_quota'] = $params['disk_quota']*1024*1024;
+
+        $disk_quota = $params['disk_quota'];
+        $visibility = $params['visibility'];
+        $subscribe = $params['subscribe'];
+        $unsubscribe = $params['unsubscribe'];
+        if (!stristr($department_url, 'http://')) {
+            $department_url = 'http://'.$department_url;
+        }
+        
+        //tutor_name='".Database::escape_string($tutor_name)."',
+        $sql = "UPDATE $course_table SET
+                    course_language='".Database::escape_string($course_language)."',
+                    title='".Database::escape_string($title)."',
+                    category_code='".Database::escape_string($category_code)."',                                    
+                    visual_code='".Database::escape_string($visual_code)."',
+                    department_name='".Database::escape_string($department_name)."',
+                    department_url='".Database::escape_string($department_url)."',
+                    disk_quota='".Database::escape_string($disk_quota)."',
+                    visibility = '".Database::escape_string($visibility)."',
+                    subscribe = '".Database::escape_string($subscribe)."',
+                    unsubscribe='".Database::escape_string($unsubscribe)."'
+                WHERE code='".Database::escape_string($course_code)."'";
+        Database::query($sql);
+
+        //Delete only teacher relations that doesn't match the selected teachers
+        $cond='';
+        if (count($teachers)>0) {
+            foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
+        }
+        $sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
+        Database::query($sql);
+
+        if (count($teachers)>0) {
+            foreach ($teachers as $key) {
+                //We check if the teacher is already subscribed in this course
+                $sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
+                $result = Database::query($sql_select_teacher);
+
+                if (Database::num_rows($result) == 1) {
+                    $sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
+                } else {
+                    $sql = "INSERT INTO ".$course_user_table . " SET
+                        course_code = '".Database::escape_string($course_code). "',
+                        user_id = '".$key . "',
+                        status = '1',
+                        role = '',
+                        tutor_id='0',
+                        sort='0',
+                        user_course_cat='0'";
+                }
+                Database::query($sql);
+            }
+        }
+
+        $sql = "INSERT IGNORE INTO ".$course_user_table . " SET
+                    course_code = '".Database::escape_string($course_code). "',
+                    user_id = '".$tutor_id . "',
+                    status = '1',
+                    role = '',
+                    tutor_id='0',
+                    sort='0',
+                    user_course_cat='0'";
+        Database::query($sql);
+
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];
+        $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+        $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
+        Database::query($sql);
+        return $course_info;
     }
 
     /**

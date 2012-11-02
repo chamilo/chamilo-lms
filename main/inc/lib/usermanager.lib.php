@@ -11,10 +11,50 @@
  * @package chamilo.include.user
  */
 class UserManager {
+    public static $columns = array(
+        'user_id',           
+        'lastname',          
+        'firstname',         
+        'username',          
+        'password',          
+        'auth_source',       
+        'email',             
+        'status',            
+        'official_code',     
+        'phone',             
+        'picture_uri',       
+        'creator_id',        
+        'competences',       
+        'diplomas',          
+        'openarea',
+        'teach',
+        'productions',       
+        'chatcall_user_id',  
+        'chatcall_date',   
+        'chatcall_text',     
+        'language',
+        'registration_date',
+        'expiration_date',
+        'active',          
+        'openid',
+        'theme',             
+        'hr_dept_id'
+    );
+    
     /**
      * Empty constructor. This class is mostly static.
      */
     private function __construct () {
+    }
+    
+    static function clean_params($params) {        
+        $clean_params = array();
+        foreach ($params as $key => $value) {
+            if (in_array($key, self::$columns)) {
+                $clean_params[$key] = $value;
+            }
+        }
+        return $clean_params;
     }
     
     /**
@@ -54,8 +94,8 @@ class UserManager {
         }
         
         $params['email'] = api_valid_email($params['email']) ? $params['email'] : null;
-                        
-        if (isset($params['user_id'])) {            
+
+        if (isset($params['user_id'])) {
             unset($params['user_id']);
         }
         
@@ -105,10 +145,11 @@ class UserManager {
                      
         // Database table definition
         $table = Database::get_main_table(TABLE_MAIN_USER);
-        $user_id = Database::insert($table, $params);
         
-        if ($user_id) {
-            
+        $clean_params = self::clean_params($params);
+        $user_id = Database::insert($table, $clean_params);
+        
+        if ($user_id) {            
             if (api_get_multiple_access_url()) {		
                 UrlManager::add_user_to_url($user_id, api_get_current_access_url_id());
             } else {
@@ -148,7 +189,7 @@ class UserManager {
     /**
      * Creates a new user for the platform
      * @author Hugues Peeters <peeters@ipm.ucl.ac.be>,
-	 * @author Roan Embrechts <roan_embrechts@yahoo.com>
+     * @author Roan Embrechts <roan_embrechts@yahoo.com>
      * @param	string	Firstname
      * @param	string	Lastname
      * @param	int   	Status (1 for course tutor, 5 for student, 6 for anonymous)
@@ -166,7 +207,7 @@ class UserManager {
      * @param 	array	Extra fields
      * @param	string	Encrypt method used if password is given encrypted. Set to an empty string by default
      * @return mixed   new user id - if the new user creation succeeds, false otherwise
-	 * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
+     * @desc The function tries to retrieve $_user['user_id'] from the global space. If it exists, $_user['user_id'] is the creator id. If a problem arises, it stores the error message in global $api_failureList
      * @assert ('Sam','Gamegie',5,'sam@example.com','jo','jo') > 1
      * @assert ('Pippin','Took',null,null,'jo','jo') === false
      */
@@ -316,33 +357,33 @@ class UserManager {
         return $return;
     }
 
-	/**
-	 * Can user be deleted?
-	 * This functions checks if there's a course in which the given user is the
-	 * only course administrator. If that is the case, the user can't be
-	 * deleted because the course would remain without a course admin.
-	 * @param int $user_id The user id
-	 * @return boolean true if user can be deleted
-	 */
-	public static function can_delete_user($user_id) {
-		global $_configuration;
-		if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
-			return false;
-		} 
-		$table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-		if ($user_id != strval(intval($user_id))) return false;
-		if ($user_id === false) return false;
-		$sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
-		$res = Database::query($sql);
-		while ($course = Database::fetch_object($res)) {
-			$sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
-			$res2 = Database::query($sql);
-			if (Database::num_rows($res2) == 1) {
-				return false;
-			}
-		}
-		return true;
-	}
+    /**
+     * Can user be deleted?
+     * This functions checks if there's a course in which the given user is the
+     * only course administrator. If that is the case, the user can't be
+     * deleted because the course would remain without a course admin.
+     * @param int $user_id The user id
+     * @return boolean true if user can be deleted
+     */
+    public static function can_delete_user($user_id) {
+            global $_configuration;
+            if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
+                    return false;
+            } 
+            $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+            if ($user_id != strval(intval($user_id))) return false;
+            if ($user_id === false) return false;
+            $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
+            $res = Database::query($sql);
+            while ($course = Database::fetch_object($res)) {
+                    $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
+                    $res2 = Database::query($sql);
+                    if (Database::num_rows($res2) == 1) {
+                            return false;
+                    }
+            }
+            return true;
+    }
 
 	/**
 	 * Delete a user from the platform

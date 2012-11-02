@@ -38,6 +38,12 @@ class MigrationCustom {
     static function clean_date_time($date) {
         return substr($date, 0, 19);
     }
+    
+    /* Converts 2009-09-30T00:00:00-05:00 to 2009-09-30 00:00:00*/
+    static function clean_date_time_from_ws($date) {
+        $pre_clean = self::clean_date_time($date, 0, 19);
+        return str_replace('T', ' ', $pre_clean);
+    }
 
     /**
      * Transform the uid identifiers from MSSQL to a string
@@ -659,8 +665,9 @@ class MigrationCustom {
     static function transaction_usuario_agregar($data, $web_service_details) {
          $uidIdPersonaId = $data['item_id'];            
          //Add user call the webservice         
-         $user_info = $web_service_details['class']::usuarioDetalles($uidIdPersonaId);
+         $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));          
          if ($user_info['error'] == false) {
+            global $api_failureList;
             $user_id = UserManager::add($user_info);
             if ($user_id) {
                 return array(
@@ -669,7 +676,7 @@ class MigrationCustom {
                 );
             } else {
                 return array(
-                    'message' => "User was not created : $uidIdPersonaId",
+                    'message' => "User was not created : $uidIdPersonaId- UserManager::add reponse $user_id".print_r($api_failureList, 1),
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -707,8 +714,8 @@ class MigrationCustom {
     static function transaction_usuario_editar($data, $web_service_details) {
         $uidIdPersonaId = $data['item_id'];
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
-        if ($user_id) {
-            $user_info = $web_service_details['class']::usuarioDetalles($uidIdPersonaId);
+        if ($user_id) {            
+            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId)); 
             if ($user_info['error'] == false) {     
                 //Edit user
                 $user_info['user_id'] = $user_id;
@@ -733,6 +740,7 @@ class MigrationCustom {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
+        
         $user_id = self::get_user_id_by_persona_id($uidIdPersona);
         
         if (empty($user_id)) {
@@ -797,8 +805,8 @@ class MigrationCustom {
     //Cursos
     //añadir curso curso_agregar CID
     static function transaction_curso_agregar($data, $web_service_details) {
-        $uidCursoId = $data['item_id'];  
-        $course_info = $web_service_details['class']::cursoDetalles($uidCursoId);
+        $uidCursoId = $data['item_id'];          
+        $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));         
         if ($course_info['error'] == false) { 
             $course_code = CourseManager::create_course($course_info);
             if (!empty($course_code)) {
@@ -837,10 +845,12 @@ class MigrationCustom {
     
     //editar detalles de curso curso_editar CID
     static function transaction_curso_editar($data, $web_service_details) {
-        $course_code = self::get_real_course_code($data['item_id']);        
+        $uidCursoId = $data['item_id'];
+        $course_code = self::get_real_course_code($uidCursoId);        
         if (!empty($course_code)) {        
-            $course_info = api_get_course_info($course_code);
-            $data_to_update = $web_service_details['class']::cursoDetalles($data['item_id']);
+            $course_info = api_get_course_info($course_code);            
+            $data_to_update = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));
+            
             if ($data_to_update['error'] == false) {
                 //do some cleaning
                 $data_to_update['code'] = $course_info['code'];
@@ -860,7 +870,7 @@ class MigrationCustom {
         }
     }
     
-    //cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
+    //Cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
     static function transaction_curso_matricula($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         $uidIdPrograma = $data['orig_id'];
@@ -868,14 +878,20 @@ class MigrationCustom {
         
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
         $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
-        
-        //@todo ???
+                
         if (!empty($course_code)) {
-            SessionManager::add_courses_to_session($destination_session_id, array($course_code));
-            return array(
+            if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination) && !empty($destination_session_id)) {
+                SessionManager::add_courses_to_session($destination_session_id, array($course_code));
+                return array(
                    'message' => "Session updated $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+                );
+            } else {
+                return array(
+                    'message' => "Session destination was not found - [dest_id] not found",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }            
         } else {
             return array(
                    'message' => "Course does not exists $course_code",
@@ -886,8 +902,9 @@ class MigrationCustom {
     
     //Programas académicos
     //añadir p.a. pa_agregar PID
-    static function transaction_pa_agregar($data, $web_service_details) {        
-        $session_info = $web_service_details['class']::programaDetalles($data['item_id']);      
+    static function transaction_pa_agregar($data, $web_service_details) {
+        $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('uididprograma' => $data['item_id']));
+        
         if ($session_info['error'] == false) {
             SessionManager::add($session_info);
         } else {
@@ -899,9 +916,10 @@ class MigrationCustom {
     static function transaction_pa_editar($data, $web_service_details) {        
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-        if (!empty($session_id)) {
-            $session_info = $web_service_details['class']::programaDetalles($data['item_id']);
-            if ($session_info['error'] == false) {
+        if (!empty($session_id)) {            
+            $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('uididprograma' => $data['item_id']));
+            if ($session_info['error'] == false) {                
+                $session_info['id'] = $session_id;
                 SessionManager::update($session_info);
                 return array(
                    'message' => "Session updated $uidIdPrograma",
@@ -925,7 +943,7 @@ class MigrationCustom {
         if (!empty($session_id)) {
             SessionManager::delete($session_id);
             return array(
-                   'message' => "Session does not exists $uidIdPrograma",
+                   'message' => "Session was deleted  $session_id - $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
             );
         } else {
@@ -937,8 +955,7 @@ class MigrationCustom {
     }
     
     static function transaction_cambiar_generic($extra_field_variable, $data) {
-        $uidIdPrograma = $data['item_id'];
-        
+        $uidIdPrograma = $data['item_id'];        
         //$orig_id = $data['orig_id'];
         $destination_id = $data['dest_id'];
         
@@ -995,8 +1012,12 @@ class MigrationCustom {
     }
     
     //cambiar intensidad pa_cambiar_fase_intensidad CID ORIG DEST (id de "intensidadFase")
-    static function transaction_cambiar_pa_fase_intensidad($data) {
+    static function transaction_cambiar_pa_fase($data) {
         self::transaction_cambiar_generic('fase', $data);
+    }
+    
+    static function transaction_cambiar_pa_intensidad($data) {
+        self::transaction_cambiar_generic('intensidad', $data);
     }
     
     //-------
@@ -1010,10 +1031,10 @@ class MigrationCustom {
             $extra_field_option = new ExtraFieldOption('session');
 
             $params = array(
-                'field_id'  => $extra_field_info['id'],
-                'option_value' => $data['item_id'],
-                'option_display_text' => $data['name'],
-                'option_order' => null
+                'field_id'              => $extra_field_info['id'],
+                'option_value'          => $data['item_id'],
+                'option_display_text'   => $data['name'],
+                'option_order'          => null
             );
             $extra_field_option->save_one_item($params);        
         } else {
@@ -1029,7 +1050,9 @@ class MigrationCustom {
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['field_id'], $data['item_id']);
         
         $function_name = $extra_field_variable."Detalles";
-        $data = $web_service_details['class']::$function_name($data['item_id']);
+        //$data = $web_service_details['class']::$function_name($data['item_id']);        
+        $data = Migration::soap_call($web_service_details, $function_name, array("uidid".$extra_field_variable => $data['item_id']));
+        
         if ($data['error'] == false) {
             //update array
             $extra_field_option_info = array(
@@ -1120,17 +1143,34 @@ class MigrationCustom {
     //
     //        Intensidad/Fase
     //            añadir intfase_agregar IID
-    static function transaction_intfase_agregar($data, $web_service_details) {
+    static function transaction_intensidad_agregar($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details);
     }
     
     //            eliminar intfase_eliminar IID
-    static function transaction_intfase_eliminar($data, $web_service_details) {
+    static function transaction_intensidad_eliminar($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
     }
     //            editar intfase_editar IID
-    static function transaction_intfase_editar($data, $web_service_details) {
+    static function transaction_intensidad_editar($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
+    }
+    
+    
+        //
+    //        Intensidad/Fase
+    //            añadir intfase_agregar IID
+    static function transaction_fase_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details);
+    }
+    
+    //            eliminar intfase_eliminar IID
+    static function transaction_fase_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details);
+    }
+    //            editar intfase_editar IID
+    static function transaction_fase_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('fase', $data, $web_service_details);
     }
     
         //

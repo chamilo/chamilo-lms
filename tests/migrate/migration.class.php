@@ -147,12 +147,10 @@ class Migration {
         }
     }
     
-    function soap_call($web_service_params, $function_name, $params = array()) {
+    static function soap_call($web_service_params, $function_name, $params = array()) {
         // Create the client instance
         $url = $web_service_params['url'];        
         error_log("\nCalling function '$function_name' in $url with params: ");        
-        var_dump($params);
-
         try {
             $client = new SoapClient($url);
         } catch (SoapFault $fault) {
@@ -165,67 +163,366 @@ class Migration {
             $data = $client->$function_name($params);            
         } catch (SoapFault $fault) {
             $error = 2;
-            die("Problem querying service - $function_name");
+            //die("Problem querying service - $function_name");
+            return array(
+                'error' => true,
+                'message' => 'Problem querying service - $function_name ',
+                'status_id' => 0
+            );
         }
         
         if (!empty($data)) {
             error_log("Calling {$web_service_params['class']}::$function_name");
-            $result = $web_service_params['class']::$function_name($data);           
+            return $web_service_params['class']::$function_name($data, $params);           
         } else {
+            return array(
+                'error' => true,
+                'message' => 'No Data found',
+                'status_id' => 0
+            );
             error_log('No data found');
         }
         error_log("\n--End--");
     }
-
-    function search_transactions($web_service_params) {
-        $libpath = api_get_path(LIBRARY_PATH);
-        error_log('search_transactions');
-        
-        //Testing transactions
-        
-        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 1, 'cantidad' => 10));
-
-        $result = self::soap_call($web_service_params, 'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
-        $result = self::soap_call($web_service_params, 'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
-        $result = self::soap_call($web_service_params, 'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
-        
-        $result = self::soap_call($web_service_params, 'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = self::soap_call($web_service_params, 'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
-        $result = self::soap_call($web_service_params, 'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
-        $result = self::soap_call($web_service_params, 'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = self::soap_call($web_service_params, 'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
-        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));
-        
-        if (!empty($result)) {
-            error_log(count($result)." transactions found: ");
-            foreach ($result as $transaction_info) {
-                /*
-                id transaccion
-                id sede
-                id accion
-                id
-                origen
-                destino
-                timestamp                 
-                 */
-                //Add transactions here
-                $params = array(
-                    'action' => 'usuario_agregar',
-                    'item_id' =>  '1',
-                    'orig_id' => '0',
-                    'branch_id' => $transaction_info['sede'],
-                    'dest_id' => null,
-                    'status_id' => 0
-                );        
-                $transaction_id = self::add_transaction($params);
-                if ($transaction_id) {
-                    error_log("Transaction #$transaction_id was created");
-                }
-            }
-        }
-    }
     
-    function add_transaction($params) {
+    function test_transactions($web_service_params) {
+        error_log('search_transactions');
+        //Just for tests
+        
+        //Cleaning transaction table
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+        $sql = "TRUNCATE $table";
+        Database::query($sql);
+        
+        
+        $transaction_harcoded = array(
+            array(
+                'action' => 'usuario_agregar',
+                'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
+                'orig_id' => null,
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'usuario_editar',
+                'item_id' => 'D236776B-D7A5-47FF-8328-55EBE9A59015',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),            
+            array(
+                'action' => 'usuario_eliminar',
+                'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),      
+            array(
+                'action' => 'usuario_matricula',
+                'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
+                'orig_id' => null, 
+                'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'curso_agregar',
+                'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
+                'orig_id' => null,
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'curso_eliminar',
+                'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
+                'orig_id' => null,
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'curso_editar',
+                'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'curso_matricula',
+                'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC', //course
+                'orig_id' => null,
+                'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'pa_agregar',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
+                'orig_id' => null,
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'pa_editar',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
+                'orig_id' => '0',
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'pa_eliminar',
+                'item_id' =>  '1',
+                'orig_id' => 'C3671999-095E-4018-9826-678BAFF595DF',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            //??
+            array(
+                'action' => 'pa_cambiar_aula',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
+                'orig_id' => '0',
+                'dest_id' => '',
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'pa_cambiar_horario',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF', //session id
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'pa_cambiar_sede',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',//session id
+                'orig_id' => '0',
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'cambiar_pa_fase',
+                'item_id' => 'C3671999-095E-4018-9826-678BAFF595DF',//session id
+                'orig_id' => '0',
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'cambiar_pa_intensidad',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'pa_cambiar_horario',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            
+            
+             array(
+                'action' => 'horario_agregar',
+                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',  // horario
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'horario_editar',
+                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
+                'orig_id' => '0',
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'horario_eliminar',
+                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
+                'orig_id' => '0',
+                'dest_id' => null,
+                'branch_id' => 1,                
+                'status_id' => 0
+            ),
+            
+            /*
+            array(
+                'action' => 'aula_agregar',
+                'item_id' =>  '1',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'aula_eliminar',
+                'item_id' =>  '1',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'aula_editar',
+                'item_id' =>  '1',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),*/
+            
+            
+            array(
+                'action' => 'sede_agregar',
+                'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'sede_editar',
+                'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'sede_eliminar',
+                'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+     
+            
+            array(
+                'action' => 'frecuencia_agregar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'frecuencia_editar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'frecuencia_eliminar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+     
+            
+            array(
+                'action' => 'intensidad_agregar',
+                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'intensidad_editar',
+                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+             array(
+                'action' => 'intensidad_eliminar',
+                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+        
+            
+            
+            array(
+                'action' => 'fase_agregar',
+                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679', 
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'fase_editar',
+                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'fase_eliminar',
+                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'meses_agregar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'meses_editar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                'action' => 'meses_eliminar',
+                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'orig_id' => '0',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),           
+        );
+        
+        foreach( $transaction_harcoded as  $transaction) {        
+            $transaction_id = self::add_transaction($transaction);
+        }        
+    }
+
+    
+    static function add_transaction($params) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
             unset($params['id']);
@@ -239,7 +536,7 @@ class Migration {
         return $inserted_id;        
     }
         
-    function get_branches() {
+    static function get_branches() {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $sql = "SELECT DISTINCT branch_id FROM $table ORDER BY branch_id";
         $result = Database::query($sql);
@@ -247,7 +544,7 @@ class Migration {
     }
     
     /** Get unprocesses */
-    function get_transactions($status_id = 0, $branch_id = null) {
+    static function get_transactions($status_id = 0, $branch_id = null) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $status_id = intval($status_id);
@@ -261,7 +558,7 @@ class Migration {
         return Database::store_result($result, 'ASSOC');
     }
     
-    function get_latest_completed_transaction_by_branch($branch_id) {
+    static function get_latest_completed_transaction_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $sql = "SELECT id FROM $table WHERE status_id = 2 AND branch_id = $branch_id ORDER BY id DESC  LIMIT 1";
@@ -273,7 +570,7 @@ class Migration {
         return 0;
     }
     
-    function get_latest_transaction_by_branch($branch_id) {
+    static function get_latest_transaction_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC  LIMIT 1";
@@ -284,12 +581,13 @@ class Migration {
         }
         return 0;
     }
-    function get_transaction_by_params($params, $type_result = 'all') {
+    
+    static function get_transaction_by_params($params, $type_result = 'all') {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         return Database::select('*', $table, $params, $type_result);
     }
     
-    function update_transaction($params) {
+    static function update_transaction($params) {
         return false;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (empty($params['id'])) {
@@ -305,7 +603,31 @@ class Migration {
             event_system('transaction_error', 'transaction_id', $params['id'], $params['time_update']);
         }
         return Database::update($table, $params, array('id = ?' => $params['id']));
-    }    
+    }
+    
+    function search_transactions($web_service_params) {        
+        error_log('search_transactions');        
+        //Testing transactions        
+
+        /*$result = self::soap_call($web_service_params, 'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        $result = self::soap_call($web_service_params, 'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
+        $result = self::soap_call($web_service_params, 'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
+        $result = self::soap_call($web_service_params, 'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params, 'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params, 'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params, 'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params, 'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
+        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));
+        
+        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
+        
+        */
+        
+        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
+        
+        //Calling a process to save transactions
+        $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => 354911, 'cantidad' => 2));        
+    }   
 
     /* Load transactions */
 
@@ -314,6 +636,7 @@ class Migration {
         
         //Getting transactions of the migration_transaction table
         $branches = self::get_branches();
+        
         if (!empty($branches)) {
             foreach ($branches as $branch_info) {
                 //Get uncompleted transactions                
@@ -352,15 +675,19 @@ class Migration {
                             exit;
                         }
                         
+                        error_log("Waiting for transaction $latest_id_attempt");
+                        
                         //Loading function
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
+                            error_log("Calling function MigrationCustom::$function_to_call");
                             $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
+                            error_log($result['message']);
                             
-                            error_log("Calling function $function_to_call");
-                            if ($result) {
+                            exit;
+                            if ($result['error'] == false) {
                                 //Updating transaction
-                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status']));                        
+                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));                        
                             } else {
                                 //failed
                                 self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));

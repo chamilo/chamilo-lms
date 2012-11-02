@@ -151,6 +151,12 @@ class CourseManager {
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
+                    
+                    //Saving extra course fields
+                    $field_value = new ExtraFieldValue('course');
+                    $params['course_code'] = $course_info['code'];   
+                    $field_value->save_field_values($params);
+                    
                     return $course_info;
                 }
             } else {

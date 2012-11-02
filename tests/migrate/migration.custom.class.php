@@ -16,8 +16,7 @@ class MigrationCustom {
     const TRANSACTION_STATUS_TO_BE_EXECUTED = 1;
     const TRANSACTION_STATUS_SUCCESSFUL = 2;
     const TRANSACTION_STATUS_DEPRECATED = 3; //??
-    const TRANSACTION_STATUS_FAILED = 4;
-    
+    const TRANSACTION_STATUS_FAILED = 4;   
 
     /**
      * The only required method is the 'none' method, which will not trigger
@@ -253,8 +252,6 @@ class MigrationCustom {
         //error_log('In create_course, received '.print_r($data,1));
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
-        
-        
         
         //Specific to ICPNA, set the default language to English
         $data['language'] = 'english';
@@ -651,29 +648,40 @@ class MigrationCustom {
         }
     }
     
+    
+    
+    
+    /* Transaction methods */
+    
+    
+    
+    
     //añadir usuario: usuario_agregar UID
-    static function transaction_usuario_agregar($data) {
+    static function transaction_usuario_agregar($data, $web_service_details) {
          $uidIdPersonaId = $data['item_id'];            
          //Add user call the webservice         
-         $user_info = usuarioDetalles($uidIdPersonaId);
-       
-         $user_id = UserManager::add($user_info);
-         if ($user_id) {             
-             return array(
-                'message' => "User was created : $user_id",
-                'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+         $user_info = $web_service_details['class']::usuarioDetalles($uidIdPersonaId);
+         if ($user_info['error'] == false) {
+            $user_id = UserManager::add($user_info);
+            if ($user_id) {
+                return array(
+                    'message' => "User was created : $user_id",
+                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else  {
+                return array(
+                    'message' => "User was not created : $uidIdPersonaId",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
          } else {
-            return array(
-                'message' => "User was not created : $uidIdPersonaId",
-                'status_id' => self::TRANSACTION_STATUS_FAILED
-            );
-        }
+            return $user_info;
+         } 
     }
     
     //eliminar usuario usuario_eliminar UID
     static function transaction_usuario_eliminar($data) {
-        $uidIdPersonaId = $data['item_id'];
+        $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
             UserManager::delete_user($user_id);
@@ -690,17 +698,22 @@ class MigrationCustom {
     }
     
     //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
-    static function transaction_usuario_editar($data) {
+    static function transaction_usuario_editar($data, $web_service_details) {
         $uidIdPersonaId = $data['item_id'];
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
-        if ($user_id) {
-            //Edit user
-            $params = array('user_id' => $user_id);
-            UserManager::update($params);
-            return array(
-                'message' => "User was updated : $user_id",
-                'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+        if ($user_id) {            
+            $user_info = $web_service_details['class']::usuarioDetalles($uidIdPersonaId);
+            if ($user_info['error'] == false) {     
+                //Edit user
+                $user_info['user_id'] = $user_id;
+                UserManager::update($user_info);
+                return array(
+                    'message' => "User was updated : $user_id",
+                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return $user_info;
+            }
         } else {
             return array(
                 'message' => "User was not found : $uidIdPersonaId",
@@ -776,20 +789,24 @@ class MigrationCustom {
     
     //Cursos
     //añadir curso curso_agregar CID
-    static function transaction_curso_agregar($data) {
-        $course_info = cursoDetalles($data['item_id']);
-        
-        $course_code = CourseManager::create_course($params);
-        if (!empty($course_code)) {
-            return array(
-                    'message' => "Course was created $course_code ",
-                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+    static function transaction_curso_agregar($data, $web_service_details) {
+        $uidCursoId = $data['item_id'];        
+        $course_info = $web_service_details['class']::cursoDetalles($uidCursoId);
+        if ($course_info['error'] == false) { 
+            $course_code = CourseManager::create_course($course_info);
+            if (!empty($course_code)) {
+                return array(
+                        'message' => "Course was created $course_code ",
+                        'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return array(
+                        'message' => "Course does not exists $course_code ",
+                        'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
         } else {
-            return array(
-                    'message' => "Course does not exists $course_code ",
-                    'status_id' => self::TRANSACTION_STATUS_FAILED
-            );
+            return $course_info;
         }
     }
     
@@ -804,25 +821,28 @@ class MigrationCustom {
             );
         } else {
             return array(
-                    'message' => "couCoursese_code does not exists $course_code ",
+                    'message' => "Coursecode does not exists $course_code ",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
         
     }
+    
     //editar detalles de curso curso_editar CID
-    static function transaction_curso_editar($data) {
-        $course_code = self::get_real_course_code($data['item_id']);
+    static function transaction_curso_editar($data, $web_service_details) {
+        $course_code = self::get_real_course_code($data['item_id']);        
         if (!empty($course_code)) {        
-            $course_info = api_get_course_info($course_code);
-            $course_details = cursoDetalles($data['item_id']);
-            CourseManager::update_attributes($course_info['real_id'], $course_details);
-            
-            return array(
-                    'message' => "Course was updated $course_code ",
-                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
-            
+            $course_info = $web_service_details['class']::cursoDetalles($data['item_id']);
+            if ($course_info['error'] == false) {
+                //do some cleaning
+                CourseManager::update_attributes($course_info['real_id'], $course_info);
+                return array(
+                        'message' => "Course was updated $course_code ",
+                        'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return $course_info;
+            }            
          } else {
             return array(
                     'message' => "couCoursese_code does not exists $course_code ",
@@ -856,30 +876,37 @@ class MigrationCustom {
     }
     
     //Programas académicos
-    //
     //añadir p.a. pa_agregar PID
-    static function transaction_pa_agregar($data) {
-        $params = array();
-        SessionManager::add($params);
+    static function transaction_pa_agregar($data, $web_service_details) {        
+        $session_info = $web_service_details['class']::programaDetalles($data['item_id']);      
+        if ($session_info['error'] == false) {
+            SessionManager::add($session_info);
+        } else {
+            return $session_info;
+        }
     }
     
     //editar detalles de p.a. pa_editar PID
-    static function transaction_pa_editar($data) {        
+    static function transaction_pa_editar($data, $web_service_details) {        
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
         if (!empty($session_id)) {
-            SessionManager::update($params);
-            return array(
+            $session_info = $web_service_details['class']::programaDetalles($data['item_id']);
+            if ($session_info['error'] == false) {
+                SessionManager::update($session_info);
+                return array(
                    'message' => "Session updated $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+                );
+            } else {
+                return $session_info;
+            }            
         } else {
             return array(
                    'message' => "Session does not exists $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_FAILED
             );
-        }
-            
+        }            
     }   
     
     //eliminar p.a. pa_eliminar PID
@@ -901,26 +928,39 @@ class MigrationCustom {
     }
     
     static function transaction_cambiar_generic($extra_field_variable, $data) {
-        $uidIdPrograma = $data['item_id'];       
+        $uidIdPrograma = $data['item_id'];
+        
+        //$orig_id = $data['orig_id'];
+        $destination_id = $data['dest_id'];
+        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);    
         if (!empty($session_id)) {
             //??
             $extra_field = new ExtraField('session');
             $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable); //horario, aula, etc
+            
+            //check if option exists
+            $extra_field_option = new ExtraFieldOption('session');
+            $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['field_id'], $destination_id); //horario, aula, etc
+            if ($extra_field_option_info) {           
         
-            $extra_field_value = new ExtraFieldValue('session');
-            //$extra_field_value_info = $extra_field_value->get_values_by_handler_and_field_id($extra_field_variable, $extra_field_info['id']);
-            
-            $params = array(
-                'field_id' => $extra_field_info['id'],
-                'field_value' => null, //??
-            );            
-            $extra_field_value->save($params);            
-            
-            return array(
-                   'message' => "Session does not exists $uidIdPrograma",
-                   'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-            );
+                $extra_field_value = new ExtraFieldValue('session');                
+                $params = array(
+                    'session_id' => $session_id,
+                    'field_id' => $extra_field_info['id'],
+                    'field_value' => $destination_id,
+                );            
+                $extra_field_value->save($params);            
+                return array(
+                       'message' => "Session does not exists $uidIdPrograma",
+                       'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return array(
+                       'message' => "Option does not exists $destination_id",
+                       'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            }
         } else {
             return array(
                    'message' => "Change variable $extra_field_variable - Session does not exists $uidIdPrograma",
@@ -952,20 +992,51 @@ class MigrationCustom {
     
     //-------
  
-    static function transaction_extra_field_agregar_generic($extra_field_variable, $data) {
+    static function transaction_extra_field_agregar_generic($extra_field_variable, $data, $web_service_details) {
+        $function_name = $extra_field_variable."Detalles";
+        $data = $web_service_details['class']::$function_name($data['item_id']);
+        if ($data['error'] == false) {           
+            $extra_field = new ExtraField('session');
+            $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
+            $extra_field_option = new ExtraFieldOption('session');
+
+            $params = array(
+                'field_id'  => $extra_field_info['id'],
+                'option_value' => $data['item_id'],
+                'option_display_text' => $data['name'],
+                'option_order' => null
+            );
+            $extra_field_option->save_one_item($params);        
+        } else {
+            return $data;
+        }
+    }    
+    
+    static function transaction_extra_field_editar_generic($extra_field_variable, $data, $web_service_details) {
         $extra_field = new ExtraField('session');
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
-        $extra_field_option = new ExtraFieldOption('session');
-        $params = array(
-            'field_id'  => $extra_field_info['id'],
-            'option_value' => '11',
-            'option_display_text' => '22',
-            'option_order' => null
-        );
-        $extra_field_option->save_one_item($params);        
+        
+        $extra_field_option = new ExtraFieldOption('session');        
+        $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['field_id'], $data['item_id']);
+        
+        $function_name = $extra_field_variable."Detalles";
+        $data = $web_service_details['class']::$function_name($data['item_id']);
+        if ($data['error'] == false) {
+            //update array
+            $extra_field_option_info = array(
+                'id' => $extra_field_option_info['id'],
+                'field_id' => $extra_field_info['field_id'],
+                'option_value' => $data['item_id'],
+                'option_display_text' => $data['name'],
+                'option_order' => null
+            );        
+            $extra_field_option->update($extra_field_option_info);
+        } else {
+            return $data;
+        }        
     }
     
-    static function transaction_extra_field_eliminar_generic($extra_field_variable, $data) {
+    static function transaction_extra_field_eliminar_generic($extra_field_variable, $data, $web_service_details) { //horario
         $extra_field = new ExtraField('session');
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         
@@ -975,97 +1046,97 @@ class MigrationCustom {
         $extra_field_option->delete($extra_field_option_info['id']);        
     }
 
-    static function transaction_extra_field_editar_generic($extra_field_variable, $data) {
-        $extra_field = new ExtraField('session');
-        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
-        
-        $extra_field_option = new ExtraFieldOption('session');        
-        $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['field_id'], $data['item_id']);
-        
-        //update array
-        $extra_field_option_info = array(
-            'field_id' => $extra_field_info['field_id'],
-            'option_value' => '22',
-            'option_display_text' => '33',
-            'option_order' => null
-        );        
-        $extra_field_option->update($extra_field_option_info);
-    }
     
     //        Horario
     //            añadir horario_agregar HID    
-    static function transaction_horario_agregar($data) {
-        self::transaction_extra_field_agregar_generic('horario', $data);       
+    static function transaction_horario_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('horario', $data, $web_service_details);       
     }
     
     //            eliminar horario_eliminar HID
-    static function transaction_horario_eliminar($data) {
-        self::transaction_extra_field_eliminar_generic('horario', $data);
+    static function transaction_horario_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('horario', $data, $web_service_details);
     }
     
     //            editar horario_editar HID
-    static function transaction_horario_editar($data) {
-        self::transaction_extra_field_editar_generic('horario', $data);
+    static function transaction_horario_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('horario', $data, $web_service_details);
     }
     
     // Aula
     //            añadir aula_agregar AID
-    static function transaction_aula_agregar($data) {
-        self::transaction_extra_field_agregar_generic('aula', $data);
+    static function transaction_aula_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('aula', $data, $web_service_details);
     }
     
     //            eliminar aula_eliminar AID
-    static function transaction_aula_eliminar($data) {
-        self::transaction_extra_field_eliminar_generic('aula', $data);
+    static function transaction_aula_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('aula', $data, $web_service_details);
     }
     //            editar aula_editor AID
-    static function transaction_aula_editar($data) {
-        self::transaction_extra_field_editar_generic('aula', $data);
+    static function transaction_aula_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('aula', $data, $web_service_details);
     }
     //        Sede
     //            añadir aula_agregar SID
-    static function transaction_sede_agregar($data) {
-        self::transaction_extra_field_agregar_generic('sede', $data);
+    static function transaction_sede_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('sede', $data, $web_service_details);
     }
     //            eliminar aula_eliminar SID
-    static function transaction_sede_eliminar($data) {
-        self::transaction_extra_field_eliminar_generic('sede', $data);
+    static function transaction_sede_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('sede', $data, $web_service_details);
     }
     //            editar aula_editar SID
-    static function transaction_sede_editar($data) {
-        self::transaction_extra_field_editar_generic('sede', $data);
+    static function transaction_sede_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('sede', $data, $web_service_details);
     }
     
     //
     //        Frecuencia
     //            añadir frec FID
-    static function transaction_frecuencia_agregar($data) {
-        self::transaction_extra_field_agregar_generic('frecuencia', $data);
+    static function transaction_frecuencia_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details);
     }
     
     //            eliminar Freca_eliminar FID
-    static function transaction_frecuencia_eliminar($data) {
-        self::transaction_extra_field_eliminar_generic('frecuencia', $data);
+    static function transaction_frecuencia_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details);
     }
     
     //             editar aula_editar FID
-    static function transaction_frecuencia_editar($data) {
-        self::transaction_extra_field_editar_generic('frecuencia', $data);
+    static function transaction_frecuencia_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details);
     }
     
     //
     //        Intensidad/Fase
     //            añadir intfase_agregar IID
-    static function transaction_intfase_agregar($data) {
-        self::transaction_extra_field_agregar_generic('intfase', $data);
+    static function transaction_intfase_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details);
     }
     
     //            eliminar intfase_eliminar IID
-    static function transaction_intfase_eliminar($data) {
-        self::transaction_extra_field_eliminar_generic('intfase', $data);
+    static function transaction_intfase_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
     }
     //            editar intfase_editar IID
-    static function transaction_intfase_editar($data) {
-        self::transaction_extra_field_editar_generic('intfase', $data);
+    static function transaction_intfase_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
+    }
+    
+        //
+    //        Intensidad/Fase
+    //            añadir intfase_agregar IID
+    static function transaction_meses_agregar($data, $web_service_details) {
+        self::transaction_extra_field_agregar_generic('meses', $data, $web_service_details);
+    }
+    
+    //            eliminar intfase_eliminar IID
+    static function transaction_meses_eliminar($data, $web_service_details) {
+        self::transaction_extra_field_eliminar_generic('meses', $data, $web_service_details);
+    }
+    //            editar intfase_editar IID
+    static function transaction_meses_editar($data, $web_service_details) {
+        self::transaction_extra_field_editar_generic('meses', $data, $web_service_details);
     }
 }

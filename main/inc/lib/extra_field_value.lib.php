@@ -3,7 +3,7 @@
 class ExtraFieldValue extends Model {
     public $type = null;
     public $columns = array('id', 'field_id', 'field_value', 'tms');
-    public $handler_id = null;
+    public $handler_id = null;//session_id, course_code, user_id
      
     public function __construct($type) {
         $this->type = $type;

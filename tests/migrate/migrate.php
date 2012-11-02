@@ -54,11 +54,15 @@ if (!empty($servers)) {
             //$m->migrate($matches);
             
             //Getting transactions from MSSQL (via webservices)
-            $m->search_transactions($matches['web_service_calls']['url'], $matches['web_service_calls']['params']);
             
-            //Load transactions saved before
+            if (isset($matches['web_service_calls']['filename'])) {                
+                require_once $matches['web_service_calls']['filename'];    
+            }
             
-            $m->load_transactions($matches['actions']);            
+            $m->search_transactions($matches['web_service_calls']);
+            
+            //Load transactions saved before            
+            $m->load_transactions($matches);            
             
             //print_r($m->errors_stack);
             //echo "OK so far\n";

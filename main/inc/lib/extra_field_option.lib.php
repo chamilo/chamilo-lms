@@ -285,8 +285,7 @@ class ExtraFieldOption extends Model {
         parent::update($params);
     }
     
-    //Form
-    
+    //Form    
     function display() {
         // action links
         echo '<div class="actions">';

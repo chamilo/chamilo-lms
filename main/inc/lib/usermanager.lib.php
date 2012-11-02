@@ -108,12 +108,18 @@ class UserManager {
         $user_id = Database::insert($table, $params);
         
         if ($user_id) {
+            
             if (api_get_multiple_access_url()) {		
                 UrlManager::add_user_to_url($user_id, api_get_current_access_url_id());
             } else {
                 //we are adding by default the access_url_user table with access_url_id = 1
                 UrlManager::add_user_to_url($user_id, 1);
             }
+            
+            //saving extra fields
+            $field_value = new ExtraFieldValue('user');
+            $params['user_id'] = $user_id;   
+            $field_value->save_field_values($params);
             
             // Add event to system log			
             $user_id_manager = api_get_user_id();
@@ -124,6 +130,19 @@ class UserManager {
         } else {
             return api_set_failure('error inserting in Database');
         }
+    }
+    
+    /**
+     * Simple update user need to add validations here
+     * @param type $params
+     * @return boolean
+     */
+    public static function update($params) {
+        $table = Database::get_main_table(TABLE_MAIN_USER);
+        if (empty($params['user_id'])) {
+            return false;
+        }
+        return Database::update($table, $params, array('user_id = ?' => $params['user_id']));
     }
 
     /**

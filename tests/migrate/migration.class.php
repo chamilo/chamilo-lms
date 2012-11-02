@@ -588,7 +588,7 @@ class Migration {
     }
     
     static function update_transaction($params) {
-        return false;
+        //return false;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (empty($params['id'])) {
             error_log('No transaction id provided during update_transaction');
@@ -643,13 +643,15 @@ class Migration {
                 $transactions = self::get_transactions(0, $branch_info['branch_id']);                
          
                 $options = array('where' => array('branch_id = ? and status_id <> ?' => array($branch_info['branch_id'], 0)), 'order' => 'id desc', 'limit' => '1');
-                $transaction_info = self::get_transaction_by_params($options, 'first');               
-                $latest_id = $transaction_info['id'];
+                $transaction_info = self::get_transaction_by_params($options, 'first');   
                 
-                $latest_id_attempt = $latest_id + 1;
-                
-                $item = 1;
-
+                $latest_id_attempt = 1;
+                if ($transaction_info) {                
+                    $latest_id = $transaction_info['id'];                
+                    $latest_id_attempt = $latest_id + 1;
+                }
+                    
+                $item = 1;//counter
                 if (!empty($transactions)) {
                     $count = count($transactions);
                     error_log("\nTransactions found: $count");
@@ -666,6 +668,8 @@ class Migration {
                         $item++;
                         //--
                         
+                        error_log("Waiting for transaction #$latest_id_attempt");
+                        
                         //Checking "huecos"
                         //Waiting transaction is fine continue:
                         if ($transaction['id'] == $latest_id_attempt) {
@@ -675,8 +679,6 @@ class Migration {
                             exit;
                         }
                         
-                        error_log("Waiting for transaction $latest_id_attempt");
-                        
                         //Loading function
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
@@ -684,20 +686,23 @@ class Migration {
                             $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
                             error_log($result['message']);
                             
-                            exit;
+                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));
+                            
+                            /*
                             if ($result['error'] == false) {
                                 //Updating transaction
-                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));                        
+                                
                             } else {
                                 //failed
                                 self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                            }
+                            }*/
                         } else {
                             //	method does not exist
                             error_log("Function does $function_to_call not exists");
                             //Failed
                             self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
                         }
+                        exit;
                     }
                 } else {
                     error_log('No transactions to load');

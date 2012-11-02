@@ -670,7 +670,7 @@ class MigrationCustom {
             global $api_failureList;
             $user_id = UserManager::add($user_info);
             if ($user_id) {
-                return array(
+                return array(                    
                     'message' => "User was created : $user_id",
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );

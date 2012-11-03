@@ -1422,7 +1422,7 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     visible int NOT NULL,
     type varchar(40) NOT NULL default 'evaluation',
     locked int NOT NULL DEFAULT 0,
-    evaluation_type_id INT NOT NULL DEFAULT 0
+    evaluation_type_id INT NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
 

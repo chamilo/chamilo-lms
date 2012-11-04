@@ -1068,11 +1068,11 @@ function generate_settings_form($settings, $settings_by_access_list) {
         
     $form = new FormValidator('settings', 'post', 'settings.php?category='.Security::remove_XSS($_GET['category']));
     
-    $form->addElement('hidden', 'search_field', Security::remove_XSS($_GET['search_field']));
+    $form->addElement('hidden', 'search_field', (!empty($_GET['search_field'])?Security::remove_XSS($_GET['search_field']):null));
     
     $url_id = api_get_current_access_url_id();
     
-    if ( $_configuration['multiple_access_urls'] && api_is_global_platform_admin() && $url_id == 1) {
+    if (!empty($_configuration['multiple_access_urls']) && api_is_global_platform_admin() && $url_id == 1) {
         $group = array();    
         $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
         $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));    
@@ -1087,7 +1087,7 @@ function generate_settings_form($settings, $settings_by_access_list) {
     foreach ($settings as $row) {      
     	if (in_array($row['variable'], array_keys($settings_to_avoid))) { continue; } 
         
-        if ( $_configuration['multiple_access_urls']) {
+        if (!empty($_configuration['multiple_access_urls'])) {
             if (api_is_global_platform_admin()) {                
                 if ($row['access_url_locked'] == 0) {
                     if ($url_id == 1) {

@@ -72,7 +72,7 @@ if ($origin == 'group') {
     if ($origin == 'learnpath') {
         Display::display_reduced_header();
     } else {    	
-        $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => $nameTools);
+        $interbreadcrumb[] = array('url' => 'index.php?'.(isset($gradebook)?'gradebook='.$gradebook.'&amp;':'').'search='.Security::remove_XSS(urlencode($my_search)), 'name' => $nameTools);
         $interbreadcrumb[] = array('url' => 'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum_category['cat_title']));
         $interbreadcrumb[] = array('url' => 'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;search='.Security::remove_XSS(urlencode($my_search)), 'name' => Security::remove_XSS($current_forum['forum_title']));
         $interbreadcrumb[] = array('url' => '#', 'name' => Security::remove_XSS($current_thread['thread_title']));

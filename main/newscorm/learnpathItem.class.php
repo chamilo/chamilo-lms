@@ -33,6 +33,7 @@ class learnpathItem {
 	public $launch_data = '';
 	public $lesson_location = '';
 	public $level = 0;
+        public $core_exit = '';
 	//var $location; // Only set this for SCORM?
 	public $lp_id;
 	public $max_score;

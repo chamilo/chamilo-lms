@@ -237,7 +237,7 @@ function handle_stylesheets() {
         if (!is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
             Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
         } else {
-            if ($_GET['showuploadform'] == 'true') {
+            if (!empty($_GET['showuploadform']) && $_GET['showuploadform'] == 'true') {
                 echo '<div id="newstylesheetform">';
             } else {
                 echo '<div id="newstylesheetform" style="display: none;">';

@@ -29,6 +29,7 @@ class Template {
     /* Loads chamilo plugins */
     var $load_plugins = false;
     var $params = array();
+    var $force_plugin_load = false;
 
     function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
 

@@ -305,15 +305,17 @@ function return_navigation_array() {
             }
         }
 
-		// Custom tabs
-		for ($i=1;$i<=3;$i++)
-			if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
-				$navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
-			} else {
-			    if (isset($possible_tabs['custom_tab_'.$i])) {
+        // Custom tabs
+        for ($i=1;$i<=3;$i++) {
+            if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true' && isset($possible_tabs['custom_tab_'.$i])) {
+                $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+            } else {
+                if (isset($possible_tabs['custom_tab_'.$i])) {
                     $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
                 }
-			}
+            }
+        }
+
     }
     return array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
 }

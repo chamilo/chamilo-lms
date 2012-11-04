@@ -231,16 +231,16 @@ if (isset($_REQUEST['interact'])) {
 }
 
 echo save_item(
-            $_REQUEST['lid'],
-            $_REQUEST['uid'],
-            $_REQUEST['vid'],
-            $_REQUEST['iid'],
-            $_REQUEST['s'],
-            $_REQUEST['max'],
-            $_REQUEST['min'],
-            $_REQUEST['status'],
-            $_REQUEST['t'],
-            $_REQUEST['suspend'],
-            $_REQUEST['loc'],
+            (!empty($_REQUEST['lid'])?$_REQUEST['lid']:null),
+            (!empty($_REQUEST['uid'])?$_REQUEST['uid']:null),
+            (!empty($_REQUEST['vid'])?$_REQUEST['vid']:null),
+            (!empty($_REQUEST['iid'])?$_REQUEST['iid']:null),
+            (!empty($_REQUEST['s'])?$_REQUEST['s']:null),
+            (!empty($_REQUEST['max'])?$_REQUEST['max']:null),
+            (!empty($_REQUEST['min'])?$_REQUEST['min']:null),
+            (!empty($_REQUEST['status'])?$_REQUEST['status']:null),
+            (!empty($_REQUEST['t'])?$_REQUEST['t']:null),
+            (!empty($_REQUEST['suspend'])?$_REQUEST['suspend']:null),
+            (!empty($_REQUEST['loc'])?$_REQUEST['loc']:null),
             $interactions,
-            $_REQUEST['core_exit']);
+            (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:''));

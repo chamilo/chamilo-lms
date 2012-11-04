@@ -584,7 +584,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
-if ($_configuration['language_measure_frequency'] == 1) {
+if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }

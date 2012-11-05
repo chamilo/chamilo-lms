@@ -5,8 +5,8 @@
  */
 class MigrationMSSQL extends Migration {
 
-    public function __construct($dbhost, $dbport = '1433', $dbuser, $dbpass, $dbname) {
-        parent::__construct($dbhost, $dbport, $dbuser, $dbpass, $dbname);
+    public function __construct($dbhost, $dbport = '1433', $dbuser, $dbpass, $dbname, $boost=false) {
+        parent::__construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $boost);
         ini_set('display_errors', 1);
         ini_set('mssql.datetimeconvert', 0);
         $this->odbtype = 'mssql';

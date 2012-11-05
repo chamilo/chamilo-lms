@@ -99,10 +99,9 @@ class Exercise {
 	 * @param - integer $id - exercise ID
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
-	function read($id) {
-		$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+	function read($id) {		
 		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
-		$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+		
 		$id  = intval($id);
         if (empty($this->course_id)) {
             return false;
@@ -139,33 +138,19 @@ class Exercise {
 				$this->start_time 	= $object->start_time;
 			}
 			$this->expired_time 	= $object->expired_time; //control time
-
-			$sql = "SELECT e.question_id, e.question_order FROM $TBL_EXERCICE_QUESTION e, $TBL_QUESTIONS  q
-					WHERE 	e.question_id	= q.id AND 
-							e.exercice_id	= '".Database::escape_string($id)."' AND
-							e.c_id = ".$this->course_id." AND
-							q.c_id = ".$this->course_id." 														 
-					ORDER BY question_order";
-				
-			$result = Database::query($sql);
-
-			// fills the array with the question ID for this exercise
-			// the key of the array is the question position
-
-			while ($new_object = Database::fetch_object($result)) {
-				$this->questionList[$new_object->question_order]=  $new_object->question_id;
-			}
+            
+            //Checking if question_order is correctly set
+            $this->questionList = $this->selectQuestionList(true);
 				
 			//overload questions list with recorded questions list
 			//load questions only for exercises of type 'one question per page'
 			//this is needed only is there is no questions
-			//
+            //			
 			// @todo not sure were in the code this is used somebody mess with the exercise tool
 			// @todo don't know who add that config and why $_configuration['live_exercise_tracking']
 			global $_configuration, $questionList;
 			if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
-			isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
-				//if(empty($_SESSION['questionList']))
+			isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {				
 				$this->questionList = $questionList;
 			}
 			return true;
@@ -389,18 +374,39 @@ class Exercise {
 		if ($from_db && !empty($this->id)) {
 			$TBL_EXERCICE_QUESTION  = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$TBL_QUESTIONS          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+			      
+            $sql = "SELECT DISTINCT e.question_order 
+                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                        ON (e.question_id	= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'";
+            $result = Database::query($sql);
+            
+            $count_question_orders = Database::num_rows($result);            
+            
+			$sql = "SELECT e.question_id, e.question_order 
+                    FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
+                        ON (e.question_id	= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
+					ORDER BY question_order";
+            $result = Database::query($sql);
 
-			$sql = "SELECT question_id, question_order FROM $TBL_EXERCICE_QUESTION eq , $TBL_QUESTIONS q 
-					WHERE 	eq.question_id = q.id AND 
-							exercice_id='".$this->id."' AND
-							eq.c_id = {$this->course_id} AND
-							q.c_id = {$this->course_id}
-					ORDER BY question_order";			
-			$result = Database::query($sql);
-			$question_list = array();
+			// fills the array with the question ID for this exercise
+			// the key of the array is the question position
+            $temp_question_list = array();
+            $counter = 1;
+            $question_list = array();
+            
 			while ($new_object = Database::fetch_object($result)) {
 				$question_list[$new_object->question_order]=  $new_object->question_id;
+                $temp_question_list[$counter] = $new_object->question_id;
+                $counter++;
 			}
+            
+            if (!empty($temp_question_list)) {
+                if (count($temp_question_list) != $count_question_orders) {
+                    $question_list = $temp_question_list;       
+                }
+            }
 			return $question_list;
 		}
 		return $this->questionList;

@@ -39,25 +39,37 @@ function WSHelperVerifyKey($params) {
     // if we are behind a reverse proxy, assume it will send the
     // HTTP_X_FORWARDED_FOR header and use this IP instead
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      list($ip1, $ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
-      $ip = trim($ip1);
+        list($ip1, $ip2) = split(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+        $ip = trim($ip1);
     }
+    if ($debug)
+        error_log("ip: $ip");
     // Check if a file that limits access from webservices exists and contains
     // the restraining check
     if (is_file('webservice-auth-ip.conf.php')) {
-      include 'webservice-auth-ip.conf.php';
-      if (!empty($ws_auth_ip)) {
-          $check_ip = true;
-          $ip_matches = api_check_ip_in_range($ip,$ws_auth_ip);
-      }
+        include 'webservice-auth-ip.conf.php';
+        if ($debug)
+            error_log("webservice-auth-ip.conf.php file included");
+        if (!empty($ws_auth_ip)) {
+            $check_ip = true;
+            $ip_matches = api_check_ip_in_range($ip, $ws_auth_ip);
+            if ($debug)
+                error_log("ip_matches: $ip_matches");
+        }
     }
+
+    if ($debug)
+        error_log("checkip ".intval($check_ip));
+
     if ($check_ip) {
-        $security_key = $_configuration['security_key'];
-    } else {
         $security_key = $ip.$_configuration['security_key'];
+    } else {
+        $security_key = $_configuration['security_key'];
     }
+
     $result = api_is_valid_secret_key($secret_key, $security_key);
-    if ($debug) error_log('WSHelperVerifyKey result '.intval($result));
+    if ($debug)
+        error_log('WSHelperVerifyKey result: '.intval($result));
     return $result;
 }
 

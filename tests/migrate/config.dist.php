@@ -66,12 +66,14 @@ $servers = array(
     array(  'name'          => 'Old ms',
             'filename'      => 'db_matches.php',   
             'connection'    => $config,
-            'active'        => false
+            'active'        => false,
+            'action'        => 'm', //m for migrate, s for synchronize
     ),
     array(  'name' => 'with e class stuff',
             'filename'      => 'db_matches_2.php',   
             'connection'    => $config2,
-            'active'        => true
+            'active'        => true,
+            'action'        => 'm', //m for migrate, s for synchronize
     ),    
 );
 

@@ -46,7 +46,7 @@ if (!empty($servers)) {
             }
             require_once $file;
             $class = 'Migration' . strtoupper($db_type);
-            $m = new $class($config_info['host'], $config_info['port'], $config_info['db_user'], $config_info['db_pass'], $config_info['db_name']);
+            $m = new $class($config_info['host'], $config_info['port'], $config_info['db_user'], $config_info['db_pass'], $config_info['db_name'], $boost);
             $m->connect();
             if ($server_info['m']) {
                 /**

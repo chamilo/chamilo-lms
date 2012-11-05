@@ -56,6 +56,13 @@ class Migration {
      * destination database field names) until ready to insert into Chamilo.
      */
     public $data_list = array('users' => array(), 'courses' => array(), 'sessions' => array());
+    /**
+     * Whether to use the memory instead of the database (if the memory allows)
+     * This option has to be configured manually, and the default is to use 
+     * the database, which is slower but much safer in terms of stability of
+     * the script (or let's say much more linear in terms of execution time)
+     */
+    private $boost = array('users' => false, 'courses' => false, 'sessions' => false);
 
     /**
      * The constructor assigns all database connection details to the migration
@@ -65,9 +72,10 @@ class Migration {
      * @param string The original database's user
      * @param string The original database's password
      * @param string The original database's name
+     * @param array  Array of parameters to define the memory-boost behaviour
      * @return boolean False on error. Void on success.
      */
-    public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname) {
+    public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $boost=false) {
         if (empty($dbhost) || empty($dbport) || empty($dbuser) || empty($dbpass) || empty($dbname)) {
             $this->errors_stack[] = 'All origin database params must be given. Received ' . print_r(func_get_args(), 1);
             return false;
@@ -78,6 +86,10 @@ class Migration {
         $this->odbuser = $dbuser;
         $this->odbpass = $dbpass;
         $this->odbname = $dbname;
+        // Set the boost level if set in config.php
+        if (!empty($boost) && is_array($boost)) {
+            $this->boost = $boost;
+        }
     }
 
     /**

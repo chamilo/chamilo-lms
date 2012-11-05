@@ -42,6 +42,13 @@ $db_pass = 'password';
 $db_name = 'master';
 //second DB 
 $db_name2 = 'master2';
+/**
+ * Boost the migration by putting the relations tables in memory (as well as
+ * in the database). This might use huge amounts of memory when managing 
+ * users bases of several hundred thousands, so the default is to disable it
+ */
+$boost = array('users'=>false, 'courses'=>false, 'sessions'=>false);
+
 
 
 $config = array(    

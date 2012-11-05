@@ -62,9 +62,9 @@ function WSHelperVerifyKey($params) {
         error_log("checkip ".intval($check_ip));
 
     if ($check_ip) {
-        $security_key = $ip.$_configuration['security_key'];
-    } else {
         $security_key = $_configuration['security_key'];
+    } else {
+        $security_key = $ip.$_configuration['security_key'];
     }
 
     $result = api_is_valid_secret_key($secret_key, $security_key);

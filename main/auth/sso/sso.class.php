@@ -50,7 +50,13 @@ class sso {
      * Sends the user to the master URL for a check of active connection
      */
     public function ask_master() {
-        header('Location: '.$this->master_url.'&sso_referer='.urlencode($this->referer).'&sso_target='.urlencode($this->target));
+        $params = 'sso_referer='.urlencode($this->referer).'&sso_target='.urlencode($this->target);
+        if (strpos($this->master_url, "?") === false) {
+            $params = "?$params";
+        } else {
+            $params = "&$params";
+        }
+        header('Location: '.$this->master_url.$params);
         exit;
     }
     /**

@@ -400,11 +400,11 @@ class Dropbox_Person
         
 		// Find all entries where this person is the recipient
 		$sql = "SELECT DISTINCT r.file_id, r.cat_id 
-                    FROM $post_tbl r INNER JOIN $person_tbl p 
-                    ON (r.dest_user_id = p.user_id AND r.c_id = $course_id AND p.c_id = $course_id )
+                FROM $post_tbl r INNER JOIN $person_tbl p 
+                    ON (r.dest_user_id = p.user_id AND r.file_id= p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
                 WHERE
-                    r.dest_user_id = ".intval($this->userId)." AND 
-                    r.file_id      = p.file_id $condition_session ";
+                    r.dest_user_id = ".intval($this->userId)." AND
+                    $condition_session ";
         
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {

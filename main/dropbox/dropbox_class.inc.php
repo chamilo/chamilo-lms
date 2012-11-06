@@ -403,7 +403,7 @@ class Dropbox_Person
                 FROM $post_tbl r INNER JOIN $person_tbl p 
                     ON (r.dest_user_id = p.user_id AND r.file_id= p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
                 WHERE
-                    r.dest_user_id = ".intval($this->userId)." AND
+                    r.dest_user_id = ".intval($this->userId)."
                     $condition_session ";
         
         $result = Database::query($sql);

@@ -837,6 +837,7 @@ if (!empty($error)) {
 
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
                     $.ajax({
+                        type:"post",
                         url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                         data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                         success: function(return_value) {
@@ -900,6 +901,7 @@ if (!empty($error)) {
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");
 
                 $.ajax({
+                    type:"post",
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                     success: function(return_value) {

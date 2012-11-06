@@ -374,9 +374,9 @@ class Dropbox_Person
 	/**
 	 * Constructor for recreating the Dropbox_Person object
 	 *
-	 * @param unknown_type $userId
-	 * @param unknown_type $isCourseAdmin
-	 * @param unknown_type $isCourseTutor
+	 * @param int $userId
+	 * @param bool $isCourseAdmin
+	 * @param bool $isCourseTutor
 	 * @return Dropbox_Person
 	 */
 	function Dropbox_Person($userId, $isCourseAdmin, $isCourseTutor) {
@@ -397,28 +397,28 @@ class Dropbox_Person
 		$post_tbl = Database::get_course_table(TABLE_DROPBOX_POST);
 		$person_tbl = Database::get_course_table(TABLE_DROPBOX_PERSON);
 		$file_tbl = Database::get_course_table(TABLE_DROPBOX_FILE);
-        
-		// Find all entries where this person is the recipient
+               
+        // Find all entries where this person is the recipient
 		$sql = "SELECT DISTINCT r.file_id, r.cat_id 
                 FROM $post_tbl r INNER JOIN $person_tbl p 
-                    ON (r.dest_user_id = p.user_id AND r.file_id= p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
+                    ON (r.file_id = p.file_id AND r.c_id = $course_id AND p.c_id = $course_id )
                 WHERE
-                    r.dest_user_id = ".intval($this->userId)."
-                    $condition_session ";
+                     p.user_id = ".intval($this->userId)." AND
+                     r.dest_user_id = ".intval($this->userId)." $condition_session ";
         
         $result = Database::query($sql);
 		while ($res = Database::fetch_array($result)) {
 			$temp = new Dropbox_Work($res['file_id']);
 			$temp->category = $res['cat_id'];
 			$this->receivedWork[] = $temp;
-		}
-
+		}        
 		// Find all entries where this person is the sender/uploader
-		$sql = "SELECT f.id
+        $sql = "SELECT DISTINCT f.id
 				FROM $file_tbl f INNER JOIN $person_tbl p
-				ON (f.uploader_id = p.user_id AND f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
+				ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
                 WHERE 
-                    f.uploader_id 	= '".Database::escape_string($this->userId)."'                     
+                    f.uploader_id 	= '".Database::escape_string($this->userId)."' AND 
+                    p.user_id       = '".Database::escape_string($this->userId)."'            
                     $condition_session
                 ";
         $result = Database::query($sql);

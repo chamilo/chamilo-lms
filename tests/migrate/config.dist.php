@@ -18,7 +18,7 @@ $db_type = 'mssql';
  * database is located. This name should be routeable by PHP.
  * Defaults to: localhost
  */
-$db_host = 'localhost';
+//$db_host = 'localhost';
 /*
  * The database port is the port on which to connect on the origin
  * database host. The default port for MS-SQL is 1433, which we
@@ -29,26 +29,19 @@ $db_port = '1433';
  * The database user is the name under which to connect to the 
  * origin database server. Defaults to: lms
  */
-$db_user = 'lms';
+$db_user = 'user_of_db';
 /*
  * The database password is the password for the user on the origin
  * database server. Defaults to: password
  */
-$db_pass = 'password';
+$db_pass = '**********';
 /*
  * The database name on the database origin server.
  * Defaults to: master
  */
-$db_name = 'master';
+$db_name = 'master1';
 //second DB 
-$db_name2 = 'master2';
-/**
- * Boost the migration by putting the relations tables in memory (as well as
- * in the database). This might use huge amounts of memory when managing 
- * users bases of several hundred thousands, so the default is to disable it
- */
-$boost = array('users'=>false, 'courses'=>false, 'sessions'=>false);
-
+$db_name2 = 'master';
 
 
 $config = array(    
@@ -59,7 +52,6 @@ $config = array(
     'db_pass' => $db_pass,
     'db_name' => $db_name,    
 );
-
 $config2 = array(    
     'type' => $db_type,
     'host' => $db_host,
@@ -73,14 +65,12 @@ $servers = array(
     array(  'name'          => 'Old ms',
             'filename'      => 'db_matches.php',   
             'connection'    => $config,
-            'active'        => false,
-            'action'        => 'm', //m for migrate, s for synchronize
+            'active'        => false
     ),
     array(  'name' => 'with e class stuff',
             'filename'      => 'db_matches_2.php',   
             'connection'    => $config2,
-            'active'        => true,
-            'action'        => 'm', //m for migrate, s for synchronize
+            'active'        => true
     ),    
 );
 

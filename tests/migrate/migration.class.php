@@ -55,15 +55,14 @@ class Migration {
      * data. Store values here (preferably using the same indexes as the
      * destination database field names) until ready to insert into Chamilo.
      */
-    public $data_list = array('users' => array(), 'courses' => array(), 'sessions' => array());
-    /**
-     * Whether to use the memory instead of the database (if the memory allows)
-     * This option has to be configured manually, and the default is to use 
-     * the database, which is slower but much safer in terms of stability of
-     * the script (or let's say much more linear in terms of execution time)
-     */
-    private $boost = array('users' => false, 'courses' => false, 'sessions' => false);
-
+    public $data_list = array(
+      'boost_users' => false,
+      'users' => array(), 
+      'boost_courses' => false,
+      'courses' => array(),
+      'boost_sessions' => false,
+      'sessions' => array(),
+    );
     /**
      * The constructor assigns all database connection details to the migration
      * object
@@ -72,7 +71,6 @@ class Migration {
      * @param string The original database's user
      * @param string The original database's password
      * @param string The original database's name
-     * @param array  Array of parameters to define the memory-boost behaviour
      * @return boolean False on error. Void on success.
      */
     public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $boost=false) {
@@ -88,7 +86,11 @@ class Migration {
         $this->odbname = $dbname;
         // Set the boost level if set in config.php
         if (!empty($boost) && is_array($boost)) {
-            $this->boost = $boost;
+            foreach ($boost as $item => $val) {
+                if ($val == true) {
+                    $this->data_list[$item] = true;
+                }
+            }
         }
     }
 
@@ -105,11 +107,12 @@ class Migration {
      * @param array Structured array of matches (see migrate.php)
      */
     public function migrate($matches) {
-        error_log("\n" . '------------ Migration->migrate function called ------------' . "\n");
+        error_log("\n" . '------------ ['.date('H:i:s').'] Migration->migrate function called ------------' . "\n");
         $extra_fields = array();
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $table) {
-            error_log('Found table ' . $table['orig_table'] . ' in db_matches');
+            echo "Starting table ".$table['orig_table']." at ".date('h:i:s')."\n";
+            error_log('['.date('H:i:s').'] Found table ' . $table['orig_table'] . ' in db_matches');
             $build_only = false;
 
             if (empty($table['dest_table'])) {
@@ -779,6 +782,7 @@ class Migration {
             if ($details['func'] == 'none' || empty($details['func'])) {
                 $dest_data = $row[$details['orig']];
             } else {
+                //error_log(__FILE__.' '.__LINE__.' Preparing to treat field with '.$details['func']);
                 $dest_data = MigrationCustom::$details['func']($row[$details['orig']], $this->data_list, $row);
             }
 
@@ -798,8 +802,10 @@ class Migration {
                     $field_type = $extra_field['field_type'];
 
                     if (!empty($options)) {
+                        if (!is_array($options)) { $options = array($options); }
                         foreach ($options as $option) {
-                            foreach ($option as $key => $value) {
+                            if (is_array($option)) {
+                              foreach ($option as $key => $value) {
                                 //error_log("$key $value --> {$dest_row[$details['dest']]} ");
                                 if ($key == 'option_value' && $value == $dest_row[$details['dest']]) {
                                     $value = $option['option_display_text'];
@@ -813,6 +819,7 @@ class Migration {
                                     break(2);
                                 }
                             }
+                          }
                         }
                     }
                 } else {
@@ -866,6 +873,7 @@ class Migration {
                         }
                     } else {
                         global $api_failureList;
+                        error_log('Empty user details');
                         error_log(print_r($api_failureList, 1));
                     }
                     break;

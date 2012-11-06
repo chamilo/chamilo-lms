@@ -64,11 +64,16 @@ class MigrationCustom {
         return utf8_encode($value);        
     }
     
-    static function clean_session_name($value, &$omigrate, $row_data) {
+    static function clean_session_name($value, $omigrate, $row_data) {
         return self::clean_utf8($row_data['session_name']);        
     }
     
-    static function get_real_course_code($data) {        
+    static function get_real_course_code($data, $omigrate=null) {
+        if (is_object($omigrate) && $omigrate->boost_courses) {
+            if (isset($omigrate->courses[$data])) {
+                return $omigrate->courses[$data];
+            }
+        }
         $extra_field = new ExtraFieldValue('course');
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);        
         if ($values) {
@@ -78,7 +83,12 @@ class MigrationCustom {
         }
     }
     
-    static function get_session_id_by_programa_id($uidIdProgram) {        
+    static function get_session_id_by_programa_id($uidIdProgram, $omigrate=null) { 
+        if (is_object($omigrate) && $omigrate->boost_sessions) {
+            if (isset($omigrate->sessions[$uidIdPrograma])) {
+                return $omigrate->sessions[$uidIdPrograma];
+            }
+        }
         $extra_field = new ExtraFieldValue('session');
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $uidIdProgram);        
         if ($values) {
@@ -89,7 +99,12 @@ class MigrationCustom {
     }
     
     /* Not used */
-    static function get_user_id_by_persona_id($uidIdPersona) {
+    static function get_user_id_by_persona_id($uidIdPersona, $omigrate=null) {
+        if (is_object($omigrate) && $omigrate->boost_users) {
+            if (isset($omigrate->users[$uidIdPersona])) {
+                return $omigrate->users[$uidIdPersona];
+            }
+        }
         //error_log('get_user_id_by_persona_id');
         $extra_field = new ExtraFieldValue('user');
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPersona', $uidIdPersona);        
@@ -100,11 +115,16 @@ class MigrationCustom {
         }
     }
     
-    static function get_real_teacher_id($uidIdPersona) {
+    static function get_real_teacher_id($uidIdPersona, $omigrate=null) {
         $default_teacher_id = self::default_admin_id;       
         if (empty($uidIdPersona)) {
             //error_log('No teacher provided');
             return $default_teacher_id;
+        }
+        if (is_object($omigrate) && $omigrate->boost_users) {
+            if (isset($omigrate->users[$uidIdPersona])) {
+                return $omigrate->users[$uidIdPersona];
+            }
         }
         
         $extra_field = new ExtraFieldValue('user');
@@ -244,7 +264,12 @@ class MigrationCustom {
         //error_log(print_r($data, 1));
         $user_info = UserManager::add($data);
         if (!$user_info) {
-            echo 'error';
+            error_log('User '.$id_persona.' could not be inserted (maybe duplicate?)');
+        } else {
+            //error_log('User '.$id_persona.' was created as user '.$user_info['user_id']);
+        }
+        if (is_object($omigrate) && isset($omigrate) && $omigrate->boost_users) {
+            $omigrate->users[$id_persona] = $user_info['user_id'];
         }
         UserManager::update_extra_field_value($user_info['user_id'], 'uidIdPersona', $id_persona);
         return $user_info;
@@ -253,7 +278,7 @@ class MigrationCustom {
     /**
      * Manages the course creation based on the rules in db_matches.php
      */
-    static function create_course($data) {
+    static function create_course($data, $omigrate) {
         //error_log('In create_course, received '.print_r($data,1));
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
@@ -272,6 +297,9 @@ class MigrationCustom {
             'max'       => '20'
         );*/
         $course_data = CourseManager::create_course($data);        
+        if (is_object($omigrate) && isset($omigrate) && $omigrate->boost_courses) {
+            $omigrate->courses[$data['uidIdCurso']] = $course_data['code'];
+        }
         return $course_data;
     }
     
@@ -279,7 +307,7 @@ class MigrationCustom {
      * Manages the session creation, based on data provided by the rules
      * in db_matches.php
      */
-    static function create_session($data) {
+    static function create_session($data, $omigrate) {
         //Hack to add the default gradebook course to the session course
         $data['create_gradebook_evaluation'] = true;        
         /*$data['gradebook_params'] = array(
@@ -298,7 +326,10 @@ class MigrationCustom {
             //print_r($data);
             //exit;
         } else{
-            //error_log('session_id created');            
+            //error_log('session_id created');      
+            if (is_object($omigrate) && isset($omigrate) && $omigrate->boost_sessions) {
+                $omigrate->sessions[$data['uidIdPrograma']] = $session_id;
+            }
         }
         return $session_id;
     }

@@ -217,7 +217,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         $cas_activated = false;
     }
 
-    $cas_login=false;
+    $cas_login = false;
     if ($cas_activated  AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) {
         require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
         $cas_login = cas_is_authenticated();
@@ -403,15 +403,14 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
             }
         } //end else login failed
-    } elseif (api_get_setting('sso_authentication')==='true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+    } elseif (api_get_setting('sso_authentication') === 'true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
         /**
          * TODO:
          * - Work on a better validation for webservices paths. Current is very poor and exit
          */
-        $subsso = api_get_setting('sso_authentication_subclass');
-        //require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.class.php'); moved to autologin
+        $subsso = api_get_setting('sso_authentication_subclass');        
         if (!empty($subsso)) {
-            require_once(api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php');
+            require_once api_get_path(SYS_CODE_PATH).'auth/sso/sso.'.$subsso.'.class.php';
             $subsso = 'sso'.$subsso;
             $osso = new $subsso(); //load the subclass
         } else {
@@ -425,10 +424,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             }
         } elseif(!$logout) {
             // Handle cookie comming from Master Server
-            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
+            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {
+                
                 // Here we are going to check the origin of
                 // what the call says should be used for
                 // authentication, and ensure  we know it
@@ -452,11 +452,10 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         error_log('Your sso_authentication_master param is empty. Check the platform configuration, security section. It can be a list of comma-separated domains');
                     }
                 }
-                if ($matches_domain) { 
-                                        //make all the process of checking
-                                        //if the user exists (delegated to the sso class)
-                                        $osso->check_user();
-
+                if ($matches_domain) {
+                    //make all the process of checking
+                    //if the user exists (delegated to the sso class)
+                    $osso->check_user();
                 } else {
                     error_log('Check the sso_referer URL in your script, it doesn\'t match any of the possibilities');
                     //Request comes from unknown source

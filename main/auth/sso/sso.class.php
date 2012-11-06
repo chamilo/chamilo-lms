@@ -39,6 +39,7 @@ class sso {
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
     }
+    
     /**
      * Unlogs the user from the remote server 
      */
@@ -46,6 +47,7 @@ class sso {
         header('Location: '.$this->deauth_url);
         exit;
     }
+    
     /**
      * Sends the user to the master URL for a check of active connection
      */
@@ -59,12 +61,13 @@ class sso {
         header('Location: '.$this->master_url.$params);
         exit;
     }
+    
     /**
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
      */
     public function check_user() {
-        global $_user, $_configuration;
+        global $_user;
         $loginFailed = false;
         //change the way we recover the cookie depending on how it is formed
         $sso = $this->decode_cookie($_GET['sso_cookie']);
@@ -127,8 +130,8 @@ class sso {
                                     if (is_array($my_url_list) && count($my_url_list)>0 ) {
                                         if (in_array($current_access_url_id, $my_url_list)) {
                                             // the user has permission to enter at this site
-                                            $_user['user_id'] = $uData['user_id'];
-                                            Session::write('_user',$_user);
+                                            $_user = api_get_user_info($_user['user_id']);
+                                            Session::write('_user', $_user);
                                             event_login();
                                             // Redirect to homepage
                                             $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
@@ -154,15 +157,15 @@ class sso {
                                     // portal can login wherever they want
                                     if (in_array(1, $my_url_list)) { 
                                         //Check if this admin is admin on the  
-                                        // principal portal
-                                        $_user['user_id'] = $uData['user_id'];
-                                        Session::write('_user',$_user);
+                                        // principal portal                                        
+                                        $_user = api_get_user_info($_user['user_id']);                                                  
+                                        Session::write('_user', $_user);
                                         event_login();
                                     } else {
                                         //Secondary URL admin wants to login 
                                         // so we check as a normal user
                                         if (in_array($current_access_url_id, $my_url_list)) {
-                                            $_user['user_id'] = $uData['user_id'];
+                                            $_user = api_get_user_info($_user['user_id']);
                                             Session::write('_user',$_user);
                                             event_login();
                                         } else {
@@ -175,18 +178,9 @@ class sso {
                                 }
                             } else {
                                 //Single URL access (Only 1 portal)
-                                $_user['user_id'] = $uData['user_id'];
-                                Session::write('_user',$_user);
-                                event_login();
-                                // Redirect to homepage
-                                /* Login was successfull, stay on Chamilo 
-                                $protocol = api_get_setting('sso_authentication_protocol');
-                                $master_url = api_get_setting('sso_authentication_domain');
-                                $target = $protocol.$master_url;
-                                $sso_target = isset($target) ? $target : api_get_path(WEB_PATH) .'.index.php';
-                                header('Location: '. $sso_target);
-                                exit;
-                                */
+                                $_user = api_get_user_info($_user['user_id']);
+                                Session::write('_user', $_user);
+                                event_login();                  
                             }
                         } else {
                             // user account expired
@@ -225,6 +219,7 @@ class sso {
         }
         return $loginFailed;
     }
+    
     /**
      * Decode the cookie (this function may vary depending on the
      * Single Sign On implementation

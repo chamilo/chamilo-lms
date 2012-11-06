@@ -8,6 +8,7 @@ $tables = array(
   'session_rel_course_rel_user',
   'gradebook_category',
 );
+echo "\n--- Post-migration count report ---\n";
 foreach ($tables as $table) {
   $sql = "SELECT count(*) FROM $table";
   $res = Database::query($sql);
@@ -19,3 +20,4 @@ foreach ($tables as $table) {
     echo "Table $table has $count items after migration\n";
   }
 }
+echo "\n";

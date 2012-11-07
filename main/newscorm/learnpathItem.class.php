@@ -33,7 +33,7 @@ class learnpathItem {
 	public $launch_data = '';
 	public $lesson_location = '';
 	public $level = 0;
-        public $core_exit = '';
+    public $core_exit = '';
 	//var $location; // Only set this for SCORM?
 	public $lp_id;
 	public $max_score;
@@ -90,8 +90,7 @@ class learnpathItem {
             //error_log('New LP - Creating item object from DB: '.$sql, 0);
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
-                $this->error = 'Could not find given learnpath item in learnpath_item table';
-                //error_log('New LP - '.$this->error, 0);
+                $this->error = 'Could not find given learnpath item in learnpath_item table';                
                 return false;
             }
             $row = Database::fetch_array($res);
@@ -227,17 +226,18 @@ class learnpathItem {
         $course_id = api_get_course_int_id();
 
 		$sql_del_view = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = ".$this->db_id;
-		//error_log('New LP - Deleting from lp_item_view: '.$sql_del_view, 0);
-		$res_del_view = Database::query($sql_del_view);
+		if (self::debug > 0) { error_log('Deleting from lp_item_view: '.$sql_del_view, 0); }
+		Database::query($sql_del_view);
 
 		$sql_sel = "SELECT * FROM $lp_item WHERE c_id = $course_id AND id = ".$this->db_id;
 		$res_sel = Database::query($sql_sel);
-		if (Database::num_rows($res_sel) < 1) { return false; }
-		$row = Database::fetch_array($res_sel);
-
-		$sql_del_item = "DELETE FROM $lp_item WHERE c_id = $course_id AND id = ".$this->db_id;
-		//error_log('New LP - Deleting from lp_item: '.$sql_del_view, 0);
-		$res_del_item = Database::query($sql_del_item);
+		if (Database::num_rows($res_sel) < 1) { 
+            return false; 
+        }
+		
+		$sql_del_item = "DELETE FROM $lp_item WHERE c_id = $course_id AND id = ".$this->db_id;        		
+		Database::query($sql_del_item);
+        if (self::debug > 0) { error_log('Deleting from lp_item: '.$sql_del_view); }
 
 		if (api_get_setting('search_enabled') == 'true') {
 			if (!is_null($this->search_did)) {
@@ -246,7 +246,6 @@ class learnpathItem {
 				$di->remove_document($this->search_did);
 			}
 		}
-
 		return true;
 	}
 
@@ -1702,14 +1701,13 @@ class learnpathItem {
 	 * @return	boolean	True on success, false on failure
 	 */
 	public function save($from_outside = true, $prereqs_complete = false) {
-		if (self::debug > 0) { error_log('learnpathItem::save()', 0); }		
-	 	$item_id = $this->get_id();
+		if (self::debug > 0) { error_log('learnpathItem::save()', 0); }			 	
 	 	// First check if parameters passed via GET can be saved here
 	 	// in case it's a SCORM, we should get:
 		if ($this->type == 'sco' || $this->type== 'au') {
-			$s = $this->get_status(true);
+			$status = $this->get_status(true);
 			if ($this->prevent_reinit == 1 AND
-				$s != $this->possible_status[0] AND $s != $this->possible_status[1]) {
+				$status != $this->possible_status[0] AND $status != $this->possible_status[1]) {
 				if (self::debug > 1) { error_log('learnpathItem::save() - save reinit blocked by setting', 0); }
 				// Do nothing because the status has already been set. Don't allow it to change.
 				// TODO: Check there isn't a special circumstance where this should be saved.
@@ -1734,9 +1732,9 @@ class learnpathItem {
 			 					if (self::debug > 2) { error_log('learnpathItem::save() - setting min_score to '.$value, 0); }
 			 					break;
 			 				case 'lesson_status':
-			 					if(!empty($value)){
+			 					if (!empty($value)) {
 				 					$this->set_status($value);
-				 						if (self::debug > 2) { error_log('learnpathItem::save() - setting status to '.$value, 0); }
+                                    if (self::debug > 2) { error_log('learnpathItem::save() - setting status to '.$value, 0); }
 			 					}
 			 					break;
 			 				case 'time':

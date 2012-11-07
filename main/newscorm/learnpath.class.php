@@ -97,8 +97,7 @@ class learnpath {
      * @return	boolean		True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id) {
-        $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
-        // Check params.
+        $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.        
         // Check course code.
         $course_id = api_get_course_int_id();
 
@@ -153,7 +152,6 @@ class learnpath {
                 $this->hide_toc_frame   = $row['hide_toc_frame'];
                 $this->lp_session_id    = $row['session_id'];
                 $this->use_max_score    = $row['use_max_score'];
-
                 $this->created_on       = $row['created_on'];
                 $this->modified_on      = $row['modified_on'];                
                 $this->ref              = $row['ref'];
@@ -200,10 +198,9 @@ class learnpath {
         
         // Selecting by view_count descending allows to get the highest view_count first.
         $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session ORDER BY view_count DESC";
-        
-        if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
         $res = Database::query($sql);
-        $view_id = 0; // Used later to query lp_item_view.
+        if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
+        
         if (Database :: num_rows($res) > 0) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
@@ -342,6 +339,7 @@ class learnpath {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
             }
+            
             $status_list = array();            
             $res = Database::query($sql);
             while ($row = Database :: fetch_array($res) ) {
@@ -349,11 +347,11 @@ class learnpath {
             }
                 
             foreach ($lp_item_id_list as $item_id) {
-                if (isset($status_list[$item_id])) {                    
+                if (isset($status_list[$item_id])) {                 
                     $status = $status_list[$item_id];
                     if (is_object($this->items[$item_id])) {
                         $this->items[$item_id]->set_status($status);
-                        if (empty ($status)) {
+                        if (empty($status)) {
                             $this->items[$item_id]->set_status($this->default_status);
                         }
                     }
@@ -363,14 +361,14 @@ class learnpath {
                     }
                     // Add that row to the lp_item_view table so that we have something to show in the stats page.
                     $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ",1,'not attempted')";
+                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
                     if ($this->debug > 2) {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
                     }
                     $res_ins = Database::query($sql_ins);
                 }
-            }            
-        }            
+            }
+        }
         
         $this->ordered_items = self::get_flat_ordered_items_list($this->get_id(), 0, $course_id);
         $this->max_ordered_items = 0;
@@ -384,8 +382,6 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
-      
-        
     }
 
     /**

@@ -1003,8 +1003,10 @@ class CourseManager {
             $condition_course = ' AND course_code = "'.$course_code.'" ';
         }
 
-        $result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course "));
+        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course ";
+        
+        $result = Database::fetch_array(Database::query($sql));
 
         if (!empty($result)) {
             return true; // The user has been registered in this course.

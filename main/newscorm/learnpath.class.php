@@ -61,23 +61,17 @@ class learnpath {
     public $user_id; //ID of the user that is viewing/using the course
     public $update_queue = array();
     public $scorm_debug = 0;
-
     public $arrMenu = array(); // Array for the menu items.
-
     public $debug = 0; // Logging level.
-
     public $lp_session_id = 0;
     public $lp_view_session_id = 0; // The specific view might be bound to a session.
-
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
-
     public $created_on      = '';
     public $modified_on     = '';
     public $publicated_on   = '';
     public $expired_on      = '';
-    public $ref = null;
-    
+    public $ref = null;    
     public $course_int_id;
     
     public function get_course_int_id() {
@@ -1354,8 +1348,7 @@ class learnpath {
      * @param	string	Zip file name
      * @return	string	Zip file path (or false on error)
      */
-    public function export_lp($type, $course, $id, $zipname) {
-        $course_id = api_get_course_int_id();
+    public function export_lp($type, $course, $id, $zipname) {        
         //if ($this->debug > 0) { error_log('New LP - In learnpath::export_lp()', 0); }
         if (empty($type) || empty($course) || empty($id) || empty($zipname)) {
             return false;
@@ -3594,7 +3587,7 @@ class learnpath {
         }
         if (is_object($this->items[$item])) {
             $prereq_string = $this->items[$item]->get_prereq_string();
-            if (empty ($prereq_string)) {
+            if (empty($prereq_string)) {
                 return true;
             }
             // Clean spaces.
@@ -5037,7 +5030,6 @@ class learnpath {
                 'audio' => $row['audio']
             );
         }
-
 
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;

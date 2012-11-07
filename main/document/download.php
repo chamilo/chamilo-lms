@@ -65,22 +65,28 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
 	}	
 }
 
+        
+//Fixes swf upload problem in chamilo 1.8.x. When uploading a file with 
+//the character "-" the filename was changed from "-" to "_" in the DB for no reason
+$path_info = pathinfo($doc_url);
+$fix_file_name = false;
+if (isset($path_info['extension']) == 'swf') {
+    $original_doc_url =  $doc_url;
+    $doc_url = str_replace('_', '-', $doc_url);
+    $fix_file_name = true;
+}
+
 if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     $full_file_name = $sys_course_path.$doc_url;
-    // Check visibility of document and paths    doc_url
-    //var_dump($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
-    $is_visible = false;
-    //$course_info   = api_get_course_info(api_get_course_id());
-    //$document_id = DocumentManager::get_document_id($course_info, $doc_url);
 
-    //HotPotatoes_files
-    //if ($document_id) {
-    	// Correct choice for strict security (only show if whole tree visible)
-        //$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
-        // Correct choice for usability
-    	$is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
-    //}
-	
+    // Check visibility of document and paths
+    
+    if ($fix_file_name) {
+        $doc_url = $original_doc_url;
+    }
+    
+    $is_visible = DocumentManager::is_visible($doc_url, $_course, api_get_session_id());
+    
 	//Documents' slideshow thumbnails
 	//correct $is_visible used in below and ??. Now the students can view the thumbnails too
 	if ( preg_match('/\.thumbs\/\./',  $doc_url)){ 

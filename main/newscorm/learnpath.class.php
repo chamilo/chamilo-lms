@@ -3788,16 +3788,17 @@ class learnpath {
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
-        if (empty ($item_id)) {
+        if (empty($item_id)) {
             $item_id = Database::escape_string($_REQUEST['id']);
         }
-        if (empty ($item_id)) {
+        if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
         if ($this->debug > 2) {
             error_log('New LP - save_current() saving item ' . $item_id, 0);
         }
         if (is_object($this->items[$item_id])) {
+            if ($this->debug) { error_log('object exists'); }
             $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
             //$res = $this->items[$item_id]->save($from_outside);
             $this->autocomplete_parents($item_id);
@@ -3819,12 +3820,14 @@ class learnpath {
         }
         $session_condition = api_get_session_condition(api_get_session_id(), true, false);
         $table = Database :: get_course_table(TABLE_LP_VIEW);
-        if (isset ($this->current)) {
+        if (isset($this->current)) {
             if ($this->debug > 2) {
                 error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
             }
-            $sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). " " .
-                    "WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id().' '.$session_condition;
+            $sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). "
+                    WHERE   c_id = $course_id AND 
+                            lp_id = " . $this->get_id() . " AND 
+                            user_id = " . $this->get_user_id()." ".$session_condition;
 
             if ($this->debug > 2) {
                 error_log('New LP - Saving last item seen : ' . $sql, 0);
@@ -3836,9 +3839,10 @@ class learnpath {
         list($progress, $text) = $this->get_progress_bar_text('%');
         if ($progress >= 0 && $progress <= 100) {
             $progress = (int) $progress;
-            $sql = "UPDATE $table SET progress = $progress " .
-                    "WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND " .
-                            "user_id = " . $this->get_user_id().' '.$session_condition;
+            $sql = "UPDATE $table SET progress = $progress 
+                    WHERE   c_id = ".$course_id." AND 
+                            lp_id = " . $this->get_id() . " AND 
+                            user_id = " . $this->get_user_id()." ".$session_condition;
             $res = Database::query($sql); // Ignore errors as some tables might not have the progress field just yet.
             $this->progress_db = $progress;
         }

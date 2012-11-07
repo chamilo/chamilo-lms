@@ -1966,8 +1966,9 @@ class learnpathItem {
 	 * it, then set the status to 'passed'.
 	 * @param	float	Score
 	 * @return	boolean	True on success, false otherwise
-	 */
+	 */    
 	public function set_score($score) {
+        //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
    		if (self::debug > 0) { error_log('learnpathItem::set_score('.$score.')', 0); }
    		if (($this->max_score<=0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
    			$this->current_score = $score;
@@ -1975,9 +1976,9 @@ class learnpathItem {
    			$current_status = $this->get_status(false);
    			// If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
    			if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
-   				$this->set_status($this->possible_status[3]);
+   				$this->set_status($this->possible_status[3]); //passed
    			} elseif ($master != -1 && $this->current_score < $master) {
-   				$this->set_status($this->possible_status[4]);
+   				$this->set_status($this->possible_status[4]); //failed
    			}
   			return true;
   		}

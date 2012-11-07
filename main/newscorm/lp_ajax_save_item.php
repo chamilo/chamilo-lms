@@ -61,8 +61,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 2) { error_log('////Reusing session lp', 0); }
             $mylp = & $oLP;
         }
-    }
-    //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
+    }    
     if (!is_a($mylp, 'learnpath')) { return ''; }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
@@ -145,8 +144,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             $mylpi->set_core_exit($core_exit);
         }
         $mylp->save_item($item_id, false);
-    } else {
-        //return $objResponse;
+    } else {        
         return $return;
     }
     
@@ -171,24 +169,19 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type() != 'sco') {
-        // If this object's JS status has not been updated by the SCORM API, update now.
-        //$objResponse->addScript("lesson_status='".$mystatus."';");
+        // If this object's JS status has not been updated by the SCORM API, update now.        
         $return .= "olms.lesson_status='".$mystatus."';";
-    }
-    //$objResponse->addScript("update_toc('".$mystatus."','".$item_id."');");
+    }    
     $return .= "update_toc('".$mystatus."','".$item_id."');";
     $update_list = $mylp->get_update_queue();
     foreach ($update_list as $my_upd_id => $my_upd_status)  {
-        if ($my_upd_id != $item_id){ // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.
-            //$objResponse->addScript("update_toc('".$my_upd_status."','".$my_upd_id."');");
+        if ($my_upd_id != $item_id){ // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
-    }
-    //$objResponse->addScript("update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');");
+    }    
     $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
 
-    if ($debug > 0) {
-        //$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);");
+    if ($debug > 0) {        
         $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";
         if ($debug > 1) { error_log('End of save_item()', 0); }
     }
@@ -198,11 +191,14 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
+        $sql_last_connection = "SELECT login_id, login_date
+            FROM $tbl_track_login 
+            WHERE login_user_id='".api_get_user_id()."' 
+            ORDER BY login_date DESC LIMIT 0,1";
 
         $q_last_connection = Database::query($sql_last_connection);
         if (Database::num_rows($q_last_connection) > 0) {
-            $current_time = date('Y-m-d H:i:s');
+            $current_time = api_get_utc_datetime();
             $row = Database::fetch_array($q_last_connection);
             $i_id_last_connection = $row['login_id'];
             $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_time."' WHERE login_id='$i_id_last_connection'";
@@ -210,13 +206,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         }
     }
 
-   if ($mylp->get_type() == 2) {
-           $return .= "update_stats();";
-   }
+    if ($mylp->get_type() == 2) {
+         $return .= "update_stats();";
+    }
     //To be sure progress is updated
     $mylp->save_last();
-    return $return;
-    //return $objResponse;
+    return $return;    
 }
 $interactions = array();
 if (isset($_REQUEST['interact'])) {

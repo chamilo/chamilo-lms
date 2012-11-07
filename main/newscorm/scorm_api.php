@@ -200,7 +200,6 @@ olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
 
 olms.execute_stats = false;
 
-
 // Initialize stuff when the page is loaded
 $(document).ready( function() {
 
@@ -242,8 +241,6 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
      */
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
-
-
 
     olms.lms_initialized=0;
     // if there are more parameters than ""
@@ -1125,7 +1122,7 @@ function logit_lms(message, priority){
         }
     }    
     params = {
-    msg: "LMS: " + message,
+        msg: "LMS: " + message,
         debug: lms_logs
     };
     $.ajax({
@@ -1144,76 +1141,71 @@ function logit_lms(message, priority){
  * @param	integer	Item id to update
  */
 function update_toc(update_action, update_id, change_ids) {
-        if (!change_ids || change_ids != 'no') {
-            change_ids = 'yes';
-        }        
-        var myelem = $("#toc_"+update_id);
-        var myelemimg = $("#toc_img_"+update_id);
-        logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
+    if (!change_ids || change_ids != 'no') {
+        change_ids = 'yes';
+    }        
+    var myelem = $("#toc_"+update_id);
+    var myelemimg = $("#toc_img_"+update_id);
+    logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
 
-        if(update_id != 0)
-        {
-            switch(update_action)
-            {
-                case 'unhighlight':
-                    if (update_id%2==0)
-                    {
-                        myelem.attr('class',"scorm_item_2");
-                    }
-                    else
-                    {
-                        myelem.attr('class',"scorm_item_1");
-                    }
-                    break;
-                case 'highlight':
-                    if (change_ids=='yes') {
-                       olms.lms_next_item = update_id;
-                       olms.lms_previous_item = update_id;
-                    }
-                    myelem.attr('class',"scorm_item_highlight"); 
-                    break;
-                case 'not attempted':
-                    if( myelemimg.attr('src') != '../img/notattempted.gif') {
-                        myelemimg.attr('src','../img/notattempted.gif');
-                        myelemimg.attr('alt','n');
-                    }
-                    break;
-                case 'incomplete':
-                    if( myelemimg.attr('src') != '../img/incomplete.png') {
-                        myelemimg.attr('src','../img/incomplete.png');
-                        myelemimg.attr('alt','i');
-                    }
-                    break;
-                case 'completed':
-                    if( myelemimg.attr('src') != '../img/completed.png') {
-                        myelemimg.attr('src','../img/completed.png');
-                        myelemimg.attr('alt','c');
-                    }
-                    break;
-                case 'failed':
-                    if( myelemimg.attr('src') != '../img/delete.png') {
-                        myelemimg.attr('src','../img/delete.png');
-                        myelemimg.attr('alt','f');
-                    }
-                    break;
-                case 'passed':
-                    if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'passed') {
-                        myelemimg.attr('src','../img/completed.png');
-                        myelemimg.attr('alt','p');
-                    }
-                    break;
-                case 'browsed':
-                    if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'browsed') {
-                        myelemimg.attr('src','../img/completed.png');
-                        myelemimg.attr('alt','b');
-                    }
-                    break;
-                default:
-                    logit_lms('Update action unknown',2);
-                    break;
-            }
+    if(update_id != 0) {
+        switch(update_action) {
+            case 'unhighlight':
+                if (update_id%2==0) {
+                    myelem.attr('class',"scorm_item_2");
+                } else {
+                    myelem.attr('class',"scorm_item_1");
+                }
+                break;
+            case 'highlight':
+                if (change_ids=='yes') {
+                   olms.lms_next_item = update_id;
+                   olms.lms_previous_item = update_id;
+                }
+                myelem.attr('class',"scorm_item_highlight"); 
+                break;
+            case 'not attempted':
+                if( myelemimg.attr('src') != '../img/notattempted.gif') {
+                    myelemimg.attr('src','../img/notattempted.gif');
+                    myelemimg.attr('alt','n');
+                }
+                break;
+            case 'incomplete':
+                if( myelemimg.attr('src') != '../img/incomplete.png') {
+                    myelemimg.attr('src','../img/incomplete.png');
+                    myelemimg.attr('alt','i');
+                }
+                break;
+            case 'completed':
+                if( myelemimg.attr('src') != '../img/completed.png') {
+                    myelemimg.attr('src','../img/completed.png');
+                    myelemimg.attr('alt','c');
+                }
+                break;
+            case 'failed':
+                if( myelemimg.attr('src') != '../img/delete.png') {
+                    myelemimg.attr('src','../img/delete.png');
+                    myelemimg.attr('alt','f');
+                }
+                break;
+            case 'passed':
+                if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'passed') {
+                    myelemimg.attr('src','../img/completed.png');
+                    myelemimg.attr('alt','p');
+                }
+                break;
+            case 'browsed':
+                if( myelemimg.attr('src') != '../img/completed.png' && myelemimg.attr('alt') != 'browsed') {
+                    myelemimg.attr('src','../img/completed.png');
+                    myelemimg.attr('alt','b');
+                }
+                break;
+            default:
+                logit_lms('Update action unknown',2);
+                break;
         }
-        return true;
+    }
+    return true;
 }
 
 /**
@@ -1301,9 +1293,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
  * @return  array   Array of SCO variables
  */
 function process_scorm_values () {
-
     for (i=0;i<olms.scorm_variables.length;i++) {
-
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.variable_to_send.push(olms.scorm_variables[i]);
         }
@@ -1318,7 +1308,6 @@ function process_scorm_values () {
 function reinit_updatable_vars_list () {
 
     for (i=0;i<olms.scorm_variables.length;i++) {
-
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.updatable_vars_list[olms.scorm_variables[i]]=false;
         }

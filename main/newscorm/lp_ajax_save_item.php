@@ -61,8 +61,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 2) { error_log('////Reusing session lp', 0); }
             $mylp = & $oLP;
         }
-    }
-    //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
+    }    
     if (!is_a($mylp, 'learnpath')) { return ''; }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
@@ -71,7 +70,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     //This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $mylpi->set_lp_view($view_id);
     
-    if ($prereq_check === true) { 
+    if ($prereq_check === true) {
         // Launch the prerequisites check and set error if needed
         //$mylpi =& $mylp->items[$item_id];
         //$mylpi->set_lp_view($view_id);
@@ -82,18 +81,45 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         if (isset($min) && $min != -1 && $min != 'undefined') {
             $mylpi->min_score = $min;
         }
+        
         if (isset($score) && $score != -1) {
             if ($debug > 1) { error_log('Calling set_score('.$score.') from xajax', 0); }
             $mylpi->set_score($score);
             if ($debug > 1) { error_log('Done calling set_score from xajax - now '.$mylpi->get_score(), 0); }
         }
-        if (isset($status) && $status != '' && $status != 'undefined') {
+        
+        //Default behaviour
+        /*if (isset($status) && $status != '' && $status != 'undefined') {
             if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }
             $mylpi->set_status($status);
             if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
         }
+        */
+        
+        //Implements scorm 1.2 constraint
+        /* If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all. */
+        
+        if (isset($status) && $status != '' && $status != 'undefined') {
+            if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }            
+            switch($status) {
+                case 'failed':
+                case 'passed':
+                    if (isset($score)) {
+                        //If score is not set then it means that the SCO_MasteryScore was not evaluated
+                        $mylpi->set_status($status);
+                    }
+                    if ($debug > 1) { error_log('Score is not set and status is passed DO NOT update status'); }        
+                    break;
+                default:
+                    if ($debug > 1) { error_log('Status was set'); }
+                    $mylpi->set_status($status);
+                    break;
+            }            
+            if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
+        }
         // Hack to set status to completed for hotpotatoes if score > 80%.
         $my_type = $mylpi->get_type();
+        
         if ($my_type == 'hotpotatoes') {
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
                 if (($score/$max) > 0.8) {
@@ -109,6 +135,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
                 if ($debug > 1) { error_log('Done calling set_status from xajax for hotpotatoes - now '.$mylpi->get_status(false), 0); }
             }
         }
+        
         if (isset($time) && $time!='' && $time!='undefined') {
             // If big integer, then it's a timestamp, otherwise it's normal scorm time.
             if ($debug > 1) { error_log('Calling set_time('.$time.') from xajax', 0); }
@@ -125,12 +152,15 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         } else {
             $time = $mylpi->get_total_time();
         }
+        
         if (isset($suspend) && $suspend != '' && $suspend != 'undefined') {
             $mylpi->current_data = $suspend; //escapetxt($suspend);
         }
+        
         if (isset($location) && $location != '' && $location!='undefined') {
             $mylpi->set_lesson_location($location);
         }
+        
         // Deal with interactions provided in arrays in the following format:
         // id(0), type(1), time(2), weighting(3), correct_responses(4), student_response(5), result(6), latency(7)
         if (is_array($interactions) && count($interactions) > 0) {
@@ -145,8 +175,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             $mylpi->set_core_exit($core_exit);
         }
         $mylp->save_item($item_id, false);
-    } else {
-        //return $objResponse;
+    } else {        
         return $return;
     }
     
@@ -171,24 +200,19 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type() != 'sco') {
-        // If this object's JS status has not been updated by the SCORM API, update now.
-        //$objResponse->addScript("lesson_status='".$mystatus."';");
+        // If this object's JS status has not been updated by the SCORM API, update now.        
         $return .= "olms.lesson_status='".$mystatus."';";
-    }
-    //$objResponse->addScript("update_toc('".$mystatus."','".$item_id."');");
+    }    
     $return .= "update_toc('".$mystatus."','".$item_id."');";
     $update_list = $mylp->get_update_queue();
     foreach ($update_list as $my_upd_id => $my_upd_status)  {
-        if ($my_upd_id != $item_id){ // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.
-            //$objResponse->addScript("update_toc('".$my_upd_status."','".$my_upd_id."');");
+        if ($my_upd_id != $item_id){ // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
-    }
-    //$objResponse->addScript("update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');");
+    }    
     $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
 
-    if ($debug > 0) {
-        //$objResponse->addScript("logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);");
+    if ($debug > 0) {        
         $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";
         if ($debug > 1) { error_log('End of save_item()', 0); }
     }
@@ -198,11 +222,14 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
+        $sql_last_connection = "SELECT login_id, login_date
+            FROM $tbl_track_login 
+            WHERE login_user_id='".api_get_user_id()."' 
+            ORDER BY login_date DESC LIMIT 0,1";
 
         $q_last_connection = Database::query($sql_last_connection);
         if (Database::num_rows($q_last_connection) > 0) {
-            $current_time = date('Y-m-d H:i:s');
+            $current_time = api_get_utc_datetime();
             $row = Database::fetch_array($q_last_connection);
             $i_id_last_connection = $row['login_id'];
             $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='".$current_time."' WHERE login_id='$i_id_last_connection'";
@@ -210,13 +237,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         }
     }
 
-   if ($mylp->get_type() == 2) {
-           $return .= "update_stats();";
-   }
+    if ($mylp->get_type() == 2) {
+         $return .= "update_stats();";
+    }
     //To be sure progress is updated
     $mylp->save_last();
-    return $return;
-    //return $objResponse;
+    return $return;    
 }
 $interactions = array();
 if (isset($_REQUEST['interact'])) {

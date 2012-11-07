@@ -61,23 +61,17 @@ class learnpath {
     public $user_id; //ID of the user that is viewing/using the course
     public $update_queue = array();
     public $scorm_debug = 0;
-
     public $arrMenu = array(); // Array for the menu items.
-
     public $debug = 0; // Logging level.
-
     public $lp_session_id = 0;
     public $lp_view_session_id = 0; // The specific view might be bound to a session.
-
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
-
     public $created_on      = '';
     public $modified_on     = '';
     public $publicated_on   = '';
     public $expired_on      = '';
-    public $ref = null;
-    
+    public $ref = null;    
     public $course_int_id;
     
     public function get_course_int_id() {
@@ -97,8 +91,7 @@ class learnpath {
      * @return	boolean		True on success, false on error
      */
     public function __construct($course, $lp_id, $user_id) {
-        $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
-        // Check params.
+        $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.        
         // Check course code.
         $course_id = api_get_course_int_id();
 
@@ -153,7 +146,6 @@ class learnpath {
                 $this->hide_toc_frame   = $row['hide_toc_frame'];
                 $this->lp_session_id    = $row['session_id'];
                 $this->use_max_score    = $row['use_max_score'];
-
                 $this->created_on       = $row['created_on'];
                 $this->modified_on      = $row['modified_on'];                
                 $this->ref              = $row['ref'];
@@ -200,10 +192,9 @@ class learnpath {
         
         // Selecting by view_count descending allows to get the highest view_count first.
         $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session ORDER BY view_count DESC";
-        
-        if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
         $res = Database::query($sql);
-        $view_id = 0; // Used later to query lp_item_view.
+        if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
+        
         if (Database :: num_rows($res) > 0) {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Found previous view', 0);
@@ -342,6 +333,7 @@ class learnpath {
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() - Selecting item_views: ' . $sql, 0);
             }
+            
             $status_list = array();            
             $res = Database::query($sql);
             while ($row = Database :: fetch_array($res) ) {
@@ -349,11 +341,11 @@ class learnpath {
             }
                 
             foreach ($lp_item_id_list as $item_id) {
-                if (isset($status_list[$item_id])) {                    
+                if (isset($status_list[$item_id])) {                 
                     $status = $status_list[$item_id];
                     if (is_object($this->items[$item_id])) {
                         $this->items[$item_id]->set_status($status);
-                        if (empty ($status)) {
+                        if (empty($status)) {
                             $this->items[$item_id]->set_status($this->default_status);
                         }
                     }
@@ -363,14 +355,14 @@ class learnpath {
                     }
                     // Add that row to the lp_item_view table so that we have something to show in the stats page.
                     $sql_ins = "INSERT INTO $lp_item_view_table (c_id, lp_item_id, lp_view_id, view_count, status)
-                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ",1,'not attempted')";
+                                VALUES ($course_id, ".$item_id . "," . $this->lp_view_id . ", 1, 'not attempted')";
                     if ($this->debug > 2) {
                         error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - Inserting blank item_view : ' . $sql_ins, 0);
                     }
                     $res_ins = Database::query($sql_ins);
                 }
-            }            
-        }            
+            }
+        }
         
         $this->ordered_items = self::get_flat_ordered_items_list($this->get_id(), 0, $course_id);
         $this->max_ordered_items = 0;
@@ -384,8 +376,6 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - End of learnpath constructor for learnpath ' . $this->get_id(), 0);
         }
-      
-        
     }
 
     /**
@@ -1358,8 +1348,7 @@ class learnpath {
      * @param	string	Zip file name
      * @return	string	Zip file path (or false on error)
      */
-    public function export_lp($type, $course, $id, $zipname) {
-        $course_id = api_get_course_int_id();
+    public function export_lp($type, $course, $id, $zipname) {        
         //if ($this->debug > 0) { error_log('New LP - In learnpath::export_lp()', 0); }
         if (empty($type) || empty($course) || empty($id) || empty($zipname)) {
             return false;
@@ -3598,7 +3587,7 @@ class learnpath {
         }
         if (is_object($this->items[$item])) {
             $prereq_string = $this->items[$item]->get_prereq_string();
-            if (empty ($prereq_string)) {
+            if (empty($prereq_string)) {
                 return true;
             }
             // Clean spaces.
@@ -3788,16 +3777,17 @@ class learnpath {
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
-        if (empty ($item_id)) {
+        if (empty($item_id)) {
             $item_id = Database::escape_string($_REQUEST['id']);
         }
-        if (empty ($item_id)) {
+        if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
         if ($this->debug > 2) {
             error_log('New LP - save_current() saving item ' . $item_id, 0);
         }
         if (is_object($this->items[$item_id])) {
+            if ($this->debug) { error_log('object exists'); }
             $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
             //$res = $this->items[$item_id]->save($from_outside);
             $this->autocomplete_parents($item_id);
@@ -3819,12 +3809,14 @@ class learnpath {
         }
         $session_condition = api_get_session_condition(api_get_session_id(), true, false);
         $table = Database :: get_course_table(TABLE_LP_VIEW);
-        if (isset ($this->current)) {
+        if (isset($this->current)) {
             if ($this->debug > 2) {
                 error_log('New LP - Saving current item (' . $this->current . ') for later review', 0);
             }
-            $sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). " " .
-                    "WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND user_id = " . $this->get_user_id().' '.$session_condition;
+            $sql = "UPDATE $table SET last_item = " . Database::escape_string($this->get_current_item_id()). "
+                    WHERE   c_id = $course_id AND 
+                            lp_id = " . $this->get_id() . " AND 
+                            user_id = " . $this->get_user_id()." ".$session_condition;
 
             if ($this->debug > 2) {
                 error_log('New LP - Saving last item seen : ' . $sql, 0);
@@ -3836,9 +3828,10 @@ class learnpath {
         list($progress, $text) = $this->get_progress_bar_text('%');
         if ($progress >= 0 && $progress <= 100) {
             $progress = (int) $progress;
-            $sql = "UPDATE $table SET progress = $progress " .
-                    "WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() . " AND " .
-                            "user_id = " . $this->get_user_id().' '.$session_condition;
+            $sql = "UPDATE $table SET progress = $progress 
+                    WHERE   c_id = ".$course_id." AND 
+                            lp_id = " . $this->get_id() . " AND 
+                            user_id = " . $this->get_user_id()." ".$session_condition;
             $res = Database::query($sql); // Ignore errors as some tables might not have the progress field just yet.
             $this->progress_db = $progress;
         }
@@ -5037,7 +5030,6 @@ class learnpath {
                 'audio' => $row['audio']
             );
         }
-
 
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;

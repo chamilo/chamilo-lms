@@ -82,41 +82,31 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             $mylpi->min_score = $min;
         }
         
+        //set_score function already saves the status
         if (isset($score) && $score != -1) {
-            if ($debug > 1) { error_log('Calling set_score('.$score.') from xajax', 0); }
+            if ($debug > 1) { error_log('Calling set_score('.$score.') from xajax', 0); }            
             $mylpi->set_score($score);
             if ($debug > 1) { error_log('Done calling set_score from xajax - now '.$mylpi->get_score(), 0); }
-        }
-        
-        //Default behaviour
-        /*if (isset($status) && $status != '' && $status != 'undefined') {
-            if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }
-            $mylpi->set_status($status);
-            if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
-        }
-        */
-        
-        //Implements scorm 1.2 constraint
-        /* If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all. */
-        
-        if (isset($status) && $status != '' && $status != 'undefined') {
-            if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }            
-            switch($status) {
-                case 'failed':
-                case 'passed':
-                    if (isset($score)) {
-                        //If score is not set then it means that the SCO_MasteryScore was not evaluated
+        } else {
+            //Default behaviour
+            if (isset($status) && $status != '' && $status != 'undefined') {
+                if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }
+                //Implements scorm 1.2 constraint
+                //If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all
+                switch ($status) {
+                    case 'failed':
+                    case 'passed':
+                        if ($debug > 1) { error_log("Cant't set status to these values only if a score was set"); }        
+                        break;
+                    default:
+                        if ($debug > 1) { error_log('Status was set'); }
                         $mylpi->set_status($status);
-                    }
-                    if ($debug > 1) { error_log('Score is not set and status is passed DO NOT update status'); }        
-                    break;
-                default:
-                    if ($debug > 1) { error_log('Status was set'); }
-                    $mylpi->set_status($status);
-                    break;
-            }            
-            if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
+                        if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
+                        break;                        
+                }
+            }
         }
+        
         // Hack to set status to completed for hotpotatoes if score > 80%.
         $my_type = $mylpi->get_type();
         

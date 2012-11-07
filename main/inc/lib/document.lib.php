@@ -1181,12 +1181,10 @@ class DocumentManager {
             $file_type = 'file';
         }
 
-        $sql = "SELECT visibility FROM $docTable d, $propTable ip
-        		 WHERE 	d.c_id  = $course_id  AND
-        		 		ip.c_id = $course_id AND
-        				d.id = ip.ref AND
-        				ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
-        				filetype = '$file_type' AND locate(concat(path,'/'),'" . $doc_path . "/')=1";
+        $sql = "SELECT visibility FROM $docTable d INNER JOIN $propTable ip
+                ON (d.id = ip.ref AND d.c_id  = $course_id  AND ip.c_id = $course_id)
+        		 WHERE ip.tool = '" . TOOL_DOCUMENT . "' $condition AND
+        			   filetype = '$file_type' AND locate(concat(path,'/'),'" . $doc_path . "/')=1";
 
         $result = Database::query($sql);
         $is_visible = false;

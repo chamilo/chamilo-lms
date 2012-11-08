@@ -291,8 +291,7 @@ class Exercise {
 		$res = 0;
 		if ($this->randomByCat == 1) {
 			$res = 1;
-		}
-		else if ($this->randomByCat == 2) {
+		} else if ($this->randomByCat == 2) {
 			$res = 2;
 		}
 		return $res;
@@ -377,7 +376,7 @@ class Exercise {
 			      
             $sql = "SELECT DISTINCT e.question_order 
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id	= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id = q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'";
             $result = Database::query($sql);
             
@@ -3381,7 +3380,10 @@ class Exercise {
 			if ($objExercise->selectPropagateNeg() == 0 && $totalScore < 0) {
 				$totalScore = 0;
 			}
-			$result = array('score' => $totalScore, 'weight' =>$track_exercise_info['exe_weighting']);
+			$result = array(
+                'score' => $totalScore, 
+                'weight' => $track_exercise_info['exe_weighting']
+            );
 		}
 		return $result;
 	}
@@ -3478,15 +3480,13 @@ class Exercise {
 	function get_validated_question_list() {
 		$tabres = array();
 		$isRandomByCategory = $this->isRandomByCat();
-		if (!$isRandomByCategory) {
+		if ($isRandomByCategory == 0) {
 			if ($this->isRandom()) {
 				$tabres = $this->selectRandomList();
-			}
-			else {
+			} else {
 				$tabres = $this->selectQuestionList();
 			}
-		}
-		else {
+		} else {
 			if ($this->isRandom()) {
 				if (!class_exists("Testcategory")) {
 					require_once("testcategory.class.php");
@@ -3529,13 +3529,13 @@ class Exercise {
 					shuffle($questionList); // or not
 				}			
 				$tabres = $questionList;
-			}
-			else {
+			} else {
 				// Problem, random by category has been selected and we have no $this->isRandom nnumber of question selected
 				// Should not happened
 			}
 		}
-		return $tabres;	}
+		return $tabres;	
+    }
 	
 	public function get_stat_track_exercise_info_by_exe_id($exe_id) {
 		$track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);

@@ -1970,14 +1970,27 @@ class learnpathItem {
 	public function set_score($score) {
         //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
    		if (self::debug > 0) { error_log('learnpathItem::set_score('.$score.')', 0); }
-   		if (($this->max_score<=0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
+   		if (($this->max_score <= 0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
    			$this->current_score = $score;
    			$master = $this->get_mastery_score();
    			$current_status = $this->get_status(false);
+            
+            //Fixes bug when SCORM doesn't send a mastery score even if they sent a score!
+            if ($master == -1) {
+                $master = $this->max_score;
+            }
+            if (self::debug > 0) {
+                error_log('get_mastery_score: '.$master);
+                error_log('current_status: '.$current_status);
+                error_log('current score : '.$this->current_score);
+            }
+            
    			// If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
    			if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
+                if (self::debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
    				$this->set_status($this->possible_status[3]); //passed
    			} elseif ($master != -1 && $this->current_score < $master) {
+                if (self::debug > 0) error_log('Status changed to: '.$this->possible_status[4]);
    				$this->set_status($this->possible_status[4]); //failed
    			}
   			return true;
@@ -2069,26 +2082,29 @@ class learnpathItem {
 	 */
 	public function set_time($scorm_time, $format = 'scorm') {        
    		if (self::debug > 0) { error_log('learnpathItem::set_time('.$scorm_time.')', 0); }
-	 	if ($scorm_time == 0 and ($this->type!='sco') and $this->current_start_time != 0) {
+	 	if ($scorm_time == 0 and ($this->type != 'sco') and $this->current_start_time != 0) {
 	 		$my_time = time() - $this->current_start_time;
 	 		if ($my_time > 0) {
 	 			$this->update_time($my_time);
 	 			if (self::debug > 0) { error_log('learnpathItem::set_time('.$scorm_time.') - found asset - set time to '.$my_time, 0); }
 	 		}
 	 	} else {
-	 		if ($format == 'scorm') {
-			 	$res = array();
-			 	if (preg_match('/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/', $scorm_time, $res)) {
-			 		$time = time();
-					$hour = $res[1];
-					$min = $res[2];
-					$sec = $res[3];
-					// Getting total number of seconds spent.
-			 		$total_sec = $hour*3600 + $min*60 + $sec;
-                    $this->scorm_update_time($total_sec);
-			 	}
-	 		} elseif ($format == 'int') {
-     			$this->scorm_update_time($scorm_time);
+            switch ($format) {
+                case 'scorm':                    
+                    $res = array();
+                    if (preg_match('/^(\d{1,4}):(\d{2}):(\d{2})(\.\d{1,4})?/', $scorm_time, $res)) {
+                        $time = time();
+                        $hour = $res[1];
+                        $min = $res[2];
+                        $sec = $res[3];
+                        // Getting total number of seconds spent.
+                        $total_sec = $hour*3600 + $min*60 + $sec;
+                        $this->scorm_update_time($total_sec);
+                    }
+                    break;
+                case 'int':
+                    $this->scorm_update_time($scorm_time);
+                    break;
 	 		}
 	 	}
 	}
@@ -2179,24 +2195,29 @@ class learnpathItem {
 	/**
      * Special scorm update time function. This function will update time directly into db for scorm objects
      **/
-    public function scorm_update_time($total_sec=0) {        
+    public function scorm_update_time($total_sec = 0) {
+        if (self::debug > 0) error_log('Funcion called: scorm_update_time');
+        if (self::debug > 0) error_log("total_sec: $total_sec");
+        
         //Step 1 : get actual total time stored in db
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-
         $course_id = api_get_course_int_id();
+        
         $get_view_sql = 'SELECT total_time, status FROM '.$item_view_table.'
                          WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
         $result=Database::query($get_view_sql);
         $row=Database::fetch_array($result);
+        
         if (!isset($row['total_time'])) {
             $total_time = 0;
         } else {
             $total_time = $row['total_time'];
         }
+        if (self::debug > 0) error_log("total_time: $total_time");
 
         //Step 2.1 : if normal mode total_time = total_time + total_sec
         if (api_get_setting('scorm_cumulative_session_time') != 'false'){
-            $total_time +=$total_sec;
+            $total_time += $total_sec;
             //$this->last_scorm_session_time = $total_sec;
         } else {
             //Step 2.2 : if not cumulative mode total_time = total_time - last_update + total_sec
@@ -2204,10 +2225,11 @@ class learnpathItem {
             $this->last_scorm_session_time = $total_sec;
         }
         //Step 3 update db only if status != completed, passed, browsed or seriousgamemode not activated
-        $case_completed=array('completed','passed','browsed','failed'); //TODO COMPLETE
-        if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)){
-            $update_view_sql='UPDATE '.$item_view_table." SET total_time =$total_time".'
-                             WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+        $case_completed = array('completed','passed','browsed','failed'); //TODO COMPLETE
+        if ($this->seriousgame_mode!=1 || !in_array($row['status'], $case_completed)) {
+            $update_view_sql ="UPDATE $item_view_table SET total_time = '$total_time'
+                               WHERE c_id = $course_id AND lp_item_id = {$this->db_id} AND lp_view_id = {$this->view_id} AND view_count = {$this->attempt_id}";
+            if (self::debug > 0) error_log($update_view_sql);
             $result=Database::query($update_view_sql);
         }
     }
@@ -2219,9 +2241,10 @@ class learnpathItem {
       $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
       $course_id = api_get_course_int_id();
       $update_view_sql='UPDATE '.$item_view_table.' SET total_time = 0, start_time='.time().'
-                        WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
-      $result=Database::query($update_view_sql);
+                        WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';      
+      Database::query($update_view_sql);
     }
+    
     /**
 	 * Write objectives to DB. This method is separate from write_to_db() because otherwise
 	 * objectives are lost as a side effect to AJAX and session concurrent access

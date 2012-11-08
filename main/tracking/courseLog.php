@@ -79,7 +79,7 @@ $js = "
             $('div#reporting_table table tr th').each(
                 function(index) {
                     num_index = index + 1;
-                    $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('delete.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 16)."</div>');                    
+                    $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('visible.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 22)."</div>');                    
                  }
                )
              }

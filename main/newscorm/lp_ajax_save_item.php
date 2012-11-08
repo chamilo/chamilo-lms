@@ -18,6 +18,12 @@ $use_anonymous = true;
 $language_file[] = 'learnpath';
 
 require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
+require_once 'learnpathItem.class.php';
+require_once 'scormItem.class.php';
+require_once 'aiccItem.class.php';
 
 /**
  * Writes an item's new values into the database and returns the operation result
@@ -38,31 +44,29 @@ require_once 'back_compat.inc.php';
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
     global $_configuration;    
     $return = '';
-    if ($debug > 0) { error_log('In save_item('.$lp_id.','.$user_id.','.$view_id.','.$item_id.','.$score.','.$max.','.$min.',"'.$status.'",'.$time.',"'.$suspend.'","'.$location.'","'.(count($interactions) > 0 ? $interactions[0] : '').'","'.$core_exit.'")', 0); }
+    $debug = 10;
     
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
+    if ($debug > 0) { 
+        error_log('lp_ajax_save_item.php : save_item params: ');
+        error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
+        error_log("score: $score - max:$max - min: $min - status:$status - time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
+    }    
     
-    $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
+    $mylp = null;
+    if (isset($_SESSION['lpobject'])) {        
         $oLP = unserialize($_SESSION['lpobject']);
-        if (!is_object($oLP)) {
-            if ($debug > 2) { error_log(print_r($oLP,true), 0); }
-            if ($debug > 2) { error_log('////Building new lp', 0); }
+        if (!is_object($oLP)) {            
             unset($oLP);
             $code = api_get_course_id();
             $mylp = new learnpath($code, $lp_id, $user_id);
         } else {
-            if ($debug > 2) { error_log('////Reusing session lp', 0); }
             $mylp = & $oLP;
         }
     }    
-    if (!is_a($mylp, 'learnpath')) { return ''; }
+    
+    if (!is_a($mylp, 'learnpath')) { 
+        return ''; 
+    }
 
     $prereq_check = $mylp->prerequisites_match($item_id);
     
@@ -71,39 +75,48 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $mylpi->set_lp_view($view_id);
     
     if ($prereq_check === true) {
-        // Launch the prerequisites check and set error if needed
-        //$mylpi =& $mylp->items[$item_id];
-        //$mylpi->set_lp_view($view_id);
+        if ($debug > 1) { error_log('Prereq are check'); }
+        
+        // Launch the prerequisites check and set error if needed   
         if (isset($max) && $max != -1)  {
             $mylpi->max_score = $max;
             $mylpi->set_max_score($max);
+            if ($debug > 1) { error_log("Setting max_score: $max"); }
         }
+        
         if (isset($min) && $min != -1 && $min != 'undefined') {
             $mylpi->min_score = $min;
+            if ($debug > 1) { error_log("Setting min_score: $min"); }
         }
         
         //set_score function already saves the status
         if (isset($score) && $score != -1) {
-            if ($debug > 1) { error_log('Calling set_score('.$score.') from xajax', 0); }            
+            if ($debug > 1) { error_log('Calling set_score('.$score.')', 0); }            
             $mylpi->set_score($score);
-            if ($debug > 1) { error_log('Done calling set_score from xajax - now '.$mylpi->get_score(), 0); }
+            if ($debug > 1) { error_log('Done calling set_score '.$mylpi->get_score(), 0); }
         } else {
+            if ($debug > 1) { error_log("Score not updated"); }
+            
             //Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {
-                if ($debug > 1) { error_log('Calling set_status('.$status.') from xajax', 0); }
+            if (isset($status) && $status != '' && $status != 'undefined') {           
                 //Implements scorm 1.2 constraint
                 //If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all
+                //Score was not set 
+                //@todo remove the switch
                 switch ($status) {
                     case 'failed':
-                    case 'passed':
-                        if ($debug > 1) { error_log("Cant't set status to these values only if a score was set"); }        
+                    case 'passed':                        
+                        $mylpi->set_status($status);   
+                        //if ($debug > 1) { error_log("Cant't set status to these values only if a score was set"); }        
                         break;
-                    default:
-                        if ($debug > 1) { error_log('Status was set'); }
+                    default:                        
+                        if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
                         $mylpi->set_status($status);
-                        if ($debug > 1) { error_log('Done calling set_status from xajax - now '.$mylpi->get_status(false), 0); }
+                        if ($debug > 1) { error_log('Done calling set_status: checking from memory:'.$mylpi->get_status(false), 0); }
                         break;                        
                 }
+            } else {
+                if ($debug > 1) { error_log("Status not updated"); }
             }
         }
         
@@ -114,31 +127,32 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ((empty($status) || $status == 'undefined' || $status == 'not attempted') && $max > 0) {
                 if (($score/$max) > 0.8) {
                     $mystatus = 'completed';
-                    if ($debug > 1) { error_log('Calling set_status('.$mystatus.') from xajax for hotpotatoes', 0); }
+                    if ($debug > 1) { error_log('Calling set_status('.$mystatus.') for hotpotatoes', 0); }
                     $mylpi->set_status($mystatus);
-                    if ($debug > 1) { error_log('Done calling set_status from xajax for hotpotatoes - now '.$mylpi->get_status(false), 0); }
+                    if ($debug > 1) { error_log('Done calling set_status for hotpotatoes - now '.$mylpi->get_status(false), 0); }
                 }
             } elseif ($status == 'completed' && $max > 0 && ($score/$max) < 0.8) {
                 $mystatus = 'failed';
-                if ($debug > 1) { error_log('Calling set_status('.$mystatus.') from xajax for hotpotatoes', 0); }
+                if ($debug > 1) { error_log('Calling set_status('.$mystatus.') for hotpotatoes', 0); }
                 $mylpi->set_status($mystatus);
-                if ($debug > 1) { error_log('Done calling set_status from xajax for hotpotatoes - now '.$mylpi->get_status(false), 0); }
+                if ($debug > 1) { error_log('Done calling set_status for hotpotatoes - now '.$mylpi->get_status(false), 0); }
             }
         }
         
         if (isset($time) && $time!='' && $time!='undefined') {
             // If big integer, then it's a timestamp, otherwise it's normal scorm time.
-            if ($debug > 1) { error_log('Calling set_time('.$time.') from xajax', 0); }
+            if ($debug > 1) { error_log('Calling set_time('.$time.') ', 0); }
             if ($time == intval(strval($time)) && $time > 1000000) {
-                $real_time = time() - $time;
-                //$real_time += $mylpi->get_total_time();
+                if ($debug > 1) { error_log("Time is INT"); }
+                $real_time = time() - $time;                
                 if ($debug > 1) { error_log('Calling $real_time '.$real_time.' ', 0); }
                 $mylpi->set_time($real_time, 'int');
             } else {
+                if ($debug > 1) { error_log("Time is in SCORM format"); }
                 if ($debug > 1) { error_log('Calling $time '.$time.' ', 0); }
-                $mylpi->set_time($time);
+                $mylpi->set_time($time, 'scorm');
             }
-            if ($debug > 1) { error_log('Done calling set_time from xajax - now '.$mylpi->get_total_time(), 0); }
+            //if ($debug > 1) { error_log('Done calling set_time - now '.$mylpi->get_total_time(), 0); }
         } else {
             $time = $mylpi->get_total_time();
         }
@@ -161,15 +175,19 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
                 $mylpi->add_interaction($index, $clean_interaction);
             }
         }
+        
         if ($core_exit != 'undefined') {
             $mylpi->set_core_exit($core_exit);
         }
+        
         $mylp->save_item($item_id, false);
     } else {        
         return $return;
     }
     
     $mystatus_in_db = $mylpi->get_status(true);
+    error_log("Status in DB: $mystatus_in_db");
+    
     if ($mystatus_in_db != 'completed' && $mystatus_in_db != 'passed' && $mystatus_in_db != 'browsed' && $mystatus_in_db != 'failed') {
          $mystatus_in_memory = $mylpi->get_status(false);
          if ($mystatus_in_memory != $mystatus_in_db) {
@@ -180,14 +198,18 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     } else {
         $mystatus = $mystatus_in_db;
     }
+    
     $mytotal = $mylp->get_total_items_count_without_chapters();
     $mycomplete = $mylp->get_complete_items_count();    
     $myprogress_mode = $mylp->get_progress_bar_mode();
-    $myprogress_mode = ($myprogress_mode == '' ? '%' : $myprogress_mode);
-    if ($debug > 1) { error_log("myprogress_mode $myprogress_mode", 0); }
-    if ($debug > 1) { error_log("mytotal $mytotal", 0); }
-    if ($debug > 1) { error_log("mycomplete $mycomplete", 0); }
-    //$mylpi->write_to_db();
+    $myprogress_mode = $myprogress_mode == '' ? '%' : $myprogress_mode;
+    
+    if ($debug > 1) { error_log("mystatus: $mystatus", 0); }
+    if ($debug > 1) { error_log("myprogress_mode: $myprogress_mode", 0); }
+    if ($debug > 1) { error_log("mytotal: $mytotal", 0); }
+    if ($debug > 1) { error_log("mycomplete: $mycomplete", 0); }
+    
+    
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type() != 'sco') {
         // If this object's JS status has not been updated by the SCORM API, update now.        
@@ -196,7 +218,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $return .= "update_toc('".$mystatus."','".$item_id."');";
     $update_list = $mylp->get_update_queue();
     foreach ($update_list as $my_upd_id => $my_upd_status)  {
-        if ($my_upd_id != $item_id){ // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
+        if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
     }    
@@ -209,7 +231,6 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     if (!isset($_SESSION['login_as'])) {
         // If $_SESSION['login_as'] is set, then the user is an admin logged as the user.
-
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
         $sql_last_connection = "SELECT login_id, login_date
@@ -232,8 +253,11 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     }
     //To be sure progress is updated
     $mylp->save_last();
+    
+   if ($debug > 0) { error_log('lp_ajax_save_item.php : save_item end ----- '); }   
     return $return;    
 }
+
 $interactions = array();
 if (isset($_REQUEST['interact'])) {
     if (is_array($_REQUEST['interact'])) {

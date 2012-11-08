@@ -34,11 +34,9 @@ require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'scorm.class.php';
 
-// Is this needed? This is probabaly done in the header file
-//$_user							= $_SESSION['_user'];
-$file							= (empty($_SESSION['file'])?'':$_SESSION['file']);
-$oLP							= unserialize($_SESSION['lpobject']);
-$oItem 							= $oLP->items[$oLP->current];
+$file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
+$oLP    = unserialize($_SESSION['lpobject']);
+$oItem 	= $oLP->items[$oLP->current];
 
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item',0);
@@ -56,25 +54,25 @@ var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=a
 
 // API Object initialization (eases access later on)
 function APIobject() {
-  this.LMSInitialize=LMSInitialize;  //for Scorm 1.2
-  this.Initialize=LMSInitialize;     //for Scorm 1.3
-  this.LMSGetValue=LMSGetValue;
-  this.GetValue=LMSGetValue;
-  this.LMSSetValue=LMSSetValue;
-  this.SetValue=LMSSetValue;
-  this.LMSCommit=LMSCommit;
-  this.Commit=LMSCommit;
-  this.LMSFinish=LMSFinish;
-  this.Finish=LMSFinish;
-  this.LMSGetLastError=LMSGetLastError;
-  this.GetLastError=LMSGetLastError;
-  this.LMSGetErrorString=LMSGetErrorString;
-  this.GetErrorString=LMSGetErrorString;
-  this.LMSGetDiagnostic=LMSGetDiagnostic;
-  this.GetDiagnostic=LMSGetDiagnostic;
-  this.Terminate=Terminate;  //only in Scorm 1.3
-  this.save_asset = lms_save_asset;
-  this.void_save_asset = chamilo_void_save_asset;
+    this.LMSInitialize=LMSInitialize;  //for Scorm 1.2
+    this.Initialize=LMSInitialize;     //for Scorm 1.3
+    this.LMSGetValue=LMSGetValue;
+    this.GetValue=LMSGetValue;
+    this.LMSSetValue=LMSSetValue;
+    this.SetValue=LMSSetValue;
+    this.LMSCommit=LMSCommit;
+    this.Commit=LMSCommit;
+    this.LMSFinish=LMSFinish;
+    this.Finish=LMSFinish;
+    this.LMSGetLastError=LMSGetLastError;
+    this.GetLastError=LMSGetLastError;
+    this.LMSGetErrorString=LMSGetErrorString;
+    this.GetErrorString=LMSGetErrorString;
+    this.LMSGetDiagnostic=LMSGetDiagnostic;
+    this.GetDiagnostic=LMSGetDiagnostic;
+    this.Terminate=Terminate;  //only in Scorm 1.3
+    this.save_asset = lms_save_asset;
+    this.void_save_asset = chamilo_void_save_asset;
 }
 
 // it is not sure that the scos use the above declarations. The following
@@ -215,12 +213,13 @@ $(document).ready( function() {
             frames['content_name'].document.body.style.margin="0 12px 0px 5px";
         } catch (ex) { }
     }*/
+    
     olms.info_lms_item[0]=olms.info_lms_item[1];
 
     if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
-      LMSInitialize();
+        LMSInitialize();
     }
-  });
+    });
 });
 
 
@@ -229,10 +228,10 @@ $(document).ready( function() {
  */
 /**
  * Function called mandatorily by the SCORM content to start the SCORM comm
- * @return  string  'true' or 'false'. Returning a string is mandatory (SCORM).
+ * This is the initialize function of all APIobjects
+ * @return  string  'true' or 'false'. Returning a string is mandatory (SCORM).  
  */
-function LMSInitialize() {  //this is the initialize function of all APIobjects
-
+function LMSInitialize() {
     /* load info for this new item by calling the js_api_refresh command in
      * the message frame. The message frame will update the JS variables by
      * itself, in JS, by doing things like top.lesson_status = 'not attempted'
@@ -302,10 +301,10 @@ function LMSInitialize() {  //this is the initialize function of all APIobjects
 
 /**
  * Twin sister of LMSInitialize(). Only provided for backwards compatibility.
+ * this is the initialize function of all APIobjects
  */
-function Initialize()
-{  //this is the initialize function of all APIobjects
-  return LMSInitialize();
+function Initialize() {    
+    return LMSInitialize();
 }
 
 /**
@@ -475,9 +474,7 @@ function LMSGetValue(param)
                 }else if(req_type == 'status'){
                     result = 'not attempted';
                 }
-            }
-            else
-            {
+           } else {
                 //the object is not null
                 if(req_type == 'id')
                 {
@@ -775,7 +772,7 @@ function LMSSetValue(param, val) {
                     }
                 }
             }
-        }else{
+        } else {
             olms.G_LastError = G_NotImplementedError;
             olms.G_LastErrorString = G_NotImplementedErrorMessage;
         }
@@ -793,23 +790,35 @@ function LMSSetValue(param, val) {
 function SetValue(param, val) {
     return LMSSetValue(param, val);
 }
+
 /**
  * Saves the current data from JS memory to the LMS database
  * @param   string  The origin of the call to save the data ('commit','finish', 'unload' or 'terminate')
  * @note    origin actually seems deprecated now
  */
 function savedata(origin) {
-    //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
-    if ((olms.lesson_status != 'completed') && (olms.lesson_status != 'passed') && (olms.mastery_score >=0) && (olms.score >= olms.mastery_score)) {
-        olms.lesson_status = 'passed';
+    //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)    
+    
+   /* console.log('savedata');
+    console.log(olms.lesson_status);
+    console.log(olms.mastery_score);
+    console.log(olms.score);
+    */
+    
+    if (olms.lesson_status != '') {        
         olms.updatable_vars_list['cmi.core.lesson_status']=true;
+    }
+    
+    //If lesson_status is empty we left the status like that
+    if (olms.lesson_status != '' && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.mastery_score >=0 && olms.score >= olms.mastery_score) {
+        //olms.lesson_status = 'passed';
+        //olms.updatable_vars_list['cmi.core.lesson_status']=true;
     } else if( (olms.mastery_score < 0) && (olms.lms_lp_type != '2') && ( olms.lesson_status == 'incomplete') && (olms.score >= (0.8*olms.max) ) ) {
         //the status cannot be modified automatically by the LMS under SCORM 1.2's rules
     <?php if ($autocomplete_when_80pct){ ?>
-              olms.lesson_status = 'completed';
-              olms.updatable_vars_list['cmi.core.lesson_status']=true;
-    <?php }?>
-    ;
+              //olms.lesson_status = 'completed';
+              //olms.updatable_vars_list['cmi.core.lesson_status']=true;
+    <?php } ?>    
     } else {
         /* DEPRECATED
          * See notes in switch_item for why this has been disabled
@@ -832,20 +841,18 @@ function savedata(origin) {
         }
         */
     }
-
+    //console.log(olms.lesson_status);
+    
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
     old_item_id=olms.info_lms_item[0];
 
-    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
-    //olms.info_lms_item[0] is old_item_id and olms.info_lms_item[1] is current_item_id
+    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);    
     olms.info_lms_item[1]=olms.lms_item_id;
-
-    if(olms.item_objectives.length>0) {
+    if (olms.item_objectives.length>0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
     olms.execute_stats = false;
-
     //clean array
     olms.variable_to_send=new Array();
 }
@@ -1013,6 +1020,7 @@ function addEvent(elm, evType, fn, useCapture){
         elm['on'+evType] = fn;
     }
 }
+
 /**
  * Add listeners to the page objects. This has to be defined for
  * the current context as it acts on objects that should exist
@@ -1046,9 +1054,8 @@ function addListeners(){
  * Save a Chamilo learnpath item's time and mark as completed upon
  * leaving it
  */
-function lms_save_asset(){
+function lms_save_asset() {
     // only for Chamilo lps
-  
     if (olms.execute_stats) {    
         olms.execute_stats = false;
     } else {
@@ -1057,13 +1064,13 @@ function lms_save_asset(){
     
     //For scorms do not show stats
     if (olms.lms_lp_type == 2) {
-        olms.execute_stats = false;
+       olms.execute_stats = false;
     }
     
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset'){
-        logit_lms('lms_save_asset', 2);
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+        logit_lms('lms_save_asset', 2);        
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
-        if(olms.item_objectives.length>0) {
+        if (olms.item_objectives.length>0) {
             xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
         }
     }
@@ -1211,11 +1218,11 @@ function update_toc(update_action, update_id, change_ids) {
 /**
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
-function update_stats() {
+function update_stats() {    
     if (olms.execute_stats) {
         try {
             cont_f = document.getElementById('content_id');
-            cont_f.src="lp_controller.php?action=stats";
+            cont_f.src = "lp_controller.php?action=stats";            
             cont_f.reload();
         } catch (e) {
             return false;

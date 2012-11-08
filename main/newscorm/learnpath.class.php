@@ -1714,14 +1714,8 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_navigation_bar()', 0);
         }
-
-        // TODO: Find a good value for the following variables.
-        $file = '';
-        $openDir = '';
-        $edoceo = '';
-        $time = 0;
-        $navbar = '';
-        $RequestUri = '';
+        $navbar = null;
+        $lp_id = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
         if ($this->mode == 'fullscreen') {
             $navbar = '

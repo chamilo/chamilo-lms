@@ -23,8 +23,12 @@ if (empty($user_id)) {
 
 // Declare variables to be used in lp_stats.php
 //When checking the reporting myspace/lp_tracking.php
-if (isset($_GET['lp_id']) && isset($lp_id) && !empty($lp_id)) {
+//isset($_GET['lp_id']) &&
+if (isset($lp_id) && !empty($lp_id)) {
     $lp_id = intval($lp_id);
+    if (!isset($list)) {
+        $list = learnpath::get_flat_ordered_items_list($lp_id);
+    }
 } else {
     if (isset($_SESSION['oLP'])) {
         $lp_id = $_SESSION['oLP']->get_id();
@@ -940,13 +944,13 @@ if (($counter % 2) == 0) {
 $output .= '<tr class="'.$oddclass.'">
                 <td></td>
                 <td colspan="4">
-                    <div class="mystatus"><i>' . get_lang('AccomplishedStepsTotal') .'</i></div>
+                    <i>' . get_lang('AccomplishedStepsTotal') .'</i>
                 </td>
                 <td colspan="2"></td>
                 <td colspan="2">
-                    <div class="mystatus" align="center">' . $final_score.'</div>
+                    ' . $final_score.'
                 </td>
-                <td colspan="2"><div class="mystatus">' . $total_time . '</div></td><td></td>
+                <td colspan="2">' . $total_time . '</div><td></td>
            </tr>';
 //}
 

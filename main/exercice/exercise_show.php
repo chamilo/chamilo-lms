@@ -223,7 +223,7 @@ $arrques = array();
 $arrans  = array();
 
 $user_restriction = $is_allowedToEdit ? '' :  "AND user_id=".intval($student_id)." ";
-$query = "SELECT attempts.question_id, answer  FROM ".$TBL_TRACK_ATTEMPT." as attempts
+$query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as attempts
 				INNER JOIN ".$TBL_TRACK_EXERCICES." AS stats_exercices ON stats_exercices.exe_id=attempts.exe_id
 				INNER JOIN ".$TBL_EXERCICE_QUESTION." AS quizz_rel_questions 
 				    ON quizz_rel_questions.exercice_id=stats_exercices.exe_exo_id 
@@ -248,7 +248,7 @@ while ($row = Database::fetch_array($result)) {
 
 //Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
+	$tempquestionList = explode(',', $track_exercise_info['data_tracking']);
 	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
 		$questionList = $tempquestionList;			
 	}		
@@ -348,136 +348,136 @@ foreach ($questionList as $questionId) {
         }
 	} else if($answerType == HOT_SPOT_DELINEATION) {
 	        
-            $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
-                        
-            $questionScore    = $question_result['score'];
-            $totalScore      += $question_result['score'];
-       
-            $final_overlap    = $question_result['extra']['final_overlap'];
-            $final_missing    = $question_result['extra']['final_missing'];
-            $final_excess     = $question_result['extra']['final_excess'];
-            
-            $overlap_color    = $question_result['extra']['overlap_color'];
-            $missing_color    = $question_result['extra']['missing_color'];
-            $excess_color     = $question_result['extra']['excess_color'];
-            
-            $threadhold1      = $question_result['extra']['threadhold1'];            
-            $threadhold2      = $question_result['extra']['threadhold2'];
-            $threadhold3      = $question_result['extra']['threadhold3'];            
-	   
-	        if ($show_results) {
-	    
-        	    if ($overlap_color) {
-        			$overlap_color='green';
-        	    } else {
-        			$overlap_color='red';
-        	    }
-        	    
-        		if ($missing_color) {
-        			$missing_color='green';
-        	    } else {
-        			$missing_color='red';
-        	    }
-        		if ($excess_color) {
-        			$excess_color='green';
-        	    } else {
-        			$excess_color='red';
-        	    }        	    
-        	    
-        	    if (!is_numeric($final_overlap)) {
-            	    $final_overlap = 0;
-        	    }
-        	    
-        	    if (!is_numeric($final_missing)) {
-        	    	$final_missing = 0;
-        	    }
-        	    if (!is_numeric($final_excess)) {
-        	    	$final_excess = 0;
-        	    }
-        	    
-        	    if ($final_excess>100) {
-        	    	$final_excess = 100;
-        	    }            
-            
-        		$table_resume='<table class="data_table">		
-        		<tr class="row_odd" >
-        		<td></td>
-        		<td ><b>'.get_lang('Requirements').'</b></td>
-        		<td><b>'.get_lang('YourAnswer').'</b></td>
-        		</tr>
-        									
-        		<tr class="row_even">
-        		<td><b>'.get_lang('Overlap').'</b></td>
-        		<td>'.get_lang('Min').' '.$threadhold1.'</td>
-        			<td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
-        		</tr>
-        				
-        		<tr>
-        			<td><b>'.get_lang('Excess').'</b></td>
-        			<td>'.get_lang('Max').' '.$threadhold2.'</td>
-        			<td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
-        		</tr>
-        				 
-        		<tr class="row_even">
-        			<td><b>'.get_lang('Missing').'</b></td>
-        			<td>'.get_lang('Max').' '.$threadhold3.'</td>
-        			<td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
-        		</tr></table>';
-        							
-        		if ($answerType!= HOT_SPOT_DELINEATION) {
-        			$item_list=explode('@@',$destination);
-        			//print_R($item_list);
-        			$try = $item_list[0];
-        			$lp = $item_list[1];
-        			$destinationid= $item_list[2];
-        			$url=$item_list[3];
-        			$table_resume='';
-        		} else {
-        			if ($next==0) {
-        				$try = $try_hotspot;
-        				$lp = $lp_hotspot;
-        				$destinationid= $select_question_hotspot;
-        				$url=$url_hotspot;
-        			} else {
-        				//show if no error
-        				//echo 'no error';
-        				$comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);	
-        				$answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
-        			}
-        		} 
-        	
-        		echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-        		if ($answerType == HOT_SPOT_DELINEATION) {			
-        			if ($organs_at_risk_hit>0) {
-        				$message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
-        				$message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-        			} else {
-        				$message='<p>'.get_lang('YourDelineation').'</p>';
-        				$message.=$table_resume;	
-        				$message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-        			}
-        			$message.='<p>'.$comment.'</p>';	
-        			echo $message;              			
-        		} else {
-        			echo '<p>'.$comment.'</p>';
-        		}
-        		
-        		//showing the score	
-         		$queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
-        		$resfree = Database::query($queryfree);
-        		$questionScore= Database::result($resfree,0,"marks");
-        		$totalScore+=$questionScore;    
-                echo '</table></td></tr>';        		 				 		
-                echo '<tr>
-        				<td colspan="2">
-        					<object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
-        						<param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
-        							
-        					</object>
-        				</td>
-        			</tr>
-        			</table>';
-	        }
+        $question_result  = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), 'database');
+
+        $questionScore    = $question_result['score'];
+        $totalScore      += $question_result['score'];
+
+        $final_overlap    = $question_result['extra']['final_overlap'];
+        $final_missing    = $question_result['extra']['final_missing'];
+        $final_excess     = $question_result['extra']['final_excess'];
+
+        $overlap_color    = $question_result['extra']['overlap_color'];
+        $missing_color    = $question_result['extra']['missing_color'];
+        $excess_color     = $question_result['extra']['excess_color'];
+
+        $threadhold1      = $question_result['extra']['threadhold1'];            
+        $threadhold2      = $question_result['extra']['threadhold2'];
+        $threadhold3      = $question_result['extra']['threadhold3'];            
+
+        if ($show_results) {
+
+            if ($overlap_color) {
+                $overlap_color='green';
+            } else {
+                $overlap_color='red';
+            }
+
+            if ($missing_color) {
+                $missing_color='green';
+            } else {
+                $missing_color='red';
+            }
+            if ($excess_color) {
+                $excess_color='green';
+            } else {
+                $excess_color='red';
+            }        	    
+
+            if (!is_numeric($final_overlap)) {
+                $final_overlap = 0;
+            }
+
+            if (!is_numeric($final_missing)) {
+                $final_missing = 0;
+            }
+            if (!is_numeric($final_excess)) {
+                $final_excess = 0;
+            }
+
+            if ($final_excess>100) {
+                $final_excess = 100;
+            }            
+
+            $table_resume='<table class="data_table">		
+            <tr class="row_odd" >
+            <td></td>
+            <td ><b>'.get_lang('Requirements').'</b></td>
+            <td><b>'.get_lang('YourAnswer').'</b></td>
+            </tr>
+
+            <tr class="row_even">
+            <td><b>'.get_lang('Overlap').'</b></td>
+            <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                <td><div style="color:'.$overlap_color.'">'.(($final_overlap < 0)?0:intval($final_overlap)).'</div></td>
+            </tr>
+
+            <tr>
+                <td><b>'.get_lang('Excess').'</b></td>
+                <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                <td><div style="color:'.$excess_color.'">'.(($final_excess < 0)?0:intval($final_excess)).'</div></td>
+            </tr>
+
+            <tr class="row_even">
+                <td><b>'.get_lang('Missing').'</b></td>
+                <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                <td><div style="color:'.$missing_color.'">'.(($final_missing < 0)?0:intval($final_missing)).'</div></td>
+            </tr></table>';
+
+            if ($answerType!= HOT_SPOT_DELINEATION) {
+                $item_list=explode('@@',$destination);
+                //print_R($item_list);
+                $try = $item_list[0];
+                $lp = $item_list[1];
+                $destinationid= $item_list[2];
+                $url=$item_list[3];
+                $table_resume='';
+            } else {
+                if ($next==0) {
+                    $try = $try_hotspot;
+                    $lp = $lp_hotspot;
+                    $destinationid= $select_question_hotspot;
+                    $url=$url_hotspot;
+                } else {
+                    //show if no error
+                    //echo 'no error';
+                    $comment=$answerComment=$objAnswerTmp->selectComment($nbrAnswers);	
+                    $answerDestination=$objAnswerTmp->selectDestination($nbrAnswers);
+                }
+            } 
+
+            echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
+            if ($answerType == HOT_SPOT_DELINEATION) {			
+                if ($organs_at_risk_hit>0) {
+                    $message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';				
+                    $message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+                } else {
+                    $message='<p>'.get_lang('YourDelineation').'</p>';
+                    $message.=$table_resume;	
+                    $message.='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                }
+                $message.='<p>'.$comment.'</p>';	
+                echo $message;              			
+            } else {
+                echo '<p>'.$comment.'</p>';
+            }
+
+            //showing the score	
+            $queryfree = "select marks from ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($id)."' and question_id= '".Database::escape_string($questionId)."'";
+            $resfree = Database::query($queryfree);
+            $questionScore= Database::result($resfree,0,"marks");
+            $totalScore+=$questionScore;    
+            echo '</table></td></tr>';        		 				 		
+            echo '<tr>
+                    <td colspan="2">
+                        <object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
+                            <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
+
+                        </object>
+                    </td>
+                </tr>
+                </table>';
+        }
 	}
 
 	if ($show_results) {

@@ -341,6 +341,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         }
 
         $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        
         if (!empty($question_list)) {
             $question_list = array_map('intval', $question_list);
         }

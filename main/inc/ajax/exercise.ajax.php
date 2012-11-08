@@ -169,11 +169,10 @@ switch ($action) {
             
             //Needed in manage_answer
             $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-            
+            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;            
             
             //Attempt id
-            $exe_id                 = $_REQUEST['exe_id'];
+            $exe_id = $_REQUEST['exe_id'];
             
             if ($debug) error_log("exe_id = $exe_id ");
             if ($debug) error_log("type = $type ");
@@ -203,17 +202,7 @@ switch ($action) {
             
             //First time here we create an attempt (getting the exe_id)
             if (empty($exercise_stat_info)) {     
-            	/* 
-                //$exe_id = create_event_exercice($objExercise->selectId());                
-                $current_expired_time_key = get_time_control_key($objExercise->id);
-                if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
-                	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
-                } else {
-                	$expired_date = '0000-00-00 00:00:00';
-                }
-                $exe_id = $objExercise->save_stat_track_exercise_info($expired_date, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $question_list, 0); //total weight 0 by now                
-                $total_score = $total_weight = 0;
-                */
+        
             } else {               
                 //We know the user we get the exe_id
                 $exe_id        = $exercise_stat_info['exe_id'];
@@ -349,12 +338,23 @@ switch ($action) {
                 
                 $_SESSION['duration_time'][$key] = time();
                 
-                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, $question_list, 'incomplete', $remind_list);
+                update_event_exercice(  $exe_id, 
+                                        $objExercise->selectId(), 
+                                        $total_score, 
+                                        $total_weight, 
+                                        api_get_session_id(),
+                                        $exercise_stat_info['orig_lp_id'], 
+                                        $exercise_stat_info['orig_lp_item_id'], 
+                                        $exercise_stat_info['orig_lp_item_view_id'], 
+                                        $duration, 
+                                        $question_list, 
+                                        'incomplete', 
+                                        $remind_list);
                 
                  // Destruction of the Question object
             	unset($objQuestionTmp); 
                 if ($debug) error_log(" -- end question -- ");
-            }   
+            }
             if ($debug) error_log(" ------ end ajax call ------- ");            
         }
         

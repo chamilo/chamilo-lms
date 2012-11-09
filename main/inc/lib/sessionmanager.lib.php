@@ -262,7 +262,7 @@ class SessionManager {
         //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
         $query = "$select FROM $tbl_session s ".
                     " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-                    " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fv.field_id) ".                    
+                    " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) ".                    
                     $where;
         
         global $_configuration;
@@ -286,15 +286,17 @@ class SessionManager {
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }        
-        error_log($query);       
-        
+        error_log($query);
         $result = Database::query($query);
+        
+        
         $formatted_sessions = array();
                 
         if (Database::num_rows($result)) {
             $sessions   = Database::store_result($result, 'ASSOC');
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
+                 error_log($session_id);
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
                 if ($session['session_active'] == 1) {
@@ -512,7 +514,7 @@ class SessionManager {
         //INNER JOIN $tbl_course c ON (src.course_code = c.code OR src.course_code = NULL)
 		$query = "$select FROM $tbl_session s 
                     LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id)
-                    INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fv.field_id)
+                    INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)
                     LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) 
                     LEFT JOIN $tbl_course c ON (src.course_code = c.code)
                     LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) 

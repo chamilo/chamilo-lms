@@ -48,10 +48,7 @@ class CourseSelectForm
 				}
 			}
             
-            function setCheckboxForum(type, value, item_id) {
-                //console.log("#resource["+type+"]["+value+"]");
-                //$("#resource["+type+"]["+value+"]").attr('checked', value);
-                
+            function setCheckboxForum(type, value, item_id) {                
  				d = document.course_select_form;
  				for (i = 0; i < d.elements.length; i++) {
    					if (d.elements[i].type == "checkbox") {

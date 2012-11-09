@@ -1697,8 +1697,7 @@ class Exercise {
                 
             }
             
-            function send_form() {
-                //console.log('send_form');
+            function send_form() {                
                 if ($('#exercise_form').length) {                
                     $('#exercise_form').submit();
                 } else {

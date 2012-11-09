@@ -148,9 +148,7 @@ class SessionManager {
     
     static function get_count_admin() {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
-        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
-
+        
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
         
@@ -158,11 +156,7 @@ class SessionManager {
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
         
-        $query_rows = "SELECT count(*) as total_rows
-         FROM $tbl_session s
-            LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-            INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-         $where ";
+        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s $where ";
          
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {
@@ -171,70 +165,25 @@ class SessionManager {
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
                 
-                $query_rows = "SELECT count(*) as total_rows
-                 FROM $tbl_session s
-                    LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                    INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-                 $where ";
+                $query_rows = "SELECT COUNT(*) as total_rows 
+                               FROM $tbl_session s
+                               INNER JOIN $table_access_url_rel_session ar 
+                               ON ar.session_id = s.id $where ";
             }
         }
         $result_rows = Database::query($query_rows);
-        $recorset = Database::fetch_array($result_rows);
-        $num = $recorset['total_rows'];
+        $row = Database::fetch_array($result_rows);
+        $num = $row['total_rows'];
         return $num;    
-    }
-    
-    
-    static function get_count_admin_complete() {
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
-        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
-
-        $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
-        
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
-            $where.=" WHERE s.session_admin_id = $user_id ";
-        }
-        
-        $query_rows = "SELECT count(*) as total_rows
-         FROM $tbl_session s
-            LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-            INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-         $where ";
-         
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $where.= " AND ar.access_url_id = $access_url_id ";
-                
-                $query_rows = "SELECT count(*) as total_rows
-                 FROM $tbl_session s
-                    LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
-                    INNER JOIN $tbl_user u ON s.id_coach = u.user_id
-                    INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
-                 $where ";
-            }
-        }
-        $result_rows = Database::query($query_rows);
-        $recorset = Database::fetch_array($result_rows);
-        $num = $recorset['total_rows'];
-        return $num;    
-    }
+    }    
     
     /**
      * Gets the admin session list callback of the admin/session_list.php page
      * @param array order and limit keys
      */
     public static function get_sessions_admin($options = array()) {
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
-        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);      
-        $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);        
-        $tbl_course             = Database::get_main_table(TABLE_MAIN_COURSE);        
+        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);                     
+        //$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
                 
@@ -244,17 +193,8 @@ class SessionManager {
         if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
             $where.=" AND s.session_admin_id = $user_id ";
         }
-
-        $coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
-
-        if (api_is_western_name_order()) {            
-            $coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
-        }        
-
-        $today = api_get_utc_datetime();   
         
-        $inject_extra_fields = null;
-                
+        $inject_extra_fields = null;                
         $extra_fields = array();
         $extra_fields_info = array();
         
@@ -290,41 +230,21 @@ class SessionManager {
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
             $options_by_double['extra_'.$double['field_variable']] = $my_options;            
         }
-                  
-        //var_dump($options_by_double);
-        //sc.name as category_name,         
+        
         $select = 
-                "SELECT * FROM ( ".
-                "    SELECT DISTINCT ".
-//                "    SELECT DISTINCT ".
-//                "        IF ( ".
-//                "            (s.access_start_date <= '$today' AND '$today' < s.access_end_date) OR ".
-//                "            (s.access_start_date  = '0000-00-00 00:00:00' AND s.access_end_date  = '0000-00-00 00:00:00' ) OR ".
-//                "           (s.access_start_date <= '$today' AND '0000-00-00 00:00:00' = s.access_end_date) OR ".
-//                "            ('$today' < s.access_end_date AND '0000-00-00 00:00:00' = s.access_start_date) ".
-//                "        , 1, 0) as session_active, ".
-//                " 1 as session_active, ".
+                "SELECT * FROM ( SELECT DISTINCT ".
                 " s.name, ".
-//                " s.nbr_courses, ". 
-//                " s.nbr_users, ".
                 " s.display_start_date, ".
                 " s.display_end_date, ".
-//                " $coach_name, ".
                 " access_start_date, ".
                 " access_end_date, ".
                 " s.visibility, ".
-//                " u.user_id, ".
                 " $inject_extra_fields ".
-//                " c.title as course_title, ".
                 " s.id ";
         
-        if (!empty($options['where'])) {
-            //var_dump($inject_extra_fields);
-            //var_dump($options);
-            if (!empty($options['extra'])) {                
-                 
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
-                //var_dump($options['where']);
+        if (!empty($options['where'])) {        
+            if (!empty($options['extra'])) {
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
                 $options['where'] = str_replace('AND', 'OR', $options['where']);
                 
                 foreach ($options['extra'] as $extra) {
@@ -339,17 +259,10 @@ class SessionManager {
         if (!empty($options['limit'])) {            
             $where .= " LIMIT ".$options['limit'];
         }
-        
-        //LEFT JOIN $tbl_course c ON (src.course_id = c.id)
-        //LEFT JOIN $tbl_course c ON (src.course_code = c.code)
-        //INNER JOIN $tbl_course c ON (src.course_code = c.code OR src.course_code = NULL)
+        //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
         $query = "$select FROM $tbl_session s ".
                     " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-                    " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fv.field_id) ".
-                    " LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
-//                    " LEFT JOIN $tbl_course c ON (src.course_code = c.code) ".
-                    " LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) ".
-//                    " INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
+                    " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fv.field_id) ".                    
                     $where;
         
         global $_configuration;
@@ -357,15 +270,12 @@ class SessionManager {
         if ($_configuration['multiple_access_urls']) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
+            //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
                 $query = "$select ".
                     " FROM $tbl_session s ".
-                    " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-                    " LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
-//                    " LEFT JOIN $tbl_course c ON (src.course_code = c.code) ".
-                    " LEFT JOIN $tbl_session_category sc ON (s.session_category_id = sc.id) ".
-//                    " INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
+                    " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".                    
                     " INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) ".
                     " $where";
             }
@@ -376,8 +286,7 @@ class SessionManager {
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }        
-        error_log($query);
-       // echo $query;
+        error_log($query);       
         
         $result = Database::query($query);
         $formatted_sessions = array();
@@ -387,9 +296,7 @@ class SessionManager {
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
-
-//                $session['coach_name'] = Display::url($session['coach_name'], "user_information.php?user_id=".$session['user_id']);
-
+                
                 if ($session['session_active'] == 1) {
                     $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
                 } else {
@@ -437,19 +344,56 @@ class SessionManager {
                     }
                 }
                 
-                //Magic filter
-                
                 if (isset($formatted_sessions[$session_id])) {                    
+                    //Compare and filter sessions with the same content
                     $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
                 } else {
                     $formatted_sessions[$session_id] = $session;
-                }
-                //$formatted_sessions[] = $session;
+                }                
             }
         }        
-        
         return $formatted_sessions;
     }    
+    
+    
+    static function get_count_admin_complete() {
+        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_category   = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);        
+        $tbl_user               = Database::get_main_table(TABLE_MAIN_USER);
+
+        $where = 'WHERE 1 = 1 ';
+        $user_id = api_get_user_id();
+        
+        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
+            $where.=" WHERE s.session_admin_id = $user_id ";
+        }
+        
+        $query_rows = "SELECT count(*) as total_rows
+         FROM $tbl_session s
+            LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+            INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+         $where ";
+         
+        global $_configuration;
+        if ($_configuration['multiple_access_urls']) {
+            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $where.= " AND ar.access_url_id = $access_url_id ";
+                
+                $query_rows = "SELECT count(*) as total_rows
+                 FROM $tbl_session s
+                    LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
+                    INNER JOIN $tbl_user u ON s.id_coach = u.user_id
+                    INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
+                 $where ";
+            }
+        }
+        $result_rows = Database::query($query_rows);
+        $recorset = Database::fetch_array($result_rows);
+        $num = $recorset['total_rows'];
+        return $num;    
+    }
     
     
     /**

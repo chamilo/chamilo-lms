@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Migration launcher
+ * Call with either "migration" or "sync" as first parameter
+ * @package chamilo.migration
+ */
 /**
  * Load required classes
  */
@@ -10,6 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 //error_reporting(-1);
+$action_type = ((isset($argv[1]) && $argv[1]=='migration')?'migration':'sync');
 
 if (is_file(dirname(__FILE__) . '/migration.custom.class.php')) {
     require_once 'migration.custom.class.php';
@@ -51,23 +56,26 @@ if (!empty($servers)) {
              */
             $migrate = array();
             include $server_info['filename'];
-            //Default migration from MSSQL to Chamilo MySQL
-            $m->migrate($matches);
             
-            //Getting transactions from MSSQL (via webservices)
+            if ($action_type == 'migration') {
+                //Default migration from MSSQL to Chamilo MySQL
+                $m->migrate($matches);
+            } else {
+                //Getting transactions from MSSQL (via webservices)
+             
+                if (isset($matches['web_service_calls']['filename'])) {                
+                    require_once $matches['web_service_calls']['filename'];    
+                }
+                //This functions truncates the transaction lists!
+                //$m->test_transactions($matches['web_service_calls']);
             
-            if (isset($matches['web_service_calls']['filename'])) {                
-                require_once $matches['web_service_calls']['filename'];    
+                $m->search_transactions($matches['web_service_calls']);
+            
+                //Load transactions saved before            
+                $m->load_transactions($matches);    
+            
+                //print_r($m->errors_stack);
             }
-            //This functions truncates the transaction lists!
-            //$m->test_transactions($matches['web_service_calls']);
-            
-            //$m->search_transactions($matches['web_service_calls']);
-            
-            //Load transactions saved before            
-            //$m->load_transactions($matches);    
-            
-            //print_r($m->errors_stack);
             //echo "OK so far\n";
             echo "\n ---- End loading server----- \n";
         } else {

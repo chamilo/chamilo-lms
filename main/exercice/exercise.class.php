@@ -2251,10 +2251,13 @@ class Exercise {
 						} else {
 							$choice[$j] = trim($choice[$j]);
 						}
-
-						$user_tags[] = api_strtolower($choice[$j]);
+                        
+                        //No idea why we api_strtolower user reponses
+						//$user_tags[] = api_strtolower($choice[$j]);
+                        $user_tags[] = $choice[$j];
 						//put the contents of the [] answer tag into correct_tags[]
-						$correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
+						//$correct_tags[] = api_strtolower(api_substr($temp, 0, $pos));
+                        $correct_tags[] = api_substr($temp, 0, $pos);
 						$j++;
 						$temp = api_substr($temp, $pos +1);
 					}

@@ -195,8 +195,13 @@ switch ($action) {
         $hotpot_path = $_REQUEST['path'];
 		$count = get_count_exam_hotpotatoes_results($hotpot_path);        
 		break;
-    case 'get_sessions':           
-        $count = SessionManager::get_count_admin(array('where'=> $where_condition, 'extra' => $extra_fields));
+    case 'get_sessions':
+        $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        if ($list_type == 'simple') {
+            $count = SessionManager::get_count_admin(array('where'=> $where_condition, 'extra' => $extra_fields));
+        } else {
+            $count = SessionManager::get_count_admin_complete(array('where'=> $where_condition, 'extra' => $extra_fields));
+        }
         break;
     case 'get_extra_fields':
         $type = $_REQUEST['type'];
@@ -331,10 +336,14 @@ switch ($action) {
 		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);        
 		break;
-    case 'get_sessions':   
-        $session_columns = SessionManager::get_session_columns();
-        $columns = $session_columns['simple_column_name'];        
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
+    case 'get_sessions':
+        $session_columns = SessionManager::get_session_columns($list_type);
+        $columns = $session_columns['simple_column_name'];    
+        if ($list_type == 'simple') {
+            $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
+        } else {
+            $result = SessionManager::get_sessions_admin_complete(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
+        }
         break;    
      case 'get_timelines': 
         $columns = array('headline', 'actions');   

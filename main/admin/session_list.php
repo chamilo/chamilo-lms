@@ -19,6 +19,8 @@ $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 $action = $_REQUEST['action'];
 $idChecked = $_REQUEST['idChecked'];
 
+$list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+
 if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
 	header('Location: session_list.php');
@@ -44,7 +46,7 @@ if (!empty($error_message)) {
 }
 
 //jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions';
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&list_type='.$list_type;
 
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
@@ -66,7 +68,7 @@ $extra_params['groupingView'] = array(  'groupCollapse'    => false,
                                         'groupText'        => array('<b>'.get_lang('Session').' {0}</b>'));
 */
 
-$result = SessionManager::get_session_columns();
+$result = SessionManager::get_session_columns($list_type);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
 
@@ -235,11 +237,16 @@ $(function() {
     gbox.css({clear:"left"});
 });
 </script>
-<div class="actions">
 <?php 
+echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_add.php">'.Display::return_icon('new_session.png',get_lang('AddSession'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/add_many_session_to_category.php">'.Display::return_icon('session_to_category.png',get_lang('AddSessionsInCategories'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_list.php">'.Display::return_icon('folder.png',get_lang('ListSessionCategory'),'',ICON_SIZE_MEDIUM).'</a>';
+if ($list_type == 'complete') {
+    echo '<a href="'.api_get_self().'?list_type=simple">'.Display::return_icon('view_remove.png',get_lang('Simple'),'',ICON_SIZE_MEDIUM).'</a>';
+} else {
+    echo '<a href="'.api_get_self().'?list_type=complete">'.Display::return_icon('view_text.png',get_lang('Complete'),'',ICON_SIZE_MEDIUM).'</a>';
+}
 echo '</div>';
 
 $form = new FormValidator('search');

@@ -284,15 +284,16 @@ EOT;
 	/*
 	 * Show form to generate groups from classes subscribed to the course
 	 */
-    /*
-	$classes = ClassManager :: get_classes_in_course($_course['sysCode']);
+    $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
+    $obj = new UserGroup();	 
+    $classes = $obj->get_usergroup_in_course($options);
 	if (count($classes) > 0) {
 		echo '<b>'.get_lang('GroupsFromClasses').'</b>';
 		echo '<blockquote>';
 		echo '<p>'.get_lang('GroupsFromClassesInfo').'</p>';
 		echo '<ul>';
 		foreach ($classes as $index => $class) {
-			$number_of_users = count(ClassManager :: get_users($class['id']));
+			$number_of_users = count($obj->get_users_by_usergroup($class['id']));
 			echo '<li>';
 			echo $class['name'];
 			echo ' ('.$number_of_users.' '.get_lang('Users').')';
@@ -316,12 +317,12 @@ EOT;
 			$create_class_groups_form->addElement('hidden', 'group_category');
 		}
 		$create_class_groups_form->addElement('submit', 'submit', get_lang('Ok'));
-		$defaults['group_category'] = DEFAULT_GROUP_CATEGORY;
+		$defaults['group_category'] = GroupManager::DEFAULT_GROUP_CATEGORY;
 		$defaults['action'] = 'create_class_groups';
 		$create_class_groups_form->setDefaults($defaults);
 		$create_class_groups_form->display();
 		echo '</blockquote>';
-	}*/
+	}
     
 }
 

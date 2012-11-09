@@ -35,6 +35,33 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 {% endraw %}
 //]]>
 
+
+                       
+function setCheckbox(value, table_id) {    
+    checkboxes = $("#"+table_id+" input:checkbox");   
+    $.each(checkboxes, function(index, checkbox) { 
+         checkbox.checked = value;
+        if (value) {
+            $(checkbox).parentsUntil("tr").parent().addClass("row_selected");
+        } else {
+            $(checkbox).parentsUntil("tr").parent().removeClass("row_selected");            
+        }      
+    });   
+    return false;
+}
+
+function action_click(element, table_id) {
+    d = $("#"+table_id);
+    if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
+        return false;
+    } else {            
+        var action =$(element).attr("data-action");                                    
+        $('#'+table_id+' input[name="action"] ').attr("value", action);        
+        d.submit();
+        return false;
+    }
+}                        
+
 /* Global chat variables */
 var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
 var online_button   = '{{ online_button }}';

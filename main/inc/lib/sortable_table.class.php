@@ -229,6 +229,7 @@ class SortableTable extends HTML_Table {
 		}
 		$html = '';
 		if (!$empty_table) {
+            $table_id = 'form_'.$this->table_name.'_id';
 			$form  = $this->get_page_select_form();
 			$nav   = $this->get_navigation_html();
 			
@@ -250,34 +251,9 @@ class SortableTable extends HTML_Table {
     			$html .= '</table>';
             }
 			
-			if (count($this->form_actions) > 0) {
-				$html .= '<script type="text/javascript">                            
-                            function setCheckbox(value) {
-                                d = document.form_'.$this->table_name.';
-                                for (i = 0; i < d.elements.length; i++) {
-                                    if (d.elements[i].type == "checkbox") {
-                                        d.elements[i].checked = value;
-                                        if (value) {
-                                            $(d.elements[i]).parentsUntil("tr").parent().addClass("row_selected");
-                                        } else {
-                                            $(d.elements[i]).parentsUntil("tr").parent().removeClass("row_selected");
-                                        }
-                                    }
-                                }
-                            }
-                            function action_click(element) {
-                                if (!confirm('."'".addslashes(get_lang("ConfirmYourChoice"))."'".')) {
-                                    return false;
-                                } else {            
-                                    var action =$(element).attr("data-action");                                    
-                                    $(\' #form_'.$this->table_name.'_id input[name="action"] \').attr("value", action);                                
-                                    $("#form_'.$this->table_name.'_id").submit();
-                                    return false;
-                                }
-                            }
-                        </script>';
+			if (count($this->form_actions) > 0) {			
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
-				$html .= '<form id ="form_'.$this->table_name.'_id" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
+				$html .= '<form id ="'.$table_id.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
 		
@@ -298,8 +274,8 @@ class SortableTable extends HTML_Table {
                 
 				$html .= '<div class="btn-toolbar">';         
                     $html .= '<div class="btn-group">';
-                    $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true); return false;">'.get_lang('SelectAll').'</a>';
-                    $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false); return false;">'.get_lang('UnSelectAll').'</a> ';
+                    $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
+                    $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
                     $html .= '</div>';                
                     $html .= '<div class="btn-group">
                                 <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>                    
@@ -308,7 +284,7 @@ class SortableTable extends HTML_Table {
                                 </button>';
                     $html .= '<ul class="dropdown-menu">';				
                     foreach ($this->form_actions as $action => & $label) {					
-                        $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this);">'.$label.'</a></li>';
+                        $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a></li>';
                     }
                     $html .= '</ul>';				
                     $html .= '</div>';//btn-group                
@@ -388,7 +364,7 @@ class SortableTable extends HTML_Table {
 
 			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {
-				$script= '<script language="JavaScript" type="text/javascript">
+				$script= '<script>
 							/*<![CDATA[*/
 							function setCheckbox(value) {
 				 				d = document.form_'.$this->table_name.';
@@ -506,7 +482,7 @@ class SortableTable extends HTML_Table {
 
 			$html .= '<div class="clear"></div>';
 			if (count($this->form_actions) > 0) {
-				$script= '<script language="javaScript" type="text/javascript">
+				$script= '<script>
 							/*<![CDATA[*/
 							function setCheckbox(value) {
 				 				d = document.form_'.$this->table_name.';
@@ -598,10 +574,9 @@ class SortableTable extends HTML_Table {
         
 		$table_data = $this->get_table_data($from);
         
-        
 		if (is_array($table_data)) {
             $count = 1;
-			foreach ($table_data as $index => & $row) {
+			foreach ($table_data as & $row) {
 				$row = $this->filter_data($row);                                
 				$this->addRow($row);
                 if (isset($row['child_of'])) {

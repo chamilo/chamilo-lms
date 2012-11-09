@@ -146,7 +146,7 @@ class SessionManager {
         return $result['count'] > 0;
     }
     
-    static function get_count_admin() {
+    static function get_count_admin($options = array()) {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
         
         $where = 'WHERE 1 = 1 ';
@@ -155,6 +155,19 @@ class SessionManager {
         if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
+        
+        if (!empty($options['where'])) {       
+            if (!empty($options['extra'])) {
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
+                $options['where'] = str_replace('AND', 'OR', $options['where']);
+                
+                foreach ($options['extra'] as $extra) {
+                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);        
+                }
+            }                        
+            $where .= ' AND '.$options['where'];           
+        }
+        
         
         $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s $where ";
          
@@ -182,16 +195,14 @@ class SessionManager {
      * @param array order and limit keys
      */
     public static function get_sessions_admin($options = array()) {
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);                     
-        //$tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);        
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
-                
+        //var_dump($options);
         $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
-                
+        $user_id = api_get_user_id();                
         if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
-            $where.=" AND s.session_admin_id = $user_id ";
+            $where .=" AND s.session_admin_id = $user_id ";
         }
         
         $inject_extra_fields = null;                
@@ -203,6 +214,7 @@ class SessionManager {
         $double_fields = array();
         
         $extra_field_option = new ExtraFieldOption('session');
+        
         $extra_present = false;
         
         if (isset($options['extra'])) {
@@ -242,7 +254,7 @@ class SessionManager {
                 " $inject_extra_fields ".
                 " s.id ";
         
-        if (!empty($options['where'])) {        
+        if (!empty($options['where'])) {       
             if (!empty($options['extra'])) {
                 $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
                 $options['where'] = str_replace('AND', 'OR', $options['where']);
@@ -250,16 +262,14 @@ class SessionManager {
                 foreach ($options['extra'] as $extra) {
                     $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);        
                 }
-            }     
-            $options['where'] = str_replace('course_title', 'c.title', $options['where']);
-            
+            }                        
             $where .= ' AND '.$options['where'];           
-        }           
+        }        
         
         if (!empty($options['limit'])) {            
             $where .= " LIMIT ".$options['limit'];
         }
-        //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
+        
         $query = "$select FROM $tbl_session s ".
                     " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
                     " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) ".                    
@@ -286,9 +296,9 @@ class SessionManager {
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }        
-        error_log($query);
         $result = Database::query($query);
         
+        error_log($query);        
         
         $formatted_sessions = array();
                 
@@ -296,7 +306,7 @@ class SessionManager {
             $sessions   = Database::store_result($result, 'ASSOC');
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                 error_log($session_id);
+                //error_log($session_id);
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
                 if ($session['session_active'] == 1) {

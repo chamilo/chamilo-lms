@@ -9,7 +9,7 @@
 * @package chamilo.learnpath
 * @author Yannick Warnier <ywarnier@beeznest.org>
 */
-//use \ChamiloSession as Session;
+use \ChamiloSession as Session;
 
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
@@ -487,7 +487,7 @@ if (!empty($flat_list)) {
         echo "</tr>";
         $current ++; //counter for number of elements treated
     } // end foreach ($flat_list)
-    // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be displayd yet.
+    // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be display yet.
     echo "</table>";
 } else {
     if ($is_allowed_to_edit) {
@@ -501,9 +501,9 @@ if (!empty($flat_list)) {
     }
 }
 $course_info = api_get_course_info();
-$result = learnpath::generate_learning_path_folder($course_info);
+learnpath::generate_learning_path_folder($course_info);
 
 //Deleting the objects
-//Session::erase('oLP');
-//Session::erase('lpobject');
+Session::erase('oLP');
+Session::erase('lpobject');
 Display::display_footer();

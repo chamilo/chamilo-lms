@@ -40,16 +40,16 @@ function save_objectives($lp_id, $user_id, $view_id, $item_id, $objectives = arr
     require_once 'aiccItem.class.php';
     $mylp = '';
     if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('////$_SESSION[lpobject] is set', 0); }
+        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
         $oLP =unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {
             if ($debug > 2) { error_log(print_r($oLP,true), 0); }
-            if ($debug > 2) { error_log('////Building new lp', 0); }
+            if ($debug > 2) { error_log('Building new lp', 0); }
             unset($oLP);
             $code = api_get_course_id();
             $mylp = new learnpath($code, $lp_id, $user_id);
         }else{
-            if ($debug > 2) { error_log('////Reusing session lp', 0); }
+            if ($debug > 2) { error_log('Reusing session lp', 0); }
             $mylp = & $oLP;
         }
     }

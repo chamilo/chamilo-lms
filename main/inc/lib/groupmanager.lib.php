@@ -117,10 +117,10 @@ class GroupManager {
 						g.self_unregistration_allowed,
 						g.session_id,
 						ug.user_id is_member						
-					FROM ".$table_group." g
-					LEFT JOIN ".$table_group_user." ug
+					FROM $table_group g
+					LEFT JOIN $table_group_user ug
 					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
-		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session===true || $_SESSION['studentview'] == 'studentview') {
+		} elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session  ===true || $_SESSION['studentview'] == 'studentview') {
 			$sql = "SELECT g.id,
 						g.name,
 						g.description,
@@ -131,8 +131,8 @@ class GroupManager {
 						g.self_unregistration_allowed,
 						g.session_id,
 						ug.user_id is_member						
-					FROM ".$table_group." g
-					LEFT JOIN ".$table_group_user." ug
+					FROM $table_group g
+					LEFT JOIN $table_group_user ug
 					ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";			
 		}
 				
@@ -162,15 +162,8 @@ class GroupManager {
 		$groups = array();
 		$thisGroup= array();
         while ($thisGroup = Database::fetch_array($groupList)) {
-            /*if ($thisGroup['category_id'] == self::VIRTUAL_COURSE_CATEGORY) {
-                $sql = "SELECT title FROM $table_course WHERE code = '".$thisGroup['name']."'";
-                $obj = Database::fetch_object(Database::query($sql));
-                $thisGroup['name'] = $obj->title;
-            }*/
-
             $thisGroup['number_of_members'] = count(GroupManager::get_subscribed_users($thisGroup['id']));
-            //$thisGroup['number_of_members'] = GroupManager::get_subscribed_users($category);
-
+            
             if ($thisGroup['session_id']!=0) {
                 $sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
                 $rs_session = Database::query($sql_session);

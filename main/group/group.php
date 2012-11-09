@@ -45,7 +45,7 @@ if (api_get_setting('allow_group_categories') == 'false') {
 	$num = Database::num_rows($res);
 	if ($num == 0) {
 		$sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order) 
-		VALUES ($course_id, '2', '".lang2db($DefaultGroupCategory)."', '', '1', '1', '8', '0', '0', '0', '0');";
+		VALUES ($course_id, '2', '".lang2db(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
 		Database::query ($sql);
 	}
 }

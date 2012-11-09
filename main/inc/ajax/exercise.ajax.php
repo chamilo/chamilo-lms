@@ -70,7 +70,18 @@ switch ($action) {
             $start = 0;
         }        
         
-        $sql = "SELECT exe_id,  exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+        $sql = "SELECT  exe_id,  
+                        exe_user_id, 
+                        firstname, 
+                        lastname, 
+                        aa.status, 
+                        start_date, 
+                        exe_result, 
+                        exe_weighting, 
+                        exe_result/exe_weighting as score, 
+                        exe_duration, 
+                        questions_to_check, 
+                        orig_lp_id
                 FROM $user_table u 
                 INNER JOIN (
                     SELECT  t.exe_id, t.exe_user_id, status,
@@ -85,7 +96,7 @@ switch ($action) {
         
         $result = Database::query($sql);
         $results = array();        
-        while ($row = Database::fetch_array($result,'ASSOC')){
+        while ($row = Database::fetch_array($result, 'ASSOC')){
             $results[] = $row;
         }        
 

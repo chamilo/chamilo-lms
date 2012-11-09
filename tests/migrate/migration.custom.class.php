@@ -338,21 +338,34 @@ class MigrationCustom {
      * Assigns a user to a session based on rules in db_matches.php
      */
     static function add_user_to_session($data) {
-        $extra_field_value = new ExtraFieldValue('session');
-        $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
-        //error_log('data[uidIdPrograma] '.$data['uidIdPrograma'].' returned $result[session_id]: '.$result['session_id']);
         $session_id = null;
         $user_id = null;
-        
-        if ($result && $result['session_id']) {
+        if (is_object($omigrate) && $omigrate->boost_sessions) {
+            if (isset($omigrate->sessions[$data['uidIdPrograma']])) {
+                $session_id = $omigrate->sessions[$data['uidIdPrograma']];
+            }
+        } 
+        if (empty($session_id)) {
+          $extra_field_value = new ExtraFieldValue('session');
+          $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $data['uidIdPrograma']);
+          //error_log('data[uidIdPrograma] '.$data['uidIdPrograma'].' returned $result[session_id]: '.$result['session_id']);
+          if ($result && $result['session_id']) {
             $session_id = $result['session_id'];
+          }
         }
         
-        $extra_field_value = new ExtraFieldValue('user');
-        $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
-        //error_log('data[uidIdPersona] '.$data['uidIdPersona'].' returned $result[user_id]: '.$result['user_id']);
-        if ($result && $result['user_id']) {               
+        if (is_object($omigrate) && $omigrate->boost_users) {
+            if (isset($omigrate->users[$data['uidIdPersona']])) {
+                $user_id = $omigrate->users[$data['uidIdPersona']];
+            }
+        }
+        if (empty($user_id)) {
+          $extra_field_value = new ExtraFieldValue('user');
+          $result = $extra_field_value->get_item_id_from_field_variable_and_field_value('uidIdPersona', $data['uidIdPersona']);
+          //error_log('data[uidIdPersona] '.$data['uidIdPersona'].' returned $result[user_id]: '.$result['user_id']);
+          if ($result && $result['user_id']) {               
             $user_id = $result['user_id'];                   
+          }
         }
         
         if (!empty($session_id) && !empty($user_id)) {          

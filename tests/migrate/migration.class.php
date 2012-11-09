@@ -703,21 +703,19 @@ class Migration {
                             
                             self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));
                             
-                            /*
                             if ($result['error'] == false) {
                                 //Updating transaction
-                                
+                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_SUCCESSFUL));
                             } else {
                                 //failed
                                 self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                            }*/
+                            }
                         } else {
                             //	method does not exist
                             error_log("Function does $function_to_call not exists");
                             //Failed
                             self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                        }
-                        exit;
+                        }                        
                     }
                 } else {
                     error_log('No transactions to load');

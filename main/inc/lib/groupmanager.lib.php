@@ -199,6 +199,8 @@ class GroupManager {
         $course_id  = api_get_course_int_id();
         
 		$currentCourseRepository = $_course['path'];
+
+        echo "HUBC category_id=$category_id ";
 		
 		$category = self :: get_category($category_id);
 
@@ -346,18 +348,15 @@ class GroupManager {
 	 */
 	public static function create_class_groups ($category_id) {
 		global $_course;
-		$classes = ClassManager::get_classes_in_course($_course['sysCode']);
+        $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
+        $obj = new UserGroup();	 
+        $classes = $obj->get_usergroup_in_course($options);		
 		$group_ids = array();
 		foreach($classes as $index => $class)
 		{
-			$users = ClassManager::get_users($class['id']);
-			$group_id = self::create_group($class['name'],$category_id,0,count($users));
-			$user_ids = array();
-			foreach($users as $index_user => $user)
-			{
-				$user_ids[] = $user['user_id'];
-			}
-			self::subscribe_users($user_ids,$group_id);
+		    $users_ids = $obj->get_users_by_usergroup($class['id']);
+			$group_id = self::create_group($class['name'],$category_id,0,count($users_ids));
+			self::subscribe_users($users_ids,$group_id);
 			$group_ids[] = $group_id;
 		}
 		return $group_ids;

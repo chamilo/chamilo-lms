@@ -199,8 +199,6 @@ class GroupManager {
         $course_id  = api_get_course_int_id();
         
 		$currentCourseRepository = $_course['path'];
-
-        echo "HUBC category_id=$category_id ";
 		
 		$category = self :: get_category($category_id);
 

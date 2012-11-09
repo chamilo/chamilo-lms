@@ -705,10 +705,10 @@ class Migration {
                             
                             if ($result['error'] == false) {
                                 //Updating transaction
-                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_SUCCESSFUL));
+                                //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_SUCCESSFUL));
                             } else {
                                 //failed
-                                self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
+                                //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
                             }
                         } else {
                             //	method does not exist

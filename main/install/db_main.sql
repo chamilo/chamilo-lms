@@ -566,9 +566,6 @@ CREATE TABLE IF NOT EXISTS session_field_options (
     PRIMARY KEY (id)
 );
 
-ALTER TABLE session_field_values ADD INDEX idx_session_field_options_field_id(field_id);
-
-
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
     id  int NOT NULL auto_increment,
@@ -579,7 +576,9 @@ CREATE TABLE IF NOT EXISTS session_field_values(
     PRIMARY KEY(id)
 );
 
-ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id (session_id);
+ALTER TABLE session_field_options ADD INDEX idx_session_field_options_field_id(field_id);
+ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id(session_id);
+ALTER TABLE session_field_values ADD INDEX idx_session_field_values_field_id(field_id);
 
 --
 -- Table structure for table settings_current
@@ -3112,4 +3111,4 @@ CREATE TABLE migration_transaction_status (
 INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20199' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20283' WHERE variable = 'chamilo_database_version';

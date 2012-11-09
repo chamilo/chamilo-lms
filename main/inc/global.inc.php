@@ -62,9 +62,9 @@ if (empty($_configuration['system_version'])) {
 }
 
 // For backward compatibility.
-$_configuration['dokeos_version']       = $_configuration['system_version'];
-$_configuration['dokeos_stable']        = $_configuration['system_stable'];
-
+$_configuration['dokeos_version']   = $_configuration['system_version'];
+$_configuration['dokeos_stable']    = $_configuration['system_stable'];
+$userPasswordCrypted                = $_configuration['password_encryption'];
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';

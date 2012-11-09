@@ -5,8 +5,8 @@
  */
 class MigrationMSSQL extends Migration {
 
-    public function __construct($dbhost, $dbport = '1433', $dbuser, $dbpass, $dbname) {
-        parent::__construct($dbhost, $dbport, $dbuser, $dbpass, $dbname);
+    public function __construct($dbhost, $dbport = '1433', $dbuser, $dbpass, $dbname, $boost=false) {
+        parent::__construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $boost);
         ini_set('display_errors', 1);
         ini_set('mssql.datetimeconvert', 0);
         $this->odbtype = 'mssql';
@@ -33,13 +33,13 @@ class MigrationMSSQL extends Migration {
         //In order to process X item of each table add TOP X
         
         $top = null;
-        //$top = " TOP 1000 ";
+//        $top = " TOP 100000 ";
         if (in_array($table, array('Empleado', 'Alumno'))) {
-            $top = " TOP 10000 ";            
+        //    $top = " TOP 10000 ";            
         }
         
         if (in_array($table, array('ProgramaAcademico', 'Matricula'))) {
-            $top = " TOP 100000 ";
+        //    $top = " TOP 100000 ";
         }
       
         //$top = null;

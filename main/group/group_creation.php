@@ -262,24 +262,22 @@ EOT;
 				$base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
 			}
 		}
-		if (count($base_group_options) > 0) {
-			echo '<b>'.get_lang('CreateSubgroups').'</b>';
-			echo '<blockquote>';
-			echo '<p>'.get_lang('CreateSubgroupsInfo').'</p>';
+		if (count($base_group_options) > 0) {			
 			$create_subgroups_form = new FormValidator('create_subgroups');
+            $create_subgroups_form->addElement('header', get_lang('CreateSubgroups'));
+            $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
 			$create_subgroups_form->addElement('hidden', 'action');
 			$group_el = array();
 			$group_el[] = & $create_subgroups_form->createElement('static', null, null, get_lang('CreateNumberOfGroups'));
 			$group_el[] = & $create_subgroups_form->createElement('text', 'number_of_groups', null, array('size' => 3));
 			$group_el[] = & $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
 			$group_el[] = & $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
-			$group_el[] = & $create_subgroups_form->createElement('submit', 'submit', get_lang('Ok'));
+			$group_el[] = & $create_subgroups_form->createElement('button', 'submit', get_lang('Ok'));
 			$create_subgroups_form->addGroup($group_el, 'create_groups', null, ' ', false);
 			$defaults = array();
 			$defaults['action'] = 'create_subgroups';
 			$create_subgroups_form->setDefaults($defaults);
-			$create_subgroups_form->display();
-			echo '</blockquote>';
+			$create_subgroups_form->display();			
 		}
 	}
 

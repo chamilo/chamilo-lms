@@ -335,6 +335,7 @@ class MigrationCustom {
             //print_r($data);
             //exit;
         } else{
+            $c = set_coach_to_course_session($data['id_coach'], $session_id, $data['course_code']);
             //error_log('session_id created');      
             if (is_object($omigrate) && isset($omigrate) && $omigrate->boost_sessions) {
                 $omigrate->sessions[$data['uidIdPrograma']] = $session_id;

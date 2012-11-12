@@ -72,6 +72,11 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_i
 ALTER TABLE c_item_property ADD INDEX idx_itemprop_id_tool (c_id, tool(8));
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 
+ALTER TABLE c_quiz_question_rel_category ADD COLUMN id int unsigned NOT NULL;
+ALTER TABLE c_quiz_question_rel_category DROP PRIMARY KEY;
+ALTER TABLE c_quiz_question_rel_category ADD PRIMARY KEY (id, c_id, question_id);
+ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN id int unsigned AUTO_INCREMENT;
+
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
@@ -106,5 +111,8 @@ CREATE TABLE migration_transaction (id int not null AUTO_INCREMENT,  branch_id i
 CREATE TABLE migration_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
 INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
+
+
+
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20283' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20306' WHERE variable = 'chamilo_database_version';

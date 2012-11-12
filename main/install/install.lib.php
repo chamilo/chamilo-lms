@@ -2643,7 +2643,7 @@ function create_course_tables($course_db_name = null) {
         question_id int unsigned NOT NULL,
         exercice_id int unsigned NOT NULL,
         question_order int unsigned NOT NULL default 1,
-        PRIMARY KEY (c_id, question_id,exercice_id)
+        PRIMARY KEY (c_id, question_id, exercice_id)
         )" . $charset_clause;
     Database::query($sql);
 
@@ -2651,24 +2651,25 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "CREATE TABLE `".$table_quiz_question_category . "` (
 	  $add_to_all_tables
-	  id int NOT NULL AUTO_INCREMENT,
+	  id int unsigned NOT NULL AUTO_INCREMENT,
 	  title varchar(255) NOT NULL,
 	  description text NOT NULL,
-	  PRIMARY KEY (c_id,id)
+	  PRIMARY KEY (c_id, id)
 	)" . $charset_clause;
     Database::query($sql);
 
 
 	$sql = "CREATE TABLE `".$table_quiz_question_rel_category . "` (
 	  $add_to_all_tables
+      id int unsigned NOT NULL AUTO_INCREMENT,
 	  question_id int NOT NULL,
 	  category_id int NOT NULL,
-	  PRIMARY KEY (c_id,question_id)
+	  PRIMARY KEY (id, c_id, question_id)
     )" . $charset_clause;
     Database::query($sql);
 
 
-    /*        Course description	*/
+    //Course description
 
     $sql = "
         CREATE TABLE `".$TABLETOOLCOURSEDESC . "` (

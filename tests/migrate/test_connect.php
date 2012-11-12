@@ -12,16 +12,17 @@ if (PHP_SAPI == 'cli') {
  * Load connect info
  */
 //require 'config.dist.php';
-$db_host = substr(htmlentities($_POST['host']),0,25);
-$db_user = substr(htmlentities($_POST['user']),0,25);
-$db_pass = substr(htmlentities($_POST['pass']),0,25);
-$db_name = substr(htmlentities($_POST['name']),0,25);
+$db_host = substr(htmlentities(empty($_POST['host'])?'':$_POST['host']),0,25);
+$db_user = substr(htmlentities(empty($_POST['user'])?'':$_POST['user']),0,25);
+$db_pass = substr(htmlentities(empty($_POST['pass'])?'':$_POST['pass']),0,25);
+$db_name = substr(htmlentities(empty($_POST['name'])?'':$_POST['name']),0,25);
 echo '<p><form action="" method="POST">';
 echo '<table>';
-echo '<tr><td>Host:</td><td><input type="text" name="host">'.(empty($db_host)?'':$db_host).'</input></td>';
-echo '<tr><td>User:</td><td><input type="text" name="user">'.(empty($db_user)?'':$db_user).'</input></td>';
-echo '<tr><td>Pass:</td><td><input type="text" name="pass">'.(empty($db_pass)?'':$db_pass).'</input></td>';
-echo '<tr><td>Base:</td><td><input type="text" name="name">'.(empty($db_name)?'':$db_name).'</input></td>';
+echo '<tr><td>Host:</td><td><input type="text" name="host">'.(empty($db_host)?'':$db_host).'</input></td></tr>';
+echo '<tr><td>User:</td><td><input type="text" name="user">'.(empty($db_user)?'':$db_user).'</input></td></tr>';
+echo '<tr><td>Pass:</td><td><input type="text" name="pass">'.(empty($db_pass)?'':$db_pass).'</input></td></tr>';
+echo '<tr><td>Base:</td><td><input type="text" name="name">'.(empty($db_name)?'':$db_name).'</input></td></tr>';
+echo '<tr><td colspan="2"><input type="submit" name="ok" value="Test"></td></tr>';
 echo '</table>';
 echo '</form></p>';
 /**

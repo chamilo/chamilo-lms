@@ -158,7 +158,7 @@ $_SESSION['duration_time'][$current_expired_time_key] = $current_timestamp;
 
 if ($time_control) {
 	//Get the expired time of the current exercice in track_e_exercices
-	$total_seconds 			  = $objExercise->expired_time*60;
+	$total_seconds = $objExercise->expired_time*60;
 }
 
 $show_clock = true;
@@ -350,7 +350,6 @@ $exercise_title			= $objExercise->selectTitle();
 $exercise_description  	= $objExercise->selectDescription();
 $exercise_sound 		= $objExercise->selectSound();
 
-//if (!isset($_SESSION['questionList']) || $origin == 'learnpath') {
 //in LP's is enabled the "remember question" feature?
 
 if (!isset($_SESSION['questionList'])) {
@@ -359,7 +358,7 @@ if (!isset($_SESSION['questionList'])) {
     if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
-    Session::write('questionList',$questionList);
+    Session::write('questionList', $questionList);
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
 } else {
 	if (isset($objExercise) && isset($_SESSION['objExercise'])) {
@@ -837,6 +836,7 @@ if (!empty($error)) {
 
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
                     $.ajax({
+                        type:"post",
                         url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                         data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                         success: function(return_value) {
@@ -900,6 +900,7 @@ if (!empty($error)) {
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");
 
                 $.ajax({
+                    type:"post",
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                     success: function(return_value) {

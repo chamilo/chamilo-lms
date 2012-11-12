@@ -413,7 +413,7 @@ if ($exerciseId > 0) {
 	$from = '';
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
 		$from = ", $TBL_COURSE_REL_CATEGORY crc ";
-		$where .= " AND crc.c_id=$selected_course AND crc.question_id=qu.id AND crc.category_id=$courseCategoryId";
+		$where .= " AND crc.c_id = $selected_course AND crc.question_id=qu.id AND crc.category_id=$courseCategoryId";
 	}
 	if (isset($exerciseLevel) && $exerciseLevel != -1) {
 		$where .= ' AND level='.$exerciseLevel;
@@ -431,9 +431,9 @@ if ($exerciseId > 0) {
 	            $from 
 	        WHERE 
 	            qt.question_id=qu.id 
-	            AND qt.exercice_id=$exerciseId 
-	            AND qt.c_id=$selected_course 
-	            AND qu.c_id=$selected_course 
+	            AND qt.exercice_id = $exerciseId 
+	            AND qt.c_id = $selected_course 
+	            AND qu.c_id = $selected_course 
 	            $where 
 	        ORDER BY 
 	            question_order";
@@ -449,7 +449,7 @@ if ($exerciseId > 0) {
 	$from = '';
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
 		$from = ", $TBL_COURSE_REL_CATEGORY crc ";
-		$level_where .= " AND crc.c_id=$selected_course AND crc.question_id=qu.id AND crc.category_id=$courseCategoryId";
+		$level_where .= " AND crc.c_id=$selected_course AND crc.question_id=qu.id AND crc.category_id = $courseCategoryId";
 	}	
 	if (isset($exerciseLevel) && $exerciseLevel!= -1 ) {
 		$level_where = ' AND level='.$exerciseLevel;
@@ -458,19 +458,23 @@ if ($exerciseId > 0) {
 	if (isset($answerType) && $answerType >0 -1 ) {
 		$answer_where = ' AND type='.$answerType;
 	}
-	$sql = "SELECT DISTINCT * FROM $TBL_QUESTIONS qu $from WHERE qu.c_id=$selected_course AND qu.id NOT IN (SELECT question_id FROM $TBL_EXERCICE_QUESTION WHERE c_id=$selected_course ) $level_where $answer_where";
+	$sql = "SELECT DISTINCT * FROM $TBL_QUESTIONS qu $from 
+            WHERE qu.c_id=$selected_course AND qu.id NOT IN (
+                    SELECT question_id FROM $TBL_EXERCICE_QUESTION 
+                    WHERE c_id=$selected_course 
+            ) $level_where $answer_where";
     $result = Database::query($sql);
     while($row = Database::fetch_array($result, 'ASSOC')) {
         $main_question_list[] = $row;
     }
-} 
-else {
+} else {
 	// 
 	// All tests for selected course 
 	// 
 	// if we have not selected any option in the list-box 'Filter'
 	$filter = '';
 	$from = '';
+    
 	if (isset($courseCategoryId) && $courseCategoryId > 0) {
 		$from = ", $TBL_COURSE_REL_CATEGORY crc ";
 		$filter .= " AND crc.c_id=$selected_course AND crc.question_id=qu.id AND crc.category_id=$courseCategoryId";
@@ -481,14 +485,6 @@ else {
 	if (isset($answerType) && $answerType > 0) {
 		$filter .= ' AND qu.type='.$answerType.' ';
 	}
-//	// why these lines ?
-//  if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
-//      $filter .= ' AND qu.type <> '.HOT_SPOT_DELINEATION.' ';
-//  }
-//  // fwhy
-  // 
-  // if in session
-  // 
   if (!empty($session_id) && $session_id != '-1') {
     $main_question_list = array();
     if (!empty($course_list))
@@ -515,8 +511,9 @@ else {
                 if ($answerType != $question_obj->type) {
                 	continue;
                 }
+                $category_list = Testcategory::getCategoryForQuestion($question_obj->id, $selected_course);
                 
-                if ($courseCategoryId > 0 && Testcategory::getCategoryForQuestion($question_obj->id, $selected_course)) {
+                if ($courseCategoryId > 0 && !empty($category_list)) {
                 	continue;
                 }
                 if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
@@ -614,6 +611,7 @@ $header[] = array($actionLabel, false, array("style"=>"text-align:center"), arra
 $data = array();
 
 if (is_array($main_question_list)) {
+    $all_category_list = Testcategory::getCategoryListName($selected_course);
     foreach ($main_question_list as $tabQuestion) {
         $row = array();
 
@@ -628,9 +626,16 @@ if (is_array($main_question_list)) {
         $row[] = $question_type;
         $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
         $row[] = $tabQuestion['level'];
-        $row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
-                    $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, 
-                    $answerType, $session_id, $exerciseId).
+        $row[] = get_action_icon_for_question($actionIcon1, 
+                    $fromExercise, 
+                    $tabQuestion['id'], 
+                    $tabQuestion['type'], 
+                    $tabQuestion['question'], 
+                    $selected_course, 
+                    $courseCategoryId, 
+                    $exerciseLevel, 
+                    $answerType, 
+                    $session_id, $exerciseId).
                     "&nbsp;".
                     get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'], 
                     $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType, 
@@ -783,7 +788,9 @@ function get_question_type_for_question($in_selectedcourse, $in_questionid) {
 
 // return the name of the category for the question in a course
 // hubert.borderiou 13-10-2011
-function get_question_categorie_for_question($in_courseid, $in_questionid) {
-	$cat = Testcategory::getCategoryNameForQuestion($in_questionid, $in_courseid);
-	return $cat;
+function get_question_categorie_for_question($course_id, $question_id) {
+    global $all_category_list;
+    $objQuestionTmp = Question :: read($question_id, $course_id);    
+    return Testcategory::return_category_labels($objQuestionTmp->category_list, $all_category_list);	
+	
 }

@@ -171,7 +171,9 @@ if (!$inATest) {
         $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
         $styleLevel = "width:6%; float:left; padding-top:8px; text-align:center;";
         $styleScore = "width:4%; float:left; padding-top:8px; text-align:center;";
-
+        
+        $category_list = Testcategory::getCategoryListName();
+        
         if (is_array($questionList)) {
 			foreach ($questionList as $id) {
 				//To avoid warning messages
@@ -203,11 +205,14 @@ if (!$inATest) {
 				$questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, array(), ICON_SIZE_MEDIUM), array('style'=>$styleType));
 
 				// Question category
-				$txtQuestionCat = Security::remove_XSS(Testcategory::getCategoryNameForQuestion($objQuestionTmp->id));
-				if (empty($txtQuestionCat)) {
-					$txtQuestionCat = "-";
+                
+                
+                $category_labels = Testcategory::return_category_labels($objQuestionTmp->category_list, $category_list);
+
+				if (empty($category_labels)) {
+					$category_labels = "-";
 				}
-				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;" title="'.$txtQuestionCat.'">'.cut($txtQuestionCat, 42).'</a>', array('style'=>$styleCat));
+				$questionCategory = Display::tag('div', '<a href="#" style="padding:0px; margin:0px;">'.$category_labels.'</a>', array('style'=>$styleCat));
 
 				// Question level
 				$txtQuestionLevel = $objQuestionTmp->level;

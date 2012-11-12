@@ -52,7 +52,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		if (!$only_questions) {
 			$questionDescription = $objQuestionTmp->selectDescription();
 			if ($show_title) {
-				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	// 				
+				echo Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);		
 				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
 			}
 			if (!empty($questionDescription)) {
@@ -135,8 +135,10 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             $s .= '</td></tr>';
 		} elseif ($answerType == ORAL_EXPRESSION) {
 			//Add nanog
-			if (api_get_setting('enable_nanogong') == 'true') {
-						
+			if (api_get_setting('enable_nanogong') == 'true') {				
+				
+				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
+				
 				//@todo pass this as a parameter
 				global $exercise_stat_info, $exerciseId, $exe_id;
 				
@@ -417,9 +419,9 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				            if (!empty($value[0])) {				            	
 				            	$value = str_replace('&nbsp;', '',  trim($value[0]));                                
 				            }                                
-                            $correct_item = preg_quote($correct_item);                            
+                            $correct_item = preg_quote($correct_item);
+                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
 				            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);                            
-                            //$answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
 				        }		        				        
 				        $i++;				        
 				    }
@@ -510,7 +512,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 	} elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
 		// Question is a HOT_SPOT        
         //checking document/images visibility
-        if (api_is_platform_admin() || api_is_course_admin()) {            
+        if (api_is_platform_admin() || api_is_course_admin()) {
+            require_once api_get_path(LIBRARY_PATH).'document.lib.php';
             $course = api_get_course_info();        
             $doc_id = DocumentManager::get_document_id($course, '/images/'.$pictureName);  
             if (is_numeric($doc_id)) {              
@@ -561,7 +564,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 		if (!$only_questions) {
             if ($show_title) {
-				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+				echo Testcategory::getCategoryNamesForQuestion($objQuestionTmp->id);
                 echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
 			//@todo I need to the get the feedback type
@@ -718,10 +721,19 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 function get_exercise_track_exercise_info($exe_id) {
 	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
 	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+	$TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
 	$exe_id = intval($exe_id);
     $result = array();
     if (!empty($exe_id)) {
-	   $sql_fb_type = 'SELECT * FROM '.$TBL_EXERCICES.' as e INNER JOIN '.$TBL_TRACK_EXERCICES.' as te  ON (e.id=te.exe_exo_id) WHERE te.exe_id='.$exe_id;
+	   $sql_fb_type = "SELECT q.*, tee.*
+	                    FROM $TBL_EXERCICES as q
+	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
+	                    ON q.id=tee.exe_exo_id
+	                    INNER JOIN $TBL_COURSE c
+	                    ON c.code = tee.exe_cours_id
+	                    WHERE tee.exe_id=$exe_id
+	                    AND q.c_id=c.id";	   
+	   
 	   $res_fb_type = Database::query($sql_fb_type);
 	   $result      = Database::fetch_array($res_fb_type, 'ASSOC');
     }
@@ -2034,8 +2046,15 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     //Getting attempt info
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
     $question_list = array();
+    
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list		= explode(',', $exercise_stat_info['data_tracking']);
+    } else {        
+        //Try getting the question list only if save result is off
+        if ($save_user_result == false) {
+            $question_list = $objExercise->get_validated_question_list();
+        }
+        error_log("Data tracking is empty! exe_id: $exe_id");
     }
     
     $counter = 1;
@@ -2130,7 +2149,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
                 
                 // display question category, if any
-                $question_content .= Testcategory::returnCategoryAndTitle($questionId);
+                $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
             }
             $counter++;
             

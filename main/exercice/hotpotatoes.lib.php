@@ -76,12 +76,14 @@ function GetComment($path, $course_code = '') {
     global $dbTable;    
     $course_info = api_get_course_info($course_code);            
     $path = Database::escape_string($path);
-    $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']} AND path='$path'";
-    $result = Database::query($query);
-    while ($row = Database::fetch_array($result)) {
-        return $row[0];
+    if (!empty($course_info) && !empty($path)) {
+        $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']} AND path='$path'";
+        $result = Database::query($query);
+        while ($row = Database::fetch_array($result)) {
+            return $row[0];
+        }
     }
-    return '';
+    return null;
 }
 
 /**
@@ -97,7 +99,7 @@ function SetComment($path, $comment) {
     $course_id = api_get_course_int_id();
     $query = "UPDATE $dbTable SET comment='$comment' WHERE $course_id AND path='$path'";
     $result = Database::query($query);
-    return "$result";
+    return $result;
 }
 
 /**
@@ -106,6 +108,9 @@ function SetComment($path, $comment) {
  * @return   string    The file contents or false on security error
  */
 function ReadFileCont($full_file_path) {
+    if (empty($full_file_path)) {
+        return false;
+    }
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH))) {
         if (is_file($full_file_path)) {
             if (!($fp = fopen(urldecode($full_file_path), 'r'))) {

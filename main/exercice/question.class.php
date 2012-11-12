@@ -57,7 +57,7 @@ abstract class Question
 	public $level;
 	public $picture;
 	public $exerciseList;  // array with the list of exercises which this question is in
-	public $category;
+	public $category_list;
 	private $isContent;
     public $course;        
 	static $typePicture = 'new_question.png';
@@ -95,7 +95,7 @@ abstract class Question
 		$this->position=1;
 		$this->picture='';
 		$this->level = 1;
-		$this->category=0;
+		$this->category_list = array();
         $this->extra=''; // This variable is used when loading an exercise like an scenario with an special hotspot: final_overlap, final_missing, final_excess
 		$this->exerciseList=array();
 		$this->course = api_get_course_info();
@@ -144,18 +144,18 @@ abstract class Question
 			$objQuestion 				= Question::getInstance($object->type);
             if (!empty($objQuestion)) {
 			
-                $objQuestion->id			= $id;
-                $objQuestion->question		= $object->question;
-                $objQuestion->description	= $object->description;
-                $objQuestion->weighting		= $object->ponderation;
-                $objQuestion->position		= $object->position;
-                $objQuestion->type			= $object->type;
-                $objQuestion->picture		= $object->picture;
-                $objQuestion->level			= (int) $object->level;
-                $objQuestion->extra         = $object->extra;
-                $objQuestion->course        = $course_info;
-                $objQuestion->category	    = Testcategory::getCategoryForQuestion($id);
-
+                $objQuestion->id                = $id;
+                $objQuestion->question          = $object->question;
+                $objQuestion->description       = $object->description;
+                $objQuestion->weighting         = $object->ponderation;
+                $objQuestion->position          = $object->position;
+                $objQuestion->type              = $object->type;
+                $objQuestion->picture           = $object->picture;
+                $objQuestion->level             = (int) $object->level;
+                $objQuestion->extra             = $object->extra;
+                $objQuestion->course            = $course_info;
+                $objQuestion->category_list	    = Testcategory::getCategoryForQuestion($id);
+                
                 $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
@@ -317,8 +317,8 @@ abstract class Question
 	 * @author - Hubert Borderiou 12-10-2011
 	 * @param - array of category $in_category
 	 */
-	function updateCategory($in_category) {
-		$this->category=$in_category;
+	function updateCategory($category_list) {
+		$this->category_list = $category_list;
 	}
 	
 	/**
@@ -334,10 +334,44 @@ abstract class Question
 	 * @param - interger $in_positive
 	 */
 	function updateUncheckedMayScore($in_positive) {
-		$this->uncheckedMayScore=$in_positive;
+		$this->uncheckedMayScore = $in_positive;
 	}
 	
 	/**
+     * Save category of a question
+     * 
+	 * A question can have n categories
+	 * if category is empty, then question has no category then delete the category entry
+     * 
+     * @param  - int $in_positive	 
+     * @author - Julio Montoya - Adding multiple cat support	 
+	 */
+	function saveCategories($category_list) {        
+		if (empty($category_list)) {
+			$this->deleteCategory();
+		} else {
+            $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+            
+            // update or add category for a question
+            foreach ($category_list as $category_id) {
+                $category_id = intval($category_id);
+                $question_id = Database::escape_string($this->id);
+                $sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY WHERE category_id = $category_id AND question_id = $question_id AND c_id=".api_get_course_int_id();
+                $res = Database::query($sql);
+                $row = Database::fetch_array($res);
+                if ($row['nb'] > 0) {
+                    //DO nothing
+                    //$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id = $category_id WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
+                    //$res = Database::query($sql);
+                } else {
+                    $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                    $res = Database::query($sql);
+                }
+            }
+		}
+	}
+    
+    /**
 	 * @author - Hubert Borderiou 12-10-2011
 	 * @param - interger $in_positive
 	 * in this version, a question can only have 1 category
@@ -363,7 +397,7 @@ abstract class Question
 				$res = Database::query($sql);
 			}
 		}
-	}	
+	}
 	
 	/**
 	 * @author hubert borderiou 12-10-2011
@@ -374,10 +408,9 @@ abstract class Question
 	function deleteCategory() {
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$question_id = Database::escape_string($this->id);
-	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
-	 	$res = Database::query($sql);
-	}
-	
+	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id = $question_id AND c_id = ".api_get_course_int_id();
+	 	Database::query($sql);
+	}	
 
 	/**
 	 * changes the question position
@@ -386,7 +419,7 @@ abstract class Question
 	 * @param - integer $position - question position
 	 */
 	function updatePosition($position) {
-		$this->position=$position;
+		$this->position = $position;
 	}
 
 	/**
@@ -666,10 +699,9 @@ abstract class Question
         $extra			= $this->extra;
         $c_id 			= $this->course['real_id'];
         $category       = $this->category;
-     
     
 		// question already exists
-		if(!empty($id)) {
+		if (!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET
 					question 	='".Database::escape_string($question)."',
 					description	='".Database::escape_string($description)."',
@@ -681,7 +713,9 @@ abstract class Question
 					level		='".Database::escape_string($level)."'
 				WHERE c_id = $c_id  AND id='".Database::escape_string($id)."'";
 			Database::query($sql);
-			$this->saveCategory($category);
+            
+			$this->saveCategories($category);
+            
 			if (!empty($exerciseId)) {
 				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id());
 			}
@@ -1039,7 +1073,7 @@ abstract class Question
                 
         //Inserting in the new course db / or the same course db
 		$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, level, extra ) 
-				VALUES('$course_id', '".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
+				VALUES ('$course_id', '".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
 		Database::query($sql);    
             
 		$new_question_id = Database::insert_id();        
@@ -1171,6 +1205,7 @@ abstract class Question
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
 		}
+        
 		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
 
 		$form->addElement('advanced_settings','
@@ -1184,28 +1219,45 @@ abstract class Question
 		// Advanced parameters
 		$form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
         
-		$select_level = array (1=>1,2=>2,3=>3,4=>4,5=>5);	
+		$select_level = array (
+            1=>1,
+            2=>2,
+            3=>3,
+            4=>4,
+            5=>5
+        );
         
         $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
         
-        $form->addElement('select', 'questionLevel',get_lang('Difficulty'), $select_level);
+        $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
         
-		// categories
-		$tabCat = array();
-		$tabCat = Testcategory::getCategoriesIdAndName(); 
-		$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
+		// Categories		
+		$category_list = Testcategory::getCategoriesIdAndName(); 
+		$form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
 		
 		// hidden values
-		$form->addElement('hidden','myid',$_REQUEST['myid']);
+		$form->addElement('hidden', 'myid', $_REQUEST['myid']);
         
         if (!isset($_GET['fromExercise'])) {            
-            switch($answerType) {
-                case 1:	$this->question = get_lang('DefaultUniqueQuestion'); break;
-                case 2:	$this->question = get_lang('DefaultMultipleQuestion'); break;
-                case 3:	$this->question = get_lang('DefaultFillBlankQuestion'); break;
-                case 4:	$this->question = get_lang('DefaultMathingQuestion'); break;
-                case 5:	$this->question = get_lang('DefaultOpenQuestion');	break;
-                case 9:	$this->question = get_lang('DefaultMultipleQuestion'); break;
+            switch ($answerType) {
+                case 1:	
+                    $this->question = get_lang('DefaultUniqueQuestion'); 
+                    break;
+                case 2:	
+                    $this->question = get_lang('DefaultMultipleQuestion'); 
+                    break;
+                case 3:	
+                    $this->question = get_lang('DefaultFillBlankQuestion'); 
+                    break;
+                case 4:	
+                    $this->question = get_lang('DefaultMathingQuestion');
+                    break;
+                case 5:	
+                    $this->question = get_lang('DefaultOpenQuestion');
+                    break;
+                case 9:	
+                    $this->question = get_lang('DefaultMultipleQuestion');
+                    break;
             }
         }
         
@@ -1213,10 +1265,10 @@ abstract class Question
         
 		// default values
 		$defaults = array();		
-		$defaults['questionName']           = $this -> question;
-		$defaults['questionDescription']    = $this -> description;
-		$defaults['questionLevel']          = $this -> level;
-		$defaults['questionCategory']       = $this->category;
+		$defaults['questionName']           = $this->question;
+		$defaults['questionDescription']    = $this->description;
+		$defaults['questionLevel']          = $this->level;        
+		$defaults['questionCategory']       = $this->category_list;
 		
         //Came from he question pool        
         if (isset($_GET['fromExercise'])) {   
@@ -1239,13 +1291,13 @@ abstract class Question
 	 * @param Exercise $objExercise the Exercise instance
 	 */
 	function processCreation ($form, $objExercise) {
-		$this -> updateTitle($form->getSubmitValue('questionName'));
-		$this -> updateDescription($form->getSubmitValue('questionDescription'));
-		$this -> updateLevel($form->getSubmitValue('questionLevel'));
+		$this->updateTitle($form->getSubmitValue('questionName'));
+		$this->updateDescription($form->getSubmitValue('questionDescription'));
+		$this->updateLevel($form->getSubmitValue('questionLevel'));
 		$this->updateCategory($form->getSubmitValue('questionCategory'));
-		$this -> save($objExercise -> id);
+		$this->save($objExercise->id);
 		// modify the exercise
-		$objExercise->addToList($this -> id);
+		$objExercise->addToList($this->id);
 		$objExercise->update_question_positions();
 	}
 

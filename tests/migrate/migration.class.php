@@ -222,7 +222,8 @@ class Migration {
         
         $transaction_harcoded = array(
             array(
-                'action' => 'usuario_agregar',
+                //'action' => 'usuario_agregar',
+                'action' => 1,
                 'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => null,
                 'branch_id' => 1,
@@ -230,7 +231,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'usuario_editar',
+                //'action' => 'usuario_editar',
+                'action' => 3,
                 'item_id' => 'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -238,7 +240,8 @@ class Migration {
                 'status_id' => 0
             ),            
             array(
-                'action' => 'usuario_eliminar',
+                //'action' => 'usuario_eliminar',
+                'action' => 2,
                 'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -246,7 +249,8 @@ class Migration {
                 'status_id' => 0
             ),      
             array(
-                'action' => 'usuario_matricula',
+                //'action' => 'usuario_matricula',
+                'action' => 4,
                 'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => null, 
                 'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session
@@ -254,7 +258,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'curso_agregar',
+                //'action' => 'curso_agregar',
+                'action' => 5,
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
                 'orig_id' => null,
                 'dest_id' => null,
@@ -262,7 +267,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'curso_eliminar',
+                //'action' => 'curso_eliminar',
+                'action' => 6,
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
                 'orig_id' => null,
                 'dest_id' => null,
@@ -270,23 +276,26 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'curso_editar',
+                //'action' => 'curso_editar',
+                'action' => 7,
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-            array(
-                'action' => 'curso_matricula',
+/*            array(
+                //'action' => 'curso_matricula',
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC', //course
                 'orig_id' => null,
                 'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session
                 'branch_id' => 1,                
                 'status_id' => 0
             ),
+*/
             array(
-                'action' => 'pa_agregar',
+                //'action' => 'pa_agregar',
+                'action' => 8,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
                 'orig_id' => null,
                 'dest_id' => null,
@@ -294,7 +303,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'pa_editar',
+                //'action' => 'pa_editar',
+                'action' => 10,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
                 'orig_id' => '0',
                 'dest_id' => null,
@@ -302,16 +312,17 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'pa_eliminar',
+                //'action' => 'pa_eliminar',
+                'action' => 9,
                 'item_id' =>  '1',
                 'orig_id' => 'C3671999-095E-4018-9826-678BAFF595DF',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-            //??
             array(
-                'action' => 'pa_cambiar_aula',
+                //'action' => 'pa_cambiar_aula',
+                'action' => 11,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
                 'orig_id' => '0',
                 'dest_id' => '',
@@ -319,15 +330,17 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'pa_cambiar_horario',
+                //'action' => 'pa_cambiar_horario',
+                'action' => 12,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF', //session id
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-             array(
-                'action' => 'pa_cambiar_sede',
+/*             array(
+                //'action' => 'pa_cambiar_sede',
+                'action' => 'x',
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',//session id
                 'orig_id' => '0',
                 'dest_id' => null,
@@ -350,18 +363,10 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-             array(
-                'action' => 'pa_cambiar_horario',
-                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            
-            
-             array(
-                'action' => 'horario_agregar',
+*/
+            array(
+                //'action' => 'horario_agregar',
+                'action' => 13,
                 'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',  // horario
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -369,7 +374,8 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'horario_editar',
+                //'action' => 'horario_editar',
+                'action' => 15,
                 'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
                 'orig_id' => '0',
                 'dest_id' => null,
@@ -377,17 +383,17 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'horario_eliminar',
+                //'action' => 'horario_eliminar',
+                'action' => 14,
                 'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
                 'orig_id' => '0',
                 'dest_id' => null,
                 'branch_id' => 1,                
                 'status_id' => 0
             ),
-            
-            /*
             array(
-                'action' => 'aula_agregar',
+                //'action' => 'aula_agregar',
+                'action' => 16,
                 'item_id' =>  '1',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -395,7 +401,8 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'aula_eliminar',
+                //'action' => 'aula_eliminar',
+                'action' => 17,
                 'item_id' =>  '1',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -403,17 +410,17 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'aula_editar',
+                //'action' => 'aula_editar',
+                'action' => 18,
                 'item_id' =>  '1',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
-            ),*/
-            
-            
+            ),
             array(
-                'action' => 'sede_agregar',
+                //'action' => 'sede_agregar',
+                'action' => 19,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -421,7 +428,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'sede_editar',
+                //'action' => 'sede_editar',
+                'action' => 21,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -429,17 +437,17 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'sede_eliminar',
+                //'action' => 'sede_eliminar',
+                'action' => 20,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-     
-            
             array(
-                'action' => 'frecuencia_agregar',
+                //'action' => 'frecuencia_agregar',
+                'action' => 22,
                 'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -447,7 +455,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'frecuencia_editar',
+                //'action' => 'frecuencia_editar',
+                'action' => 24,
                 'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -455,17 +464,17 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'frecuencia_eliminar',
+                //'action' => 'frecuencia_eliminar',
+                'action' => 23,
                 'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-     
-            
             array(
-                'action' => 'intensidad_agregar',
+                //'action' => 'intensidad_agregar',
+                'action' => 25,
                 'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -473,7 +482,8 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                'action' => 'intensidad_editar',
+                //'action' => 'intensidad_editar',
+                'action' => 27,
                 'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -481,64 +491,14 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                'action' => 'intensidad_eliminar',
+                //'action' => 'intensidad_eliminar',
+                'action' => 26,
                 'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
             ),
-        
-            
-            
-            array(
-                'action' => 'fase_agregar',
-                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679', 
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            array(
-                'action' => 'fase_editar',
-                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            array(
-                'action' => 'fase_eliminar',
-                'item_id' =>  'BDB68000-B073-404D-BC4A-351998678679',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            array(
-                'action' => 'meses_agregar',
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            array(
-                'action' => 'meses_editar',
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),
-            array(
-                'action' => 'meses_eliminar',
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
-                'orig_id' => '0',
-                'branch_id' => 1,
-                'dest_id' => null,
-                'status_id' => 0
-            ),           
         );
         
         foreach( $transaction_harcoded as  $transaction) {        

@@ -17,7 +17,37 @@ class MigrationCustom {
     const TRANSACTION_STATUS_SUCCESSFUL = 2;
     const TRANSACTION_STATUS_DEPRECATED = 3; //??
     const TRANSACTION_STATUS_FAILED = 4;   
-
+    /**
+     * Types of transaction operations read from the external databases
+     */
+    const TRANSACTION_TYPE_ADD_USER    =  1;
+    const TRANSACTION_TYPE_DEL_USER    =  2;
+    const TRANSACTION_TYPE_EDIT_USER   =  3;
+    const TRANSACTION_TYPE_SUB_USER    =  4; //subscribe user to a session
+    const TRANSACTION_TYPE_ADD_COURSE  =  5;
+    const TRANSACTION_TYPE_DEL_COURSE  =  6;
+    const TRANSACTION_TYPE_EDIT_COURSE =  7;
+    const TRANSACTION_TYPE_ADD_SESS    =  8;
+    const TRANSACTION_TYPE_DEL_SESS    =  9;
+    const TRANSACTION_TYPE_EDIT_SESS   = 10;
+    const TRANSACTION_TYPE_UPD_ROOM    = 11;
+    const TRANSACTION_TYPE_UPD_SCHED   = 12;
+    const TRANSACTION_TYPE_ADD_SCHED   = 13;
+    const TRANSACTION_TYPE_DEL_SCHED   = 14;
+    const TRANSACTION_TYPE_EDIT_SCHED  = 15;
+    const TRANSACTION_TYPE_ADD_ROOM    = 16;
+    const TRANSACTION_TYPE_DEL_ROOM    = 17;
+    const TRANSACTION_TYPE_EDIT_ROOM   = 18;
+    const TRANSACTION_TYPE_ADD_BRANCH  = 19;
+    const TRANSACTION_TYPE_DEL_BRANCH  = 20;
+    const TRANSACTION_TYPE_EDIT_BRANCH = 21;
+    const TRANSACTION_TYPE_ADD_FREQ    = 22;
+    const TRANSACTION_TYPE_DEL_FREQ    = 23;
+    const TRANSACTION_TYPE_EDIT_FREQ   = 24;
+    const TRANSACTION_TYPE_ADD_INTENS  = 25;
+    const TRANSACTION_TYPE_DEL_INTENS  = 26;
+    const TRANSACTION_TYPE_EDIT_INTENS = 27;
+  
     /**
      * The only required method is the 'none' method, which will not trigger
      * any process at all
@@ -716,6 +746,7 @@ class MigrationCustom {
     
     
     //añadir usuario: usuario_agregar UID
+    //const TRANSACTION_TYPE_ADD_USER    =  1;
     static function transaction_usuario_agregar($data, $web_service_details) {
          $uidIdPersonaId = $data['item_id'];            
          //Add user call the webservice         
@@ -740,6 +771,7 @@ class MigrationCustom {
     }
     
     //eliminar usuario usuario_eliminar UID
+    //const TRANSACTION_TYPE_DEL_USER    =  2;
     static function transaction_usuario_eliminar($data) {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);

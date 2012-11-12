@@ -64,6 +64,15 @@ class MigrationCustom {
         return utf8_encode($value);        
     }
     
+    static function add_meses_label_to_extra_field_fase($value, $data, $row_data) {
+        $label = 'meses';
+        if ($row_data['chrOrdenFase'] == 1) {
+            $label = 'mes';    
+        }
+        $value = $row_data['vchNombreFase'] .' ['.trim($row_data['chrOrdenFase']).' '.$label.']';
+        return self::clean_utf8($value);
+    }
+    
     static function clean_session_name($value, $omigrate, $row_data) {
         return self::clean_utf8($row_data['session_name']);        
     }

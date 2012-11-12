@@ -1,7 +1,7 @@
 <?php
-
 /**
  * Scipt defining the Migration class
+ * @package chamilo.migration
  */
 
 /**
@@ -161,7 +161,13 @@ class Migration {
             }
         }
     }
-    
+    /**
+     * Call the SOAP web service as detailed in the parameters
+     * @param array Settings for the WS call
+     * @param string Name of the funcion to call
+     * @param array Variables to be passed as params to the function
+     * @return array Results as returned by the SOAP call
+     */
     static function soap_call($web_service_params, $function_name, $params = array()) {
         // Create the client instance
         $url = $web_service_params['url'];        
@@ -199,7 +205,11 @@ class Migration {
         }
         error_log("\n--End--");
     }
-    
+    /**
+     * Test a series of hand-crafted transactions
+     * @param array of parameters that would usually get passed to the web service
+     * @return void
+     */
     function test_transactions($web_service_params) {
         error_log('search_transactions');
         //Just for tests
@@ -536,7 +546,11 @@ class Migration {
         }        
     }
 
-    
+    /**
+     * Adds a given transaction to the transactions table in Chamilo
+     * @param array The transaction details (array('id' => ..., 'action' => '...', ...))
+     * @return int The ID of the transaction row in Chamilo's table
+     */
     static function add_transaction($params) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
@@ -550,7 +564,10 @@ class Migration {
         }
         return $inserted_id;        
     }
-        
+    /**
+     * Get all available branches (the migration system supports multiple origin databases, the branch identifies which database it comes from)
+     * @return array Branches IDs (int)
+     */
     static function get_branches() {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $sql = "SELECT DISTINCT branch_id FROM $table ORDER BY branch_id";
@@ -558,7 +575,12 @@ class Migration {
         return Database::store_result($result, 'ASSOC');
     }
     
-    /** Get unprocesses */
+    /**
+     * Gets transactions in a specific state (for example to get all non-processed transactions) from the Chamilo transactions table
+     * @param int State ID (0=unprocessed (default), 2=completed)
+     * @param int Branch ID
+     * @return array Associative array containing the details of the transactions requested
+     */
     static function get_transactions($status_id = 0, $branch_id = null) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
@@ -572,7 +594,11 @@ class Migration {
         $result = Database::query($sql);        
         return Database::store_result($result, 'ASSOC');
     }
-    
+    /**
+     * Gets the latest completed transaction for a specific branch (allows the building of a request to the branch to get new transactions)
+     * @param int The ID of the branch
+     * @return int The ID of the latest transaction
+     */
     static function get_latest_completed_transaction_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
@@ -584,7 +610,11 @@ class Migration {
         }
         return 0;
     }
-    
+    /**
+     * Gets the latest recorded transaction for a specific branch
+     * @param int The ID of the branch
+     * @return int The ID of the last transaction registered
+     */
     static function get_latest_transaction_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
@@ -596,12 +626,21 @@ class Migration {
         }
         return 0;
     }
-    
+    /**
+     * Gets a specific transaction using select parameters
+     * @param array Select parameters (associative array)
+     * @param string Type of result set expected
+     * @return array Results as requested
+     */
     static function get_transaction_by_params($params, $type_result = 'all') {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         return Database::select('*', $table, $params, $type_result);
     }
-    
+    /**
+     * Updates a transaction using the given query parameters
+     * @param array Query parameters
+     * @return bool The result of the transaction row update
+     */ 
     static function update_transaction($params) {
         //return false;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
@@ -619,7 +658,11 @@ class Migration {
         }
         return Database::update($table, $params, array('id = ?' => $params['id']));
     }
-    
+    /**
+     * Search for new transactions through a web service call. Automatically insert them in the local transactions table.
+     * @param array The web service parameters
+     * @return The operation results
+     */
     function search_transactions($web_service_params) {        
         error_log('search_transactions');        
         //Testing transactions        
@@ -644,8 +687,11 @@ class Migration {
         $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => 354911, 'cantidad' => 2));        
     }   
 
-    /* Load transactions */
-
+    /**
+     * Loads a specific set of transactions from the transactions table and executes them
+     * @param array Transactions filter
+     * @return void
+     */
     function load_transactions($matches) {
         $actions = $matches['actions'];
         
@@ -733,7 +779,11 @@ class Migration {
             }
         }
     }
-
+    /**
+     * Prepares the relationship between two fields (one from the original database and on from the destination/local database)
+     * @param array List of fields that must be matched ('fields_match' => array(0=>array('orig'=>'...','dest'=>'...',...)))
+     * @return mixed Modified field
+     */
     function prepare_field_match($table) {
         $sql_select_fields = array();
         if (!empty($table['fields_match'])) {
@@ -754,7 +804,12 @@ class Migration {
         }
         return $sql_select_fields;
     }
-
+    /**
+     * Executes a fields match
+     * @param array List of fields that must be matched ('fields_match' => array(0=>array('orig'=>'...','dest'=>'...',...)))
+     * @param array Row of data
+     * @param array Extra fields table definition
+     */
     function execute_field_match($table, $row, $extra_fields = array()) {
         //error_log('execute_field_match');
         $dest_row = array();
@@ -946,5 +1001,4 @@ class Migration {
         }
         return $extra_fields;
     }
-
 }

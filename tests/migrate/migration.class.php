@@ -210,7 +210,7 @@ class Migration {
      * @return void
      */
     function test_transactions($web_service_params, $truncate = false) {
-        error_log('search_transactions');
+        error_log('test_transactions');
         //Just for tests
         
         //Cleaning transaction table
@@ -582,7 +582,7 @@ class Migration {
     static function get_latest_transaction_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
-        $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC  LIMIT 1";
+        $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
@@ -626,9 +626,10 @@ class Migration {
     /**
      * Search for new transactions through a web service call. Automatically insert them in the local transactions table.
      * @param array The web service parameters
+     * @param int An optional transaction ID to start from. If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($web_service_params) {        
+    function search_transactions($web_service_params, $t_id = null) {
         error_log('search_transactions');        
         //Testing transactions        
         
@@ -644,11 +645,14 @@ class Migration {
         $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
         $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
-        
-        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
-        
-        //Calling a process to save transactions
-        $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => 354911, 'cantidad' => 2));        
+        $branches = self::get_banches();
+        foreach ($branches as $branch) {
+            error_log('Treating transactions for branch '.$branch['branch_id']);
+            $last = self::get_latest_transaction_by_branch($branch['branch_id']);
+            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 10));
+            //Calling a process to save transactions
+            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 10));
+        }
     }   
 
     /**

@@ -67,12 +67,12 @@ if (!empty($servers)) {
                     require_once $matches['web_service_calls']['filename'];    
                 }
                 //This functions truncates the transaction lists!
-                $m->test_transactions($matches['web_service_calls']);
+                //$m->test_transactions($matches['web_service_calls']);
             
-                //$m->search_transactions($matches['web_service_calls']);
+                $m->search_transactions($matches['web_service_calls']);
             
-                //Load transactions saved before            
-                $m->load_transactions($matches);    
+                //Load transactions saved before
+                $m->load_transactions($matches);
             
                 //print_r($m->errors_stack);
             }

@@ -500,8 +500,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
         	)";
 
     if ($debug) error_log("Saving question attempt: ");
-    if ($debug) error_log($sql);
-    if ($debug) error_log("");
+    if ($debug) error_log($sql);    
 
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
         $res = Database::query($sql);

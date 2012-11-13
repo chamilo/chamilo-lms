@@ -173,19 +173,7 @@ class MigrationCustom {
             return $values['user_id'];
         } else {
             return $default_teacher_id; 
-        }
-        
-        /*
-        if (!isset($omigrate['users_empleado'][$data])) {
-            //error_log(' Teacher not found big problem! ');    
-            //echo $data;
-            //print_r($omigrate['users_empleado'][$data]);
-            //echo $data;exit;
-            return $default_teacher_id;            
-        } else {
-            //error_log('Teacher found: '.$omigrate['users_empleado'][$data]['extra']['user_id']);
-            return isset($omigrate['users_empleado'][$data]['extra']) ? $omigrate['users_empleado'][$data]['extra']['user_id'] : $default_teacher_id;        
-        } */       
+        }      
     }
     
     /**
@@ -201,15 +189,7 @@ class MigrationCustom {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));    
             exit;
-        }
-            
-        //Is a teacher
-        /*if (isset($omigrate['users_empleado'][$data['uidIdEmpleado']])) {            
-            $data['status'] = COURSEMANAGER;                
-        } else {     
-            $data['status'] = STUDENT;    
-        }*/
-        
+        }          
         $data['status'] = STUDENT;
         if (isset($data['uidIdEmpleado'])) {
             $data['status'] = COURSEMANAGER;

@@ -60,8 +60,6 @@ class SessionManager {
         if ($my_session_result == false) {
             $session_model = new SessionModel();
             $session_id = $session_model->save($params);            
-        } else {
-            return false;
         }
                         
         if (!empty($session_id)) {

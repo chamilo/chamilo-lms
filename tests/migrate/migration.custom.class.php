@@ -747,7 +747,7 @@ class MigrationCustom {
     
     //añadir usuario: usuario_agregar UID
     //const TRANSACTION_TYPE_ADD_USER    =  1;
-    static function transaction_usuario_agregar($data, $web_service_details) {
+    static function transaction_1($data, $web_service_details) {
          $uidIdPersonaId = $data['item_id'];            
          //Add user call the webservice         
          $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));          
@@ -772,7 +772,7 @@ class MigrationCustom {
     
     //eliminar usuario usuario_eliminar UID
     //const TRANSACTION_TYPE_DEL_USER    =  2;
-    static function transaction_usuario_eliminar($data) {
+    static function transaction_2($data) {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
@@ -797,7 +797,8 @@ class MigrationCustom {
     }
     
     //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
-    static function transaction_usuario_editar($data, $web_service_details) {
+    //const TRANSACTION_TYPE_EDIT_USER   =  3;
+    static function transaction_3($data, $web_service_details) {
         $uidIdPersonaId = $data['item_id'];
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {            
@@ -822,7 +823,8 @@ class MigrationCustom {
     }
     
     //cambiar usuario de progr. académ. (de A a B, de A a nada, de nada a A) (como estudiante o profesor) usuario_matricula UID ORIG DEST
-    static function transaction_usuario_matricula($data) {
+    //const TRANSACTION_TYPE_SUB_USER    =  4; //subscribe user to a session
+    static function transaction_4($data) {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
@@ -890,7 +892,8 @@ class MigrationCustom {
     
     //Cursos
     //añadir curso curso_agregar CID
-    static function transaction_curso_agregar($data, $web_service_details) {
+    //const TRANSACTION_TYPE_ADD_COURSE  =  5;
+    static function transaction_5($data, $web_service_details) {
         $uidCursoId = $data['item_id'];          
         $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));         
         if ($course_info['error'] == false) { 
@@ -912,7 +915,8 @@ class MigrationCustom {
     }
     
     //eliminar curso curso_eliminar CID
-    static function transaction_curso_eliminar($data) {
+    //const TRANSACTION_TYPE_DEL_COURSE  =  6;
+    static function transaction_6($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         if (!empty($course_code)) {
             CourseManager::delete_course($course_code);
@@ -930,7 +934,8 @@ class MigrationCustom {
     }
     
     //editar detalles de curso curso_editar CID
-    static function transaction_curso_editar($data, $web_service_details) {
+    //const TRANSACTION_TYPE_EDIT_COURSE =  7;
+    static function transaction_7($data, $web_service_details) {
         $uidCursoId = $data['item_id'];
         $course_code = self::get_real_course_code($uidCursoId);        
         if (!empty($course_code)) {        
@@ -957,6 +962,7 @@ class MigrationCustom {
     }
     
     //Cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
+    //Unused
     static function transaction_curso_matricula($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         $uidIdPrograma = $data['orig_id'];
@@ -988,7 +994,8 @@ class MigrationCustom {
     
     //Programas académicos
     //añadir p.a. pa_agregar PID
-    static function transaction_pa_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_SESS    =  8;
+    static function transaction_8($data, $web_service_details) {
         $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('uididprograma' => $data['item_id']));
         
         if ($session_info['error'] == false) {
@@ -999,7 +1006,8 @@ class MigrationCustom {
     }
     
     //editar detalles de p.a. pa_editar PID
-    static function transaction_pa_editar($data, $web_service_details) {        
+    // const TRANSACTION_TYPE_EDIT_SESS   = 10;
+    static function transaction_10($data, $web_service_details) {        
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
         if (!empty($session_id)) {            
@@ -1023,7 +1031,8 @@ class MigrationCustom {
     }   
     
     //eliminar p.a. pa_eliminar PID
-    static function transaction_pa_eliminar($data) {
+    //const TRANSACTION_TYPE_DEL_SESS    =  9;
+    static function transaction_9($data) {
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);    
         if (!empty($session_id)) {
@@ -1083,25 +1092,30 @@ class MigrationCustom {
     }
  
     //cambiar aula pa_cambiar_aula PID ORIG DEST
-    static function transaction_pa_cambiar_aula($data) {
+    //const TRANSACTION_TYPE_UPD_ROOM    = 11;
+    static function transaction_11($data) {
         self::transaction_cambiar_generic('aula', $data);
     }
     
     //cambiar horario pa_cambiar_horario PID ORIG DEST
-    static function transaction_pa_cambiar_horario($data) {
+    //const TRANSACTION_TYPE_UPD_SCHED   = 12;
+    static function transaction_12($data) {
         self::transaction_cambiar_generic('horario', $data);
     }    
     
     //cambiar sede pa_cambiar_sede PID ORIG DEST    
+    //no se usa (se declara el p.a. en otra sede, nada más)
     static function transaction_pa_cambiar_sede($data) {
         self::transaction_cambiar_generic('sede', $data);
     }
     
     //cambiar intensidad pa_cambiar_fase_intensidad CID ORIG DEST (id de "intensidadFase")
+    //no se usa (se declara el p.a. en otra sede, nada más)
     static function transaction_cambiar_pa_fase($data) {
         self::transaction_cambiar_generic('fase', $data);
     }
     
+    //no se usa (se declara el p.a. en otra sede, nada más)
     static function transaction_cambiar_pa_intensidad($data) {
         self::transaction_cambiar_generic('intensidad', $data);
     }
@@ -1167,111 +1181,93 @@ class MigrationCustom {
     
     //        Horario
     //            añadir horario_agregar HID    
-    static function transaction_horario_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_SCHED   = 13;
+    static function transaction_13($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('horario', $data, $web_service_details);       
     }
     
     //            eliminar horario_eliminar HID
-    static function transaction_horario_eliminar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_DEL_SCHED   = 14;
+    static function transaction_14($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('horario', $data, $web_service_details);
     }
     
     //            editar horario_editar HID
-    static function transaction_horario_editar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_EDIT_SCHED  = 15;
+    static function transaction_15($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('horario', $data, $web_service_details);
     }
     
     // Aula
     //            añadir aula_agregar AID
-    static function transaction_aula_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_ROOM    = 16;
+    static function transaction_16($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('aula', $data, $web_service_details);
     }
     
     //            eliminar aula_eliminar AID
-    static function transaction_aula_eliminar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_DEL_ROOM    = 17;
+    static function transaction_17($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('aula', $data, $web_service_details);
     }
     //            editar aula_editor AID
-    static function transaction_aula_editar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_EDIT_ROOM   = 18;
+    static function transaction_18($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('aula', $data, $web_service_details);
     }
     //        Sede
     //            añadir aula_agregar SID
-    static function transaction_sede_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_BRANCH  = 19;
+    static function transaction_19($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('sede', $data, $web_service_details);
     }
     //            eliminar aula_eliminar SID
-    static function transaction_sede_eliminar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_DEL_BRANCH  = 20;
+    static function transaction_20($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('sede', $data, $web_service_details);
     }
     //            editar aula_editar SID
-    static function transaction_sede_editar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_EDIT_BRANCH = 21;
+    static function transaction_21($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('sede', $data, $web_service_details);
     }
     
     //
     //        Frecuencia
     //            añadir frec FID
-    static function transaction_frecuencia_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_FREQ    = 22;
+    static function transaction_22($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details);
     }
     
     //            eliminar Freca_eliminar FID
-    static function transaction_frecuencia_eliminar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_DEL_FREQ    = 23;
+    static function transaction_23($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details);
     }
     
     //             editar aula_editar FID
-    static function transaction_frecuencia_editar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_EDIT_FREQ   = 24;
+    static function transaction_24($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details);
     }
     
     //
     //        Intensidad/Fase
     //            añadir intfase_agregar IID
-    static function transaction_intensidad_agregar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_ADD_INTENS  = 25;
+    static function transaction_25($data, $web_service_details) {
         self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details);
     }
     
     //            eliminar intfase_eliminar IID
-    static function transaction_intensidad_eliminar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_DEL_INTENS  = 26;
+    static function transaction_26($data, $web_service_details) {
         self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
     }
     //            editar intfase_editar IID
-    static function transaction_intensidad_editar($data, $web_service_details) {
+    // const TRANSACTION_TYPE_EDIT_INTENS = 27;
+    static function transaction_27($data, $web_service_details) {
         self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
-    }
-    
-    
-        //
-    //        Intensidad/Fase
-    //            añadir intfase_agregar IID
-    static function transaction_fase_agregar($data, $web_service_details) {
-        self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details);
-    }
-    
-    //            eliminar intfase_eliminar IID
-    static function transaction_fase_eliminar($data, $web_service_details) {
-        self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details);
-    }
-    //            editar intfase_editar IID
-    static function transaction_fase_editar($data, $web_service_details) {
-        self::transaction_extra_field_editar_generic('fase', $data, $web_service_details);
-    }
-    
-        //
-    //        Intensidad/Fase
-    //            añadir intfase_agregar IID
-    static function transaction_meses_agregar($data, $web_service_details) {
-        self::transaction_extra_field_agregar_generic('meses', $data, $web_service_details);
-    }
-    
-    //            eliminar intfase_eliminar IID
-    static function transaction_meses_eliminar($data, $web_service_details) {
-        self::transaction_extra_field_eliminar_generic('meses', $data, $web_service_details);
-    }
-    //            editar intfase_editar IID
-    static function transaction_meses_editar($data, $web_service_details) {
-        self::transaction_extra_field_editar_generic('meses', $data, $web_service_details);
     }
 }

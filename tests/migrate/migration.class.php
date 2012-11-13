@@ -700,7 +700,7 @@ class Migration {
                             exit;
                         }
                         
-                        //Loading function
+                        //Loading function. The action is now numeric, so we call a transaction_1() function, for example
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
                             error_log("Calling function MigrationCustom::$function_to_call");

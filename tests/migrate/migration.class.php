@@ -206,16 +206,19 @@ class Migration {
     /**
      * Test a series of hand-crafted transactions
      * @param array of parameters that would usually get passed to the web service
+     * @param bool Whether to truncate the transaction table before the test or not
      * @return void
      */
-    function test_transactions($web_service_params) {
+    function test_transactions($web_service_params, $truncate = false) {
         error_log('search_transactions');
         //Just for tests
         
         //Cleaning transaction table
-        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
+        if ($truncate) {
+            $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+            $sql = "TRUNCATE $table";
+            Database::query($sql);
+        }
         
         $transaction_harcoded = array(
             array(

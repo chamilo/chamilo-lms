@@ -205,6 +205,7 @@ class Migration {
         }
         error_log("\n--End--");
     }
+    
     /**
      * Test a series of hand-crafted transactions
      * @param array of parameters that would usually get passed to the web service
@@ -218,7 +219,6 @@ class Migration {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $sql = "TRUNCATE $table";
         Database::query($sql);
-        
         
         $transaction_harcoded = array(
             array(
@@ -320,6 +320,8 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
+            
+            /* seems not to be used
             array(
                 //'action' => 'pa_cambiar_aula',
                 'action' => 11,
@@ -328,7 +330,7 @@ class Migration {
                 'dest_id' => '',
                 'branch_id' => 1,                
                 'status_id' => 0
-            ),
+            ),*/
             array(
                 //'action' => 'pa_cambiar_horario',
                 'action' => 12,
@@ -391,6 +393,7 @@ class Migration {
                 'branch_id' => 1,                
                 'status_id' => 0
             ),
+            /*
             array(
                 //'action' => 'aula_agregar',
                 'action' => 16,
@@ -418,6 +421,7 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
+             * */
             array(
                 //'action' => 'sede_agregar',
                 'action' => 19,
@@ -618,6 +622,7 @@ class Migration {
         }
         return Database::update($table, $params, array('id = ?' => $params['id']));
     }
+    
     /**
      * Search for new transactions through a web service call. Automatically insert them in the local transactions table.
      * @param array The web service parameters
@@ -635,10 +640,8 @@ class Migration {
         $result = self::soap_call($web_service_params, 'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
         $result = self::soap_call($web_service_params, 'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
         $result = self::soap_call($web_service_params, 'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
-        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));
-        
-        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
-        
+        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
+        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
         
         $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
@@ -703,19 +706,21 @@ class Migration {
                         //Loading function. The action is now numeric, so we call a transaction_1() function, for example
                         $function_to_call = "transaction_" . $transaction['action'];
                         if (method_exists('MigrationCustom', $function_to_call)) {
-                            error_log("Calling function MigrationCustom::$function_to_call");
+                            error_log("\n-----------------------------------------------------------------------");
+                            error_log("\nCalling function MigrationCustom::$function_to_call");
+                            
                             $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
                             error_log($result['message']);
                             
                             self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));
-                            
+                            /*
                             if ($result['error'] == false) {
                                 //Updating transaction
                                 //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_SUCCESSFUL));
                             } else {
                                 //failed
                                 //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                            }
+                            }*/
                         } else {
                             //	method does not exist
                             error_log("Function does $function_to_call not exists");

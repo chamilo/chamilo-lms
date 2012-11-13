@@ -148,6 +148,8 @@ class SessionManager {
     
     static function get_count_admin($options = array()) {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+        $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
         
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();
@@ -168,7 +170,10 @@ class SessionManager {
             $where .= ' AND '.$options['where'];           
         }
         
-        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s $where ";
+        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s 
+                                LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) 
+                                INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) 
+        $where ";
          
         global $_configuration;
         if ($_configuration['multiple_access_urls']) {

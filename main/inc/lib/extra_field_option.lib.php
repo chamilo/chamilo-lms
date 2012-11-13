@@ -218,7 +218,7 @@ class ExtraFieldOption extends Model {
         $field_id = intval($field_id);
         $option_value = Database::escape_string($option_value);
         
-        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = '".$option_value."'";
+        $sql = "SELECT * FROM {$this->table} WHERE field_id = $field_id AND option_value = '".$option_value."'";        
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return Database::store_result($result, 'ASSOC');

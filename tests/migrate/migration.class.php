@@ -171,7 +171,6 @@ class Migration {
     static function soap_call($web_service_params, $function_name, $params = array()) {
         // Create the client instance
         $url = $web_service_params['url'];        
-        error_log("\nCalling function '$function_name' in $url with params: ");        
         try {
             $client = new SoapClient($url);
         } catch (SoapFault $fault) {
@@ -187,23 +186,21 @@ class Migration {
             //die("Problem querying service - $function_name");
             return array(
                 'error' => true,
-                'message' => 'Problem querying service - $function_name ',
+                'message' => "Problem querying service - $function_name in URL $url ",
                 'status_id' => 0
             );
         }
         
         if (!empty($data)) {
-            error_log("Calling {$web_service_params['class']}::$function_name");
+            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ");
             return $web_service_params['class']::$function_name($data, $params);           
         } else {
             return array(
                 'error' => true,
                 'message' => 'No Data found',
                 'status_id' => 0
-            );
-            error_log('No data found');
-        }
-        error_log("\n--End--");
+            );            
+        }        
     }
     
     /**
@@ -251,9 +248,9 @@ class Migration {
             array(
                 //'action' => 'usuario_matricula',
                 'action' => 4,
-                'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
-                'orig_id' => null, 
-                'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session
+                'item_id' =>  '95EDA88F-D729-450F-95FF-4A3989244F53', //usuario - Abel 
+                'orig_id' => null, //session orig
+                'dest_id' => 'C3671999-095E-4018-9826-678BAFF595DF', //session dest
                 'branch_id' => 1,                
                 'status_id' => 0
             ),
@@ -278,7 +275,7 @@ class Migration {
             array(
                 //'action' => 'curso_editar',
                 'action' => 7,
-                'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
+                'item_id' =>  '31B4BD38-5D90-4275-88AF-F01F0274800A', // ONE   (SATURDAYS)
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -314,8 +311,8 @@ class Migration {
             array(
                 //'action' => 'pa_eliminar',
                 'action' => 9,
-                'item_id' =>  '1',
-                'orig_id' => 'C3671999-095E-4018-9826-678BAFF595DF',
+                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF', //id to delete
+                'orig_id' => null,
                 'branch_id' => 1,
                 'dest_id' => null,
                 'status_id' => 0
@@ -334,10 +331,10 @@ class Migration {
             array(
                 //'action' => 'pa_cambiar_horario',
                 'action' => 12,
-                'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF', //session id
-                'orig_id' => '0',
+                'item_id' =>  'B94FEBA2-7EAD-4E14-B3DA-1D02397D1FA1', //session id  - 200910 (A02M) Advanced Oral Communication Skills 2 08:45 10:15 701 00003
+                'orig_id' => '63D661DB-0A2F-47FC-94C0-5AA46BE7DA66',  // (01) 07:00 09:00
                 'branch_id' => 1,
-                'dest_id' => null,
+                'dest_id' => 'B4FE6E83-F33F-417B-8B3F-C24CB94264EA', //(02) 09:00 11:00
                 'status_id' => 0
             ),
 /*             array(
@@ -369,7 +366,7 @@ class Migration {
             array(
                 //'action' => 'horario_agregar',
                 'action' => 13,
-                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',  // horario
+                'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',  // horario
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -378,7 +375,7 @@ class Migration {
              array(
                 //'action' => 'horario_editar',
                 'action' => 15,
-                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
+                'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
                 'orig_id' => '0',
                 'dest_id' => null,
                 'branch_id' => 1,                
@@ -387,7 +384,7 @@ class Migration {
              array(
                 //'action' => 'horario_eliminar',
                 'action' => 14,
-                'item_id' =>  '2FF78F94-2474-4A9B-AD4A-B1DE624A2759',
+                'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
                 'orig_id' => '0',
                 'dest_id' => null,
                 'branch_id' => 1,                
@@ -452,7 +449,7 @@ class Migration {
             array(
                 //'action' => 'frecuencia_agregar',
                 'action' => 22,
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -461,7 +458,7 @@ class Migration {
             array(
                 //'action' => 'frecuencia_editar',
                 'action' => 24,
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -470,7 +467,7 @@ class Migration {
              array(
                 //'action' => 'frecuencia_eliminar',
                 'action' => 23,
-                'item_id' =>  '78D22B04-B7EB-4DB7-96A3-3557D4B80123',
+                'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -479,7 +476,7 @@ class Migration {
             array(
                 //'action' => 'intensidad_agregar',
                 'action' => 25,
-                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -488,7 +485,7 @@ class Migration {
             array(
                 //'action' => 'intensidad_editar',
                 'action' => 27,
-                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -497,7 +494,7 @@ class Migration {
              array(
                 //'action' => 'intensidad_eliminar',
                 'action' => 26,
-                'item_id' =>  '0091CD3A-F042-11D7-B338-0050DAB14015',
+                'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
                 'dest_id' => null,
@@ -631,7 +628,8 @@ class Migration {
     function search_transactions($web_service_params) {        
         error_log('search_transactions');        
         //Testing transactions        
-
+        
+        
         /*$result = self::soap_call($web_service_params, 'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
         $result = self::soap_call($web_service_params, 'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
         $result = self::soap_call($web_service_params, 'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
@@ -691,8 +689,8 @@ class Migration {
                         }
                         $item++;
                         //--
-                        
-                        error_log("Waiting for transaction #$latest_id_attempt");
+                        error_log("\nend transaction ->  \n");
+                        error_log("Waiting for transaction #$latest_id_attempt ...");
                         
                         //Checking "huecos"
                         //Waiting transaction is fine continue:
@@ -710,7 +708,7 @@ class Migration {
                             error_log("\nCalling function MigrationCustom::$function_to_call");
                             
                             $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
-                            error_log($result['message']);
+                            error_log('Reponse: '.$result['message']);
                             
                             self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));
                             /*

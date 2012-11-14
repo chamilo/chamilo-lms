@@ -158,6 +158,21 @@ class SessionManager {
             $where.=" WHERE s.session_admin_id = $user_id ";
         }
         
+        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s ";
+        
+        if (api_is_multiple_url_enabled()) {
+            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $where.= " AND ar.access_url_id = $access_url_id ";
+                
+                $query_rows = "SELECT COUNT(*) as total_rows 
+                               FROM $tbl_session s
+                               INNER JOIN $table_access_url_rel_session ar 
+                               ON ar.session_id = s.id ";
+            }
+        }
+        
         if (!empty($options['where'])) {       
             if (!empty($options['extra'])) {
                 $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
@@ -168,26 +183,12 @@ class SessionManager {
                 }
             }                        
             $where .= ' AND '.$options['where'];           
-        }
+            
+            $query_rows .= "LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) 
+                            INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)";
+        }        
+        $query_rows .= $where;         
         
-        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s 
-                                LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) 
-                                INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) 
-        $where ";
-         
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $where.= " AND ar.access_url_id = $access_url_id ";
-                
-                $query_rows = "SELECT COUNT(*) as total_rows 
-                               FROM $tbl_session s
-                               INNER JOIN $table_access_url_rel_session ar 
-                               ON ar.session_id = s.id $where ";
-            }
-        }
         $result_rows = Database::query($query_rows);
         $row = Database::fetch_array($result_rows);
         $num = $row['total_rows'];
@@ -202,7 +203,7 @@ class SessionManager {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);        
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
-        //var_dump($options);
+        
         $where = 'WHERE 1 = 1 ';
         $user_id = api_get_user_id();                
         if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
@@ -278,10 +279,8 @@ class SessionManager {
                     " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
                     " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) ".                    
                     $where;
-        
-        global $_configuration;
-        
-        if ($_configuration['multiple_access_urls']) {
+                
+        if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
@@ -300,6 +299,8 @@ class SessionManager {
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
         }        
+        
+        
         $result = Database::query($query);
         
         error_log($query);        

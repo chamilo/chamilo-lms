@@ -192,7 +192,7 @@ class Migration {
         }
         
         if (!empty($data)) {
-            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ");
+            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ".print_r($params,1));
             return $web_service_params['class']::$function_name($data, $params);           
         } else {
             return array(
@@ -516,6 +516,7 @@ class Migration {
      * @return int The ID of the transaction row in Chamilo's table
      */
     static function add_transaction($params) {
+error_log('Request add_transaction of : '.print_r($params,1));
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
             unset($params['id']);
@@ -536,7 +537,16 @@ class Migration {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $sql = "SELECT DISTINCT branch_id FROM $table ORDER BY branch_id";
         $result = Database::query($sql);
-        return Database::store_result($result, 'ASSOC');
+        if (Database::num_rows($result) > 0) {
+          return Database::store_result($result, 'ASSOC');
+        }
+        return array(
+          //0=>array('branch_id' => 1),
+          1=>array('branch_id' => 2),
+          //2=>array('branch_id' => 3),
+          //3=>array('branch_id' => 4),
+          //4=>array('branch_id' => 5),
+        );
     }
     
     /**
@@ -580,6 +590,7 @@ class Migration {
      * @return int The ID of the last transaction registered
      */
     static function get_latest_transaction_by_branch($branch_id) {
+        return 376011;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC LIMIT 1";
@@ -588,7 +599,7 @@ class Migration {
             $row = Database::fetch_array($result);
             return $row['id'];
         }
-        return 0;
+        return 376013; //current first entry
     }
     /**
      * Gets a specific transaction using select parameters
@@ -649,9 +660,9 @@ class Migration {
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 10));
+            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 2));
             //Calling a process to save transactions
-            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 10));
+            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 2));
         }
     }   
 

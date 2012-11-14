@@ -14,7 +14,7 @@ require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 
 //error_reporting(-1);
-$action_type = ((isset($argv[1]) && $argv[1]=='migration')?'migration':'sync');
+$action_type = ((!empty($argv[1]) && $argv[1]=='migration')?'migration':'sync');
 
 if (is_file(dirname(__FILE__) . '/migration.custom.class.php')) {
     require_once 'migration.custom.class.php';
@@ -58,9 +58,11 @@ if (!empty($servers)) {
             include $server_info['filename'];
             
             if ($action_type == 'migration') {
+                error_log('Starting Migration');
                 //Default migration from MSSQL to Chamilo MySQL
                 $m->migrate($matches);
             } else {
+                error_log('Starting Synchronization');
                 //Getting transactions from MSSQL (via webservices)
              
                 if (isset($matches['web_service_calls']['filename'])) {                

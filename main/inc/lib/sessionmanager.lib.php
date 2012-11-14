@@ -145,61 +145,12 @@ class SessionManager {
         $result = Database::fetch_array(Database::query("SELECT COUNT(*) as count FROM ".Database::get_main_table(TABLE_MAIN_SESSION)." WHERE name = '$session_name' "));
         return $result['count'] > 0;
     }
-    
-    static function get_count_admin($options = array()) {
-        $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-        $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
         
-        $where = 'WHERE 1 = 1 ';
-        $user_id = api_get_user_id();
-        
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_see_all_sessions') == 'false') {
-            $where.=" WHERE s.session_admin_id = $user_id ";
-        }
-        
-        $query_rows = "SELECT count(*) as total_rows FROM $tbl_session s ";
-        
-        if (api_is_multiple_url_enabled()) {
-            $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1) {
-                $where.= " AND ar.access_url_id = $access_url_id ";
-                
-                $query_rows = "SELECT COUNT(*) as total_rows 
-                               FROM $tbl_session s
-                               INNER JOIN $table_access_url_rel_session ar 
-                               ON ar.session_id = s.id ";
-            }
-        }
-        
-        if (!empty($options['where'])) {       
-            if (!empty($options['extra'])) {
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
-                $options['where'] = str_replace('AND', 'OR', $options['where']);
-                
-                foreach ($options['extra'] as $extra) {
-                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);        
-                }
-            }                        
-            $where .= ' AND '.$options['where'];           
-            
-            $query_rows .= "LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) 
-                            INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id)";
-        }        
-        $query_rows .= $where;         
-        
-        $result_rows = Database::query($query_rows);
-        $row = Database::fetch_array($result_rows);
-        $num = $row['total_rows'];
-        return $num;    
-    }    
-    
     /**
      * Gets the admin session list callback of the admin/session_list.php page
      * @param array order and limit keys
      */
-    public static function get_sessions_admin($options = array()) {
+    public static function get_sessions_admin($options = array(), $get_count = false) {
         $tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);        
         $tbl_session_field_values = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
         $tbl_session_field_options = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_OPTIONS);
@@ -226,59 +177,71 @@ class SessionManager {
             $extra_fields = $options['extra'];
             if (!empty($extra_fields)) {
                 $extra_present = true;
-                foreach ($extra_fields as $extra) {
-                    $inject_extra_fields .= " IF (fv.field_id = {$extra['id']}, fvo.option_display_text, NULL ) as {$extra['field']} , ";
+                $counter = 1;                
+                foreach ($extra_fields as $extra) {                    
+                    $inject_extra_fields .= " fvo$counter.option_display_text as {$extra['field']}, ";
                     if (isset($extra_fields_info[$extra['id']])) {
                         $info = $extra_fields_info[$extra['id']];                        
                     } else {
                         $info = $extra_field->get($extra['id']);
                         $extra_fields_info[$extra['id']] = $info;                        
-                    }
-                    
+                    }                    
                     if ($info['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                         $double_fields[$info['id']] = $info;
                     }
+                    $counter++;
                 }                
             }
         }
-        
+                
         $options_by_double = array();
         foreach ($double_fields as $double) {            
             $my_options = $extra_field_option->get_field_options_by_field($double['id'], true);
             $options_by_double['extra_'.$double['field_variable']] = $my_options;            
         }
         
-        $select = 
-                "SELECT * FROM ( SELECT DISTINCT ".
-                " s.name, ".
-                " s.display_start_date, ".
-                " s.display_end_date, ".
-                " access_start_date, ".
-                " access_end_date, ".
-                " s.visibility, ".
-                " $inject_extra_fields ".
-                " s.id ";
+        if ($get_count == true) {
+            $select = " SELECT count(*) as total_rows";
+        } else {
+            $select = 
+                    "SELECT DISTINCT ".
+                    " s.name, ".
+                    " s.display_start_date, ".
+                    " s.display_end_date, ".
+                    " access_start_date, ".
+                    " access_end_date, ".
+                    " s.visibility, ".
+                    " $inject_extra_fields ".
+                    " s.id ";
+        }        
         
-        if (!empty($options['where'])) {       
+        //filter can be all/any = and/or
+        $inject_joins = null;
+        $inject_where = null;
+        $field_value_to_join = array();
+        
+        if (!empty($options['where'])) {  
             if (!empty($options['extra'])) {
-                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);                
-                $options['where'] = str_replace('AND', 'OR', $options['where']);
-                
+                //Removing double 1=1
+                $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
+                //Always OR                
+                $counter = 1;                
                 foreach ($options['extra'] as $extra) {
-                    $options['where'] = str_replace($extra['field'], 'fv.field_id = '.$extra['id'].' AND fvo.option_value', $options['where']);        
+                    $options['where'] = str_replace($extra['field'], 'fv'.$counter.'.field_id = '.$extra['id'].' AND fvo'.$counter.'.option_value', $options['where']);                              
+                    $inject_joins .= " INNER JOIN $tbl_session_field_values fv$counter ON (s.id = fv$counter.session_id) INNER JOIN $tbl_session_field_options fvo$counter ".
+                                     " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.field_value = fvo$counter.option_value) ";
+                    //$inject_where .= " AND s.id = fv$counter.session_id ";
+                    $field_value_to_join[] = " fv$counter.session_id ";
+                    $counter++;
+                }                
+                if (!empty($field_value_to_join)) {
+                    //$inject_where .= " AND s.id = ".implode(' = ', $field_value_to_join);
                 }
             }                        
             $where .= ' AND '.$options['where'];           
         }        
         
-        if (!empty($options['limit'])) {            
-            $where .= " LIMIT ".$options['limit'];
-        }
-        
-        $query = "$select FROM $tbl_session s ".
-                    " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".
-                    " INNER JOIN $tbl_session_field_options fvo ON (fv.field_id = fvo.field_id) ".                    
-                    $where;
+        $query = "$select FROM $tbl_session s $inject_joins $where $inject_where";      
                 
         if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
@@ -286,32 +249,33 @@ class SessionManager {
             //" LEFT JOIN $tbl_session_rel_course src ON (src.id_session = s.id) ".
             if ($access_url_id != -1) {
                 $where.= " AND ar.access_url_id = $access_url_id ";
-                $query = "$select ".
-                    " FROM $tbl_session s ".
-                    " LEFT JOIN $tbl_session_field_values fv ON (fv.session_id = s.id) ".                    
-                    " INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) ".
-                    " $where";
+                $query = "$select FROM $tbl_session s $inject_joins INNER JOIN $table_access_url_rel_session ar ON (ar.session_id = s.id) $where";
             }
         }
-     
-        $query .= ") AS session_table";
-
+        
         if (!empty($options['order'])) { 
             $query .= " ORDER BY ".$options['order'];
-        }        
+        }
         
-        
-        $result = Database::query($query);
-        
-        error_log($query);        
+        if (!empty($options['limit'])) {            
+            $query .= " LIMIT ".$options['limit'];
+        }
+         
+        if ($get_count == false) {
+            //echo $query;exit;
+        }
+        $result = Database::query($query);        
         
         $formatted_sessions = array();
                 
         if (Database::num_rows($result)) {
-            $sessions   = Database::store_result($result, 'ASSOC');
+            $sessions   = Database::store_result($result, 'ASSOC');            
+            if ($get_count) {                
+                return $sessions[0]['total_rows'];
+            }            
             foreach ($sessions as $session) {
                 $session_id = $session['id'];
-                //error_log($session_id);
+                
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
                 if ($session['session_active'] == 1) {
@@ -324,14 +288,14 @@ class SessionManager {
                 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
-                        $session['visibility'] =  get_lang('ReadOnly');
+                        $session['visibility'] = get_lang('ReadOnly');
                         break;
                     case SESSION_VISIBLE:           //2
                     case SESSION_AVAILABLE:         //4
-                        $session['visibility'] =  get_lang('Visible');
+                        $session['visibility'] = get_lang('Visible');
                         break;
                     case SESSION_INVISIBLE:         //3
-                        $session['visibility'] =  api_ucfirst(get_lang('Invisible'));
+                        $session['visibility'] = api_ucfirst(get_lang('Invisible'));
                         break;
                 }
                 
@@ -339,7 +303,7 @@ class SessionManager {
                 //var_dump($session);
                 foreach ($session as $key => &$value) {                    
                     if (isset($options_by_double[$key]) || isset($options_by_double[$key.'_second'])) {
-                        $options = explode('::', $value);                        
+                        $options = explode('::', $value);                
                     }
                     $original_key = $key;
                     
@@ -361,12 +325,14 @@ class SessionManager {
                     }
                 }
                 
-                if (isset($formatted_sessions[$session_id])) {                    
+                $formatted_sessions[$session_id] = $session;
+                
+                /*if (isset($formatted_sessions[$session_id])) {                    
                     //Compare and filter sessions with the same content
                     $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
                 } else {
                     $formatted_sessions[$session_id] = $session;
-                }                
+                }*/                
             }
         }        
         return $formatted_sessions;
@@ -401,9 +367,8 @@ class SessionManager {
                        FROM $tbl_session s
                        LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                        INNER JOIN $tbl_user u ON s.id_coach = u.user_id $where ";
-         
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        
+        if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -537,9 +502,7 @@ class SessionManager {
                     INNER JOIN $tbl_user u ON (s.id_coach = u.user_id) ".
                     $where;
         
-		global $_configuration;
-        
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -640,7 +603,7 @@ class SessionManager {
             return $array1;
         }
         foreach ($array1 as $key => $item) {            
-            if (!isset($array1[$key])) {                
+            if (!isset($array1[$key])) {          
                 //My string is empty try the other one
                 if (isset($array2[$key]) && !empty($array2[$key])) {
                     $array1[$key] = $array2[$key];
@@ -651,14 +614,14 @@ class SessionManager {
     }
     
     static function convert_dates_to_local($params) {
-        $params['display_start_date'] = api_get_local_time($params['display_start_date'], null, null, true);
-        $params['display_end_date'] = api_get_local_time($params['display_end_date'], null, null, true);
+        $params['display_start_date']       = api_get_local_time($params['display_start_date'], null, null, true);
+        $params['display_end_date']         = api_get_local_time($params['display_end_date'], null, null, true);
         
-        $params['access_start_date'] = api_get_local_time($params['access_start_date'], null, null, true);
-        $params['access_end_date'] = api_get_local_time($params['access_end_date'], null, null, true);
+        $params['access_start_date']        = api_get_local_time($params['access_start_date'], null, null, true);
+        $params['access_end_date']          = api_get_local_time($params['access_end_date'], null, null, true);
         
-        $params['coach_access_start_date'] = api_get_local_time($params['coach_access_start_date'], null, null, true);
-        $params['coach_access_end_date'] = api_get_local_time($params['coach_access_end_date'], null, null, true);
+        $params['coach_access_start_date']  = api_get_local_time($params['coach_access_start_date'], null, null, true);
+        $params['coach_access_end_date']    = api_get_local_time($params['coach_access_end_date'], null, null, true);
         return $params;
     }
         

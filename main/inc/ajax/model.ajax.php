@@ -197,8 +197,8 @@ switch ($action) {
 		break;
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
-        if ($list_type == 'simple') {
-            $count = SessionManager::get_count_admin(array('where'=> $where_condition, 'extra' => $extra_fields));
+        if ($list_type == 'simple') {            
+            $count = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'extra' => $extra_fields), true);
         } else {
             $count = SessionManager::get_count_admin_complete(array('where'=> $where_condition, 'extra' => $extra_fields));
         }
@@ -339,8 +339,8 @@ switch ($action) {
     case 'get_sessions':
         $session_columns = SessionManager::get_session_columns($list_type);
         $columns = $session_columns['simple_column_name'];    
-        if ($list_type == 'simple') {
-            $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
+        if ($list_type == 'simple') {            
+            $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"), false);                                
         } else {
             $result = SessionManager::get_sessions_admin_complete(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));        
         }

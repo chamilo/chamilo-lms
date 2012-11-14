@@ -2587,6 +2587,7 @@ function create_course_tables($course_db_name = null) {
         CREATE TABLE `".$TABLEQUIZQUESTIONLIST . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
+        parent_id int unsigned NOT NULL default 0,
         question TEXT NOT NULL,
         description text default NULL,
         ponderation float(6,2) NOT NULL default 0,

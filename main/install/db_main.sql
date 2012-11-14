@@ -3111,4 +3111,4 @@ CREATE TABLE migration_transaction_status (
 INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20306' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20339' WHERE variable = 'chamilo_database_version';

@@ -80,6 +80,8 @@ ALTER TABLE c_quiz_question_rel_category MODIFY COLUMN id int unsigned AUTO_INCR
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
+ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
+
 /*
 CREATE TABLE IF NOT EXISTS transacciones (
     id  int unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -115,4 +117,4 @@ INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Exec
 
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20306' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20339' WHERE variable = 'chamilo_database_version';

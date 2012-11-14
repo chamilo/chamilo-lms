@@ -60,14 +60,6 @@ $extra_params['height'] = '100%';
 
 $extra_params['rowList'] = array(20, 50, 100, 250, 500);
 
-/*
-$extra_params['grouping'] = 'true';
-$extra_params['groupingView'] = array(  'groupCollapse'    => false,
-                                        'groupField'       => array('name'),
-                                        'groupColumnShow'  => array(false),
-                                        'groupText'        => array('<b>'.get_lang('Session').' {0}</b>'));
-*/
-
 $result = SessionManager::get_session_columns($list_type);
 $columns = $result['columns'];
 $column_model = $result['column_model'];
@@ -98,7 +90,8 @@ $url_select = api_get_path(WEB_AJAX_PATH).'extra_field.ajax.php?1=1';
 <script>
 
 function setSearchSelect(columnName) {    
-    $("#sessions").jqGrid('setColProp', columnName, {                   
+    $("#sessions").jqGrid('setColProp', columnName, {
+        
        /*searchoptions:{
             dataInit:function(el){                            
                 $("option[value='1']",el).attr("selected", "selected");
@@ -135,6 +128,8 @@ function show_cols(grid, added_cols) {
 var second_filters = [];
 
 $(function() {
+  
+    
     date_pick_today = function(elem) {
         $(elem).datetimepicker({dateFormat: "yy-mm-dd"});
         $(elem).datetimepicker('setDate', (new Date()));
@@ -186,19 +181,26 @@ $(function() {
         overlay : false, 
         width: 'auto',
         caption: '<?php echo addslashes(get_lang('Search')); ?>',
-        formclass:'data_table',
+        formclass:'data_table',     
         onSearch : function() {
             var postdata = grid.jqGrid('getGridParam', 'postData');
-                        
+            
             if (postdata && postdata.filters) {
                 filters = jQuery.parseJSON(postdata.filters);
                 clean_cols(grid, added_cols);
-                added_cols = [];                
+                added_cols = [];    
+                //console.log(postdata);
                 $.each(filters, function(key, value){
+                    console.log('key: ' + key );
+                    
                     if (key == 'rules') {
-                        $.each(value, function(key, value) {
+                        $.each(value, function(subkey, subvalue) {
+                            
+                            if (subvalue.data == undefined) {                                
+                            }
+                            
                             //if (added_cols[value.field] == undefined) {
-                                added_cols[value.field] = value.field;
+                                added_cols[subvalue.field] = subvalue.field;
                             //}
                             //grid.showCol(value.field);                            
                         });
@@ -235,6 +237,29 @@ $(function() {
     var gbox = $("#gbox_"+grid[0].id);
     gbox.before(searchDialog);
     gbox.css({clear:"left"});
+    
+    //Select first elements by default 
+    $('.input-elm').each(function(){
+        $(this).find('option:first').attr('selected', 'selected');        
+    });
+    
+    $('.delete-rule').each(function(){
+        $(this).click(function(){
+             $('.input-elm').each(function(){
+                $(this).find('option:first').attr('selected', 'selected');        
+            });
+        });        
+    });
+    
+    /*
+    $('.delete-rule').on('click', function(){
+        console.log('deleted');
+        $('.input-elm').each(function(){
+            $(this).find('option:first').attr('selected', 'selected');        
+        });
+    });*/
+    
+    
 });
 </script>
 <?php 

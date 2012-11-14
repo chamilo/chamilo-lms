@@ -192,7 +192,7 @@ class Migration {
         }
         
         if (!empty($data)) {
-            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ");
+            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ".print_r($params,1));
             return $web_service_params['class']::$function_name($data, $params);           
         } else {
             return array(
@@ -206,16 +206,19 @@ class Migration {
     /**
      * Test a series of hand-crafted transactions
      * @param array of parameters that would usually get passed to the web service
+     * @param bool Whether to truncate the transaction table before the test or not
      * @return void
      */
-    function test_transactions($web_service_params) {
-        error_log('search_transactions');
+    function test_transactions($web_service_params, $truncate = false) {
+        error_log('test_transactions');
         //Just for tests
         
         //Cleaning transaction table
-        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
-        $sql = "TRUNCATE $table";
-        Database::query($sql);
+        if ($truncate) {
+            $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+            $sql = "TRUNCATE $table";
+            Database::query($sql);
+        }
         
         $transaction_harcoded = array(
             array(
@@ -513,6 +516,7 @@ class Migration {
      * @return int The ID of the transaction row in Chamilo's table
      */
     static function add_transaction($params) {
+error_log('Request add_transaction of : '.print_r($params,1));
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
             unset($params['id']);
@@ -533,7 +537,16 @@ class Migration {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $sql = "SELECT DISTINCT branch_id FROM $table ORDER BY branch_id";
         $result = Database::query($sql);
-        return Database::store_result($result, 'ASSOC');
+        if (Database::num_rows($result) > 0) {
+          return Database::store_result($result, 'ASSOC');
+        }
+        return array(
+          //0=>array('branch_id' => 1),
+          1=>array('branch_id' => 2),
+          //2=>array('branch_id' => 3),
+          //3=>array('branch_id' => 4),
+          //4=>array('branch_id' => 5),
+        );
     }
     
     /**
@@ -577,15 +590,16 @@ class Migration {
      * @return int The ID of the last transaction registered
      */
     static function get_latest_transaction_by_branch($branch_id) {
+        return 376011;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
-        $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC  LIMIT 1";
+        $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
             return $row['id'];
         }
-        return 0;
+        return 376013; //current first entry
     }
     /**
      * Gets a specific transaction using select parameters
@@ -623,9 +637,10 @@ class Migration {
     /**
      * Search for new transactions through a web service call. Automatically insert them in the local transactions table.
      * @param array The web service parameters
+     * @param int An optional transaction ID to start from. If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($web_service_params) {        
+    function search_transactions($web_service_params, $t_id = null) {
         error_log('search_transactions');        
         //Testing transactions        
         
@@ -641,11 +656,14 @@ class Migration {
         $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
         $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
-        
-        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2)); 
-        
-        //Calling a process to save transactions
-        $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => 354911, 'cantidad' => 2));        
+        $branches = self::get_branches();
+        foreach ($branches as $branch) {
+            error_log('Treating transactions for branch '.$branch['branch_id']);
+            $last = self::get_latest_transaction_by_branch($branch['branch_id']);
+            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 2));
+            //Calling a process to save transactions
+            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 2));
+        }
     }   
 
     /**

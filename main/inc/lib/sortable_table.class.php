@@ -95,14 +95,10 @@ class SortableTable extends HTML_Table {
     /** 
      * Activates the odd even rows  
      * **/
-    public $odd_even_rows_enabled = true;
-    
-    public $use_jqgrid = false;
-    
-    public $table_id = null;
-    
+    public $odd_even_rows_enabled = true;    
+    public $use_jqgrid = false;    
+    public $table_id = null;    
     public $headers = array();
-
 
 	/**
 	 * Create a new SortableTable
@@ -217,12 +213,11 @@ class SortableTable extends HTML_Table {
 		}
 		return $this->pager;
 	}
-    
-    
-	
+    	
 	public function display() {
 		echo $this->return_table();
 	}
+    
 	/**
 	 * Displays the table, complete with navigation buttons to browse through
 	 * the data-pages.
@@ -244,7 +239,7 @@ class SortableTable extends HTML_Table {
 			$nav   = $this->get_navigation_html();
 			
 			//Only show pagination info when there are items to paginate	
-	
+            
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
     			$html  = '<table class="data_table_pagination">';
     			$html .= '<tr>';
@@ -863,6 +858,7 @@ class SortableTable extends HTML_Table {
 	public function set_additional_parameters ($parameters) {
 		$this->additional_parameters = $parameters;
 	}
+    
 	/**
 	 * Set other tables on the same page.
 	 * If you have other sortable tables on the page displaying this sortable

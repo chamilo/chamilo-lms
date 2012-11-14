@@ -83,8 +83,8 @@ $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] 
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';    
-    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);    
-        
+    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+            
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
     }    
@@ -113,7 +113,9 @@ if ($_REQUEST['_search'] == 'true') {
             if (strpos($rule->field, 'extra_') === false) {
                 //normal fields
                 $field = $rule->field;
-                $condition_array[] = get_where_clause($field, $rule->op, $rule->data);                
+                if (!empty($rule->data)) {                
+                    $condition_array[] = get_where_clause($field, $rule->op, $rule->data);                
+                }
             } else {
                 //Extra fields
                 
@@ -123,7 +125,7 @@ if ($_REQUEST['_search'] == 'true') {
                     $original_field = str_replace('extra_', '', $rule->field);                    
                     $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
                     
-                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {                        
+                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                         
                         if (isset($double_select[$rule->field])) {
                             $data = explode('#', $rule->data);
@@ -134,11 +136,15 @@ if ($_REQUEST['_search'] == 'true') {
                             $data = explode('#', $rule->data);
                             $rule->data = $data[1];                            
                         }                        
-                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';                        
-                        $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';                        
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
                     } else {
-                        $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
-                        $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
                     }
                 } else {
                     $my_field = str_replace('_second', '', $rule->field);
@@ -147,7 +153,7 @@ if ($_REQUEST['_search'] == 'true') {
                     $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
                 }
             }            
-        }
+        }        
         
         if (!empty($condition_array)) {
             $where_condition .= ' AND ( ';    
@@ -155,7 +161,8 @@ if ($_REQUEST['_search'] == 'true') {
             $where_condition .= implode($filters->groupOp, $condition_array);
             
             $where_condition .= ' ) ';        
-        }        
+        }
+        
     }
 }
 //var_dump($extra_fields);
@@ -338,7 +345,8 @@ switch ($action) {
 		break;
     case 'get_sessions':
         $session_columns = SessionManager::get_session_columns($list_type);
-        $columns = $session_columns['simple_column_name'];    
+        $columns = $session_columns['simple_column_name'];
+        
         if ($list_type == 'simple') {            
             $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"), false);                                
         } else {

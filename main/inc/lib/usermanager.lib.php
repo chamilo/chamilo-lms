@@ -2228,8 +2228,8 @@ class UserManager {
                 WHERE (
                          scu.id_user = $user_id OR session.id_coach = $user_id
                       )  $condition_date_end
-                ORDER BY session_category_name, name LIMIT 100";
-        //var_dump($sql);
+                ORDER BY session_category_name, name";
+        
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             

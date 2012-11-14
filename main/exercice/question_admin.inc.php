@@ -21,7 +21,7 @@ $course_id = api_get_course_int_id();
 
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
-	$objQuestion = Question::read ($_GET['editQuestion']);
+	$objQuestion = Question::read ($_GET['editQuestion']);    
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 
 	if (isset($exerciseId) && !empty($exerciseId)) {
@@ -89,8 +89,7 @@ if (is_object($objQuestion)) {
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {
-	    	
+	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {	    	
 	    	if(isset($_GET['editQuestion'])) {
 	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
 	    	} else {

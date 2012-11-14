@@ -11,18 +11,17 @@ class MediaQuestion extends Question {
     
     function processAnswersCreation($form) {
         $params = $form->getSubmitValues();        
-        $this->save($params);
+        $this->save_media($params);
     }
     
-    function save($params) {
+    function save_media($params) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);         
         $new_params = array(
-            'c_id' => api_get_course_int_id(),
-            'question' => $params['questionName'],
+            'c_id'      => api_get_course_int_id(),
+            'question'  => $params['questionName'],
             'parent_id' => 0,
-            'type' => MEDIA_QUESTION
-        );
-        
+            'type'      => MEDIA_QUESTION
+        );        
         Database::insert($table_question, $new_params);
     }
     

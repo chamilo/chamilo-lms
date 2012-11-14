@@ -1197,7 +1197,7 @@ abstract class Question
 		$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 		
 		// hidden values
-		$form->addElement('hidden','myid',$_REQUEST['myid']);
+		$form->addElement('hidden','myid', intval($_REQUEST['myid']));
         
         if (!isset($_GET['fromExercise'])) {            
             switch($answerType) {

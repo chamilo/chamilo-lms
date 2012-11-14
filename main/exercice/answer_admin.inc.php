@@ -791,7 +791,7 @@ if ($modifyAnswers) {
 
                 <input type="hidden" name="formSent" value="1">
                 <input type="hidden" name="nbrAnswers" value="<?php echo $nbrAnswers; ?>">
-                <input type="hidden" name="myid" value="<?php echo $_REQUEST['myid']; ?>">
+                <input type="hidden" name="myid" value="<?php echo intval($_REQUEST['myid']); ?>">
 
                 <table width="650" border="0" cellpadding="5">
 
@@ -894,7 +894,7 @@ if ($modifyAnswers) {
             <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
                 <input type="hidden" name="formSent" value="1">
                 <input type="hidden" name="setWeighting" value="<?php echo $setWeighting; ?>">
-                <input type="hidden" name="myid" value="<?php echo $_REQUEST['myid']; ?>">
+                <input type="hidden" name="myid" value="<?php echo intval($_REQUEST['myid']); ?>">
 
             <?php
             if (!$setWeighting) {
@@ -1028,7 +1028,7 @@ if ($modifyAnswers) {
             <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?modifyAnswers=<?php echo $modifyAnswers; ?>">
                 <input type="hidden" name="formSent" value="1">
                 <input type="hidden" name="setWeighting" value="1">
-                <input type="hidden" name="myid" value="<?php echo $_REQUEST['myid']; ?>">
+                <input type="hidden" name="myid" value="<?php echo intval($_REQUEST['myid']); ?>">
                 <table border="0" cellpadding="5" width="500">
                 <?php
                 if ($okPicture) {
@@ -1081,7 +1081,7 @@ if ($modifyAnswers) {
                     <input type="hidden" name="formSent" value="1">
                     <input type="hidden" name="nbrOptions" value="<?php echo $nbrOptions; ?>">
                     <input type="hidden" name="nbrMatches" value="<?php echo $nbrMatches; ?>">
-                    <input type="hidden" name="myid" value="<?php echo $_REQUEST['myid']; ?>">
+                    <input type="hidden" name="myid" value="<?php echo intval($_REQUEST['myid']); ?>">
 
                     <table border="0" cellpadding="5">
 

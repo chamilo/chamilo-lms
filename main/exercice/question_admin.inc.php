@@ -77,6 +77,7 @@ if (is_object($objQuestion)) {
 	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 	
 	// FORM VALIDATION
+    
 	if (isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question

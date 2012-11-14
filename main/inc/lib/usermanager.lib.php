@@ -2172,7 +2172,7 @@ class UserManager {
 	 * @return array  list of statuses [session_category][session_id]
 	 * @todo ensure multiple access urls are managed correctly
 	 */
-	public static function get_sessions_by_category($user_id, $is_time_over = false) {
+	public static function get_sessions_by_category($user_id, $is_time_over = false, $get_count = false) {
 		// Database Table Definitions		
 		$tbl_session				= Database :: get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_course_user	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);      
@@ -2200,7 +2200,7 @@ class UserManager {
             }
 		}
 
-        $sql = "SELECT DISTINCT session.id, 
+        $select = "SELECT DISTINCT session.id, 
                                 session.name,
                                 
                                 access_start_date, 
@@ -2216,19 +2216,27 @@ class UserManager {
                                 moved_to,
                                 moved_status,
                                 id_coach,
-                                scu.id_user
-                                
-                FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
+                                scu.id_user";
+        
+        if ($get_count) {
+            $select = "SELECT count(session.id) as total_rows ";
+        }
+        
+        $sql = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
                       INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
                       LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE (
                          scu.id_user = $user_id OR session.id_coach = $user_id
                       )  $condition_date_end
-                ORDER BY session_category_name, name";
+                ORDER BY session_category_name, name LIMIT 100";
         //var_dump($sql);
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
+            
             while ($row = Database::fetch_array($result)) {
+                if ($get_count) {
+                    return $row['total_rows'];
+                }
                 $categories[$row['session_category_id']]['session_category']['id']                          = $row['session_category_id'];
                 $categories[$row['session_category_id']]['session_category']['name']                        = $row['session_category_name'];
                 $categories[$row['session_category_id']]['session_category']['date_start']                  = $row['session_category_date_start'];

@@ -247,10 +247,10 @@ class CourseManager {
                 Database::query($sql);
             }
         }
-
+        
+        //user_id = '".$tutor_id . "',
         $sql = "INSERT IGNORE INTO ".$course_user_table . " SET
-                    course_code = '".Database::escape_string($course_code). "',
-                    user_id = '".$tutor_id . "',
+                    course_code = '".Database::escape_string($course_code). "',                  
                     status = '1',
                     role = '',
                     tutor_id='0',
@@ -259,10 +259,11 @@ class CourseManager {
         Database::query($sql);
 
         $course_info = api_get_course_info($course_code);
-        $course_id = $course_info['real_id'];
-        $forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+        //$course_id = $course_info['real_id'];
+        //That table does no exists
+        /*$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
         $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
-        Database::query($sql);
+        Database::query($sql);*/
         return $course_info;
     }
 

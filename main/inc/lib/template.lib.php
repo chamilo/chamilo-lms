@@ -30,6 +30,7 @@ class Template {
     public $user_is_logged_in = false;
     public $twig = null;
     public $jquery_ui_theme;
+    public $force_plugin_load = false;
 
     /* Loads chamilo plugins */
     var $load_plugins = false;

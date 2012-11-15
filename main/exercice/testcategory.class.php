@@ -472,7 +472,7 @@ class Testcategory {
         return $res_num_max;
     }
     
-    public function getCategoryListName($course_id = null) {
+    public static function getCategoryListName($course_id = null) {
         $category_list = self::getCategoryListInfo(null, $course_id);
         $category_name_list = array();
         if (!empty($category_list)) {
@@ -483,7 +483,7 @@ class Testcategory {
         return $category_name_list;
     }
     
-    public function return_category_labels($category_list, $all_categories) {        
+    public static function return_category_labels($category_list, $all_categories) {        
         $category_list_to_render = array();
         foreach ($category_list as $category_id) {
             $category_name = null;

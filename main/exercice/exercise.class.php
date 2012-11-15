@@ -23,7 +23,6 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
-if(!class_exists('Exercise')):
 /**
  * Exercise class
 * @package chamilo.exercise
@@ -3502,8 +3501,17 @@ class Exercise {
     
     function media_is_activated($media_list) {
         $active = false;        
-        if (isset($media_list) && !empty($media_list) && count($media_list) > 1) {
-            $active = true;        
+        if (isset($media_list) && !empty($media_list)) {
+            $media_count = count($media_list);
+            if ($media_count > 1) {
+                return true;
+            } elseif ($media_count == 1) {                
+                if (isset($media_list[999])) {
+                    return false;    
+                } else {
+                    return true;
+                }
+            }            
         }
         return $active;            
     }
@@ -3659,4 +3667,3 @@ class Exercise {
         return $html;
     }
 }
-endif;

@@ -2979,8 +2979,8 @@ function api_not_allowed($print_headers = false, $message = null) {
  * @version October 2003
  * @desc convert sql date to unix timestamp
  */
-function convert_sql_date($last_post_datetime) {
-    list ($last_post_date, $last_post_time) = split(' ', $last_post_datetime);
+function convert_sql_date($last_post_datetime) {    
+    list ($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);    
     list ($year, $month, $day) = explode('-', $last_post_date);
     list ($hour, $min, $sec) = explode(':', $last_post_time);
     return mktime((int)$hour, (int)$min, (int)$sec, (int)$month, (int)$day, (int)$year);

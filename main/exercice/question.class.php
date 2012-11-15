@@ -1212,7 +1212,9 @@ abstract class Question
 			$editor_config = array_merge($editor_config, $fck_config);
 		}
         
-		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
+		if (!api_is_allowed_to_edit(null,true)) {
+            $editor_config['UserStatus'] = 'student';
+        }
 
 		$form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>		
@@ -1221,32 +1223,33 @@ abstract class Question
 		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
-
-		// Advanced parameters
-		$form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
         
-		$select_level = array (
-            1=>1,
-            2=>2,
-            3=>3,
-            4=>4,
-            5=>5
-        );
-        
-        $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
-        
-        $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
-        
-		// Categories		
-		$category_list = Testcategory::getCategoriesIdAndName(); 
-		$form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
-        
-        //Medias
-        $course_medias = Question::prepare_course_media_select(api_get_course_int_id());        
-        $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
-		
-		// hidden values
+        // hidden values
 		$form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
+        
+        //Advance settings
+        
+        if ($this->type != MEDIA_QUESTION) {
+            
+            // Advanced parameters
+            $form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
+        
+            $form->addElement('html','<div id="id_advancedOption" style="display:none;">');        
+            
+            $select_level = Question::get_default_levels();
+            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
+
+            // Categories		
+            $category_list = Testcategory::getCategoriesIdAndName(); 
+            $form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
+
+            //Medias
+            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());        
+            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+            
+            $form->addElement('html','</div>');
+        }
+		
         
         if (!isset($_GET['fromExercise'])) {            
             switch ($answerType) {
@@ -1271,7 +1274,7 @@ abstract class Question
             }
         }
         
-		$form->addElement('html','</div>');
+		
         
 		// default values
 		$defaults = array();		
@@ -1551,6 +1554,17 @@ abstract class Question
             }
         }
         return $media_list;
+    }
+    
+    static function get_default_levels() {
+        $select_level = array (
+                1=>1,
+                2=>2,
+                3=>3,
+                4=>4,
+                5=>5
+            );
+        return $select_level;        
     }
 }
 endif;

@@ -1630,7 +1630,7 @@ class Exercise {
 					
 					//Next question
 					$all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';					
-					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
+					$all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 					$html .= $all_button;
 				} else {					
 					if ($this->review_answers) {

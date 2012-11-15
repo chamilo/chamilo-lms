@@ -880,7 +880,7 @@ if (!empty($error)) {
                                 url = url_extra;
                             }
                             
-                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png')).'");
+                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
                                 
                             if (redirect) {
                                 window.location = url;
@@ -1103,7 +1103,7 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
                 break;
             case ALL_ON_ONE_PAGE :
                 $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                 $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
                 break;
         }
@@ -1115,7 +1115,7 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
             $exercise_actions .= $objExercise->show_button($questionId, $current_question);*/
             if ($count_of_questions_inside_media > 1) {
                 $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
-                $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+                $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
                 $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
             }
             

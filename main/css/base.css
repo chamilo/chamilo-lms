@@ -4678,3 +4678,8 @@ i.size-32.icon-new-work{
 #ui-datepicker-div {
     z-index: 1005 !important;
 }
+
+
+.exercise_save_mini_message {
+    padding-left: 5px;
+}

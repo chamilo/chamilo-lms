@@ -99,9 +99,7 @@ switch ($action) {
         $i=0;
         
         if (!empty($results)) {
-            foreach($results as $row) {
-                //$user_info = api_get_user_info($row['exe_user_id']);
-                //print_r($row);
+            foreach($results as $row) {                
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a 
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
@@ -169,8 +167,7 @@ switch ($action) {
             
             //Needed in manage_answer
             $learnpath_id           = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-            
+            $learnpath_item_id      = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;            
             
             //Attempt id
             $exe_id                 = $_REQUEST['exe_id'];
@@ -202,18 +199,7 @@ switch ($action) {
             $attempt_list = array();
             
             //First time here we create an attempt (getting the exe_id)
-            if (empty($exercise_stat_info)) {     
-            	/* 
-                //$exe_id = create_event_exercice($objExercise->selectId());                
-                $current_expired_time_key = get_time_control_key($objExercise->id);
-                if (isset($_SESSION['expired_time'][$current_expired_time_key])) { //Only for exercice of type "One page"
-                	$expired_date = $_SESSION['expired_time'][$current_expired_time_key];
-                } else {
-                	$expired_date = '0000-00-00 00:00:00';
-                }
-                $exe_id = $objExercise->save_stat_track_exercise_info($expired_date, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id, $question_list, 0); //total weight 0 by now                
-                $total_score = $total_weight = 0;
-                */
+            if (empty($exercise_stat_info)) {
             } else {               
                 //We know the user we get the exe_id
                 $exe_id        = $exercise_stat_info['exe_id'];

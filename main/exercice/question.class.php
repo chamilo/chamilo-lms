@@ -1301,15 +1301,15 @@ abstract class Question
 	 * @param FormValidator $form the formvalidator instance
 	 * @param Exercise $objExercise the Exercise instance
 	 */
-	function processCreation ($form, $objExercise) {
-        
+	function processCreation ($form, $objExercise) {        
         $this->updateParentId($form->getSubmitValue('parent_id'));
 		$this->updateTitle($form->getSubmitValue('questionName'));
 		$this->updateDescription($form->getSubmitValue('questionDescription'));
 		$this->updateLevel($form->getSubmitValue('questionLevel'));
 		$this->updateCategory($form->getSubmitValue('questionCategory'));
-        //For parent_id != 0
-        if ($objExercise->parent_id != 0) {
+        
+        //Save normal question if NOT media
+        if ($this->type != MEDIA_QUESTION) {
             $this->save($objExercise->id);
         
             // modify the exercise

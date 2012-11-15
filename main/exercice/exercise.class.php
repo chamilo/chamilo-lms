@@ -1585,9 +1585,13 @@ class Exercise {
 		return $id;		
 	}
 
-	public function show_button($question_id, $questionNum) {	
+	public function show_button($question_id, $questionNum, $inside_media = false) {	
 		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
+        
 		$nbrQuestions = count($this->get_validated_question_list());		
+        if ($inside_media) {
+            $nbrQuestions = count($this->get_media_list());            
+        }
 		 
 		$html = $label = '';
 		$confirmation_alert = $this->type == ALL_ON_ONE_PAGE? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
@@ -3478,10 +3482,36 @@ class Exercise {
 		}
 		return false;
 	}
+    
+    function get_media_list() {
+        $questionList = self::get_validated_question_list();
+        $media_questions = array();
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $objQuestionTmp = Question::read($questionId);
+                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
+                    $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;                    
+                } else {
+                    //Always the last item
+                    $media_questions[999][] = $objQuestionTmp->id;                
+                }
+            }
+        }
+        return $media_questions;
+    }
+    
+    function media_is_activated($media_list) {
+        $active = false;        
+        if (isset($media_list) && !empty($media_list) && count($media_list) > 1) {
+            $active = true;        
+        }
+        return $active;            
+    }
 	
 	function get_validated_question_list() {
 		$tabres = array();
 		$isRandomByCategory = $this->isRandomByCat();
+        
 		if ($isRandomByCategory == 0) {
 			if ($this->isRandom()) {
 				$tabres = $this->selectRandomList();
@@ -3492,16 +3522,14 @@ class Exercise {
 			if ($this->isRandom()) {
 				if (!class_exists("Testcategory")) {
 					require_once("testcategory.class.php");
-				}
-				// 
+				}				
 				// USE question categories 
-				// 
+                // 				
 				// get questions by category for this exercice
 				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
 				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)
 				// value is the array of question id of this category
-				$questionList = array();
-				$tabCategoryQuestions = array();
+				$questionList = array();				
 				$tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
 				$isRandomByCategory = $this->selectRandomByCat();
 				// on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie

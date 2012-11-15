@@ -726,8 +726,9 @@ class Autoload
         $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
-        $result['Matching'] = '/main/exercice/matching.class.php';
+        $result['Matching'] = '/main/exercice/matching.class.php';        
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
+        $result['MediaQuestion'] = '/main/exercice/media_question.class.php';
         $result['Model'] = '/main/inc/lib/model.lib.php';
         $result['Model\Course'] = '/main/inc/lib/course.class.php';
         $result['Model\Document'] = '/main/inc/lib/document.class.php';

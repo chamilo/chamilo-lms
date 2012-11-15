@@ -19,6 +19,7 @@ class MediaQuestion extends Question {
         $new_params = array(
             'c_id'      => api_get_course_int_id(),
             'question'  => $params['questionName'],
+            'description'  => $params['questionDescription'],
             'parent_id' => 0,
             'type'      => MEDIA_QUESTION
         );        

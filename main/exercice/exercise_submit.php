@@ -352,11 +352,19 @@ $exercise_sound 		= $objExercise->selectSound();
 
 //in LP's is enabled the "remember question" feature?
 
+$media_questions = $objExercise->get_media_list();
+$media_question_is_active = $objExercise->media_is_activated($media_questions);
+
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
     $questionList = $objExercise->get_validated_question_list();
+    
     if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
+    }
+    
+    if ($media_question_is_active) {
+        //$questionList = $media_questions;
     }
     Session::write('questionList', $questionList);
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
@@ -370,8 +378,12 @@ if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
 //Real question count
 $question_count = 0;
-if (!empty($questionList)) {
+if (!empty($questionList)) {        
 	$question_count = count($questionList);
+}
+
+if ($media_question_is_active) {
+    $question_count = count($media_questions);
 }
 
 if ($formSent && isset($_POST)) {
@@ -389,6 +401,8 @@ if ($formSent && isset($_POST)) {
         $choice     = array($hotspot_id => '');
     }
 
+    // Filling array exercise result
+    
     // if the user has answered at least one question
     if (is_array($choice)) {
         if ($debug) { error_log('9.1. $choice is an array '.print_r($choice, 1)); }
@@ -801,9 +815,16 @@ if (!empty($error)) {
                 url = "exercise_submit.php?'.$params.'&num="+previous_question_id;                    
                 //Save the current question
                 save_now(question_id_to_save, url);
-            }            
-
-           function save_now(question_id, url_extra) {
+            }
+            
+            
+         
+           function save_now(question_id, url_extra, redirect) {
+                
+                if(redirect == undefined) {
+                    redirect = true;
+                }
+                
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -817,7 +838,6 @@ if (!empty($error)) {
            		if (typeof(FCKeditorAPI) !== "undefined") {
     				var oEditor = FCKeditorAPI.GetInstance("choice["+question_id+"]") ;
     				var fck_content = "";
-
     				if (oEditor) {
                			fck_content = oEditor.GetHTML();
                			my_choice = {};
@@ -834,35 +854,42 @@ if (!empty($error)) {
 
            		// Only for the first time
 
-          		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
-                    $.ajax({
-                        type:"post",
-                        url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
-                        data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
-                        success: function(return_value) {
-                        	if (return_value == "ok") {
-                        		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
-                        	} else if (return_value == "error") {
-                        		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
-                        	} else if (return_value == "one_per_page") {
-                        		var url = "";
-								if ('.$reminder.' == 1 ) {
-                        			url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
-								} else if ('.$reminder.' == 2 ) {
-									url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
-								} else {
-									url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-								}
-                                
-                                if (url_extra) {
-                                    url = url_extra;
-                                }
-								window.location = url;
-                        	}
-                        },
-                        error: function() {
+          		$("#save_for_now_"+question_id).html("  '.addslashes(Display::return_icon('loading1.gif')).'");
+                    
+                $.ajax({
+                    type:"post",
+                    url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
+                    data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
+                    success: function(return_value) {
+                        if (return_value == "ok") {
+                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+                        } else if (return_value == "error") {
                             $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                        } else if (return_value == "one_per_page") {
+
+                            var url = "";
+                            if ('.$reminder.' == 1 ) {
+                                url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                            } else if ('.$reminder.' == 2 ) {
+                                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                            } else {
+                                url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                            }
+
+                            if (url_extra) {
+                                url = url_extra;
+                            }
+                            
+                            $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png')).'");
+                                
+                            if (redirect) {
+                                window.location = url;
+                            }
                         }
+                    },
+                    error: function() {
+                        $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('error.png', get_lang('Error'), array(), ICON_SIZE_SMALL)).'");
+                    }
                     });
                 return false;
             }
@@ -952,45 +979,32 @@ if (!empty($error)) {
     }    
     
     //Media question list render
-    $media_questions = array();
-    $media_question_is_active = false;
     
-    if (!empty($questionList)) {
-        foreach ($questionList as $questionId) {
-            $objQuestionTmp = Question::read($questionId);
-            if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
-                $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp;
-                $media_question_is_active = true;
-            } else {
-                $media_questions[0][] = $objQuestionTmp;
-            }
-        }
-    }
-    
-    if ($media_question_is_active) {
-        foreach ($media_questions as $media_id => $question_list_in_media) {
-            if (!empty($media_id)) {
-                $objQuestionTmp = Question::read($media_id);
-                //echo Display::page_subheader($objQuestionTmp->selectTitle());
-            }
-            
-            foreach($question_list_in_media as $questionId) {
-                
-            }
-            
-        }
-    }
-    render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);    
+    $media_list = array();    
+
+    if ($media_question_is_active) {        
+        
+        //Media behaviour
+        foreach ($media_questions as $media_id => $question_list_in_media) {                                    
+            $media_list[] = $media_id;
+        }        
+        render_question_list($objExercise, $media_list, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);
+        
+    } else {
+        //Normal behaviour
+        render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);    
+    }    
     echo '</form>';
 }
 
-function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list) {  
+
+function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions = array()) {  
     global $origin;
     
     $i = 1;
-
     //Normal question list render
     foreach ($questionList as $questionId) {
+        
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
             // if it is not the right question, goes to the next loop iteration
@@ -1003,7 +1017,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object
                         $objQuestionTmp = Question::read($questionId);
-                        $questionName = $objQuestionTmp->selectTitle();
+                        //$questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset ($objQuestionTmp);
                         Display :: display_normal_message(get_lang('AlreadyAnswered'));
@@ -1013,53 +1027,29 @@ function render_question_list($objExercise, $questionList, $current_question, $e
                 }
             }
         }
-
-        $user_choice = $attempt_list[$questionId];
-
-        $remind_highlight = '';
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
-        if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-            $remind_highlight = 'no_remind_highlight';    
-        }
-
-        $exercise_actions  = '';
-        $is_remind_on = false;
-
-        $attributes = array('id' =>'remind_list['.$questionId.']');
-        if (in_array($questionId, $remind_list)) {
-            $is_remind_on = true;
-            $attributes['checked'] = 1;
-            $remind_question = true;
-            $remind_highlight = ' remind_highlight ';
-        }
-
-        //Showing the question
-
-        echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
-
-            //Shows the question + possible answers
-            showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
-
-            //BUtton save and continue
-            switch ($objExercise->type) {
-                case ONE_PER_PAGE:
-                    $exercise_actions .= $objExercise->show_button($questionId, $current_question);
-                    break;
-                case ALL_ON_ONE_PAGE :
-                    $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
-                    $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
-                    $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
-                    break;
+        
+        //Medias
+        
+        if (isset($media_questions) && !empty($media_questions)) {
+            $media_question_list = $media_questions[$questionId];            
+            $objQuestionTmp = Question::read($questionId);
+            
+            if ($objQuestionTmp) {
+                echo Display::page_subheader($objQuestionTmp->selectTitle());
+                echo $objQuestionTmp->selectDescription();
             }
-
-            //Checkbox review answers
-            if ($objExercise->review_answers) {
-                $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-                $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
-            }
-            echo Display::div($exercise_actions, array('class'=>'form-actions'));
-        echo '</div>';
+            $count_of_questions_inside_media = count($media_question_list);
+            $counter = 1;
+            foreach ($media_question_list as $my_question_id) {
+                if ($counter == $count_of_questions_inside_media) {
+                    $last_question_in_media = true;
+                }
+                render_question($objExercise, $my_question_id, $attempt_list, $remind_list, $i, $current_question, true, $count_of_questions_inside_media, $last_question_in_media);                
+                $counter++;
+            }            
+        } else {
+            render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question);            
+        }
 
         $i++;
         // for sequential exercises
@@ -1068,12 +1058,82 @@ function render_question_list($objExercise, $questionList, $current_question, $e
             break;
         }
     }
+    
     // end foreach()
     if ($objExercise->type == ALL_ON_ONE_PAGE) {
         $exercise_actions =  $objExercise->show_button($questionId, $current_question);
         echo Display::div($exercise_actions, array('class'=>'exercise_actions'));
     }
 }
+
+function render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, $inside_media = false, $count_of_questions_inside_media = 0, $last_question_in_media = false) {    
+    global $origin;
+    $user_choice = $attempt_list[$questionId];
+
+    $remind_highlight = null;
+
+    //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+    if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
+        $remind_highlight = 'no_remind_highlight';    
+    }
+    
+    $is_remind_on = false;
+
+    $attributes = array('id' =>'remind_list['.$questionId.']');
+    
+    if (in_array($questionId, $remind_list)) {
+        $is_remind_on = true;
+        $attributes['checked'] = 1;            
+        $remind_highlight = ' remind_highlight ';
+    }
+
+    //Showing the question
+    
+    $exercise_actions  = null;
+
+    echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
+
+        //Shows the question + possible answers
+        showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
+
+        //BUtton save and continue
+        switch ($objExercise->type) {
+            case ONE_PER_PAGE:
+                $exercise_actions .= $objExercise->show_button($questionId, $current_question, $inside_media);
+                break;
+            case ALL_ON_ONE_PAGE :
+                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+                $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+                $exercise_actions  .= Display::div($button, array('class'=>'exercise_save_now_button'));
+                break;
+        }
+        
+        if ($inside_media) {
+            /*$button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
+            $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+            $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));            
+            $exercise_actions .= $objExercise->show_button($questionId, $current_question);*/
+            if ($count_of_questions_inside_media > 1) {
+                $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
+                $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
+                $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));
+            }
+            
+            if ($last_question_in_media) {
+               $exercise_actions = $objExercise->show_button($questionId, $current_question, $inside_media);
+            }
+        }
+
+        //Checkbox review answers
+        if ($objExercise->review_answers) {
+            $remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
+            $exercise_actions   .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+        }
+        
+        echo Display::div($exercise_actions, array('class'=>'form-actions'));
+    echo '</div>';
+}
+
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     echo '</div>'; //End glossary div

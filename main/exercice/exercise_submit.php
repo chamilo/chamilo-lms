@@ -353,6 +353,7 @@ $exercise_sound 		= $objExercise->selectSound();
 //in LP's is enabled the "remember question" feature?
 
 $media_questions = $objExercise->get_media_list();
+
 $media_question_is_active = $objExercise->media_is_activated($media_questions);
 
 if (!isset($_SESSION['questionList'])) {
@@ -762,7 +763,7 @@ if (!empty($error)) {
     $onsubmit = '';
     $i = 0;
     
-    if (!strcmp($questionList[0], '') === 0) {
+    if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
@@ -981,7 +982,7 @@ if (!empty($error)) {
     //Media question list render
     
     $media_list = array();    
-
+    
     if ($media_question_is_active) {        
         
         //Media behaviour
@@ -1068,7 +1069,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
 
 function render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, $inside_media = false, $count_of_questions_inside_media = 0, $last_question_in_media = false) {    
     global $origin;
-    $user_choice = $attempt_list[$questionId];
+    $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
 
     $remind_highlight = null;
 

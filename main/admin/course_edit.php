@@ -210,8 +210,7 @@ if ($form->validate()) {
             }
         }
         $warn = substr($warn,0,-1);
-    }
-    exit;
+    }    
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {

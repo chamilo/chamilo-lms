@@ -1147,14 +1147,14 @@ function _api_format_user($user, $add_password = false) {
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @version 21 September 2004
  */
-function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
+function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false, $add_extra_values = false) {
     if ($user_id == '') {
         return _api_format_user($GLOBALS['_user']);
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $result_array = Database::fetch_array($result);
+        $result_array = Database::fetch_array($result);            
 		if ($check_if_user_is_online) {
             $use_status_in_platform = user_is_online($user_id);
 
@@ -1169,7 +1169,12 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        $user =  _api_format_user($result_array, $show_password);
+        $user =  _api_format_user($result_array, $show_password);            
+        
+        if ($add_extra_values) {
+            $extra_field_values = new ExtraField('user');                
+            $user['extra_fields'] = $extra_field_values->get_handler_extra_data($user_id);                
+        }
         return $user;
     }
     return false;
@@ -1308,7 +1313,7 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  * particular course, not specially the current one.
  * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
  */
-function api_get_course_info($course_code = null) {
+function api_get_course_info($course_code = null, $add_extra_values = false) {
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1322,6 +1327,10 @@ function api_get_course_info($course_code = null) {
         $_course = array();
         if (Database::num_rows($result) > 0) {            
             $course_data = Database::fetch_array($result);
+            if ($add_extra_values) {
+                $extra_field_values = new ExtraField('course');                
+                $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);                
+            }
             $_course = api_format_course_array($course_data);            
         }
         return $_course;
@@ -1337,7 +1346,7 @@ function api_get_course_info($course_code = null) {
  * Now if the course_code is given, the returned array gives info about that
  * particular course, not specially the current one.
  */
-function api_get_course_info_by_id($id = null) {
+function api_get_course_info_by_id($id = null, $add_extra_values = false) {
     if (!empty($id)) {
         $id = intval($id);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -1351,6 +1360,10 @@ function api_get_course_info_by_id($id = null) {
         $_course = array();
         if (Database::num_rows($result) > 0) {            
             $course_data = Database::fetch_array($result);
+            if ($add_extra_values) {
+                $extra_field_values = new ExtraField('course');                
+                $course_data['extra_fields'] = $extra_field_values->get_handler_extra_data($course_code);                
+            }
             $_course = api_format_course_array($course_data);
         }
         return $_course;
@@ -1880,7 +1893,7 @@ function api_get_session_name($session_id) {
  * @param int       Session ID
  * @return array    information of the session
  */
-function api_get_session_info($session_id) {
+function api_get_session_info($session_id, $add_extra_values = false) {
     $data = array();
     if (!empty($session_id)) {
         $session_id = intval($session_id);
@@ -1890,6 +1903,10 @@ function api_get_session_info($session_id) {
 
         if (Database::num_rows($result)>0) {
             $data = Database::fetch_array($result, 'ASSOC');
+            if ($add_extra_values) {
+                $extra_field_values = new ExtraField('session');
+                $data['extra_fields'] = $extra_field_values->get_handler_extra_data($session_id);                
+            }
         }
     }
     return $data;

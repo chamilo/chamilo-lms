@@ -727,6 +727,7 @@ class MigrationCustom {
          if ($user_info['error'] == false) {
             global $api_failureList;
             $chamilo_user_info = UserManager::add($user_info);
+            $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], true);
             if ($chamilo_user_info) {
                 return array(
                     'entity' => 'user',
@@ -752,9 +753,9 @@ class MigrationCustom {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
-            $chamilo_user_info_before = api_get_user_info($user_id);            
+            $chamilo_user_info_before = api_get_user_info($user_id, true);            
             $result = UserManager::delete_user($user_id);
-            $chamilo_user_info = api_get_user_info($user_id);
+            $chamilo_user_info = api_get_user_info($user_id, true);
             if ($result) {
                 return array(
                     'entity' => 'user',
@@ -787,9 +788,9 @@ class MigrationCustom {
             if ($user_info['error'] == false) {
                 //Edit user
                 $user_info['user_id'] = $user_id;
-                $chamilo_user_info_before = api_get_user_info($user_id);
+                $chamilo_user_info_before = api_get_user_info($user_id, true);
                 UserManager::update($user_info);
-                $chamilo_user_info = api_get_user_info($user_id);
+                $chamilo_user_info = api_get_user_info($user_id, true);
                 return array(
                     'entity' => 'user',
                     'before' => $chamilo_user_info_before,
@@ -927,6 +928,7 @@ class MigrationCustom {
         $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));         
         if ($course_info['error'] == false) { 
             $course_info = CourseManager::create_course($course_info);
+            $course_info = api_get_course_info($course_info['code'], true);            
             if (!empty($course_info)) {
                 return array(
                         'entity' => 'course',
@@ -951,9 +953,9 @@ class MigrationCustom {
     static function transaction_6($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         if (!empty($course_code)) {
-            $course_info_before = api_get_course_info($course_code);
+            $course_info_before = api_get_course_info($course_code, true);
             CourseManager::delete_course($course_code);
-            $course_info = api_get_course_info($course_code);
+            $course_info = api_get_course_info($course_code, true);
             return array(
                     'entity' => 'course',
                     'before' => $course_info_before,
@@ -976,7 +978,7 @@ class MigrationCustom {
         $uidCursoId = $data['item_id'];
         $course_code = self::get_real_course_code($uidCursoId);        
         if (!empty($course_code)) {        
-            $course_info = api_get_course_info($course_code);            
+            $course_info = api_get_course_info($course_code, true);            
             $data_to_update = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));
             
             if ($data_to_update['error'] == false) {
@@ -984,7 +986,7 @@ class MigrationCustom {
                 $data_to_update['code'] = $course_info['code'];
                 unset($data_to_update['error']);                
                 CourseManager::update($data_to_update);
-                $course_info_after = api_get_course_info($course_code);
+                $course_info_after = api_get_course_info($course_code, true);
                 
                 return array(
                         'entity' => 'course',
@@ -1047,7 +1049,7 @@ class MigrationCustom {
         if ($session_info['error'] == false) {
             unset($session_info['error']);
             $session_id = SessionManager::add($session_info);
-            $session_info = api_get_session_info($session_id);
+            $session_info = api_get_session_info($session_id, true);
             if ($session_id) {
                 return array(
                    'entity' => 'session',
@@ -1075,9 +1077,9 @@ class MigrationCustom {
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);    
         if (!empty($session_id)) {
-            $session_info_before = api_get_session_info($session_id);
+            $session_info_before = api_get_session_info($session_id, true);
             SessionManager::delete_session($session_id, true);
-            $session_info = api_get_session_info($session_id);
+            $session_info = api_get_session_info($session_id, true);
             return array(
                    'entity' => 'session',
                    'before' => $session_info_before,
@@ -1103,9 +1105,9 @@ class MigrationCustom {
             if ($session_info['error'] == false) {                
                 $session_info['id'] = $session_id;
                 unset($session_info['error']);
-                $session_info_before = api_get_session_info($session_id);
+                $session_info_before = api_get_session_info($session_id, true);
                 SessionManager::update($session_info);
-                $session_info = api_get_session_info($session_id);
+                $session_info = api_get_session_info($session_id, true);
                 return array(
                    'entity' => 'session',
                    'before' => $session_info_before,

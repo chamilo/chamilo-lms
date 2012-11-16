@@ -30,7 +30,7 @@ if (empty($servers)) {
 $start = time();
 echo "\n-- Starting at ".date('h:i:s')." local server time\n";
 if (!empty($servers)) {
-    foreach($servers as $server_info) {        
+    foreach ($servers as $server_info) {        
         if ($server_info['active']) {
             echo "\n---- Start loading server----- \n";
             echo $server_info['name']."\n\n";
@@ -51,6 +51,7 @@ if (!empty($servers)) {
             $m = new $class($config_info['host'], $config_info['port'], $config_info['db_user'], $config_info['db_pass'], $config_info['db_name'], $boost);
             $m->connect();
             
+            
             /**
              * Prepare the arrays of matches that will allow for the migration
              */
@@ -64,16 +65,18 @@ if (!empty($servers)) {
                 $m->migrate($matches);
             } else {                
                 //Getting transactions from MSSQL (via webservices)
-                if (!empty($matches['web_service_calls'])) {
+                if (!empty($matches['web_service_calls'])) {                    
                     error_log('Starting Synchronization');
                     
+                    $m->set_web_service_connection_info($matches);
+                    
                     //This functions truncates the transaction lists!
-                    $m->test_transactions($matches['web_service_calls']);
+                    $m->test_transactions();
 
-                    $m->search_transactions($matches['web_service_calls']);
+                    $m->search_transactions();
 
                     //Load transactions saved before
-                    $m->load_transactions($matches);
+                    $m->load_transactions();
                 } else {
                     error_log('Make sure you define the web_service_calls array in your db_matches.php file');
                 }

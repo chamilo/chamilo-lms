@@ -48,7 +48,7 @@ class Migration {
     /**
      * Temporary handler for SQL result
      */
-    public $odbrows = null;
+    public $odbrows = null;    
 
     /**
      * Temporary holder for the list of users, courses and sessions and their 
@@ -63,6 +63,9 @@ class Migration {
       'boost_sessions' => false,
       'sessions' => array(),
     );
+    
+    public $web_service_connection_info = array();
+    
     /**
      * The constructor assigns all database connection details to the migration
      * object
@@ -73,10 +76,10 @@ class Migration {
      * @param string The original database's name
      * @return boolean False on error. Void on success.
      */
-    public function __construct($dbhost, $dbport, $dbuser, $dbpass, $dbname, $boost=false) {
+    public function __construct($dbhost = null, $dbport = null, $dbuser = null, $dbpass = null, $dbname = null, $boost = false) {
         if (empty($dbhost) || empty($dbport) || empty($dbuser) || empty($dbpass) || empty($dbname)) {
             $this->errors_stack[] = 'All origin database params must be given. Received ' . print_r(func_get_args(), 1);
-            return false;
+            //return false;
         }
         //$this->odbtype = $dbtype;
         $this->odbhost = $dbhost;
@@ -84,6 +87,7 @@ class Migration {
         $this->odbuser = $dbuser;
         $this->odbpass = $dbpass;
         $this->odbname = $dbname;
+        
         // Set the boost level if set in config.php
         if (!empty($boost) && is_array($boost)) {
             foreach ($boost as $item => $val) {
@@ -99,6 +103,10 @@ class Migration {
      */
     public function connect() {
         //extend in child class
+    }
+    
+    public function set_web_service_connection_info($matches) {        
+        $this->web_service_connection_info = $matches['web_service_calls'];
     }
 
     /**
@@ -165,6 +173,7 @@ class Migration {
             }
         }
     }
+    
     /**
      * Call the SOAP web service as detailed in the parameters
      * @param array Settings for the WS call
@@ -172,7 +181,9 @@ class Migration {
      * @param array Variables to be passed as params to the function
      * @return array Results as returned by the SOAP call
      */
-    static function soap_call($web_service_params, $function_name, $params = array()) {
+    function soap_call($function_name, $params = array()) {
+        $web_service_params = $this->web_service_connection_info;
+        
         // Create the client instance
         $url = $web_service_params['url'];        
         try {
@@ -213,7 +224,7 @@ class Migration {
      * @param bool Whether to truncate the transaction table before the test or not
      * @return void
      */
-    function test_transactions($web_service_params, $truncate = false) {
+    function test_transactions($truncate = false) {
         error_log('test_transactions');
         //Just for tests
         
@@ -648,29 +659,31 @@ class Migration {
      * @param int An optional transaction ID to start from. If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($web_service_params, $t_id = null) {
-        error_log('search_transactions');        
+    function search_transactions($t_id = null) {
+        error_log('search_transactions');
+        
         //Testing transactions        
+        $web_service_params = $this->web_service_connection_info;
         
         
-        /*$result = self::soap_call($web_service_params, 'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
-        $result = self::soap_call($web_service_params, 'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
-        $result = self::soap_call($web_service_params, 'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
-        $result = self::soap_call($web_service_params, 'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = self::soap_call($web_service_params, 'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
-        $result = self::soap_call($web_service_params, 'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
-        $result = self::soap_call($web_service_params, 'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = self::soap_call($web_service_params, 'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
-        $result = self::soap_call($web_service_params, 'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
-        $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
+        /*$result = $this->soap_call('usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        $result = $this->soap_call('programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
+        $result = $this->soap_call('cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
+        $result = $this->soap_call('faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = $this->soap_call('frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
+        $result = $this->soap_call('intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
+        $result = $this->soap_call('mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = $this->soap_call('sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
+        $result = $this->soap_call('horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
+        $result = $this->soap_call('transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
         $branches = self::get_branches();
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 1));
+            $result = self::soap_call('transacciones', array('ultimo' => $last, 'cantidad' => 1));
             //Calling a process to save transactions
-            MigrationCustom::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
+            MigrationCustom::process_transactions(array('ultimo' => $last, 'cantidad' => 1));
         }
     }   
 
@@ -680,9 +693,7 @@ class Migration {
      * @param int Optional limit of transactions to execute
      * @return void
      */
-    function load_transactions($matches) {
-        $actions = $matches['actions'];
-        
+    function load_transactions() {               
         //Getting transactions of the migration_transaction table
         $branches = self::get_branches();
         
@@ -728,22 +739,8 @@ class Migration {
                             exit;
                         }
                         
-                        //Loading function. The action is now numeric, so we call a transaction_1() function, for example
-                        $function_to_call = "transaction_" . $transaction['action'];
-                        if (method_exists('MigrationCustom', $function_to_call)) {
-                            error_log("\n-----------------------------------------------------------------------");
-                            error_log("\nCalling function MigrationCustom::$function_to_call");
-                            
-                            $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
-                            error_log('Reponse: '.$result['message']);
-                            
-                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));                  
-                        } else {
-                            //	method does not exist
-                            error_log("Function does $function_to_call not exists");
-                            //Failed
-                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                        }                        
+                        self::execute_transaction($transaction_info);
+                        
                     }
                 } else {
                     error_log('No transactions to load');
@@ -761,6 +758,91 @@ class Migration {
             }
         }
     }
+    
+    function execute_transaction($transaction_info) {
+        //Loading function. The action is now numeric, so we call a transaction_1() function, for example
+        $function_to_call = "transaction_" . $transaction_info['action'];
+        if (method_exists('MigrationCustom', $function_to_call)) {
+            error_log("\n-----------------------------------------------------------------------");
+            error_log("\nCalling function MigrationCustom::$function_to_call");
+
+            $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);            
+            error_log('Reponse: '.$result['message']);
+            
+            if (!empty($transaction_info['id'])) {
+                self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));                  
+            }
+            return $result;
+        } else {
+            //	method does not exist
+            $error_message = "Function does $function_to_call not exists";
+            error_log($error_message);
+            
+            //Failed
+            if (!empty($transaction_info['id'])) {
+                self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
+            }
+            return array('message' => $error_message);
+        }
+    }
+    
+    /** 
+     * 
+     * @param int Transaction id of the third party 
+     * 
+     */
+    function load_transaction_by_third_party_id($transaction_external_id) {        
+        $result = self::soap_call('transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
+        if ($result && isset($result[0])) {
+            //Getting 1 transaction
+            $result = $result[0];            
+            //Hacking webservice
+            $transaction_external_id++;            
+            if ($result['idt'] == $transaction_external_id) {
+                $message = Display::return_message('Transaction id found in third party', 'success');
+                
+                //Adding third party transaction to Chamilo not sure about this
+                $chamilo_transaction_id = MigrationCustom::process_transaction($result);
+                $chamilo_transaction_id = null;
+                
+                if ($chamilo_transaction_id) {
+                    $message .= "<br /> Transaction added to Chamilo with Id #$chamilo_transaction_id <br />";                    
+                    $transaction_chamilo_info = self::get_transaction_by_params(array('Where' => array('id = ?' => $chamilo_transaction_id), 'first'));
+                    if (isset($transaction_chamilo_info) && isset($transaction_chamilo_info[$chamilo_transaction_id])) {
+                        $transaction_chamilo_info = $transaction_chamilo_info[$chamilo_transaction_id];
+                    } else {
+                        $transaction_chamilo_info = null;
+                    }                    
+                } else {
+                    $message .= Display::return_message("Transaction NOT added to Chamilo executing transaction on the fly", 'info');
+                    $transaction_chamilo_info = MigrationCustom::process_transaction($result, false);                    
+                }
+                
+                if (!empty($transaction_chamilo_info)) {
+                    $transaction_result = $this->execute_transaction($transaction_chamilo_info);
+                    if ($transaction_result) {
+                        $message .= "<h4>Transaction result:</h4>";
+                        $message .= $transaction_result['message'];
+                        $message .= "<br />";
+                    } else {
+                        $message .= Display::return_message("Transaction failed", 'error');                        
+                    }
+                }                
+                
+                return array(
+                    'message' => $message,
+                    'raw_reponse' => "<h4>Chamilo info:</h4><pre>".print_r($transaction_chamilo_info, true)."</pre>
+                                      <h4>Webservice reponse:</h4><pre>".print_r($result, true)."</pre>",
+                );
+            }
+        }
+        
+        return array(
+            'message' => Display::return_message("Transaction NOT found in third party", 'warning'),
+            //'raw_reponse' => print_r($result, true)
+        );
+    }
+    
     /**
      * Prepares the relationship between two fields (one from the original database and on from the destination/local database)
      * @param array List of fields that must be matched ('fields_match' => array(0=>array('orig'=>'...','dest'=>'...',...)))

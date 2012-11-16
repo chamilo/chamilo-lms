@@ -768,7 +768,7 @@ class MigrationCustom {
             }
         } else {
             return array(
-                'message' => "User was not found : $uidIdPersonaId",
+                'message' => "User was not found with uidIdPersona: $uidIdPersonaId",
                 'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
@@ -1370,7 +1370,7 @@ class MigrationCustom {
     
     static function transacciones($data) {   
         if ($data) {
-            $xml = $data->transaccionesResult->any;                        
+            $xml = $data->transaccionesResult->any;            
             // Cut the invalid XML and extract the valid chunk with the data
             $stripped_xml = strstr($xml, '<diffgr:diffgram');
             $xml = simplexml_load_string($stripped_xml);
@@ -1402,8 +1402,8 @@ class MigrationCustom {
       string(12) "AAAAATbYxkg="
     }
     */
-    static function process_transactions($web_service_params, $params) {
-        $transactions = Migration::soap_call($web_service_params, 'transacciones', $params);
+    function process_transactions($params) {
+        $transactions = Migration::soap_call('transacciones', $params);
         if (!empty($transactions)) {
              foreach ($transactions as $transaction_info) {
                 /*
@@ -1416,19 +1416,32 @@ class MigrationCustom {
                 timestamp                 
                  */
                 //Add transactions here
-               if ($transaction_info) {
-                    $params = array(
-                        'action'    => $transaction_info['idt'],
-                        'item_id'   => $transaction_info['idt'],
-                        'orig_id'   => $transaction_info['idt'],
-                        'branch_id' => $transaction_info['idsede'],
-                        'dest_id'   => $transaction_info['idt'],
-                        'status_id' => 0
-                    );        
-                    Migration::add_transaction($params);             
-                }
+                 self::process_transaction($transaction_info);
             }
         }
+    }
+    
+    /**
+     * 
+     * @param array simple return of the webservice transaction
+     * @return int
+     */
+    static function process_transaction($transaction_info, $save_to_db = true) {
+        if ($transaction_info) {
+            $params = array(
+                   'action'    => $transaction_info['ida'],
+                   'item_id'   => $transaction_info['idt'],
+                   'orig_id'   => $transaction_info['id'],
+                   'branch_id' => $transaction_info['idsede'],
+                   'dest_id'   => $transaction_info['idt'],
+                   'status_id' => 0
+            );            
+            if (!$save_to_db) {
+                return $params;
+            }            
+            return Migration::add_transaction($params);             
+        }
+        return false;
     }
     
     static function genericDetalles($data, $result_name, $params = array()) {

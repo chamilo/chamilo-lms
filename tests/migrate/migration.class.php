@@ -119,7 +119,7 @@ class Migration {
         $extra_fields = array();
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $idx => $table) {
-            if ($idx == 'web_service_calls') { continue;}
+            if ($idx === 'web_service_calls') { continue;}
             echo "Starting table ".$table['orig_table']." at ".date('h:i:s')."\n";
             error_log('['.date('H:i:s').'] Found table ' . $table['orig_table'] . ' in db_matches');
             $build_only = false;

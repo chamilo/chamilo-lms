@@ -1521,16 +1521,7 @@ class MigrationCustom {
         $transaction_status_list = self::get_transaction_status_list();
         
         if (!empty($transactions)) {
-             foreach ($transactions as $transaction_info) {
-                /*
-                id transaccion
-                id sede
-                id accion
-                id
-                origen
-                destino
-                timestamp                 
-                 */
+             foreach ($transactions as $transaction_info) { 
                 //Add transactions here
                  self::process_transaction($transaction_info, $transaction_status_list);
             }
@@ -1551,12 +1542,12 @@ class MigrationCustom {
             
             $params = array(
                    'transaction_id' =>  $transaction_info['idt'], 
-                   'action'    => $transaction_info['ida'],
-                   'item_id'   => strtoupper($transaction_info['id']),
-                   'orig_id'   => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
-                   'branch_id' => $transaction_info['idsede'],
-                   'dest_id'   => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
-                   'status_id' => 0
+                   'action'         => $transaction_info['ida'],
+                   'item_id'        => strtoupper($transaction_info['id']),
+                   'orig_id'        => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
+                   'branch_id'      => $transaction_info['idsede'],
+                   'dest_id'        => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
+                   'status_id'      => 0
             );
                      
             //what to do if transaction already exists?

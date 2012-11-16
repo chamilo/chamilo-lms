@@ -660,13 +660,14 @@ class Migration {
             return false;
         }
         $params['time_update'] = api_get_utc_datetime();
-        error_log("Transaction updated #{$params['id']}");
+        error_log("Transaction updated #{$params['id']} with status_id = {$params['status_id']}");
         
         //Failed - do something else
         if ($params['status_id'] == MigrationCustom::TRANSACTION_STATUS_FAILED) {
             //event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null) {
             event_system('transaction_error', 'transaction_id', $params['id'], $params['time_update']);
         }
+        
         return Database::update($table, $params, array('id = ?' => $params['id']));
     }
     
@@ -784,9 +785,11 @@ class Migration {
 
             $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
             $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \n Function reponse: ".$result['message'];            
-            error_log('Reponse: '.$result['message']);            
+            error_log('Reponse: '.$result['message']);          
             if (!empty($transaction_info['id'])) {
                 self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));                  
+            } else {
+                error_log("Cant update transaction, id was not provided");                
             }
             return $result;
         } else {

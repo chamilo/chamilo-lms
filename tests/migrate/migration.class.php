@@ -586,7 +586,7 @@ class Migration {
         return Database::store_result($result, 'ASSOC');
     }
     
-    static function get_transaction_by_item_id($transaction_id, $branch_id) {
+    static function get_transaction_by_transaction_id($transaction_id, $branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $transaction_id = intval($transaction_id);
         $branch_id = intval($branch_id);

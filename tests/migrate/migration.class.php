@@ -589,12 +589,11 @@ class Migration {
         return 0;
     }
     /**
-     * Gets the latest recorded transaction for a specific branch
+     * Gets the latest locally-recorded transaction for a specific branch
      * @param int The ID of the branch
      * @return int The ID of the last transaction registered
      */
     static function get_latest_transaction_by_branch($branch_id) {
-        return 376011;
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC LIMIT 1";
@@ -603,7 +602,7 @@ class Migration {
             $row = Database::fetch_array($result);
             return $row['id'];
         }
-        return 20;
+        return 376011;
     }
     /**
      * Gets a specific transaction using select parameters
@@ -664,15 +663,16 @@ class Migration {
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 2));
+            $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 1));
             //Calling a process to save transactions
-            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 2));
+            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
         }
     }   
 
     /**
      * Loads a specific set of transactions from the transactions table and executes them
      * @param array Transactions filter
+     * @param int Optional limit of transactions to execute
      * @return void
      */
     function load_transactions($matches) {

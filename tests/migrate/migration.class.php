@@ -826,11 +826,11 @@ class Migration {
                         
                         if (isset($transaction_result['entity']) && !empty($transaction_result['entity'])) {                        
                             $message .= Display::page_subheader2("Entity {$transaction_result['entity']} before:");
-                            $message .= "<pre>".print_r($transaction_result['before'])."</pre>";
+                            $message .= "<pre>".print_r($transaction_result['before'], 1)."</pre>";
                             $message .= "<br />";
 
                             $message .= Display::page_subheader2("Entity {$transaction_result['entity']} after:");
-                            $message .= "<pre>".print_r($transaction_result['after'])."</pre>";
+                            $message .= "<pre>".print_r($transaction_result['after'], 1)."</pre>";
                             $message .= "<br />";
                         }                        
                     } else {

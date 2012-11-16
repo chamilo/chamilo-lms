@@ -228,7 +228,7 @@ class MigrationCustom {
                     return $user_info;
                 } else {
                     error_log("Homonym - wanted_username: $wanted_user_name - uidIdPersona: {$user_persona['uidIdPersona']} - username: {$user_info['username']}");       
-                    print_r($data);
+                    //print_r($data);
                      //The user has the same firstname and lastname but it has another uiIdPersona could by an homonym  
                     $data['username'] = UserManager::create_unique_username($data['firstname'], $data['lastname']);       
                     error_log("homonym username created ". $data['username']);
@@ -838,7 +838,23 @@ class MigrationCustom {
                 SessionManager::suscribe_users_to_session($destination_session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);*/
                 
                 //Not sure what reason use
-                SessionManager::change_user_session($user_id, $session_id, $destination_session_id, SessionManager::SESSION_CHANGE_USER_REASON_SCHEDULE);
+                /*
+                $extra_field_value = new ExtraFieldValue('session');
+                
+                SESSION_CHANGE_USER_REASON_SCHEDULE = 1;
+                SESSION_CHANGE_USER_REASON_CLASSROOM = 2;
+                SESSION_CHANGE_USER_REASON_LOCATION = 3;
+                SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION = 4;
+                
+                $extra_field_value->compare_item_values($session_id, $destination_session_id, 'aula');
+                
+                SessionManager::compare_extra_field($session_id, $session_id, 'aula');
+                SessionManager::detect_reason_by_extra_field($session_id, 'sede');
+                SessionManager::detect_reason_by_extra_field($session_id, 'horario');
+                SessionManager::detect_reason_by_extra_field($session_id, 'aula');*/
+                
+                $reason_id = SESSION_CHANGE_USER_REASON_SCHEDULE;
+                SessionManager::change_user_session($user_id, $session_id, $destination_session_id, $reason_id);
                 
                 $befores = array($before1, $before2);
                 

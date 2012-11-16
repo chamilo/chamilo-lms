@@ -250,5 +250,8 @@ class ExtraFieldValue extends Model {
         $item_id = Database::escape_string($item_id);
         $sql = "DELETE FROM {$this->table} WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql); 
-    }   
+    }
+    
+    public function compare_item_values($item_id, $item_to_compare) {        
+    }
 }

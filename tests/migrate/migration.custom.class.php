@@ -1514,12 +1514,12 @@ class MigrationCustom {
     static function process_transaction($transaction_info, $save_to_db = true) {
         if ($transaction_info) {
             $params = array(
-                   'transaction_id' =>  $transaction_info['id'], 
+                   'transaction_id' =>  $transaction_info['idt'], 
                    'action'    => $transaction_info['ida'],
                    'item_id'   => $transaction_info['id'],
-                   'orig_id'   => empty($transaction_info['ido']) ? $transaction_info['ido'] : null,
+                   'orig_id'   => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
                    'branch_id' => $transaction_info['idsede'],
-                   'dest_id'   => empty($transaction_info['idd']) ? $transaction_info['idd'] : null,
+                   'dest_id'   => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
                    'status_id' => 0
             );            
             if (!$save_to_db) {

@@ -3090,7 +3090,8 @@ CREATE TABLE usergroup_rel_question (
 
 DROP TABLE IF EXISTS migration_transaction;
 CREATE TABLE migration_transaction (
-    id int not null AUTO_INCREMENT,
+    id bigint unsigned not null AUTO_INCREMENT,
+    transaction_id bigint unsigned,
     branch_id int not null default 0,
     action char(20),
     item_id char(36),
@@ -3099,7 +3100,7 @@ CREATE TABLE migration_transaction (
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-    PRIMARY KEY (id, branch_id)
+    PRIMARY KEY (id, transaction_id, branch_id)
 );
 
 DROP TABLE IF EXISTS migration_transaction_status;
@@ -3111,4 +3112,4 @@ CREATE TABLE migration_transaction_status (
 INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20339' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20356' WHERE variable = 'chamilo_database_version';

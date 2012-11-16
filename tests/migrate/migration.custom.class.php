@@ -325,6 +325,7 @@ class MigrationCustom {
     /**
      * Manages the session creation, based on data provided by the rules
      * in db_matches.php
+     * @return int The created (or existing) session ID
      */
     static function create_session($data, $omigrate) {
         //Hack to add the default gradebook course to the session course
@@ -337,16 +338,13 @@ class MigrationCustom {
         );*/
         
         //Here the $data variable has $data['course_code'] that will be added when creating the session
+        // If session already exists, it will return the existing session id
         $session_id = SessionManager::add($data);
         //error_log('create_session');        
         if (!$session_id) {
-            //error_log($session_id);
-            error_log('failed create_session');
-            //print_r($data);
-            //exit;
+            error_log('Error: Failed to create_session '.$data['name']);
         } else{
             $c = SessionManager::set_coach_to_course_session($data['id_coach'], $session_id, $data['course_code']);
-            //error_log('session_id created');      
             if (is_object($omigrate) && isset($omigrate) && $omigrate->boost_sessions) {
                 $omigrate->sessions[$data['uidIdPrograma']] = $session_id;
             }
@@ -530,7 +528,7 @@ class MigrationCustom {
             $result = Database::fetch_array($result, 'ASSOC');
             return $result['id'];
         }
-        return false;        
+        return false;
     }
     
     static function create_gradebook_evaluation($data){

@@ -35,11 +35,11 @@ class MigrationMSSQL extends Migration {
         $top = null;
 //        $top = " TOP 100000 ";
         if (in_array($table, array('Empleado', 'Alumno'))) {
-        //    $top = " TOP 10000 ";            
+            //$top = " TOP 1000 ";            
         }
         
         if (in_array($table, array('ProgramaAcademico', 'Matricula'))) {
-        //    $top = " TOP 100000 ";
+            //$top = " TOP 1000 ";
         }
       
         //$top = null;
@@ -52,11 +52,6 @@ class MigrationMSSQL extends Migration {
         
         $sql = "SELECT $top $fields_sql FROM $table $extra $order";        
         $sql = isset($options['query']) ? sprintf($options['query'], "$top $fields_sql") : $sql;
-        
-        if (!empty($extra)) {
-            error_log(print_r($options,1));
-            error_log($sql);
-        }
         
         //Remove        
         $this->rows_iterator = mssql_query($sql, $this->c);

@@ -55,6 +55,7 @@ if (!empty($servers)) {
              * Prepare the arrays of matches that will allow for the migration
              */
             $migrate = array();
+            $branch = $server_info['branch_id'];
             include $server_info['filename'];
             
             if ($action_type == 'migration') {

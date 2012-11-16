@@ -110,7 +110,8 @@ class Migration {
         error_log("\n" . '------------ ['.date('H:i:s').'] Migration->migrate function called ------------' . "\n");
         $extra_fields = array();
         // Browsing through 1st-level arrays in db_matches.php
-        foreach ($matches as $table) {
+        foreach ($matches as $idx => $table) {
+            if ($idx == 'web_service_calls') { continue;}
             echo "Starting table ".$table['orig_table']." at ".date('h:i:s')."\n";
             error_log('['.date('H:i:s').'] Found table ' . $table['orig_table'] . ' in db_matches');
             $build_only = false;
@@ -140,12 +141,15 @@ class Migration {
             if ($num_rows) {
                 error_log('Records found: ' . $num_rows);
                 $item = 1;
+                $lastpct = 0;
+                //error_log(print_r($table['extra_fields'],1));
                 while ($row = $this->fetch_array()) {
-                    //error_log('Loading: ');error_log(print_r($row, 1));
                     self::execute_field_match($table, $row, $extra_fields);
-                    $percentage = $item / $num_rows * 100;
-                    if (round($percentage) % 10 == 0) {
+                    $percentage = ($item / $num_rows) * 100;
+                    $newpct = intval($percentage);
+                    if ($newpct>$lastpct && floor($percentage) % 10 == 0) {
                         $percentage = round($percentage, 3);
+                        $lastpct = $newpct;
                         error_log("Processing item {$table['orig_table']} #$item $percentage%");
                     }
                     $item++;
@@ -516,7 +520,7 @@ class Migration {
      * @return int The ID of the transaction row in Chamilo's table
      */
     static function add_transaction($params) {
-error_log('Request add_transaction of : '.print_r($params,1));
+        error_log('Requested add_transaction of : '.print_r($params,1));
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
             unset($params['id']);
@@ -599,7 +603,7 @@ error_log('Request add_transaction of : '.print_r($params,1));
             $row = Database::fetch_array($result);
             return $row['id'];
         }
-        return 376013; //current first entry
+        return 20;
     }
     /**
      * Gets a specific transaction using select parameters
@@ -795,21 +799,20 @@ error_log('Request add_transaction of : '.print_r($params,1));
         //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
-
+        // If a dest table exists, fill $my_extra_fields
         $my_extra_fields = isset($table['dest_table']) && isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
         $extra_field_obj = null;
         $extra_field_value_obj = null;
-
         if (!empty($table['dest_table'])) {
             $extra_field_obj = new Extrafield($table['dest_table']);
             $extra_field_value_obj = new ExtraFieldValue($table['dest_table']);
         }
-
         $extra_fields_to_insert = array();
+        
         foreach ($table['fields_match'] as $id_field => $details) {
-            if ($id_field == 0) {
-                $first_field = $details['dest'];
-            }
+            //if ($table['dest_table'] == 'session') {error_log('Processing field '.$details['orig']);}
+            $params = array();
+            // Remove the table name prefix if any (in the orig field)
             if (isset($details['orig'])) {
                 $field_exploded = explode('.', $details['orig']);
                 if (isset($field_exploded[1])) {
@@ -819,8 +822,10 @@ error_log('Request add_transaction of : '.print_r($params,1));
 
             // process the fields one by one
             if ($details['func'] == 'none' || empty($details['func'])) {
+                // if no function is defined to alter the field, take it as is
                 $dest_data = $row[$details['orig']];
             } else {
+                // if an alteration function is defined, run it on the field
                 //error_log(__FILE__.' '.__LINE__.' Preparing to treat field with '.$details['func']);
                 $dest_data = MigrationCustom::$details['func']($row[$details['orig']], $this->data_list, $row);
             }
@@ -833,14 +838,20 @@ error_log('Request add_transaction of : '.print_r($params,1));
 
             //Extra field values
             $extra_field = isset($my_extra_fields) && isset($my_extra_fields[$details['dest']]) ? $my_extra_fields[$details['dest']] : null;
-            //error_log('-----');
-            //error_log(print_r($extra_field, 1));
+            // Check the array is there
+            //if($table['dest_table'] == 'session') error_log('Fucking Extra field: '.print_r($extra_field,1));
             if (!empty($extra_field) && $extra_field_obj) {
-                if (isset($extra_field['options'])) {
+                //if($table['dest_table'] == 'session') error_log('Extra_field no es vacío');
+                // Check the "options" array is defined for this field (checking is_array is crucial here, see BT#5215)
+                if (is_array($extra_field['options']) && count($extra_field['options'])>0) {
+                    //if($table['dest_table'] == 'session') error_log('...y sus opciones son: '.print_r($extra_field['options'],1));
+                    //if($details['orig']=='uidIdPrograma') { error_log('Eso era lo inicial, del cual se tomó '.$details['dest'].': '.print_r($my_extra_fields,1));}
                     $options = $extra_field['options'];
                     $field_type = $extra_field['field_type'];
-
+                    //if ($table['dest_table'] == 'session') {error_log('Field orid: '.$details['orig']);}
+                    
                     if (!empty($options)) {
+                        //if ($table['dest_table'] == 'session') {error_log('Options not empty');}
                         if (!is_array($options)) { $options = array($options); }
                         foreach ($options as $option) {
                             if (is_array($option)) {
@@ -872,19 +883,23 @@ error_log('Request add_transaction of : '.print_r($params,1));
                 }
                 unset($dest_row[$details['dest']]);
             }
+            unset($extra_field);
         }
-
+        //if ($table['dest_table']=='session') { error_log('Params: '.print_r($params,1)); }
+        // If a dest_func entry has been defind, use this entry as the main 
+        // operation to execute when inserting the item
         if (!empty($table['dest_func'])) {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
             $dest_row['return_item_if_already_exists'] = true;
 
             $item_result = call_user_func_array($table['dest_func'], array($dest_row, $this->data_list));
 
-            if (isset($table['show_in_error_log']) && $table['show_in_error_log'] == false) {
+/*            if (isset($table['show_in_error_log']) && $table['show_in_error_log'] == false) {
                 
             } else {
                 //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             }
+*/
             //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
             //After the function was executed fill the $this->data_list array
             switch ($table['dest_table']) {
@@ -923,8 +938,10 @@ error_log('Request add_transaction of : '.print_r($params,1));
             }
 
             //Saving extra fields of the element
+            //error_log('Checking extra fields for '.$extra_field_value_obj->handler_id.' '.$handler_id);
             if (!empty($extra_fields_to_insert)) {
                 foreach ($extra_fields_to_insert as $params) {
+                    //error_log('Trying to save '.print_r($params,1));
                     $params[$extra_field_value_obj->handler_id] = $handler_id;
                     $extra_field_value_obj->save($params);
                 }
@@ -937,16 +954,19 @@ error_log('Request add_transaction of : '.print_r($params,1));
     }
 
     /**
-     * Helper function to create extra fields in the Chamilo database
+     * Helper function to create extra fields in the Chamilo database. If the 
+     * extra field aleady exists, then just return the ID of this field. If 
+     * options are provided ('options' sub-array), then options are inserted in
+     * the corresponding x_field_options table.
      * @param Array An array containing an 'extra_fields' entry with details about the required extra fields
      * @return void
      */
     private function _create_extra_fields(&$table) {
         $extra_fields = array();
 
-        error_log('Inserting (if exists) extra fields for : ' . $table['dest_table'] . " \n");
+        error_log('Inserting (if not exist) extra fields for : ' . $table['dest_table'] . " \n");
         foreach ($table['extra_fields'] as $extra_field) {
-            error_log('Preparing for insertion of extra field ' . $extra_field['field_display_text'] . "\n");
+            //error_log('Preparing for insertion of extra field ' . $extra_field['field_display_text'] . "\n");
             $options = isset($extra_field['options']) ? $extra_field['options'] : null;
             unset($extra_field['options']);
 
@@ -955,9 +975,11 @@ error_log('Request add_transaction of : '.print_r($params,1));
 
             $selected_fields = self::prepare_field_match($options);
 
-            //Adding options
+            //Adding options. This is only processed if the corresponding 
+            // extra_field has an 'options' sub-aray defined
             if (!empty($options)) {
                 $extra_field_option_obj = new ExtraFieldOption($table['dest_table']);
+                // use the query defined in the 'query' item as returned in a select by prepare_field_match above
                 $this->select_all($options['orig_table'], $selected_fields);
                 $num_rows = $this->num_rows();
 
@@ -977,6 +999,7 @@ error_log('Request add_transaction of : '.print_r($params,1));
                     //error_log('$data: ' . print_r($data_to_insert, 1));
                 }
             } else {
+                // if there are no pre-defined options, then just return the field_id for this variable
                 $extra_fields[$table['dest_table']]['extra_field_' . $extra_field['field_variable']] = $extra_field_id;
             }
         }

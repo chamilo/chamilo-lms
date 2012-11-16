@@ -600,6 +600,17 @@ class Migration {
         }
         return false;
     }
+    
+    static function delete_transaction_by_transaction_id($transaction_id, $branch_id) {
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+        $transaction_id = intval($transaction_id);
+        $branch_id = intval($branch_id);
+        
+        if (!empty($transaction_id) && !empty($branch_id)) {
+            $sql = "DELETE FROM $table WHERE transaction_id = $transaction_id  AND branch_id = $branch_id";
+            Database::query($sql);            
+        }        
+    }
         
     
     /**
@@ -698,9 +709,9 @@ class Migration {
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $last, 'cantidad' => 1));
+            //$result = self::soap_call($this->web_service_connection_info, 'transacciones', array('ultimo' => $last, 'cantidad' => 2));
             //Calling a process to save transactions
-            MigrationCustom::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
+            MigrationCustom::process_transactions(array('ultimo' => $last, 'cantidad' => 2), $web_service_params);
         }
     }   
 
@@ -810,7 +821,7 @@ class Migration {
      * @param int Transaction id of the third party 
      * 
      */
-    function load_transaction_by_third_party_id($transaction_external_id) {        
+    function load_transaction_by_third_party_id($transaction_external_id, $forced = false) {        
         //Asking for 2 transactions by getting 1
         $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
         
@@ -824,7 +835,7 @@ class Migration {
                 $message = Display::return_message('Transaction id found in third party', 'info');
                 
                 //Adding third party transaction to Chamilo
-                $transaction_result = MigrationCustom::process_transaction($result);
+                $transaction_result = MigrationCustom::process_transaction($result, null, $forced);
                 
                 $transaction_chamilo_info = array();
                 

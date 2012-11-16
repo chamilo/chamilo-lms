@@ -732,9 +732,10 @@ class MigrationCustom {
          if ($user_info['error'] == false) {
             global $api_failureList;
             unset($user_info['error']);
-            $chamilo_user_info = UserManager::add($user_info);
-            $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], false, false, true);
-            if ($chamilo_user_info) {
+            $chamilo_user_info = UserManager::add($user_info);            
+            
+            if ($chamilo_user_info && $chamilo_user_info['user_id']) {
+                $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], false, false, true);
                 return array(
                     'entity' => 'user',
                     'before' => null,
@@ -744,7 +745,7 @@ class MigrationCustom {
                 );
             } else {
                 return array(
-                    'message' => "User was not created : $uidIdPersonaId \n UserManager::add() reponse: \n ".print_r($api_failureList, 1),
+                    'message' => "User was not created : $uidIdPersonaId \n UserManager::add() params: ".print_r($user_info, 1)." \n Reponse: \n ".print_r($api_failureList, 1),
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -1533,7 +1534,7 @@ class MigrationCustom {
      * @param array simple return of the webservice transaction
      * @return int
      */
-    static function process_transaction($transaction_info, $transaction_status_list = array()) {
+    static function process_transaction($transaction_info, $transaction_status_list = array(), $forced = false) {
         if ($transaction_info) {
             
             if (empty($transaction_status_list)) {
@@ -1549,14 +1550,19 @@ class MigrationCustom {
                    'dest_id'        => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
                    'status_id'      => 0
             );
+            
+            if ($forced) {
+                //Delete transaction
+                Migration::delete_transaction_by_transaction_id($params['transaction_id'], $params['branch_id']);    
+            }
                      
             //what to do if transaction already exists?
             $transaction_info = Migration::get_transaction_by_transaction_id($params['transaction_id'], $params['branch_id']);
             
-            if (empty($transaction_info)) {         
+            if (empty($transaction_info)) {
                 $transaction_id = Migration::add_transaction($params);
                 return array(
-                    'id' => $transaction_id, 
+                    'id' => $transaction_id,
                     'error' => false,
                     'message' => "Transaction added #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
                 );
@@ -1566,13 +1572,13 @@ class MigrationCustom {
                     return array(
                         'id' => $transaction_info['id'], 
                         'error' => false,
-                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}). Trying to execute because transaction has status: {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Trying to execute because transaction has status: {$transaction_status_list[$transaction_info['status_id']]['title']}"
                     );
                 } else {
                     return array(
                         'id' => null, 
                         'error' => true,
-                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}). Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
                     );
                 }
             }

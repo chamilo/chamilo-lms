@@ -47,6 +47,11 @@ class MigrationCustom {
     const TRANSACTION_TYPE_ADD_INTENS  = 25;
     const TRANSACTION_TYPE_DEL_INTENS  = 26;
     const TRANSACTION_TYPE_EDIT_INTENS = 27;
+    
+    static function get_transaction_status_list() {
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION_STATUS);
+        return Database::select("*", $table);
+    }
   
     /**
      * The only required method is the 'none' method, which will not trigger
@@ -1513,6 +1518,8 @@ class MigrationCustom {
     */
     function process_transactions($params, $web_service_details) {
         $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);
+        $transaction_status_list = self::get_transaction_status_list();
+        
         if (!empty($transactions)) {
              foreach ($transactions as $transaction_info) {
                 /*
@@ -1525,7 +1532,7 @@ class MigrationCustom {
                 timestamp                 
                  */
                 //Add transactions here
-                 self::process_transaction($transaction_info);
+                 self::process_transaction($transaction_info, $transaction_status_list);
             }
         }
     }
@@ -1535,8 +1542,13 @@ class MigrationCustom {
      * @param array simple return of the webservice transaction
      * @return int
      */
-    static function process_transaction($transaction_info, $save_to_db = true) {
+    static function process_transaction($transaction_info, $transaction_status_list = array()) {
         if ($transaction_info) {
+            
+            if (empty($transaction_status_list)) {
+                $transaction_status_list = self::get_transaction_status_list();
+            }
+            
             $params = array(
                    'transaction_id' =>  $transaction_info['idt'], 
                    'action'    => $transaction_info['ida'],
@@ -1545,11 +1557,39 @@ class MigrationCustom {
                    'branch_id' => $transaction_info['idsede'],
                    'dest_id'   => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
                    'status_id' => 0
-            );            
-            if (!$save_to_db) {
-                return $params;
-            }            
-            return Migration::add_transaction($params);             
+            );
+                     
+            //what to do if transaction already exists?
+            $transaction_info = Migration::get_transaction_by_item_id($params['item_id'], $params['branch_id']);
+            if (empty($transaction_info)) {         
+                $transaction_id = Migration::add_transaction($params);
+                return array(
+                    'id' => $transaction_id, 
+                    'error' => false,
+                    'message' => "Transaction added to Chamilo #$transaction_id"
+                );
+            } else {
+                //only process transaction if it was failed or to be executed
+                if (in_array($transaction_info['status_id'], array(MigrationCustom::TRANSACTION_STATUS_FAILED, MigrationCustom::TRANSACTION_STATUS_TO_BE_EXECUTED))) {                    
+                    return array(
+                        'id' => $transaction_info['id'], 
+                        'error' => false,
+                        'message' => "Transaction #{$transaction_info['id']} was already added to Chamilo. Trying to execute because transaction has status: {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                    );
+                } else {
+                    return array(
+                        'id' => null, 
+                        'error' => true,
+                        'message' => "Transaction #{$transaction_info['id']} was already added to Chamilo. Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                    );
+                }
+            }
+            
+            return array(
+                'id' => null,
+                'error' => true,
+                'message' => 'Transaction was already treated'
+            );
         }
         return false;
     }

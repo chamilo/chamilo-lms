@@ -586,6 +586,22 @@ class Migration {
         return Database::store_result($result, 'ASSOC');
     }
     
+    static function get_transaction_by_item_id($item_id, $branch_id) {
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+        $branch_id = intval($branch_id);
+        $item_id = intval($item_id);
+        
+        if (!empty($item_id) && !empty($branch_id)) {
+            $sql = "SELECT * FROM $table WHERE item_id = $item_id  AND branch_id = $branch_id";
+            $result = Database::query($sql);
+            if (Database::num_rows($result)) {
+                return Database::fetch_array($result, 'ASSOC');        
+            }
+        }
+        return false;
+    }
+        
+    
     /**
      * Gets the latest completed transaction for a specific branch (allows the building of a request to the branch to get new transactions)
      * @param int The ID of the branch
@@ -792,20 +808,26 @@ class Migration {
      * 
      */
     function load_transaction_by_third_party_id($transaction_external_id) {        
+        //Asking for 2 transactions by getting 1
         $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
+        
+        //Hacking webservice default result        
         if ($result && isset($result[0])) {
             //Getting 1 transaction
             $result = $result[0];            
-            //Hacking webservice
+            
             $transaction_external_id++;            
             if ($result['idt'] == $transaction_external_id) {
                 $message = Display::return_message('Transaction id found in third party', 'info');
                 
-                //Adding third party transaction to Chamilo not sure about this
-                $chamilo_transaction_id = MigrationCustom::process_transaction($result);                
+                //Adding third party transaction to Chamilo
+                $transaction_result = MigrationCustom::process_transaction($result);
                 
-                if ($chamilo_transaction_id) {                        
-                    $message .= Display::return_message("Transaction added to Chamilo with Id #$chamilo_transaction_id", 'info');
+                $transaction_chamilo_info = array();
+                
+                if ($transaction_result['error'] == false) {
+                    $chamilo_transaction_id = $transaction_result['id'];
+                    $message .= Display::return_message($transaction_result['message'], 'info');
                     $transaction_chamilo_info = self::get_transaction_by_params(array('Where' => array('id = ?' => $chamilo_transaction_id), 'first'));
                     if (isset($transaction_chamilo_info) && isset($transaction_chamilo_info[$chamilo_transaction_id])) {
                         $transaction_chamilo_info = $transaction_chamilo_info[$chamilo_transaction_id];
@@ -813,8 +835,8 @@ class Migration {
                         $transaction_chamilo_info = null;
                     }                    
                 } else {
-                    $message .= Display::return_message("Transaction NOT added to Chamilo. Executing transaction on the fly", 'info');
-                    $transaction_chamilo_info = MigrationCustom::process_transaction($result, false);                    
+                    $message .= Display::return_message("Transaction NOT added to Chamilo. {$transaction_result['message']}", 'warning');
+                    //$transaction_chamilo_info = MigrationCustom::process_transaction($result, false);                    
                 }
                 
                 if (!empty($transaction_chamilo_info)) {

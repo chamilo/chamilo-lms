@@ -1541,7 +1541,7 @@ class MigrationCustom {
             }
             
             $params = array(
-                   'transaction_id' =>  $transaction_info['idt'], 
+                   'transaction_id' => $transaction_info['idt'], 
                    'action'         => $transaction_info['ida'],
                    'item_id'        => strtoupper($transaction_info['id']),
                    'orig_id'        => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
@@ -1551,7 +1551,8 @@ class MigrationCustom {
             );
                      
             //what to do if transaction already exists?
-            $transaction_info = Migration::get_transaction_by_item_id($params['item_id'], $params['branch_id']);
+            $transaction_info = Migration::get_transaction_by_item_id($params['transaction_id'], $params['branch_id']);
+            
             if (empty($transaction_info)) {         
                 $transaction_id = Migration::add_transaction($params);
                 return array(

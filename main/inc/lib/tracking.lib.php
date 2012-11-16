@@ -243,17 +243,23 @@ class Tracking {
 		$session_id  = intval($session_id);
 
 		$tbl_track_e_course_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-		$sql = 'SELECT login_course_date FROM '.$tbl_track_e_course_access.'
-                        WHERE user_id = '.$student_id.'
-                        AND course_code = "'.$course_code.'"
-                        AND session_id = '.$session_id.'
-                        ORDER BY login_course_date DESC LIMIT 0,1';
+		$sql = 'SELECT login_course_date 
+                FROM '.$tbl_track_e_course_access.'
+                WHERE   user_id = '.$student_id.' AND 
+                        course_code = "'.$course_code.'" AND 
+                        session_id = '.$session_id.'
+                ORDER BY login_course_date DESC 
+                LIMIT 0,1';
 
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 			if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
-                
+                if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
+                    return false;
+                }
+                //$last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
+                //see #5736
+                $last_login_date_timestamp = api_strtotime($last_login_date);                
 				$now = time();
 				//If the last connection is > than 7 days, the text is red
 				//345600 = 7 days in seconds
@@ -261,7 +267,7 @@ class Tracking {
 					if ($convert_date) {		
                         $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                         $icon = api_is_allowed_to_edit() ? '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>': null;
-						return $icon. Display::label(api_format_date($last_login_date, DATE_FORMAT_SHORT), 'warning');
+						return $icon. Display::label($last_login_date, 'warning');
 					} else {
 						return $last_login_date;
 					}
@@ -3682,8 +3688,7 @@ class TrackingCourseLog {
 			$is_western_name_order = api_is_western_name_order();
             $user_row = array();
             
-            $user_row[]= $user['official_code']; //0
-            
+            $user_row[]= $user['official_code']; //0            
             if ($is_western_name_order) {
                 $user_row[]= $user['lastname'];
                 $user_row[]= $user['firstname'];
@@ -3691,17 +3696,14 @@ class TrackingCourseLog {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];
             }
-            $user_row[]= $user['username']; // hubr
-            $user_row[]= $user['time']; //3           
+            $user_row[]= $user['username'];
+            $user_row[]= $user['time'];           
             $user_row[]= $user['average_progress'];            
-            $user_row[]= $user['exercise_progress'];
-            
+            $user_row[]= $user['exercise_progress'];            
             $user_row[]= $user['exercise_average_best_attempt'];  
-
-        
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
-            $user_row[]= $user['count_messages']; //8
+            $user_row[]= $user['count_messages'];
             
             if (empty($session_id)) {
                 $user_row[]= $user['survey'];

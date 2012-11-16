@@ -196,14 +196,14 @@ class Migration {
         }
         
         if (!empty($data)) {
-            error_log("Calling {$web_service_params['class']}::$function_name  $url with params: ".print_r($params,1));
-            return $web_service_params['class']::$function_name($data, $params);           
+            error_log("Calling MigrationCustom::$function_name  $url with params: ".print_r($params,1));
+            return MigrationCustom::$function_name($data, $params);           
         } else {
             return array(
                 'error' => true,
                 'message' => 'No Data found',
                 'status_id' => 0
-            );            
+            );
         }        
     }
     
@@ -510,7 +510,7 @@ class Migration {
         );
         
         foreach( $transaction_harcoded as  $transaction) {        
-            $transaction_id = self::add_transaction($transaction);
+            self::add_transaction($transaction);
         }        
     }
 
@@ -533,6 +533,7 @@ class Migration {
         }
         return $inserted_id;        
     }
+    
     /**
      * Get all available branches (the migration system supports multiple origin databases, the branch identifies which database it comes from)
      * @return array Branches IDs (int)
@@ -572,6 +573,7 @@ class Migration {
         $result = Database::query($sql);        
         return Database::store_result($result, 'ASSOC');
     }
+    
     /**
      * Gets the latest completed transaction for a specific branch (allows the building of a request to the branch to get new transactions)
      * @param int The ID of the branch
@@ -588,6 +590,7 @@ class Migration {
         }
         return 0;
     }
+    
     /**
      * Gets the latest locally-recorded transaction for a specific branch
      * @param int The ID of the branch
@@ -604,6 +607,7 @@ class Migration {
         }
         return 376011;
     }
+    
     /**
      * Gets a specific transaction using select parameters
      * @param array Select parameters (associative array)
@@ -614,6 +618,7 @@ class Migration {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         return Database::select('*', $table, $params, $type_result);
     }
+    
     /**
      * Updates a transaction using the given query parameters
      * @param array Query parameters
@@ -665,7 +670,7 @@ class Migration {
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
             $result = self::soap_call($web_service_params, 'transacciones', array('ultimo' => $last, 'cantidad' => 1));
             //Calling a process to save transactions
-            $web_service_params['class']::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
+            MigrationCustom::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
         }
     }   
 
@@ -732,15 +737,7 @@ class Migration {
                             $result = MigrationCustom::$function_to_call($transaction, $matches['web_service_calls']);
                             error_log('Reponse: '.$result['message']);
                             
-                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));
-                            /*
-                            if ($result['error'] == false) {
-                                //Updating transaction
-                                //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_SUCCESSFUL));
-                            } else {
-                                //failed
-                                //self::update_transaction(array('id' => $transaction['id'] , 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED));
-                            }*/
+                            self::update_transaction(array('id' => $transaction['id'] , 'status_id' => $result['status_id']));                  
                         } else {
                             //	method does not exist
                             error_log("Function does $function_to_call not exists");

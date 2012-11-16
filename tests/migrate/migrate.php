@@ -62,20 +62,21 @@ if (!empty($servers)) {
                 error_log('Starting Migration');
                 //Default migration from MSSQL to Chamilo MySQL
                 $m->migrate($matches);
-            } else {
-                error_log('Starting Synchronization');
+            } else {                
                 //Getting transactions from MSSQL (via webservices)
-             
-                if (isset($matches['web_service_calls']['filename'])) {                
-                    require_once $matches['web_service_calls']['filename'];    
+                if (!empty($matches['web_service_calls'])) {
+                    error_log('Starting Synchronization');
+                    
+                    //This functions truncates the transaction lists!
+                    $m->test_transactions($matches['web_service_calls']);
+
+                    $m->search_transactions($matches['web_service_calls']);
+
+                    //Load transactions saved before
+                    $m->load_transactions($matches);
+                } else {
+                    error_log('Make sure you define the web_service_calls array in your db_matches.php file');
                 }
-                //This functions truncates the transaction lists!
-                //$m->test_transactions($matches['web_service_calls']);
-            
-                $m->search_transactions($matches['web_service_calls']);
-            
-                //Load transactions saved before
-                $m->load_transactions($matches);
             
                 //print_r($m->errors_stack);
             }

@@ -302,7 +302,7 @@ class MigrationCustom {
         //Fixes wrong wanted codes
         $data['wanted_code'] = str_replace(array('-', '_'), '000', $data['wanted_code']);
         
-        //Specific to ICPNA, set the default language to English
+        //Specific to customer, set the default language to English
         $data['language'] = 'english';
         $data['visibility'] = COURSE_VISIBILITY_REGISTERED;
         
@@ -1363,5 +1363,301 @@ class MigrationCustom {
     // const TRANSACTION_TYPE_EDIT_INTENS = 27;
     static function transaction_27($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
+    }
+    
+    
+    //custom class moved here
+    
+    static function transacciones($data) {   
+        if ($data) {
+            $xml = $data->transaccionesResult->any;                        
+            // Cut the invalid XML and extract the valid chunk with the data
+            $stripped_xml = strstr($xml, '<diffgr:diffgram');
+            $xml = simplexml_load_string($stripped_xml);
+            if (!empty($xml->NewDataSet)) {                
+                $transaction_list = array();
+                foreach ($xml->NewDataSet->Table as $item) { //this is a "Table" object
+                    $item = (array) $item;                    
+                    $transaction_list[] = $item;
+                }
+                return $transaction_list;
+            } else {
+                error_log('No transactions found');
+            }        
+        } else {
+            error_log('Data is not valid');
+        }
+    }
+    
+    /*  object(SimpleXMLElement)#11 (5) {
+      ["idt"]=>
+      string(6) "354913"
+      ["idsede"]=>
+      string(1) "2"
+      ["ida"]=>
+      string(2) "10"
+      ["id"]=>
+      string(36) "cf0f2c9b-3e79-4960-8dec-b1a02b367921"
+      ["timestamp"]=>
+      string(12) "AAAAATbYxkg="
+    }
+    */
+    static function process_transactions($web_service_params, $params) {
+        $transactions = Migration::soap_call($web_service_params, 'transacciones', $params);
+        if (!empty($transactions)) {
+             foreach ($transactions as $transaction_info) {
+                /*
+                id transaccion
+                id sede
+                id accion
+                id
+                origen
+                destino
+                timestamp                 
+                 */
+                //Add transactions here
+               if ($transaction_info) {
+                    $params = array(
+                        'action'    => $transaction_info['idt'],
+                        'item_id'   => $transaction_info['idt'],
+                        'orig_id'   => $transaction_info['idt'],
+                        'branch_id' => $transaction_info['idsede'],
+                        'dest_id'   => $transaction_info['idt'],
+                        'status_id' => 0
+                    );        
+                    Migration::add_transaction($params);             
+                }
+            }
+        }
+    }
+    
+    static function genericDetalles($data, $result_name, $params = array()) {
+        error_log("Calling $result_name ");
+        $result_name = $result_name.'Result';
+        $xml = $data->$result_name->any;
+        
+        // Cut the invalid XML and extract the valid chunk with the data
+        $stripped_xml = strstr($xml, '<diffgr:diffgram');        
+        $xml = simplexml_load_string($stripped_xml);
+        
+        if (!empty($xml->NewDataSet)) {
+            $item = (array)$xml->NewDataSet->Table;            
+            var_dump($item);
+            $item['error'] = false;
+            return $item;            
+        } else {            
+            return array(
+                'error' => true,
+                'message' => "No data when calling $result_name",
+                'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED,
+            );
+        }
+    }
+    
+    /* Returns an obj with this params
+    object(SimpleXMLElement)#11 (7) {
+      ["rol"]=>
+      string(8) "profesor"
+      ["username"]=>
+      string(4) "3525"
+      ["lastname"]=>
+      string(15) "Zegarra Acevedo"
+      ["firstname"]=>
+      string(10) "Allen Juan"
+      ["phone"]=>
+      object(SimpleXMLElement)#13 (0) {
+      }
+      ["email"]=>
+      string(17) "3525@aaa.com"
+      ["password"]=>
+      string(6) "xxx"
+    }
+    **/
+    static function usuarioDetalles($result, $params) {
+        $result = self::genericDetalles($result, __FUNCTION__, $params);
+        if ($result['error'] == true) {
+            return $result;
+        }
+        
+        $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;        
+        $result['phone'] = (string)$result['phone'];
+        $result['extra_uidIdPersona'] = $params['uididpersona'];
+        unset($result['rol']);
+        return $result;
+    }
+    
+    /*
+    ["uididsede"]=>
+    string(36) "7379a7d3-6dc5-42ca-9ed4-97367519f1d9"
+    ["uididhorario"]=>
+    string(36) "cdce484b-a564-4499-b587-bc32b3f82810"
+    ["chrperiodo"]=>
+    string(6) "200910"
+    ["display_start_date"]=>
+    string(25) "2009-09-30T00:00:00-05:00"
+    ["display_end_date"]=>
+    string(25) "2009-10-26T00:00:00-05:00"
+    ["access_start_date"]=>
+    string(25) "2009-09-30T00:00:00-05:00"
+    ["access_end_date"]=>
+    string(25) "2009-10-26T00:00:00-05:00"
+    
+    ["course_code"]=>
+    string(36) "5b7e9b5a-5145-4a42-be48-223a70d9ad52"
+    ["id_coach"]=>
+    string(36) "26dbb1c1-32b7-4cf8-a81f-43d1cb231abe"
+     * 
+     */
+    static function programaDetalles($data, $params) {  
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }
+        
+        $result['extra_uidIdPrograma']  = $params['uididprograma'];
+        $result['extra_sede']           = $result['uididsede'];
+        $result['extra_horario']        = $result['uididhorario'];
+        $result['extra_periodo']        = $result['chrperiodo'];
+        
+        $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);
+        $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
+        $result['access_start_date']    = MigrationCustom::clean_date_time_from_ws($result['access_start_date']);
+        $result['access_end_date']      = MigrationCustom::clean_date_time_from_ws($result['access_end_date']);
+        
+        //Searching course code
+        $course_code = MigrationCustom::get_real_course_code($result['course_code']);
+        $result['course_code'] = $course_code;
+        
+        //Searching id_coach
+        $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach']);
+        
+        unset($result['uididprograma']);
+        unset($result['uididsede']);
+        unset($result['uididhorario']);
+        unset($result['chrperiodo']);
+        
+        return $result;
+    }
+     
+    /**
+       ["name"]=>
+       string(42) "(A02SA) Pronunciacion Two Sabado Acelerado"
+       ["frecuencia"]=>
+       string(36) "0091cd3b-f042-11d7-b338-0050dab14015"
+       ["intensidad"]=>
+       string(36) "0091cd3d-f042-11d7-b338-0050dab14015"
+       ["fase"]=>
+       string(36) "90854fc9-f748-4e85-a4bd-ace33598417d"
+       ["meses"]=>
+       string(3) "2  "
+   */
+    static function cursoDetalles($data, $params) {  
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }
+        
+        $result['title']            = $result['name'];
+        $result['extra_frecuencia'] = $result['frecuencia'];
+        $result['extra_intensidad'] = $result['intensidad'];
+        $result['extra_fase']       = $result['fase'];
+        $result['extra_meses']       = $result['meses'];
+        $result['extra_uidIdCurso'] = $params['uididcurso'];
+        
+        unset($result['frecuencia']);
+        unset($result['intensidad']);
+        unset($result['fase']);
+        unset($result['name']);
+        unset($result['meses']);
+        
+        return $result;
+    }
+    
+    /*Calling frecuenciaDetalles 
+    array(1) {
+      ["name"]=>
+      string(8) "Sabatino"
+    }*/
+    static function faseDetalles($data) {
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;        
+    }
+    
+    static function frecuenciaDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__); 
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;
+    }
+    
+    /*Calling intensidadDetalles 
+    array(1) {
+      ["name"]=>
+      string(6) "Normal"
+    }*/
+
+    static function intensidadDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        //$result['option_value'] = $params['uididintensidad'];
+        return $result;
+    }
+    
+    /*Calling mesesDetalles
+    Calling mesesDetalles 
+    array(1) {
+      ["name"]=>
+      string(3) "4  "
+    }*/
+    static function mesesDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;
+    }
+    
+    /*Calling sedeDetalles 
+    array(1) {
+      ["name"]=>
+      string(23) "Sede Miraflores"
+    }*/
+
+    static function sedeDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;
+    }
+    
+    /*
+    Calling horarioDetalles 
+    array(3) {
+      ["start"]=>
+      string(5) "08:45"
+      ["end"]=>
+      string(5) "10:15"
+      ["id"]=>
+      string(2) "62"
+    }*/
+    static function horarioDetalles($data, $params) {         
+        $result = self::genericDetalles($data, __FUNCTION__);        
+        if ($result['error'] == true) {
+            return $result;
+        }
+        
+        $result['name'] = $result['id'].' '.$result['start'].' '.$result['end'];
+        //$result['option_value'] = $params['uididhorario'];        
+        unset($result['id']);
+        unset($result['start']);
+        unset($result['end']);
+        return $result;
     }
 }

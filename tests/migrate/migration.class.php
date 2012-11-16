@@ -802,8 +802,7 @@ class Migration {
                 $message = Display::return_message('Transaction id found in third party', 'info');
                 
                 //Adding third party transaction to Chamilo not sure about this
-                $chamilo_transaction_id = MigrationCustom::process_transaction($result);
-                $chamilo_transaction_id = null;
+                $chamilo_transaction_id = MigrationCustom::process_transaction($result);                
                 
                 if ($chamilo_transaction_id) {                        
                     $message .= Display::return_message("Transaction added to Chamilo with Id #$chamilo_transaction_id", 'info');
@@ -841,8 +840,10 @@ class Migration {
                 
                 return array(
                     'message' => $message,
-                    'raw_reponse' => Display::page_subheader2("Chamilo transaction info:")."<pre>".print_r($transaction_chamilo_info, true)."</pre>".
-                                     Display::page_subheader2("Webservice transaction reponse:")."<pre>".print_r($result, true)."</pre>",
+                    'raw_reponse' => 
+                                    //Display::page_subheader2("Transactions:"). 
+                                     Display::page_subheader3("Chamilo transaction info:")."<pre>".print_r($transaction_chamilo_info, true)."</pre>".
+                                     Display::page_subheader3("Webservice transaction reponse:")."<pre>".print_r($result, true)."</pre>",
                 );
             }
         }

@@ -726,6 +726,7 @@ class MigrationCustom {
          $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));
          if ($user_info['error'] == false) {
             global $api_failureList;
+            unset($user_info['error']);
             $chamilo_user_info = UserManager::add($user_info);
             $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], false, false, true);
             if ($chamilo_user_info) {
@@ -786,6 +787,7 @@ class MigrationCustom {
         if ($user_id) {            
             $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId)); 
             if ($user_info['error'] == false) {
+                unset($user_info['error']);
                 //Edit user
                 $user_info['user_id'] = $user_id;
                 $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);
@@ -926,7 +928,8 @@ class MigrationCustom {
     static function transaction_5($data, $web_service_details) {
         $uidCursoId = $data['item_id'];          
         $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));         
-        if ($course_info['error'] == false) { 
+        if ($course_info['error'] == false) {
+            unset($user_info['error']);
             $course_info = CourseManager::create_course($course_info);
             $course_info = api_get_course_info($course_info['code'], true);            
             if (!empty($course_info)) {

@@ -794,7 +794,7 @@ class MigrationCustom {
             }
         } else {
             return array(
-                'message' => "User was not found : $uidIdPersonaId",
+                'message' => "User was not found with uidIdPersona: $uidIdPersonaId",
                 'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
@@ -1183,8 +1183,8 @@ class MigrationCustom {
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         if (empty($extra_field_info)) {
             return array(
-                           'message' => "Extra field can't be edited extra field does not exists:  extra_field_variable: ".$extra_field_variable,
-                           'status_id' => self::TRANSACTION_STATUS_FAILED
+                    'message' => "Extra field can't be edited extra field does not exists:  extra_field_variable: ".$extra_field_variable,
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
         }
         
@@ -1209,11 +1209,11 @@ class MigrationCustom {
                 $options_updated = array();
                 foreach($extra_field_option_info as $option) {
                     $extra_field_option_info = array(
-                        'id'                                 => $option['id'],
-                        'field_id'                        => $extra_field_info['id'],
-                        'option_value'              => $original_data['item_id'],
+                        'id'                    => $option['id'],
+                        'field_id'              => $extra_field_info['id'],
+                        'option_value'          => $original_data['item_id'],
                         'option_display_text'   => $data['name'],
-                        'option_order'              => null
+                        'option_order'          => null
                     );        
                     $extra_field_option->update($extra_field_option_info);
                     $options_updated [] = $option['id'];
@@ -1402,8 +1402,8 @@ class MigrationCustom {
       string(12) "AAAAATbYxkg="
     }
     */
-    function process_transactions($params) {
-        $transactions = Migration::soap_call('transacciones', $params);
+    function process_transactions($params, $web_service_details) {
+        $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);
         if (!empty($transactions)) {
              foreach ($transactions as $transaction_info) {
                 /*
@@ -1430,10 +1430,10 @@ class MigrationCustom {
         if ($transaction_info) {
             $params = array(
                    'action'    => $transaction_info['ida'],
-                   'item_id'   => $transaction_info['idt'],
+                   'item_id'   => $transaction_info['id'],
                    'orig_id'   => $transaction_info['id'],
                    'branch_id' => $transaction_info['idsede'],
-                   'dest_id'   => $transaction_info['idt'],
+                   'dest_id'   => $transaction_info['id'],
                    'status_id' => 0
             );            
             if (!$save_to_db) {

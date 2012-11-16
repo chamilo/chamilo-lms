@@ -181,8 +181,9 @@ class Migration {
      * @param array Variables to be passed as params to the function
      * @return array Results as returned by the SOAP call
      */
-    function soap_call($function_name, $params = array()) {
-        $web_service_params = $this->web_service_connection_info;
+    function soap_call($web_service_params, $function_name, $params = array()) {
+        
+        //$web_service_params = $this->web_service_connection_info;
         
         // Create the client instance
         $url = $web_service_params['url'];        
@@ -666,24 +667,24 @@ class Migration {
         $web_service_params = $this->web_service_connection_info;
         
         
-        /*$result = $this->soap_call('usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
-        $result = $this->soap_call('programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
-        $result = $this->soap_call('cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
-        $result = $this->soap_call('faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = $this->soap_call('frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
-        $result = $this->soap_call('intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
-        $result = $this->soap_call('mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = $this->soap_call('sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
-        $result = $this->soap_call('horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
-        $result = $this->soap_call('transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
+        /*$result = $this->soap_call($web_service_params,'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        $result = $this->soap_call($web_service_params,'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
+        $result = $this->soap_call($web_service_params,'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
+        $result = $this->soap_call($web_service_params,'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = $this->soap_call($web_service_params,'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
+        $result = $this->soap_call($web_service_params,'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
+        $result = $this->soap_call($web_service_params,'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = $this->soap_call($web_service_params,'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
+        $result = $this->soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
+        $result = $this->soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
         $branches = self::get_branches();
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
             $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call('transacciones', array('ultimo' => $last, 'cantidad' => 1));
+            $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $last, 'cantidad' => 1));
             //Calling a process to save transactions
-            MigrationCustom::process_transactions(array('ultimo' => $last, 'cantidad' => 1));
+            MigrationCustom::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
         }
     }   
 
@@ -766,16 +767,17 @@ class Migration {
             error_log("\n-----------------------------------------------------------------------");
             error_log("\nCalling function MigrationCustom::$function_to_call");
 
-            $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);            
-            error_log('Reponse: '.$result['message']);
+            $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
             
+            $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \n Function reponse: ".$result['message'];            
+            error_log('Reponse: '.$result['message']);            
             if (!empty($transaction_info['id'])) {
                 self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));                  
             }
             return $result;
         } else {
             //	method does not exist
-            $error_message = "Function does $function_to_call not exists";
+            $error_message = "Function $function_to_call does not exists";
             error_log($error_message);
             
             //Failed
@@ -792,14 +794,14 @@ class Migration {
      * 
      */
     function load_transaction_by_third_party_id($transaction_external_id) {        
-        $result = self::soap_call('transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
+        $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
         if ($result && isset($result[0])) {
             //Getting 1 transaction
             $result = $result[0];            
             //Hacking webservice
             $transaction_external_id++;            
             if ($result['idt'] == $transaction_external_id) {
-                $message = Display::return_message('Transaction id found in third party', 'success');
+                $message = Display::return_message('Transaction id found in third party', 'info');
                 
                 //Adding third party transaction to Chamilo not sure about this
                 $chamilo_transaction_id = MigrationCustom::process_transaction($result);

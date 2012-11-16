@@ -1516,7 +1516,7 @@ class MigrationCustom {
             $params = array(
                    'transaction_id' =>  $transaction_info['idt'], 
                    'action'    => $transaction_info['ida'],
-                   'item_id'   => $transaction_info['id'],
+                   'item_id'   => strtoupper($transaction_info['id']),
                    'orig_id'   => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
                    'branch_id' => $transaction_info['idsede'],
                    'dest_id'   => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,

@@ -727,7 +727,7 @@ class MigrationCustom {
          if ($user_info['error'] == false) {
             global $api_failureList;
             $chamilo_user_info = UserManager::add($user_info);
-            $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], true);
+            $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], false, false, true);
             if ($chamilo_user_info) {
                 return array(
                     'entity' => 'user',
@@ -753,9 +753,9 @@ class MigrationCustom {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
-            $chamilo_user_info_before = api_get_user_info($user_id, true);            
+            $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);            
             $result = UserManager::delete_user($user_id);
-            $chamilo_user_info = api_get_user_info($user_id, true);
+            $chamilo_user_info = api_get_user_info($user_id, false, false, true);
             if ($result) {
                 return array(
                     'entity' => 'user',
@@ -788,9 +788,9 @@ class MigrationCustom {
             if ($user_info['error'] == false) {
                 //Edit user
                 $user_info['user_id'] = $user_id;
-                $chamilo_user_info_before = api_get_user_info($user_id, true);
+                $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);
                 UserManager::update($user_info);
-                $chamilo_user_info = api_get_user_info($user_id, true);
+                $chamilo_user_info = api_get_user_info($user_id, false, false, true);
                 return array(
                     'entity' => 'user',
                     'before' => $chamilo_user_info_before,

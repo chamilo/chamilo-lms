@@ -2246,6 +2246,10 @@ class SessionManager {
     
     /**
      * Changes the user from one session to another due a reason
+     * @params int user_id
+     * @params int old session id
+     * @params int new session id
+     * @params int see SessionManager::get_session_change_user_reasons()
      */
     static function change_user_session($user_id, $old_session_id, $new_session_id, $reason_id) {
         if (!empty($user_id) && !empty($old_session_id) && !empty($new_session_id)) {

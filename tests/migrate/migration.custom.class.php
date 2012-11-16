@@ -834,8 +834,11 @@ class MigrationCustom {
                 $before1 = SessionManager::get_user_status_in_session($session_id, $user_id);
                 $before2 = SessionManager::get_user_status_in_session($destination_session_id, $user_id);
                 
-                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-                SessionManager::suscribe_users_to_session($destination_session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                /*SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                SessionManager::suscribe_users_to_session($destination_session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);*/
+                
+                //Not sure what reason use
+                SessionManager::change_user_session($user_id, $session_id, $destination_session_id, SessionManager::SESSION_CHANGE_USER_REASON_SCHEDULE);
                 
                 $befores = array($before1, $before2);
                 

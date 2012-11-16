@@ -589,9 +589,9 @@ class Migration {
     static function get_transaction_by_item_id($transaction_id, $branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $transaction_id = intval($transaction_id);
-        $item_id = intval($item_id);
+        $branch_id = intval($branch_id);
         
-        if (!empty($item_id) && !empty($branch_id)) {
+        if (!empty($transaction_id) && !empty($branch_id)) {
             $sql = "SELECT * FROM $table WHERE transaction_id = $transaction_id  AND branch_id = $branch_id";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {

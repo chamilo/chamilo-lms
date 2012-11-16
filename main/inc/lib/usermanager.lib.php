@@ -183,7 +183,15 @@ class UserManager {
         if (empty($params['user_id'])) {
             return false;
         }
-        return Database::update($table, $params, array('user_id = ?' => $params['user_id']));
+        
+        //saving extra fields
+        $field_value = new ExtraFieldValue('user');
+        $params['user_id'] = $params['user_id'];   
+        $field_value->save_field_values($params);
+        
+        $clean_params = self::clean_params($params);
+
+        return Database::update($table, $clean_params, array('user_id = ?' => $params['user_id']));
     }
 
     /**
@@ -2246,6 +2254,7 @@ class UserManager {
                 
                 //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
+                //var_dump($visibility);
                                 
                 switch ($visibility) {
                     case SESSION_VISIBLE_READ_ONLY:

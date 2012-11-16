@@ -16,7 +16,7 @@ $response = null;
 if ($form->validate()) {
     $values = $form->getSubmitValues();    
     $transaction_id = $values['transaction_id'];
-    $response = Display::page_subheader2("Testing transaction #$transaction_id");    
+    $response = Display::page_subheader2("Executing transaction #$transaction_id");    
     
     require_once 'migration.class.php'; 
     require_once 'migration.custom.class.php';

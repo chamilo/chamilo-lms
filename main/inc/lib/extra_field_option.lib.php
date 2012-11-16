@@ -177,6 +177,7 @@ class ExtraFieldOption extends Model {
         }
         return true;    
     }
+    
     /**
      * Save one option item at a time
      * @param array Parameters specific to the option
@@ -207,6 +208,7 @@ class ExtraFieldOption extends Model {
         }
         return true;
     }
+    
     /**
      * Get the complete row of a specific option of a specific field
      * @param int Field ID
@@ -225,6 +227,7 @@ class ExtraFieldOption extends Model {
         }
         return false;        
     }
+    
     /**
      * Get the complete row of a specific option's display text of a specific field
      * @param int Field ID
@@ -243,6 +246,7 @@ class ExtraFieldOption extends Model {
         }
         return false;        
     }
+    
     /**
      * Get the complete row of a specific option's display text of a specific field
      * @param int Field ID
@@ -263,6 +267,7 @@ class ExtraFieldOption extends Model {
         }
         return false;        
     }
+    
     /**
      * Gets an array of options for a specific field
      * @param int The field ID

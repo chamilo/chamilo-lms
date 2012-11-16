@@ -72,7 +72,7 @@ class ExtraFieldValue extends Model {
         //If field id exists
         $extra_field_info = $extra_field->get($params['field_id']);
                 
-        if ($extra_field_info) {    
+        if ($extra_field_info) {
             switch ($extra_field_info['field_type']) {
                 case ExtraField::FIELD_TYPE_TAG :
                     break;
@@ -119,7 +119,7 @@ class ExtraFieldValue extends Model {
             }            
             $params['field_value'] = $value_to_insert;
             $params['tms'] = api_get_utc_datetime();            
-            parent::save($params, $show_query);
+            return parent::save($params, $show_query);
         }        
     }
     

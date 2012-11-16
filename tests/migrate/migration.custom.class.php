@@ -716,30 +716,28 @@ class MigrationCustom {
     }
     
     
-    
-    
     /* Transaction methods */
-    
-    
-    
     
     //añadir usuario: usuario_agregar UID
     //const TRANSACTION_TYPE_ADD_USER    =  1;
     static function transaction_1($data, $web_service_details) {
-         $uidIdPersonaId = $data['item_id'];            
+         $uidIdPersonaId = $data['item_id'];
          //Add user call the webservice         
-         $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));          
+         $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));
          if ($user_info['error'] == false) {
             global $api_failureList;
             $chamilo_user_info = UserManager::add($user_info);
             if ($chamilo_user_info) {
-                return array(                    
+                return array(
+                    'entity' => 'user',
+                    'before' => null,
+                    'after' => $chamilo_user_info,
                     'message' => "User was created - user_id: {$chamilo_user_info['user_id']} - firstname: {$chamilo_user_info['firstname']} - lastname:{$chamilo_user_info['lastname']}",
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
             } else {
                 return array(
-                    'message' => "User was not created : $uidIdPersonaId- UserManager::add reponse $user_id".print_r($api_failureList, 1),
+                    'message' => "User was not created : $uidIdPersonaId \n UserManager::add() reponse: \n ".print_r($api_failureList, 1),
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -754,9 +752,14 @@ class MigrationCustom {
         $uidIdPersonaId = $data['item_id'];        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
+            $chamilo_user_info_before = api_get_user_info($user_id);            
             $result = UserManager::delete_user($user_id);
+            $chamilo_user_info = api_get_user_info($user_id);
             if ($result) {
                 return array(
+                    'entity' => 'user',
+                    'before' => $chamilo_user_info_before,
+                    'after' => $chamilo_user_info,
                     'message' => "User was deleted : $user_id",
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -784,8 +787,13 @@ class MigrationCustom {
             if ($user_info['error'] == false) {
                 //Edit user
                 $user_info['user_id'] = $user_id;
+                $chamilo_user_info_before = api_get_user_info($user_id);
                 UserManager::update($user_info);
+                $chamilo_user_info = api_get_user_info($user_id);
                 return array(
+                    'entity' => 'user',
+                    'before' => $chamilo_user_info_before,
+                    'after' => $chamilo_user_info,
                     'message' => "User id $user_id was updated updated with data: ".print_r($user_info, 1),
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -811,7 +819,7 @@ class MigrationCustom {
         
         if (empty($user_id)) {
             return array(
-                'message' => "User does not exists: $uidIdPersona",
+                'message' => "User does not exists in DB: $uidIdPersona",
                 'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
@@ -822,12 +830,19 @@ class MigrationCustom {
             $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
             
             if (!empty($session_id) && !empty($destination_session_id)) {
+                
+                $before1 = SessionManager::get_user_status_in_session($session_id, $user_id);
+                $before2 = SessionManager::get_user_status_in_session($destination_session_id, $user_id);
+                
                 SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                 SessionManager::suscribe_users_to_session($destination_session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                
+                $befores = array($before1, $before2);
+                
                 $message = "Move Session A to Session B";
-               return self::check_if_user_is_subscribe_to_session($user_id, $destination_session_id,  $message);
+                return self::check_if_user_is_subscribe_to_session($user_id, $destination_session_id, $message, $befores);           
             } else {
-                return array(
+                return array(     
                     'message' => "Session ids were not correctly setup session_id 1: $session_id Session id 2 $uidIdProgramaDestination - Move Session A to Session B",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
@@ -838,12 +853,13 @@ class MigrationCustom {
         if (!empty($uidIdPrograma) && empty($uidIdProgramaDestination)) {            
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             if (!empty($session_id)) {
+                $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
                 $message = "Move Session to empty";
-                return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message);
+                return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
                 return array(
-                    'message' => "Session does not exists $uidIdPrograma  - Move Session to empty",
+                    'message' => "Session does not exists in DB $uidIdPrograma  - Move Session to empty",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -852,30 +868,34 @@ class MigrationCustom {
          //Move empty to A
         if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination)) {
             $session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
-            if (!empty($session_id)) {             
+            if (!empty($session_id)) {     
+                $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
                 $message = 'Move empty to Session';
-                return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message);
+                return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
                 return array(
-                    'message' => "Session does not exists $uidIdProgramaDestination - Move empty to Session",
+                    'message' => "Session does not exists in DB $uidIdProgramaDestination - Move empty to Session",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
         }
     }
     
-    function check_if_user_is_subscribe_to_session($user_id, $session_id, $message = null) {
+    function check_if_user_is_subscribe_to_session($user_id, $session_id, $message = null, $before = array()) {
         $user_session_status = SessionManager::get_user_status_in_session($session_id, $user_id);
         if (!empty($user_session_status)) {
             return array(
+                'entity' => 'session_rel_user',
+                'before' => $before,
+                'after' => $user_session_status,
                 'message' => "User $user_id added to Session $session_id  - user relation_type in session: {$user_session_status['relation_type']}- $message ",
                 'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
             );
         } else {
             return array(
                 'message' => "User $user_id was NOT added to Session $session_id  - $message",
-                'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
     }
@@ -890,6 +910,9 @@ class MigrationCustom {
             $course_info = CourseManager::create_course($course_info);
             if (!empty($course_info)) {
                 return array(
+                        'entity' => 'course',
+                        'before' => null,
+                        'after' => $course_info,
                         'message' => "Course was created code: {$course_info['code']} ",
                         'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -909,15 +932,20 @@ class MigrationCustom {
     static function transaction_6($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         if (!empty($course_code)) {
+            $course_info_before = api_get_course_info($course_code);
             CourseManager::delete_course($course_code);
+            $course_info = api_get_course_info($course_code);
             return array(
+                    'entity' => 'course',
+                    'before' => $course_info_before,
+                    'after' => $course_info,
                     'message' => "Course was deleted $course_code ",
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
             );
         } else {
             return array(
-                    'message' => "Coursecode does not exists $course_code ",
-                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                'message' => "Coursecode does not exists in DB $course_code ",
+                'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }
         
@@ -935,10 +963,14 @@ class MigrationCustom {
             if ($data_to_update['error'] == false) {
                 //do some cleaning
                 $data_to_update['code'] = $course_info['code'];
-                unset($data_to_update['error']);
-                                
+                unset($data_to_update['error']);                
                 CourseManager::update($data_to_update);
+                $course_info_after = api_get_course_info($course_code);
+                
                 return array(
+                        'entity' => 'course',
+                        'before' => $course_info,
+                        'after'  => $course_info_after,
                         'message' => "Course with code: $course_code was updated with this data:  ".print_r($data_to_update, 1),
                         'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -953,8 +985,11 @@ class MigrationCustom {
         }
     }
     
-    //Cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
-    //Unused
+    /**
+     * Cambiar curso de progr. académ. (de nada a A) curso_matricula CID ORIG DEST
+     * @todo Unused ?
+     *
+     */
     static function transaction_curso_matricula($data) {
         $course_code = self::get_real_course_code($data['item_id']);
         $uidIdPrograma = $data['orig_id'];
@@ -993,8 +1028,12 @@ class MigrationCustom {
         if ($session_info['error'] == false) {
             unset($session_info['error']);
             $session_id = SessionManager::add($session_info);
+            $session_info = api_get_session_info($session_id);
             if ($session_id) {
                 return array(
+                   'entity' => 'session',
+                   'before' => null,
+                   'after'  => $session_info,
                    'message' => "Session was created. Id: $session_id session data: ".print_r($session_info, 1),
                    'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
@@ -1017,8 +1056,13 @@ class MigrationCustom {
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);    
         if (!empty($session_id)) {
+            $session_info_before = api_get_session_info($session_id);
             SessionManager::delete_session($session_id, true);
+            $session_info = api_get_session_info($session_id);
             return array(
+                   'entity' => 'session',
+                   'before' => $session_info_before,
+                   'after'  => $session_info,
                    'message' => "Session was deleted  session_id: $session_id - id: $uidIdPrograma",
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
             );
@@ -1040,8 +1084,13 @@ class MigrationCustom {
             if ($session_info['error'] == false) {                
                 $session_info['id'] = $session_id;
                 unset($session_info['error']);
+                $session_info_before = api_get_session_info($session_id);
                 SessionManager::update($session_info);
+                $session_info = api_get_session_info($session_id);
                 return array(
+                   'entity' => 'session',
+                   'before' => $session_info_before,
+                   'after'  => $session_info,
                    'message' => "Session updated $uidIdPrograma with data: ".print_r($session_info, 1),
                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -1054,8 +1103,7 @@ class MigrationCustom {
                    'status_id' => self::TRANSACTION_STATUS_FAILED
             );
         }            
-    }   
-
+    }
     
     static function transaction_cambiar_generic($extra_field_variable, $data) {
         $uidIdPrograma = $data['item_id'];        
@@ -1082,14 +1130,28 @@ class MigrationCustom {
             $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $destination_id); //horario, aula, etc
             
             if ($extra_field_option_info) {
-                $extra_field_value = new ExtraFieldValue('session');                
+                $extra_field_value = new ExtraFieldValue('session');
+                
+                //Getting info before
+                $info_before = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
+                
+                //Delete previous extra field value
+                $extra_field_value->delete_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
+                
                 $params = array(
                     'session_id' => $session_id,
                     'field_id' => $extra_field_info['id'],
                     'field_value' => $destination_id,
                 );            
-                $extra_field_value->save($params);            
+                $extra_field_value->save($params);
+                
+                //Getting info after
+                $info_after = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
+                
                 return array(
+                       'entity' => $extra_field_variable,
+                       'before' => $info_before,
+                       'after'  => $info_after,
                        'message' => "Extra field  $extra_field_variable saved with params: ".print_r($params, 1),
                        'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
@@ -1147,6 +1209,8 @@ class MigrationCustom {
             $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
             if ($extra_field_info) {
                 $extra_field_option = new ExtraFieldOption('session');
+                
+                $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
 
                 $params = array(
                     'field_id'              => $extra_field_info['id'],
@@ -1156,8 +1220,14 @@ class MigrationCustom {
                 );
                 
                 $result = $extra_field_option->save_one_item($params);
+                
+                $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
+                
                 if ($result) {
                     return array(
+                           'entity' => $extra_field_variable,
+                           'before' => $info_before,
+                           'after'  => $info_after,
                            'message' => "Extra field option added - $extra_field_variable was saved with data: ".print_r($params,1),
                            'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                     );
@@ -1197,9 +1267,11 @@ class MigrationCustom {
             
             //Update 1 item
             if (!empty($extra_field_option_info)) {
+                
+                $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
                       
                 if (count($extra_field_option_info) > 1)  {
-                    var_dump($extra_field_option_info);
+                    //var_dump($extra_field_option_info);
                     //Take the first one                
                     error_log('Warning! There are several options with the same key. You should delete doubles. Check your DB with this query:');
                     error_log("SELECT * FROM session_field_options WHERE field_id =  {$extra_field_info['id']} AND option_value = '{$original_data['item_id']}' ");
@@ -1207,7 +1279,7 @@ class MigrationCustom {
                 }
                 
                 $options_updated = array();
-                foreach($extra_field_option_info as $option) {
+                foreach ($extra_field_option_info as $option) {
                     $extra_field_option_info = array(
                         'id'                    => $option['id'],
                         'field_id'              => $extra_field_info['id'],
@@ -1216,12 +1288,17 @@ class MigrationCustom {
                         'option_order'          => null
                     );        
                     $extra_field_option->update($extra_field_option_info);
-                    $options_updated [] = $option['id'];
+                    $options_updated[] = $option['id'];
                 }
+                
+                $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
 
-               $options_updated = implode(',', $options_updated);
+                $options_updated = implode(',', $options_updated);
                 
                 return array(
+                           'entity' => $extra_field_variable,
+                           'before' => $info_before,
+                           'after'  => $info_after,
                            'message' => "Extra field options id updated: $options_updated",
                            'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
@@ -1245,6 +1322,9 @@ class MigrationCustom {
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         if (!empty($extra_field_option_info)) {
+            
+            $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
+            
             $deleting_option_ids = array();
             foreach($extra_field_option_info as $option) {
                 //@todo Delete all horario in sessions?
@@ -1253,8 +1333,13 @@ class MigrationCustom {
             }            
             $deleting_option_ids = implode(',', $deleting_option_ids);            
             
+            $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
+            
             if ($result) {
                 return array(
+                        'entity' => $extra_field_variable,
+                        'before' => $info_before,
+                        'after'  => $info_after,
                         'message' => "Extra field options were deleted for the field_variable: $extra_field_variable, options id  deleted: $deleting_option_ids",
                         'status_id' => self::TRANSACTION_STATUS_FAILED
                  );
@@ -1455,7 +1540,7 @@ class MigrationCustom {
         
         if (!empty($xml->NewDataSet)) {
             $item = (array)$xml->NewDataSet->Table;            
-            var_dump($item);
+            //var_dump($item);
             $item['error'] = false;
             return $item;            
         } else {            

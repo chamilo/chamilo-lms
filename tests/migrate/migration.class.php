@@ -181,7 +181,7 @@ class Migration {
      * @param array Variables to be passed as params to the function
      * @return array Results as returned by the SOAP call
      */
-    function soap_call($web_service_params, $function_name, $params = array()) {
+    static function soap_call($web_service_params, $function_name, $params = array()) {
         
         //$web_service_params = $this->web_service_connection_info;
         
@@ -665,18 +665,17 @@ class Migration {
         
         //Testing transactions        
         $web_service_params = $this->web_service_connection_info;
-        
-        
-        /*$result = $this->soap_call($web_service_params,'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
-        $result = $this->soap_call($web_service_params,'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
-        $result = $this->soap_call($web_service_params,'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
-        $result = $this->soap_call($web_service_params,'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = $this->soap_call($web_service_params,'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
-        $result = $this->soap_call($web_service_params,'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
-        $result = $this->soap_call($web_service_params,'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
-        $result = $this->soap_call($web_service_params,'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
-        $result = $this->soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
-        $result = $this->soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
+                
+        /*$result = self::soap_call($web_service_params,'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        $result = self::soap_call($web_service_params,'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
+        $result = self::soap_call($web_service_params,'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));        
+        $result = self::soap_call($web_service_params,'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params,'frecuenciaDetalles', array('uididfrecuencia' => '0091CD3B-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params,'intensidadDetalles', array('uididintensidad' => '0091CD3C-F042-11D7-B338-0050DAB14015'));
+        $result = self::soap_call($web_service_params,'mesesDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
+        $result = self::soap_call($web_service_params,'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));        
+        $result = self::soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
+        $result = self::soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
         $branches = self::get_branches();
         foreach ($branches as $branch) {
@@ -768,7 +767,6 @@ class Migration {
             error_log("\nCalling function MigrationCustom::$function_to_call");
 
             $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
-            
             $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \n Function reponse: ".$result['message'];            
             error_log('Reponse: '.$result['message']);            
             if (!empty($transaction_info['id'])) {
@@ -807,8 +805,8 @@ class Migration {
                 $chamilo_transaction_id = MigrationCustom::process_transaction($result);
                 $chamilo_transaction_id = null;
                 
-                if ($chamilo_transaction_id) {
-                    $message .= "<br /> Transaction added to Chamilo with Id #$chamilo_transaction_id <br />";                    
+                if ($chamilo_transaction_id) {                        
+                    $message .= Display::return_message("Transaction added to Chamilo with Id #$chamilo_transaction_id", 'info');
                     $transaction_chamilo_info = self::get_transaction_by_params(array('Where' => array('id = ?' => $chamilo_transaction_id), 'first'));
                     if (isset($transaction_chamilo_info) && isset($transaction_chamilo_info[$chamilo_transaction_id])) {
                         $transaction_chamilo_info = $transaction_chamilo_info[$chamilo_transaction_id];
@@ -816,16 +814,26 @@ class Migration {
                         $transaction_chamilo_info = null;
                     }                    
                 } else {
-                    $message .= Display::return_message("Transaction NOT added to Chamilo executing transaction on the fly", 'info');
+                    $message .= Display::return_message("Transaction NOT added to Chamilo. Executing transaction on the fly", 'info');
                     $transaction_chamilo_info = MigrationCustom::process_transaction($result, false);                    
                 }
                 
                 if (!empty($transaction_chamilo_info)) {
                     $transaction_result = $this->execute_transaction($transaction_chamilo_info);
                     if ($transaction_result) {
-                        $message .= "<h4>Transaction result:</h4>";
-                        $message .= $transaction_result['message'];
+                        $message .= Display::page_subheader("Transaction result:");
+                        $message .= nl2br($transaction_result['message']);
                         $message .= "<br />";
+                        
+                        if (isset($transaction_result['entity']) && !empty($transaction_result['entity'])) {                        
+                            $message .= Display::page_subheader2("Entity {$transaction_result['entity']} before:");
+                            $message .= "<pre>".print_r($transaction_result['before'])."</pre>";
+                            $message .= "<br />";
+
+                            $message .= Display::page_subheader2("Entity {$transaction_result['entity']} after:");
+                            $message .= "<pre>".print_r($transaction_result['after'])."</pre>";
+                            $message .= "<br />";
+                        }                        
                     } else {
                         $message .= Display::return_message("Transaction failed", 'error');                        
                     }
@@ -833,8 +841,8 @@ class Migration {
                 
                 return array(
                     'message' => $message,
-                    'raw_reponse' => "<h4>Chamilo info:</h4><pre>".print_r($transaction_chamilo_info, true)."</pre>
-                                      <h4>Webservice reponse:</h4><pre>".print_r($result, true)."</pre>",
+                    'raw_reponse' => Display::page_subheader2("Chamilo transaction info:")."<pre>".print_r($transaction_chamilo_info, true)."</pre>".
+                                     Display::page_subheader2("Webservice transaction reponse:")."<pre>".print_r($result, true)."</pre>",
                 );
             }
         }

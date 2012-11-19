@@ -306,17 +306,8 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-if (api_get_setting('server_type') == 'test') {
-    /*
-        Server type is test
-    - high error reporting level
-    - only do addslashes on $_GET and $_POST
-    */
-    if (IS_PHP_53) {
-        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    } else {
-        error_reporting(E_ALL & ~E_NOTICE);
-    }
+if (api_get_setting('server_type') == 'test') {    
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);    
 } else {
     /*
     Server type is not test

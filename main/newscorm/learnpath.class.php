@@ -3671,8 +3671,6 @@ class learnpath {
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
 
-        $course_id = api_get_course_int_id();
-
         $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
         $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
@@ -3969,7 +3967,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new content_maker : ' . $this->maker, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -3978,13 +3976,13 @@ class learnpath {
      * @param	string	Optional string giving the new name of this learnpath
      * @return  boolean True/False
      */
-    public function set_name($name = '') {
+    public function set_name($name = null) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_name()', 0);
         }
-        if (empty ($name))
+        if (empty($name)) {
             return false;
-
+        }
         $this->name = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
@@ -3998,8 +3996,7 @@ class learnpath {
         if (Database::affected_rows()) {
             $session_id = api_get_session_id();
             $session_condition = api_get_session_condition($session_id);
-            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-            $session_id = 
+            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);            
             $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
             $sql = "UPDATE $tbl_tool SET name = '$this->name'
             	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";

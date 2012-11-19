@@ -23,7 +23,7 @@ else{
 $config['ToolbarSets']['Normal'] = array(
 	array('Save','NewPage','Templates','-','PasteWord'),
 	array('Undo','Redo'),
-	array('Link','Image','flvPlayer','Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
+	array('Link','Image','flvPlayer','EmbedMovies', 'YouTube', 'Flash','MP3','TableOC','mimetex','asciimath','asciisvg'),
 	array('UnorderedList','OrderedList','Rule'),
 	array('Abbr'),
 	array('JustifyLeft','JustifyCenter','JustifyFull'),

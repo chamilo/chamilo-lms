@@ -47,7 +47,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $debug = 0;
     
     if ($debug > 0) { 
-        error_log('lp_ajax_save_item.php : save_item params: ');
+        error_log('lp_ajax_save_item.php : save_item() params: ');
+        error_log("item_id: $item_id");        
         error_log("lp_id: $lp_id - user_id: - $user_id - view_id: $view_id - item_id: $item_id");
         error_log("score: $score - max:$max - min: $min - status:$status - time:$time - suspend: $suspend - location: $location - core_exit: $core_exit");
     }    
@@ -91,7 +92,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         
         //set_score function already saves the status
         if (isset($score) && $score != -1) {
-            if ($debug > 1) { error_log('Calling set_score('.$score.')', 0); }            
+            if ($debug > 1) { error_log('Calling set_score('.$score.')', 0); }
+            if ($debug > 1) { error_log('set_score changes the status to failed/passed if mastery score is provided', 0); }
             $mylpi->set_score($score);
             if ($debug > 1) { error_log('Done calling set_score '.$mylpi->get_score(), 0); }
         } else {
@@ -112,7 +114,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
                     default:                        
                         if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
                         $mylpi->set_status($status);
-                        if ($debug > 1) { error_log('Done calling set_status: checking from memory:'.$mylpi->get_status(false), 0); }
+                        if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
                         break;                        
                 }
             } else {
@@ -186,7 +188,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     }
     
     $mystatus_in_db = $mylpi->get_status(true);
-    error_log("Status in DB: $mystatus_in_db");
+    if ($debug) error_log("Status in DB: $mystatus_in_db");
     
     if ($mystatus_in_db != 'completed' && $mystatus_in_db != 'passed' && $mystatus_in_db != 'browsed' && $mystatus_in_db != 'failed') {
          $mystatus_in_memory = $mylpi->get_status(false);
@@ -199,16 +201,14 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         $mystatus = $mystatus_in_db;
     }
     
-    $mytotal = $mylp->get_total_items_count_without_chapters();
-    $mycomplete = $mylp->get_complete_items_count();    
+    $mytotal         = $mylp->get_total_items_count_without_chapters();
+    $mycomplete      = $mylp->get_complete_items_count();    
     $myprogress_mode = $mylp->get_progress_bar_mode();
     $myprogress_mode = $myprogress_mode == '' ? '%' : $myprogress_mode;
     
     if ($debug > 1) { error_log("mystatus: $mystatus", 0); }
-    if ($debug > 1) { error_log("myprogress_mode: $myprogress_mode", 0); }
-    if ($debug > 1) { error_log("mytotal: $mytotal", 0); }
-    if ($debug > 1) { error_log("mycomplete: $mycomplete", 0); }
-    
+    if ($debug > 1) { error_log("myprogress_mode: $myprogress_mode", 0); }    
+    if ($debug > 1) { error_log("progress: $mycomplete / $mytotal", 0); }    
     
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type() != 'sco') {
@@ -217,12 +217,14 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     }    
     $return .= "update_toc('".$mystatus."','".$item_id."');";
     $update_list = $mylp->get_update_queue();
+    
     foreach ($update_list as $my_upd_id => $my_upd_status)  {
         if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
-    }    
-    $return .= "update_progress_bar('$mycomplete','$mytotal','$myprogress_mode');";
+    }
+    
+    $return .= "update_progress_bar('$mycomplete', '$mytotal', '$myprogress_mode');";
 
     if ($debug > 0) {        
         $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";

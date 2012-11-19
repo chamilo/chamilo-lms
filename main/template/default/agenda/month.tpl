@@ -1,5 +1,4 @@
 <script>
-
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
         o.addClass( "ui-state-error" );
@@ -276,20 +275,19 @@ $(document).ready(function() {
 				
 				$("#dialog-form").dialog({
 					buttons: {
-                        '{{"ExportiCalConfidential"|get_lang}}' : function() {                                            
-                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";                                
-                                window.location.href = url;
-                                
+                        '{{ "ExportiCalConfidential"|get_lang }}' : function() {                                            
+                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=confidential";                                
+                            window.location.href = url;                                
 						},
-						'{{"ExportiCalPrivate"|get_lang}}': function() { 
-                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
-                                window.location.href = url;
+						'{{ "ExportiCalPrivate"|get_lang }}': function() { 
+                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=private";			
+                            window.location.href = url;
 						},
-                        '{{"ExportiCalPublic"|get_lang}}': function() { 
-                                url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
-                                window.location.href = url;
+                        '{{ "ExportiCalPublic"|get_lang }}': function() { 
+                            url =  "ical_export.php?id=" + calEvent.id+'&course_id='+calEvent.course_id+"&class=public";			
+                            window.location.href = url;
 						},                        
-						'{{"Edit"|get_lang}}' : function() {
+						'{{ "Edit"|get_lang }}' : function() {
 							
 							var bValid = true;
 							bValid = bValid && checkLength( title, "title", 1, 255 );							
@@ -313,7 +311,7 @@ $(document).ready(function() {
 								}							
 							});
 						},
-						'{{"Delete"|get_lang}}': function() { 
+						'{{ "Delete"|get_lang }}': function() { 
 							$.ajax({
 								url: delete_url,
 								success:function() {

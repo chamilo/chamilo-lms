@@ -846,17 +846,20 @@ function savedata(origin) {
     
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
-    old_item_id=olms.info_lms_item[0];
+    old_item_id = olms.info_lms_item[0];
 
-    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);    
+    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    
     olms.info_lms_item[1]=olms.lms_item_id;
+    
     if (olms.item_objectives.length>0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
     olms.execute_stats = false;
     //clean array
-    olms.variable_to_send=new Array();
+    olms.variable_to_send = new Array();
 }
+
 /**
  * Send the Commit signal to the LMS (save the data for this element without
  * closing the current process)
@@ -1257,7 +1260,7 @@ function update_stats_page() {
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
-    logit_lms('could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
+    logit_lms('Could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
 
     if (mode == '') { 
         mode='%'; 
@@ -1273,13 +1276,6 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
     var pr_text = $("#progress_text");
     var progress_bar = $("#progress_bar_value");     
     progress_bar.css('width', percentage + "%");
-       
-    /*
-    var pr_full  = $("#progress_img_full");
-    var pr_empty = $("#progress_img_empty");
-    pr_full.attr('width',percentage*1.2);
-    pr_empty.attr('width',(100-percentage)*1.2);    
-    */
 
     var mytext = '';
     switch(mode){
@@ -1568,8 +1564,9 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
     var is_interactions='false';
     var params='';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
-    var my_scorm_values=new Array();
-    my_scorm_values=process_scorm_values();
+    var my_scorm_values = new Array();
+    
+    my_scorm_values = process_scorm_values();
 
     for (k=0;k<my_scorm_values.length;k++) {
         if (my_scorm_values[k]=='cmi.core.session_time') {
@@ -1604,9 +1601,10 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
     }
 
 
-    if (is_interactions=='true')  {
+    if (is_interactions == 'true')  {
         interact_string = '';
-          temp = '';
+        temp = '';
+        
         for (i in olms.interactions) {
             interact_string += '&interact['+i+']=';
             interact_temp = '[';
@@ -1621,7 +1619,6 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
             //  interact_string += encodeURIComponent(interact_temp);
-
 
             interact_string += interact_temp;
         }

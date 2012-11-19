@@ -3674,16 +3674,19 @@ class learnpath {
         $course_id = api_get_course_int_id();
 
         $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
-        $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
+        $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
         $row2 = Database :: fetch_array($result);
         //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
         if (($set_visibility == 'i') && ($num > 0)) {
-            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition)";
+            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } elseif (($set_visibility == 'v') && ($num == 0)) {
             $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
             	    ($course_id, '$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";
+        } elseif (($set_visibility == 'v') && ($num > 0)) {
+            $sql = "UPDATE $tbl_tool SET c_id = $course_id, name = '$name', link = '$link', image = 'scormbuilder.gif', visibility = '$v', admin = '0', address = 'pastillegris.gif', added_tool = 0, session_id = $session_id
+            	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } else {
             // Parameter and database incompatible, do nothing.
         }
@@ -3993,11 +3996,14 @@ class learnpath {
         $res = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows()) {
-            $table = Database :: get_course_table(TABLE_TOOL_LIST);
-            $sql = 'UPDATE ' . $table . ' SET
-                        name = "' . $this->name . '"
-                    WHERE c_id = '.$course_id.' AND link = "newscorm/lp_controller.php?action=view&lp_id=' . $lp_id . '"';
-            Database::query($sql);
+            $session_id = api_get_session_id();
+            $session_condition = api_get_session_condition($session_id);
+            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+            $session_id = 
+            $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
+            $sql = "UPDATE $tbl_tool SET name = '$this->name'
+            	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            $res = Database::query($sql);
         }
         return true;
     }

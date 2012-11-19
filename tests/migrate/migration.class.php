@@ -219,6 +219,12 @@ class Migration {
         }        
     }
     
+    function clean_all_transactions() {
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+        $sql = "TRUNCATE $table";
+        Database::query($sql);
+    }
+    
     /**
      * Test a series of hand-crafted transactions
      * @param array of parameters that would usually get passed to the web service
@@ -231,9 +237,7 @@ class Migration {
         
         //Cleaning transaction table
         if ($truncate) {
-            $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
-            $sql = "TRUNCATE $table";
-            Database::query($sql);
+            $this->clean_all_transactions();
         }
         
         $transaction_harcoded = array(
@@ -541,7 +545,7 @@ class Migration {
         
         $inserted_id = Database::insert($table, $params);
         if ($inserted_id) {
-            error_log("Transaction added #$inserted_id");
+            //error_log("Transaction added #$inserted_id");
         }
         return $inserted_id;        
     }
@@ -555,11 +559,11 @@ class Migration {
         $sql = "SELECT DISTINCT branch_id FROM $table ORDER BY branch_id";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
-          return Database::store_result($result, 'ASSOC');
+            return Database::store_result($result, 'ASSOC');
         }
         return array(
           //0=>array('branch_id' => 1),
-          1=>array('branch_id' => 2),
+          1 => array('branch_id' => 2),
           //2=>array('branch_id' => 3),
           //3=>array('branch_id' => 4),
           //4=>array('branch_id' => 5),
@@ -572,17 +576,14 @@ class Migration {
      * @param int Branch ID
      * @return array Associative array containing the details of the transactions requested
      */
-    static function get_transactions($status_id = 0, $branch_id = null) {
+    static function get_transactions($status_id = 0, $branch_id = 0) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
         $status_id = intval($status_id);
         
-        $extra_conditions = null;
-        if (!empty($branch_id)) {
-            $extra_conditions = " AND branch_id = $branch_id ";
-        }
+        $extra_conditions = " AND branch_id = $branch_id ";        
         $sql = "SELECT * FROM $table WHERE status_id = $status_id $extra_conditions ORDER BY id ";
-        $result = Database::query($sql);        
+        $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
     }
     
@@ -647,7 +648,7 @@ class Migration {
             $row = Database::fetch_array($result);
             return $row['transaction_id'];
         }
-        return 376011;
+        return 376012;
     }
     
     /**
@@ -688,11 +689,17 @@ class Migration {
     /**
      * Search for new transactions through a web service call. Automatically insert them in the local transactions table.
      * @param array The web service parameters
-     * @param int An optional transaction ID to start from. If none provided, fetches the latest transaction available and add + 1
+     * @param int the branch id optional
+     * @param int An optional transaction ID to start from. Branch id must be selected if you use this option. 
+     *        If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($transaction_id = null, $branch_id = null) {
-        error_log('search_transactions');
+    function search_transactions($params = array()) {
+        error_log("search_transactions() function called \n");
+        
+        $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
+        $transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
+        $number_of_transactions = isset($params['number_of_transactions']) ? $params['number_of_transactions'] : 2;
         
         //Testing transactions        
         $web_service_params = $this->web_service_connection_info;
@@ -708,26 +715,34 @@ class Migration {
         $result = self::soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
         $result = self::soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
+        
         if (empty($branch_id)) {
-            $branches = self::get_branches();    
+            $branches = self::get_branches();
         } else {
             $branches = array('branch_id' => $branch_id);
         }
         
-        foreach ($branches as $branch) {
-            error_log('Treating transactions for branch '.$branch['branch_id']);
-            if (empty($transaction_id)) {
-                $last_transaction_id = self::get_latest_transaction_id_by_branch($branch['branch_id']);
-            } else {
-                $last_transaction_id = $transaction_id;
-            }            
-            //Calling a process to save transactions
-            $params = array(
-                'ultimo' => $last_transaction_id,
-                'cantidad' => 2,
-                'sede' => $branch['branch_id'],
-            );
-            MigrationCustom::process_transactions($params, $web_service_params);
+        error_log(count($branches)." branches found \n");
+        
+        if (!empty($branches)) {
+            foreach ($branches as $branch) {                
+                
+                if (!empty($branch_id) && !empty($transaction_id)) {
+                    $last_transaction_id = $transaction_id;
+                } else {
+                    $last_transaction_id = self::get_latest_transaction_id_by_branch($branch['branch_id']);
+                }
+
+                //Calling a process to save transactions
+                $params = array(
+                    'ultimo'    => $last_transaction_id,
+                    'cantidad'  => isset($number_of_transactions) && !empty($number_of_transactions) ? $number_of_transactions : 2,
+                    'intIdSede' => $branch['branch_id'],
+                );
+                
+                error_log("Branch #".$branch['branch_id']." - treating $number_of_transactions transaction(s) starting with transaction #$last_transaction_id \n");
+                MigrationCustom::process_transactions($params, $web_service_params);
+            }
         }
     }   
 
@@ -737,54 +752,67 @@ class Migration {
      * @param int Optional limit of transactions to execute
      * @return void
      */
-    function load_transactions() {               
+    function load_transactions($params = array()) {
+        error_log("load_transactions() function called \n");
+        $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
+        //$transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
+        //$number_of_transactions = isset($params['number_of_transactions']) ? $params['number_of_transactions'] : 2;
+        
         //Getting transactions of the migration_transaction table
-        $branches = self::get_branches();
+        if (empty($branch_id)) {
+            $branches = self::get_branches();
+        } else {
+            $branches = array('branch_id' => $branch_id);
+        }
         
         if (!empty($branches)) {
+            
+            error_log(count($branches)." branches found \n");
+        
             foreach ($branches as $branch_info) {
                 //Get uncompleted transactions                
                 $transactions = self::get_transactions(0, $branch_info['branch_id']);                
          
+                //Getting latest executed transaction
                 $options = array('where' => array('branch_id = ? and status_id <> ?' => array($branch_info['branch_id'], 0)), 'order' => 'id desc', 'limit' => '1');
-                $transaction_info = self::get_transaction_by_params($options, 'first');   
-                
+                $transaction_info = self::get_transaction_by_params($options, 'first');                
                 $latest_id_attempt = 1;
                 if ($transaction_info) {                
                     $latest_id = $transaction_info['id'];                
                     $latest_id_attempt = $latest_id + 1;
                 }
+                
+                $count = count($transactions);                
+                
+                error_log("Treating $count transaction(s) starting with  transaction #$latest_id_attempt for branch ".$branch_info['branch_id']."\n");
                     
                 $item = 1;//counter
-                if (!empty($transactions)) {
-                    $count = count($transactions);
-                    error_log("\nTransactions found: $count");
+                if (!empty($transactions)) {                 
+                    error_log("\n$count Transactions found");
 
                     //Looping transactions
-                    foreach ($transactions as $transaction) {
-                        
-                        //Calculating percentage
-                        $percentage = $item / $count * 100;
-                        if (round($percentage) % 10 == 0) {
-                            $percentage = round($percentage, 3);
-                            error_log("\nProcessing transaction #{$transaction['id']} $percentage%");
+                    if (!empty($transactions)) {
+                        foreach ($transactions as $transaction) {
+                            //Calculating percentage
+                            $percentage = $item / $count * 100;
+                            if (round($percentage) % 10 == 0) {
+                                $percentage = round($percentage, 3);
+                                error_log("\nProcessing transaction #{$transaction['id']} $percentage%");
+                            }
+                            $item++;
+                            
+                            error_log("\nWaiting for transaction #$latest_id_attempt ...");
+
+                            //Checking "huecos"
+                            //Waiting transaction is fine continue:
+                            if ($transaction['id'] == $latest_id_attempt) {
+                                $latest_id_attempt++;
+                            } else {
+                                error_log("Transaction #$latest_id_attempt is missing in branch #{$branch_info['branch_id']} \n");                                
+                            }
+                            $result = $this->execute_transaction($transaction);                            
+                            error_log($result['message']);
                         }
-                        $item++;
-                        //--
-                        error_log("\nend transaction ->  \n");
-                        error_log("Waiting for transaction #$latest_id_attempt ...");
-                        
-                        //Checking "huecos"
-                        //Waiting transaction is fine continue:
-                        if ($transaction['id'] == $latest_id_attempt) {
-                            $latest_id_attempt++;
-                        } else {
-                            error_log("Transaction #$latest_id_attempt is missing in branch #{$branch_info['branch_id']}");
-                            exit;
-                        }
-                        
-                        self::execute_transaction($transaction_info);
-                        
                     }
                 } else {
                     error_log('No transactions to load');
@@ -805,13 +833,22 @@ class Migration {
     
     function execute_transaction($transaction_info) {
         //Loading function. The action is now numeric, so we call a transaction_1() function, for example
+        
+        $validate = MigrationCustom::validate_transaction($transaction_info);
+        if (isset($validate['error']) && $validate['error']) {
+            return $validate;
+        }
+        error_log("\n-----------------------------------------------------------------------");
+        error_log("Executing transaction ".$transaction_info['id']);
+        error_log("\n-----------------------------------------------------------------------");
+                
         $function_to_call = "transaction_" . $transaction_info['action'];
         if (method_exists('MigrationCustom', $function_to_call)) {
-            error_log("\n-----------------------------------------------------------------------");
+            
             error_log("\nCalling function MigrationCustom::$function_to_call");
 
             $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
-            $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \n Function reponse: ".$result['message'];            
+            $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \nFunction reponse: ".$result['message'];            
             error_log('Reponse: '.$result['message']);          
             if (!empty($transaction_info['id'])) {
                 self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));                  
@@ -841,9 +878,9 @@ class Migration {
         //Asking for 2 transactions by getting 1
         
         $params = array(
-            'ultimo' => $transaction_external_id, 
-            'cantidad' => 2,
-            'sede' => $branch_id
+            'ultimo'    => $transaction_external_id, 
+            'cantidad'  => 2,
+            'intIdSede' => $branch_id
         );
         
         $result = self::soap_call($this->web_service_connection_info, 'transacciones', $params);

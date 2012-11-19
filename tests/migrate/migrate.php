@@ -72,8 +72,8 @@ if (!empty($servers)) {
                     
                     //This functions truncates the transaction lists!
                     //$m->test_transactions();
-
-                    $m->search_transactions();
+                    
+                    //$m->search_transactions();
 
                     //Load transactions saved before
                     $m->load_transactions();

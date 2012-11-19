@@ -1518,14 +1518,41 @@ class MigrationCustom {
     }
     */
     static function process_transactions($params, $web_service_details) {
-        $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);
+        $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);        
         $transaction_status_list = self::get_transaction_status_list();
         
-        if (!empty($transactions)) {
-             foreach ($transactions as $transaction_info) { 
-                //Add transactions here
-                 self::process_transaction($transaction_info, $transaction_status_list);
+        if (isset($transactions) && isset($transactions['error']) && $transactions['error'] == true) {            
+            error_log($transactions['message']);
+        } else {
+            $counter = count($transactions);
+            error_log("Processing ".$counter." transaction(s)");
+            $count = 1;
+            if (!empty($transactions)) {
+                foreach ($transactions as $transaction_info) { 
+                   //Add transactions here
+                    error_log("Processing transaction: ".$count);        
+                    $result = self::process_transaction($transaction_info, $transaction_status_list);
+                    $count++;
+                    if ($result['error'] == true) {
+                        error_log("ERROR:");
+                        error_log($result['message']);
+                    } else {
+                        error_log($result['message']);
+                    }
+               }
             }
+        }
+    }
+    
+    static function validate_transaction($transaction_info) {
+        if (empty($transaction_info) || empty($transaction_info['transaction_id']) || empty($transaction_info['action']) || empty($transaction_info['branch_id'])) {
+            return array(
+                'id' => null, 
+                'error' => true,
+                'message' => "Transaction could not be added there are some missing params: ".print_r($transaction_info, 1)
+            );
+        } else {
+            return true;
         }
     }
     
@@ -1535,21 +1562,26 @@ class MigrationCustom {
      * @return int
      */
     static function process_transaction($transaction_info, $transaction_status_list = array(), $forced = false) {
-        if ($transaction_info) {
-            
+        if ($transaction_info) {            
             if (empty($transaction_status_list)) {
                 $transaction_status_list = self::get_transaction_status_list();
             }
             
             $params = array(
-                   'transaction_id' => $transaction_info['idt'], 
-                   'action'         => $transaction_info['ida'],
-                   'item_id'        => strtoupper($transaction_info['id']),
+                   'transaction_id' => isset($transaction_info['idt']) ? $transaction_info['idt'] : null, 
+                   'action'         => isset($transaction_info['ida']) ? $transaction_info['ida'] : null, 
+                   'item_id'        => isset($transaction_info['id']) ? strtoupper($transaction_info['id']) : null,
                    'orig_id'        => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
-                   'branch_id'      => $transaction_info['idsede'],
+                   'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
                    'dest_id'        => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
                    'status_id'      => 0
             );
+            
+            $validate = self::validate_transaction($params);
+            
+            if (isset($validate['error']) && $validate['error']) {
+                return $validate;
+            }            
             
             if ($forced) {
                 //Delete transaction
@@ -1564,7 +1596,7 @@ class MigrationCustom {
                 return array(
                     'id' => $transaction_id,
                     'error' => false,
-                    'message' => "Transaction added #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
+                    'message' => "Third party transaction id #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
                 );
             } else {
                 //only process transaction if it was failed or to be executed
@@ -1572,13 +1604,13 @@ class MigrationCustom {
                     return array(
                         'id' => $transaction_info['id'], 
                         'error' => false,
-                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Trying to execute because transaction has status: {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                        'message' => "Third party transaction id  #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Trying to execute because transaction has status: {$transaction_status_list[$transaction_info['status_id']]['title']}"
                     );
                 } else {
                     return array(
                         'id' => null, 
                         'error' => true,
-                        'message' => "Transaction #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
+                        'message' => "Third party transaction id #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
                     );
                 }
             }
@@ -1586,7 +1618,7 @@ class MigrationCustom {
             return array(
                 'id' => null,
                 'error' => true,
-                'message' => 'Transaction was already treated'
+                'message' => 'Third party transaction was already treated'
             );
         }
         return false;

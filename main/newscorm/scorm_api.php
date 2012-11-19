@@ -266,7 +266,7 @@ function LMSInitialize() {
             async: false
         });
        // log a more complete object dump when initializing, so we know what data hasn't been cleaned
-       var log = '<br />item              : '+  olms.lms_item_id
+       var log = '<br />item              : '+ olms.lms_item_id
                  + '<br />item_type       : '+ olms.lms_item_type
                  + '<br />score           : '+ olms.score
                  + '<br />max             : '+ olms.max
@@ -278,9 +278,10 @@ function LMSInitialize() {
                  + '<br />total_time      : '+ olms.total_time
                  + '<br />mastery_score   : '+ olms.mastery_score
                  + '<br />max_time_allowed: '+ olms.max_time_allowed
-                 + '<br />lms_lp_id  : '+olms.lms_lp_id
-                 + '<br />lms_user_id: '+olms.lms_user_id
-                 + '<br />lms_view_id: '+olms.lms_view_id
+                 + '<br />credit          : '+ olms.lms_item_credit
+                 + '<br />lms_lp_id       : '+ olms.lms_lp_id
+                 + '<br />lms_user_id     : '+ olms.lms_user_id
+                 + '<br />lms_view_id     : '+ olms.lms_view_id
                 ;
 
         logit_scorm('LMSInitialize()'+log,0);

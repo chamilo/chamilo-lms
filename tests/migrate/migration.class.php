@@ -600,6 +600,17 @@ class Migration {
         }
         return false;
     }
+    
+    static function delete_transaction_by_transaction_id($transaction_id, $branch_id) {
+        $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
+        $transaction_id = intval($transaction_id);
+        $branch_id = intval($branch_id);
+        
+        if (!empty($transaction_id) && !empty($branch_id)) {
+            $sql = "DELETE FROM $table WHERE transaction_id = $transaction_id  AND branch_id = $branch_id";
+            Database::query($sql);            
+        }        
+    }
         
     
     /**
@@ -624,14 +635,17 @@ class Migration {
      * @param int The ID of the branch
      * @return int The ID of the last transaction registered
      */
-    static function get_latest_transaction_by_branch($branch_id) {
+    static function get_latest_transaction_id_by_branch($branch_id) {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         $branch_id = intval($branch_id);
-        $sql = "SELECT id FROM $table WHERE branch_id = $branch_id ORDER BY id DESC LIMIT 1";
+        $sql = "SELECT transaction_id FROM $table 
+                WHERE branch_id = $branch_id 
+                ORDER BY transaction_id DESC 
+                LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_array($result);
-            return $row['id'];
+            return $row['transaction_id'];
         }
         return 376011;
     }
@@ -677,7 +691,7 @@ class Migration {
      * @param int An optional transaction ID to start from. If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($t_id = null) {
+    function search_transactions($transaction_id = null, $branch_id = null) {
         error_log('search_transactions');
         
         //Testing transactions        
@@ -694,13 +708,26 @@ class Migration {
         $result = self::soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));        
         $result = self::soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));         
         */
-        $branches = self::get_branches();
+        if (empty($branch_id)) {
+            $branches = self::get_branches();    
+        } else {
+            $branches = array('branch_id' => $branch_id);
+        }
+        
         foreach ($branches as $branch) {
             error_log('Treating transactions for branch '.$branch['branch_id']);
-            $last = self::get_latest_transaction_by_branch($branch['branch_id']);
-            $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $last, 'cantidad' => 1));
+            if (empty($transaction_id)) {
+                $last_transaction_id = self::get_latest_transaction_id_by_branch($branch['branch_id']);
+            } else {
+                $last_transaction_id = $transaction_id;
+            }            
             //Calling a process to save transactions
-            MigrationCustom::process_transactions($web_service_params, array('ultimo' => $last, 'cantidad' => 1));
+            $params = array(
+                'ultimo' => $last_transaction_id,
+                'cantidad' => 2,
+                'sede' => $branch['branch_id'],
+            );
+            MigrationCustom::process_transactions($params, $web_service_params);
         }
     }   
 
@@ -810,9 +837,16 @@ class Migration {
      * @param int Transaction id of the third party 
      * 
      */
-    function load_transaction_by_third_party_id($transaction_external_id) {        
+    function load_transaction_by_third_party_id($transaction_external_id, $branch_id, $forced = false) {        
         //Asking for 2 transactions by getting 1
-        $result = self::soap_call($this->web_service_connection_info,'transacciones', array('ultimo' => $transaction_external_id, 'cantidad' => 2));
+        
+        $params = array(
+            'ultimo' => $transaction_external_id, 
+            'cantidad' => 2,
+            'sede' => $branch_id
+        );
+        
+        $result = self::soap_call($this->web_service_connection_info, 'transacciones', $params);
         
         //Hacking webservice default result        
         if ($result && isset($result[0])) {
@@ -824,7 +858,7 @@ class Migration {
                 $message = Display::return_message('Transaction id found in third party', 'info');
                 
                 //Adding third party transaction to Chamilo
-                $transaction_result = MigrationCustom::process_transaction($result);
+                $transaction_result = MigrationCustom::process_transaction($result, null, $forced);
                 
                 $transaction_chamilo_info = array();
                 

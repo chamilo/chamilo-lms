@@ -71,7 +71,7 @@ if (!empty($servers)) {
                     $m->set_web_service_connection_info($matches);
                     
                     //This functions truncates the transaction lists!
-                    $m->test_transactions();
+                    //$m->test_transactions();
 
                     $m->search_transactions();
 

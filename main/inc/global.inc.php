@@ -328,17 +328,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-if (api_get_setting('server_type') == 'test') {
-    /*
-        Server type is test
-    - high error reporting level
-    - only do addslashes on $_GET and $_POST
-    */
-    if (IS_PHP_53) {
-        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    } else {
-        error_reporting(E_ALL & ~E_NOTICE);
-    }
+if (api_get_setting('server_type') == 'test') {    
+    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    error_reporting(-1);
 } else {
     /*
     Server type is not test
@@ -606,7 +598,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
 // be used in development versions.
-if ($_configuration['language_measure_frequency'] == 1) {
+if (isset($_configuration['language_measure_frequency']) && $_configuration['language_measure_frequency'] == 1) {
     require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
     $langstats = new langstats();
 }

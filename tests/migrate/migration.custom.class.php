@@ -1473,13 +1473,13 @@ class MigrationCustom {
     // const TRANSACTION_TYPE_DEL_INTENS  = 26;
     static function transaction_26($data, $web_service_details) {
         return self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
-    }
+    }    
+    
     //            editar intfase_editar IID
     // const TRANSACTION_TYPE_EDIT_INTENS = 27;
     static function transaction_27($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
     }
-    
     
     //custom class moved here
     
@@ -1517,7 +1517,7 @@ class MigrationCustom {
       string(12) "AAAAATbYxkg="
     }
     */
-    function process_transactions($params, $web_service_details) {
+    static function process_transactions($params, $web_service_details) {
         $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);
         $transaction_status_list = self::get_transaction_status_list();
         

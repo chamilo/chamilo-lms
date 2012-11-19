@@ -800,6 +800,8 @@ function SetValue(param, val) {
 function savedata(origin) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)    
     
+    //Status is NOT modified here see the lp_ajax_save_item.php file
+    
    /* console.log('savedata');
     console.log(olms.lesson_status);
     console.log(olms.mastery_score);
@@ -1547,6 +1549,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         });
     }
 }
+
 /**
  * Save a SCORM item's variables, getting its SCORM values from
  * updatable_vars_list. Takes interactions into account and considers whether

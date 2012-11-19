@@ -188,8 +188,8 @@ switch ($action) {
             if ($debug) error_log("exe_id = $exe_id ");
             if ($debug) error_log("type = $type ");
             if ($debug) error_log("choice = ".print_r($choice, 1)." ");
-            if ($debug) error_log("hot_spot_coordinates = $hot_spot_coordinates ");
-            if ($debug) error_log("remind_list = $remind_list ");            
+            if ($debug) error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
+            if ($debug) error_log("remind_list = ".print_r($remind_list));
             
             //Exercise information            
             $objExercise             = $_SESSION['objExercise'];
@@ -317,7 +317,7 @@ switch ($action) {
                 
             	
             	// We're inside *one* question. Go through each possible answer for this question
-            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice,'exercise_result', $hot_spot_coordinates, true, false, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
+            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
                 
                 //Adding the new score 
                 $total_score += $result['score'];              

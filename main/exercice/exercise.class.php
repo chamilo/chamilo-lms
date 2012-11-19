@@ -1880,11 +1880,12 @@ class Exercise {
 		if ($debug) error_log('manage_answer $from_database: '.$from_database);
 		if ($debug) error_log('manage_answer $show_result: '.$show_result);
 		if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
+        if ($debug) error_log('manage_answer $exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
 		if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
         if ($debug) error_log('manage_answer $learnpath_id: '.$learnpath_id);        
         if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
         			
-		$extra_data = array();    
+		$extra_data = array();
         $arrques = null;
         $arrans  = null;
 				 
@@ -2431,8 +2432,8 @@ class Exercise {
 						break;
 					}
 					// for hotspot with no order
-				case HOT_SPOT :					
-					if ($from_database) {						
+				case HOT_SPOT :
+					if ($from_database) {
 						if ($show_result) {
 							$TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
@@ -3186,7 +3187,7 @@ class Exercise {
 			} elseif ($answerType == HOT_SPOT) {				
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
 				if (isset($exerciseResultCoordinates[$questionId]) && !empty($exerciseResultCoordinates[$questionId])) {
-					foreach($exerciseResultCoordinates[$questionId] as $idx => $val) {						
+					foreach ($exerciseResultCoordinates[$questionId] as $idx => $val) {
 						exercise_attempt_hotspot($exeId,$quesId,$idx,$choice[$idx],$val,$this->id);
 					}
 				}

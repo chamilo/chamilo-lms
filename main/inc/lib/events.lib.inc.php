@@ -459,7 +459,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
 
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-    if ($debug) error_log("----- entering exercise_attempt function ------");
+    if ($debug) error_log("----- entering exercise_attempt() function ------");
 
     if ($debug) error_log("answer: $answer");
     if ($debug) error_log("score: $score");

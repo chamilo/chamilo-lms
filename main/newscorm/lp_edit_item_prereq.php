@@ -72,7 +72,7 @@ $interbreadcrumb[] = array('url' => api_get_self() . "?action=add_item&type=step
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-Display::display_header(get_lang('Prerequisites'), 'Path');
+Display::display_header(get_lang('LearnpathPrerequisites'), 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 ?>

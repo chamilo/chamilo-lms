@@ -5126,7 +5126,7 @@ class learnpath {
                 $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
                     
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
+                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
                     $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');                
                     $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
                 }
@@ -5933,7 +5933,7 @@ class learnpath {
             }
             /*// Commented the prerequisites, only visible in edit (exercise).
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
+            $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
             $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                 foreach($arrHide as $key => $value){
@@ -6517,7 +6517,7 @@ class learnpath {
             }
 
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '</label></td>';
+            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('LearnpathPrerequisites') . '</label></td>';
             $return .= '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">' . get_lang('NoPrerequisites') . '</option>';
 
             foreach ($arrHide as $key => $value) {
@@ -7445,7 +7445,7 @@ class learnpath {
             // Commented the prerequisites, only visible in edit (work).
             /*
                     $return .= '<tr>';
-                    $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
+                    $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
                     $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                     foreach($arrHide as $key => $value) {
@@ -7564,7 +7564,7 @@ class learnpath {
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
-            $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
+            $return .= Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
         
@@ -7759,7 +7759,7 @@ class learnpath {
 
         $return .= '<table class="data_table" style="width:650px">';
         $return .= '<tr>';
-        $return .= '<th height="24">' . get_lang('Prerequisites') . '</th>';
+        $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
         $return .= '<th width="70" height="24">' . get_lang('Minimum') . '</th>';
         $return .= '<th width="70" height="24">' . get_lang('Maximum') . '</th>';
         $return .= '</tr>';

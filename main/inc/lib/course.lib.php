@@ -3541,7 +3541,7 @@ class CourseManager {
     }
 
     public static function get_course_ranking($course_id, $session_id = null, $url_id = null) {
-        $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
+        $table_course_ranking = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
 
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
@@ -3549,8 +3549,7 @@ class CourseManager {
         $params = array(
             'c_id'          => $course_id,
             'session_id'    => $session_id,
-            'url_id'        => $url_id,
-            'creation_date' => $now,
+            'url_id'        => $url_id            
         );
 
         $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
@@ -3589,9 +3588,7 @@ class CourseManager {
     public static function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {
         //Course catalog stats modifications see #4191
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-
-        $now = api_get_utc_datetime();
-
+        
         $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
@@ -3599,8 +3596,7 @@ class CourseManager {
         $params = array(
             'c_id'          => $course_id,
             'session_id'    => $session_id,
-            'url_id'        => $url_id,
-            'creation_date' => $now,
+            'url_id'        => $url_id            
         );
 
         $result = Database::select('id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');

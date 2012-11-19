@@ -2674,4 +2674,41 @@ class learnpathItem {
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";        
         Database::query($sql);
     }
+    
+    static function humanize_status($status, $decorate = true) {
+        $mylanglist = array(
+            'completed' => 'ScormCompstatus',
+            'incomplete' => 'ScormIncomplete',
+            'failed' => 'ScormFailed',
+            'passed' => 'ScormPassed',
+            'browsed' => 'ScormBrowsed',
+            'not attempted' => 'ScormNotAttempted'
+        );
+        
+        $my_lesson_status = get_lang($mylanglist[$status]);
+        
+        switch ($status) {
+            case 'completed':
+            case 'browsed':
+                $class_status = 'info';
+                break;
+            case 'incomplete':
+                $class_status = 'warning';
+                break;
+            case 'passed':
+                $class_status = 'success';
+                break;
+            case 'failed':
+                $class_status = 'important';
+                break;
+            default:
+                $class_status = 'default';
+                break;                
+        }
+        if ($decorate) {        
+            return Display::label($my_lesson_status, $class_status);
+        } else {
+            return $my_lesson_status;
+        }
+    }
 }

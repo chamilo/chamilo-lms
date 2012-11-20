@@ -176,6 +176,10 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_course_exercise_medias':
+        $course_id = api_get_course_int_id();
+        $count = Question::get_count_course_medias($course_id);
+        break;       
 	case 'get_user_skill_ranking':
     	$skill = new Skill();
 	    $count = $skill->get_user_list_skill_ranking_count();
@@ -292,7 +296,11 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 //5. Querying the DB for the elements
 $columns = array();
 
-switch ($action) { 
+switch ($action) {
+    case 'get_course_exercise_medias':
+        $columns = array('question');
+        $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);        
+        break;  
 	case 'get_user_skill_ranking':	
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
@@ -587,7 +595,8 @@ $allowed_actions = array('get_careers',
                          'get_event_email_template',
                          'get_user_skill_ranking',
                          'get_extra_fields',
-                         'get_extra_field_options'
+                         'get_extra_field_options',
+                         'get_course_exercise_medias',
 );
                          	
 //5. Creating an obj to return a json

@@ -1161,10 +1161,12 @@ class Database {
                 $clean_columns = (string)$columns;
             }
         }
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";        
+        $sql = "SELECT $clean_columns FROM $table_name $conditions";
+        //var_dump($sql);
+                
         $result = self::query($sql);
         $array = array();
-        //if (self::num_rows($result) > 0 ) {
+        
         if ($type_result == 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {

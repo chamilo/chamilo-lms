@@ -28,7 +28,7 @@ define('MULTIPLE_ANSWER_TRUE_FALSE',                11);
 define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
 define('ORAL_EXPRESSION',                           13);
 define('GLOBAL_MULTIPLE_ANSWER',                    14);
-define('MEDIA_QUESTION',                              15); //
+define('MEDIA_QUESTION',                            15);
 
 //Some alias used in the QTI exports
 define('MCUA',				1);
@@ -297,8 +297,7 @@ abstract class Question
     
     function updateParentId($id) {
         $this->parent_id = intval($id);
-    }
-    
+    }    
 
 	/**
 	 * changes the question description
@@ -988,7 +987,7 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
 	 */
-	function delete($deleteFromEx=0) {		       
+	function delete($deleteFromEx = 0) {		       
         $course_id = api_get_course_int_id();
 
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -996,7 +995,7 @@ abstract class Question
 		$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		
-		$id=$this->id;
+		$id = $this->id;
 
 		// if the question must be removed from all exercises
 		if(!$deleteFromEx) {
@@ -1304,7 +1303,7 @@ abstract class Question
 	 * @param FormValidator $form the formvalidator instance
 	 * @param Exercise $objExercise the Exercise instance
 	 */
-	function processCreation ($form, $objExercise) {        
+	function processCreation ($form, $objExercise = null) {        
         $this->updateParentId($form->getSubmitValue('parent_id'));
 		$this->updateTitle($form->getSubmitValue('questionName'));
 		$this->updateDescription($form->getSubmitValue('questionDescription'));
@@ -1537,10 +1536,36 @@ abstract class Question
 			return array($img, $explanation);
     }
     
-    static function get_course_medias($course_id) {        
-        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);               
-        $result = Database::select('*', $table_question, array('where'=>array('c_id = ? AND parent_id = 0 AND type = ?' =>array($course_id, MEDIA_QUESTION)), 'order'=>'question'));        
+    /**
+     * Get course medias 
+     * @param int course id
+     */
+    static function get_course_medias($course_id, $start = 0, $limit = 100, $sidx = "question", $sord = "ASC", $where_condition = array()) {        
+        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
+        if (!empty($where_condition)) {
+            //$where_condition
+        }
+        $result = Database::select('*', $table_question, 
+            array(
+                'limit' => " $start, $limit", 
+                'where' => $default_where, 
+                'order' => "$sidx $sord"));        
         return $result;    
+    }
+    
+    /**
+     * Get count course medias 
+     * @param int course id
+     */
+    static function get_count_course_medias($course_id) {        
+        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);               
+        $result = Database::select('count(*) as count', $table_question, array('where'=>array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION))),'first');        
+        
+        if ($result && isset($result['count'])) {
+            return $result['count'];    
+        }
+        return 0;
     }
     
     static function prepare_course_media_select($course_id) {

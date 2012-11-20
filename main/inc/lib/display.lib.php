@@ -1410,6 +1410,11 @@ class Display {
         return $html;        
     }    
     
+    /**
+     * Return a list of actions in a div
+     * @param array array(array('content' => 'Hello', 'url' => 'chamilo.org'));
+     * @return string
+     */
     public static function actions($items) {
         $html = null;
         if (!empty($items)) {

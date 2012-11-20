@@ -306,19 +306,19 @@ if ($modifyIn == 'thisExercise') {
         $noPHP_SELF = true;
     }
 }
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 function multiple_answer_true_false_onchange(variable) {
-        var result = variable.checked;
-        var id = variable.id;
-        var weight_id = "weighting_" + id;
-        var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
-        if (result) {
-        	result = 1;
-        } else {
-            result = 0;
-        }
-        document.getElementById(weight_id).value = array_result[result];
+    var result = variable.checked;
+    var id = variable.id;
+    var weight_id = "weighting_" + id;
+    var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
+    if (result) {
+        result = 1;
+    } else {
+        result = 0;
+    }
+    document.getElementById(weight_id).value = array_result[result];
 }
 
 
@@ -328,7 +328,6 @@ $htmlHeadXtra[] = "<script type=\"text/javascript\" src=\"../plugin/hotspot/Java
 <script src=\"../plugin/hotspot/hotspot.js\" type=\"text/javascript\"></script>
 <script language=\"JavaScript\" type=\"text/javascript\">
 <!--
-// -----------------------------------------------------------------------------
 // Globals
 // Major version of Flash required
 var requiredMajorVersion = 7;
@@ -338,7 +337,6 @@ var requiredMinorVersion = 0;
 var requiredRevision = 0;
 // the version of javascript supported
 var jsVersion = 1.0;
-// -----------------------------------------------------------------------------
 // -->
 </script>
 <script language=\"VBScript\" type=\"text/vbscript\">

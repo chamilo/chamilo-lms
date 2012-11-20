@@ -371,6 +371,8 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 	echo '<a href="question_pool.php">';
 	echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style'=>'width:32px'));
 	echo '</a>';
+    
+    echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
 	// end question category
 	echo '<a href="hotpotatoes.php?' . api_get_cidreq() . '">' . Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'),'',ICON_SIZE_MEDIUM).'</a>';
 	// link to import qti2 ...

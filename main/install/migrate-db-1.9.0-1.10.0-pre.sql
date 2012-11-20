@@ -82,21 +82,6 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
 
-/*
-CREATE TABLE IF NOT EXISTS transacciones (
-    id  int unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    sede int unsigned NOT NULL,
-    tipo_id int unsigned NOT NULL,
-    system_transaction_id int unsigned NOT NULL,
-    orig varchar(255),
-    dest varchar(255),
-    tms varchar(255)  
-);
-
-CREATE TABLE IF NOT EXISTS tipo_transaccion (
-    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
-    titulo varchar(255)    
-);*/
 
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
     id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
@@ -112,9 +97,6 @@ INSERT INTO settings_options(variable,value,display_text) VALUES ('last_transact
 CREATE TABLE migration_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id int not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id, transaction_id, branch_id));
 CREATE TABLE migration_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
 INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
-
-
-
 
 -- Do not move this 
 UPDATE settings_current SET selected_value = '1.10.0.20356' WHERE variable = 'chamilo_database_version';

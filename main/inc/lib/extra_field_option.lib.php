@@ -278,8 +278,7 @@ class ExtraFieldOption extends Model {
      */
     public function get_field_options_by_field($field_id, $add_id_in_array = false, $ordered_by = null) {
         $field_id = intval($field_id);
-        $option_value = Database::escape_string($option_value);
-        
+                
         $sql = "SELECT * FROM {$this->table} 
                 WHERE field_id = $field_id ";
         

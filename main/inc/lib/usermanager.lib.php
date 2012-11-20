@@ -880,6 +880,7 @@ class UserManager {
 	 * @param	string	The id
 	 * @param	boolean	Whether to return the user's extra fields (defaults to false)
 	 * @return	array 	All user information as an associative array
+     * @todo    Use api_get_user_info() instead
 	 */
 	public static function get_user_info_by_id($user_id, $user_fields = false) {
 		$user_id = intval($user_id);

@@ -992,6 +992,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
 
 /**
  * Formats user information into a standard array
+ * This function should be only used inside api_get_user_info()
  *
  * @param array Non-standard user array
  * @return array Standard user array

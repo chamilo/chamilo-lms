@@ -1258,8 +1258,6 @@ function count_exercise_result_not_validated($exercise_id, $course_code, $sessio
     $session_id     = intval($session_id);
     $exercise_id    = intval($exercise_id);
 
-    $status = Database::escape_string($status);
-
     $sql = "SELECT count(e.exe_id) as count FROM $table_track_exercises e LEFT JOIN $table_track_attempt a  ON e.exe_id = a.exe_id
             WHERE   exe_exo_id = $exercise_id AND
                     exe_cours_id = '$course_code' AND

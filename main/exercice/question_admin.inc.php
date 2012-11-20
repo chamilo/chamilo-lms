@@ -12,11 +12,6 @@
  * Code
  */
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE')) {
-	exit();
-}
-
 $course_id = api_get_course_int_id();
 
 // INIT QUESTION

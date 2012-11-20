@@ -8,14 +8,10 @@
  */
 
 /**
- * Code
- * ALLOWED_TO_INCLUDE is defined in admin.php
+ * Code 
  */
 use \ChamiloSession as Session;
 
-if (!defined('ALLOWED_TO_INCLUDE')) {
-    exit();
-}
 $modifyAnswers = intval($_GET['hotspotadmin']);
 
 if (!is_object($objQuestion)) {

@@ -13,10 +13,6 @@
  */
 use \ChamiloSession as Session;
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if (!defined('ALLOWED_TO_INCLUDE')) {
-    exit();
-}
 if (!is_object($objQuestion)) {
     $objQuestion = Question :: read($_GET['modifyAnswers']);
 }

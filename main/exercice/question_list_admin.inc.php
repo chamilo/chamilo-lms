@@ -16,10 +16,6 @@
 * Modified by Hubert Borderiou 21-10-2011 (Question by category)
 */
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if (!defined('ALLOWED_TO_INCLUDE')) {
-	exit();
-}
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
 	// if the question exists

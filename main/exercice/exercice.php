@@ -128,21 +128,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 }
 
-if ($show != 'result') {
-	$nameTools = get_lang('Exercices');
-} else {
-	if ($is_allowedToEdit || $is_tutor) {
-		$nameTools = get_lang('StudentScore');
-		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-	    $objExerciseTmp = new Exercise();
-        if ($objExerciseTmp->read($exerciseId)) {
-            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => $objExerciseTmp->name);
-        }
-	} else {
-		$nameTools = get_lang('YourScore');
-		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-	}
-}
+$nameTools = get_lang('Exercices');
 
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
@@ -554,7 +540,9 @@ if (!empty($exercise_list)) {
                     $title = $cut_title;
                 }
 
-                $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                /*
+                 * Exercise results counter
+                 * $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
 
                 $class_tip = '';
                 if (!empty($count)) {
@@ -565,8 +553,9 @@ if (!empty($exercise_list)) {
 
                 if ($added_to_lp) {
                     //$title .= Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class'=> 'lp_content_type_label'));
-                }
-
+                }*/
+                
+                $class_tip = null;
                 $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
 
                 $item =  Display::tag('td', $url.' '.$session_img.$lp_blocked);

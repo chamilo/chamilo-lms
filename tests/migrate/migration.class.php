@@ -177,7 +177,7 @@ class Migration {
     /**
      * Call the SOAP web service as detailed in the parameters
      * @param array Settings for the WS call
-     * @param string Name of the funcion to call
+     * @param string Name of the function to call
      * @param array Variables to be passed as params to the function
      * @return array Results as returned by the SOAP call
      */
@@ -231,8 +231,8 @@ class Migration {
      * @param bool Whether to truncate the transaction table before the test or not
      * @return void
      */
-    function test_transactions($truncate = false) {
-        error_log('test_transactions');
+    function insert_test_transactions($truncate = false) {
+        error_log('insert_test_transactions');
         //Just for tests
         
         //Cleaning transaction table
@@ -244,6 +244,7 @@ class Migration {
             array(
                 //'action' => 'usuario_agregar',
                 'action' => 1,
+                'transaction_id' => 1000,
                 'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => null,
                 'branch_id' => 1,
@@ -252,6 +253,7 @@ class Migration {
             ),
             array(
                 //'action' => 'usuario_editar',
+                'transaction_id' => 1001,
                 'action' => 3,
                 'item_id' => 'D236776B-D7A5-47FF-8328-55EBE9A59015',
                 'orig_id' => '0',
@@ -260,6 +262,7 @@ class Migration {
                 'status_id' => 0
             ),            
             array(
+                'transaction_id' => 1002,
                 //'action' => 'usuario_eliminar',
                 'action' => 2,
                 'item_id' =>  'D236776B-D7A5-47FF-8328-55EBE9A59015',
@@ -269,6 +272,7 @@ class Migration {
                 'status_id' => 0
             ),      
             array(
+                'transaction_id' => 1003,
                 //'action' => 'usuario_matricula',
                 'action' => 4,
                 'item_id' =>  '95EDA88F-D729-450F-95FF-4A3989244F53', //usuario - Abel 
@@ -278,6 +282,7 @@ class Migration {
                 'status_id' => 0
             ),
             array(
+                'transaction_id' => 1004,
                 //'action' => 'curso_agregar',
                 'action' => 5,
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
@@ -287,6 +292,7 @@ class Migration {
                 'status_id' => 0
             ),
             array(
+                'transaction_id' => 1005,
                 //'action' => 'curso_eliminar',
                 'action' => 6,
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC',
@@ -296,6 +302,7 @@ class Migration {
                 'status_id' => 0
             ),
             array(
+                'transaction_id' => 1006,
                 //'action' => 'curso_editar',
                 'action' => 7,
                 'item_id' =>  '31B4BD38-5D90-4275-88AF-F01F0274800A', // ONE   (SATURDAYS)
@@ -315,6 +322,7 @@ class Migration {
 */
             array(
                 //'action' => 'pa_agregar',
+                'transaction_id' => 1007,
                 'action' => 8,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
                 'orig_id' => null,
@@ -324,6 +332,7 @@ class Migration {
             ),
             array(
                 //'action' => 'pa_editar',
+                'transaction_id' => 1008,
                 'action' => 10,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',
                 'orig_id' => '0',
@@ -333,6 +342,7 @@ class Migration {
             ),
             array(
                 //'action' => 'pa_eliminar',
+                'transaction_id' => 1009,
                 'action' => 9,
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF', //id to delete
                 'orig_id' => null,
@@ -352,6 +362,7 @@ class Migration {
                 'status_id' => 0
             ),*/
             array(
+                'transaction_id' => 1010,
                 //'action' => 'pa_cambiar_horario',
                 'action' => 12,
                 'item_id' =>  'B94FEBA2-7EAD-4E14-B3DA-1D02397D1FA1', //session id  - 200910 (A02M) Advanced Oral Communication Skills 2 08:45 10:15 701 00003
@@ -388,6 +399,7 @@ class Migration {
 */
             array(
                 //'action' => 'horario_agregar',
+                'transaction_id' => 1010,
                 'action' => 13,
                 'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',  // horario
                 'orig_id' => '0',
@@ -396,6 +408,7 @@ class Migration {
                 'status_id' => 0
             ),
              array(
+                 'transaction_id' => 1011,
                 //'action' => 'horario_editar',
                 'action' => 15,
                 'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
@@ -406,6 +419,7 @@ class Migration {
             ),
              array(
                 //'action' => 'horario_eliminar',
+                 'transaction_id' => 1012,
                 'action' => 14,
                 'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
                 'orig_id' => '0',
@@ -444,6 +458,7 @@ class Migration {
              * */
             array(
                 //'action' => 'sede_agregar',
+                'transaction_id' => 1013,
                 'action' => 19,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
@@ -453,6 +468,7 @@ class Migration {
             ),
             array(
                 //'action' => 'sede_editar',
+                'transaction_id' => 1014,
                 'action' => 21,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
@@ -462,6 +478,7 @@ class Migration {
             ),
             array(
                 //'action' => 'sede_eliminar',
+                'transaction_id' => 1015,
                 'action' => 20,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
@@ -471,6 +488,7 @@ class Migration {
             ),
             array(
                 //'action' => 'frecuencia_agregar',
+                'transaction_id' => 1016,
                 'action' => 22,
                 'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -480,6 +498,7 @@ class Migration {
             ),
             array(
                 //'action' => 'frecuencia_editar',
+                'transaction_id' => 1017,
                 'action' => 24,
                 'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -489,6 +508,7 @@ class Migration {
             ),
              array(
                 //'action' => 'frecuencia_eliminar',
+                'transaction_id' => 1018,
                 'action' => 23,
                 'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -498,6 +518,7 @@ class Migration {
             ),
             array(
                 //'action' => 'intensidad_agregar',
+                'transaction_id' => 1019,
                 'action' => 25,
                 'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -507,6 +528,7 @@ class Migration {
             ),
             array(
                 //'action' => 'intensidad_editar',
+                'transaction_id' => 1020,
                 'action' => 27,
                 'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -516,6 +538,7 @@ class Migration {
             ),
              array(
                 //'action' => 'intensidad_eliminar',
+                 'transaction_id' => 1021,
                 'action' => 26,
                 'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -525,7 +548,11 @@ class Migration {
             ),
         );
         
-        foreach( $transaction_harcoded as  $transaction) {        
+        foreach( $transaction_harcoded as  $transaction) {
+            $transaction['branch_id'] = 2;
+            if ($transaction['action'] != 8) {
+                continue;
+            }
             self::add_transaction($transaction);
         }        
     }
@@ -536,7 +563,7 @@ class Migration {
      * @return int The ID of the transaction row in Chamilo's table
      */
     static function add_transaction($params) {
-        error_log('Requested add_transaction of : '.print_r($params,1));
+        //error_log('Requested add_transaction of : '.print_r($params,1));
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION);
         if (isset($params['id'])) {
             unset($params['id']);
@@ -611,8 +638,7 @@ class Migration {
             $sql = "DELETE FROM $table WHERE transaction_id = $transaction_id  AND branch_id = $branch_id";
             Database::query($sql);            
         }        
-    }
-        
+    }        
     
     /**
      * Gets the latest completed transaction for a specific branch (allows the building of a request to the branch to get new transactions)
@@ -694,8 +720,8 @@ class Migration {
      *        If none provided, fetches the latest transaction available and add + 1
      * @return The operation results
      */
-    function search_transactions($params = array()) {
-        error_log("search_transactions() function called \n");
+    function get_transactions_from_webservice($params = array()) {
+        error_log("get_transactions_from_webservice() function called \n");
         
         $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
         $transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
@@ -725,8 +751,7 @@ class Migration {
         error_log(count($branches)." branches found \n");
         
         if (!empty($branches)) {
-            foreach ($branches as $branch) {                
-                
+            foreach ($branches as $branch) {
                 if (!empty($branch_id) && !empty($transaction_id)) {
                     $last_transaction_id = $transaction_id;
                 } else {
@@ -738,8 +763,7 @@ class Migration {
                     'ultimo'    => $last_transaction_id,
                     'cantidad'  => isset($number_of_transactions) && !empty($number_of_transactions) ? $number_of_transactions : 2,
                     'intIdSede' => $branch['branch_id'],
-                );
-                
+                );                
                 error_log("Branch #".$branch['branch_id']." - treating $number_of_transactions transaction(s) starting with transaction #$last_transaction_id \n");
                 MigrationCustom::process_transactions($params, $web_service_params);
             }
@@ -752,7 +776,7 @@ class Migration {
      * @param int Optional limit of transactions to execute
      * @return void
      */
-    function load_transactions($params = array()) {
+    function execute_transactions($params = array()) {
         error_log("load_transactions() function called \n");
         $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
         //$transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
@@ -767,7 +791,7 @@ class Migration {
         
         if (!empty($branches)) {
             
-            error_log(count($branches)." branches found \n");
+            error_log(count($branches)." branch(es) found \n");
         
             foreach ($branches as $branch_info) {
                 //Get uncompleted transactions                
@@ -783,12 +807,11 @@ class Migration {
                 }
                 
                 $count = count($transactions);                
-                
-                error_log("Treating $count transaction(s) starting with  transaction #$latest_id_attempt for branch ".$branch_info['branch_id']."\n");
-                    
+                                    
                 $item = 1;//counter
-                if (!empty($transactions)) {                 
-                    error_log("\n$count Transactions found");
+                if (!empty($transactions)) {
+                    
+                    error_log("Branch #".$branch_info['branch_id']." called, $count transaction(s) found starting with transaction #$latest_id_attempt \n");
 
                     //Looping transactions
                     if (!empty($transactions)) {
@@ -815,7 +838,7 @@ class Migration {
                         }
                     }
                 } else {
-                    error_log('No transactions to load');
+                    error_log("Branch #".$branch_info['branch_id']." - No transactions to load");
                 }
             }
         } else {
@@ -845,11 +868,11 @@ class Migration {
         $function_to_call = "transaction_" . $transaction_info['action'];
         if (method_exists('MigrationCustom', $function_to_call)) {
             
-            error_log("\nCalling function MigrationCustom::$function_to_call");
-
+            error_log("\nCalling function MigrationCustom::$function_to_call()");
+            
             $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
-            $result['message'] = "Funcion called: MigrationCustom::$function_to_call()  \nFunction reponse: ".$result['message'];            
-            error_log('Reponse: '.$result['message']);          
+            $result['message'] = "\nFunction reponse: ".$result['message'];            
+            //error_log('Reponse: '.$result['message']);
             if (!empty($transaction_info['id'])) {
                 self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));                  
             } else {

@@ -71,12 +71,12 @@ if (!empty($servers)) {
                     $m->set_web_service_connection_info($matches);
                     
                     //This functions truncates the transaction lists!
-                    //$m->test_transactions();
+                    $m->insert_test_transactions();
                     
-                    //$m->search_transactions();
+                    //$m->get_transactions_from_webservice();
 
                     //Load transactions saved before
-                    $m->load_transactions();
+                    $m->execute_transactions();
                 } else {
                     error_log('Make sure you define the web_service_calls array in your db_matches.php file');
                 }

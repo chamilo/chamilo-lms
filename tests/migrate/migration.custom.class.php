@@ -194,7 +194,10 @@ class MigrationCustom {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));    
             exit;
-        }          
+        }
+        
+        $data['uidIdPersona'] = strtoupper($data['uidIdPersona']);
+        
         $data['status'] = STUDENT;
         if (isset($data['uidIdEmpleado'])) {
             $data['status'] = COURSEMANAGER;
@@ -728,7 +731,7 @@ class MigrationCustom {
     static function transaction_1($data, $web_service_details) {
          $uidIdPersonaId = $data['item_id'];
          //Add user call the webservice         
-         $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId));
+         $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId));
          if ($user_info['error'] == false) {
             global $api_failureList;
             unset($user_info['error']);
@@ -757,7 +760,7 @@ class MigrationCustom {
     //eliminar usuario usuario_eliminar UID
     //const TRANSACTION_TYPE_DEL_USER    =  2;
     static function transaction_2($data) {
-        $uidIdPersonaId = $data['item_id'];        
+        $uidIdPersonaId = strtoupper($data['item_id']);        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {
             $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);            
@@ -788,10 +791,10 @@ class MigrationCustom {
     //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
     //const TRANSACTION_TYPE_EDIT_USER   =  3;
     static function transaction_3($data, $web_service_details) {
-        $uidIdPersonaId = $data['item_id'];
+        $uidIdPersonaId = strtoupper($data['item_id']);        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
         if ($user_id) {            
-            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('uididpersona' => $uidIdPersonaId)); 
+            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId)); 
             if ($user_info['error'] == false) {
                 unset($user_info['error']);
                 //Edit user
@@ -802,8 +805,8 @@ class MigrationCustom {
                 return array(
                     'entity' => 'user',
                     'before' => $chamilo_user_info_before,
-                    'after' => $chamilo_user_info,
-                    'message' => "User id $user_id was updated updated with data: ".print_r($user_info, 1),
+                    'after'  => $chamilo_user_info,
+                    'message' => "User id $user_id was updated with data: ".print_r($user_info, 1),
                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
             } else {
@@ -910,7 +913,7 @@ class MigrationCustom {
         }
     }
     
-    function check_if_user_is_subscribe_to_session($user_id, $session_id, $message = null, $before = array()) {
+    static function check_if_user_is_subscribe_to_session($user_id, $session_id, $message = null, $before = array()) {
         $user_session_status = SessionManager::get_user_status_in_session($session_id, $user_id);
         if (!empty($user_session_status)) {
             return array(
@@ -933,9 +936,9 @@ class MigrationCustom {
     //const TRANSACTION_TYPE_ADD_COURSE  =  5;
     static function transaction_5($data, $web_service_details) {
         $uidCursoId = $data['item_id'];          
-        $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));         
+        $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('intIdSede'=> $data['branch_id'], 'uididcurso' => $uidCursoId));         
         if ($course_info['error'] == false) {
-            unset($user_info['error']);
+            unset($course_info['error']);
             $course_info = CourseManager::create_course($course_info);
             $course_info = api_get_course_info($course_info['code'], true);            
             if (!empty($course_info)) {
@@ -988,7 +991,7 @@ class MigrationCustom {
         $course_code = self::get_real_course_code($uidCursoId);        
         if (!empty($course_code)) {        
             $course_info = api_get_course_info($course_code, true);            
-            $data_to_update = Migration::soap_call($web_service_details, 'cursoDetalles', array('uididcurso' => $uidCursoId));
+            $data_to_update = Migration::soap_call($web_service_details, 'cursoDetalles', array('intIdSede'=> $data['branch_id'], 'uididcurso' => $uidCursoId));
             
             if ($data_to_update['error'] == false) {
                 //do some cleaning
@@ -1053,7 +1056,7 @@ class MigrationCustom {
     //añadir p.a. pa_agregar PID
     // const TRANSACTION_TYPE_ADD_SESS    =  8;
     static function transaction_8($data, $web_service_details) {
-        $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('uididprograma' => $data['item_id']));
+        $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('intIdSede'=> $data['branch_id'], 'uididprograma' => $data['item_id']));
         
         if ($session_info['error'] == false) {
             unset($session_info['error']);
@@ -1110,7 +1113,7 @@ class MigrationCustom {
         $uidIdPrograma = $data['item_id'];        
         $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
         if (!empty($session_id)) {            
-            $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('uididprograma' => $data['item_id']));
+            $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('intIdSede'=> $data['branch_id'], 'uididprograma' => $data['item_id']));
             if ($session_info['error'] == false) {                
                 $session_info['id'] = $session_id;
                 unset($session_info['error']);
@@ -1232,7 +1235,7 @@ class MigrationCustom {
  
     static function transaction_extra_field_agregar_generic($extra_field_variable, $original_data, $web_service_details) {                
         $function_name = $extra_field_variable."Detalles";        
-        $data = Migration::soap_call($web_service_details, $function_name, array("uidid".$extra_field_variable => $original_data['item_id']));
+        $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));
         
         if ($data['error'] == false) {
             $extra_field = new ExtraField('session');
@@ -1292,7 +1295,7 @@ class MigrationCustom {
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         $function_name = $extra_field_variable."Detalles";
-        $data = Migration::soap_call($web_service_details, $function_name, array("uidid".$extra_field_variable => $original_data['item_id']));          
+        $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));          
         if ($data['error'] == false) {
             
             //Update 1 item
@@ -1536,6 +1539,7 @@ class MigrationCustom {
                     if ($result['error'] == true) {
                         error_log("ERROR:");
                         error_log($result['message']);
+                        exit;
                     } else {
                         error_log($result['message']);
                     }
@@ -1562,7 +1566,7 @@ class MigrationCustom {
      * @return int
      */
     static function process_transaction($transaction_info, $transaction_status_list = array(), $forced = false) {
-        if ($transaction_info) {            
+        if ($transaction_info) {           
             if (empty($transaction_status_list)) {
                 $transaction_status_list = self::get_transaction_status_list();
             }
@@ -1593,11 +1597,19 @@ class MigrationCustom {
             
             if (empty($transaction_info)) {
                 $transaction_id = Migration::add_transaction($params);
-                return array(
-                    'id' => $transaction_id,
-                    'error' => false,
-                    'message' => "Third party transaction id #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
-                );
+                if ($transaction_id) {
+                    return array(
+                        'id' => $transaction_id,
+                        'error' => false,
+                        'message' => "Third party transaction id #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
+                    );
+                } else {
+                    return array(
+                        'id' => null,
+                        'error' => true,
+                        'message' => 'There was an error while creating the transaction'
+                    );
+                }
             } else {
                 //only process transaction if it was failed or to be executed
                 if (in_array($transaction_info['status_id'], array(MigrationCustom::TRANSACTION_STATUS_FAILED, MigrationCustom::TRANSACTION_STATUS_TO_BE_EXECUTED))) {                    
@@ -1613,15 +1625,19 @@ class MigrationCustom {
                         'message' => "Third party transaction id #{$params['transaction_id']} was already added to Chamilo with id #{$transaction_info['id']}. Transaction can't be executed twice. Transacion status_id = {$transaction_status_list[$transaction_info['status_id']]['title']}"
                     );
                 }
-            }
-            
+            }   
             return array(
                 'id' => null,
                 'error' => true,
                 'message' => 'Third party transaction was already treated'
             );
+        } else {
+            return array(
+                'id' => null,
+                'error' => true,
+                'message' => 'Third party transaction is not an array'
+            );
         }
-        return false;
     }
     
     static function genericDetalles($data, $result_name, $params = array()) {
@@ -1635,8 +1651,15 @@ class MigrationCustom {
         
         if (!empty($xml->NewDataSet)) {
             $item = (array)$xml->NewDataSet->Table;            
-            //var_dump($item);
             $item['error'] = false;
+            if (isset($item['uididsede'])) {
+                $item['uididsede'] = strtoupper($item['uididsede']);
+            }
+            
+            if (isset($item['uididhorario'])) {
+                $item['uididhorario'] = strtoupper($item['uididhorario']);
+            }
+            
             return $item;            
         } else {            
             return array(
@@ -1674,7 +1697,7 @@ class MigrationCustom {
         
         $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;        
         $result['phone'] = (string)$result['phone'];
-        $result['extra_uidIdPersona'] = $params['uididpersona'];
+        $result['extra_uidIdPersona'] = strtoupper($params['uididpersona']);
         unset($result['rol']);
         return $result;
     }
@@ -1707,19 +1730,45 @@ class MigrationCustom {
             return $result;
         }
         
-        $result['extra_uidIdPrograma']  = $params['uididprograma'];
-        $result['extra_sede']           = $result['uididsede'];
-        $result['extra_horario']        = $result['uididhorario'];
-        $result['extra_periodo']        = $result['chrperiodo'];
+        //Searching course code
+        $course_code = MigrationCustom::get_real_course_code($result['course_code']);
+        $result['course_code'] = $course_code;
+        
+        $course_info = api_get_course_info($course_code);
+        
+        //Getting sede
+        $extra_field = new ExtraField('session');
+        $extra_field_option = new ExtraFieldOption('session');
+        
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('sede');        
+        $extra_field_option_info_sede = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $result['uididsede']);
+        
+        $sede_name = null;
+        if (isset($extra_field_option_info_sede[0]) && !empty($extra_field_option_info_sede[0]['option_display_text'])) {
+            $sede_name = $extra_field_option_info_sede[0]['option_display_text'];
+        }
+        
+        //Getting horario
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');        
+        $extra_field_option_info_horario = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $result['uididhorario']);
+        
+        $horario_name = null;
+        if (isset($extra_field_option_info_horario[0]) && !empty($extra_field_option_info_horario[0]['option_display_text'])) {
+            $horario_name = $extra_field_option_info_horario[0]['option_display_text'];
+        }       
+        
+        //Setting the session name
+        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].' '.$sede_name." ".$horario_name;        
+        
+        $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
+        $result['extra_horario']        = strtoupper($result['uididhorario']);
+        $result['extra_sede']           = strtoupper($result['uididsede']);        
+        $result['extra_periodo']        = strtoupper($result['chrperiodo']);
         
         $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);
         $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
         $result['access_start_date']    = MigrationCustom::clean_date_time_from_ws($result['access_start_date']);
         $result['access_end_date']      = MigrationCustom::clean_date_time_from_ws($result['access_end_date']);
-        
-        //Searching course code
-        $course_code = MigrationCustom::get_real_course_code($result['course_code']);
-        $result['course_code'] = $course_code;
         
         //Searching id_coach
         $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach']);
@@ -1751,11 +1800,11 @@ class MigrationCustom {
         }
         
         $result['title']            = $result['name'];
-        $result['extra_frecuencia'] = $result['frecuencia'];
-        $result['extra_intensidad'] = $result['intensidad'];
-        $result['extra_fase']       = $result['fase'];
-        $result['extra_meses']       = $result['meses'];
-        $result['extra_uidIdCurso'] = $params['uididcurso'];
+        $result['extra_frecuencia'] = strtoupper($result['frecuencia']);
+        $result['extra_intensidad'] = strtoupper($result['intensidad']);
+        $result['extra_fase']       = strtoupper($result['fase']);
+        $result['extra_meses']      = strtoupper($result['meses']);
+        $result['extra_uidIdCurso'] = strtoupper($params['uididcurso']);
         
         unset($result['frecuencia']);
         unset($result['intensidad']);

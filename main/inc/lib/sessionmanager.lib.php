@@ -45,7 +45,7 @@ class SessionManager {
         //Check portal limits
         $access_url_id = 1;
         
-        if (api_get_multiple_access_url()) {
+        if (api_is_multiple_url_enabled()) {
             $access_url_id = api_get_current_access_url_id();
         }
         if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_sessions']) && $_configuration[$access_url_id]['hosting_limit_sessions'] > 0) {
@@ -60,6 +60,8 @@ class SessionManager {
         if ($my_session_result == false) {
             $session_model = new SessionModel();
             $session_id = $session_model->save($params);            
+        } else {
+            error_log('Session already exits with name: '.$params['name']." session_id: ".$my_session_result['id']);
         }
                         
         if (!empty($session_id)) {
@@ -278,7 +280,7 @@ class SessionManager {
                 
                 $session['name'] = Display::url($session['name'], "resume_session.php?id_session=".$session['id']);
                 
-                if ($session['session_active'] == 1) {
+                if (isset($session['session_active']) && $session['session_active'] == 1) {
                     $session['session_active'] = Display::return_icon('accept.png', get_lang('Active'), array(), ICON_SIZE_SMALL);
                 } else {
                     $session['session_active'] = Display::return_icon('error.png', get_lang('Inactive'), array(), ICON_SIZE_SMALL);
@@ -323,16 +325,8 @@ class SessionManager {
                             }                            
                         }                                
                     }
-                }
-                
-                $formatted_sessions[$session_id] = $session;
-                
-                /*if (isset($formatted_sessions[$session_id])) {                    
-                    //Compare and filter sessions with the same content
-                    $formatted_sessions[$session_id] = self::compare_arrays_to_merge($formatted_sessions[$session_id], $session);                    
-                } else {
-                    $formatted_sessions[$session_id] = $session;
-                }*/                
+                }                
+                $formatted_sessions[$session_id] = $session;                
             }
         }        
         return $formatted_sessions;
@@ -620,8 +614,8 @@ class SessionManager {
         $params['access_start_date']        = api_get_local_time($params['access_start_date'], null, null, true);
         $params['access_end_date']          = api_get_local_time($params['access_end_date'], null, null, true);
         
-        $params['coach_access_start_date']  = api_get_local_time($params['coach_access_start_date'], null, null, true);
-        $params['coach_access_end_date']    = api_get_local_time($params['coach_access_end_date'], null, null, true);
+        $params['coach_access_start_date']  = isset($params['coach_access_start_date']) ? api_get_local_time($params['coach_access_start_date'], null, null, true) : null;
+        $params['coach_access_end_date']    = isset($params['coach_access_end_date']) ? api_get_local_time($params['coach_access_end_date'], null, null, true) : null;
         return $params;
     }
         
@@ -2555,8 +2549,7 @@ class SessionManager {
                     //array('name'=>'course_code',    'index'=>'course_code',    'width'=>'40', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
                     array('name'=>'visibility',     'index'=>'visibility',      'width'=>'40',   'align'=>'left', 'search' => 'false'),
                     //array('name'=>'course_title',    'index'=>'course_title',   'width'=>'50',   'hidden' => 'true', 'search' => 'true', 'searchoptions' => array('searchhidden' =>'true','sopt' => $operators)),
-                ); 
-
+                );
                 break;
             case 'complete':
                 $columns = array(
@@ -2610,7 +2603,7 @@ class SessionManager {
                 }
 
                 $search_options['searchhidden'] = 'true';
-                $search_options['defaultValue'] = $search_options['field_default_value'];
+                $search_options['defaultValue'] = isset($search_options['field_default_value']) ? $search_options['field_default_value'] : null;
 
                 if ($field['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
                     //Add 2 selects

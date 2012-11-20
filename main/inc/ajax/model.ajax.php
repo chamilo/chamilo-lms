@@ -81,6 +81,8 @@ $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 
+$extra_fields = array();
+
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';    
     $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
@@ -92,8 +94,7 @@ if ($_REQUEST['_search'] == 'true') {
     //var_dump($filters);
     
     //for now
-    $extra_field = new ExtraField('session');
-    $extra_fields = array();
+    $extra_field = new ExtraField('session');    
     if (!empty($filters)) {
         
         //Getting double select if exists
@@ -282,7 +283,7 @@ if ($start < 0 ) {
 } 
 
 //4. Deleting an element if the user wants to
-if ($_REQUEST['oper'] == 'del') {
+if (isset($_REQUEST['oper']) && $_REQUEST['oper'] == 'del') {
     $obj->delete($_REQUEST['id']);
 }
 
@@ -346,7 +347,7 @@ switch ($action) {
     case 'get_sessions':
         $session_columns = SessionManager::get_session_columns($list_type);
         $columns = $session_columns['simple_column_name'];
-        
+                
         if ($list_type == 'simple') {            
             $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"), false);                                
         } else {
@@ -596,7 +597,7 @@ if (in_array($action, $allowed_actions)) {
     $response->total    = $total_pages;
     $response->records  = $count; 
     $i=0;
-    if (!empty($result)) {
+    if (!empty($result)) {        
         foreach ($result as $row) {
             //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
@@ -607,7 +608,7 @@ if (in_array($action, $allowed_actions)) {
             }             
             $array = array();            
             foreach ($columns as $col) {
-                $array[] = $row[$col];
+                $array[] = isset($row[$col]) ? $row[$col] : null;
             }                   
             $response->rows[$i]['cell']=$array;
             $i++; 

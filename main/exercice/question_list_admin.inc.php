@@ -129,10 +129,10 @@ $(function() {
 </script>
 <?php
 
-echo '<div class="actionsbig">';
+
 //we filter the type of questions we can add
 Question :: display_type_menu ($objExercise->feedback_type);
-echo '</div><div style="clear:both;"></div>';
+echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)

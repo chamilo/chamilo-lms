@@ -1364,7 +1364,8 @@ abstract class Question
 				$show_quiz_edition = false;
 			}
 		}
-
+        
+        echo '<div class="actionsbig">';
 		echo '<ul class="question_menu">';
 
 		foreach ($question_type_custom_list as $i=>$a_type) {
@@ -1377,15 +1378,11 @@ abstract class Question
 			echo '<li>';
 			echo '<div class="icon_image_content">';
 			if ($show_quiz_edition) {
-				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
-				//echo '<br>';
-				//echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.$explanation.'</a>';
+				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';				
 			} else {
 				$img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
-				echo ''.Display::return_icon($img,$explanation).'';
-				//echo '<br>';
-				//echo ''.$explanation.'';
+				echo ''.Display::return_icon($img,$explanation).'';				
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1406,6 +1403,7 @@ abstract class Question
 		echo '</a>';
 		echo '</div></li>';
 		echo '</ul>';
+        echo '</div>';
 	}
     
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0) {

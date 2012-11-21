@@ -54,7 +54,7 @@ class HotSpot extends Question {
 		
 	}
 
-	function processCreation ($form, $objExercise) {
+	function processCreation ($form, $objExercise = null) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 		if(!empty($file_info['tmp_name'])) {
@@ -63,7 +63,7 @@ class HotSpot extends Question {
 			//fixed width ang height 
 			if (file_exists($picturePath.'/'.$this->picture)) { 
 				//list($width,$height) = @getimagesize($file_info['tmp_name']); does not work	
-				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);				
+				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);
 				if($width>$height) {
 					$this->resizePicture('width',545);
 				} else {
@@ -103,7 +103,7 @@ class HotSpotDelineation extends HotSpot {
 		parent::createForm ($form, $fck_config);	
 	}
 
-	function processCreation ($form, $objExercise) {
+	function processCreation ($form, $objExercise = null) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 	}

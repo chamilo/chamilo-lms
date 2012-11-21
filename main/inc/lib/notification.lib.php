@@ -145,7 +145,7 @@ class Notification extends Model {
                     case NOTIFY_GROUP_AT_ONCE:                     
                         if (!empty($user_info['mail'])) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);                            
-                            api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->admin_name, $this->admin_email);
+                            api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email']);
                         }
                         $params['sent_at']       = api_get_utc_datetime();
                     //Saving the notification to be sent some day 

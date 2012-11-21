@@ -2078,7 +2078,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
         $objExercise->description = '';
-        echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
+        //var_dump($exercise_stat_info);
+        echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['exe_date'], DATE_TIME_FORMAT_LONG));
     }
     
     if ($save_user_result) {    
@@ -2093,6 +2094,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
     
     $question_list_answers = array();
+    $media_list = array();
 
     // Loop over all question to show results for each of them, one by one
     if (!empty($question_list)) {
@@ -2144,9 +2146,16 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
             $question_content = '<div class="question_row">';
 
-            if ($show_results) {           
+            if ($show_results) {
+                
+                $show_media = false;
+                if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
+                    $show_media = true;        
+                    $media_list[] = $objQuestionTmp->parent_id;
+                }    
+                
                 //Shows question title an description
-                $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
+                $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media);
                 
                 // display question category, if any
                 $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);

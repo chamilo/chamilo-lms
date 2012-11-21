@@ -463,7 +463,7 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             } else {
                 //Time control is only enabled for ONE PER PAGE
@@ -486,12 +486,12 @@ if ($formSent && isset($_POST)) {
                 }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
                 //header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
-                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             }
         } else {
             if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
-            header("Location: exercise_submit.php?exerciseId=$exerciseId&origin=$origin");
+            header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId&origin=$origin");
             exit;
         }
     }
@@ -519,7 +519,6 @@ if ($question_count != 0) {
 
 	            //We check if the user attempts before sending to the exercise_result.php
 	            if ($objExercise->selectAttempts() > 0) {
-
 	                $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 	                if ($attempt_count >= $objExercise->selectAttempts()) {
 	                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), false);
@@ -551,7 +550,7 @@ if ($question_count != 0) {
 	            	header('Location: exercise_reminder.php?'.$params);
 	            	exit;
 	            } else {
-	            	header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+	            	header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
 	            }
 	        }
 	    } else {
@@ -601,7 +600,6 @@ if (api_is_course_admin() && $origin != 'learnpath') {
     //echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     if ($show_quiz_edition == false) {
     	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
-        //echo Display :: return_icon('wizard.gif', get_lang('QuestionList')) . '<a href="exercice/admin.php?' . api_get_cidreq() . '&exerciseId=' . $objExercise->id . '">' . get_lang('QuestionList') . '</a>';
     } else {
     	echo '<a href="#">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }
@@ -773,7 +771,6 @@ if (!empty($error)) {
     }
 
     echo '<script>
-
             $(function() {
     			//$(".exercise_save_now_button").hide();
     		    $(".main_question").mouseover(function() {
@@ -992,9 +989,8 @@ function render_question_list($objExercise, $questionList, $current_question, $e
            
             $counter = 1;
             if ($objQuestionTmp->type == MEDIA_QUESTION) {
-                echo Display::page_subheader($objQuestionTmp->selectTitle());
-                echo $objQuestionTmp->selectDescription();
-                
+                echo $objQuestionTmp->show_media_content();
+                                
                 $count_of_questions_inside_media = count($media_question_list);
                 //var_dump($media_question_list);
                 //Show questions that belongs to a media

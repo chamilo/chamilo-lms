@@ -1426,7 +1426,7 @@ abstract class Question
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?'=>array($course_id, $id)));             
         return $result;        
-    }    
+    }
     
     static function readQuestionOption($question_id, $course_id) {
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);               
@@ -1441,8 +1441,7 @@ abstract class Question
      * @param type $counter
      * @param type $score
      */
-	function return_header($feedback_type = null, $counter = null, $score = null) {
-          
+	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {          
 	    $counter_label = '';
 	    if (!empty($counter)) {
 	        $counter_label = intval($counter);
@@ -1461,12 +1460,15 @@ abstract class Question
             } else {
                 $score_label = get_lang('NotRevised');
                 $class = 'error';
-            }            
+            }
         }
         
         $question_title = $this->question;
 	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.get_lang("Question").' '.($counter_label).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
-        $header .= '<div class="page-header"><h4>'.$question_title.'</h4></div>';
+        if ($show_media) {
+            $header .= $this->show_media_content();
+        }
+        $header .= Display::page_subheader3($question_title);
 	    $header .= Display::div($this->description, array('id'=>'question_description'));	    
         return $header;
 	}
@@ -1589,5 +1591,17 @@ abstract class Question
             );
         return $select_level;        
     }
+    
+    function show_media_content() {
+        $html = null;        
+        if ($this->parent_id != 0) {
+            $parent_question = Question::read($this->parent_id);
+            $html = $parent_question->show_media_content();
+        } else {
+            $html .= Display::page_subheader($this->selectTitle());
+            $html .= $this->selectDescription();
+        }
+        return $html;
+    }    
 }
 endif;

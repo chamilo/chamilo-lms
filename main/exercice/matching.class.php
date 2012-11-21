@@ -232,8 +232,8 @@ class Matching extends Question {
 		$this->save();
 	}
 	
-	function return_header($feedback_type = null, $counter = null, $score = null) {
-	    $header = parent::return_header($feedback_type, $counter, $score);
+	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {
+	    $header = parent::return_header($feedback_type, $counter, $score, $show_media);
         $header .= '<table class="'.$this->question_table_class .'">';            
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
@@ -243,4 +243,3 @@ class Matching extends Question {
 	}
 }
 endif;
-?>

@@ -241,25 +241,19 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
           //GROUP BY questions.position, attempts.question_id";
 
-$result = Database::query($query);	
-$questionList = array();
+$result = Database::query($query);
 $exerciseResult = array();
 
-while ($row = Database::fetch_array($result)) {
-	$questionList[] = $row['question_id'];
+while ($row = Database::fetch_array($result)) {	
 	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-//Fixing #2073 Fixing order of questions
-if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-	$temp_question_list = explode(',',$track_exercise_info['data_tracking']);    
-	if (is_array($temp_question_list) && count($temp_question_list) == count($questionList)) {	
-		$questionList = $temp_question_list;        
-	}    
-}
+// always getting question list from the DB
+$questionList = explode(',',$track_exercise_info['data_tracking']);
 
 // Display the text when finished message if we are on a LP #4227
 $end_of_message = $objExercise->selectTextWhenFinished();
+
 if (!empty($end_of_message) && ($origin == 'learnpath')) {
     Display::display_normal_message($end_of_message, false);
     echo "<div class='clear'>&nbsp;</div>";
@@ -269,30 +263,34 @@ if (!empty($end_of_message) && ($origin == 'learnpath')) {
 $total_weighting = 0;
 foreach ($questionList as $questionId) {
     $objQuestionTmp     = Question::read($questionId);
-    $total_weighting  +=$objQuestionTmp->selectWeighting();        
+    $total_weighting += $objQuestionTmp->selectWeighting();        
 }
 $counter = 1;
 
 $exercise_content = null;
 
+$media_list = array();
+
 foreach ($questionList as $questionId) {
-	
+    
 	$choice = $exerciseResult[$questionId];
 	// destruction of the Question object
 	unset($objQuestionTmp);
 	
 	// creates a temporary Question object
-	$objQuestionTmp 	= Question::read($questionId);	
+	$objQuestionTmp = Question::read($questionId);  
+            
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
 	$answerType			= $objQuestionTmp->selectType();
 	
 	// Start buffer
     ob_start();
     
+ 
+    
     /* Use switch
     switch ($answerType) {        
-    }*/
-	
+    }*/	
 	if ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
         $question_result = $objExercise->manage_answer($id, $questionId, $choice,'exercise_show', array(), false, true, $show_results, $objExercise->selectPropagateNeg());                    
         $questionScore   = $question_result['score'];
@@ -370,7 +368,6 @@ foreach ($questionList as $questionId) {
         $threadhold3      = $question_result['extra']['threadhold3'];            
 
         if ($show_results) {
-
             if ($overlap_color) {
                 $overlap_color='green';
             } else {
@@ -597,9 +594,15 @@ foreach ($questionList as $questionId) {
     
     $question_content = '<div class="question_row">';
     
+    $show_media = false;
+    if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
+        $show_media = true;        
+        $media_list[] = $objQuestionTmp->parent_id;
+    }    
+    
  	if ($show_results) { 	    
         //Shows question title an description        
-	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
+	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score, $show_media);
         
         // display question category, if any
  	    $question_content .= Testcategory::getCategoryNamesForQuestion($questionId);
@@ -646,8 +649,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
-		//echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
+		echo '<form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';		
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';

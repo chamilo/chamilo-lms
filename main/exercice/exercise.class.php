@@ -1584,12 +1584,15 @@ class Exercise {
 		return $id;		
 	}
 
-	public function show_button($question_id, $questionNum, $inside_media = false) {	
-		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
+	public function show_button($question_id, $questionNum) {	
+		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;        
+		$nbrQuestions = count($this->get_validated_question_list());
         
-		$nbrQuestions = count($this->get_validated_question_list());		
-        if ($inside_media) {
-            $nbrQuestions = count($this->get_media_list());            
+        $media_questions = $this->get_media_list();
+        $media_active = $this->media_is_activated($media_questions);
+        
+        if ($media_active) {
+            $nbrQuestions = $this->get_count_questions_when_using_medias();            
         }
 		 
 		$html = $label = '';
@@ -3499,6 +3502,12 @@ class Exercise {
         return $media_questions;
     }
     
+    function get_count_questions_when_using_medias() {
+        $media_questions = $this->get_media_list();
+        $questions_with_no_group = isset($media_questions[999]) ? count($media_questions[999]) : 0;
+        return count($media_questions) - 1 + $questions_with_no_group;    
+    }
+    
     function media_is_activated($media_list) {
         $active = false;        
         if (isset($media_list) && !empty($media_list)) {
@@ -3527,10 +3536,7 @@ class Exercise {
 				$tabres = $this->selectQuestionList();
 			}
 		} else {
-			if ($this->isRandom()) {
-				if (!class_exists("Testcategory")) {
-					require_once("testcategory.class.php");
-				}				
+			if ($this->isRandom()) {							
 				// USE question categories 
                 // 				
 				// get questions by category for this exercice
@@ -3552,6 +3558,7 @@ class Exercise {
 				 * On veut dans l'ordre des groupes dÃ©finis par le terme entre crochet au dÃ©but du titre de la catÃ©gorie
 				*/
 				// If test option is Grouped By Categories
+                
 				if ($isRandomByCategory == 2) {
 					$tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions);
 				}

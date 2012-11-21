@@ -2339,6 +2339,9 @@ div.admin_section h4 {
     height:5px;
 }
 
+#question_list .ui-state-highlight{
+    height: 80px;
+}
 
 .ui-state-highlight {
     height:25px;

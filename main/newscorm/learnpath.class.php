@@ -12,6 +12,7 @@
  * Defines the learnpath parent class
  * @package chamilo.learnpath
  */
+
 class learnpath {
 
     public $attempt = 0; // The number for the current ID view.
@@ -726,20 +727,22 @@ class learnpath {
      * @param	integer	Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item) {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
+        $debug = $this->debug;        
+        if ($debug) {
             error_log('New LP - In learnpath::autocomplete_parents()', 0);
         }
-        if (empty ($item)) {
+        if (empty($item)) {
             $item = $this->current;
         }
         $parent_id = $this->items[$item]->get_parent();
-        if ($this->debug > 2) {
+        
+        if ($debug) {
             error_log('New LP - autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
         }
-        if (is_object($this->items[$item]) and !empty ($parent_id)) {
+        
+        if (is_object($this->items[$item]) and !empty($parent_id)) {
             // if $item points to an object and there is a parent.
-            if ($this->debug > 2) {
+            if ($debug) {
                 error_log('New LP - ' . $item . ' is an item, proceed', 0);
             }
             $current_item = & $this->items[$item];
@@ -749,18 +752,19 @@ class learnpath {
             if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
                 // If the current item is completed or passes or succeeded.
                 $completed = true;
-                if ($this->debug > 2) {
+                if ($debug) {
                     error_log('New LP - Status of current item is alright', 0);
                 }
+                
                 foreach ($parent->get_children() as $child) {
-                    // Check all his brothers (his parent's children) for completion status.
+                    // Check all his brothers (parent's children) for completion status.
                     if ($child != $item) {
-                        if ($this->debug > 2) {
+                        if ($debug) {
                             error_log('New LP - Looking at brother with ID ' . $child . ', status is ' . $this->items[$child]->get_status(), 0);
                         }
                         //if($this->items[$child]->status_is(array('completed','passed','succeeded')))
                         // Trying completing parents of failed and browsed items as well.
-                        if ($this->items[$child]->status_is(array (
+                        if ($this->items[$child]->status_is(array(
                                 'completed',
                                 'passed',
                                 'succeeded',
@@ -776,11 +780,12 @@ class learnpath {
                         }
                     }
                 }
+                
                 if ($completed) { // If all the children were completed:
                     $parent->set_status('completed');
                     $parent->save(false, $this->prerequisites_match($parent->get_id()));
                     $this->update_queue[$parent->get_id()] = $parent->get_status();
-                    if ($this->debug > 2) {
+                    if ($debug) {
                         error_log('New LP - Added parent to update queue ' . print_r($this->update_queue, true), 0);
                     }
                     $this->autocomplete_parents($parent->get_id()); // Recursive call.
@@ -3530,7 +3535,7 @@ class learnpath {
             error_log('New LP - In learnpath::next()', 0);
         }
         $this->last = $this->get_current_item_id();
-        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));
+        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));        
         $this->autocomplete_parents($this->last);
         $new_index = $this->get_next_index();
         if ($this->debug > 2) {
@@ -3783,8 +3788,7 @@ class learnpath {
         }
         if (is_object($this->items[$item_id])) {
             if ($this->debug) { error_log('object exists'); }
-            $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
-            //$res = $this->items[$item_id]->save($from_outside);
+            $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));            
             $this->autocomplete_parents($item_id);
             $status = $this->items[$item_id]->get_status();
             $this->append_message('new_item_status: ' . $status);
@@ -5254,8 +5258,6 @@ class learnpath {
 
         $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=build&lp_id=' . $this->lp_id . '">' . Display :: return_icon('home.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
 
-        if ($is_allowed_to_edit) {
-        }
         //$return .=  '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         $return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
 

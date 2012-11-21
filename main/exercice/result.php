@@ -51,16 +51,12 @@ if (empty($track_exercise_info)) {
     api_not_allowed(false);
 }
 $exercise_id        = $track_exercise_info['id'];
-$exercise_date      = $track_exercise_info['start_date'];
 $student_id         = $track_exercise_info['exe_user_id'];
-$learnpath_id       = $track_exercise_info['orig_lp_id'];
-$learnpath_item_id  = $track_exercise_info['orig_lp_item_id'];    
-$lp_item_view_id    = $track_exercise_info['orig_lp_item_view_id'];
-$course_code        = api_get_course_id();
 $current_user_id    = api_get_user_id();
 
-if (empty($objExercise)) {
-	$objExercise = new Exercise();
+$objExercise = new Exercise();
+
+if (!empty($exercise_id)) {
     $objExercise->read($exercise_id);
 }
 

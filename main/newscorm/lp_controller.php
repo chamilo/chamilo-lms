@@ -819,9 +819,7 @@ switch ($action) {
             require 'lp_save.php';
         }
         break;
-
-    case 'stats':
-        
+    case 'stats':        
         if ($debug > 0) error_log('New LP - stats action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for stats', 0); require 'lp_list.php'; }
         else {            

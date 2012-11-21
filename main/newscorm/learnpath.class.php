@@ -3754,7 +3754,7 @@ class learnpath {
         }
         if (is_object($this->items[$this->current])) {
             //$res = $this->items[$this->current]->save(false);
-            $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));
+            $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));            
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();
             $this->append_message('new_item_status: ' . $status);
@@ -3770,24 +3770,24 @@ class learnpath {
      * @param	boolean	Save from url params (true) or from current attributes (false). Optional. Defaults to true
      * @return	boolean
      */
-    public function save_item($item_id = null, $from_outside = true) {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
+    public function save_item($item_id = null, $from_outside = true) {        
+        $debug = $this->debug;
+        if ($debug) {
             error_log('New LP - In learnpath::save_item(' . $item_id . ',' . $from_outside . ')', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
         if (empty($item_id)) {
-            $item_id = Database::escape_string($_REQUEST['id']);
+            $item_id = intval($_REQUEST['id']);
         }
         if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
-        if ($this->debug > 2) {
+        if ($debug) {
             error_log('New LP - save_current() saving item ' . $item_id, 0);
         }
         if (is_object($this->items[$item_id])) {
-            if ($this->debug) { error_log('object exists'); }
+            if ($debug) { error_log('object exists'); }
             $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));            
             $this->autocomplete_parents($item_id);
             $status = $this->items[$item_id]->get_status();

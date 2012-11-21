@@ -844,8 +844,7 @@ function savedata(origin) {
         }
         */
     }
-    //console.log(olms.lesson_status);
-    
+        
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
     old_item_id = olms.info_lms_item[0];
@@ -1336,11 +1335,11 @@ function reinit_updatable_vars_list () {
 
 function switch_item(current_item, next_item){
     // backup these params
-    var orig_current_item = current_item;
-    var orig_next_item = next_item;
-    var orig_lesson_status = olms.lesson_status;
-    var orig_item_type = olms.lms_item_types['i'+current_item];
-    var next_item_type = olms.lms_item_types['i'+next_item];
+    var orig_current_item   = current_item;
+    var orig_next_item      = next_item;
+    var orig_lesson_status  = olms.lesson_status;
+    var orig_item_type      = olms.lms_item_types['i'+current_item];
+    var next_item_type      = olms.lms_item_types['i'+next_item];
 
     /*
      There are four "cases" for switching items:

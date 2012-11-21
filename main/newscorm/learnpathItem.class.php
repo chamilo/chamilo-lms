@@ -1986,7 +1986,7 @@ class learnpathItem {
                 error_log('current_status: '.$current_status);
                 error_log('current score : '.$this->current_score);
             }
-            
+            /*
    			// If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
    			if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
                 if ($debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
@@ -1995,6 +1995,7 @@ class learnpathItem {
                 if ($debug > 0) error_log('Status changed to: '.$this->possible_status[4]);
    				$this->set_status($this->possible_status[4]); //failed
    			}
+            */
   			return true;
   		}
 	 	return false;

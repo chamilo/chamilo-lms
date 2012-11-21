@@ -2034,6 +2034,7 @@ function delete_chat_exercise_session($exe_id) {
     }    
 }
 
+
 /**
  * Display the exercise results
  * @param obj   exercise obj
@@ -2048,7 +2049,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     $question_list = array();
     
     if (!empty($exercise_stat_info['data_tracking'])) {
-        $question_list		= explode(',', $exercise_stat_info['data_tracking']);
+        $question_list = explode(',', $exercise_stat_info['data_tracking']);
     } else {        
         //Try getting the question list only if save result is off
         if ($save_user_result == false) {
@@ -2076,8 +2077,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
     if ($show_results || $show_only_score) {
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
-        //Shows exercise header
-        $objExercise->description = '';
+        //Shows exercise header        
+        $exercise_date = $exercise_stat_info['start_date'];        
         echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
     }
     

@@ -216,13 +216,14 @@ if ($objExercise->selectAttempts() > 0) {
 	}
 }
 
-if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
+
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
-
+if ($debug)  error_log('4. Trying to create an attempt ');
+ 
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
@@ -254,6 +255,8 @@ if (empty($exercise_stat_info)) {
 	$exe_id = $exercise_stat_info['exe_id'];
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
+
+if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //Array to check in order to block the chat
 create_chat_exercise_session($exe_id);
@@ -329,7 +332,7 @@ if ($time_control) {
         $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];
     }
 } else {
-    if ($debug) { error_log("7 No time control"); };
+    if ($debug) { error_log("7. No time control"); };
 }
 
 // Get time left for exipiring time
@@ -348,13 +351,18 @@ if ($time_control) { //Sends the exercice form when the expired time is finished
 $exercise_title			= $objExercise->selectTitle();
 $exercise_sound 		= $objExercise->selectSound();
 
-//in LP's is enabled the "remember question" feature?
+//Media questions
+$media_questions = $objExercise->get_media_list();
+$media_is_activated = $objExercise->media_is_activated($media_questions);
 
+
+//in LP's is enabled the "remember question" feature?
+ 
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
-    $questionList = $objExercise->get_question_list();
+    $questionList = $objExercise->get_question_list(false);
     //Getting order from random
-    if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
+    if ($media_is_activated == false && $objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
@@ -365,10 +373,8 @@ if (!isset($_SESSION['questionList'])) {
 	}
 }
 
-//Media questions
-$media_questions = $objExercise->get_media_list();
-
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
+if ($debug) error_log('8.1 Media list loaded '.print_r($media_questions, 1));
 
 $question_count = $objExercise->get_count_question_list();
 
@@ -571,11 +577,11 @@ if (!empty ($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
 }
 
 if (!empty ($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
+    $interbreadcrumb[]= array ('url' => '../gradebook/' . Security::remove_XSS($_SESSION['gradebook_dest']),'name' => get_lang('ToolGradebook'));
 }
 
-$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
-$interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
+$interbreadcrumb[]= array ("url" => "exercice.php?gradebook=$gradebook",	"name" => get_lang('Exercices'));
+$interbreadcrumb[]= array ("url" => "#","name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
     Display :: display_header($nameTools,'Exercises');
@@ -943,11 +949,6 @@ if (!empty($error)) {
     if (isset($exe_id)) {
         $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
     }
-
-    if (!empty($attempt_list) && $current_question == 1) {
-        //Display::display_normal_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
-    }
-
     $remind_list  = array();
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);

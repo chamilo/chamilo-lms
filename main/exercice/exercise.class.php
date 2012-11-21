@@ -3576,7 +3576,7 @@ class Exercise {
     }
     
     function get_question_list($expand_media_questions = false) {
-        $question_list = $this->get_validated_question_list();        
+        $question_list = $this->get_validated_question_list();
         $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);        
         return $question_list;
     }
@@ -3605,9 +3605,8 @@ class Exercise {
                         $new_question_list[$counter] = $question_id;
                         $counter++;
                     }                
-                }
-                
-                if ($expand_media_questions) {                
+                }                
+                if ($expand_media_questions) {               
                     $media_key_list = array_keys($media_questions);
                     foreach ($new_question_list as &$question_id) {                     
                         if (in_array($question_id, $media_key_list)) {

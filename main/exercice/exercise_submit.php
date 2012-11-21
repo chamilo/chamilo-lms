@@ -222,10 +222,12 @@ if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
+
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
-	$questionList = $objExercise->get_validated_question_list();
+	$questionList = $objExercise->get_question_list(true);
+    
 	foreach ($questionList as $question_id) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
@@ -344,43 +346,31 @@ if ($time_control) { //Sends the exercice form when the expired time is finished
 // if the user has submitted the form
 
 $exercise_title			= $objExercise->selectTitle();
-$exercise_description  	= $objExercise->selectDescription();
 $exercise_sound 		= $objExercise->selectSound();
 
 //in LP's is enabled the "remember question" feature?
 
-//Getting media questions for this exercises
-$media_questions = $objExercise->get_media_list();
-
-$media_question_is_active = $objExercise->media_is_activated($media_questions);
-
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
-    $questionList = $objExercise->get_validated_question_list();
-    
+    $questionList = $objExercise->get_question_list();
+    //Getting order from random
     if ($objExercise->isRandom() && !empty($exercise_stat_info['data_tracking'])) {
     	$questionList = explode(',', $exercise_stat_info['data_tracking']);
     }
     Session::write('questionList', $questionList);
     if ($debug > 0) { error_log('$_SESSION[questionList] was set'); }
 } else {
-	if (isset($objExercise) && isset($_SESSION['objExercise'])) {
-    	$questionList = $_SESSION['questionList'];
+	if (isset($objExercise) && isset($_SESSION['objExercise'])) {    	
+        $questionList = Session::read('questionList');
 	}
 }
 
+//Media questions
+$media_questions = $objExercise->get_media_list();
+
 if ($debug) error_log('8. Question list loaded '.print_r($questionList, 1));
 
-//Real question count
-$question_count = 0;
-if (!empty($questionList)) {        
-	$question_count = count($questionList);
-}
-
-//If media is on we redefine the question count
-if ($media_question_is_active) {   
-    $question_count = $objExercise->get_count_questions_when_using_medias();    
-}
+$question_count = $objExercise->get_count_question_list();
 
 if ($formSent && isset($_POST)) {
     if ($debug) { error_log('9. $formSent was set'); }
@@ -961,43 +951,10 @@ if (!empty($error)) {
     $remind_list  = array();
     if (isset($exercise_stat_info['questions_to_check']) && !empty($exercise_stat_info['questions_to_check'])) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
-    }    
-    
-    //Media question list render
-    var_dump($questionList);
-    
-    if ($media_question_is_active) {
-        
-        if (!empty($questionList)) {
-            $new_question_list = array();
-            $counter = 1;
-            foreach ($questionList as $question_id) {
-                $add_question = true;
-                foreach ($media_questions as $media_id => $question_list_in_media) {                    
-                    if ($media_id != 999 && in_array($question_id, $question_list_in_media)) {
-                        $add_question = false;
-                        if (!in_array($media_id, $new_question_list)) {
-                            $new_question_list[$counter] = $media_id;
-                            $counter++;
-                        }
-                        break;
-                    }
-                }
-                if ($add_question) {
-                    $new_question_list[$counter] = $question_id;
-                    $counter++;
-                }                
-            }
-            var_dump($new_question_list);
-        }        
-        render_question_list($objExercise, $new_question_list, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);        
-    } else {
-        //Normal behaviour
-        render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list);    
-    }    
+    }        
+    render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions);            
     echo '</form>';
 }
-
 
 function render_question_list($objExercise, $questionList, $current_question, $exerciseResult, $attempt_list, $remind_list, $media_questions = array()) {  
     global $origin;
@@ -1033,12 +990,12 @@ function render_question_list($objExercise, $questionList, $current_question, $e
             $objQuestionTmp = Question::read($questionId);
            
             $counter = 1;
-            if ($objQuestionTmp->type == MEDIA_QUESTION) {           
+            if ($objQuestionTmp->type == MEDIA_QUESTION) {
                 echo Display::page_subheader($objQuestionTmp->selectTitle());
                 echo $objQuestionTmp->selectDescription();
                 
                 $count_of_questions_inside_media = count($media_question_list);
-                
+                //var_dump($media_question_list);
                 //Show questions that belongs to a media
                 if (!empty($media_question_list)) {
                     foreach ($media_question_list as $my_question_id) {

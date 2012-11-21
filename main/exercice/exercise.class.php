@@ -1586,14 +1586,8 @@ class Exercise {
 
 	public function show_button($question_id, $questionNum) {	
 		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;        
-		$nbrQuestions = count($this->get_validated_question_list());
+		$nbrQuestions = $this->get_count_question_list();
         
-        $media_questions = $this->get_media_list();
-        $media_active = $this->media_is_activated($media_questions);
-        
-        if ($media_active) {
-            $nbrQuestions = $this->get_count_questions_when_using_medias();            
-        }
 		 
 		$html = $label = '';
 		$confirmation_alert = $this->type == ALL_ON_ONE_PAGE? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
@@ -3380,8 +3374,7 @@ class Exercise {
 				$question_list = explode(',', $track_exercise_info['data_tracking']);
 			}
 			foreach ($question_list as $questionId) {
-				$question_result = $objExercise->manage_answer($exe_id, $questionId, '','exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());
-				$questionScore   = $question_result['score'];
+				$question_result = $objExercise->manage_answer($exe_id, $questionId, '','exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());				
 				$totalScore      += $question_result['score'];
 			}
 				
@@ -3486,10 +3479,10 @@ class Exercise {
 	}
     
     function get_media_list() {
-        $questionList = self::get_validated_question_list();
         $media_questions = array();
-        if (!empty($questionList)) {
-            foreach ($questionList as $questionId) {
+        $question_list = $this->get_validated_question_list();        
+        if (!empty($question_list)) {
+            foreach ($question_list as $questionId) {
                 $objQuestionTmp = Question::read($questionId);
                 if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
                     $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;                    
@@ -3502,11 +3495,11 @@ class Exercise {
         return $media_questions;
     }
     
-    function get_count_questions_when_using_medias() {
+    /*function get_count_questions_when_using_medias() {
         $media_questions = $this->get_media_list();
         $questions_with_no_group = isset($media_questions[999]) ? count($media_questions[999]) : 0;
         return count($media_questions) - 1 + $questions_with_no_group;    
-    }
+    }*/
     
     function media_is_activated($media_list) {
         $active = false;        
@@ -3524,26 +3517,26 @@ class Exercise {
         }
         return $active;            
     }
-	
+  	
 	function get_validated_question_list() {
-		$tabres = array();
+		$question_list = array();
 		$isRandomByCategory = $this->isRandomByCat();
         
 		if ($isRandomByCategory == 0) {
 			if ($this->isRandom()) {
-				$tabres = $this->selectRandomList();
+				$question_list = $this->selectRandomList();
 			} else {
-				$tabres = $this->selectQuestionList();
+				$question_list = $this->selectQuestionList();
 			}
 		} else {
-			if ($this->isRandom()) {							
+			if ($this->isRandom()) {						
 				// USE question categories 
                 // 				
 				// get questions by category for this exercice
 				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
 				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)
 				// value is the array of question id of this category
-				$questionList = array();				
+				$temp_question_list = array();				
 				$tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
 				$isRandomByCategory = $this->selectRandomByCat();
 				// on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie
@@ -3567,19 +3560,67 @@ class Exercise {
 				    if ($this->random == -1) {
 				        $number_of_random_question = count($this->questionList);
 				    }
-					$questionList = array_merge($questionList, Testcategory::getNElementsFromArray($tabquestion, $number_of_random_question));
+					$temp_question_list = array_merge($temp_question_list, Testcategory::getNElementsFromArray($tabquestion, $number_of_random_question));
 				}
 				// shuffle the question list if test is not grouped by categories
 				if ($isRandomByCategory == 1) {
-					shuffle($questionList); // or not
-				}			
-				$tabres = $questionList;
+					shuffle($temp_question_list); // or not
+				}		
+				$question_list = $temp_question_list;
 			} else {
 				// Problem, random by category has been selected and we have no $this->isRandom nnumber of question selected
 				// Should not happened
 			}
-		}
-		return $tabres;	
+		}       
+		return $question_list;	
+    }
+    
+    function get_question_list($expand_media_questions = false) {
+        $question_list = $this->get_validated_question_list();        
+        $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);        
+        return $question_list;
+    }
+    
+    function transform_question_list_with_medias($question_list, $expand_media_questions = false) {
+        $new_question_list = array();
+        if (!empty($question_list)) {            
+            $media_questions = $this->get_media_list();
+            $media_active = $this->media_is_activated($media_questions);
+            
+            if ($media_active) {             
+                $counter = 1;
+                foreach ($question_list as $question_id) {
+                    $add_question = true;
+                    foreach ($media_questions as $media_id => $question_list_in_media) {                    
+                        if ($media_id != 999 && in_array($question_id, $question_list_in_media)) {
+                            $add_question = false;                            
+                            if (!in_array($media_id, $new_question_list)) {
+                                $new_question_list[$counter] = $media_id;
+                                $counter++;
+                            }                            
+                            break;
+                        }
+                    }
+                    if ($add_question) {
+                        $new_question_list[$counter] = $question_id;
+                        $counter++;
+                    }                
+                }
+                
+                if ($expand_media_questions) {                
+                    $media_key_list = array_keys($media_questions);
+                    foreach ($new_question_list as &$question_id) {                     
+                        if (in_array($question_id, $media_key_list)) {
+                            $question_id = $media_questions[$question_id];
+                        }                    
+                    }
+                    $new_question_list = array_flatten($new_question_list);
+                }                
+            } else {
+                $new_question_list = $question_list;
+            }
+        }
+        return $new_question_list;
     }
 	
 	public function get_stat_track_exercise_info_by_exe_id($exe_id) {
@@ -3672,5 +3713,15 @@ class Exercise {
         $html  = '<div id="clock_warning" style="display:none">'.Display::return_message(get_lang('ReachedTimeLimit'), 'warning').' '.sprintf(get_lang('YouWillBeRedirectedInXSeconds'), '<span id="counter_to_redirect" class="red_alert"></span>').'</div>';
         $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
         return $html;
+    }
+    
+    function get_count_question_list() {    
+        //Real question count
+        $question_count = 0;
+        $question_list = $this->get_question_list();
+        if (!empty($question_list)) {        
+            $question_count = count($question_list);
+        }
+        return $question_count;
     }
 }

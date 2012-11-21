@@ -322,7 +322,7 @@ function event_link($link_id) {
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {    
+function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {    
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) error_log('Called to update_event_exercice');
@@ -341,9 +341,10 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         }
 
         $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        /*
         if (!empty($question_list)) {
             $question_list = array_map('intval', $question_list);
-        }
+        }*/
 
         if (!empty($remind_list)) {
         	$remind_list = array_map('intval', $remind_list);
@@ -356,6 +357,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
+        //data_tracking    	= '".implode(',', $question_list)."'
 
         $sql = "UPDATE $TABLETRACK_EXERCICES SET
         		   exe_exo_id 			= '".Database::escape_string($exo_id)."',
@@ -368,8 +370,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         		   exe_duration 		= '".Database::escape_string($duration)."',
         		   exe_date				= '".$end_date."',
         		   status 				= '".$status."',
-        		   questions_to_check 	= '".$remind_list."',
-        		   data_tracking    	= '".implode(',', $question_list)."'
+        		   questions_to_check 	= '".$remind_list."'        		   
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
         $res = Database::query($sql);
 

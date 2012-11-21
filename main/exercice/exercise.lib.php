@@ -2197,7 +2197,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
     
     echo $total_score_text;   
-    echo $exercise_content;    
+    echo $exercise_content;
+    
     if (!$show_only_score) {
         echo $total_score_text;
     }
@@ -2210,12 +2211,12 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
         
         if (api_is_allowed_to_session_edit()) {    
-            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
+            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
         }
         
         // Send notification ..
         if (!api_is_allowed_to_edit(null,true)) {
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
         }
-    }
+    }    
 }

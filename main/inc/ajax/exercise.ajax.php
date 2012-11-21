@@ -335,7 +335,7 @@ switch ($action) {
                 
                 $_SESSION['duration_time'][$key] = time();
                 
-                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, $question_list, 'incomplete', $remind_list);
+                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, 'incomplete', $remind_list);
                 
                  // Destruction of the Question object
             	unset($objQuestionTmp); 

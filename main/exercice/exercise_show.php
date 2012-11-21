@@ -98,7 +98,7 @@ $feedback_type = $objExercise->feedback_type;
 //If is not valid
 $session_control_key = get_session_time_control_key($exercise_id, $learnpath_id, $learnpath_item_id);
 if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id) && !in_array($action, array('qualify','edit'))) {
-    $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
+    $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position = 0 WHERE exe_id = $id ";
     Database::query($sql_fraud);
 }
 
@@ -239,8 +239,7 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
 				    AND questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-
-			//GROUP BY questions.position, attempts.question_id";
+          //GROUP BY questions.position, attempts.question_id";
 
 $result = Database::query($query);	
 $questionList = array();
@@ -253,10 +252,10 @@ while ($row = Database::fetch_array($result)) {
 
 //Fixing #2073 Fixing order of questions
 if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
-	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
-		$questionList = $tempquestionList;			
-	}		
+	$temp_question_list = explode(',',$track_exercise_info['data_tracking']);    
+	if (is_array($temp_question_list) && count($temp_question_list) == count($questionList)) {	
+		$questionList = $temp_question_list;        
+	}    
 }
 
 // Display the text when finished message if we are on a LP #4227

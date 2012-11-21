@@ -380,7 +380,7 @@ if (Database::num_rows($res_media) > 0) {
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
 
-                <?php  if (!empty($_SESSION['oLP']->scorm_debug)) { //only show log  ?>
+                <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
                 <!-- log message layout -->
                 <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
                     <div id="log_content"></div>

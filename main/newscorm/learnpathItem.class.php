@@ -1969,7 +1969,8 @@ class learnpathItem {
 	 */    
 	public function set_score($score) {
         //$possible_status = array('not attempted','incomplete','completed','passed','failed','browsed');
-   		if (self::debug > 0) { error_log('learnpathItem::set_score('.$score.')', 0); }
+        $debug = self::debug;
+   		if ($debug > 0) { error_log('learnpathItem::set_score('.$score.')', 0); }
    		if (($this->max_score <= 0 || $score <= $this->max_score) && ($score >= $this->min_score)) {
    			$this->current_score = $score;
    			$master = $this->get_mastery_score();
@@ -1979,7 +1980,8 @@ class learnpathItem {
             if ($master == -1) {
                 $master = $this->max_score;
             }
-            if (self::debug > 0) {
+            
+            if ($debug > 0) {
                 error_log('get_mastery_score: '.$master);
                 error_log('current_status: '.$current_status);
                 error_log('current score : '.$this->current_score);
@@ -1987,12 +1989,12 @@ class learnpathItem {
             
    			// If mastery_score is set AND the current score reaches the mastery score AND the current status is different from 'completed', then set it to 'passed'.
    			if ($master != -1 && $this->current_score >= $master && $current_status != $this->possible_status[2]) {
-                if (self::debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
+                if ($debug > 0) error_log('Status changed to: '.$this->possible_status[3]);
    				$this->set_status($this->possible_status[3]); //passed
    			} elseif ($master != -1 && $this->current_score < $master) {
-                if (self::debug > 0) error_log('Status changed to: '.$this->possible_status[4]);
+                if ($debug > 0) error_log('Status changed to: '.$this->possible_status[4]);
    				$this->set_status($this->possible_status[4]); //failed
-   			}
+   			}            
   			return true;
   		}
 	 	return false;
@@ -2671,5 +2673,42 @@ class learnpathItem {
         }
         $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";        
         Database::query($sql);
+    }
+    
+    static function humanize_status($status, $decorate = true) {
+        $mylanglist = array(
+            'completed' => 'ScormCompstatus',
+            'incomplete' => 'ScormIncomplete',
+            'failed' => 'ScormFailed',
+            'passed' => 'ScormPassed',
+            'browsed' => 'ScormBrowsed',
+            'not attempted' => 'ScormNotAttempted'
+        );
+        
+        $my_lesson_status = get_lang($mylanglist[$status]);
+        
+        switch ($status) {
+            case 'completed':
+            case 'browsed':
+                $class_status = 'info';
+                break;
+            case 'incomplete':
+                $class_status = 'warning';
+                break;
+            case 'passed':
+                $class_status = 'success';
+                break;
+            case 'failed':
+                $class_status = 'important';
+                break;
+            default:
+                $class_status = 'default';
+                break;                
+        }
+        if ($decorate) {        
+            return Display::label($my_lesson_status, $class_status);
+        } else {
+            return $my_lesson_status;
+        }
     }
 }

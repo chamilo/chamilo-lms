@@ -62,11 +62,6 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     $mylp->set_current_item($next_item);
     if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
     $mylp->start_current_item(true);
-    /*
-    if ($mylp->force_commit) {
-        $mylp->save_current();
-    }
-    */
     
     if (is_object($mylp->items[$next_item])) {
         if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }

@@ -266,7 +266,7 @@ function LMSInitialize() {
             async: false
         });
        // log a more complete object dump when initializing, so we know what data hasn't been cleaned
-       var log = '<br />item              : '+  olms.lms_item_id
+       var log = '<br />item              : '+ olms.lms_item_id
                  + '<br />item_type       : '+ olms.lms_item_type
                  + '<br />score           : '+ olms.score
                  + '<br />max             : '+ olms.max
@@ -278,9 +278,10 @@ function LMSInitialize() {
                  + '<br />total_time      : '+ olms.total_time
                  + '<br />mastery_score   : '+ olms.mastery_score
                  + '<br />max_time_allowed: '+ olms.max_time_allowed
-                 + '<br />lms_lp_id  : '+olms.lms_lp_id
-                 + '<br />lms_user_id: '+olms.lms_user_id
-                 + '<br />lms_view_id: '+olms.lms_view_id
+                 + '<br />credit          : '+ olms.lms_item_credit
+                 + '<br />lms_lp_id       : '+ olms.lms_lp_id
+                 + '<br />lms_user_id     : '+ olms.lms_user_id
+                 + '<br />lms_view_id     : '+ olms.lms_view_id
                 ;
 
         logit_scorm('LMSInitialize()'+log,0);
@@ -799,6 +800,8 @@ function SetValue(param, val) {
 function savedata(origin) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)    
     
+    //Status is NOT modified here see the lp_ajax_save_item.php file
+    
    /* console.log('savedata');
     console.log(olms.lesson_status);
     console.log(olms.mastery_score);
@@ -841,21 +844,23 @@ function savedata(origin) {
         }
         */
     }
-    //console.log(olms.lesson_status);
-    
+        
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
-    old_item_id=olms.info_lms_item[0];
+    old_item_id = olms.info_lms_item[0];
 
-    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);    
+    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    
     olms.info_lms_item[1]=olms.lms_item_id;
+    
     if (olms.item_objectives.length>0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
     olms.execute_stats = false;
     //clean array
-    olms.variable_to_send=new Array();
+    olms.variable_to_send = new Array();
 }
+
 /**
  * Send the Commit signal to the LMS (save the data for this element without
  * closing the current process)
@@ -1256,7 +1261,7 @@ function update_stats_page() {
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
-    logit_lms('could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
+    logit_lms('Could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
 
     if (mode == '') { 
         mode='%'; 
@@ -1272,13 +1277,6 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
     var pr_text = $("#progress_text");
     var progress_bar = $("#progress_bar_value");     
     progress_bar.css('width', percentage + "%");
-       
-    /*
-    var pr_full  = $("#progress_img_full");
-    var pr_empty = $("#progress_img_empty");
-    pr_full.attr('width',percentage*1.2);
-    pr_empty.attr('width',(100-percentage)*1.2);    
-    */
 
     var mytext = '';
     switch(mode){
@@ -1337,11 +1335,11 @@ function reinit_updatable_vars_list () {
 
 function switch_item(current_item, next_item){
     // backup these params
-    var orig_current_item = current_item;
-    var orig_next_item = next_item;
-    var orig_lesson_status = olms.lesson_status;
-    var orig_item_type = olms.lms_item_types['i'+current_item];
-    var next_item_type = olms.lms_item_types['i'+next_item];
+    var orig_current_item   = current_item;
+    var orig_next_item      = next_item;
+    var orig_lesson_status  = olms.lesson_status;
+    var orig_item_type      = olms.lms_item_types['i'+current_item];
+    var next_item_type      = olms.lms_item_types['i'+next_item];
 
     /*
      There are four "cases" for switching items:
@@ -1550,6 +1548,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
         });
     }
 }
+
 /**
  * Save a SCORM item's variables, getting its SCORM values from
  * updatable_vars_list. Takes interactions into account and considers whether
@@ -1567,8 +1566,9 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
     var is_interactions='false';
     var params='';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
-    var my_scorm_values=new Array();
-    my_scorm_values=process_scorm_values();
+    var my_scorm_values = new Array();
+    
+    my_scorm_values = process_scorm_values();
 
     for (k=0;k<my_scorm_values.length;k++) {
         if (my_scorm_values[k]=='cmi.core.session_time') {
@@ -1603,9 +1603,10 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
     }
 
 
-    if (is_interactions=='true')  {
+    if (is_interactions == 'true')  {
         interact_string = '';
-          temp = '';
+        temp = '';
+        
         for (i in olms.interactions) {
             interact_string += '&interact['+i+']=';
             interact_temp = '[';
@@ -1620,7 +1621,6 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
             }
             interact_temp = interact_temp.substr(0,(interact_temp.length-2)) + ']';
             //  interact_string += encodeURIComponent(interact_temp);
-
 
             interact_string += interact_temp;
         }

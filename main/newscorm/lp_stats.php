@@ -335,22 +335,7 @@ if (is_array($list) && count($list) > 0) {
                 }
 
                 // Remove "NaN" if any (@todo: locate the source of these NaN)
-                $time = str_replace('NaN', '00' . $h . '00\'00"', $time);
-                if (($lesson_status == 'completed') || ($lesson_status == 'passed')) {
-                    $class_status = 'success';
-                } else {
-                    $class_status = 'default';
-                }
-                $mylanglist = array(
-                    'completed' => 'ScormCompstatus',
-                    'incomplete' => 'ScormIncomplete',
-                    'failed' => 'ScormFailed',
-                    'passed' => 'ScormPassed',
-                    'browsed' => 'ScormBrowsed',
-                    'not attempted' => 'ScormNotAttempted'
-                );
-
-                $my_lesson_status = get_lang($mylanglist[$lesson_status]);
+                $time = str_replace('NaN', '00' . $h . '00\'00"', $time);             
 
                 if ($row['item_type'] != 'dokeos_chapter') {
                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -376,7 +361,7 @@ if (is_array($list) && count($list) > 0) {
                                     <td></td>
                                     <td>' . $extend_attempt_link . '</td>
                                     <td colspan="3">' . get_lang('Attempt') . ' ' . $row['iv_view_count'] . '</td>
-                                    <td colspan="2">' . Display::label($my_lesson_status, $class_status) . '</td>
+                                    <td colspan="2">' . learnpathItem::humanize_status($lesson_status) . '</td>
                                     <td colspan="2">' . $view_score . '</td>
                                     <td colspan="2">' . $time . '</td>
                                     <td></td>
@@ -385,7 +370,7 @@ if (is_array($list) && count($list) > 0) {
                     if (!empty($export_csv)) {
                         $temp = array();
                         $temp[] = $title = Security::remove_XSS($title);
-                        $temp[] = Security::remove_XSS($my_lesson_status);
+                        $temp[] = Security::remove_XSS(learnpathItem::humanize_status($lesson_status, false));
 
                         if ($row['item_type'] == 'quiz') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -518,13 +503,9 @@ if (is_array($list) && count($list) > 0) {
             $score = $row['myscore'];
             $subtotal_time = $row['mytime'];
 
-            //if ($row['mytime'] == 0) {
             while ($tmp_row = Database :: fetch_array($result)) {
                 $subtotal_time += $tmp_row['mytime'];
             }
-            //}
-            //$time_for_total = $subtotal_time;
-            //$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
             $scoIdentifier = $row['myid'];
             $title = $row['mytitle'];
 
@@ -620,23 +601,6 @@ if (is_array($list) && count($list) > 0) {
             // Remove "NaN" if any (@todo: locate the source of these NaN)
             //$time = str_replace('NaN', '00'.$h.'00\'00"', $time);
 
-            if (($lesson_status == 'completed') or ($lesson_status == 'passed')) {
-                $class_status = 'success';
-            } else {
-                $class_status = 'default';
-            }
-
-            $mylanglist = array(
-                'completed' => 'ScormCompstatus',
-                'incomplete' => 'ScormIncomplete',
-                'failed' => 'ScormFailed',
-                'passed' => 'ScormPassed',
-                'browsed' => 'ScormBrowsed',
-                'not attempted' => 'ScormNotAttempted'
-            );
-
-            $my_lesson_status = get_lang($mylanglist[$lesson_status]);
-
             if ($row['item_type'] != 'dokeos_chapter') {
                 if ($row['item_type'] == 'quiz') {
                     $correct_test_link = '';
@@ -711,7 +675,7 @@ if (is_array($list) && count($list) > 0) {
                     
                     $output .= '<td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>
-                                <td colspan="2">' . Display::label($my_lesson_status, $class_status) .'</td>
+                                <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
                                 <td colspan="2">';
                     if ($row['item_type'] == 'quiz') {
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -837,16 +801,16 @@ if (is_array($list) && count($list) > 0) {
                             $my_lesson_status = $row_attempts['status'];
 
                             if ($my_lesson_status == '') {
-                                $my_lesson_status = get_lang($mylanglist['completed']);
+                                $my_lesson_status = learnpathitem::humanize_status('completed');
                             } elseif ($my_lesson_status == 'incomplete') {
-                                $my_lesson_status = get_lang($mylanglist['incomplete']);
+                                $my_lesson_status = learnpathitem::humanize_status('incomplete');
                             }
 
                             $output .= '<tr class="' . $oddclass . '" >
                                             <td></td>
                                             <td>' . $extend_attempt_link . '</td>
                                             <td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>
-                                            <td colspan="2">' . Display::label($my_lesson_status, $class_status) . '</td>
+                                            <td colspan="2">' . $my_lesson_status . '</td>
                                             <td colspan="2">
                                                 ' . $view_score . '
                                             </td>

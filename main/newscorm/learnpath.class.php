@@ -12,6 +12,7 @@
  * Defines the learnpath parent class
  * @package chamilo.learnpath
  */
+
 class learnpath {
 
     public $attempt = 0; // The number for the current ID view.
@@ -726,20 +727,22 @@ class learnpath {
      * @param	integer	Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item) {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
+        $debug = $this->debug;        
+        if ($debug) {
             error_log('New LP - In learnpath::autocomplete_parents()', 0);
         }
-        if (empty ($item)) {
+        if (empty($item)) {
             $item = $this->current;
         }
         $parent_id = $this->items[$item]->get_parent();
-        if ($this->debug > 2) {
+        
+        if ($debug) {
             error_log('New LP - autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
         }
-        if (is_object($this->items[$item]) and !empty ($parent_id)) {
+        
+        if (is_object($this->items[$item]) and !empty($parent_id)) {
             // if $item points to an object and there is a parent.
-            if ($this->debug > 2) {
+            if ($debug) {
                 error_log('New LP - ' . $item . ' is an item, proceed', 0);
             }
             $current_item = & $this->items[$item];
@@ -749,18 +752,19 @@ class learnpath {
             if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
                 // If the current item is completed or passes or succeeded.
                 $completed = true;
-                if ($this->debug > 2) {
+                if ($debug) {
                     error_log('New LP - Status of current item is alright', 0);
                 }
+                
                 foreach ($parent->get_children() as $child) {
-                    // Check all his brothers (his parent's children) for completion status.
+                    // Check all his brothers (parent's children) for completion status.
                     if ($child != $item) {
-                        if ($this->debug > 2) {
+                        if ($debug) {
                             error_log('New LP - Looking at brother with ID ' . $child . ', status is ' . $this->items[$child]->get_status(), 0);
                         }
                         //if($this->items[$child]->status_is(array('completed','passed','succeeded')))
                         // Trying completing parents of failed and browsed items as well.
-                        if ($this->items[$child]->status_is(array (
+                        if ($this->items[$child]->status_is(array(
                                 'completed',
                                 'passed',
                                 'succeeded',
@@ -776,11 +780,12 @@ class learnpath {
                         }
                     }
                 }
+                
                 if ($completed) { // If all the children were completed:
                     $parent->set_status('completed');
                     $parent->save(false, $this->prerequisites_match($parent->get_id()));
                     $this->update_queue[$parent->get_id()] = $parent->get_status();
-                    if ($this->debug > 2) {
+                    if ($debug) {
                         error_log('New LP - Added parent to update queue ' . print_r($this->update_queue, true), 0);
                     }
                     $this->autocomplete_parents($parent->get_id()); // Recursive call.
@@ -3530,7 +3535,7 @@ class learnpath {
             error_log('New LP - In learnpath::next()', 0);
         }
         $this->last = $this->get_current_item_id();
-        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));
+        $this->items[$this->last]->save(false, $this->prerequisites_match($this->last));        
         $this->autocomplete_parents($this->last);
         $new_index = $this->get_next_index();
         if ($this->debug > 2) {
@@ -3671,19 +3676,20 @@ class learnpath {
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
 
-        $course_id = api_get_course_int_id();
-
         $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
-        $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
+        $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
         $row2 = Database :: fetch_array($result);
         //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
         if (($set_visibility == 'i') && ($num > 0)) {
-            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (name='$name' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition)";
+            $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } elseif (($set_visibility == 'v') && ($num == 0)) {
             $sql = "INSERT INTO $tbl_tool (c_id, name, link, image, visibility, admin, address, added_tool, session_id) VALUES
             	    ($course_id, '$name','$link','scormbuilder.gif','$v','0','pastillegris.gif',0, $session_id)";
+        } elseif (($set_visibility == 'v') && ($num > 0)) {
+            $sql = "UPDATE $tbl_tool SET c_id = $course_id, name = '$name', link = '$link', image = 'scormbuilder.gif', visibility = '$v', admin = '0', address = 'pastillegris.gif', added_tool = 0, session_id = $session_id
+            	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } else {
             // Parameter and database incompatible, do nothing.
         }
@@ -3748,7 +3754,7 @@ class learnpath {
         }
         if (is_object($this->items[$this->current])) {
             //$res = $this->items[$this->current]->save(false);
-            $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));
+            $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));            
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();
             $this->append_message('new_item_status: ' . $status);
@@ -3764,26 +3770,25 @@ class learnpath {
      * @param	boolean	Save from url params (true) or from current attributes (false). Optional. Defaults to true
      * @return	boolean
      */
-    public function save_item($item_id = null, $from_outside = true) {
-        $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
+    public function save_item($item_id = null, $from_outside = true) {        
+        $debug = $this->debug;
+        if ($debug) {
             error_log('New LP - In learnpath::save_item(' . $item_id . ',' . $from_outside . ')', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
         if (empty($item_id)) {
-            $item_id = Database::escape_string($_REQUEST['id']);
+            $item_id = intval($_REQUEST['id']);
         }
         if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
-        if ($this->debug > 2) {
+        if ($debug) {
             error_log('New LP - save_current() saving item ' . $item_id, 0);
         }
         if (is_object($this->items[$item_id])) {
-            if ($this->debug) { error_log('object exists'); }
-            $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
-            //$res = $this->items[$item_id]->save($from_outside);
+            if ($debug) { error_log('object exists'); }
+            $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));            
             $this->autocomplete_parents($item_id);
             $status = $this->items[$item_id]->get_status();
             $this->append_message('new_item_status: ' . $status);
@@ -3966,7 +3971,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new content_maker : ' . $this->maker, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -3975,13 +3980,13 @@ class learnpath {
      * @param	string	Optional string giving the new name of this learnpath
      * @return  boolean True/False
      */
-    public function set_name($name = '') {
+    public function set_name($name = null) {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_name()', 0);
         }
-        if (empty ($name))
+        if (empty($name)) {
             return false;
-
+        }
         $this->name = Database::escape_string($name);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
@@ -3993,11 +3998,13 @@ class learnpath {
         $res = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows()) {
-            $table = Database :: get_course_table(TABLE_TOOL_LIST);
-            $sql = 'UPDATE ' . $table . ' SET
-                        name = "' . $this->name . '"
-                    WHERE c_id = '.$course_id.' AND link = "newscorm/lp_controller.php?action=view&lp_id=' . $lp_id . '"';
-            Database::query($sql);
+            $session_id = api_get_session_id();
+            $session_condition = api_get_session_condition($session_id);
+            $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);            
+            $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
+            $sql = "UPDATE $tbl_tool SET name = '$this->name'
+            	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
+            $res = Database::query($sql);
         }
         return true;
     }
@@ -5123,7 +5130,7 @@ class learnpath {
                 $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$arrLP[$i]['id'] .'&lp_id='.$this->lp_id;
                     
                 if (!in_array($arrLP[$i]['item_type'], array('dokeos_chapter', 'dokeos_module', 'dir'))) {
-                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
+                    $prerequisities_icon = Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_TINY), $url.'&action=edit_item_prereq');
                     $move_item_icon = Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_TINY), $url.'&action=move_item');                
                     $audio_icon = Display::url(Display::return_icon('audio.png', get_lang('UplUpload'), array(), ICON_SIZE_TINY), $url.'&action=add_audio');
                 }
@@ -5251,8 +5258,6 @@ class learnpath {
 
         $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=build&lp_id=' . $this->lp_id . '">' . Display :: return_icon('home.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
 
-        if ($is_allowed_to_edit) {
-        }
         //$return .=  '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM).'</a>';
         $return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
 
@@ -5930,7 +5935,7 @@ class learnpath {
             }
             /*// Commented the prerequisites, only visible in edit (exercise).
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
+            $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
             $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                 foreach($arrHide as $key => $value){
@@ -6514,7 +6519,7 @@ class learnpath {
             }
 
             $return .= '<tr>';
-            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('Prerequisites') . '</label></td>';
+            $return .= '<td class="label"><label for="idPrerequisites">' . get_lang('LearnpathPrerequisites') . '</label></td>';
             $return .= '<td class="input"><select name="prerequisites" id="prerequisites"><option value="0">' . get_lang('NoPrerequisites') . '</option>';
 
             foreach ($arrHide as $key => $value) {
@@ -7442,7 +7447,7 @@ class learnpath {
             // Commented the prerequisites, only visible in edit (work).
             /*
                     $return .= '<tr>';
-                    $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('Prerequisites').'</label></td>';
+                    $return .= '<td class="label"><label for="idPrerequisites">'.get_lang('LearnpathPrerequisites').'</label></td>';
                     $return .= '<td class="input"><select name="prerequisites" id="prerequisites" class="learnpath_item_form"><option value="0">'.get_lang('NoPrerequisites').'</option>';
 
                     foreach($arrHide as $key => $value) {
@@ -7561,7 +7566,7 @@ class learnpath {
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
-            $return .= Display::url(Display::return_icon('accept.png', get_lang('Prerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
+            $return .= Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
         
@@ -7756,7 +7761,7 @@ class learnpath {
 
         $return .= '<table class="data_table" style="width:650px">';
         $return .= '<tr>';
-        $return .= '<th height="24">' . get_lang('Prerequisites') . '</th>';
+        $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
         $return .= '<th width="70" height="24">' . get_lang('Minimum') . '</th>';
         $return .= '<th width="70" height="24">' . get_lang('Maximum') . '</th>';
         $return .= '</tr>';

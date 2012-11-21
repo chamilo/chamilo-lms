@@ -100,7 +100,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             if ($debug > 1) { error_log("Score not updated"); }
             
             //Default behaviour
-            if (isset($status) && $status != '' && $status != 'undefined') {           
+            if (isset($status) && $status != '' && $status != 'undefined') {
                 //Implements scorm 1.2 constraint
                 //If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all
                 //Score was not set 
@@ -141,7 +141,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             }
         }
         
-        if (isset($time) && $time!='' && $time!='undefined') {
+        if (isset($time) && $time != '' && $time != 'undefined') {
             // If big integer, then it's a timestamp, otherwise it's normal scorm time.
             if ($debug > 1) { error_log('Calling set_time('.$time.') ', 0); }
             if ($time == intval(strval($time)) && $time > 1000000) {

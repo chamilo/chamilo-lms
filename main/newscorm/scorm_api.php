@@ -597,7 +597,7 @@ function LMSSetValue(param, val) {
         olms.updatable_vars_list['cmi.completion_status']=true;
         return_value='true'; //1.3
     } else if ( param == "cmi.core.session_time" ) {
-        olms.session_time = val;
+        olms.session_time = val;        
         olms.updatable_vars_list['cmi.core.session_time']=true;
         return_value='true';
     } else if ( param == "cmi.score.scaled") { //1.3
@@ -847,15 +847,15 @@ function savedata(origin) {
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
     
     //Yannick's fix
-    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
     
     //Julio's fix
     
-    if (olms.lms_item_id == old_item_id) {    
+    /*if (olms.lms_item_id == old_item_id) {    
         xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
     } else {
         xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
-    }
+    }*/
     
     olms.info_lms_item[1] = olms.lms_item_id;
     
@@ -1120,12 +1120,13 @@ function logit_scorm(message,priority) {
         msg: "SCORM: " + message,
         debug: scorm_logs
     };
+    
     $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_log.php",
         dataType: "script",
-        async: true
+        async: false
     });
 }
 
@@ -1144,13 +1145,14 @@ function logit_lms(message, priority){
         msg: "LMS: " + message,
         debug: lms_logs
     };
+    
     $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_log.php",
         dataType: "script",
-        async: true
-    });    
+        async: false
+    });   
     //console.log(message);
 }
 

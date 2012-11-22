@@ -801,15 +801,9 @@ function savedata(origin) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)    
     
     //Status is NOT modified here see the lp_ajax_save_item.php file
-    
-   /* console.log('savedata');
-    console.log(olms.lesson_status);
-    console.log(olms.mastery_score);
-    console.log(olms.score);
-    */
-    
+        
     if (olms.lesson_status != '') {        
-        olms.updatable_vars_list['cmi.core.lesson_status']=true;
+        olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
     
     //If lesson_status is empty we left the status like that
@@ -848,14 +842,27 @@ function savedata(origin) {
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
     old_item_id = olms.info_lms_item[0];
-
-    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
     
-    olms.info_lms_item[1]=olms.lms_item_id;
+    //Original behaviour
+    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    
+    //Yannick's fix
+    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+    
+    //Julio's fix
+    
+    if (olms.lms_item_id == old_item_id) {    
+        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+    } else {
+        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    }
+    
+    olms.info_lms_item[1] = olms.lms_item_id;
     
     if (olms.item_objectives.length>0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
+    
     olms.execute_stats = false;
     //clean array
     olms.variable_to_send = new Array();

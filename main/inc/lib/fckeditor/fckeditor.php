@@ -59,6 +59,7 @@ function FCKeditor_IsCompatibleBrowser()
     else if ( strpos($sAgent, 'Gecko/') !== false )
     {
         $iVersion = substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
+        // Special fix for Firefox 17 and followers - see #5752
         if ( preg_match('/^\d{2,3}\.\d{1,4}\s/', $iVersion) ) {
           return true;
         }

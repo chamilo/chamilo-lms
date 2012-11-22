@@ -41,9 +41,8 @@ require_once 'aiccItem.class.php';
  * @param   array   Interactions array
  * @param   string  Core exit SCORM string
  */
-function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
-    global $_configuration;    
-    $return = '';
+function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {      
+    $return = null;
     $debug = 0;
     
     if ($debug > 0) { 
@@ -211,6 +210,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if ($debug > 1) { error_log("progress: $mycomplete / $mytotal", 0); }    
     
     $_SESSION['lpobject'] = serialize($mylp);
+    
     if ($mylpi->get_type() != 'sco') {
         // If this object's JS status has not been updated by the SCORM API, update now.        
         $return .= "olms.lesson_status='".$mystatus."';";

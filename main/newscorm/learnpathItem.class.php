@@ -59,7 +59,7 @@ class learnpathItem {
 	public $type; // This attribute can contain chapter|link|student_publication|module|quiz|document|forum|thread
 	public $view_id;
     //var used if absolute session time mode is used
-    private $last_scorm_session_time =0;
+    private $last_scorm_session_time = 0;
 
 	const debug = 0; // Logging parameter.
 
@@ -1004,19 +1004,21 @@ class learnpathItem {
 		if (self::debug > 0) { error_log('learnpathItem::get_status() on item '.$this->db_id, 0); }
 		if ($check_db) {
 			if (self::debug > 2) { error_log('learnpathItem::get_status(): checking db', 0); }
-			$table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-			$sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";            
-			if (self::debug > 2) { error_log('learnpathItem::get_status() - Checking DB: '.$sql, 0); }
+            if (!empty($this->db_item_view_id)) {
+                $table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                $sql = "SELECT status FROM $table WHERE c_id = $course_id AND id = '".$this->db_item_view_id."' AND view_count = '".$this->get_attempt_id()."'";            
+                if (self::debug > 2) { error_log('learnpathItem::get_status() - Checking DB: '.$sql, 0); }
 
-			$res = Database::query($sql);
-			if (Database::num_rows($res) == 1) {
-				$row = Database::fetch_array($res);
-				if ($update_local) {
-					$this->set_status($row['status']);
-				}
-				if (self::debug > 2) { error_log('learnpathItem::get_status() - Returning db value '.$row['status'], 0); }                
-				return $row['status'];
-			}
+                $res = Database::query($sql);
+                if (Database::num_rows($res) == 1) {
+                    $row = Database::fetch_array($res);
+                    if ($update_local) {
+                        $this->set_status($row['status']);
+                    }
+                    if (self::debug > 2) { error_log('learnpathItem::get_status() - Returning db value '.$row['status'], 0); }                
+                    return $row['status'];
+                }
+            }
 		} else {
 			if (self::debug > 2) { error_log('learnpathItem::get_status() - in get_status: using attrib', 0); }
 			if (!empty($this->status)) {
@@ -2322,19 +2324,19 @@ class learnpathItem {
 		$course_id  = api_get_course_int_id();
    		$mode       = $this->get_lesson_mode();
    		$credit     = $this->get_credit();
-   		//$my_verified_status=$this->get_status(false);
 
    		$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 		$sql_verified = 'SELECT status FROM '.$item_view_table.'
-		                 WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->attempt_id.'" ;';
+		                 WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ;';
 		$rs_verified = Database::query($sql_verified);
 		$row_verified = Database::fetch_array($rs_verified);
+        
    		$my_case_completed = array('completed', 'passed', 'browsed', 'failed'); // Added by Isaac Flores.
         
         $save = true;
         
-        if (isset($sql_verified['status'])) {
-            if (in_array($sql_verified['status'], $my_case_completed)) {
+        if (isset($row_verified) && isset($row_verified['status'])) {
+            if (in_array($row_verified['status'], $my_case_completed)) {
                 $save = false;
             }
         }

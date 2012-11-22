@@ -746,10 +746,16 @@ class BigBlueButtonBN {
             $data = curl_exec( $ch );
             curl_close( $ch );
 
-            if($data)
-                return (new SimpleXMLElement($data,LIBXML_NOCDATA));
-            else
+            if ($data) {
+                try {
+                    $res = new SimpleXMLElement($data,LIBXML_NOCDATA);
+                } catch (Exception $e) {
+                    return false;
+                }
+                return $res;
+            } else {
                 return false;
+            }
         }
 
         return (simplexml_load_file($url,'SimpleXMLElement', LIBXML_NOCDATA));

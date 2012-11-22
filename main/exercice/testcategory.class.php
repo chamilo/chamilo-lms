@@ -264,9 +264,9 @@ class Testcategory {
 				$categories_in_exercise = array_merge($categories_in_exercise, $category_list);
             }
         }
-        if (!empty($categories_in_exercise)) {
-            array_filter($categories_in_exercise);
-        }
+        if (!empty($categories_in_exercise)) {            
+            $categories_in_exercise = array_unique(array_filter($categories_in_exercise));            
+        }        
 		return $categories_in_exercise;
 	}
 	
@@ -303,18 +303,19 @@ class Testcategory {
 	 * return : integer
 	 * hubert.borderiou 07-04-2011
 	 */
-	public static function getNumberOfQuestionsInCategoryForTest($in_testid, $in_categoryid) {
-		$nbCatResult = 0;
-		$quiz = new Exercise();
-		$quiz->read($in_testid);
-		$tabQuestionList = $quiz->selectQuestionList();
+	public static function getNumberOfQuestionsInCategoryForTest($exercise_id, $category_id) {
+		$number_questions_in_category = 0;
+		$exercise = new Exercise();
+		$exercise->read($exercise_id);
+		$question_list = $exercise->selectQuestionList();
 		// the array given by selectQuestionList start at indice 1 and not at indice 0 !!! ? ? ?
-		for ($i=1; $i <= count($tabQuestionList); $i++) {
-			if (Testcategory::getCategoryForQuestion($tabQuestionList[$i]) == $in_categoryid) {
-				$nbCatResult++;
+		for ($i=1; $i <= count($question_list); $i++) {
+            $category_in_question = Testcategory::getCategoryForQuestion($question_list[$i]);            
+			if (in_array($category_id, $category_in_question)) {
+				$number_questions_in_category++;
 			}
 		}		
-		return $nbCatResult;
+		return $number_questions_in_category;
 	}
 	
 	/**
@@ -323,20 +324,23 @@ class Testcategory {
 	 * hubert.borderiou 07-04-2011
 	 * question witout categories are not counted
 	 */
-	public static function getNumberOfQuestionRandomByCategory($in_testid, $in_nbrandom) {
+	public static function getNumberOfQuestionRandomByCategory($exercise_id, $in_nbrandom) {
 		$nbquestionresult = 0;
-		$tabcatid = Testcategory::getListOfCategoriesIDForTest($in_testid);
-		for ($i=0; $i < count($tabcatid); $i++) {
-			if ($tabcatid[$i] > 0) {	// 0 = no category for this questio
-				$nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest($in_testid, $tabcatid[$i]);
-				if ($nbQuestionInThisCat > $in_nbrandom) {
-					$nbquestionresult += $in_nbrandom;
-				}
-				else {
-					$nbquestionresult += $nbQuestionInThisCat;
-				}
-			}
-		}
+		$list_categories = Testcategory::getListOfCategoriesIDForTest($exercise_id);
+                
+        if (!empty($list_categories)) {                     
+            for ($i=0; $i < count($list_categories); $i++) {
+                if ($list_categories[$i] > 0) {	// 0 = no category for this question
+                    $nbQuestionInThisCat = Testcategory::getNumberOfQuestionsInCategoryForTest($exercise_id, $list_categories[$i]);
+
+                    if ($nbQuestionInThisCat > $in_nbrandom) {
+                        $nbquestionresult += $in_nbrandom;
+                    } else {
+                        $nbquestionresult += $nbQuestionInThisCat;
+                    }
+                }
+            }
+        }
 		return $nbquestionresult;
 	}
 	
@@ -364,7 +368,7 @@ class Testcategory {
 		* tabres[24] = array of question id with category id = 24
 		* In this version, a question has 0 or 1 category
 	 */
-	function getQuestionsByCat($in_exerciceId) {
+	static function getQuestionsByCat($in_exerciceId) {
 		$tabres = array();		
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
@@ -385,7 +389,7 @@ class Testcategory {
 	/**
 	 * return a tab of $in_number random elements of $in_tab
 	 */
-	function getNElementsFromArray($in_tab, $in_number) {
+	static function getNElementsFromArray($in_tab, $in_number) {
 		$tabres = $in_tab;
 		shuffle($tabres);
 		if ($in_number < count($tabres)) {
@@ -413,7 +417,7 @@ class Testcategory {
 	 * value is the array of question id of this category
 	 * Sort question by Category
 	*/
-	function sortTabByBracketLabel($in_tab) {
+	static function sortTabByBracketLabel($in_tab) {
 		$tabResult = array();
 		$tabCatName = array();	// tab of category name
 		while (list($cat_id, $tabquestion) = each($in_tab)) {

@@ -522,8 +522,7 @@ if (!empty($exercise_list)) {
                 }
 
                 $lp_blocked = '';
-                if ($added_to_lp) {
-                    //$lp_blocked = Display::label(get_lang('AddedToALP'), 'info');
+                if ($added_to_lp) {                    
                     $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class'=> 'lp_content_type_label'));
                 }
 
@@ -562,7 +561,7 @@ if (!empty($exercise_list)) {
 
                 $item =  Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
-                //count number exercice - teacher
+                //Count number exercice - teacher
                 $sqlquery   = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
                 $sqlresult  = Database::query($sqlquery);
                 $rowi       = Database :: result($sqlresult, 0);
@@ -614,20 +613,18 @@ if (!empty($exercise_list)) {
                 }
 
 				// Number of questions
-                $random_label = '';
+                $random_label = null;
                 if ($row['random'] > 0 || $row['random'] == -1) {
                	    // if random == -1 means use random questions with all questions
                	    $random_number_of_question = $row['random'];
                	    if ($random_number_of_question == -1) {
                	        $random_number_of_question = $rowi;
                	    }
-					if ($row['random_by_category'] > 0) {
-						if (!class_exists("testcategory.class.php")) include_once "testcategory.class.php" ;
-						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
+					if ($row['random_by_category'] > 0) {						
+						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);                        
 						$number_of_questions = $nbQuestionsTotal." ";
 						$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
-						$number_of_questions .= " - ";
-						//$number_of_questions .= Testcategory::getNumberMaxQuestionByCat($my_exercise_id).' '.get_lang('QuestionByCategory');
+						$number_of_questions .= " - ";						
                         $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
 					} else {
                    		$random_label = ' ('.get_lang('Random').') ';

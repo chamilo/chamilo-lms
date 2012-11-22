@@ -329,7 +329,7 @@ class Exercise {
 	 * @return - integer - 0 if not random, otherwise the draws
 	 */
 	function isRandom() {
-		if($this->random > 0 || $this->random == -1) {
+		if ($this->random > 0 || $this->random == -1) {
 			return true;
 		} else {
 			return false;
@@ -3520,25 +3520,31 @@ class Exercise {
   	
 	function get_validated_question_list() {
 		$question_list = array();
-		$isRandomByCategory = $this->isRandomByCat();
-        
-		if ($isRandomByCategory == 0) {
+		$is_random_by_category = $this->isRandomByCat();
+                
+		if ($is_random_by_category == 0) {
 			if ($this->isRandom()) {
 				$question_list = $this->selectRandomList();
 			} else {
 				$question_list = $this->selectQuestionList();
 			}
-		} else {
-			if ($this->isRandom()) {						
+		} else {            
+			if ($this->isRandom()) {
+                
 				// USE question categories 
-                // 				
-				// get questions by category for this exercice
-				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
-				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)
-				// value is the array of question id of this category
-				$temp_question_list = array();				
-				$tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
+                
+				/* Get questions by category for this exercice
+				   we have to choice $objExercise->random question in each array values of $questions_in_category
+                   key of $tabCategoryQuestions are the categopy id (0 for not in a category)
+				   value is the array of question id of this category
+                 */
+				$temp_question_list = array();
+                
+                //Getting questions by category
+				$questions_in_category = Testcategory::getQuestionsByCat($this->id);
+                                
 				$isRandomByCategory = $this->selectRandomByCat();
+                
 				// on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie
 				/*
 				 * ex de catÃ©gories :
@@ -3550,23 +3556,45 @@ class Exercise {
 				 * [chimie] ConnaÃ®tre les charges des particules
 				 * On veut dans l'ordre des groupes dÃ©finis par le terme entre crochet au dÃ©but du titre de la catÃ©gorie
 				*/
+                
 				// If test option is Grouped By Categories
                 
 				if ($isRandomByCategory == 2) {
-					$tabCategoryQuestions = Testcategory::sortTabByBracketLabel($tabCategoryQuestions);
+					$questions_in_category = Testcategory::sortTabByBracketLabel($questions_in_category);
 				}
-				while (list($cat_id, $tabquestion) = each($tabCategoryQuestions)) {
-				    $number_of_random_question = $this->random;
-				    if ($this->random == -1) {
-				        $number_of_random_question = count($this->questionList);
-				    }
-					$temp_question_list = array_merge($temp_question_list, Testcategory::getNElementsFromArray($tabquestion, $number_of_random_question));
+                
+                $number_of_random_question = $this->random;                
+                if ($this->random == -1) {
+                    $number_of_random_question = count($this->questionList);
+                }
+                
+                //Only 1 question can have a category
+                if (!empty($questions_in_category)) {
+                    $one_question_per_category = array();
+                    $questions_added = array();
+                    foreach ($questions_in_category as $category_id => $question_list)  {
+                        foreach ($question_list as $question_id) {
+                            if (!in_array($question_id, $questions_added)) {
+                                $one_question_per_category[$category_id][] = $question_id;
+                                $questions_added[]= $question_id;
+                            }
+                        }
+                    }
+                    $questions_in_category = $one_question_per_category;
+                }
+                //var_dump($questions_in_category);
+				while (list($category_id, $question_id) = each($questions_in_category)) {                    
+                    $elements = Testcategory::getNElementsFromArray($question_id, $number_of_random_question);
+                    //var_dump($elements);
+					$temp_question_list = array_merge($temp_question_list, $elements);
 				}
+                
 				// shuffle the question list if test is not grouped by categories
 				if ($isRandomByCategory == 1) {
 					shuffle($temp_question_list); // or not
 				}		
 				$question_list = $temp_question_list;
+                
 			} else {
 				// Problem, random by category has been selected and we have no $this->isRandom nnumber of question selected
 				// Should not happened
@@ -3576,7 +3604,7 @@ class Exercise {
     }
     
     function get_question_list($expand_media_questions = false) {
-        $question_list = $this->get_validated_question_list();
+        $question_list = $this->get_validated_question_list();        
         $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);        
         return $question_list;
     }
@@ -3717,7 +3745,7 @@ class Exercise {
     function get_count_question_list() {    
         //Real question count
         $question_count = 0;
-        $question_list = $this->get_question_list();
+        $question_list = $this->get_question_list();        
         if (!empty($question_list)) {        
             $question_count = count($question_list);
         }

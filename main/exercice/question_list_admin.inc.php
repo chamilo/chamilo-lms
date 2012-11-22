@@ -221,8 +221,6 @@ if (!$inATest) {
                     $txtQuestionLevel = '-';
                 }
                 $questionLevel = Display::tag('div', $txtQuestionLevel, array('style'=>$styleLevel));
-                
-                
 
                 // Question score
                 $questionScore = Display::tag('div', $objQuestionTmp->selectWeighting(), array('style'=>$styleScore));

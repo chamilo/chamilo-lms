@@ -806,48 +806,16 @@ function savedata(origin) {
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
     
-    //If lesson_status is empty we left the status like that
-    if (olms.lesson_status != '' && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.mastery_score >=0 && olms.score >= olms.mastery_score) {
-        //olms.lesson_status = 'passed';
-        //olms.updatable_vars_list['cmi.core.lesson_status']=true;
-    } else if( (olms.mastery_score < 0) && (olms.lms_lp_type != '2') && ( olms.lesson_status == 'incomplete') && (olms.score >= (0.8*olms.max) ) ) {
-        //the status cannot be modified automatically by the LMS under SCORM 1.2's rules
-    <?php if ($autocomplete_when_80pct){ ?>
-              //olms.lesson_status = 'completed';
-              //olms.updatable_vars_list['cmi.core.lesson_status']=true;
-    <?php } ?>    
-    } else {
-        /* DEPRECATED
-         * See notes in switch_item for why this has been disabled
-        if ((origin== 'finish' || origin == 'unload') && olms.lesson_status != 'completed' && olms.lesson_status != 'passed' && olms.lesson_status != 'browsed' && olms.lesson_status != 'failed' && olms.lesson_status != 'incomplete')  {
-            // The SCORM1.2 Runtime object document says for the "cmi.core.lesson_status" variable:
-            // Upon receiving the LMSFinish() call or the user navigates away,
-            // the LMS should set the cmi.core.lesson_status for the SCO to 'completed'
-            logit_lms('the LMS did saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
-            if (olms.mastery_score && olms.mastery_score!= '' && olms.score && olms.score != '') {
-                if  (olms.score >= olms.mastery_score) {
-                  olms.lesson_status = 'passed';
-                } else {
-                  olms.lesson_status = 'failed';
-                }
-                olms.updatable_vars_list['cmi.core.lesson_status']=true;
-            } else if (olms.mastery_score && olms.mastery_score!= '') {
-                olms.lesson_status = 'completed';
-                olms.updatable_vars_list['cmi.core.lesson_status']=true;
-            }
-        }
-        */
-    }
         
     logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
 
     old_item_id = olms.info_lms_item[0];
     
     //Original behaviour
-    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
+    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
     
     //Yannick's fix
-    xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
+    //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
     
     //Julio's fix
     
@@ -1146,14 +1114,21 @@ function logit_lms(message, priority){
         debug: lms_logs
     };
     
+    var ua = $.browser;
+    
+    if (ua.mozilla) {
+        console.log("LMS: " + message);
+    }
+    
+    /*
     $.ajax({
         type: "POST",
         data: params,
         url: "lp_ajax_log.php",
         dataType: "script",
         async: false
-    });   
-    //console.log(message);
+    });
+    */    
 }
 
 /**

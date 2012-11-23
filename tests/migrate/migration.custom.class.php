@@ -936,7 +936,7 @@ class MigrationCustom {
     //const TRANSACTION_TYPE_ADD_COURSE  =  5;
     static function transaction_5($data, $web_service_details) {
         $uidCursoId = $data['item_id'];          
-        $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('intIdSede'=> $data['branch_id'], 'uididcurso' => $uidCursoId));         
+        $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('intIdSede'=> $data['branch_id'], 'uididcurso' => $uidCursoId));    
         if ($course_info['error'] == false) {
             unset($course_info['error']);
             $course_info = CourseManager::create_course($course_info);
@@ -1295,7 +1295,10 @@ class MigrationCustom {
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         $function_name = $extra_field_variable."Detalles";
-        $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));          
+        
+        $params = array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']);
+        
+        $data = Migration::soap_call($web_service_details, $function_name, $params);          
         if ($data['error'] == false) {
             
             //Update 1 item
@@ -1665,7 +1668,7 @@ class MigrationCustom {
         } else {            
             return array(
                 'error' => true,
-                'message' => "No data when calling $result_name with data: ".print_r($data, 1),
+                'message' => "No data when calling $result_name result:".print_r($data, 1)." with params: ".print_r($params, 1),
                 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED,
             );
         }
@@ -1821,8 +1824,8 @@ class MigrationCustom {
       ["name"]=>
       string(8) "Sabatino"
     }*/
-    static function faseDetalles($data) {
-        $result = self::genericDetalles($data, __FUNCTION__);
+    static function faseDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }        
@@ -1830,7 +1833,7 @@ class MigrationCustom {
     }
     
     static function frecuenciaDetalles($data, $params) {
-        $result = self::genericDetalles($data, __FUNCTION__); 
+        $result = self::genericDetalles($data, __FUNCTION__, $params); 
         if ($result['error'] == true) {
             return $result;
         }        
@@ -1844,7 +1847,7 @@ class MigrationCustom {
     }*/
 
     static function intensidadDetalles($data, $params) {
-        $result = self::genericDetalles($data, __FUNCTION__);
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }        
@@ -1859,7 +1862,7 @@ class MigrationCustom {
       string(3) "4  "
     }*/
     static function mesesDetalles($data, $params) {
-        $result = self::genericDetalles($data, __FUNCTION__);
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }        
@@ -1873,7 +1876,7 @@ class MigrationCustom {
     }*/
 
     static function sedeDetalles($data, $params) {
-        $result = self::genericDetalles($data, __FUNCTION__);
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }        
@@ -1891,7 +1894,7 @@ class MigrationCustom {
       string(2) "62"
     }*/
     static function horarioDetalles($data, $params) {         
-        $result = self::genericDetalles($data, __FUNCTION__);        
+        $result = self::genericDetalles($data, __FUNCTION__, $params);        
         if ($result['error'] == true) {
             return $result;
         }

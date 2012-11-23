@@ -181,10 +181,7 @@ class Migration {
      * @param array Variables to be passed as params to the function
      * @return array Results as returned by the SOAP call
      */
-    static function soap_call($web_service_params, $function_name, $params = array()) {
-        
-        //$web_service_params = $this->web_service_connection_info;
-        
+    static function soap_call($web_service_params, $function_name, $params = array()) {        
         // Create the client instance
         $url = $web_service_params['url'];        
         try {
@@ -196,13 +193,13 @@ class Migration {
         
         $client->debug_flag = true;     
         try {            
-            $data = $client->$function_name($params);            
+            $data = $client->$function_name($params);
         } catch (SoapFault $fault) {
             $error = 2;
             //die("Problem querying service - $function_name");
             return array(
                 'error' => true,
-                'message' => "Problem querying service - $function_name in URL $url ",
+                'message' => "Problem querying service - $function_name in URL $url with params: ".print_r($params, 1),
                 'status_id' => 0
             );
         }
@@ -213,7 +210,7 @@ class Migration {
         } else {
             return array(
                 'error' => true,
-                'message' => 'No Data found',
+                'message' => "No data found when calling $function_name in URL $url with params: ".print_r($params, 1),
                 'status_id' => 0
             );
         }        
@@ -418,9 +415,9 @@ class Migration {
                 'status_id' => 0
             ),
              array(
-                //'action' => 'horario_eliminar',
-                 'transaction_id' => 1012,
+                //'action' => 'horario_eliminar',                 
                 'action' => 14,
+                 'transaction_id' => 1012,
                 'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
                 'orig_id' => '0',
                 'dest_id' => null,
@@ -457,9 +454,9 @@ class Migration {
             ),
              * */
             array(
-                //'action' => 'sede_agregar',
-                'transaction_id' => 1013,
+                //'action' => 'sede_agregar',                
                 'action' => 19,
+                'transaction_id' => 1013,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -467,9 +464,9 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                //'action' => 'sede_editar',
-                'transaction_id' => 1014,
+                //'action' => 'sede_editar',                
                 'action' => 21,
+                'transaction_id' => 1014,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -478,8 +475,8 @@ class Migration {
             ),
             array(
                 //'action' => 'sede_eliminar',
-                'transaction_id' => 1015,
                 'action' => 20,
+                'transaction_id' => 1015,
                 'item_id' =>  '7379A7D3-6DC5-42CA-9ED4-97367519F1D9',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -487,9 +484,9 @@ class Migration {
                 'status_id' => 0
             ),
             array(
-                //'action' => 'frecuencia_agregar',
-                'transaction_id' => 1016,
+                //'action' => 'frecuencia_agregar',                
                 'action' => 22,
+                'transaction_id' => 1016,
                 'item_id' =>  '0091CD3B-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
                 'branch_id' => 1,
@@ -550,7 +547,7 @@ class Migration {
         
         foreach( $transaction_harcoded as  $transaction) {
             $transaction['branch_id'] = 2;
-            if ($transaction['action'] != 8) {
+            if ($transaction['action'] != 21) {
                 continue;
             }
             self::add_transaction($transaction);

@@ -3940,6 +3940,10 @@ footer {
 
 /* Default LP left column values */
 
+#learning_path_breadcrumb_zone {
+    
+}
+
 #learning_path_left_zone {
     float:left;
     width:280px;

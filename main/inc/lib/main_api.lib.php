@@ -2536,9 +2536,10 @@ function api_display_debug_info($debug_info) {
  * this particular course.
  * Optionally checking for tutor and coach roles here allows us to use the
  * student_view feature altogether with these roles as well.
- * @param bool      Whether to check if the user has the tutor role
- * @param bool      Whether to check if the user has the coach role
- * @param bool      Whether to check if the user has the session coach role
+ * @param bool  Whether to check if the user has the tutor role
+ * @param bool  Whether to check if the user has the coach role
+ * @param bool  Whether to check if the user has the session coach role
+ * @param bool  check the student view or not
  *
  * @author Roan Embrechts
  * @author Patrick Cool
@@ -2546,7 +2547,7 @@ function api_display_debug_info($debug_info) {
  * @return boolean, true: the user has the rights to edit, false: he does not
  */
 
-function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false) {
+function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true) {
 
     $my_session_id 				= api_get_session_id();
     $is_allowed_coach_to_edit 	= api_is_coach();
@@ -2555,7 +2556,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     //Admins can edit anything
     if (api_is_platform_admin(false)) {
         //The student preview was on
-        if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
             return false;
         } else {
             return true;
@@ -2597,9 +2598,15 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
             } else {
                 $is_allowed = false;
             }
-            $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+            if ($check_student_view) {
+                $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+            }
         } else {
-            $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+            if ($check_student_view) {
+                $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+            } else {
+                $is_allowed = $is_courseAdmin;   
+            }
         }
         return $is_allowed;
     } else {

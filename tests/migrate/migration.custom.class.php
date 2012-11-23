@@ -1377,7 +1377,7 @@ class MigrationCustom {
                         'entity' => $extra_field_variable,
                         'before' => $info_before,
                         'after'  => $info_after,
-                        'message' => "Extra field options were deleted for the field_variable: $extra_field_variable, options id  deleted: $deleting_option_ids",
+                        'message' => "Extra field options were deleted for the field_variable: $extra_field_variable, options id deleted: $deleting_option_ids",
                         'status_id' => self::TRANSACTION_STATUS_FAILED
                  );
             } else  {
@@ -1388,7 +1388,7 @@ class MigrationCustom {
             }
         } else {        
              return array(
-                    'message' => "Extra field option was NOT deleted  - Extra field not found. Trying to locate with field_variable: '$extra_field_variable' and id: '{$original_data['item_id']}'",
+                    'message' => "Extra field option was NOT deleted  - Extra field not found in DB. Trying to locate field_variable: '$extra_field_variable' with id: '{$original_data['item_id']}'",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
              );
         }
@@ -1615,8 +1615,8 @@ class MigrationCustom {
                     );
                 }
             } else {
-                //only process transaction if it was failed or to be executed
-                if (in_array($transaction_info['status_id'], array(MigrationCustom::TRANSACTION_STATUS_FAILED, MigrationCustom::TRANSACTION_STATUS_TO_BE_EXECUTED))) {                    
+                //only process transaction if it was failed or to be executed or is 0 registered 
+                if (in_array($transaction_info['status_id'], array(0, MigrationCustom::TRANSACTION_STATUS_FAILED, MigrationCustom::TRANSACTION_STATUS_TO_BE_EXECUTED))) {                    
                     return array(
                         'id' => $transaction_info['id'], 
                         'error' => false,

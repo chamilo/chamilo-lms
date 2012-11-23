@@ -1772,7 +1772,7 @@ class MigrationCustom {
         }       
         
         //Setting the session name
-        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].'  '.$horario_name.' '.$aula_name.' '.$sede_name;        
+        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].' '.$horario_name.' '.$aula_name.' '.$sede_name;        
         
         $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
         $result['extra_horario']        = strtoupper($result['uididhorario']);

@@ -570,6 +570,8 @@ foreach ($questionList as $questionId) {
 	$my_total_weight = $questionWeighting;
     $totalWeighting += $questionWeighting;
     
+    $category_was_added_for_this_test = false;
+    
     if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
         $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
         $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
@@ -652,6 +654,7 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 if (!empty($category_list) && ($show_results || $show_only_total_score)) {
     //Adding total        
     $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
+    
     echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
 }    
 

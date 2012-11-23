@@ -1665,7 +1665,7 @@ class MigrationCustom {
         } else {            
             return array(
                 'error' => true,
-                'message' => "No data when calling $result_name",
+                'message' => "No data when calling $result_name with data: ".print_r($data, 1),
                 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED,
             );
         }

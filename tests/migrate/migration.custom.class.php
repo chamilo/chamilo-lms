@@ -1382,13 +1382,13 @@ class MigrationCustom {
                  );
             } else  {
                  return array(
-                        'message' => "Extra field option was NOT deleted  - no field options ids where found for variable: $extra_field_variable for sede:'".$original_data['item_id']."'",
+                        'message' => "Extra field option was NOT deleted. No field options ids where found for variable: '$extra_field_variable' with id:'".$original_data['item_id']."'",
                         'status_id' => self::TRANSACTION_STATUS_FAILED
                  );
             }
         } else {        
              return array(
-                    'message' => "Extra field option was NOT deleted  - extra field not found field_variable: $extra_field_variable",
+                    'message' => "Extra field option was NOT deleted  - Extra field not found. Trying to locate with field_variable: '$extra_field_variable' and id: '{$original_data['item_id']}'",
                     'status_id' => self::TRANSACTION_STATUS_FAILED
              );
         }
@@ -1646,6 +1646,8 @@ class MigrationCustom {
     
     static function genericDetalles($data, $result_name, $params = array()) {
         error_log("Calling $result_name ");
+        $original_webservice_name = $result_name;
+        
         $result_name = $result_name.'Result';
         $xml = $data->$result_name->any;
         
@@ -1668,7 +1670,7 @@ class MigrationCustom {
         } else {            
             return array(
                 'error' => true,
-                'message' => "No data when calling $result_name result:".print_r($data, 1)." with params: ".print_r($params, 1),
+                'message' => "No data when calling web service *$original_webservice_name* Result:".print_r($data, 1)." with params: ".print_r($params, 1),
                 'status_id' => MigrationCustom::TRANSACTION_STATUS_FAILED,
             );
         }

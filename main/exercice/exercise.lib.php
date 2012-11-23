@@ -1283,8 +1283,7 @@ function show_success_message($score, $weight, $pass_percentage) {
         $is_success = is_success_exercise_result($score, $weight, $pass_percentage);
         
         $icon = '';
-        if ($is_success) {        
-            //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+        if ($is_success) {            
             $html = get_lang('CongratulationsYouPassedTheTest');
             $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
         } else {
@@ -2195,33 +2194,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     if ($origin != 'learnpath') {
         if ($show_results || $show_only_score) {
-            
-            $is_success = is_success_exercise_result($total_score, $total_weight, $objExercise->selectPassPercentage());
-            $total_score_text .= '<div class="question_row">';
-            $total_score_text .= '<div class="ribbon ribbon-total ">';
-            
-            // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (is_pass_pourcentage_enabled($objExercise->selectPassPercentage())) {
-                if ($is_success) {
-                    $ribbon_total_success_or_error = ' ribbon-total-success';
-                } else {
-                    $ribbon_total_success_or_error = ' ribbon-total-error';
-                }
-            }
-            $total_score_text .= '<div class="rib rib-total $ribbon_total_success_or_error">';
-            
-            $total_score_text .= '<h3>';
-            $total_score_text .= get_lang('YourTotalScore')."&nbsp;";
-            if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
-                $total_score = 0;
-            }
-            $total_score_text .= show_score($total_score, $total_weight, false, true);
-            $total_score_text .= '</h3>';            
-            $total_score_text .= '</div>';
-            $total_score_text .= show_success_message($total_score, $total_weight, $objExercise->selectPassPercentage());
-            
-            $total_score_text .= '</div>';
+            $total_score_text .= '<div class="question_row">';            
+            $total_score_text .= get_question_ribbon($objExercise, $total_score, $total_weight, true);  
             $total_score_text .= '</div>';
         }
     }    
@@ -2253,5 +2227,34 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         if (!api_is_allowed_to_edit(null,true)) {
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
         }
+    }   
+}
+
+
+function get_question_ribbon($objExercise, $score, $weight, $check_pass_percentage = false) {    
+    $ribbon = '<div class="ribbon">';    
+    if ($check_pass_percentage) {
+        $is_success = is_success_exercise_result($score, $weight, $objExercise->selectPassPercentage());
+        // Color the final test score if pass_percentage activated
+        $ribbon_total_success_or_error = "";
+        if (is_pass_pourcentage_enabled($objExercise->selectPassPercentage())) {
+            if ($is_success) {
+                $ribbon_total_success_or_error = ' ribbon-total-success';
+            } else {
+                $ribbon_total_success_or_error = ' ribbon-total-error';
+            }
+        }
+        $ribbon .= '<div class="rib rib-total '.$ribbon_total_success_or_error.'">';
+    } else {
+        $ribbon .= '<div class="rib rib-total">';
     }
+    $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";       
+    $ribbon .= show_score($score, $weight, false, true);
+    if ($check_pass_percentage) {
+        $ribbon .= show_success_message($score, $weight, $objExercise->selectPassPercentage());
+    }
+    $ribbon .= '</h3>';
+    $ribbon .= '</div>';
+    $ribbon .= '</div>';    
+    return $ribbon;
 }

@@ -632,21 +632,13 @@ $total_score_text = null;
 
 //Total score
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
-	if ($show_results || $show_only_total_score ) {
-        
-        $total_score_text .= '<div class="question_row">
-        <div class="ribbon">
-        <div class="rib rib-total">';
-        
-		$total_score_text .= '<h3>'.get_lang('YourTotalScore').": ";
+	if ($show_results || $show_only_total_score) {
+        $total_score_text .= '<div class="question_row">';                
         $my_total_score_temp = $totalScore; 
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
-	    }          
-        $total_score_text .= show_score($my_total_score_temp, $totalWeighting, false);	        
-		$total_score_text .= '</h3>';
-        $total_score_text .= '</div>';
-        $total_score_text .= '</div>';
+	    }        
+        $total_score_text .= get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);        
         $total_score_text .= '</div>';
 	}
 }

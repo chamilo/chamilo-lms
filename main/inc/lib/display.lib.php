@@ -1354,13 +1354,13 @@ class Display {
         return 'data_table';
     }
     
-    public static function page_header($title, $second_title = null) {
+    public static function page_header($title, $second_title = null, $size = 'h1') {
         $title = Security::remove_XSS($title);
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
-        return '<div class="page-header"><h1>'.$title.'</h1></div>';
+        return '<div class="page-header"><'.$size.'>'.$title.'</'.$size.'></div>';
     }
     
     public static function page_header_and_translate($title, $second_title = null) {
@@ -1379,6 +1379,14 @@ class Display {
             $title .= "<small> $second_title<small>";
         }
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
+    }
+    
+    public static function page_subheader2($title, $second_title = null) {
+        return self::page_header($title, $second_title, 'h3');
+    }
+    
+    public static function page_subheader3($title, $second_title = null) {
+        return self::page_header($title, $second_title, 'h4');
     }
     
     public static function description($list) {

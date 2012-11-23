@@ -1731,7 +1731,7 @@ class MigrationCustom {
      * 
      */
     static function programaDetalles($data, $params) {  
-        $result = self::genericDetalles($data, __FUNCTION__);
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }
@@ -1800,7 +1800,7 @@ class MigrationCustom {
        string(3) "2  "
    */
     static function cursoDetalles($data, $params) {  
-        $result = self::genericDetalles($data, __FUNCTION__);
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
         }

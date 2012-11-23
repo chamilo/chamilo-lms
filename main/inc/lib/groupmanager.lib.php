@@ -181,16 +181,19 @@ class GroupManager {
         
         $session_id = api_get_session_id();
         $course_id  = api_get_course_int_id();
-        
-		$currentCourseRepository = $_course['path'];
+       	$currentCourseRepository = $_course['path'];
 		
 		$category = self :: get_category($category_id);
 
 		if (intval($places) == 0) {
 			//if the amount of users per group is not filled in, use the setting from the category
 			$places = $category['max_student'];
-		}
-        
+		} else {
+            if ($places > $category['max_student'] && $category['max_student'] != 0) {
+                $places = $category['max_student'];
+            } 
+        } 
+         
 		 $sql = "INSERT INTO ".$table_group." SET
 				c_id = $course_id , 
 				category_id='".Database::escape_string($category_id)."', 
@@ -479,7 +482,12 @@ class GroupManager {
 		$table_forum = Database :: get_course_table(TABLE_FORUM);
 		//$forum_id = get_forums_of_group($group_id);
 		$group_id = Database::escape_string($group_id);
-		$course_id = api_get_course_int_id();
+        $category = self::get_category_from_group($group_id);
+        if ($maximum_number_of_students > $category['max_student'] && $category['max_student'] != 0) {
+            $maximum_number_of_students = $category['max_student'];
+        }
+        $course_id = api_get_course_int_id();
+        
 		$sql = "UPDATE ".$table_group."
 					SET name='".Database::escape_string(trim($name))."',
 					doc_state = '".Database::escape_string($doc_state)."',

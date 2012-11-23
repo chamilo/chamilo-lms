@@ -1753,6 +1753,14 @@ class MigrationCustom {
         if (isset($extra_field_option_info_sede[0]) && !empty($extra_field_option_info_sede[0]['option_display_text'])) {
             $sede_name = $extra_field_option_info_sede[0]['option_display_text'];
         }
+
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('aula');
+        $extra_field_option_info_aula = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $result['uididaula']);
+        
+        $aula_name = null;
+        if (isset($extra_field_option_info_aula[0]) && !empty($extra_field_option_info_sede[0]['option_display_text'])) {
+            $aula_name = $extra_field_option_info_aula[0]['option_display_text'];
+        }
         
         //Getting horario
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');        
@@ -1768,7 +1776,8 @@ class MigrationCustom {
         
         $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
         $result['extra_horario']        = strtoupper($result['uididhorario']);
-        $result['extra_sede']           = strtoupper($result['uididsede']);        
+        $result['extra_sede']           = strtoupper($result['uididsede']);
+        $result['extra_aula']           = strtoupper($result['uididaula']);
         $result['extra_periodo']        = strtoupper($result['chrperiodo']);
         
         $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);

@@ -3680,7 +3680,6 @@ class learnpath {
         $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
-        $row2 = Database :: fetch_array($result);
         //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
@@ -3691,7 +3690,8 @@ class learnpath {
             $sql = "UPDATE $tbl_tool SET c_id = $course_id, name = '$name', link = '$link', image = 'scormbuilder.gif', visibility = '$v', admin = '0', address = 'pastillegris.gif', added_tool = 0, session_id = $session_id
             	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } else {
-            // Parameter and database incompatible, do nothing.
+            // Parameter and database incompatible, do nothing, exit.
+            return false;
         }
         $result = Database::query($sql);
         //if ($this->debug > 2) { error_log('New LP - Leaving learnpath::toggle_visibility: '.$sql, 0); }
@@ -3995,7 +3995,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new name : ' . $this->name, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows()) {
             $session_id = api_get_session_id();
@@ -4004,9 +4004,12 @@ class learnpath {
             $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
             $sql = "UPDATE $tbl_tool SET name = '$this->name'
             	    WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
-            $res = Database::query($sql);
+            Database::query($sql);
+            return true;
+        } else {
+            return false;
         }
-        return true;
+        
     }
 
     /**

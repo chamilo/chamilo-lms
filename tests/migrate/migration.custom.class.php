@@ -1379,7 +1379,7 @@ class MigrationCustom {
                  );
             } else  {
                  return array(
-                        'message' => "Extra field option was NOT deleted  - no field options ids where found for variable: $extra_field_variable",
+                        'message' => "Extra field option was NOT deleted  - no field options ids where found for variable: $extra_field_variable for sede:'".$original_data['item_id']."'",
                         'status_id' => self::TRANSACTION_STATUS_FAILED
                  );
             }

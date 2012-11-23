@@ -857,7 +857,6 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
  * @todo this function should be moved in a library  + no global calls 
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-    
                         
     //@todo replace all this globals
     global $documentPath, $filter;
@@ -1231,7 +1230,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param	 bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
+function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_only_percentage = false) {
     if (is_null($score) && is_null($weight)) {
         return '-';
     }
@@ -1242,11 +1241,11 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     if ($use_platform_settings) {
         if ($max_note != '' && $min_note != '') {        
             if (!empty($weight) && intval($weight) != 0) {
-    	       $score        = $min_note + ($max_note - $min_note) * $score /$weight;
+    	       $score = $min_note + ($max_note - $min_note) * $score /$weight;
             } else {
-               $score        = $min_note;
+               $score = $min_note;
             }            
-            $weight         = $max_note;
+            $weight = $max_note;
         }
     }
     $score_rounded = float_format($score, 1);    
@@ -1254,10 +1253,13 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     
     $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
     
-    $html  = '';
+    $html  = null;
     if ($show_percentage) {        
         $parent = '(' . $score_rounded . ' / ' . $weight . ')';
-        $html = $percentage." %  $parent";	
+        $html = $percentage."%  $parent";
+        if ($show_only_percentage) {
+            $html = $percentage."% ";
+        }
     } else {    
     	$html = $score_rounded . ' / ' . $weight;
     }  
@@ -1587,8 +1589,7 @@ function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session
  * @return 	float	Average score
  */
 function get_average_score($exercise_id, $course_code, $session_id) { 
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
-    $avg_score_data = array();    
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);    
     $avg_score = 0;
     if (!empty($user_results)) {        
         foreach($user_results as $result) {
@@ -2046,8 +2047,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     //Getting attempt info
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-    $question_list = array();
     
+    $question_list = array();    
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list = explode(',', $exercise_stat_info['data_tracking']);
     } else {        
@@ -2079,7 +2080,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header        
         $exercise_date = $exercise_stat_info['start_date'];        
-        echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
+        echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_date, DATE_TIME_FORMAT_LONG));
     }
     
     if ($save_user_result) {    
@@ -2094,6 +2095,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
     
     $question_list_answers = array();
+    
+    $category_list = array();
 
     // Loop over all question to show results for each of them, one by one
     if (!empty($question_list)) {
@@ -2105,7 +2108,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             //this variable commes from exercise_submit_modal.php
 
-            //$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId];
             ob_start();
             
             // We're inside *one* question. Go through each possible answer for this question        
@@ -2114,11 +2116,38 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];
             
-            $question_list_answers[] = array('question' => $result['open_question'], 'answer' => $result['open_answer']);            
+            $question_list_answers[] = array(
+                'question' => $result['open_question'], 
+                'answer' => $result['open_answer']
+            );
             
             $my_total_score  = $result['score'];
-            $my_total_weight = $result['weight'];   
-
+            $my_total_weight = $result['weight'];
+            
+            
+            //Category report
+            $category_was_added_for_this_test = false;
+            
+            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+                $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                $category_was_added_for_this_test = true;
+            } 
+            
+            if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                foreach($objQuestionTmp->category_list as $category_id) {
+                    $category_list[$category_id]['score'] += $my_total_score;
+                    $category_list[$category_id]['total'] += $my_total_weight;
+                    $category_was_added_for_this_test = true;
+                }
+            }
+            
+            //No category for this question!
+            if ($category_was_added_for_this_test == false) {
+                $category_list['none']['score'] += $my_total_score;
+                $category_list['none']['total'] += $my_total_weight;
+            }            
+   
             if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
                 $my_total_score = 0;
             }
@@ -2195,7 +2224,13 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score_text .= '</div>';
             $total_score_text .= '</div>';
         }
-    }
+    }    
+    
+    if (!empty($category_list) && ($show_results || $show_only_score) ) {
+        //Adding total        
+        $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
+        echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+    }    
     
     echo $total_score_text;   
     echo $exercise_content;    

@@ -167,8 +167,6 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	$exerciseTitle			= $track_exercise_info['title'];
-	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
@@ -234,9 +232,7 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
 				    AND questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-
-			//GROUP BY questions.position, attempts.question_id";
-
+          //GROUP BY questions.position, attempts.question_id";
 $result = Database::query($query);	
 $questionList = array();
 $exerciseResult = array();
@@ -271,6 +267,8 @@ $counter = 1;
 
 $exercise_content = null;
 
+$category_list = array();
+
 foreach ($questionList as $questionId) {
 	
 	$choice = $exerciseResult[$questionId];
@@ -281,6 +279,7 @@ foreach ($questionList as $questionId) {
 	$objQuestionTmp 	= Question::read($questionId);	
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
 	$answerType			= $objQuestionTmp->selectType();
+
 	
 	// Start buffer
     ob_start();
@@ -472,7 +471,6 @@ foreach ($questionList as $questionId) {
                     <td colspan="2">
                         <object type="application/x-shockwave-flash" data="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" width="556" height="350">
                             <param name="movie" value="../plugin/hotspot/hotspot_solution.swf?modifyAnswers='.$questionId.'&exe_id='.$id.'&from_db=1" />
-
                         </object>
                     </td>
                 </tr>
@@ -506,7 +504,7 @@ foreach ($questionList as $questionId) {
 			echo '<br />';
             
             echo '<div id="feedback_'.$name.'" style="width:100%">';
-			$comnt = trim(get_comments($id,$questionId));
+			$comnt = trim(get_comments($id, $questionId));
 			if (empty($comnt)) {
 				echo '<br />';
 			} else {
@@ -550,7 +548,7 @@ foreach ($questionList as $questionId) {
 					echo '<option '.(($i==$questionScore)?"selected='selected'":'').'>'.$i.'</option>';
 				}
 				echo '</select>';
-				echo '</form><br/ ></div>';
+				echo '</form><br /></div>';
                 
 				if ($questionScore == -1 ) {
 					$questionScore = 0;
@@ -566,11 +564,31 @@ foreach ($questionList as $questionId) {
 				 $questionScore = 0;
 			}
 		}    	
-	}
+	}   
     
     $my_total_score  = $questionScore;
-	$my_total_weight = $questionWeighting;   
+	$my_total_weight = $questionWeighting;
     $totalWeighting += $questionWeighting;
+    
+    if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+        $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+        $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+        $category_was_added_for_this_test = true;
+    } 
+
+    if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+        foreach($objQuestionTmp->category_list as $category_id) {
+            $category_list[$category_id]['score'] += $my_total_score;
+            $category_list[$category_id]['total'] += $my_total_weight;
+            $category_was_added_for_this_test = true;
+        }
+    }
+    
+    //No category for this question!
+    if ($category_was_added_for_this_test == false) {
+        $category_list['none']['score'] += $my_total_score;
+        $category_list['none']['total'] += $my_total_weight;
+    }    
 	
     if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
         $my_total_score = 0;
@@ -631,6 +649,12 @@ if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type'])))
 	}
 }
 
+if (!empty($category_list) && ($show_results || $show_only_total_score)) {
+    //Adding total        
+    $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+}    
+
 echo $total_score_text;
 echo $exercise_content;
 echo $total_score_text;
@@ -642,8 +666,7 @@ if (is_array($arrid) && is_array($arrmarks)) {
 
 if ($is_allowedToEdit && $locked == false && !api_is_drh()) {
 	if (in_array($origin, array('tracking_course','user_course','correct_exercise_in_lp'))) {        
-		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';
-		//echo ' <input type = "hidden" name="totalWeighting" value="'.$totalWeighting.'">';
+		echo ' <form name="myform" id="myform" action="exercise_report.php?exerciseId='.$exercise_id.'&filter=2&comments=update&exeid='.$id.'&origin='.$origin.'&details=true&course='.Security::remove_XSS($_GET['cidReq']).$fromlink.'" method="post">';		
 		echo '<input type = "hidden" name="lp_item_id"       value="'.$learnpath_id.'">';
 		echo '<input type = "hidden" name="lp_item_view_id"  value="'.$lp_item_view_id.'">';
 		echo '<input type = "hidden" name="student_id"       value="'.$student_id.'">';

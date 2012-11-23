@@ -1587,12 +1587,11 @@ class Exercise {
 
 	public function show_button($question_id, $questionNum) {	
 		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-		$nbrQuestions = count($this->get_validated_question_list());		
+        $question_list = $this->get_validated_question_list();
+		$nbrQuestions = count($question_list);
 		 
-		$html = $label = '';
-		$confirmation_alert = $this->type == ALL_ON_ONE_PAGE? " onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\" ":"";
-		$hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
-		$all_button = '';
+		$all_button = $html = $label = '';		
+		$hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;		 
 	
 		if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT && $this->type == ONE_PER_PAGE) {            
 			$html .='<a href="exercise_submit_modal.php?learnpath_id='.$safe_lp_id.'&learnpath_item_id='.$safe_lp_item_id.'&learnpath_item_view_id='.$safe_lp_item_view_id.'&origin='.$origin.'&hotspot='.$hotspot_get.'&nbrQuestions='.$nbrQuestions.'&num='.$questionNum.'&exerciseType='.$this->type.'&exerciseId='.$this->id.'&placeValuesBeforeTB_=savedValues&TB_iframe=true&height=480&width=640&modal=true" title="" class="thickbox btn">';
@@ -1617,9 +1616,8 @@ class Exercise {
 					$label = get_lang('NextQuestion');
 					$class = 'btn btn-primary';
 				}
-				if ($this->type == ONE_PER_PAGE) {	
-
-					if ($questionNum != 1) {
+				if ($this->type == ONE_PER_PAGE) {
+					if ($questionNum != 1) {                        
 						$prev_question = $questionNum - 2;
 						$all_button .= '<a href="javascript://" class="btn" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
 					}

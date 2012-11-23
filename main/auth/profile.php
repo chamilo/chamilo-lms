@@ -581,7 +581,7 @@ if ($form->validate()) {
         if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
         }
-        if (!empty($changeemail) && isset($password) && in_array('password', $available_values_to_modify)) {
+        if (isset($password) && in_array('password', $available_values_to_modify)) {
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
         } else {            

@@ -1359,16 +1359,17 @@ class MigrationCustom {
             $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
             
             $deleting_option_ids = array();
-            foreach($extra_field_option_info as $option) {
+            foreach ($extra_field_option_info as $option) {
                 //@todo Delete all horario in sessions?
                 $result = $extra_field_option->delete($option['id']);
-                $deleting_option_ids[] = $option['id'];                
-            }            
-            $deleting_option_ids = implode(',', $deleting_option_ids);            
-            
+                if ($result) {
+                    $deleting_option_ids[] = $option['id'];
+                }
+            }
             $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
             
-            if ($result) {
+            if (!empty($deleting_option_ids)) {
+                $deleting_option_ids = implode(',', $deleting_option_ids);
                 return array(
                         'entity' => $extra_field_variable,
                         'before' => $info_before,
@@ -1378,7 +1379,7 @@ class MigrationCustom {
                  );
             } else  {
                  return array(
-                        'message' => "Extra field option was NOT deleted  - extra field not found field_variable: $extra_field_variable",
+                        'message' => "Extra field option was NOT deleted  - no field options ids where found for variable: $extra_field_variable",
                         'status_id' => self::TRANSACTION_STATUS_FAILED
                  );
             }

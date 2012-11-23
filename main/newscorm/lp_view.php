@@ -315,9 +315,20 @@ if (Database::num_rows($res_media) > 0) {
         if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
     }
 }
-?>
 
-<div id="learning_path_main" style="width:100%;height:100%;">
+
+echo '<div id="learning_path_main" style="width:100%;height:100%;">';    
+    $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
+    if ($is_allowed_to_edit) {
+        echo '<div id="learning_path_breadcrumb_zone">'; 
+        global $interbreadcrumb;
+        $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
+        $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->id, 'name' => $_SESSION['oLP']->get_name());
+        $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+        echo return_breadcrumb($interbreadcrumb, null, null);        
+        echo '</div>';
+    }
+?>    
     <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
         <!-- header -->
         <div id="header">
@@ -392,10 +403,11 @@ if (Database::num_rows($res_media) > 0) {
         </div>
         <!-- end TOC layout -->
     </div>
-    <!-- end left Zone -->
-
-
-    <!-- right Zone -->
+    <!-- end left zone -->
+    
+    
+    
+    <!-- right zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
         // hub 26-05-2010 Fullscreen or not fullscreen

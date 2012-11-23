@@ -380,7 +380,9 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for build', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-            require 'lp_build.php';
+            //require 'lp_build.php';
+            header('Location: lp_add_item.php?type=step');
+            exit;
         }
         break;
     case 'edit_item':

@@ -2717,10 +2717,10 @@ class learnpath {
     public function get_html_toc($toc_list = null) {
         $course_id      = api_get_course_int_id();
         $course_code    = api_get_course_id();
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        //$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
         $charset = api_get_system_encoding();
-        $display_action_links_with_icons = false;
+        //$display_action_links_with_icons = false;
 
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_html_toc()', 0);
@@ -2732,7 +2732,8 @@ class learnpath {
         //$parent = $this->items[$this->current]->get_parent();
         //if (empty($parent)) { $parent = $this->ordered_items[$this->items[$this->current]->get_previous_index()]; }
         $html = '<div id="scorm_title" class="scorm_title">' . Security::remove_XSS($this->get_name()) . '</div>';
-        // Build, display.
+        
+        /*
         if ($is_allowed_to_edit) {
             $gradebook = Security :: remove_XSS($_GET['gradebook']);
             if ($this->get_lp_session_id() == api_get_session_id()) {
@@ -2754,8 +2755,7 @@ class learnpath {
                 }
                 $html .= '</div>';
             }
-
-        }
+        }*/
         $html .= '<div id="inner_lp_toc" class="inner_lp_toc">';
         require_once 'resourcelinker.inc.php';
 
@@ -5259,10 +5259,10 @@ class learnpath {
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         $return = '<div class="actions">';
 
-        $return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=build&lp_id=' . $this->lp_id . '">' . Display :: return_icon('home.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
+        //$return .= '<a href="lp_controller.php?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&action=build&lp_id=' . $this->lp_id . '">' . Display :: return_icon('home.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
 
         //$return .=  '<a href="' . api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('BasicOverview') . '">' . Display :: return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-        $return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
+        //$return .=  '<a href="lp_controller.php?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&action=view&lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('view_left_right.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a> ';
 
         $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'',ICON_SIZE_MEDIUM).'</a>';
 //		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -5732,8 +5732,8 @@ class learnpath {
                             Display::return_icon('forum.png', get_lang('Forums'), array(), 64),
                             Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), array(), 64)
                         );
-
-        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
+        echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
+        $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');        
         echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab');
         return true;
     }

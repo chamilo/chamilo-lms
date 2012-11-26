@@ -43,7 +43,7 @@ require_once 'aiccItem.class.php';
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {      
     $return = null;
-    $debug = 10;
+    $debug = false;
     
     if ($debug > 0) { 
         error_log('lp_ajax_save_item.php : save_item() params: ');
@@ -56,10 +56,10 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if (isset($_SESSION['lpobject'])) {        
         $oLP = unserialize($_SESSION['lpobject']);
         if (!is_object($oLP)) {            
-            unset($oLP);
+            unset($oLP);            
             $code = api_get_course_id();
             $mylp = new learnpath($code, $lp_id, $user_id);
-        } else {
+        } else {            
             $mylp = $oLP;
         }
     }    
@@ -68,9 +68,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         return ''; 
     }
 
-    $prereq_check = $mylp->prerequisites_match($item_id);
-    
+    $prereq_check = $mylp->prerequisites_match($item_id);    
     $mylpi = $mylp->items[$item_id];
+    
+    if (empty($mylpi)) {
+        return false;
+    }
     
     //This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $mylpi->set_lp_view($view_id);

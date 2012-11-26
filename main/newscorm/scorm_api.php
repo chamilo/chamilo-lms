@@ -1070,7 +1070,11 @@ function chamilo_void_save_asset(myscore,mymax)
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_scorm(message, priority) {
-    log_in_log("SCORM: " + message);
+    if (scorm_logs) {        
+        log_in_log("SCORM: " + message);
+    }
+    return false;    
+    
     if (scorm_logs == 0) { return false; }
     if (scorm_logs > priority) {
         /* fixed see http://support.chamilo.org/issues/370 */
@@ -1109,6 +1113,11 @@ function log_in_log(message) {
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
 function logit_lms(message, priority){
+    if (scorm_logs) {        
+        log_in_log("SCORM: " + message);
+    }
+    return false;    
+    
     if (lms_logs >= priority) {
         if ($("#lp_log_name") && $("#log_content")) {
             $("#log_content").append("LMS: " + message + "<br />");

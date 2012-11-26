@@ -727,7 +727,7 @@ class learnpath {
      * @param	integer	Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item) {
-        $debug = 10;        
+        $debug = $this->debug;        
         if ($debug) {
             error_log('Learnpath::autocomplete_parents()', 0);
         }
@@ -3756,7 +3756,7 @@ class learnpath {
      * @return	boolean
      */
     public function save_item($item_id = null, $from_outside = true) {        
-        $debug = 10;
+        $debug = $this->debug;
         if ($debug) {
             error_log('In learnpath::save_item(' . $item_id . ',' . intval($from_outside). ')', 0);
         }

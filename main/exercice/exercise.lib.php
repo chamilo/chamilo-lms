@@ -2173,12 +2173,9 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
             $question_content = '<div class="question_row">';
 
-            if ($show_results) {           
+            if ($show_results) {
                 //Shows question title an description
-                $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
-                
-                // display question category, if any
-                $question_content .= Testcategory::returnCategoryAndTitle($questionId);
+                $question_content .= $objQuestionTmp->return_header(null, $counter, $score);                
             }
             $counter++;
             

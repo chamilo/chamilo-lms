@@ -614,13 +614,9 @@ foreach ($questionList as $questionId) {
     $question_content = '<div class="question_row">';
     
  	if ($show_results) { 	    
-        //Shows question title an description        
-	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
-        
-        // display question category, if any
- 	    $question_content .= Testcategory::returnCategoryAndTitle($questionId);
-	}
-    
+        //Shows question title an description
+	    $question_content .= $objQuestionTmp->return_header(null, $counter, $score);        
+	}    
 	$counter++;    
     $question_content .= $contents;
     $question_content .= '</div>';   

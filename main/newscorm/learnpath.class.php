@@ -727,23 +727,19 @@ class learnpath {
      * @param	integer	Optional ID of the item from which to look for parents
      */
     public function autocomplete_parents($item) {
-        $debug = $this->debug;        
+        $debug = 10;        
         if ($debug) {
-            error_log('New LP - In learnpath::autocomplete_parents()', 0);
+            error_log('Learnpath::autocomplete_parents()', 0);
         }
         if (empty($item)) {
             $item = $this->current;
         }
         $parent_id = $this->items[$item]->get_parent();
-        
-        if ($debug) {
-            error_log('New LP - autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
-        }
-        
-        if (is_object($this->items[$item]) and !empty($parent_id)) {
+                
+        if (isset($this->items[$item]) && is_object($this->items[$item]) and !empty($parent_id)) {
             // if $item points to an object and there is a parent.
             if ($debug) {
-                error_log('New LP - ' . $item . ' is an item, proceed', 0);
+                error_log('Autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
             }
             $current_item = & $this->items[$item];
             $parent = & $this->items[$parent_id]; // Get the parent.
@@ -753,14 +749,14 @@ class learnpath {
                 // If the current item is completed or passes or succeeded.
                 $completed = true;
                 if ($debug) {
-                    error_log('New LP - Status of current item is alright', 0);
+                    error_log('Status of current item is alright', 0);
                 }
                 
                 foreach ($parent->get_children() as $child) {
                     // Check all his brothers (parent's children) for completion status.
                     if ($child != $item) {
                         if ($debug) {
-                            error_log('New LP - Looking at brother with ID ' . $child . ', status is ' . $this->items[$child]->get_status(), 0);
+                            error_log('Looking at brother with ID ' . $child . ', status is ' . $this->items[$child]->get_status(), 0);
                         }
                         //if($this->items[$child]->status_is(array('completed','passed','succeeded')))
                         // Trying completing parents of failed and browsed items as well.
@@ -774,7 +770,7 @@ class learnpath {
                             // Keep completion status to true.
                         } else {
                             if ($this->debug > 2) {
-                                error_log('New LP - Found one incomplete child of ' . $parent_id . ': ' . $child . ' is ' . $this->items[$child]->get_status(), 0);
+                                error_log('Found one incomplete child of ' . $parent_id . ': ' . $child . ' is ' . $this->items[$child]->get_status(), 0);
                             }
                             $completed = false;
                         }
@@ -786,12 +782,16 @@ class learnpath {
                     $parent->save(false, $this->prerequisites_match($parent->get_id()));
                     $this->update_queue[$parent->get_id()] = $parent->get_status();
                     if ($debug) {
-                        error_log('New LP - Added parent to update queue ' . print_r($this->update_queue, true), 0);
+                        error_log('Added parent to update queue ' . print_r($this->update_queue, true), 0);
                     }
                     $this->autocomplete_parents($parent->get_id()); // Recursive call.
                 }
             } else {
                 //error_log('New LP - status of current item is not enough to get bothered with it', 0);
+            }
+        } else {
+            if ($debug) {
+                error_log("#$item is an item doesn't have parents");
             }
         }
     }
@@ -3727,7 +3727,7 @@ class learnpath {
      */
     public function save_current() {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::save_current()', 0);
+            error_log('learnpath::save_current()', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
@@ -3756,9 +3756,9 @@ class learnpath {
      * @return	boolean
      */
     public function save_item($item_id = null, $from_outside = true) {        
-        $debug = $this->debug;
+        $debug = 10;
         if ($debug) {
-            error_log('New LP - In learnpath::save_item(' . $item_id . ',' . $from_outside . ')', 0);
+            error_log('In learnpath::save_item(' . $item_id . ',' . intval($from_outside). ')', 0);
         }
         // TODO: Do a better check on the index pointing to the right item (it is supposed to be working
         // on $ordered_items[] but not sure it's always safe to use with $items[]).
@@ -3768,16 +3768,22 @@ class learnpath {
         if (empty($item_id)) {
             $item_id = $this->get_current_item_id();
         }
-        if ($debug) {
-            error_log('New LP - save_current() saving item ' . $item_id, 0);
-        }
-        if (is_object($this->items[$item_id])) {
-            if ($debug) { error_log('object exists'); }
+        if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
+            if ($debug) { error_log('Object exists'); }
             $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));            
             $this->autocomplete_parents($item_id);
-            $status = $this->items[$item_id]->get_status();
-            $this->append_message('new_item_status: ' . $status);
+             if ($debug) {
+                error_log('update_queue before:');
+                error_log(print_r($this->update_queue,1));
+            }
+            $status = $this->items[$item_id]->get_status();            
             $this->update_queue[$item_id] = $status;
+            
+            if ($debug) {
+                error_log('get_status(): ' . $status);
+                error_log('update_queue after:' . $status);
+                error_log(print_r($this->update_queue,1));
+            }
             return $res;
         }
         return false;

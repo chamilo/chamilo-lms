@@ -43,7 +43,7 @@ require_once 'aiccItem.class.php';
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {      
     $return = null;
-    $debug = 0;
+    $debug = 10;
     
     if ($debug > 0) { 
         error_log('lp_ajax_save_item.php : save_item() params: ');
@@ -70,7 +70,8 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     $prereq_check = $mylp->prerequisites_match($item_id);
     
-    $mylpi = $mylp->items[$item_id];    
+    $mylpi = $mylp->items[$item_id];
+    
     //This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $mylpi->set_lp_view($view_id);
     
@@ -179,8 +180,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         
         if ($core_exit != 'undefined') {
             $mylpi->set_core_exit($core_exit);
-        }
-        
+        }        
         $mylp->save_item($item_id, false);
     } else {        
         return $return;
@@ -222,13 +222,11 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         if ($my_upd_id != $item_id) { // Only update the status from other items (i.e. parents and brothers), do not update current as we just did it already.            
             $return .= "update_toc('".$my_upd_status."','".$my_upd_id."');";
         }
-    }
-    
+    }    
     $return .= "update_progress_bar('$mycomplete', '$mytotal', '$myprogress_mode');";
 
     if ($debug > 0) {        
-        $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";
-        if ($debug > 1) { error_log('End of save_item()', 0); }
+        $return .= "logit_lms('Saved data for item ".$item_id.", user ".$user_id." (status=".$mystatus.")',2);";        
     }
 
     if (!isset($_SESSION['login_as'])) {
@@ -256,7 +254,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     //To be sure progress is updated
     $mylp->save_last();
     
-   if ($debug > 0) { error_log('lp_ajax_save_item.php : save_item end ----- '); }   
+   if ($debug > 0) { error_log('---------------- lp_ajax_save_item.php : save_item end ----- '); }   
     return $return;    
 }
 

@@ -1558,7 +1558,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
     
     my_scorm_values = process_scorm_values();
 
-    for (k=0;k<my_scorm_values.length;k++) {
+    for (k=0; k<my_scorm_values.length; k++) {
         if (my_scorm_values[k]=='cmi.core.session_time') {
             params += '&t='+olms.session_time;
         } else if (my_scorm_values[k]=='cmi.core.lesson_status' && olms.lesson_status!='') {

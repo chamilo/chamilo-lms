@@ -383,8 +383,9 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for build', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-            //require 'lp_build.php';
-            header('Location: lp_add_item.php?type=step');
+            //require 'lp_build.php';            
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
             exit;
         }
         break;

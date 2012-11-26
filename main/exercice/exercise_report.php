@@ -375,8 +375,7 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
-
-$extra_params['rowList'] = array(10, 20 ,30);
+//$extra_params['rowList'] = array(10, 20 ,30);
 
 ?>
 <script>

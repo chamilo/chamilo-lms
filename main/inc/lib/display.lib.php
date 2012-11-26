@@ -872,7 +872,8 @@ class Display {
         
         //Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = array(50, 100, 200);
+            $extra_params['rowList'] = array(20, 50, 100, 500, 1000);
+            //$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
         }
         
         $json = '';

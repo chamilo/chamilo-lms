@@ -80,9 +80,7 @@ $extra_params['autowidth'] = 'true';
 //height auto 
 $extra_params['height'] = 'auto';
 //$extra_params['excel'] = 'excel';
-
-$extra_params['rowList'] = array(10, 20 ,30);
-
+//$extra_params['rowList'] = array(10, 20 ,30);
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {

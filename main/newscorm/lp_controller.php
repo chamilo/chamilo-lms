@@ -254,9 +254,10 @@ switch ($action) {
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
-                    }
-                    // Display.
-                    require 'lp_add_item.php';
+                    }                    
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                    header('Location: '.$url);
+                    exit;
                 }
             } else {
                 require 'lp_add_item.php';
@@ -415,7 +416,13 @@ switch ($action) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
+                    
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                header('Location: '.$url);
+                exit;
             }
+        
+            
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_edit_item.php';
             } else {
@@ -429,7 +436,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - edit item prereq action triggered', 0);
-
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item prereq', 0); require 'lp_list.php'; }
         else {
             if (isset($_POST['submit_button'])) {
@@ -441,7 +447,10 @@ switch ($action) {
                     $is_success = true;
                 }
             }
-            require 'lp_edit_item_prereq.php';
+            //require 'lp_edit_item_prereq.php';
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
+            exit;
         }
         break;
 
@@ -459,7 +468,9 @@ switch ($action) {
                 $_SESSION['oLP']->set_modified_on();
 
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
-                $is_success = true;
+                $is_success = true;                
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                header('Location: '.$url);
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -615,7 +626,6 @@ switch ($action) {
             require 'lp_edit.php';
         }
         break;
-
     case 'update_lp':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -649,7 +659,6 @@ switch ($action) {
 			$_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
-
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];
@@ -693,11 +702,12 @@ switch ($action) {
                         }
                     }
                 }
-            }
-            require 'lp_build.php';
+            }            
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
+            exit;
         }
         break;
-
     case 'add_sub_item': // Add an item inside a chapter.
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

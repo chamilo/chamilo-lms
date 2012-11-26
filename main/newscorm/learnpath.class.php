@@ -5038,8 +5038,8 @@ class learnpath {
             
             //Link for the documents
             if ($arrLP[$i]['item_type'] == 'document') {
-                $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=view_item&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id;
-                $title_cut = Display::url($title_cut, $url);
+                $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=view_item&amp;mode=preview_document&amp;id=' . $arrLP[$i]['id'] . '&amp;lp_id=' . $this->lp_id;
+                $title_cut = Display::url($title_cut, $url, array('class' => 'ajax'));
             }
             
             if (($i % 2) == 0) {
@@ -5544,7 +5544,7 @@ class learnpath {
      * @param string $msg
      * @return string
      */
-    public function display_item($item_id, $iframe = true, $msg = '') {
+    public function display_item($item_id, $msg = null, $show_actions = true) {
         $course_id = api_get_course_int_id();
         $return = '';
         if (is_numeric($item_id)) {
@@ -5560,8 +5560,10 @@ class learnpath {
                 if ($row['item_type'] != 'dokeos_chapter' || $row['item_type'] != 'dokeos_module') {
                     $_SESSION['parent_item_id'] = $row['parent_item_id'];
                 }
-
-                $return .= $this->display_manipulate($item_id, $row['item_type']);
+                
+                if ($show_actions) {
+                    $return .= $this->display_manipulate($item_id, $row['item_type']);
+                }
                 $return .= '<div style="padding:10px;">';
 
                 if ($msg != '')
@@ -5754,9 +5756,6 @@ class learnpath {
                     WHERE c_id = ".$course_id." AND id = " . $id;
         $res_doc = Database::query($sql_doc);
         $row_doc = Database :: fetch_array($res_doc);
-
-        //if ($show_title)
-        //$return .= '<p class="lp_title">' . $row_doc['title'] . ($edit_link ? ' [ <a href="' .api_get_self(). '?cidReq=' . $_GET['cidReq'] . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $_GET['file'] . '&amp;edit=true&amp;lp_id=' . $_GET['lp_id'] . '">Edit this document</a> ]' : '') . '</p>';
 
         // TODO: Add a path filter.
         if ($iframe) {

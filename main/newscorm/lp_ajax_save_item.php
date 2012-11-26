@@ -11,6 +11,9 @@
 /**
  * Code
  */
+
+use \ChamiloSession as Session;
+
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
 
@@ -41,9 +44,9 @@ require_once 'aiccItem.class.php';
  * @param   array   Interactions array
  * @param   string  Core exit SCORM string
  */
-function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {      
+function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {              
     $return = null;
-    $debug = false;
+    $debug = 0;
     
     if ($debug > 0) { 
         error_log('lp_ajax_save_item.php : save_item() params: ');
@@ -53,8 +56,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     }    
     
     $mylp = null;
-    if (isset($_SESSION['lpobject'])) {        
-        $oLP = unserialize($_SESSION['lpobject']);
+    $lpobject = Session::read('lpobject');
+    if (isset($lpobject)) {
+        $oLP = unserialize($lpobject);
         if (!is_object($oLP)) {            
             unset($oLP);            
             $code = api_get_course_id();
@@ -65,6 +69,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     }    
     
     if (!is_a($mylp, 'learnpath')) { 
+        if ($debug > 0) { 
+            error_log("mylp variable is not an learnpath object");
+        }
         return ''; 
     }
 
@@ -72,6 +79,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $mylpi = $mylp->items[$item_id];
     
     if (empty($mylpi)) {
+        if ($debug > 0) { 
+            error_log("item #$item_id not found in the items array: ".print_r($mylp->items, 1));
+        }
         return false;
     }
     

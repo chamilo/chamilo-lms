@@ -60,7 +60,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             $code = api_get_course_id();
             $mylp = new learnpath($code, $lp_id, $user_id);
         } else {
-            $mylp = & $oLP;
+            $mylp = $oLP;
         }
     }    
     

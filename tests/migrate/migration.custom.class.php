@@ -826,7 +826,6 @@ class MigrationCustom {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
-        
         $user_id = self::get_user_id_by_persona_id($uidIdPersona);
         
         if (empty($user_id)) {
@@ -870,7 +869,7 @@ class MigrationCustom {
                 
                 $befores = array($before1, $before2);
                 
-                $message = "Move Session A to Session B";
+                $message = "Move Session A to Session B"; 
                 return self::check_if_user_is_subscribe_to_session($user_id, $destination_session_id, $message, $befores);           
             } else {
                 return array(     
@@ -885,7 +884,8 @@ class MigrationCustom {
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
-                SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                //SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                 $message = "Move Session to empty";
                 return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
@@ -1579,9 +1579,9 @@ class MigrationCustom {
                    'transaction_id' => isset($transaction_info['idt']) ? $transaction_info['idt'] : null, 
                    'action'         => isset($transaction_info['ida']) ? $transaction_info['ida'] : null, 
                    'item_id'        => isset($transaction_info['id']) ? strtoupper($transaction_info['id']) : null,
-                   'orig_id'        => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
+                   'orig_id'        => isset($transaction_info['orig']) ? $transaction_info['orig'] : null,
                    'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
-                   'dest_id'        => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
+                   'dest_id'        => isset($transaction_info['dest']) ? $transaction_info['dest'] : null,
                    'status_id'      => 0
             );
             
@@ -1772,7 +1772,7 @@ class MigrationCustom {
         }       
         
         //Setting the session name
-        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].' '.$horario_name.' '.$aula_name.' '.$sede_name;        
+        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].'  '.$horario_name.' '.$aula_name.' '.$sede_name;        
         
         $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
         $result['extra_horario']        = strtoupper($result['uididhorario']);
@@ -1784,6 +1784,7 @@ class MigrationCustom {
         $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
         $result['access_start_date']    = MigrationCustom::clean_date_time_from_ws($result['access_start_date']);
         $result['access_end_date']      = MigrationCustom::clean_date_time_from_ws($result['access_end_date']);
+        //$result['estado'] = intval($result['estado']);
         
         //Searching id_coach
         $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach']);
@@ -1880,6 +1881,13 @@ class MigrationCustom {
         return $result;
     }
     
+    static function aulaDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;        
+    }
     /*Calling sedeDetalles 
     array(1) {
       ["name"]=>

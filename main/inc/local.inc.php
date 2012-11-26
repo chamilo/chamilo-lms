@@ -135,7 +135,6 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
 $gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
 
-
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
 // $cidReq can be set in the index.php file of a course-area
@@ -222,7 +221,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         require_once(api_get_path(SYS_PATH).'main/auth/cas/authcas.php');
         $cas_login = cas_is_authenticated();
     }
-    if ( ( isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
+    if ((isset($_POST['login']) AND  isset($_POST['password']) ) OR ($cas_login) )  {
 
         // $login && $password are given to log in
         if ( $cas_login  && empty($_POST['login']) ) {
@@ -246,7 +245,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 $password = api_get_encrypted_password(trim(stripslashes($password)));
                    
                 // Check the user's password
-                if ( ($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
+                if (($password == $uData['password']  OR $cas_login) AND (trim($login) == $uData['username'])) {
                     $update_type = UserManager::get_extra_user_data_by_field($uData['user_id'], 'update_type');
                     $update_type= $update_type['update_type'];
                     if (!empty($extAuthSource[$update_type]['updateUser']) && file_exists($extAuthSource[$update_type]['updateUser'])) {
@@ -403,7 +402,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
             }
         } //end else login failed
-    } elseif (api_get_setting('sso_authentication') === 'true' &&  !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
+    } elseif (api_get_setting('sso_authentication') === 'true' && !in_array('webservices', explode('/', $_SERVER['REQUEST_URI']))) {
         /**
          * TODO:
          * - Work on a better validation for webservices paths. Current is very poor and exit
@@ -536,15 +535,11 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     } elseif (KeyAuth::is_enabled()) {
         $success = KeyAuth::instance()->login();
-        if($success)
-        {
+        if($success) {
             $use_anonymous = false;
         }
     }
-
-    //    else {} => continue as anonymous user
     $uidReset = true;
-
     //    $cidReset = true;
     //    $gidReset = true;
 } // end else
@@ -685,7 +680,7 @@ if (isset($cidReset) && $cidReset) {
         Session::erase('_course');
 
         if (!empty($_SESSION)) {
-                foreach($_SESSION as $key => $session_item) {
+            foreach($_SESSION as $key => $session_item) {
                 if (strpos($key,'lp_autolunch_') === false) {
                     continue;
                 } else {
@@ -713,8 +708,8 @@ if (isset($cidReset) && $cidReset) {
         //Just in case $_course is empty we try to load if the c_id still exists
         $_course = api_get_course_info($_SESSION['_cid']);
         if (!empty($_course)) {
-            $_real_cid                      = $_course['real_id'];
-            $_cid                           = $_course['code'];
+            $_real_cid = $_course['real_id'];
+            $_cid = $_course['code'];
 
             Session::write('_real_cid', $_real_cid);
             Session::write('_cid',      $_cid);
@@ -729,13 +724,11 @@ if (isset($cidReset) && $cidReset) {
          
         $_cid      = $_SESSION['_cid'   ];
         $_course   = $_SESSION['_course'];
-        
-        
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
         if (!empty($_GET['id_session'])) {
-            $tbl_session                 = Database::get_main_table(TABLE_MAIN_SESSION);
+            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
             list($_SESSION['session_name']) = Database::fetch_array($rs);
@@ -817,14 +810,6 @@ if (isset($cidReset) && $cidReset) {
     }
 }
 
-// if the requested group is different from the group in session
-/*
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;
-if (isset($gidReq) && $gidReq != $gid) {
-    $gidReset = true;
-}*/
-
-
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
@@ -859,7 +844,6 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
             }
         }
     }
-
 
     if (isset($user_id) && $user_id && isset($_cid) && $_cid) {
     

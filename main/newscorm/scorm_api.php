@@ -804,34 +804,27 @@ function savedata(origin) {
         
     if (olms.lesson_status != '') {        
         olms.updatable_vars_list['cmi.core.lesson_status'] = true;
-    }
-    
+    }    
         
-    logit_lms('saving data (status='+olms.lesson_status+' - interactions: '+ olms.interactions.length +')',1);
+    logit_lms('function savedata()');
 
     old_item_id = olms.info_lms_item[0];
     
     //Original behaviour
+    //Call ajax save item
     xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
     
     //Yannick's fix
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
     
-    //Julio's fix
-    
-    /*if (olms.lms_item_id == old_item_id) {    
-        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id);
-    } else {
-        xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
-    }*/
-    
     olms.info_lms_item[1] = olms.lms_item_id;
     
-    if (olms.item_objectives.length>0) {
+    if (olms.item_objectives.length > 0) {
         xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,old_item_id,olms.item_objectives);
     }
     
     olms.execute_stats = false;
+    
     //clean array
     olms.variable_to_send = new Array();
 }
@@ -1076,7 +1069,8 @@ function chamilo_void_save_asset(myscore,mymax)
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
-function logit_scorm(message,priority) {    
+function logit_scorm(message, priority) {
+    log_in_log("SCORM: " + message);
     if (scorm_logs == 0) { return false; }
     if (scorm_logs > priority) {
         /* fixed see http://support.chamilo.org/issues/370 */
@@ -1087,7 +1081,7 @@ function logit_scorm(message,priority) {
     params = {
         msg: "SCORM: " + message,
         debug: scorm_logs
-    };
+    };            
     
     $.ajax({
         type: "POST",
@@ -1096,6 +1090,17 @@ function logit_scorm(message,priority) {
         dataType: "script",
         async: false
     });
+}
+
+function log_in_log(message) {
+    var ua = $.browser;    
+    if (ua.mozilla) {
+        console.log(message);
+    } else {
+        if (window.console) {
+            window.console.log(message);
+        }
+    }
 }
 
 /**
@@ -1114,11 +1119,7 @@ function logit_lms(message, priority){
         debug: lms_logs
     };
     
-    var ua = $.browser;
-    
-    if (ua.mozilla) {
-        console.log("LMS: " + message);
-    }
+    log_in_log("LMS: " + message);
     
     /*
     $.ajax({
@@ -1245,7 +1246,7 @@ function update_stats_page() {
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
     logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
-    logit_lms('Could update with data: '+olms.lms_lp_id+','+olms.lms_view_id+','+olms.lms_user_id,2);
+    logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,2);
 
     if (mode == '') { 
         mode='%'; 
@@ -1516,12 +1517,15 @@ function switch_item(current_item, next_item){
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-    params='';
+    params  = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
     params += '&status='+lesson_status+'&t='+session_time;
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
+    
+    logit_lms('xajax_save_item with params:' + params);
+    
     if ( olms.lms_lp_type == 1) {
         $.ajax({
             type:"POST",
@@ -1612,6 +1616,9 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         params += interact_string;
         is_interactions='false';
     }
+    
+    logit_lms('xajax_save_item_scorm with params:' + params);    
+    
     $.ajax({
         type:"POST",
         data: params,

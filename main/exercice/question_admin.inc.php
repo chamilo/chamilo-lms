@@ -12,38 +12,19 @@
  * Code
  */
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if(!defined('ALLOWED_TO_INCLUDE')) {
-	exit();
-}
-
-$course_id = api_get_course_int_id();
-
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
 	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
-
-	if (isset($exerciseId) && !empty($exerciseId)) {
-		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-		$sql="SELECT max_score FROM $TBL_LP_ITEM
-			  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-		$result = Database::query($sql);
-		if (Database::num_rows($result) > 0) {
-			//Display::display_warning_message(get_lang('EditingScoreCauseProblemsToExercisesInLP'));
-		}
-	}
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
 	$action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
 }
 
 if (is_object($objQuestion)) {
-	//INIT FORM    
-	$form = new FormValidator('question_admin_form','post', $action);
-    //FORM CREATION
-    
-	if(isset($_GET['editQuestion'])) {
+	//FORM CREATION
+	$form = new FormValidator('question_admin_form','post', $action);    
+	if (isset($_GET['editQuestion'])) {
 		$class="btn save";
 		$text=get_lang('ModifyQuestion');
 		$type = Security::remove_XSS($_GET['type']);
@@ -63,18 +44,13 @@ if (is_object($objQuestion)) {
 	$objQuestion->createForm($form);
 
 	// answer form elements
+    
 	$objQuestion->createAnswersForm($form);
 
-	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-	if (!$show_quiz_edition) {
+	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications    
+	if ($objExercise->edit_exercise_in_lp == false) {
 		$form->freeze();
 	}
-
-	// submit button is implemented in every question type
-
-	//$form->addElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
-	//$renderer = $form->defaultRenderer();
-	//$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}</div></div>','submitQuestion');
 	
 	// FORM VALIDATION
 	if (isset($_POST['submitQuestion']) && $form->validate()) {
@@ -88,8 +64,7 @@ if (is_object($objQuestion)) {
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {
-	    	
+	    if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {	    	
 	    	if(isset($_GET['editQuestion'])) {
 	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
 	    	} else {

@@ -141,12 +141,6 @@ $audioPath = $documentPath.'/audio';
 $aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('FillBlanks'),get_lang('Matching'),get_lang('FreeAnswer'));
 
 // tables used in the exercise tool
-//@todo remove if this declarations are not used
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES         = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES          = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_DOCUMENT          = Database::get_course_table(TABLE_DOCUMENT);
 
 if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once 'export/qti2/qti2_export.php';
@@ -438,23 +432,13 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 </script>";
 
 Display::display_header($nameTools,'Exercise');
-
-$course_id = api_get_course_int_id();
-
-$show_quiz_edition = true;
-if (isset($exerciseId) && !empty($exerciseId)) {
-	$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-	$sql = "SELECT max_score FROM $TBL_LP_ITEM
-		  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-	$result = Database::query($sql);
-	if (Database::num_rows($result) > 0) {
-		Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
-		$show_quiz_edition = false;
-	}
+if ($objExercise->edit_exercise_in_lp == false) {
+    Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
 }
 
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
+
 if ($inATest) {
     echo '<div class="actions">';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
@@ -467,10 +451,10 @@ if ($inATest) {
 
     echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
 
-    if ($show_quiz_edition) {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
+    if ($objExercise->edit_exercise_in_lp == false) {
+        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';        
     } else {
-        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
     $maxScoreAllQuestions = 0;

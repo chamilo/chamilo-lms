@@ -16,10 +16,6 @@
 * Modified by Hubert Borderiou 21-10-2011 (Question by category)
 */
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if (!defined('ALLOWED_TO_INCLUDE')) {
-	exit();
-}
 // deletes a question from the exercise (not from the data base)
 if ($deleteQuestion) {
 	// if the question exists
@@ -133,10 +129,9 @@ $(function() {
 </script>
 <?php
 
-echo '<div class="actionsbig">';
 //we filter the type of questions we can add
-Question :: display_type_menu ($objExercise->feedback_type);
-echo '</div><div style="clear:both;"></div>';
+Question :: display_type_menu($objExercise);
+echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
 //deletes a session when using don't know question type (ugly fix)
@@ -158,14 +153,10 @@ if (!$inATest) {
     echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
-	if ($nbrQuestions) {
-        $my_exercise = new Exercise();
-        //forces the query to the database
-        $my_exercise->read($_GET['exerciseId']);
-        $questionList=$my_exercise->selectQuestionList();
+	if ($nbrQuestions) {        
+        $questionList = $objExercise->selectQuestionList();                
 
         // Style for columns
-
         $styleQuestion = "width:50%; float:left;";
         $styleType = "width:4%; float:left; padding-top:4px; text-align:center;";
         $styleCat = "width:22%; float:left; padding-top:8px; text-align:center;";
@@ -178,19 +169,20 @@ if (!$inATest) {
 				if (!is_numeric($id)) {
 					continue;
 				}
-				$objQuestionTmp = Question :: read($id);
+				$objQuestionTmp = Question::read($id);
 				$question_class = get_class($objQuestionTmp);
 
 				$clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
 				$edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-				// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-				if ($show_quiz_edition) {
+                
+				if ($objExercise->edit_exercise_in_lp == true) {
 				     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
 				}
-				$edit_link   = Display::tag('div',$edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
-				$clone_link  = Display::tag('div',$clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
-				$delete_link = Display::tag('div',$delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
-				$actions     = Display::tag('div',$edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px;     margin-top: 0px;     position: absolute;     top: 10%;'));
+                
+				$edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
+				$clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
+				$delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
+				$actions     = Display::tag('div', $edit_link.$clone_link.$delete_link, array('class'=>'edition','style'=>'width:100px; right:10px; margin-top: 0px; position: absolute; top: 10%;'));
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
@@ -235,7 +227,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, null, null, false, true, false, true, $my_exercise->feedback_type, true);
+                        showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

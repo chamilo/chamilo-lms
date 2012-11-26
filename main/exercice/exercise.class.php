@@ -31,6 +31,8 @@ if(!class_exists('Exercise')):
 class Exercise {
 
 	public $id;
+    public $name;
+    public $title;
 	public $exercise;
 	public $description;
 	public $sound;
@@ -54,6 +56,10 @@ class Exercise {
 	public $text_when_finished;
 	public $display_category_name;
     public $pass_percentage;
+    public $edit_exercise_in_lp = false;
+    public $is_gradebook_locked = false;
+    public $exercise_was_added_in_lp = false;
+    public $force_edit_exercise_in_lp = false;
 
 	 
 	/**
@@ -61,7 +67,7 @@ class Exercise {
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function Exercise($course_id = null) {
+	function Exercise($course_id = null) {        
 		$this->id				= 0;
 		$this->exercise			= '';
 		$this->description		= '';
@@ -84,12 +90,12 @@ class Exercise {
         $this->pass_percentage  = null;        
 
 		if (!empty($course_id)) {			
-			$course_info        =  api_get_course_info_by_id($course_id);
+			$course_info        = api_get_course_info_by_id($course_id);
 		} else {
 			$course_info 		= api_get_course_info();
 		}
 		$this->course_id    = $course_info['real_id'];
-		$this->course   	= $course_info;
+		$this->course   	= $course_info;        
 	}
 
 	/**
@@ -99,8 +105,10 @@ class Exercise {
 	 * @param - integer $id - exercise ID
 	 * @return - boolean - true if exercise exists, otherwise false
 	 */
-	function read($id) {		
-		$TBL_EXERCICES          = Database::get_course_table(TABLE_QUIZ_TEST);
+	function read($id) {
+        global $_configuration;
+		$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+        $table_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 		
 		$id  = intval($id);
         if (empty($this->course_id)) {
@@ -113,7 +121,8 @@ class Exercise {
 		if ($object = Database::fetch_object($result)) {
 			$this->id                       = $id;
 			$this->exercise                 = $object->title;
-			$this->name                     = cut($object->title, EXERCISE_MAX_NAME_SIZE);
+			$this->name                     = $object->title;
+            $this->title                    = $object->title;
 			$this->description              = $object->description;
 			$this->sound                    = $object->sound;
 			$this->type                     = $object->type;
@@ -128,36 +137,62 @@ class Exercise {
 			$this->text_when_finished       = $object->text_when_finished; 
 			$this->display_category_name    = $object->display_category_name;
             $this->pass_percentage          = $object->pass_percentage;
+            
+            $this->is_gradebook_locked      = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
 		
 			$this->review_answers   = (isset($object->review_answers) && $object->review_answers == 1) ? true : false;  
-			
+                        
+            $sql = "SELECT max_score FROM $table_lp_item
+                    WHERE   c_id = {$this->course_id} AND 
+                            item_type = '".TOOL_QUIZ."' AND
+                            path = '".$id."'";
+            $result = Database::query($sql);
+            
+            if (Database::num_rows($result) > 0) {
+                $this->exercise_was_added_in_lp = true;
+            }
+            
+            $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;            
+                        
+            if ($this->exercise_was_added_in_lp) {
+                $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;
+            } else {
+                $this->edit_exercise_in_lp = true;
+            }
+            			
 			if ($object->end_time != '0000-00-00 00:00:00') {
 				$this->end_time 	= $object->end_time;
 			}
 			if ($object->start_time != '0000-00-00 00:00:00') {
 				$this->start_time 	= $object->start_time;
 			}
-			$this->expired_time 	= $object->expired_time; //control time
+            
+            //control time
+			$this->expired_time 	= $object->expired_time;
             
             //Checking if question_order is correctly set
-            $this->questionList = $this->selectQuestionList(true);
+            $this->questionList     = $this->selectQuestionList(true);
 				
 			//overload questions list with recorded questions list
 			//load questions only for exercises of type 'one question per page'
 			//this is needed only is there is no questions
-            //			
+            /*
 			// @todo not sure were in the code this is used somebody mess with the exercise tool
 			// @todo don't know who add that config and why $_configuration['live_exercise_tracking']
 			global $_configuration, $questionList;
 			if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
 			isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {				
 				$this->questionList = $questionList;
-			}
+			}*/
 			return true;
 		}
 		// exercise not found
 		return false;
 	}
+    
+    function getCutTitle() {
+        return cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
+    }
 
 	/**
 	 * returns the exercise ID

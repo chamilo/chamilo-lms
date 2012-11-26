@@ -159,16 +159,11 @@ class MultipleAnswerTrueFalse extends Question {
         
         $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('option[3]', get_lang('ThisFieldIsRequired'), 'required');
-                
+        $form->addRule('option[3]', get_lang('ThisFieldIsRequired'), 'required');                
         
         $form -> addElement ('html', '</tr><table>');
-        
-
-        $form -> addElement('hidden', 'options_count', 3);
-                    
-        $form -> addElement ('html', '</table><br /><br />');
-        
+        $form -> addElement('hidden', 'options_count', 3);                    
+        $form -> addElement ('html', '</table><br /><br />');        
         
         //Extra values True, false,  Dont known
         if (!empty($this->extra)) {
@@ -184,8 +179,8 @@ class MultipleAnswerTrueFalse extends Question {
 
 		$navigator_info = api_get_navigator();
 
-		global $text, $class, $show_quiz_edition;
-		if ($show_quiz_edition) {
+		global $text, $class;
+		if ($obj_ex->edit_exercise_in_lp == true) {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 

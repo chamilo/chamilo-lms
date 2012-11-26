@@ -78,8 +78,7 @@ class MultipleAnswerCombination extends Question {
 		if ($nb_answers < 1) {
 			$nb_answers = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-		}
-		
+		}		
 
 		for($i = 1 ; $i <= $nb_answers ; ++$i) {
 			if(is_object($answer)) {
@@ -125,16 +124,15 @@ class MultipleAnswerCombination extends Question {
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 
-		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
-		
+		$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');		
 						
 		//only 1 answer the all deal ...
 		$form->addElement('text', 'weighting[1]', get_lang('Score'), array('class' => "span1", 'value' => '10'));
 				
 		$navigator_info = api_get_navigator();
-		global $text, $class, $show_quiz_edition;
+		global $text, $class;
 		//ie6 fix
-		if ($show_quiz_edition) {
+		if ($obj_ex->edit_exercise_in_lp == true) {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');

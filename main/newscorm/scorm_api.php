@@ -877,7 +877,7 @@ function LMSFinish(val) {
     //}
 
     //reinit the list of modified variables
-    reinit_updatable_vars_list()
+    reinit_updatable_vars_list();
     return('true');
 }
 /**

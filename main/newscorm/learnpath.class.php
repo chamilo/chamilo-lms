@@ -741,8 +741,8 @@ class learnpath {
             if ($debug) {
                 error_log('Autocompleting parent of item ' . $item . ' (item ' . $parent_id . ')', 0);
             }
-            $current_item = & $this->items[$item];
-            $parent = & $this->items[$parent_id]; // Get the parent.
+            $current_item = $this->items[$item];
+            $parent = $this->items[$parent_id]; // Get the parent.
             // New experiment including failed and browsed in completed status.
             $current_status = $current_item->get_status();
             if ($current_item->is_done() || $current_status == 'browsed' || $current_status == 'failed') {
@@ -3781,7 +3781,7 @@ class learnpath {
             
             if ($debug) {
                 error_log('get_status(): ' . $status);
-                error_log('update_queue after:' . $status);
+                error_log('update_queue after:');
                 error_log(print_r($this->update_queue,1));
             }
             return $res;
@@ -6671,7 +6671,7 @@ class learnpath {
                 $form->addElement('hidden', 'title');
             }
 
-            $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_chapter_form" style="width:37%;" id="idParent" onchange="javascript: load_cbo(this.value);"');
+            $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_chapter_form" style="width:37%;" id="idParent" onchange="javascript: load_cbo(this.value);"');
 
             foreach ($arrHide as $key => $value) {
                 $parent_select->addOption($value['value'], $key, 'style="padding-left:' . $value['padding'] . 'px;"');
@@ -6922,7 +6922,7 @@ class learnpath {
             }
         }
 
-        $parent_select = & $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" id="idParent" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
+        $parent_select = $form->addElement('select', 'parent', get_lang('Parent'), '', 'class="learnpath_item_form" id="idParent" style="width:40%;" onchange="javascript: load_cbo(this.value);"');
         $my_count=0;
         foreach ($arrHide as $key => $value) {
             if ($my_count!=0) {
@@ -6959,7 +6959,7 @@ class learnpath {
             }
         }
 
-        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_item_form" style="width:40%;"');
+        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_item_form" style="width:40%;"');
         $position->addOption(get_lang('FirstPosition'), 0);
 
         foreach ($arrHide as $key => $value) {

@@ -1078,7 +1078,7 @@ function logit_scorm(message, priority) {
             $("#log_content").append("SCORM: " + message + "<br/>");
         }
     }
-    params = {
+    var params = {
         msg: "SCORM: " + message,
         debug: scorm_logs
     };            
@@ -1114,7 +1114,7 @@ function logit_lms(message, priority){
             $("#log_content").append("LMS: " + message + "<br />");
         }
     }    
-    params = {
+    var params = {
         msg: "LMS: " + message,
         debug: lms_logs
     };
@@ -1523,10 +1523,11 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
     params += '&status='+lesson_status+'&t='+session_time;
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
-    
-    logit_lms('xajax_save_item with params:' + params);
-    
+        
     if ( olms.lms_lp_type == 1) {
+    
+        logit_lms('xajax_save_item with params:' + params);
+        
         $.ajax({
             type:"POST",
             data: params,

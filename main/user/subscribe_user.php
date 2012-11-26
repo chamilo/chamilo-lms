@@ -60,7 +60,7 @@ if (api_get_setting('ProfilingFilterAddingUsers') == 'true') {
 
 // Build search-form
 $form = new FormValidator('search_user', 'get', '', '', null, false);
-$renderer = & $form->defaultRenderer();
+$renderer = $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->add_textfield('keyword', '', false);
 $form->addElement('hidden', 'type', Security::remove_XSS($_REQUEST['type']));

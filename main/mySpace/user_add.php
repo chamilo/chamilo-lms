@@ -165,8 +165,8 @@ $form->addGroup($group, 'mail', get_lang('SendMailToNewUser'), '&nbsp;');
 // Expiration Date
 $form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 $group = array ();
-$group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 // Active account or inactive account
 $form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
@@ -224,7 +224,7 @@ if ($form->validate()) {
 	$check = Security::check_token('post');
 	if ($check) {
 		$user = $form->exportValues();
-		$picture_element = & $form->getElement('picture');
+		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 		$picture_uri = '';
 		if (strlen($picture['name']) > 0) {

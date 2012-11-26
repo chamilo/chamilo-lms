@@ -104,14 +104,14 @@ $form->addElement('hidden', 'action');
 
 // Groups per user
 $group = array ();
-$group[] = & $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'));
+$group[] = $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'));
 $possible_values = array ();
 for ($i = 1; $i <= 10; $i ++) {
 	$possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
-$group[] = & $form->createElement('select', 'groups_per_user', null, $possible_values);
-$group[] = & $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'));
+$group[] = $form->createElement('select', 'groups_per_user', null, $possible_values);
+$group[] = $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'));
 $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
 $form->addRule('limit_group', get_lang('MaxGroupsPerUserInvalid'), 'callback', 'check_groups_per_user');
 // Default settings for new groups
@@ -123,9 +123,9 @@ $form->addElement('html', '</div>');
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array ();
-$group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
-$group[] = & $form->createElement('text', 'max_member', null, array ('size' => 2));
-$group[] = & $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
+$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
+$group[] = $form->createElement('text', 'max_member', null, array ('size' => 2));
+$group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 

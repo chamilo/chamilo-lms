@@ -75,7 +75,7 @@ if ($course_validation_feature) {
         $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
 
         // The teacher.
-        $titular = & $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
+        $titular = $form->add_textfield('tutor_name', get_lang('Professor'), null, array('size' => '60', 'disabled' => 'disabled'));
         //$form->applyFilter('tutor_name', 'html_filter');
 
         // Description of the requested course.

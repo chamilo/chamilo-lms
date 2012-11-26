@@ -428,7 +428,7 @@ switch ($action) {
 			// For user comming from group space to publish his work
 			$realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
 			$form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
-			$text_document = & $form->addElement('text', 'document', get_lang('Document'));
+			$text_document = $form->addElement('text', 'document', get_lang('Document'));
 			$defaults['document'] = '<a href="' . format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
 			$text_document->freeze();
 		} elseif ($item_id && ($is_allowed_to_edit or $is_author)) {

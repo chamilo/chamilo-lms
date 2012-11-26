@@ -140,7 +140,7 @@ elseif (isset($_POST['number_of_groups'])) {
 		$form = new FormValidator('create_groups_step2');
 
 		// Modify the default templates
-		$renderer = & $form->defaultRenderer();
+		$renderer = $form->defaultRenderer();
 		$form_template = "<form {attributes}>\n<div>\n<table>\n{content}\n</table>\n</div>\n</form>";
 		$renderer->setFormTemplate($form_template);
 		$element_template = <<<EOT
@@ -160,32 +160,32 @@ EOT;
 		$defaults = array ();
 		// Table heading
 		$group_el = array ();
-		$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupName').'</b>');
+		$group_el[] =$form->createElement('static', null, null, '<b>'.get_lang('GroupName').'</b>');
 		if (api_get_setting('allow_group_categories') == 'true') {
-			$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupCategory').'</b>');
+			$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupCategory').'</b>');
 		}
-		//$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupTutor').'</b>');
-		$group_el[] = & $form->createElement('static', null, null, '<b>'.get_lang('GroupPlacesThis').'</b>');
+		//$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupTutor').'</b>');
+		$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupPlacesThis').'</b>');
 		$form->addGroup($group_el, 'groups', null, "\n</td>\n<td>\n", false);
 		// Checkboxes
 		if ($_POST['number_of_groups'] > 1) {
 			$group_el = array ();
-			$group_el[] = & $form->createElement('static', null, null, ' ');
+			$group_el[] = $form->createElement('static', null, null, ' ');
 			if (api_get_setting('allow_group_categories') == 'true') {
-				$group_el[] = & $form->createElement('checkbox', 'same_category', null, get_lang('SameForAll'), array('onclick' => "javascript: switch_state('category');"));
+				$group_el[] = $form->createElement('checkbox', 'same_category', null, get_lang('SameForAll'), array('onclick' => "javascript: switch_state('category');"));
 			}
-			//$group_el[] = & $form->createElement('checkbox', 'same_tutor', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('tutor');"));
-			$group_el[] = & $form->createElement('checkbox', 'same_places', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('places');"));
+			//$group_el[] = $form->createElement('checkbox', 'same_tutor', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('tutor');"));
+			$group_el[] = $form->createElement('checkbox', 'same_places', null, get_lang('SameForAll'), array ('onclick' => "javascript: switch_state('places');"));
 			$form->addGroup($group_el, 'groups', null, '</td><td>', false);
 		}
 		// Properties for all groups
 		for ($group_number = 0; $group_number < $_POST['number_of_groups']; $group_number ++) {
 			$group_el = array ();
-			$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_name');
+			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
 			if (api_get_setting('allow_group_categories') == 'true') {
-				$group_el[] = & $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
+				$group_el[] = $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
 			}			
-			$group_el[] = & $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
+			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
 
 			if ($_POST['number_of_groups'] < 10000) {
 				if ($group_id < 10) {
@@ -220,10 +220,10 @@ EOT;
 		$create_groups_form = new FormValidator('create_groups');
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
-		$group_el[] = & $create_groups_form->createElement('static', null, null, get_lang('Create'));
-		$group_el[] = & $create_groups_form->createElement('text', 'number_of_groups', null, array('class' => 'span1'));
-		$group_el[] = & $create_groups_form->createElement('static', null, null, get_lang('NewGroups'));
-		$group_el[] = & $create_groups_form->createElement('style_submit_button', 'submit', get_lang('ProceedToCreateGroup'), 'class="save"');
+		$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('Create'));
+		$group_el[] = $create_groups_form->createElement('text', 'number_of_groups', null, array('class' => 'span1'));
+		$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('NewGroups'));
+		$group_el[] = $create_groups_form->createElement('style_submit_button', 'submit', get_lang('ProceedToCreateGroup'), 'class="save"');
 		$create_groups_form->addGroup($group_el, 'create_groups', null, ' ', false);
 		$defaults = array();
 		$defaults['number_of_groups'] = 1;
@@ -268,11 +268,11 @@ EOT;
             $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
 			$create_subgroups_form->addElement('hidden', 'action');
 			$group_el = array();
-			$group_el[] = & $create_subgroups_form->createElement('static', null, null, get_lang('CreateNumberOfGroups'));
-			$group_el[] = & $create_subgroups_form->createElement('text', 'number_of_groups', null, array('size' => 3));
-			$group_el[] = & $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
-			$group_el[] = & $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
-			$group_el[] = & $create_subgroups_form->createElement('button', 'submit', get_lang('Ok'));
+			$group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('CreateNumberOfGroups'));
+			$group_el[] = $create_subgroups_form->createElement('text', 'number_of_groups', null, array('size' => 3));
+			$group_el[] = $create_subgroups_form->createElement('static', null, null, get_lang('WithUsersFrom'));
+			$group_el[] = $create_subgroups_form->createElement('select', 'base_group', null, $base_group_options);
+			$group_el[] = $create_subgroups_form->createElement('button', 'submit', get_lang('Ok'));
 			$create_subgroups_form->addGroup($group_el, 'create_groups', null, ' ', false);
 			$defaults = array();
 			$defaults['action'] = 'create_subgroups';

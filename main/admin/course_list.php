@@ -190,7 +190,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $categories = array();
     $categories_select = $form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
     CourseManager::select_and_sort_categories($categories_select);
-    $el = & $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
+    $el = $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);

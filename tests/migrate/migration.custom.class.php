@@ -889,8 +889,9 @@ class MigrationCustom {
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 //SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
-                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-                $message = "Move Session to empty";
+                //SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                SessionManager::change_user_session($user_id, $session_id, null, 4);
+                $message = "Move Session to empty (cancelled subscription)";
                 return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
                 return array(

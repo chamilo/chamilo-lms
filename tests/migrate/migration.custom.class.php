@@ -791,18 +791,14 @@ class MigrationCustom {
     //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
     //const TRANSACTION_TYPE_EDIT_USER   =  3;
     static function transaction_3($data, $web_service_details) {
-        $uidIdPersonaId = strtoupper($data['item_id']);
+        $uidIdPersonaId = strtoupper($data['item_id']);        
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
-        if ($user_id) { 
-            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId));
+        if ($user_id) {            
+            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId)); 
             if ($user_info['error'] == false) {
                 unset($user_info['error']);
                 //Edit user
                 $user_info['user_id'] = $user_id;
-                // If the user is disabled on the other side, disable in Chamilo
-		if (isset($user_info['bitvigencia'])) {
-                    $user_info['active'] = $user_info['bitvigencia'];
-                }
                 $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);
                 UserManager::update($user_info);
                 $chamilo_user_info = api_get_user_info($user_id, false, false, true);
@@ -889,9 +885,8 @@ class MigrationCustom {
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 //SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
-                //SessionManager::unsubscribe_user_from_session($session_id, $user_id);
-                SessionManager::change_user_session($user_id, $session_id, null, 4);
-                $message = "Move Session to empty (cancelled subscription)";
+                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
+                $message = "Move Session to empty";
                 return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
                 return array(
@@ -1257,6 +1252,7 @@ class MigrationCustom {
                     'option_order'          => null
                 );
                 
+error_log('Adding extra field: '.print_r($params,1));
                 $result = $extra_field_option->save_one_item($params);
                 
                 $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
@@ -1329,6 +1325,7 @@ class MigrationCustom {
                         'option_order'          => null
                     );        
                     $extra_field_option->update($extra_field_option_info);
+error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     $options_updated[] = $option['id'];
                 }
                 
@@ -1784,7 +1781,6 @@ class MigrationCustom {
         $result['extra_sede']           = strtoupper($result['uididsede']);
         $result['extra_aula']           = strtoupper($result['uididaula']);
         $result['extra_periodo']        = strtoupper($result['chrperiodo']);
-        $result['extra_estado']         = strtoupper($result['tinestado']);
         
         $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);
         $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
@@ -1799,7 +1795,6 @@ class MigrationCustom {
         unset($result['uididsede']);
         unset($result['uididhorario']);
         unset($result['chrperiodo']);
-        unset($result['tinestado']);
         
         return $result;
     }

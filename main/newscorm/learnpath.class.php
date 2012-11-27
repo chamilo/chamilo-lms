@@ -5615,7 +5615,7 @@ class learnpath {
     public function display_edit_item($item_id) {
         global $_course; // It will disappear.
         $course_id = api_get_course_int_id();
-        $return = '';
+        $return = '';        
         if (is_numeric($item_id)) {
             $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
             $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = ".$course_id." AND id = " . Database::escape_string($item_id);
@@ -7700,11 +7700,13 @@ class learnpath {
      * @param array $data
      * @return string
      */
-    public function display_item_small_form($item_type, $title = '', $data) {
-        $form = new FormValidator('small_form');
+    public function display_item_small_form($item_type, $title = '', $data = array()) {        
+        $url = api_get_self() . '?' .api_get_cidreq().'&action=edit_item&lp_id='.$this->lp_id;
+        $form = new FormValidator('small_form', 'post', $url);
         $form->addElement('header', $title);
         $form->addElement('text', 'title', get_lang('Title'));
         $form->addElement('button', 'submit_button', get_lang('Save'));
+        $form->addElement('hidden', 'id', $data['id']);
         $form->addElement('hidden', 'parent', $data['parent_item_id']);
         $form->addElement('hidden', 'previous', $data['previous_item_id']);        
         $form->setDefaults(array('title' => $data['title']));

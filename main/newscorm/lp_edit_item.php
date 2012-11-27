@@ -21,9 +21,6 @@ api_protect_course_script();
 
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
@@ -34,7 +31,7 @@ $language_file = 'learnpath';
 /* Header and action code */
 
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 
 function FCKeditor_OnComplete( editorInstance ) {
     document.getElementById(\'frmModel\').innerHTML = "<iframe height=890px; width=230px; frameborder=0 src=\''.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/fckdialogframe.html \'>";
@@ -48,7 +45,9 @@ function InnerDialogLoaded() {
         var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
     }
     return B.ClickFrame();
-$};'.$_SESSION['oLP']->get_js_dropdown_array().'</script>';
+$};'.$_SESSION['oLP']->get_js_dropdown_array().'
+
+</script>';
 
 /* Constants and variables */
 
@@ -92,7 +91,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
             'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
             'name' => get_lang('ToolGradebook')
-        );
+    );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
@@ -106,7 +105,7 @@ Display::display_header(get_lang('Edit'),'Path');
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -130,7 +129,6 @@ function confirmation(name) {
 /* DISPLAY SECTION */
 
 echo $_SESSION['oLP']->build_action_menu();
-
 
 echo '<div class="row-fluid">';
 echo '<div class="span3">';

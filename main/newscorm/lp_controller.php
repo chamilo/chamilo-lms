@@ -404,13 +404,12 @@ switch ($action) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
-                //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
                 $audio = array();
-                
-                if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
-                
-                $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
+                if (isset($_FILES['mp3'])) {
+                    $audio = $_FILES['mp3'];
+                }
+                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
 
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
@@ -421,8 +420,6 @@ switch ($action) {
                 header('Location: '.$url);
                 exit;
             }
-        
-            
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_edit_item.php';
             } else {

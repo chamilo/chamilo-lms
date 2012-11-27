@@ -21,9 +21,6 @@ api_protect_course_script();
 
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
@@ -36,7 +33,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -46,7 +42,7 @@ $submit			= $_POST['submit_button'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' and $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_admin_view.php');
@@ -87,24 +83,8 @@ if (isset($_REQUEST['updateaudio'])) {
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
-
-
 /* DISPLAY SECTION */
 
-switch ($_GET['action']) {
-    case 'edit_item':
-        if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemEdited'));
-        } else {
-            echo $_SESSION['oLP']->display_edit_item($_GET['id']);
-        }
-        break;
-    case 'delete_item':
-        if (isset($is_success) && $is_success === true) {
-            Display::display_confirmation_message(get_lang('LearnpathItemDeleted'));
-        }
-        break;
-}
 
 // POST action handling (uploading mp3, deleting mp3)
 if (isset($_POST['save_audio'])) {
@@ -187,8 +167,8 @@ if (isset($_POST['save_audio'])) {
     exit;
 }
 
-
 Display::display_header(null, 'Path');
+
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 ?>
@@ -303,7 +283,29 @@ function confirmation(name) {
 
 echo $_SESSION['oLP']->build_action_menu();
 
-echo $_SESSION['oLP']->overview();
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
+echo $_SESSION['oLP']->return_new_tree(null, true); 
+echo '</div>';
+
+echo '<div class="span9">';
+switch ($_GET['action']) {
+    case 'edit_item':
+        if (isset($is_success) && $is_success === true) {
+            Display::display_confirmation_message(get_lang('LearnpathItemEdited'));
+        } else {
+            echo $_SESSION['oLP']->display_edit_item($_GET['id']);
+        }
+        break;
+    case 'delete_item':
+        if (isset($is_success) && $is_success === true) {
+            Display::display_confirmation_message(get_lang('LearnpathItemDeleted'));
+        }
+        break;
+}
+
+echo '</div>';
+echo '</div>';
 
 /* FOOTER */
 Display::display_footer();

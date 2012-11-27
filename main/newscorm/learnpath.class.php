@@ -6581,7 +6581,7 @@ class learnpath {
             $item_path_fck = '';
         }
 
-        $legend = '<legend>';
+        
 
         if ($id != 0 && is_array($extra_info))
             $parent = $extra_info['parent_item_id'];
@@ -6620,10 +6620,6 @@ class learnpath {
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
 
-        $legend .= $title;
-
-        $legend .= '</legend>';
-
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
         
         $url = api_get_self() . '?' .api_get_cidreq().'&gradeboook='.$gradebook.'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
@@ -6633,7 +6629,7 @@ class learnpath {
         $defaults['title'] = api_html_entity_decode($item_title, ENT_QUOTES, $charset);
         $defaults['description'] = $item_description;
 
-        $form->addElement('html', $legend);
+        $form->addElement('header', $title);
 
         //$arrHide = array($id);
         $arrHide[0]['value'] = Security :: remove_XSS($this->name);
@@ -7545,12 +7541,12 @@ class learnpath {
         if (!empty($row['audio'])) {
             $audio_player .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
             $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
-            $audio_player .= '<script type="text/javascript">
-                                        var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
-                                        s1.addParam("allowscriptaccess","always");
-                                        s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
-                                        s1.write("container");
-                                    </script>';
+            $audio_player .= '<script>
+                                var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
+                                s1.addParam("allowscriptaccess","always");
+                                s1.addParam("flashvars","file=../../courses/' . $_course['path'] . '/document/audio/' . $row['audio'] . '&autostart=true");
+                                s1.write("container");
+                            </script>';
         }
         $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
@@ -7562,8 +7558,7 @@ class learnpath {
             $return .= Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
         }
         $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
-        
-        
+                
          if ($item_type == TOOL_HOTPOTATOES ) {
             $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);            
             $return .= get_lang('File').': '.$document_data['absolute_path_from_document'];
@@ -7706,23 +7701,14 @@ class learnpath {
      * @return string
      */
     public function display_item_small_form($item_type, $title = '', $data) {
-        $return = '<div class="lp_small_form">';
-        $return .= '<p class="lp_title">' . $title . '</p>';
-        $return .= '<form method="post">';
-        $return .= '<table cellpadding="0" cellspacing="0" class="lp_form">';
-        $return .= '<tr>';
-        $return .= '<td class="label"><label for="idTitle">Title&nbsp;:</label></td>';
-        $return .= '<td class="input"><input class="small_form" id="idTitle" name="title" type="text" value="' . api_html_entity_decode($data['title'], ENT_QUOTES) . '" /></td>';
-        $return .= '</tr>';
-        $return .= '<tr>';
-        $return .= '<td colspan="2"><button class="save" name="submit_button" type="submit">' . get_lang('Save') . '</button></td>';
-        $return .= '</tr>';
-        $return .= '</table>';
-        $return .= '<input name="parent" type="hidden" value="' . $data['parent_item_id'] . '"/>';
-        $return .= '<input name="previous" type="hidden" value="' . $data['previous_item_id'] . '"/>';
-        $return .= '</form>';
-        $return .= '</div>';
-        return $return;
+        $form = new FormValidator('small_form');
+        $form->addElement('header', $title);
+        $form->addElement('text', 'title', get_lang('Title'));
+        $form->addElement('button', 'submit_button', get_lang('Save'));
+        $form->addElement('hidden', 'parent', $data['parent_item_id']);
+        $form->addElement('hidden', 'previous', $data['previous_item_id']);        
+        $form->setDefaults(array('title' => $data['title']));
+        return $form->toHtml();
     }
 
     /**

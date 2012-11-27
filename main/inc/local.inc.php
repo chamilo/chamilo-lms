@@ -977,7 +977,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset)) {
     //Checking the course access
     $is_allowed_in_course = false;
     
-    if (isset($_course)) {
+    if (isset($_course) && isset($_course['visibility'])) {
         switch ($_course['visibility']) {
             case COURSE_VISIBILITY_OPEN_WORLD: //3
                 $is_allowed_in_course = true;

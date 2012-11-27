@@ -1779,6 +1779,7 @@ class MigrationCustom {
         $result['extra_sede']           = strtoupper($result['uididsede']);
         $result['extra_aula']           = strtoupper($result['uididaula']);
         $result['extra_periodo']        = strtoupper($result['chrperiodo']);
+        $result['extra_estado']         = strtoupper($result['tinestado']);
         
         $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);
         $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
@@ -1793,6 +1794,7 @@ class MigrationCustom {
         unset($result['uididsede']);
         unset($result['uididhorario']);
         unset($result['chrperiodo']);
+        unset($result['tinestado']);
         
         return $result;
     }

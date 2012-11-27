@@ -791,14 +791,18 @@ class MigrationCustom {
     //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
     //const TRANSACTION_TYPE_EDIT_USER   =  3;
     static function transaction_3($data, $web_service_details) {
-        $uidIdPersonaId = strtoupper($data['item_id']);        
+        $uidIdPersonaId = strtoupper($data['item_id']);
         $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
-        if ($user_id) {            
-            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId)); 
+        if ($user_id) { 
+            $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId));
             if ($user_info['error'] == false) {
                 unset($user_info['error']);
                 //Edit user
                 $user_info['user_id'] = $user_id;
+                // If the user is disabled on the other side, disable in Chamilo
+		if (isset($user_info['bitvigencia'])) {
+                    $user_info['active'] = $user_info['bitvigencia'];
+                }
                 $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);
                 UserManager::update($user_info);
                 $chamilo_user_info = api_get_user_info($user_id, false, false, true);

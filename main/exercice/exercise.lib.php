@@ -992,7 +992,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     propagate_neg,
                     revised,
                     group_name,
-                    group_id";
+                    group_id, 
+                    orig_lp_id";
         }
         
         $sql = " $sql_select            
@@ -1002,9 +1003,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete' 
                     AND te.exe_cours_id='" . api_get_course_id() . "' $session_id_and 
-                    AND ce.active <>-1 
-                    AND orig_lp_id = 0 
-                    AND orig_lp_item_id = 0
+                    AND ce.active <>-1                    
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
          
@@ -1077,6 +1076,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 $clean_group_list[$group['id']] = $group['name'];
             }
         }
+        
+        $lp_list_obj = new learnpathList(api_get_user_id());
+        $lp_list = $lp_list_obj->get_flat_list();
+        
             
         if (is_array($results)) {
 			
@@ -1099,6 +1102,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         continue;
                     }
                     $users_array_id[] = $results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'];
+                }
+                
+                $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                $lp_name = null;
+                
+                if ($lp_obj) {
+                    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                    $lp_name =  Display::url($lp_obj['lp_name'], $url, array('target' => '_blank'));
                 }
                                  
                 //Add all groups by user
@@ -1127,7 +1138,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     $result_disabled = 0;
                 }
     
-                if ($result_disabled == 0) {      
+                if ($result_disabled == 0) {
                     
                     $my_res     = $results[$i]['exe_result'];
                     $my_total   = $results[$i]['exe_weighting'];
@@ -1178,9 +1189,10 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         $revised = Display::label(get_lang('NotValidated'), 'info');
                     }
                     
-                    if ($is_allowedToEdit) {                        					
+                    if ($is_allowedToEdit) {              					
 						$results[$i]['status']  =  $revised;
 						$results[$i]['score']   =  $score;
+                        $results[$i]['lp']      =  $lp_name;
 						$results[$i]['actions'] =  $actions;
 						$list_info[] = $results[$i];                        
                     } else {

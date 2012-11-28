@@ -324,22 +324,31 @@ if (!empty($group_parameters)) {
 if ($is_allowedToEdit || $is_tutor) {
 
 	//The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'),
-                        get_lang('Group'), get_lang('Duration').' ('.get_lang('MinMinute').')', get_lang('StartDate'),  get_lang('EndDate'), get_lang('Score'), get_lang('Status'), get_lang('Actions'));
+	$columns        = array(get_lang('FirstName'), 
+                            get_lang('LastName'), 
+                            get_lang('LoginName'),
+                            get_lang('Group'), 
+                            get_lang('Duration').' ('.get_lang('MinMinute').')', 
+                            get_lang('StartDate'),  
+                            get_lang('EndDate'), 
+                            get_lang('Score'), 
+                            get_lang('Status'), 
+                            get_lang('ToolLearnpath'), 
+                            get_lang('Actions')
+    );
 
 //Column config
 	$column_model   = array(
                         array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'lastname',		'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'true'),
-                        array('name'=>'login',          'hidden'=>'true',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true'),
-                        array('name'=>'group_name',		'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=> 'select',
+                        array('name'=>'login',          'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'true', 'hidden'=>'true'),
+                        array('name'=>'group_name',		'index'=>'group_id',        'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=> 'select',
                             //for the bottom bar
                             'searchoptions' => array(
                                             'defaultValue'  => 'group_all',
                                             'value'         => $group_parameters),
                               //for the top bar
-                              'editoptions' => array('value' => $group_parameters)),
-
+                            'editoptions' => array('value' => $group_parameters)),
                         array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'30',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'start_date',		'index'=>'start_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),
 						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),
@@ -352,8 +361,7 @@ if ($is_allowedToEdit || $is_tutor) {
 
                               //for the top bar
                               'editoptions' => array('value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'))),
-//issue fixed in jqgrid
-//                      array('name'=>'actions',        'index'=>'actions',         'width'=>'100',  'align'=>'left','formatter'=>'action_formatter','sortable'=>'false', 'search' => 'false')
+                        array('name'=>'lp',             'index'=>'lp',              'width'=>'60',  'align'=>'left', 'search' => 'false'),
 						array('name'=>'actions',        'index'=>'actions',         'width'=>'60',  'align'=>'left', 'search' => 'false')
                        );
 
@@ -374,8 +382,6 @@ $extra_params['autowidth'] = 'true';
 
 //height auto
 $extra_params['height'] = 'auto';
-//$extra_params['excel'] = 'excel';
-//$extra_params['rowList'] = array(10, 20 ,30);
 
 ?>
 <script>
@@ -421,7 +427,7 @@ function exportExcel() {
 
 $(function() {
     <?php
-        echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);
+        echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
     if ($is_allowedToEdit || $is_tutor) { ?>
 

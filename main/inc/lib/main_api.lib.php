@@ -2787,7 +2787,13 @@ function api_not_found($print_headers = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false, $message = null) {
-    Header::response_code(403);
+    if (api_get_setting('sso_authentication') === 'true') {
+        global $osso;
+        if ($osso) {
+            $osso->logout();
+        }
+    }
+    Header::response_code(403);    
     $home_url   = api_get_path(WEB_PATH);
     $user_id    = api_get_user_id();
     $course     = api_get_course_id();
@@ -2823,7 +2829,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     $tpl = new Template(null, $show_headers, $show_headers);
     $tpl->assign('content', $msg);
 
-    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {        
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
@@ -2832,13 +2838,14 @@ function api_not_allowed($print_headers = false, $message = null) {
     }
 
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+        
         //only display form and return to the previous URL if there was a course ID included
-        if ($user_id!=0 && !api_is_anonymous()) {
+        if ($user_id != 0 && !api_is_anonymous()) {
             //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
             $tpl->assign('content', $msg);
             $tpl->display_one_col_template();
             exit;
-        }
+        }       
 
         // If the user has no user ID, then his session has expired
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);

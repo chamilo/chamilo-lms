@@ -3641,26 +3641,30 @@ class learnpath {
         //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_publish()', 0); }
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = Database::escape_string($lp_id);
         $sql = "SELECT * FROM $tbl_lp where c_id = ".$course_id." AND id=$lp_id";
         $result = Database::query($sql);
-        $row = Database :: fetch_array($result);
-        $name = domesticate($row['name']);
-        if ($set_visibility == 'i') {
-            $s = $name . " " . get_lang('LearnpathNotPublished');
-            $dialogBox = $s;
-            $v = 0;
-        }
-        if ($set_visibility == 'v') {
-            $s = $name . " " . get_lang('LearnpathPublished');
-            $dialogBox = $s;
-            $v = 1;
+        if (Database::num_rows($result)) {
+            $row = Database :: fetch_array($result);
+            $name = domesticate($row['name']);
+            if ($set_visibility == 'i') {
+                $s = $name . " " . get_lang('LearnpathNotPublished');
+                $dialogBox = $s;
+                $v = 0;
+            }
+            if ($set_visibility == 'v') {
+                $s = $name . " " . get_lang('LearnpathPublished');
+                $dialogBox = $s;
+                $v = 1;
+            }
+        } else {
+            return false;                    
         }
 
         $session_id = api_get_session_id();
         $session_condition = api_get_session_condition($session_id);
 
         $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
-
         $link = 'newscorm/lp_controller.php?action=view&lp_id=' . $lp_id.'&id_session='.$session_id;
         $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
@@ -3679,7 +3683,7 @@ class learnpath {
             return false;
         }
         $result = Database::query($sql);
-        //if ($this->debug > 2) { error_log('New LP - Leaving learnpath::toggle_visibility: '.$sql, 0); }
+        //if ($this->debug > 2) { error_log('New LP - Leaving learnpath::toggle_visibility: '.$sql, 0); }      
     }
 
     /**

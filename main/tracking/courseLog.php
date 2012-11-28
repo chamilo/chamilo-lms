@@ -192,10 +192,9 @@ echo '</div>';
 
 echo '<div class="actions">';    
 // Create a search-box.
-$form_search = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq().'&studentlist=true', '', array('class' => 'form-search'), false);
+$form_search = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
 $renderer = $form_search->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span>');
-$form_search->addElement('hidden', 'studentlist', 'true');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', api_get_session_id());
 $form_search->addElement('text', 'user_keyword');
@@ -262,7 +261,6 @@ if (count($a_students) > 0) {
 
     $parameters['cidReq'] 		= Security::remove_XSS($_GET['cidReq']);
     $parameters['id_session'] 	= $session_id;
-    $parameters['studentlist'] 	= Security::remove_XSS($_GET['studentlist']);
     $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);

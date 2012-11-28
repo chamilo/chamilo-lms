@@ -64,7 +64,6 @@ if ($export_csv) {
     ob_start();
 }
 
-
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
@@ -116,8 +115,6 @@ $parameters = array();
 if (isset($_GET['keyword'])) {
     $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
 }
-
-$parameters['studentlist'] = 'resources';
 
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('Tool'));

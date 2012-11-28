@@ -49,6 +49,8 @@ require_once api_get_path(SYS_CODE_PATH).'resourcelinker/resourcelinker.inc.php'
 require_once api_get_path(SYS_CODE_PATH).'survey/survey.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
+$TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
+
 // Starting the output buffering when we are exporting the information.
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
@@ -97,7 +99,7 @@ echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
-echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv&studentlist=false">
+echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
 	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';	
 
 echo '</span>';

@@ -18,10 +18,6 @@ $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info(api_get_course_id());
 
-if (!empty($course_info)) {
-    //api_protect_course_script();
-}
-
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
@@ -64,68 +60,6 @@ if ($export_csv) {
     ob_start();
 }
 $csv_content = array();
-// Scripts for reporting array hide / unhide columns
-$js = "
-    <script>
-        // hide column and display the button to unhide it
-        function foldup(in_id) {
-            $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();
-            $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();
-            $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();
-        }
-        // add the red cross on top of each column
-        function init_hide() {
-            $('div#reporting_table table tr th').each(
-                function(index) {
-                    num_index = index + 1;
-                    $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('visible.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 22)."</div>');                    
-                 }
-               )
-             }
-        // hide some column at startup
-        // be sure that these columns always exists
-        // see $tab_table_header = array();    // tab of header texts
-        $(document).ready( function() {
-            init_hide();
-            foldup(1);foldup(9);foldup(10);foldup(11);foldup(12);
-        })
-    </script>";
-        
-$htmlHeadXtra[] = "<style type='text/css'>
-/*<![CDATA[*/
-.secLine {background-color : #E6E6E6;}
-.content {padding-left : 15px;padding-right : 15px; }
-.specialLink{color : #0000FF;}
-/*]]>*/
-/* Style for reporting array hide / unhide columns */
-.unhide_button {
-    cursor : pointer;
-    border:1px solid black;
-    background-color: #FAFAFA;
-    padding: 5px;
-    border-radius : 3px;
-    margin-right:3px;
-}
-div#reporting_table table th {
-  vertical-align:top;
-}
-</style>
-<style media='print' type='text/css'>
-
-</style>";
-$htmlHeadXtra[] .= $js;
-
-// Database table definitions.
-//@todo remove this calls
-$TABLETRACK_ACCESS      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-$TABLETRACK_LINKS       = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
-$TABLETRACK_DOWNLOADS   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
-$TABLETRACK_ACCESS_2    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-$TABLETRACK_EXERCISES 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TABLECOURSUSER	        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$TABLECOURSE	        = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user             = Database::get_main_table(TABLE_MAIN_USER);
-$TABLEQUIZ              = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
@@ -151,21 +85,10 @@ if (empty($session_id)) {
 
 $nbStudents = count($a_students);
 
-// Gettting all the additional information of an additional profile field.
-if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
-    $user_array = array();
-    foreach ($a_students as $key=>$item) {
-        $user_array[] = $key;
-    }
-    // Fetching only the user that are loaded NOT ALL user in the portal.
-    $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
-    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);    
-}
-
 
 /* MAIN CODE */
 
-echo '<div class="actions" style="height:32px">';
+echo '<div class="actions">';
 
 echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());        
 echo Display::return_icon('course_na.png', get_lang('CourseTracking'), array(), 32);
@@ -346,10 +269,10 @@ echo '<div class="clear"></div>';
 // Documents tracking.
 if (!isset($_GET['num']) || empty($_GET['num'])) {
     $num = 3;
-    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
+    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
 } else {
     $num = 1000;
-    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&studentlist=false&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
+    $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
 }
 
  echo '<a name="documents_tracking" id="a"></a><div class="report_section">
@@ -423,7 +346,7 @@ echo '<div class="clear"></div>';
 // send the csv file if asked
 if ($export_csv) {
     ob_end_clean();
-    Export :: export_table_csv($csv_content, 'reporting_course_tracking');
+    Export :: export_table_csv($csv_content, 'reporting_course_tools');
     exit;
 }
 

@@ -110,9 +110,7 @@ switch ($action) {
         $i=0;
         
         if (!empty($results)) {
-            foreach($results as $row) {
-                //$user_info = api_get_user_info($row['exe_user_id']);
-                //print_r($row);
+            foreach($results as $row) {                
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a 
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}

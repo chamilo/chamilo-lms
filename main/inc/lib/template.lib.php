@@ -593,11 +593,14 @@ class Template {
         
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
+            $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $profile_link = Display::url(get_lang('Profile'), $profile_url);
         } else {
-            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';            
+            $profile_link = Display::url(get_lang('Profile'), $profile_url);
         }
         $this->assign('profile_link', $profile_link);
+        $this->assign('profile_url', $profile_url);
         
         //Message link
         $message_link = null;
@@ -610,9 +613,34 @@ class Template {
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
         
         $this->assign('portal_name', $portal_name);
+        
         //Menu
         $menu = return_menu();
         $this->assign('menu', $menu);
+        
+        //Setting notifications
+        
+           
+        $count_unread_message = 0;
+        if (api_get_setting('allow_message_tool')=='true') {
+            // get count unread message and total invitations
+            $count_unread_message = MessageManager::get_number_of_messages(true);
+        }
+
+        $total_invitations = 0;
+        if (api_get_setting('allow_social_tool')=='true') {
+            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
+            $group_pending_invitations = 0;
+            if (!empty($group_pending_invitations )) {
+                $group_pending_invitations = count($group_pending_invitations);
+            }
+            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
+        }        
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);    
+                
+        $this->assign('user_notifications', $total_invitations);
+        
         
         //Breadcrumb        
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);

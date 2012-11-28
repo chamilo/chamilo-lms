@@ -60,8 +60,10 @@ function get_tabs() {
 		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
-
-	// Social
+    
+    
+    // Social
+    /*
 	if (api_get_setting('allow_social_tool')=='true') {
 		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
 
@@ -79,7 +81,14 @@ function get_tabs() {
 
 		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}
-
+    */
+    
+	// Social
+	if (api_get_setting('allow_social_tool')=='true') {
+		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+		$navigation['social']['title'] = get_lang('SocialNetwork');
+	} 
+   
 	// Dashboard
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
 		$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';

@@ -16,6 +16,13 @@
 
                 {% if _u.logged == 1 %}
                 <ul class="nav pull-right">
+                    
+                    {% if user_notifications is not null %}
+                    <li>
+                        <a href="{{ profile_url }}">{{ user_notifications }}</a>
+                    </li>                    
+                    {% endif %}
+                    
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>

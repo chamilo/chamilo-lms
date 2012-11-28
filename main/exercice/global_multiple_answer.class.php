@@ -143,10 +143,10 @@ if (!class_exists('GlobalMultipleAnswer')):
             $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
 
             $navigator_info = api_get_navigator();
-            global $text, $class, $show_quiz_edition;
+            global $text, $class;
 
             //ie6 fix
-            if ($show_quiz_edition) {
+            if ($obj_ex->edit_exercise_in_lp == true) {
                 if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
                     $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="minus"');
                     $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="plus"');

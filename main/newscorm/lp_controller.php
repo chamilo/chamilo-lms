@@ -197,6 +197,9 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 }
 if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+
 /**
  * Actions switching
  */
@@ -214,12 +217,14 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         }
     }
 } else {
-    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view') {
-        $_REQUEST['action'] = 'build';
+    if ($is_allowed_to_edit) {
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view') {
+            $_REQUEST['action'] = 'build';
+        }
     }
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 

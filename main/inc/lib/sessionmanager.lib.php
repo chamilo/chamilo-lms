@@ -62,7 +62,7 @@ class SessionManager {
                 $session_model = new SessionModel();
                 $session_id = $session_model->save($params);            
             } else {
-                error_log('Session already exits with name: '.$params['name']." session_id: ".$my_session_result['id']);
+                error_log('Session already exists with name: '.$params['name']." session_id: ".$my_session_result['id']);
             }
         } else {
             //with the allow_homonyms option, two sessions can share names

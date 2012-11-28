@@ -2165,11 +2165,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             
             $score = array();    
             if ($show_results) {	    
-                $score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
-                $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
-                $score['score'] = $my_total_score;
-                $score['weight'] = $my_total_weight;
-                $score['comments'] = $comnt;                
+                $score['result']    = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, true);
+                $score['pass']      = $my_total_score >= $my_total_weight ? true : false;
+                $score['score']     = $my_total_score;
+                $score['weight']    = $my_total_weight;
+                $score['comments']  = $comnt;                
             }
             
             $contents = ob_get_clean();

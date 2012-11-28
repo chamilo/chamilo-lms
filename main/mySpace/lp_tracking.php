@@ -50,8 +50,7 @@ if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$cidReq, "name" => get_lang("Users"));
 } else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
-//	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$session_id, "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&id_session='.$session_id, "name" => get_lang("Tracking"));
 } else {
 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));

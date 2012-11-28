@@ -1288,7 +1288,7 @@ class MySpace {
 			$table_row[] = $avg_assignments_in_course;
 
 			//set the "from" value to know if I access the Reporting by the chamilo tab or the course link
-			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&studentlist=true&from=myspace&id_session='.$session_id.'">
+			$table_row[] = '<center><a href="../tracking/courseLog.php?cidReq='.$course_code.'&from=myspace&id_session='.$session_id.'">
 			                 <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
 			                </center>';
 			$csv_content[] = array(

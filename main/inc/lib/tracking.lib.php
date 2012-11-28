@@ -632,8 +632,7 @@ class Tracking {
             $debug = false;
         }
 
-        if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';
-        // get global tables names			
+        if ($debug) echo '<h1>Tracking::get_avg_student_score</h1>';        
         $tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 

@@ -47,6 +47,9 @@ class MigrationCustom {
     const TRANSACTION_TYPE_ADD_INTENS  = 25;
     const TRANSACTION_TYPE_DEL_INTENS  = 26;
     const TRANSACTION_TYPE_EDIT_INTENS = 27;
+    const TRANSACTION_TYPE_ADD_FASE    = 28;
+    const TRANSACTION_TYPE_DEL_FASE    = 29;
+    const TRANSACTION_TYPE_EDIT_FASE   = 30;
     
     static function get_transaction_status_list() {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION_STATUS);
@@ -1489,6 +1492,23 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     static function transaction_27($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
     }
+    //        Fase
+    //            añadir fase_agregar IID
+    // const TRANSACTION_TYPE_ADD_FASE  = 28;
+    static function transaction_28($data, $web_service_details) {
+        return self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details);
+    }
+    
+    //            eliminar fase_eliminar IID
+    // const TRANSACTION_TYPE_DEL_FASE  = 29;
+    static function transaction_29($data, $web_service_details) {
+        return self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details);
+    }    
+    
+    //            editar fase_editar IID
+    // const TRANSACTION_TYPE_EDIT_FASE = 30;
+    static function transaction_30($data, $web_service_details) {
+        return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details);
     
     //custom class moved here
     
@@ -1705,6 +1725,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         
         $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;        
         $result['phone'] = (string)$result['phone'];
+        $result['active'] = (int)$result['bitvigencia']
         $result['extra_uidIdPersona'] = strtoupper($params['uididpersona']);
         unset($result['rol']);
         return $result;
@@ -1774,7 +1795,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         }       
         
         //Setting the session name
-        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].'  '.$horario_name.' '.$aula_name.' '.$sede_name;        
+        $result['name'] = substr($sede_name,13).' - '.$result['chrperiodo']." - ".$course_info['title'].'  '.$horario_name.' '.$aula_name;
         
         $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
         $result['extra_horario']        = strtoupper($result['uididhorario']);

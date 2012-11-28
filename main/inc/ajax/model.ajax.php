@@ -240,9 +240,9 @@ switch ($action) {
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);        
         break;
 	case 'get_exercise_results':
-		$course                     = api_get_course_info();        
+		$course = api_get_course_info();        
         //used inside get_exam_results_data()
-		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
+		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		if ($is_allowedToEdit) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		} else {

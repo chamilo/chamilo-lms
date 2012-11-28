@@ -1292,7 +1292,7 @@ function show_success_message($score, $weight, $pass_percentage) {
             $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
         }    
         $html = Display::tag('h4', $html);
-        $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
+        $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:2px 10px 0px 0px'));
         $res = $html;
     }
     return $res;
@@ -2247,11 +2247,13 @@ function get_question_ribbon($objExercise, $score, $weight, $check_pass_percenta
     }
     $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";       
     $ribbon .= show_score($score, $weight, false, true);
+    $ribbon .= '</h3>';
+    $ribbon .= '</div>';
     if ($check_pass_percentage) {
         $ribbon .= show_success_message($score, $weight, $objExercise->selectPassPercentage());
     }
-    $ribbon .= '</h3>';
-    $ribbon .= '</div>';
+    
+    
     $ribbon .= '</div>';    
     return $ribbon;
 }

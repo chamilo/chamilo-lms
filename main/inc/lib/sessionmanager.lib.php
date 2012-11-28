@@ -34,7 +34,7 @@ class SessionManager {
         return Database::fetch_array($r,'ASSOC');
     }
     
-    public static function add($params) {
+    public static function add($params, $allow_homonyms=false) {
         global $_configuration;
         
         //just in case
@@ -54,14 +54,20 @@ class SessionManager {
                 return get_lang('PortalSessionsLimitReached');
             }
         }
-        $my_session_result = SessionManager::get_session_by_name($params['name']);            
-        $session_id = null;
+        if (!$allow_homonyms) {
+            $my_session_result = SessionManager::get_session_by_name($params['name']);            
+            $session_id = null;
         
-        if ($my_session_result == false) {
+            if ($my_session_result == false) {
+                $session_model = new SessionModel();
+                $session_id = $session_model->save($params);            
+            } else {
+                error_log('Session already exits with name: '.$params['name']." session_id: ".$my_session_result['id']);
+            }
+        } else {
+            //with the allow_homonyms option, two sessions can share names
             $session_model = new SessionModel();
             $session_id = $session_model->save($params);            
-        } else {
-            error_log('Session already exits with name: '.$params['name']." session_id: ".$my_session_result['id']);
         }
                         
         if (!empty($session_id)) {
@@ -2245,13 +2251,11 @@ class SessionManager {
      * @params int new session id
      * @params int see SessionManager::get_session_change_user_reasons()
      */
-    static function change_user_session($user_id, $old_session_id, $new_session_id=null, $reason_id) {
-        if (!empty($user_id) && !empty($old_session_id)) {
+    static function change_user_session($user_id, $old_session_id, $new_session_id, $reason_id) {
+        if (!empty($user_id) && !empty($old_session_id) && !empty($new_session_id)) {
             $user_id = intval($user_id);
             $old_session_id = intval($old_session_id);
-            if (!empty($new_session_id)) {
-                $new_session_id = intval($new_session_id);
-            }
+            $new_session_id = intval($new_session_id);
             $reason_id = intval($reason_id);
             
             //self::unsubscribe_user_from_session($old_session_id, $user_id, $reason_id);             
@@ -2284,7 +2288,7 @@ class SessionManager {
             switch ($reason_id) {
                 case self::SESSION_CHANGE_USER_REASON_SCHEDULE:
                 case self::SESSION_CHANGE_USER_REASON_CLASSROOM:
-                case self::SESSION_CHANGE_USER_REASON_LOCATION:
+                case self::SESSION_CHANGE_USER_REASON_LOCATION:                       
                     //Adding to the new session
                     self::suscribe_users_to_session($new_session_id, array($user_id), null, false);
                     
@@ -2300,8 +2304,8 @@ class SessionManager {
             
             $now = api_get_utc_datetime();            
             //Setting the moved_status
-            $sql = "UPDATE $tbl_session_rel_user SET moved_status = $reason_id, moved_at = '$now' ".
-                   "WHERE id_session = '$old_session_id' AND id_user ='$user_id'";
+            $sql = "UPDATE $tbl_session_rel_user SET moved_status = $reason_id, moved_at = '$now'
+                    WHERE id_session = '$old_session_id' AND id_user ='$user_id'";            
             Database::query($sql);
             
             return true;            

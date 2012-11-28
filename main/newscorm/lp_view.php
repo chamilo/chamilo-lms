@@ -316,7 +316,6 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';    
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
     if ($is_allowed_to_edit) {
@@ -325,6 +324,8 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
         $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
+        //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
+        
         echo return_breadcrumb($interbreadcrumb, null, null);        
         echo '</div>';
     }

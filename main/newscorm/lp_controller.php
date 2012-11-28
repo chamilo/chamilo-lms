@@ -213,6 +213,10 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
             $_REQUEST['action'] = 'list';
         }
     }
+} else {
+    if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view') {
+        $_REQUEST['action'] = 'build';
+    }
 }
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);

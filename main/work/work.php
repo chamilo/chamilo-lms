@@ -441,7 +441,7 @@ switch ($action) {
 		
         $form->addElement('hidden', 'id', $work_id);
 		if (empty($item_id)) {
-			$form->addElement('checkbox', 'contains_file', null, get_lang('ContainsAfile'), array('id'=>'contains_file_id'));
+			$form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
 		} else {
             $form->addElement('hidden', 'item_id', $item_id);
         }

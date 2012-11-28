@@ -1,10 +1,23 @@
 <?php
-
+/**
+ * Declaration for the ExtraFieldValue class, managing the values in extra 
+ * fields for any datatype
+ * @package chamilo.library
+ */
+/**
+ * Class managing the values in extra fields for any datatype
+ * @package chamilo.library.extrafields
+ */
 class ExtraFieldValue extends Model {
     public $type = null;
     public $columns = array('id', 'field_id', 'field_value', 'tms');
     public $handler_id = null;//session_id, course_code, user_id
- 
+    /**
+     * Formats the necessary elements for the given datatype
+     * @param string The type of data to which this extra field applies (user, course, session, ...)
+     * @return void (or false if unmanaged datatype)
+     * @assert (-1) === false
+     */ 
     public function __construct($type) {
         $this->type = $type;
         $extra_field = new ExtraField($this->type);
@@ -21,16 +34,30 @@ class ExtraFieldValue extends Model {
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD); 
-            break;
+                break;
+            default:
+                //unmanaged datatype, return false to let the caller know it
+                // didn't work
+                return false;
         }
         $this->columns[] = $this->handler_id;
     }
- 
+    /**
+     * Gets the number of values stored in the table (all fields together) 
+     * for this type of resource
+     * @return integer Number of rows in the table
+     * @assert () !== false
+     */ 
     public function get_count() {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
         return $row['count'];
     }
- 
+    /**
+     * Saves a series of records given as parameter into the coresponding table
+     * @param array  Structured parameter for the insertion into the *_field_values table
+     * @return mixed false on empty params, void otherwise
+     * @assert (array()) === false
+     */ 
     public function save_field_values($params) {
         $extra_field = new ExtraField($this->type);
         if (empty($params[$this->handler_id])) {
@@ -53,7 +80,13 @@ class ExtraFieldValue extends Model {
             }
         } 
     }
- 
+    /**
+     * Save values in the *_field_values table
+     * @param array Structured array with the values to save
+     * @param boolean Whether to show the insert query (passed to the parent save() method)
+     * @result mixed The result sent from the parent method
+     * @assert (array()) === false
+     */
     public function save($params, $show_query = false) { 
         $extra_field = new ExtraField($this->type);
  
@@ -64,9 +97,9 @@ class ExtraFieldValue extends Model {
  
         if (is_array($value)) {
             $value_to_insert = implode(';', $value); 
-		} else {
-			$value_to_insert = Database::escape_string($value);
-		} 
+        } else {
+            $value_to_insert = Database::escape_string($value);
+        } 
         $params['field_value'] = $value_to_insert;
  
         //If field id exists
@@ -77,25 +110,25 @@ class ExtraFieldValue extends Model {
                 case ExtraField::FIELD_TYPE_TAG :
                     break;
                 case ExtraField::FIELD_TYPE_RADIO:
-				case ExtraField::FIELD_TYPE_SELECT:
-				case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
+                case ExtraField::FIELD_TYPE_SELECT:
+                case ExtraField::FIELD_TYPE_SELECT_MULTIPLE:
                     //$field_options = $session_field_option->get_field_options_by_field($params['field_id']); 
 					//$params['field_value'] = split(';', $value_to_insert); 
-                    /*
-					if ($field_options) {
-						$check = false;
-						foreach ($field_options as $option) {
-							if (in_array($option['option_value'], $values)) {
-								$check = true;
-								break;
-							}
-						}
-						if (!$check) {
-							return false; //option value not found
-						}
-					} else {
-						return false; //enumerated type but no option found
-					}*/
+               /*
+                   if ($field_options) {
+                       $check = false;
+                       foreach ($field_options as $option) {
+                           if (in_array($option['option_value'], $values)) {
+                               $check = true;
+                               break;
+                           }
+                      }
+                      if (!$check) {
+                          return false; //option value not found
+                      }
+                  } else {
+                      return false; //enumerated type but no option found
+                  }*/
                     break;
                 case ExtraField::FIELD_TYPE_TEXT:
                 case ExtraField::FIELD_TYPE_TEXTAREA:
@@ -124,11 +157,12 @@ class ExtraFieldValue extends Model {
     }
  
     /**
-     * 
-     * @param int handler_id (It could be a session_id, course_id or user_id)
-     * @param int $field_id
-     * @param bool transform the result to a human readable strings
-     * @return boolean
+     * Returns the value of the given extra field on the given resource
+     * @param int Item ID (It could be a session_id, course_id or user_id)
+     * @param int Field ID (the ID from the *_field table)
+     * @param bool Whether to transform the result to a human readable strings
+     * @return mixed A structured array with the field_id and field_value, or fals on error
+     * @assert (-1,-1) === false 
      */
     public function get_values_by_handler_and_field_id($item_id, $field_id, $transform = false) {
         $field_id = intval($field_id);
@@ -172,7 +206,14 @@ class ExtraFieldValue extends Model {
             return false;
         }
     }
- 
+    /**
+     * Gets a structured array of the original item and its extra values, using
+     * a specific original item and a field name (like "branch", or "birthdate")
+     * @param int Item ID from the original table
+     * @param string The name of the field we are looking for
+     * @return mixed Array of results, or false on error or not found
+     * @assert (-1,'') === false
+     */ 
     public function get_values_by_handler_and_field_variable($item_id, $field_variable, $transform = false) {
         $field_id = intval($field_id);
         $item_id = Database::escape_string($item_id);
@@ -206,8 +247,14 @@ class ExtraFieldValue extends Model {
             return false;
         }
     }
- 
- 
+    /**
+     * Gets the ID from the item (course, session, etc) for which
+     * the given field is defined with the given value
+     * @param string Field (type of data) we want to check
+     * @param string Data we are looking for in the given field
+     * @return mixed Give the ID if found, or false on failure or not found
+     * @assert (-1,-1) === false
+     */
     public function get_item_id_from_field_variable_and_field_value($field_variable, $field_value, $transform = false) { 
         $field_value = Database::escape_string($field_value);
         $field_variable = Database::escape_string($field_variable);
@@ -219,16 +266,19 @@ class ExtraFieldValue extends Model {
                 "; 
 
         $result = Database::query($sql); 
-        if (Database::num_rows($result)) { 
+        if ($result !== false && Database::num_rows($result)) { 
             $result = Database::fetch_array($result, 'ASSOC'); 
             return $result;
         } else {
             return false;
         }
     }
- 
- 
-    /* Get all values by field id */
+    /**
+     * Get all values for a specific field id
+     * @param int Field ID
+     * @return mixed Array of values on success, false on failure or not found
+     * @assert (-1) === false
+     */
     public function get_values_by_field_id($field_id) { 
         $sql = "SELECT s.*, field_type FROM {$this->table} s INNER JOIN {$this->table_handler_field} sf ON (s.field_id = sf.id)
                 WHERE field_id = '".$field_id."' ORDER BY id";
@@ -238,20 +288,36 @@ class ExtraFieldValue extends Model {
         }
         return false;
     }
- 
+    /**
+     * Deletes all the values related to a specific field ID
+     * @param int Field ID
+     * @return void
+     * @assert ('a') == null
+     */
     public function delete_all_values_by_field_id($field_id) {
         $field_id = intval($field_id);
         $sql = "DELETE FROM  {$this->table} WHERE field_id = $field_id";
         Database::query($sql); 
     }
- 
+    /**
+     * Deletes values of a specific field for a specific item
+     * @param int Item ID (session id, course id, etc)
+     * @param int Field ID
+     * @return void
+     * @assert (-1,-1) == null
+     */
     public function delete_values_by_handler_and_field_id($item_id, $field_id) {
         $field_id = intval($field_id);
         $item_id = Database::escape_string($item_id);
         $sql = "DELETE FROM {$this->table} WHERE {$this->handler_id} = '$item_id' AND field_id = '".$field_id."' ";
         Database::query($sql); 
     }
- 
+    /**
+     * Not yet implemented - Compares the field values of two items
+     * @param int Item 1
+     * @param int Item 2
+     * @return mixed Differential array generated from the comparison
+     */
     public function compare_item_values($item_id, $item_to_compare) { 
     }
 }

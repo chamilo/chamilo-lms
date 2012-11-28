@@ -1241,17 +1241,20 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     if ($use_platform_settings) {
         if ($max_note != '' && $min_note != '') {        
             if (!empty($weight) && intval($weight) != 0) {
-    	       $score = $min_note + ($max_note - $min_note) * $score /$weight;
+    	       $score = $min_note + ($max_note - $min_note) * $score / $weight;
             } else {
                $score = $min_note;
             }            
             $weight = $max_note;
         }
     }
-    $score_rounded = float_format($score, 1);    
-    $weight = float_format($weight, 1);    
     
-    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
+    $score_rounded = float_format($score, 1);
+    $weight = float_format($weight, 1);
+    
+    $score_to_percentage = (100 * $score_rounded)/ ($weight != 0 ? $weight : 1);
+        
+    $percentage = float_format($score_to_percentage, 1);
     
     $html  = null;
     if ($show_percentage) {        
@@ -1263,7 +1266,7 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
     } else {    
     	$html = $score_rounded . ' / ' . $weight;
     }  
-    $html  = Display::span($html, array('class' => 'score_exercise'));
+    $html  = Display::span($html, array('class' => 'score_exercise'));    
     return $html;	
 }
 

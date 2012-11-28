@@ -224,7 +224,7 @@ class UniqueAnswer extends Question {
         
 		$navigator_info = api_get_navigator();
 
-		global $text, $class, $show_quiz_edition;
+		global $text, $class;
         
 		//ie6 fix
 		if ($obj_ex->edit_exercise_in_lp == true) {

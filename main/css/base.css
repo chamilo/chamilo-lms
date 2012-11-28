@@ -2504,7 +2504,7 @@ div.admin_section h4 {
     min-height:150px;
 }
 .question_description {
-    padding:0px 0px 0px 16px;
+    padding: 0px;
 }
 
 .exercise_description {
@@ -2535,15 +2535,16 @@ div.admin_section h4 {
     margin: 0;
     width: 100%;
     margin: 0 0 0 0px;
+    padding: 0px;
 }
 .question_answer label {
-    color: #222222;
-    display: block;
-    font-size: 100%;
-    line-height: 150%;
-    margin: -16px 0 0 23px;
-    padding: 0 0 5px;
-    width: 88%;
+    float:left;
+    margin: 0px 0 0 8px;    
+}
+
+.question_answer input {
+    float:left;
+    margin: 0px;
 }
 
 #question_description {

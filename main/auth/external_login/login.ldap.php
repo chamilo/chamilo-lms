@@ -61,6 +61,7 @@ if ($ldap_user !== false) {
     Session::write('_user', $_user);
     $uidReset = true;
     event_login();
+    $logging_in = true;
 } else {
     $loginFailed = true;
     $uidReset = false;

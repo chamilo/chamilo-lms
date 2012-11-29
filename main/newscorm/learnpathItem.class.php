@@ -1564,38 +1564,6 @@ class learnpathItem {
 												if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' complete', 0); }
 											}
 										}
-
-										//error_log('results :'.$items[$refs_list[$prereqs_string]]->path. ':'.$user_id);
-										/*$rs_quiz = Database::query($sql);
-										if ($quiz = Database :: fetch_array($rs_quiz)) {
-											if ($quiz['exe_result'] >= $items[$refs_list[$prereqs_string]]->get_mastery_score()) {
-												$returnstatus = true;
-											} else {
-												$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-												$returnstatus = false;
-											}
-										} else {
-											$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-											$returnstatus = false;
-										}*/
-
-										/*
-										$status = $items[$refs_list[$prereqs_string]]->get_status(true);
-										//error_log(print_r($items, 1));
-										//error_log($refs_list[$prereqs_string]);
-
-										$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
-										if (!$returnstatus && empty($this->prereq_alert)) {
-											$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-										}
-										if(!$returnstatus){
-											if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' not complete', 0); }
-										}else{
-											if (self::debug > 1) { error_log('New LP - Prerequisite '.$prereqs_string.' complete', 0); }
-										}
-										*/
-
-										//$returnstatus =false;
 										return $returnstatus;
 									}
 								} else {

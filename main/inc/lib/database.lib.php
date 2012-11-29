@@ -681,7 +681,7 @@ class Database {
         //@todo remove this before the stable release
         
         //Check if the table contains a c_ (means a course id)
-        if (strpos($query, 'c_')) {	
+        if (api_get_setting('server_type')==='test' && strpos($query, 'c_')) {
         	//Check if the table contains inner joins 
         	if (     
                 strpos($query, 'assoc_handle') === false &&

@@ -1509,6 +1509,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     // const TRANSACTION_TYPE_EDIT_FASE = 30;
     static function transaction_30($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details);
+    }
     
     //custom class moved here
     
@@ -1725,7 +1726,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         
         $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;        
         $result['phone'] = (string)$result['phone'];
-        $result['active'] = (int)$result['bitvigencia']
+        $result['active'] = (int)$result['bitvigencia'];
         $result['extra_uidIdPersona'] = strtoupper($params['uididpersona']);
         unset($result['rol']);
         return $result;

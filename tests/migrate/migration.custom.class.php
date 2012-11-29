@@ -1236,15 +1236,15 @@ class MigrationCustom {
     
     //-------
  
-    static function transaction_extra_field_agregar_generic($extra_field_variable, $original_data, $web_service_details) {                
-        $function_name = $extra_field_variable."Detalles";        
+    static function transaction_extra_field_agregar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') {
+        $function_name = $extra_field_variable."Detalles";
         $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));
-        
+
         if ($data['error'] == false) {
-            $extra_field = new ExtraField('session');
+            $extra_field = new ExtraField($type);
             $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
             if ($extra_field_info) {
-                $extra_field_option = new ExtraFieldOption('session');
+                $extra_field_option = new ExtraFieldOption($type);
                 
                 $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
 
@@ -1254,8 +1254,7 @@ class MigrationCustom {
                     'option_display_text'   => $data['name'],
                     'option_order'          => null
                 );
-                
-error_log('Adding extra field: '.print_r($params,1));
+
                 $result = $extra_field_option->save_one_item($params);
                 
                 $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
@@ -1285,8 +1284,8 @@ error_log('Adding extra field: '.print_r($params,1));
         }
     }    
     
-    static function transaction_extra_field_editar_generic($extra_field_variable, $original_data, $web_service_details) {        
-        $extra_field = new ExtraField('session');
+    static function transaction_extra_field_editar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') {
+        $extra_field = new ExtraField($type);
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         if (empty($extra_field_info)) {
             return array(
@@ -1295,7 +1294,7 @@ error_log('Adding extra field: '.print_r($params,1));
                 );
         }
         
-        $extra_field_option = new ExtraFieldOption('session');        
+        $extra_field_option = new ExtraFieldOption($type);        
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         $function_name = $extra_field_variable."Detalles";
@@ -1314,7 +1313,7 @@ error_log('Adding extra field: '.print_r($params,1));
                     //var_dump($extra_field_option_info);
                     //Take the first one                
                     error_log('Warning! There are several options with the same key. You should delete doubles. Check your DB with this query:');
-                    error_log("SELECT * FROM session_field_options WHERE field_id =  {$extra_field_info['id']} AND option_value = '{$original_data['item_id']}' ");
+                    error_log("SELECT * FROM ".$type."_field_options WHERE field_id =  {$extra_field_info['id']} AND option_value = '{$original_data['item_id']}' ");
                     error_log('All options are going to be updated');
                 }
                 
@@ -1355,11 +1354,11 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     }
     
     /* Delete all options with option_value = item_id */    
-    static function transaction_extra_field_eliminar_generic($extra_field_variable, $original_data, $web_service_details) { //horario        
-        $extra_field = new ExtraField('session');
+    static function transaction_extra_field_eliminar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') { //horario        
+        $extra_field = new ExtraField($type);
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         
-        $extra_field_option = new ExtraFieldOption('session');        
+        $extra_field_option = new ExtraFieldOption($type);        
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         if (!empty($extra_field_option_info)) {
@@ -1452,63 +1451,60 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     static function transaction_21($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('sede', $data, $web_service_details);
     }
-    
-    //
+
     //        Frecuencia
     //            añadir frec FID
     // const TRANSACTION_TYPE_ADD_FREQ    = 22;
     static function transaction_22($data, $web_service_details) {
-        return self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
     //            eliminar Freca_eliminar FID
     // const TRANSACTION_TYPE_DEL_FREQ    = 23;
     static function transaction_23($data, $web_service_details) {
-        return self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
     //             editar aula_editar FID
     // const TRANSACTION_TYPE_EDIT_FREQ   = 24;
     static function transaction_24($data, $web_service_details) {
-        return self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
+
     //
     //        Intensidad/Fase
     //            añadir intfase_agregar IID
     // const TRANSACTION_TYPE_ADD_INTENS  = 25;
     static function transaction_25($data, $web_service_details) {
-        return self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details);
+        return self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details, 'course');
     }
-    
+
     //            eliminar intfase_eliminar IID
     // const TRANSACTION_TYPE_DEL_INTENS  = 26;
     static function transaction_26($data, $web_service_details) {
-        return self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
-    }    
+        return self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details, 'course');
+    }
     
     //            editar intfase_editar IID
     // const TRANSACTION_TYPE_EDIT_INTENS = 27;
     static function transaction_27($data, $web_service_details) {
-        return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
+        return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details, 'course');
     }
     //        Fase
     //            añadir fase_agregar IID
     // const TRANSACTION_TYPE_ADD_FASE  = 28;
     static function transaction_28($data, $web_service_details) {
-        return self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details);
+        return self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details, 'course');
     }
     
     //            eliminar fase_eliminar IID
     // const TRANSACTION_TYPE_DEL_FASE  = 29;
     static function transaction_29($data, $web_service_details) {
-        return self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details);
-    }    
+        return self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details, 'course');
+    }
     
     //            editar fase_editar IID
     // const TRANSACTION_TYPE_EDIT_FASE = 30;
     static function transaction_30($data, $web_service_details) {
-        return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details);
+        return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details, 'course');
     }
     
     //custom class moved here

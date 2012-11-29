@@ -1,103 +1,219 @@
 /* media queries responsive */
+/* Typical screen resolutions (only width matters) are:
+320*
+480*
+640*
+800*
+1024*
+1152
+1280*
+1360
+1400
+1440*
+1600*
+1680
+1920*
++more*
+The more frequent ones have been marked with *
+*/
+/* Phone */
 
-/* LARGE DESKTOP SCREENS */
-@media (min-width: 1201px) {   
-}
-
-@media (max-width: 1200px) {
-}
-
-/* Tablet or large-screen phone */
-
-@media (max-width: 1024px) {
-    /* fixes tabs */
-    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
-        padding-left: 6px;
-        padding-right: 6px;
+@media (max-width: 320px) {
+    header #header_center, header #header_right, header #header_left {
+        display:none;
+    }    
+    .navbar {
+      margin-top: 0em;
     }
+    .navbar .brand {
+         font-size: 14px;
+    }
+    #main_content .span3 #login_block {
+        width: 160px;
+        float: left;
+    }
+    #main_content .span3 #help_block {
+        width: 60px;
+        float: right;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    /* No view as link*/
+    #view_as_link {
+        display:none;
+    }
+    /* Smaller brand */
+    .navbar .brand {
+         font-size: 14px;
+    }
+    
+    /* In order to avoid clicking in the main title instead of the expand button */
+    .subnav .navbar-inner .in{
+        margin-top: 45px;
+    }
+    #main_content .span3 #login_block {
+        width: 180px;
+    }
+    #main_content .span3 #help_block {
+        width: 100px;
+    }
+    /* only for the course tools */
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
+        float: left;
+        margin-left: 20px;
+    }
+    /* Course- home - Show 2 icons instead of one */
+    .course-tool {
+        float: left;
+        height: 110px;
+        width: 110px;
+    }
+
+    .course-tool h4 {
+        font-size: 15px;
+    }
+    /* in admin, reduce block height but increase width (from 47%) as there
+       will be only one for the whole width */
+    #settings .span6 {
+        min-height: none;
+        width: 95%;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+    header #header_center, header #header_right, header #header_left {
+        display:none;
+    }
+    .navbar {
+      margin-top: 0em;
+    }
+    .subnav .navbar-inner .in{
+        margin-top: 45px; 
+    }
+
+    /* No chat in mobiles */
+    #chatmain {
+        display:none;
+    }
+
+    /* No topbar */
+    #topbar {
+        display:none;
+    }
+
+    /* No view as link*/
+    #view_as_link {
+        display:none;
+    }
+
+    /* Brand fix */
+    .navbar .brand {
+         font-size: 14px;
+    }
+
+    .subnav .dropdown-toggle {
+        display:none;
+    }
+
+    .subnav .nav > li > a, .navbar .dropdown-menu a {
+        color: white;
+    }
+
+    /* Footer fixes */
+
+    footer {
+        border-top: 1px solid #CCCCCC;
+        background-color: #fff;
+        background-image: none;
+        color: #666;
+    }
+
+    footer #footer_left a, footer #footer_center a, footer #footer_right a {
+        color : #999;
+    }
+
+    #footer_left , #footer_right #admin_name, #footer_right #software_name {
+        text-align: center !important;
+    }
+
+    footer .container .row {
+        padding-top: 15px;
+    }
+
+    /* No resize font */
+    .resize_font {
+        display:none;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    h4 {
+        font-size: 16px;
+    }
+
+    /* No notifications */
+    .notification-panel {
+        display:none;
+    }
+
+    /* only for the course tools */
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
+        float: left;
+        margin-left: 10px;
+    }
+    /* Course- home - Show 2 icons instead of one */
+    .course-tool {
+        float: left;
+        height: 150px;
+        width: 160px;
+    }
+
+    .course-tool h4 {
+        font-size: 14px;
+    }
+
+    .subbav .nav > li > a:hover,
+    .subbav .dropdown-menu a:hover {
+        background-color: #555;
+    }
+    #main_content .span3 #login_block {
+        width: 280px;
+        float: left;
+    }
+    #main_content .span3 #help_block {
+        width: 100px;
+        float: right;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    /* in admin, reduce block height but increase width (from 47%) as there
+       will be only one for the whole width */
+    #settings .span6 {
+        min-height: none;
+        width: 95%;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 800px) {
+    /* No topbar */
+    #topbar {
+        display:none;
+    }    
     
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
         float: left;     
     }
-    #top_main_content .span6 {
-        width: 440px;
+    .course-tool {
+        width: 210px;
     }
-    .section-social #top_main_content .span3 {
-        width: 200px;
-    }
-    #top_main_content #hot_courses .span9 .span6 { 
-        width: 330px;
-    }
-    /* Space between course tools */
-    #course_tools .row .span4 {
-        width: 240px;
-    }
-    #course_tools .row .span4 h4 {
+    .course-tool h4 {
         font-size: 14px;
     }
-}
-
-/* Normal tablet or normal-screen phone */
-@media (max-width: 979px) {
-    /* Remove any padding from the body */
-    body {
-        padding-top: 0;
-    }
-
-    #topbar_push {
-        height: 0px;
-    }
-
-    /* No topbar */
-    #topbar {
-        display:none;
-    }
     
-    /* fixes tabs */
-    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    
-    .subnav .dropdown-toggle {
-        display:none;
-    }    
-    
-    .subnav .nav > li > a, .navbar .dropdown-menu a, #main .subnav .dropdown-menu li a {
-        color: #fff;
-    }
-    
-   .subnav .nav > li > a:hover,
-   .subnav .dropdown-menu a:hover {
-    }
-    .section-social #top_main_content .span3 {
-        width: 190px;
-    }
-    #top_main_content .span4, #top_main_content .span5 {
-        width: 250px;
-        margin-left: 5px;
-    }
-    #top_main_content .span6 {
-        width: 340px;
-    }
-    #top_main_content .span9 {
-        width: 500px;
-    }
-    /* Space between course tools */
-    #course_tools .row .span4 {
-        width: 220px;
-    }
-    .section-mycourses #top_main_content .span9 #main_content .well .pull-right, .section-mycampus #top_main_content .span9 #hot_courses .pull-right {
-        display: none;
-    }
-}
-
-@media (max-width: 767px) {
-    /* No topbar */
-    #topbar {
-        display:none;
-    }    
     .subnav .dropdown-toggle {
         display:none;
     }
@@ -110,7 +226,7 @@
         text-align: center !important;
     }    
     
-    .subnav .nav > li > a, .navbar .dropdown-menu a, #main .subnav .dropdown-menu li a  {
+    .subnav .nav > li > a, .navbar .dropdown-menu a {        
         color: white;
     }
     
@@ -159,7 +275,7 @@
     }
     
     .subnav .navbar-inner li a:hover {
-        background-color: #6B8E23;
+        background-color: #666;
         color: #fff;
     }    
     
@@ -192,39 +308,8 @@
                 border-radius: 4px 4px 0 0;
     }
 
-    .section-social #top_main_content .span3 {
-        width: 170px;
-    }
-    .section-social #top_main_content .span4 {
-        width: 200px;
-        margin-left: 5px;
-        float: right;
-    }
-    .section-social #top_main_content .span5 {
-        width: 240px;
-        margin-left: 5px;
-        float: left;
-    }
-    #top_main_content .span6 {
-        width: 328px;
-        float: left;
-        margin-left: 5px;
-    }
-    #top_main_content .span9 {
-        width: 420px;
-        margin-left: 5px;
-    }
-    .section-social #top_main_content .span9 {
-        width: 480px;
-        margin-left: 5px;
-    }
-    /* Space between course tools */
-    #course_tools .row .span4 {
-        width: 180px;
-        float: left;
-    }
-    #course_tools .row .span4 h4 {
-        font-size: 14px;
+    #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {     
+        float: left;     
     }
 
     /* Footer fixes */
@@ -249,332 +334,83 @@
     }
 }
 
-/* Intermediary */
-@media (max-width: 680px) {
-    #top_main_content .span9 {
-        width: 320px;
-    }
-    #announcements .bx-prev, #announcements .bx-next {
-        display: none;
-    }
-}
-@media (max-width: 640px) {
-    .section-mycampus #top_main_content .span3 #user_image_block, .section-mycampus #top_main_content .span3 #profile_block,
-    .section-mycourses #top_main_content .span3 #user_image_block, .section-mycourses #top_main_content .span3 #profile_block {
-        margin: 5px;
-        width: 202px;
-        float: left;
-    }
-    .section-mycampus #top_main_content .span3 #course_block, .section-mycampus #top_main_content .span3 #help_block, .section-mycampus #top_main_content .span3 #skill_block,
-    .section-mycourses #top_main_content .span3 #course_block, .section-mycourses #top_main_content .span3 #help_block, .section-mycourses #top_main_content .span3 #skill_block {
-        margin: 5px;
-        width: 202px;
-        float: left;
-    }
-    .section-mycampus #top_main_content .span3 #help_block {
-        width: 202px;
-        float: left;
-        margin: 5px;
-    }
-    #top_main_content .span9 {
-        width: 540px;
-        margin-left: 5px;
-    }
-    #top_main_content #hot_courses .span9 .thumbnail, .section-mycourses #top_main_content .span9 #main_content .thumbnail {
-        width: 80px;
-        float: left;
-    }
-    #top_main_content #hot_courses .span9 .well_border, .section-mycourses #top_main_content .span9 #main_content .well {
-        padding: 8px;
-    }
-    #top_main_content #hot_courses .span9 .span6, .section-mycourses #top_main_content .span9 #main_content .well .span7 .span6 {
-        width: 400px;
-        float: right;
-        min-height: auto;
-    }
-}
-
-/* Small-screen phones, horizontal */
-
-@media (max-width: 480px) {
-    body {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-    header #header_center, header #header_right, header #header_left {
-        display:none;
-    }    
-    .navbar {
-      margin-top: 1em;
-    }
-    .subnav .navbar-inner .in{
-        margin-top: 45px 
-    }
-    
-    /* No chat in mobiles */
-    #chatmain {
-        display:none;
-    }
-    
+@media (min-width: 801px) and (max-width: 979px) {
     /* No topbar */
     #topbar {
         display:none;
     }
     
-    /* No view as link*/
-    #view_as_link {
-        display:none;
-    }
-    
-    /* Brand fix */
-    .navbar .brand {
-         margin-top: 2px;
-         font-size: 18px;
+    /* fixes tabs */
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
+        padding-left: 6px;
+        padding-right: 6px;
     }
     
     .subnav .dropdown-toggle {
         display:none;
-    }
-    
-    .subnav .nav > li > a, .navbar .dropdown-menu a {        
-        color: white;        
-    }
-    
-    /* Footer fixes */
-    
-    footer {
-        border-top: 1px solid #CCCCCC;
-        background-color: #fff;
-        background-image: none;
-        color: #666;
-    }
-    
-    footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
-    }
-    
-    #footer_left , #footer_right #admin_name, #footer_right #software_name {
-        text-align: center !important;
     }    
     
-    footer .container .row {
-        padding-top: 15px;        
+    .subnav .nav > li > a, .navbar .dropdown-menu a {      
+        color: #ccc;        
     }
     
-    /* No resize font */
-    .resize_font {
-        display:none;
+   .subnav .nav > li > a:hover,
+   .subnav .dropdown-menu a:hover {
     }
-    
-    h3 {
-        font-size: 18px;
-    }
-    
-    h4 {
-        font-size: 16px;
-    }   
-        
-    /* No notifications */
-    .notification-panel {
-        display:none;
-    }
-    
-    /* Course- home - Show 2 icons instead of one */
-    #course_tools .row .span4 {
-        float: left;        
-        height: 150px;
-        width: 148px;
-    }
-    #course_tools .row .span4 h4 {
-        font-size: 11px;
-    }
-    
-    #course_tools .span12 .page-header {
-        text-align: center;
-    }
-    
-    .subbav .nav > li > a:hover,
-    .subbav .dropdown-menu a:hover {
-        background-color: #555;
-    }
-    /* Improving the login form */
-    #top_main_content .span3 #login_block {
-        width: 190px;
-        float: left;
-        margin-left: 5px;
-        margin-top: 5px;
-    }
-    #top_main_content .span3 #login_block #lang_form {
-        margin-bottom: 4px;
-    }
-    #top_main_content .span3 #login_block #formLogin form {
-        margin-bottom: 8px;
-    }
-    #top_main_content .span3 #login_block #formLogin .control-label{
-        font-weight: bold;
-    }
-    #top_main_content .span3 #login_block ul.nav-list {
-        float: left;
-        width: 120px;
-        margin-top: -40px;
-    }
-    #top_main_content .span3 #login_block .btn {
-        float: right;
-    }
-    /* Improving blocks layout in social network */
-    .section-social #top_main_content .span3 {
-        width: 170px;
-    }
-    .section-social #top_main_content .span4 {
-        width: 200px;
-        margin-left: 5px;
-        float: right;
-    }
-    .section-social #top_main_content .span5 {
-        width: 240px;
-        margin-left: 5px;
-        float: left;
-    }
-    #top_main_content .span6 {
-        width: 400px;
-        /*min-height: 200px;*/
-    }
-    #top_main_content .span9 {
-        width: 400px;
-        margin-left: 5px;
-    }
-    /* Improving blocks layout in my courses and homepage */
-    .section-mycampus #top_main_content.span9 {
-        float: left;
-    }
-    #top_main_content .span9 #announcements .span6 {
-        width: 330px;
-    }
-    #top_main_content #hot_courses .span9 .thumbnail, .section-mycourses #top_main_content .span9 #main_content .thumbnail {
-        width: 80px;
-        float: left;
-    }
-    #top_main_content #hot_courses .span9 .well_border, .section-mycourses #top_main_content .span9 #main_content .well {
-        padding: 8px;
-    }
-    #top_main_content #hot_courses .span9 .span6, .section-mycourses #top_main_content .span9 #main_content .well .span7 .span6 {
-        width: 270px;
-        float: right;
-        min-height: auto;
-    }
-    .section-mycourses #top_main_content .span9 #main_content .well .pull-right, .section-mycampus #top_main_content .span9 #hot_courses .pull-right {
-        display: none;
-    }
-    .section-mycampus #top_main_content .span3, .section-mycourses #top_main_content .span3 {
-        float: left;
-        width: auto;
-        clear: both;
-    }
-    .section-social #top_main_content .span9, .section-mycourses #top_main_content .span9 {
-        width: 480px;
-        margin-left: 5px;
-    }
-    .section-mycampus #top_main_content .span3 #user_image_block, .section-mycampus #top_main_content .span3 #profile_block,
-    .section-mycourses #top_main_content .span3 #user_image_block, .section-mycourses #top_main_content .span3 #profile_block {
-        margin: 5px;
-        width: 192px;
-        float: left;
-    }
-    .section-mycampus #top_main_content .span3 #course_block, .section-mycampus #top_main_content .span3 #help_block, .section-mycampus #top_main_content .span3 #skill_block,
-    .section-mycourses #top_main_content .span3 #course_block, .section-mycourses #top_main_content .span3 #help_block, .section-mycourses #top_main_content .span3 #skill_block {
-        margin: 5px;
-        width: 192px;
-        float: left;
-    }
-    .section-mycampus #top_main_content .span3 #help_block {
-        width: 192px;
-        float: left;
-        margin-left: 5px;
-    }
-    .section-mycampus #top_main_content #homepage {
-        margin-top: 20px;
-    }
-    .section-mycourses #top_main_content .span9 #main_content {
-        width: 420px;
-    }
-    #top_main_content .page-header h1 {
-        text-align: center;
+    .course-tool {
+        width: 220px;
     }
 }
 
-/* Phone, vertical screen */
-
-@media (max-width: 320px) {    
+@media (max-width: 979px) {
+    /* Remove any padding from the body */
     body {
-        padding-left: 3px;
-        padding-right: 3px;
+        padding-top: 0;
     }
-    header #header_center, header #header_right, header #header_left {
-        display:none;
-    }    
-    .navbar {
-      margin-top: 1em;
+
+    #topbar_push {
+        height: 0px;
     }
-    .navbar .brand {
-         margin-top: 2px;
-         font-size: 14px;
-    }
-    #top_main_content .span3 #login_block {
-        width: 160px;
-        float: left;
-    }
-    #top_main_content .span3 #help_block {
-        width: 60px;
-        float: right;
-        margin-left: 10px;
-        margin-right: 10px;
-    }
-    
-    /* No view as link*/
-    #view_as_link {
-        display:none;
-    }
-    
-    /* Smaller brand */
-    .navbar .brand {
-         font-size: 14px;
-    }
-    
-    /* In order to avoid clicking in the main title instead of the expand button */
-    .subnav .navbar-inner .in{
-        margin-top: 45px 
-    }
-    #top_main_content .span9 {
-        width: 290px;
-        margin: 0;
-    }
-    #top_main_content .span3 #login_block {
-        width: 190px;
-    }
-    #top_main_content .span3 #help_block {
-        width: 100px;
-    }
-/*
-    .section-mycourses #top_main_content .span9 #main_content {
-        width: 290px;
-    }
-*/
-    #top_main_content #hot_courses .span9 .span6, .section-mycourses #top_main_content .span9 #main_content .well .span7 .span6 {
-        width: 150px;
-    }
-    #top_main_content #hot_courses .span9 .span6 .btn {
-        float: left;
-        margin-top: 5px;
-    }
-    #top_main_content #hot_courses .vote_label_info {
-        display: none;
-    }
-    #course_tools .row .span4 {
-        width: 120px;
+    .section-social .span9 {
+        width: 530px;
     }
 }
 
+@media (min-width: 980px) and (max-width: 1200px) {
+    /* fixes tabs */
+    .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    
+    /* only for the course tools */
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
+        float: left;     
+    }
+    .course-tool {
+        width: 280px;
+    }
+    .section-social .span9, .section-mycourses .span9{
+        width: 680px;
+    }
+    .section-social .social-menu {
+        width: 200px;
+    }
+    .section-social .span5 {
+        width: 350px;
+    }
+}
 
-
-
-
+/* LARGE DESKTOP SCREENS */
+@media (min-width: 1201px) {
+    #top_main_content .span12 {
+      width: 98%;
+    }
+    /* only for the course tools */
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
+        float: left;
+    }
+    .course-tool {
+        width: 260px;
+    }
+}

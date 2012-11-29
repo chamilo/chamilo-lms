@@ -476,7 +476,14 @@ a.tag {
 
 /* Admin index.php */
 #settings .span6 {
-    min-height: 320px;
+    min-height: 260px;
+    width: 47%;
+}
+#settings .span6 .well_border{
+    min-height: 250px;
+}
+#settings .form-search .span3 {
+    float: left;
 }
 
 /* user_portal course status icon */
@@ -2018,10 +2025,6 @@ input.maininput:focus {
 #course_tools .content {
     text-align:center;
     margin-bottom: 20px;
-}
-
-#course_tools .span4 {
-    width: 250px;
 }
 
 .big_icon img {

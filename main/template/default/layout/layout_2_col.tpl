@@ -58,7 +58,7 @@
             </div>
         {% endif %}        
 	</div>
-	<div class="span9">
+	<div class="span9 content-column">
         
         {#  Plugin bottom  #}
         {% if plugin_content_top %}

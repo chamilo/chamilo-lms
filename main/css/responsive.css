@@ -3,6 +3,7 @@
 320*
 480*
 640*
+720* (samsung S3)
 800*
 1024*
 1152
@@ -388,6 +389,27 @@ The more frequent ones have been marked with *
 
     #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {     
         float: left;     
+    }
+    /* Some fixes for w~720px */
+    .section-mycampus #top_main_content .content-column {
+        float: none;
+    }
+    .section-mycampus #homepage {
+        float: left;
+        width: 450px;
+    }
+    .section-mycampus #hot_courses {
+        float: left;
+        width: 660px;
+    }
+    .section-mycampus #hot_courses .page-header {
+        width: 650px;
+    }
+    .section-mycourses .course-box .course-box-actions {
+        display: none;
+    }
+    .section-mycampus .hot-course-box, .section-mycourses .course-box {
+        width: 660px;
     }
 
     /* Footer fixes */

@@ -90,10 +90,10 @@ var chamilo_xajax_handler = window.oxajax;
 </script>';
 
 if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_frame()==1 ) {
-    $htmlHeadXtra[] = '<script>        
+    $htmlHeadXtra[] = '<script>
         $(document).ready(function(){
             toogle_minipanel();
-        });        
+        });
         </script>';
 }
 
@@ -127,9 +127,9 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></scrip
  * Get a link to the corresponding document.
  */
 
-if ($debug) { 
+if ($debug) {
     error_log(" src: $src ");
-    error_log(" lp_type: $lp_type ");    
+    error_log(" lp_type: $lp_type ");
 }
 
 $get_toc_list = $_SESSION['oLP']->get_toc();
@@ -154,7 +154,7 @@ if (!isset($src)) {
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 $file_info = pathinfo($file_info['path']);
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {                    
+                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
@@ -240,7 +240,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         	$lp_item_view_id  = $row_last_attempt[0];
             $sql_upd_score = "UPDATE $TBL_LP_ITEM_VIEW SET status = 'completed' , score = $score, total_time = $mytime
                               WHERE id='".$lp_item_view_id."' AND c_id = $course_id ";
-            
+
             if ($debug) error_log($sql_upd_score);
             Database::query($sql_upd_score);
 
@@ -316,20 +316,32 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-echo '<div id="learning_path_main" style="width:100%;height:100%;">';    
+/*
+ *
+ *    <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
+                <!-- log message layout -->
+                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
+                    <div id="log_content"></div>
+                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
+                </div>
+                <!-- end log message layout -->
+                <?php } ?>
+ */
+
+echo '<div id="learning_path_main" style="width:100%;height:100%;">';
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
     if ($is_allowed_to_edit) {
-        echo '<div id="learning_path_breadcrumb_zone">'; 
+        echo '<div id="learning_path_breadcrumb_zone">';
         global $interbreadcrumb;
         $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
         $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
         //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
-        
-        echo return_breadcrumb($interbreadcrumb, null, null);        
+
+        echo return_breadcrumb($interbreadcrumb, null, null);
         echo '</div>';
     }
-?>    
+?>
     <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
         <!-- header -->
         <div id="header">
@@ -378,36 +390,25 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         </div>
 
         <!-- media player layout -->
-        <?php 
+        <?php
         if ($show_audioplayer) {
-            echo '<div id="lp_media_file">';            
+            echo '<div id="lp_media_file">';
             echo $mediaplayer;
             echo '</div>';
-        }        
-        ?>         
+        }
+        ?>
         <!-- end media player layout -->
 
         <!-- TOC layout -->
         <div id="toc_id" name="toc_name" style="overflow: auto; padding:0;margin-top:0px;width:100%;float:left">
             <div id="learning_path_toc">
                 <?php echo $_SESSION['oLP']->get_html_toc($get_toc_list); ?>
-
-                <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
-                <!-- log message layout -->
-                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                    <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
-                </div>
-                <!-- end log message layout -->
-                <?php } ?>
             </div>
         </div>
         <!-- end TOC layout -->
     </div>
     <!-- end left zone -->
-    
-    
-    
+
     <!-- right zone -->
     <div id="learning_path_right_zone" style="margin-left:<?php echo $margin_left;?>;height:100%">
     <?php
@@ -431,12 +432,12 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         var hauteurHeader = document.getElementById('header').offsetHeight;
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
-        
+
         var hauteurMedia = 0;
         if ($("#lp_media_file").length != 0) {
             hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
         }
-        
+
         var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
         var hauteurAction = 0;
         if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;
@@ -463,7 +464,7 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
                   {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
                   {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
                   {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-                  
+
           ] }
           );
     <?php
@@ -475,9 +476,9 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
       { load: [
               {type:"script", id:"_fr1", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.min.js"},
               {type:"script", id:"_fr4", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-              {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},              
+              {type:"stylesheet", id:"_fr5", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
               {type:"script", id:"_fr2", src:"<?php echo api_get_path(WEB_LIBRARY_PATH); ?>javascript/jquery.highlight.js"}
-              
+
           ] }
           );
       <?php

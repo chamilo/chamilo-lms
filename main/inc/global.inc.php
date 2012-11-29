@@ -194,9 +194,9 @@ if (api_is_utf8($charset)) {
 Chamilo::session()->start($already_installed);
 
 // Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
- 
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {	
-	array_walk_recursive_limited($_GET,     	'stripslashes', true);	
+
+if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
+	array_walk_recursive_limited($_GET,     	'stripslashes', true);
 	array_walk_recursive_limited($_POST, 	'stripslashes', true);
 	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
 	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
@@ -278,7 +278,7 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 // Load HTMLPurifier.
 //require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
 
-// Before we call local.inc.php, let's define a global $this_section variable 
+// Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts
 $this_section = SECTION_GLOBAL;
 
@@ -290,10 +290,10 @@ require $includePath.'/local.inc.php';
 //Fixes bug in Chamilo 1.8.7.1 array was not set
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
- 
+
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 if (file_exists($mail_conf)) {
-	require_once $mail_conf; 
+	require_once $mail_conf;
 }
 
 // ===== "who is logged in?" module section =====
@@ -306,8 +306,8 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 
 // ===== end "who is logged in?" module section =====
 
-if (api_get_setting('server_type') == 'test') {    
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);    
+if (api_get_setting('server_type') == 'test') {
+    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
     /*
     Server type is not test
@@ -371,18 +371,18 @@ if (isset($this_script) && $this_script == 'sub_language') {
     //getting parent info
     $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);    
+    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
-        //loading english        
-        $path = $langpath.'english/'.$language_file_item.'.inc.php';        
+        //loading english
+        $path = $langpath.'english/'.$language_file_item.'.inc.php';
         if (file_exists($path)) {
             include $path;
         }
-        
+
         $lang_list_post = array_keys($GLOBALS);
         $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
         unset($lang_list_pre);
@@ -395,7 +395,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
             unset(${$item});
         }
         $parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        
+
         if (file_exists($parent_file) && is_file($parent_file)) {
             include_once $parent_file;
         }
@@ -406,7 +406,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
         foreach($lang_list_result as $item) {
             unset(${$item});
         }
-        
+
         $sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
         if (file_exists($sub_file) && is_file($sub_file)) {
             include $sub_file;
@@ -471,7 +471,7 @@ if (!empty($valid_languages)) {
         }
     }
 }
-  
+
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and
@@ -569,8 +569,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($s_sql_update_logout_date);
     }
 }
-// Add language_measure_frequency to your main/inc/conf/configuration.php in 
-// order to generate language variables frequency measurements (you can then 
+// Add language_measure_frequency to your main/inc/conf/configuration.php in
+// order to generate language variables frequency measurements (you can then
 // see them through main/cron/lang/langstats.php)
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
@@ -582,7 +582,7 @@ if (isset($_configuration['language_measure_frequency']) && $_configuration['lan
 
 //Default quota for the course documents folder
 $default_quota = api_get_setting('default_document_quotum');
-//Just in case the setting is not correctly set 
+//Just in case the setting is not correctly set
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }

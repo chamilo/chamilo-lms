@@ -3564,9 +3564,9 @@ class learnpath {
      */
     public function prerequisites_match($item = null) {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::prerequisites_match()', 0);
+            error_log('In learnpath::prerequisites_match()', 0);
         }
-        if (empty ($item)) {
+        if (empty($item)) {
             $item = $this->current;
         }
         if (is_object($this->items[$item])) {
@@ -3588,12 +3588,12 @@ class learnpath {
         } else {
             $result = true;
             if ($this->debug > 1) {
-                error_log('New LP - $this->items[' . $item . '] was not an object', 0);
+                error_log('$this->items[' . $item . '] was not an object', 0);
             }
         }
 
         if ($this->debug > 1) {
-            error_log('New LP - End of prerequisites_match(). Error message is now ' . $this->error, 0);
+            error_log('End of prerequisites_match(). Error message is now ' . $this->error, 0);
         }
         return $result;
     }
@@ -3775,11 +3775,12 @@ class learnpath {
         if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
             if ($debug) { error_log('Object exists'); }
             $res = $this->items[$item_id]->save($from_outside, $this->prerequisites_match($item_id));
-            $this->autocomplete_parents($item_id);
-             if ($debug) {
+            if ($debug) {
                 error_log('update_queue before:');
                 error_log(print_r($this->update_queue,1));
             }
+            $this->autocomplete_parents($item_id);
+
             $status = $this->items[$item_id]->get_status();
             $this->update_queue[$item_id] = $status;
 
@@ -6699,7 +6700,7 @@ class learnpath {
             }
         }
 
-        $position = & $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_chapter_form" style="width:37%;"');
+        $position = $form->addElement('select', 'previous', get_lang('Position'), '', 'id="previous" class="learnpath_chapter_form" style="width:37%;"');
 
         $padding = isset($value['padding']) ? $value['padding'] : 0;
 

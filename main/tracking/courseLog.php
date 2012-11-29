@@ -27,7 +27,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";    
+    $this_section = "session_my_space";
 } else {
     $this_section = SECTION_COURSES;
 }
@@ -35,8 +35,8 @@ if ($from == 'myspace') {
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
-if (!$is_allowedToTrack) {    
-    api_not_allowed();    
+if (!$is_allowedToTrack) {
+    api_not_allowed();
     exit;
 }
 
@@ -65,32 +65,37 @@ if ($export_csv) {
 }
 $csv_content = array();
 // Scripts for reporting array hide / unhide columns
-$js = "
-    <script>
+$js = "<script>
         // hide column and display the button to unhide it
         function foldup(in_id) {
             $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();
             $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();
             $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();
         }
+
         // add the red cross on top of each column
         function init_hide() {
             $('div#reporting_table table tr th').each(
                 function(index) {
                     num_index = index + 1;
-                    $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('visible.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 22)."</div>');                    
-                 }
-               )
-             }
+                   // $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('visible.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 22)."</div>');
+                }
+            );
+        }
+
         // hide some column at startup
         // be sure that these columns always exists
         // see $tab_table_header = array();    // tab of header texts
         $(document).ready( function() {
             init_hide();
-            foldup(1);foldup(9);foldup(10);foldup(11);foldup(12);
+            foldup(1);
+            foldup(9);
+            foldup(10);
+            foldup(11);
+            foldup(12);
         })
     </script>";
-        
+
 $htmlHeadXtra[] = "<style type='text/css'>
 /*<![CDATA[*/
 .secLine {background-color : #E6E6E6;}
@@ -141,12 +146,12 @@ $nameTools = get_lang('Tracking');
 Display::display_header($nameTools, 'Tracking');
 
 // getting all the students of the course
-if (empty($session_id)) {	
+if (empty($session_id)) {
 	// Registered students in a course outside session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());	
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
 } else {
 	// Registered students in session.
-	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());    
+	$a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
 }
 
 $nbStudents = count($a_students);
@@ -159,7 +164,7 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
     }
     // Fetching only the user that are loaded NOT ALL user in the portal.
     $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
-    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);    
+    $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);
 }
 
 
@@ -167,10 +172,10 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 echo '<div class="actions">';
 
-echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);        
+echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);
 echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());        
-    
+echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());
+
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 
@@ -190,7 +195,7 @@ echo '</span>';
 echo '</div>';
 
 
-echo '<div class="actions">';    
+echo '<div class="actions">';
 // Create a search-box.
 $form_search = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
 $renderer = $form_search->defaultRenderer();
@@ -198,7 +203,7 @@ $renderer->setElementTemplate('<span>{element}</span>');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', api_get_session_id());
 $form_search->addElement('text', 'user_keyword');
-$form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');    
+$form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
 $form_search->display();
 echo '</div>';
 
@@ -229,7 +234,7 @@ if (count($a_students) > 0) {
 
     $course_name = get_lang('Course').' '.$course_info['name'];
 
-    if ($session_id) {    	
+    if ($session_id) {
         echo Display::page_subheader(Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
              Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name);
     } else {
@@ -240,10 +245,10 @@ if (count($a_students) > 0) {
 
     if (!empty($extra_field_select)) {
         echo $extra_field_select;
-    }              
+    }
     $form->display();
 
-    //PERSON_NAME_DATA_EXPORT is buggy    
+    //PERSON_NAME_DATA_EXPORT is buggy
     $is_western_name_order = api_is_western_name_order();
 
     if ($export_csv) {
@@ -307,7 +312,7 @@ if (count($a_students) > 0) {
         if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(14, $extra_info['field_display_text'], false);
             $tab_table_header[] = $extra_info['field_display_text'];
-            $table->set_header(15, get_lang('Details'), false);                        
+            $table->set_header(15, get_lang('Details'), false);
             $tab_table_header[] = get_lang('Details');
         } else {
             $table->set_header(14, get_lang('Details'), false);
@@ -320,15 +325,15 @@ if (count($a_students) > 0) {
         $table->set_header(12, get_lang('LatestLogin'), false);
         $tab_table_header[] = get_lang('LatestLogin');
 
-        if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {                                
+        if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
             $table->set_header(13, $extra_info['field_display_text'], false);
             $tab_table_header[] = $extra_info['field_display_text'];
-            $table->set_header(14, get_lang('Details'), false);                
+            $table->set_header(14, get_lang('Details'), false);
             $tab_table_header[] = get_lang('Details');
-        } else {                
+        } else {
             $table->set_header(13, get_lang('Details'), false);
             $tab_table_header[] = get_lang('Details');
-        }            
+        }
     }
     // display buttons to unhide hidden columns
     echo "<br/><br/><div id='unhideButtons'>";
@@ -351,14 +356,14 @@ if ($export_csv) {
     $csv_headers = array();
 
     $csv_headers[] = get_lang('OfficialCode', '');
-    if ($is_western_name_order) {       
+    if ($is_western_name_order) {
         $csv_headers[] = get_lang('FirstName', '');
-        $csv_headers[] = get_lang('LastName', '');            
+        $csv_headers[] = get_lang('LastName', '');
     } else {
-        $csv_headers[] = get_lang('LastName', '');   
-        $csv_headers[] = get_lang('FirstName', '');            
+        $csv_headers[] = get_lang('LastName', '');
+        $csv_headers[] = get_lang('FirstName', '');
     }
-    $csv_headers[] = get_lang('Login', ''); // 
+    $csv_headers[] = get_lang('Login', ''); //
     $csv_headers[] = get_lang('TrainingTime', '');
     $csv_headers[] = get_lang('CourseProgress', '');
     $csv_headers[] = get_lang('ExerciseProgress','');
@@ -372,12 +377,12 @@ if ($export_csv) {
     }
 
     $csv_headers[] = get_lang('FirstLogin', '');
-    $csv_headers[] = get_lang('LatestLogin', '');    
+    $csv_headers[] = get_lang('LatestLogin', '');
 
     if (isset($_GET['additional_profile_field']) AND is_numeric($_GET['additional_profile_field'])) {
         $csv_headers[] = $extra_info['field_display_text'];
     }
-    ob_end_clean();        
+    ob_end_clean();
     array_unshift($csv_content, $csv_headers); // Adding headers before the content.
 
     Export::export_table_csv($csv_content, 'reporting_student_list');

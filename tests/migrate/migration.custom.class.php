@@ -350,7 +350,7 @@ class MigrationCustom {
         
         //Here the $data variable has $data['course_code'] that will be added when creating the session
         // If session already exists, it will return the existing session id
-        $session_id = SessionManager::add($data);
+        $session_id = SessionManager::add($data, true);
         //error_log('create_session');        
         if (!$session_id) {
             error_log('Error: Failed to create_session '.$data['name']);

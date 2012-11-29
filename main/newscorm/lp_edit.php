@@ -75,7 +75,7 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Encoding
 /* // Chamilo 1.8.8: Deprecated code.
-$encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
+$encoding_select = $form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
 foreach ($encodings as $encoding) {
     if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
@@ -88,7 +88,7 @@ $form->addElement('hidden', 'lp_encoding');
 
 // Origin
 /*
-$origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
+$origin_select = $form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
 
 include 'content_makers.inc.php';
@@ -100,7 +100,7 @@ foreach ($content_origins as $origin) {
 }
 
 // Content proximity
-$content_proximity_select = &$form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
+$content_proximity_select = $form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
 $lp_prox = $_SESSION['oLP']->get_proximity();
 if ($lp_prox != 'local') {
     $s_selected_proximity = 'remote';
@@ -111,12 +111,12 @@ $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 */
 //Hide toc frame
-$hide_toc_frame = &$form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));
+$hide_toc_frame = $form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));
 if (api_get_setting('allow_course_theme') == 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
         //LP theme picker
-        $theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
+        $theme_select = $form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
         $form->applyFilter('lp_theme', 'trim');
 
         $s_theme = $_SESSION['oLP']->get_theme();

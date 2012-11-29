@@ -46,7 +46,7 @@ require_once 'aiccItem.class.php';
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
     $return = null;
-    $debug = 0;
+    $debug = 10;
 
     if ($debug > 0) {
         error_log('lp_ajax_save_item.php : save_item() params: ');
@@ -121,22 +121,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
             //Default behaviour
             if (isset($status) && $status != '' && $status != 'undefined') {
-                //Implements scorm 1.2 constraint
-                //If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all
-                //Score was not set
-                //@todo remove the switch
-                switch ($status) {
-                    case 'failed':
-                    case 'passed':
-                        $mylpi->set_status($status);
-                        //if ($debug > 1) { error_log("Cant't set status to these values only if a score was set"); }
-                        break;
-                    default:
-                        if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
-                        $mylpi->set_status($status);
-                        if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
-                        break;
-                }
+                if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
+                $mylpi->set_status($status);
+                if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
             } else {
                 if ($debug > 1) { error_log("Status not updated"); }
             }
@@ -232,7 +219,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if ($debug > 1) { error_log("myprogress_mode: $myprogress_mode", 0); }
     if ($debug > 1) { error_log("progress: $mycomplete / $mytotal", 0); }
 
-    $_SESSION['lpobject'] = serialize($mylp);
+    //$_SESSION['lpobject'] = serialize($mylp);
 
     if ($mylpi->get_type() != 'sco') {
         // If this object's JS status has not been updated by the SCORM API, update now.
@@ -274,10 +261,12 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     if ($mylp->get_type() == 2) {
          $return .= "update_stats();";
     }
+
     //To be sure progress is updated
     $mylp->save_last();
 
-   if ($debug > 0) { error_log('---------------- lp_ajax_save_item.php : save_item end ----- '); }
+    Session::write('lpobject', serialize($mylp));
+    if ($debug > 0) { error_log('---------------- lp_ajax_save_item.php : save_item end ----- '); }
     return $return;
 }
 

@@ -341,24 +341,28 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         echo return_breadcrumb($interbreadcrumb, null, null);
         echo '</div>';
     }
-?>
-    <div id="learning_path_left_zone" style="<?php echo $display_none;?>">
-        <!-- header -->
-        <div id="header">
+    echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';
+    echo '<div id="header">
             <table>
                 <tr>
-                    <td>
-                        <a href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
+                    <td>';
+                        echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">
                             <img src="../img/lp_arrow.gif" />
                         </a>
                     </td>
-                    <td>
-                        <a class="link" href="lp_controller.php?action=return_to_course_homepage&<?php echo api_get_cidreq(); ?>" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                        <?php echo get_lang('CourseHomepageLink'); ?></a>
+                    <td>';
+                         if ($is_allowed_to_edit) {
+                            echo '<a class="link" href="lp_controller.php?isStudentView=false&action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
+                         } else {
+                            echo '<a class="link" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
+                         }
+                        echo get_lang('CourseHomepageLink').'
+                        </a>
                     </td>
                 </tr>
             </table>
-        </div>
+        </div>';
+?>
         <!-- end header -->
 
         <!-- Author image preview -->

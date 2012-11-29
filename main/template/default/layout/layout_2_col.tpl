@@ -4,7 +4,7 @@
 	{# Main content #}
    
 	{#  Right column  #}
-	<div class="span3">		        
+	<div class="span3 menu-column">		        
         {% if plugin_menu_top %}
             <div id="plugin_menu_top">
                 {{plugin_menu_top}}

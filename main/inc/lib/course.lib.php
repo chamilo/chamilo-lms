@@ -2784,7 +2784,7 @@ class CourseManager {
      */
     public static function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well";
+        $class = "well course-box";
         if ($is_sub_content) {
             $class = "course_item";
         }
@@ -2792,7 +2792,7 @@ class CourseManager {
             $html .= '<div class="row">';
             $html .= '<div class="span7">';
                 $html .= ' <div class="row">';
-                    $html .= '<div class="span1">';
+                    $html .= '<div class="span1 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';
                         $html .= $params['icon'];
@@ -2824,7 +2824,7 @@ class CourseManager {
 
             $html .= '</div>';
 
-            $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';
+            $html .= '<div class="span1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
         $html .= '</div>';
         $html .= '</div>';
         return $html;

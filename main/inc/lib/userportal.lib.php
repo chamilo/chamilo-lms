@@ -853,7 +853,7 @@ class IndexManager {
 	 * The most important function here, prints the session and course list (user_portal.php)
 	 *  
 	 * */
-	function return_courses_and_sessions($user_id) {		       
+	function return_courses_and_sessions($user_id) {
         $session_categories = array();        
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 		

@@ -79,6 +79,45 @@ The more frequent ones have been marked with *
         min-height: none;
         width: 95%;
     }
+    .section-mycourses .menu-column, .section-mycampus .menu-column {
+        width: 95%;
+    }
+    .section-mycampus .menu-column #login_block {
+        width: 95%;
+    }
+    .section-mycourses .menu-column #user_image_block, 
+    .section-mycourses .menu-column #profile_block, 
+    .section-mycourses .menu-column #skill_block, 
+    .section-mycourses .menu-column #search_block, 
+    .section-mycourses .menu-column #classes_block, 
+    .section-mycourses .menu-column #reservation_block, 
+    .section-mycourses .menu-column #skill_block, 
+    .section-mycampus .menu-column #help_block, 
+    .section-mycourses .menu-column #notice_block {
+        display: none;
+    }
+    .section-mycampus #homepage {
+        width: 260px;
+    }
+    .section-mycampus #hot_courses {
+        width: 260px;
+    }
+    .section-mycourses #top_main_content {
+        margin-right: 15px;
+    }
+    .section-mycourses #main_content {
+        margin-right: 15px;
+        width: 260px;
+    }
+    .section-mycourses .course-box .course-box-actions {
+        display: none;
+    }
+    .section-mycampus .hot-course-box, .section-mycourses .course-box {
+        width: 95%;
+    }
+    footer {
+        margin-top: 0px;
+    }
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
@@ -194,6 +233,45 @@ The more frequent ones have been marked with *
     #settings .span6 {
         min-height: none;
         width: 95%;
+    }
+    .section-mycourses .menu-column, .section-mycampus .menu-column {
+        width: 95%;
+    }
+    .section-mycampus .menu-column #login_block {
+        width: 95%;
+    }
+    .section-mycourses .menu-column #user_image_block, 
+    .section-mycourses .menu-column #profile_block, 
+    .section-mycourses .menu-column #skill_block, 
+    .section-mycourses .menu-column #search_block, 
+    .section-mycourses .menu-column #classes_block, 
+    .section-mycourses .menu-column #reservation_block, 
+    .section-mycourses .menu-column #skill_block, 
+    .section-mycampus .menu-column #help_block, 
+    .section-mycourses .menu-column #notice_block {
+        display: none;
+    }
+    .section-mycampus #homepage {
+        width: 400px;
+    }
+    .section-mycampus #hot_courses {
+        width: 400px;
+    }
+    .section-mycourses #top_main_content {
+        margin-right: 15px;
+    }
+    .section-mycourses #main_content {
+        margin-right: 15px;
+        width: 400px;
+    }
+    .section-mycourses .course-box .course-box-actions {
+        display: none;
+    }
+    .section-mycampus .hot-course-box, .section-mycourses .course-box {
+        width: 95%;
+    }
+    footer {
+        margin-top: 0px;
     }
 }
 

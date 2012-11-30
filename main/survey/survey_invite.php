@@ -52,7 +52,6 @@ if (empty($survey_data)) {
 	exit;
 }
 
-
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
@@ -77,6 +76,7 @@ $(function() {
     });
 });
 </script>';
+
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
 $sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
@@ -214,11 +214,5 @@ if ($form->validate()) {
 	$defaults['send_mail'] = 1;
 	$form->setDefaults($defaults);
     $form->display();
-
-
-
-	//$form->display();
 }
-
-// Footer
 Display :: display_footer();

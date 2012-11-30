@@ -189,39 +189,28 @@ olms.asset_timer = 0;
 olms.userfname = '<?php echo str_replace("'","\\'",$user['firstname']); ?>';
 olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
 
-//Backup for old values
-//var olms.old_score = 0;
-//var old_max = 0;
-//var old_min = 0;
-//var old_lesson_status = '';
-//var old_session_time = '';
-//var old_suspend_data = '';
-//var olms.lms_old_item_id = 0;
-
 olms.execute_stats = false;
 
 // Initialize stuff when the page is loaded
 $(document).ready( function() {
+    olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
+    olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
 
-  olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
-  olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
+    $("#content_id").load( function() {
+      // Add a right margin see BT#1607
+      /*if (frames['content_name']) {
+          // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
+          try {
+              frames['content_name'].document.body.style.margin="0 12px 0px 5px";
+          } catch (ex) { }
+      }*/
 
-  $("#content_id").load( function() {
+      olms.info_lms_item[0]=olms.info_lms_item[1];
 
-    // Add a right margin see BT#1607
-    /*if (frames['content_name']) {
-        // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
-        try {
-            frames['content_name'].document.body.style.margin="0 12px 0px 5px";
-        } catch (ex) { }
-    }*/
-
-    olms.info_lms_item[0]=olms.info_lms_item[1];
-
-    if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
-        LMSInitialize();
-    }
-    });
+      if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
+          LMSInitialize();
+      }
+      });
 });
 
 /**
@@ -252,6 +241,7 @@ function LMSInitialize() {
     } else {
         //reinit the list of modified variables
         reinit_updatable_vars_list();
+
         // Get LMS values for this item
         var params = {
             'lid': olms.lms_lp_id,
@@ -285,7 +275,10 @@ function LMSInitialize() {
                  + '\nlms_view_id     : '+ olms.lms_view_id
                 ;
 
-        logit_scorm('LMSInitialize()'+log,0);
+        logit_scorm('LMSInitialize()'+log);
+
+        //To keep the table updated
+        update_toc(olms.lesson_status, olms.lms_item_id);
 
         olms.lms_initialized = 1;
 
@@ -524,13 +517,13 @@ function LMSGetValue(param) {
                 }
             }
         }
-    }else if(param == 'cmi.student_data._children'){
-    // ---- cmi.student_data._children
+    } else if(param == 'cmi.student_data._children'){
+        // ---- cmi.student_data._children
         result = 'mastery_score,max_time_allowed';
     } else if(param == 'cmi.student_data.mastery_score'){
         // ---- cmi.student_data.mastery_score
         result = olms.mastery_score;
-    }else if(param == 'cmi.student_data.max_time_allowed'){
+    } else if(param == 'cmi.student_data.max_time_allowed'){
         // ---- cmi.student_data.max_time_allowed
         result = olms.max_time_allowed;
     } else if(param == 'cmi.interactions._count'){
@@ -551,12 +544,14 @@ function LMSGetValue(param) {
     logit_scorm("LMSGetValue\n\t('"+param+"') returned '"+result+"'",1);
     return result;
 }
+
 /**
  * Twin sister of LMSGetValue(). Only provided for backwards compatibility.
  */
 function GetValue(param) {
     return LMSGetValue(param);
 }
+
 /**
  * Sets a SCORM variable's value through a call from the SCO.
  * @param   string  The SCORM variable's name
@@ -839,7 +834,6 @@ function savedata(origin) {
  */
 function LMSCommit(val) {
     logit_scorm('LMSCommit() + val');
-    logit_scorm(val);
 
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
@@ -849,12 +843,14 @@ function LMSCommit(val) {
     //commit = 'false' ; //now changes have been commited, no need to update until next SetValue()
     return('true');
 }
+
 /**
  * Twin sister of LMSCommit(). Only provided for backwards compatibility.
  */
 function Commit(val) {
     return LMSCommit(val);
 }
+
 /**
  * Send the closure signal to the LMS. This saves the data and closes the current SCO.
  * From SCORM 1.2 RTE: The SCO must call this when it has determined that it no
@@ -883,12 +879,14 @@ function LMSFinish(val) {
     reinit_updatable_vars_list();
     return('true');
 }
+
 /**
  * Twin sister of LMSFinish(). Only provided for backwards compatibility.
  */
 function Finish(val) {
     return LMSFinish(val);
 }
+
 /**
  * Returns the last error code as a string
  * @return  string  Error code
@@ -897,12 +895,14 @@ function LMSGetLastError() {
     logit_scorm('LMSGetLastError()',1);
     return(olms.G_LastError.toString());
 }
+
 /**
  * Twin sister of LMSGetLastError(). Only provided for backwards compatibility.
  */
 function GetLastError() {
     return LMSGetLastError();
 }
+
 /**
  * Returns the last error code literal for a given error code
  * @param   int     Error code
@@ -912,12 +912,14 @@ function LMSGetErrorString(errCode){
     logit_scorm('LMSGetErrorString()',1);
     return(olms.G_LastErrorString);
 }
+
 /**
  * Twin sister of LMSGetErrorString(). Only provided for backwards compatibility.
  */
 function GetErrorString(errCode){
     return LMSGetErrorString(errCode);
 }
+
 /**
  * Returns a more explanatory, full English, error message
  * @param   int     Error code
@@ -927,20 +929,21 @@ function LMSGetDiagnostic(errCode){
     logit_scorm('LMSGetDiagnostic()',1);
     return(API.LMSGetLastError());
 }
+
 /**
  * Twin sister of LMSGetDiagnostic(). Only provided for backwards compatibility.
  */
 function GetDiagnostic(errCode){
     return LMSGetDiagnostic(errCode);
 }
+
 /**
  * Acts as a "commit"
  * This function is not standard SCORM 1.2 and is probably deprecated in all
  * meanings of the term.
  * @return  string  'true' or 'false', depening on whether the LMS has initialized the SCORM process or not
  */
-function Terminate()
-{
+function Terminate() {
     if (olms.lms_initialized == 0) {
         olms.G_LastError 		= G_NotInitialized;
         olms.G_LastErrorMessage = G_NotInitializedMessage;
@@ -955,6 +958,7 @@ function Terminate()
         return ('true');
     }
 }
+
 /**
  * LMS-specific code that deals with event handling and inter-frames
  * messaging/refreshing.
@@ -1065,9 +1069,8 @@ function lms_save_asset() {
  * Also save the score locally because it hasn't been done through SetValue().
  * Saving the status will be dealt with by the XAJAX function.
  */
-function chamilo_void_save_asset(myscore,mymax)
-{
-    logit_lms('lms_save_asset',2);
+function chamilo_void_save_asset(myscore, mymax) {
+    logit_lms('chamilo_void_save_asset',2);
     olms.score = myscore;
     if((mymax == null) || (mymax == '')){mymax = 100;} //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
     xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, myscore, mymax);
@@ -1185,6 +1188,7 @@ function update_toc(update_action, update_id, change_ids) {
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats() {
+    logit_lms('update_stats()');
     if (olms.execute_stats) {
         try {
             cont_f = document.getElementById('content_id');
@@ -1201,6 +1205,7 @@ function update_stats() {
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats_page() {
+    logit_lms('update_stats_page');
     var myframe = document.getElementById('content_id');
     var mysrc = myframe.location.href;
     if(mysrc == 'lp_controller.php?action=stats'){
@@ -1212,7 +1217,6 @@ function update_stats_page() {
     }
     return true;
 }
-
 
 /**
  * Updates the progress bar with the new status. Prevents the need of a page refresh and flickering
@@ -1259,13 +1263,14 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
  * @return  array   Array of SCO variables
  */
 function process_scorm_values () {
-    for (i=0;i<olms.scorm_variables.length;i++) {
+    for (i=0; i<olms.scorm_variables.length; i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.variable_to_send.push(olms.scorm_variables[i]);
         }
     }
     return olms.variable_to_send;
 }
+
 /**
  * Reinitializes the SCO's modified variables to an empty list.
  * @return  void
@@ -1303,6 +1308,8 @@ function switch_item(current_item, next_item){
     var orig_item_type      = olms.lms_item_types['i'+current_item];
     var next_item_type      = olms.lms_item_types['i'+next_item];
 
+    logit_lms('Called switch_item with params '+olms.lms_item_id+' and '+next_item+'',0);
+
     /*
      There are four "cases" for switching items:
      (1) asset switching to asset
@@ -1320,8 +1327,6 @@ function switch_item(current_item, next_item){
      In any case, we need to change the current document frame.
      These cases, although clear here, are however very difficult to implement
     */
-
-    logit_lms('Called switch_item with params '+olms.lms_item_id+' and '+next_item+'',0);
 
     if (orig_item_type != 'sco') {
         if (next_item_type != 'sco' ) {
@@ -1481,17 +1486,15 @@ function switch_item(current_item, next_item){
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-    params  = '';
+    var params;
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
     params += '&status='+lesson_status+'&t='+session_time;
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
 
-    if ( olms.lms_lp_type == 1) {
-
+    if (olms.lms_lp_type == 1) {
         logit_lms('xajax_save_item with params:' + params);
-
         $.ajax({
             type:"POST",
             data: params,
@@ -1515,7 +1518,6 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id) {
-
     var is_interactions='false';
     var params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
     var my_scorm_values = new Array();
@@ -1536,17 +1538,13 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         } else if (my_scorm_values[k]=='cmi.core.lesson_location') {
             params += '&loc='+olms.lesson_location;
         } else if (my_scorm_values[k]=='cmi.completion_status') {
-
         } else if (my_scorm_values[k]=='cmi.score.scaled') {
-
         } else if (my_scorm_values[k]=='cmi.suspend_data') {
             params += '&suspend='+olms.suspend_data;
         } else if (my_scorm_values[k]=='cmi.completion_status') {
-
         } else if (my_scorm_values[k]=='cmi.core.exit') {
             params += '&core_exit='+olms.lms_item_core_exit;
         }
-
         if (my_scorm_values[k]=='interactions') {
             is_interactions='true';
         } else {
@@ -1589,7 +1587,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         dataType: "script",
         async: false
     });
-    params='';
+    params = '';
     my_scorm_values = null;
 }
 
@@ -1600,13 +1598,18 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
  * @uses    lp_ajax_start_timer.php
  */
 function xajax_start_timer() {
+    logit_lms('xajax_start_timer');
     $.ajax({
         type: "GET",
         url: "lp_ajax_start_timer.php",
         dataType: "script",
-        async: false
+        async: false,
+        success: function(data) {
+            logit_lms('xajax_start_timer result: ' + data);
+        }
     });
 }
+
 /**
  * Save a specific item's objectives into the LMS through an Synch JAX call
  * @param   int     ID of the learning path

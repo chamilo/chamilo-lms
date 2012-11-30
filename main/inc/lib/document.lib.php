@@ -1896,7 +1896,7 @@ class DocumentManager {
                 }
             }
         } else {
-            error_log('preg_match did not find anything', 0);
+            //error_log('preg_match did not find anything', 0);
         }
         return $attributes;
     }

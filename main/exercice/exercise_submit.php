@@ -431,7 +431,7 @@ if ($formSent && isset($_POST)) {
 
 
     // the script "exercise_result.php" will take the variable $exerciseResult from the session
-    Session::write('exerciseResult',$exerciseResult);
+    Session::write('exerciseResult', $exerciseResult);
     Session::write('remind_list', $remind_list);
     Session::write('exerciseResultCoordinates',$exerciseResultCoordinates);
 
@@ -648,7 +648,7 @@ if ($limit_time_exists) {
             exit;
         } else {
             $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
-            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));            
+            Display :: display_warning_message(sprintf($message_warning, $exercise_title, $objExercise->selectAttempts()));
         }
     }
 }
@@ -666,7 +666,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) && $_custom['exercise
 
 //Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();	
+    echo $objExercise->return_time_left_div();
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
@@ -745,7 +745,7 @@ if (!empty($error)) {
     $number_of_hotspot_questions = 0;
     $onsubmit = '';
     $i = 0;
-    
+
     if (!strcmp($questionList[0], '') === 0) {
         foreach ($questionList as $questionId) {
             $i++;
@@ -786,20 +786,20 @@ if (!empty($error)) {
                 	//$(this).find(".exercise_save_now_button").hide();
                 	$(this).removeClass("question_highlight");
                 });
-                
-                $(".no_remind_highlight").hide();               
+
+                $(".no_remind_highlight").hide();
     		});
 
 			function previous_question(question_num) {
 				url = "exercise_submit.php?'.$params.'&num="+question_num;
 				window.location = url;
 			}
-            
-            function previous_question_and_save(previous_question_id, question_id_to_save) {            
-                url = "exercise_submit.php?'.$params.'&num="+previous_question_id;                    
+
+            function previous_question_and_save(previous_question_id, question_id_to_save) {
+                url = "exercise_submit.php?'.$params.'&num="+previous_question_id;
                 //Save the current question
                 save_now(question_id_to_save, url);
-            }            
+            }
 
            function save_now(question_id, url_extra) {
            		//1. Normal choice inputs
@@ -851,7 +851,7 @@ if (!empty($error)) {
 								} else {
 									url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
 								}
-                                
+
                                 if (url_extra) {
                                     url = url_extra;
                                 }
@@ -922,7 +922,7 @@ if (!empty($error)) {
                 return false;
             }
 		</script>';
-  
+
     echo '<form id="exercise_form" method="post" action="'.api_get_self().'?'.api_get_cidreq().'&autocomplete=off&gradebook='.$gradebook."&exerciseId=" . $exerciseId .'" name="frm_exercise" '.$onsubmit.'>
          <input type="hidden" name="formSent"				value="1" />
          <input type="hidden" name="exerciseId" 			value="'.$exerciseId . '" />
@@ -979,12 +979,12 @@ if (!empty($error)) {
         $user_choice = $attempt_list[$questionId];
 
         $remind_highlight = '';
-        
+
         //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
         if ($objExercise->type == ALL_ON_ONE_PAGE && isset($_GET['reminder']) && $_GET['reminder'] == 2) {
-            $remind_highlight = 'no_remind_highlight';    
+            $remind_highlight = 'no_remind_highlight';
         }
-        
+
         $exercise_actions  = '';
         $is_remind_on = false;
 

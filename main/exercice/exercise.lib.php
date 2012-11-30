@@ -1080,7 +1080,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         $lp_list_obj = new learnpathList(api_get_user_id());
         $lp_list = $lp_list_obj->get_flat_list();
 
-
         if (is_array($results)) {
 
             $users_array_id = array();
@@ -1239,7 +1238,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param   float   score
  * @param   float   weight
  * @param   bool    show porcentage or not
- * @param	 bool	use or not the platform settings
+ * @param	bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
 function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_only_percentage = false) {
@@ -1260,23 +1259,22 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
             $weight = $max_note;
         }
     }
+    $percentage = (100 * $score)/ ($weight != 0 ? $weight : 1);
 
-    $score_rounded = float_format($score, 1);
+    //Formats values
+    $percentage = float_format($percentage, 1);
+    $score = float_format($score, 1);
     $weight = float_format($weight, 1);
-
-    $score_to_percentage = (100 * $score_rounded)/ ($weight != 0 ? $weight : 1);
-
-    $percentage = float_format($score_to_percentage, 1);
 
     $html  = null;
     if ($show_percentage) {
-        $parent = '(' . $score_rounded . ' / ' . $weight . ')';
+        $parent = '(' . $score . ' / ' . $weight . ')';
         $html = $percentage."%  $parent";
         if ($show_only_percentage) {
             $html = $percentage."% ";
         }
     } else {
-    	$html = $score_rounded . ' / ' . $weight;
+    	$html = $score . ' / ' . $weight;
     }
     $html  = Display::span($html, array('class' => 'score_exercise'));
     return $html;

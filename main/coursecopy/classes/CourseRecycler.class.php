@@ -356,6 +356,13 @@ class CourseRecycler
                     $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
                     Database::query($sql);
                 }
+                // Also delete questions categories and options
+                $sql = "DELETE FROM $table_qui_que_rel_cat WHERE c_id = ".$this->course_id;
+                Database::query($sql);
+                $sql = "DELETE FROM $table_qui_que_cat WHERE c_id = ".$this->course_id;
+                Database::query($sql);
+                $sql = "DELETE FROM $table_qui_que_opt WHERE c_id = ".$this->course_id;
+                Database::query($sql);
             }
             // Quizzes previously deleted are, in fact, kept with a status
             //  (active field) of "-1". Delete those, now.

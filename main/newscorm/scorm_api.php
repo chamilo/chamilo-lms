@@ -144,8 +144,9 @@ olms.scorm_variables = new Array(
 
 // manage variables to save or not
 olms.variable_to_send=new Array();
+
 // temporary list of variables (gets set to true when set through LMSSetValue)
-olms.updatable_vars_list=new Array();
+olms.updatable_vars_list = new Array();
 
 // Strictly scorm variables
 olms.score=<?php echo $oItem->get_score();?>;
@@ -168,10 +169,12 @@ olms.info_lms_item=new Array();
 olms.lms_lp_id = <?php echo $oLP->get_id();?>;
 olms.lms_item_id = <?php echo $oItem->get_id();?>;
 olms.lms_initialized = 0;
+
 //olms.lms_total_lessons = <?php echo $oLP->get_total_items_count(); ?>;
 //olms.lms_complete_lessons = <?php echo $oLP->get_complete_items_count();?>;
 //olms.lms_progress_bar_mode = '<?php echo $oLP->progress_bar_mode;?>';
 //if(lms_progress_bar_mode == ''){lms_progress_bar_mode='%';}
+
 olms.lms_view_id = '<?php echo $oLP->get_view();?>';
 if(olms.lms_view_id == ''){ olms.lms_view_id = 1;}
 olms.lms_user_id = '<?php echo $_user['user_id'];?>';
@@ -191,27 +194,39 @@ olms.userlname = '<?php echo str_replace("'","\\'",$user['lastname']); ?>';
 
 olms.execute_stats = false;
 
+/**
+ * Add the "addListeners" function to the "onload" event of the window and
+ * start the timer if necessary (asset)
+ */
+addEvent(window, 'load', addListeners, false);
+
 // Initialize stuff when the page is loaded
-$(document).ready( function() {
-    olms.info_lms_item[0]='<?php echo $oItem->get_id();?>';
-    olms.info_lms_item[1]='<?php echo $oItem->get_id();?>';
+$(document).ready(function() {
+    logit_lms('document.ready');
+
+    olms.info_lms_item[0] = '<?php echo $oItem->get_id();?>';
+    olms.info_lms_item[1] = '<?php echo $oItem->get_id();?>';
 
     $("#content_id").load( function() {
-      // Add a right margin see BT#1607
-      /*if (frames['content_name']) {
-          // See the task #2558: try-catch block has been added for suppressing "Access denied" error that may occur on IE.
-          try {
-              frames['content_name'].document.body.style.margin="0 12px 0px 5px";
-          } catch (ex) { }
-      }*/
+        logit_lms('#content_id on load executing: ');
+        olms.info_lms_item[0] = olms.info_lms_item[1];
 
-      olms.info_lms_item[0]=olms.info_lms_item[1];
-
-      if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
-          LMSInitialize();
-      }
-      });
+        if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
+            LMSInitialize();
+        } else {
+            logit_lms('Cant execute LMSInitialize() ');
+        }
+    });
 });
+
+//Seems that this objs are not used
+//oXAJAX = new XAJAXobject();
+//oxajax = new XAJAXobject();
+
+if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+    xajax_start_timer();
+}
+
 
 /**
  * The following section represents a set of mandatory functions for SCORM
@@ -228,6 +243,9 @@ function LMSInitialize() {
      * and that kind of stuff, so when the content loads in the content frame
      * it will have all the correct variables set
      */
+
+    logit_scorm('LMSInitialize()');
+
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
 
@@ -256,8 +274,8 @@ function LMSInitialize() {
             dataType: 'script',
             async: false
         });
-       // log a more complete object dump when initializing, so we know what data hasn't been cleaned
-       var log = '\nitem              : '+ olms.lms_item_id
+        // log a more complete object dump when initializing, so we know what data hasn't been cleaned
+        var log = '\nitem              : '+ olms.lms_item_id
                  + '\nitem_type       : '+ olms.lms_item_type
                  + '\nscore           : '+ olms.score
                  + '\nmax             : '+ olms.max
@@ -275,7 +293,7 @@ function LMSInitialize() {
                  + '\nlms_view_id     : '+ olms.lms_view_id
                 ;
 
-        logit_scorm('LMSInitialize()'+log);
+        logit_scorm('LMSInitialize() with params: '+log);
 
         //To keep the table updated
         update_toc(olms.lesson_status, olms.lms_item_id);
@@ -970,18 +988,11 @@ function Terminate() {
  * Defining the AJAX-object class to be made available from other frames
  */
 function XAJAXobject() {
-  this.xajax_switch_item_details=xajax_switch_item_details;
-  this.switch_item=switch_item;
-  this.xajax_save_objectives=xajax_save_objectives;
-  this.xajax_save_item = xajax_save_item;
+    this.xajax_switch_item_details=xajax_switch_item_details;
+    this.switch_item=switch_item;
+    this.xajax_save_objectives=xajax_save_objectives;
+    this.xajax_save_item = xajax_save_item;
 }
-
-/**
- * It is not sure that the SCOs use the above declarations
- */
-
-oXAJAX = new XAJAXobject();
-oxajax = new XAJAXobject();
 
 /**
  * Cross-browser event handling by Scott Andrew
@@ -991,12 +1002,12 @@ oxajax = new XAJAXobject();
  * @param   string	used in addEventListener
  */
 function addEvent(elm, evType, fn, useCapture){
-    if(elm.addEventListener){
+    if (elm.addEventListener){
         elm.addEventListener(evType, fn, useCapture);
         return true;
-    }else if (elm.attachEvent){
+    } else if (elm.attachEvent){
         var r = elm.attachEvent('on' + evType, fn);
-    }else{
+    } else{
         elm['on'+evType] = fn;
     }
 }
@@ -1011,21 +1022,21 @@ function addEvent(elm, evType, fn, useCapture){
 function addListeners(){
     //exit if the browser doesn't support ID or tag retrieval
     logit_lms('Entering addListeners()',2);
-    if(!document.getElementsByTagName){
+    if (!document.getElementsByTagName){
         logit_lms("getElementsByTagName not available",2);
         return;
     }
-    if(!document.getElementById){
+    if (!document.getElementById){
         logit_lms("getElementById not available",2);
         return;
     }
     //assign event handlers to objects
-    if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
         logit_lms('Chamilo LP or asset',2);
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
-        addEvent(window,'unload',lms_save_asset,false);
-        logit_lms('Added event listener on content_id for unload',2);
+        addEvent(window, 'unload', lms_save_asset,false);
+        logit_lms('Added event listener lms_save_asset() on window unload',2);
     }
     logit_lms('Quitting addListeners()',2);
 }
@@ -1035,7 +1046,6 @@ function addListeners(){
  * leaving it
  */
 function lms_save_asset() {
-
     // only for Chamilo lps
     if (olms.execute_stats) {
         olms.execute_stats = false;
@@ -1122,7 +1132,7 @@ function update_toc(update_action, update_id, change_ids) {
     }
     var myelem = $("#toc_"+update_id);
     var myelemimg = $("#toc_img_"+update_id);
-    logit_lms('update_toc("'+update_action+'",'+update_id+')',2);
+    logit_lms('update_toc("'+update_action+'", '+update_id+')',2);
 
     if (update_id != 0) {
         switch (update_action) {
@@ -1225,7 +1235,7 @@ function update_stats_page() {
  * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
-    logit_lms('update_progress_bar('+nbr_complete+','+nbr_total+','+mode+')',2);
+    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',2);
     logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,2);
 
     if (mode == '') {
@@ -1262,7 +1272,8 @@ function update_progress_bar(nbr_complete, nbr_total, mode) {
  * put them into an array for later shipping to lp_ajax_save_item.php
  * @return  array   Array of SCO variables
  */
-function process_scorm_values () {
+function process_scorm_values() {
+    logit_scorm('process_scorm_values()');
     for (i=0; i<olms.scorm_variables.length; i++) {
         if (olms.updatable_vars_list[olms.scorm_variables[i]]) {
             olms.variable_to_send.push(olms.scorm_variables[i]);
@@ -1299,7 +1310,6 @@ function reinit_updatable_vars_list() {
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
-
 function switch_item(current_item, next_item){
     // backup these params
     var orig_current_item   = current_item;
@@ -1444,7 +1454,7 @@ function switch_item(current_item, next_item){
             cont_f.attr("src",mysrc);
     <?php } ?>
 
-    if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
         xajax_start_timer();
     }
 
@@ -1486,7 +1496,7 @@ function switch_item(current_item, next_item){
  * @uses lp_ajax_save_item.php through an AJAX call
  */
 function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
-    var params;
+    var params = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
     params += '&status='+lesson_status+'&t='+session_time;
@@ -1605,7 +1615,7 @@ function xajax_start_timer() {
         dataType: "script",
         async: false,
         success: function(data) {
-            logit_lms('xajax_start_timer result: ' + data);
+            //logit_lms('xajax_start_timer result: ' + data);
         }
     });
 }
@@ -1620,7 +1630,7 @@ function xajax_start_timer() {
  * @uses    lp_ajax_save_objectives.php
  */
 function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives) {
-    var params;
+    var params = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id;
     obj_string = '';
@@ -1703,14 +1713,6 @@ function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,nex
     });
 }
 
-/**
- * Add the "addListeners" function to the "onload" event of the window and
- * start the timer if necessary (asset)
- */
-addEvent(window,'load',addListeners,false);
-if (olms.lms_lp_type==1 || olms.lms_item_type=='asset') {
-    xajax_start_timer();
-}
 
 /**
  * Allow attach the glossary terms into html document of scorm. This has
@@ -1754,7 +1756,7 @@ function attach_glossary_into_scorm(type) {
                 var complex_array = new Array();
                 var cp_complex_array = new Array();
                 for(i=0;i<data_terms.length;i++) {
-                    specific_terms=data_terms[i].split("__|__|");
+                    specific_terms= data_terms[i].split("__|__|");
                     var real_term = specific_terms[1]; // glossary term
                     var real_code = specific_terms[0]; // glossary id
                     complex_array[real_code] = real_term;

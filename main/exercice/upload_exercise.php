@@ -240,10 +240,12 @@ function lp_upload_quiz_action_handling() {
             for ($i = 0; $i < $number_questions; $i++) {
                 // Create questions
                 $question_title = $question[$i][2]; // Question name
-                if ($question_title != '') {
-                    $question_id = Question::create_question($quiz_id, ($question_title));
-                }
+                // Unique answers are the only question types available for now
+                // through xls-format import
                 $unique_answer = new UniqueAnswer();
+                if ($question_title != '') {
+                    $question_id = $unique_answer->create_question($quiz_id, ($question_title));
+                }
                 if (is_array($new_answer[$i])) {
                     $id = 1;
                     $answers_data = $new_answer[$i];

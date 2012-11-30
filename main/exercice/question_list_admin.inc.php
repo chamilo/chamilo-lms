@@ -39,9 +39,9 @@ if ($deleteQuestion) {
     }
 </style>
 
-<div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>">
+<div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>" style="display:none;">
     <p>
-        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0; display:none;">
         </span>
         <?php echo get_lang("AreYouSureToDelete"); ?>
     </p>

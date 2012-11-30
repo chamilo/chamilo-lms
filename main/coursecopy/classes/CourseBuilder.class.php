@@ -149,7 +149,6 @@ class CourseBuilder {
         }
 
         //TABLE_LINKED_RESOURCES is the "resource" course table, which is deprecated, apparently
-
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
                 $sql = "SELECT * FROM ".$table_link." WHERE c_id = $course_id AND source_type = '".$resource->get_type()."' AND source_id = '".$resource->get_id()."'";
@@ -159,7 +158,8 @@ class CourseBuilder {
                 }
             }
         }
-
+        // Once we've built the resouces array a bit more, try to get items
+        //  from the item_propry table and order them in the "resources" array
         foreach ($this->course->resources as $type => $resources) {
             foreach ($resources as $id => $resource) {
                 $tool = $resource->get_tool();
@@ -462,6 +462,7 @@ class CourseBuilder {
             $sql = 'SELECT * FROM '.$table_rel.' WHERE c_id = '.$course_id.' AND exercice_id = '.$obj->id;            
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
+error_log('Adding question '.$obj2->question_id.' to the pack at '.$obj2->question_order);
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
             }            
             $this->course->add_resource($quiz);

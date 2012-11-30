@@ -1031,6 +1031,7 @@ function addListeners(){
  * leaving it
  */
 function lms_save_asset() {
+
     // only for Chamilo lps
     if (olms.execute_stats) {
         olms.execute_stats = false;
@@ -1043,8 +1044,13 @@ function lms_save_asset() {
        olms.execute_stats = false;
     }
 
+    if (olms.lms_item_type == 'quiz') {
+        olms.execute_stats = true;
+    }
+
     if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
-        logit_lms('lms_save_asset', 2);
+        logit_lms('lms_save_asset');
+        logit_lms('execute_stats :'+ olms.execute_stats);
         xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
         if (olms.item_objectives.length>0) {
             xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
@@ -1611,10 +1617,13 @@ function xajax_start_timer() {
  * @uses    lp_ajax_save_objectives.php
  */
 function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,item_objectives) {
-    params='';
+    var params;
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id;
     obj_string = '';
+
+    logit_lms('xajax_save_objectives with params:' + params);
+
     for (i in item_objectives){
         obj_string += '&objectives['+i+']=';
         obj_temp = '[';
@@ -1633,6 +1642,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
         async: false
     });
 }
+
 /**
  * Switch between two items through an AJAX call.
  * @param   int     ID of the learning path
@@ -1643,13 +1653,15 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
  * @uses    lp_ajax_switch_item.php
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
-    params = {
+    var params = {
         'lid': lms_lp_id,
         'uid': lms_user_id,
         'vid': lms_view_id,
         'iid': lms_item_id,
         'next': next_item
     };
+    logit_lms('xajax_switch_item_details with params:' + params);
+
     $.ajax({
         type: "POST",
         data: params,
@@ -1658,6 +1670,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         async: false
     });
 }
+
 /**
  * Switch between two items through an AJAX call, but only update the TOC and
  * progress bar.
@@ -1676,6 +1689,8 @@ function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,nex
         'iid': lms_item_id,
         'next': next_item
     };
+    logit_lms('xajax_switch_item_toc with params:' + params);
+
     $.ajax({
         type: "POST",
         data: params,
@@ -1684,21 +1699,22 @@ function xajax_switch_item_toc(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,nex
         async: false
     });
 }
+
 /**
  * Add the "addListeners" function to the "onload" event of the window and
  * start the timer if necessary (asset)
  */
 addEvent(window,'load',addListeners,false);
-if(olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
+if (olms.lms_lp_type==1 || olms.lms_item_type=='asset') {
     xajax_start_timer();
 }
+
 /**
  * Allow attach the glossary terms into html document of scorm. This has
  * nothing to do with SCORM itself, and should not interfere w/ SCORM either.
   * @param   string     automatic or manual values are allowed
 */
 function attach_glossary_into_scorm(type) {
-
     var f = $('#content_id')[0];
     //Prevents "f is undefined" javascript error
     if (f == null) {
@@ -1719,107 +1735,105 @@ function attach_glossary_into_scorm(type) {
     work_path = my_pathname.substr(0,my_pathname.indexOf('/courses/'));
 
     if (type == 'automatic') {
-
-            $.ajax({
-                contentType: "application/x-www-form-urlencoded",
-                beforeSend: function(object) {
-                },
-                type: "POST",
-                url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
-                data: "glossary_data=true",
-                success: function(datas) {
-                      if (datas.length==0) {
-                          return false;
-                      }
-                      // glossary terms
-                      data_terms=datas.split("[|.|_|.|-|.|]");
-                        var complex_array = new Array();
-                        var cp_complex_array = new Array();
-                        for(i=0;i<data_terms.length;i++) {
-                            specific_terms=data_terms[i].split("__|__|");
-                            var real_term = specific_terms[1]; // glossary term
-                            var real_code = specific_terms[0]; // glossary id
-                            complex_array[real_code] = real_term;
-                            cp_complex_array[real_code] = real_term;
-                        }
-
-                        complex_array.reverse();
-
-                        for (var my_index in complex_array) {
-                            n = complex_array[my_index];
-                            if (n == null) {
-                                n = '';
-                            } else {
-                                for (var cp_my_index in cp_complex_array) {
-                                    cp_data = cp_complex_array[cp_my_index];
-                                    if (cp_data == null) {
-                                        cp_data = '';
-                                    } else {
-                                        if (cp_data == n) {
-                                            my_index = cp_my_index;
-                                        }
-                                    }
-                                }
-                                //alert(n + ' ' + my_index);
-                                $("iframe").contents().find('body').removeHighlight().highlight(n,my_index)
-                                //logit_lms(n+ ' - '+my_index, 0);
-                            }
-                        }
-
-                      var complex_array = new Array();
-
-                        //$("iframe").contents().find("body .glossary-ajax").on("click", ".glossary-ajax", function() {
-                        $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
-
-                        div_show_id="div_show_id";
-                        div_content_id="div_content_id";
-
-                        $("iframe").contents().find("body").append('<div id="div_show_id"><div id="div_content_id">&nbsp;</div></div>');
-
-                            show_dialog = $("iframe").contents().find("div#"+div_show_id);
-                            show_description = $("iframe").contents().find("div#"+div_content_id);
-
-                            var $target = $(this);
-
-                            if ($("#learning_path_left_zone").is(':visible') ) {
-                                var extra_left = $("#learning_path_left_zone").width() + 20;
-                            } else {
-                                var extra_left = 0;
-                            }
-
-                            //$("#"+div_show_id).dialog("destroy");
-                            show_dialog.dialog({
-                                autoOpen: false,
-                                width: 600,
-                                height: 200,
-                                position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
-                                close: function(){
-                                     show_dialog.remove();
-                                     show_description.remove();
-                                }
-                            });
-                            notebook_id=$(this).attr("name");
-                            data_notebook=notebook_id.split("link");
-
-                            my_glossary_id=data_notebook[1];
-                            $.ajax({
-                                contentType: "application/x-www-form-urlencoded",
-                                type: "POST",
-                                url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
-                                data: "glossary_id="+my_glossary_id,
-                                success: function(data) {
-                                        show_description.html(data);
-                                        show_dialog.dialog("open");
-                                }
-                            });
-                      });
+        $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            beforeSend: function(object) {
+            },
+            type: "POST",
+            url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
+            data: "glossary_data=true",
+            success: function(datas) {
+                if (datas.length==0) {
+                    return false;
                 }
-            });
-    } else {
-         if ('manual') {
+                // glossary terms
+                data_terms=datas.split("[|.|_|.|-|.|]");
+                var complex_array = new Array();
+                var cp_complex_array = new Array();
+                for(i=0;i<data_terms.length;i++) {
+                    specific_terms=data_terms[i].split("__|__|");
+                    var real_term = specific_terms[1]; // glossary term
+                    var real_code = specific_terms[0]; // glossary id
+                    complex_array[real_code] = real_term;
+                    cp_complex_array[real_code] = real_term;
+                }
 
+                complex_array.reverse();
+
+                for (var my_index in complex_array) {
+                    n = complex_array[my_index];
+                    if (n == null) {
+                        n = '';
+                    } else {
+                        for (var cp_my_index in cp_complex_array) {
+                            cp_data = cp_complex_array[cp_my_index];
+                            if (cp_data == null) {
+                                cp_data = '';
+                            } else {
+                                if (cp_data == n) {
+                                    my_index = cp_my_index;
+                                }
+                            }
+                        }
+                        //alert(n + ' ' + my_index);
+                        $("iframe").contents().find('body').removeHighlight().highlight(n,my_index)
+                        //logit_lms(n+ ' - '+my_index, 0);
+                    }
+                }
+
+                var complex_array = new Array();
+
+                //$("iframe").contents().find("body .glossary-ajax").on("click", ".glossary-ajax", function() {
+                $("iframe").contents().find("body").on("click", ".glossary-ajax", function() {
+
+                div_show_id="div_show_id";
+                div_content_id="div_content_id";
+
+                $("iframe").contents().find("body").append('<div id="div_show_id"><div id="div_content_id">&nbsp;</div></div>');
+
+                    show_dialog = $("iframe").contents().find("div#"+div_show_id);
+                    show_description = $("iframe").contents().find("div#"+div_content_id);
+
+                    var $target = $(this);
+
+                    if ($("#learning_path_left_zone").is(':visible') ) {
+                        var extra_left = $("#learning_path_left_zone").width() + 20;
+                    } else {
+                        var extra_left = 0;
+                    }
+
+                    //$("#"+div_show_id).dialog("destroy");
+                    show_dialog.dialog({
+                        autoOpen: false,
+                        width: 600,
+                        height: 200,
+                        position:  { my: 'left top', at: 'right top', of: $target, offset: extra_left+", 0"},
+                        close: function(){
+                             show_dialog.remove();
+                             show_description.remove();
+                        }
+                    });
+                    notebook_id=$(this).attr("name");
+                    data_notebook=notebook_id.split("link");
+
+                    my_glossary_id=data_notebook[1];
+                    $.ajax({
+                        contentType: "application/x-www-form-urlencoded",
+                        type: "POST",
+                        url: "<?php echo api_get_path(WEB_PATH); ?>main/glossary/glossary_ajax_request.php",
+                        data: "glossary_id="+my_glossary_id,
+                        success: function(data) {
+                            show_description.html(data);
+                            show_dialog.dialog("open");
+                        }
+                    });
+                });
+            }
+        });
+    } else {
+        if ('manual') {
             $("iframe").contents().find("body").on("click", ".glossary", function() {
-				is_glossary_name = $(this).html();
+                is_glossary_name = $(this).html();
 
                 div_show_id="div_show_id";
                 div_content_id="div_content_id";
@@ -1862,7 +1876,6 @@ function attach_glossary_into_scorm(type) {
                          show_dialog.dialog("open");
                     }
                 });
-
             });
         }
     }

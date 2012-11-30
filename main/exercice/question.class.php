@@ -902,7 +902,7 @@ abstract class Question
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
-		global $TBL_EXERCICE_QUESTION;
+	        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 		$id = $this->id;
 

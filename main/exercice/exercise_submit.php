@@ -797,6 +797,23 @@ if (!empty($error)) {
                 save_now(question_id_to_save, url);
             }
                      
+            function save_question_list(question_list) {
+                $.each(question_list, function(key, question_id) {
+                    save_now(question_id, null, false);
+                });
+                
+                var url = "";
+                if ('.$reminder.' == 1 ) {
+                    url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                } else if ('.$reminder.' == 2 ) {
+                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                } else {
+                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                }
+                //$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");                
+                window.location = url;                           
+            }
+            
             function save_now(question_id, url_extra, redirect) {                
                 if (redirect == undefined) {
                     redirect = true;
@@ -835,6 +852,7 @@ if (!empty($error)) {
                     
                 $.ajax({
                     type:"post",
+                    async: false,
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                     success: function(return_value) {
@@ -870,7 +888,7 @@ if (!empty($error)) {
                     });
                 return false;
             }
-
+            
             function save_now_all(validate) {
             	//1. Input choice
            		var my_choice = $(\'*[name*="choice"]\').serialize();
@@ -906,6 +924,7 @@ if (!empty($error)) {
 
                 $.ajax({
                     type:"post",
+                    async: false,
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                     success: function(return_value) {
@@ -999,7 +1018,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
                         if ($counter == $count_of_questions_inside_media) {
                             $last_question_in_media = true;
                         }
-                        render_question($objExercise, $my_question_id, $attempt_list, $remind_list, $i, $current_question, true, $count_of_questions_inside_media, $last_question_in_media);
+                        render_question($objExercise, $my_question_id, $attempt_list, $remind_list, $i, $current_question, $media_question_list, $last_question_in_media);
                         $counter++;
                     }      
                 }
@@ -1026,7 +1045,7 @@ function render_question_list($objExercise, $questionList, $current_question, $e
     }
 }
 
-function render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, $inside_media = false, $count_of_questions_inside_media = 0, $last_question_in_media = false) {    
+function render_question($objExercise, $questionId, $attempt_list, $remind_list, $i, $current_question, $questions_in_media = array(), $last_question_in_media = false) {    
     global $origin;
     $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
 
@@ -1068,11 +1087,12 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
                 break;
         }
         
-        if ($inside_media) {            
+        if (!empty($questions_in_media)) {          
             /*$button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\'); ">'.get_lang('SaveForNow').'</a>';
             $button .= '<span id="save_for_now_'.$questionId.'"></span>&nbsp;';
             $exercise_actions  = Display::div($button, array('class'=>'exercise_save_now_button'));            
             $exercise_actions .= $objExercise->show_button($questionId, $current_question);*/
+            $count_of_questions_inside_media = count($questions_in_media);
             if ($count_of_questions_inside_media > 1) {
                 $button  = '<a href="javascript://" class="btn" onclick="save_now(\''.$questionId.'\', false, false); ">'.get_lang('SaveForNow').'</a>';
                 $button .= '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
@@ -1080,7 +1100,7 @@ function render_question($objExercise, $questionId, $attempt_list, $remind_list,
             }
             
             if ($last_question_in_media) {                
-                $exercise_actions = $objExercise->show_button($questionId, $current_question, $inside_media);
+                $exercise_actions = $objExercise->show_button($questionId, $current_question, $questions_in_media);
             }
         }
 

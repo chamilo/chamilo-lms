@@ -47,6 +47,9 @@ class MigrationCustom {
     const TRANSACTION_TYPE_ADD_INTENS  = 25;
     const TRANSACTION_TYPE_DEL_INTENS  = 26;
     const TRANSACTION_TYPE_EDIT_INTENS = 27;
+    const TRANSACTION_TYPE_ADD_FASE    = 28;
+    const TRANSACTION_TYPE_DEL_FASE    = 29;
+    const TRANSACTION_TYPE_EDIT_FASE   = 30;
     
     static function get_transaction_status_list() {
         $table = Database::get_main_table(TABLE_MIGRATION_TRANSACTION_STATUS);
@@ -347,7 +350,7 @@ class MigrationCustom {
         
         //Here the $data variable has $data['course_code'] that will be added when creating the session
         // If session already exists, it will return the existing session id
-        $session_id = SessionManager::add($data);
+        $session_id = SessionManager::add($data, true);
         //error_log('create_session');        
         if (!$session_id) {
             error_log('Error: Failed to create_session '.$data['name']);
@@ -826,7 +829,6 @@ class MigrationCustom {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
-        
         $user_id = self::get_user_id_by_persona_id($uidIdPersona);
         
         if (empty($user_id)) {
@@ -870,7 +872,7 @@ class MigrationCustom {
                 
                 $befores = array($before1, $before2);
                 
-                $message = "Move Session A to Session B";
+                $message = "Move Session A to Session B"; 
                 return self::check_if_user_is_subscribe_to_session($user_id, $destination_session_id, $message, $befores);           
             } else {
                 return array(     
@@ -885,7 +887,8 @@ class MigrationCustom {
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
-                SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                //SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                 $message = "Move Session to empty";
                 return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
@@ -1233,15 +1236,15 @@ class MigrationCustom {
     
     //-------
  
-    static function transaction_extra_field_agregar_generic($extra_field_variable, $original_data, $web_service_details) {                
-        $function_name = $extra_field_variable."Detalles";        
+    static function transaction_extra_field_agregar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') {
+        $function_name = $extra_field_variable."Detalles";
         $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));
-        
+
         if ($data['error'] == false) {
-            $extra_field = new ExtraField('session');
+            $extra_field = new ExtraField($type);
             $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
             if ($extra_field_info) {
-                $extra_field_option = new ExtraFieldOption('session');
+                $extra_field_option = new ExtraFieldOption($type);
                 
                 $info_before = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
 
@@ -1251,7 +1254,7 @@ class MigrationCustom {
                     'option_display_text'   => $data['name'],
                     'option_order'          => null
                 );
-                
+
                 $result = $extra_field_option->save_one_item($params);
                 
                 $info_after = $extra_field_option->get_field_options_by_field($extra_field_info['id']);
@@ -1281,8 +1284,8 @@ class MigrationCustom {
         }
     }    
     
-    static function transaction_extra_field_editar_generic($extra_field_variable, $original_data, $web_service_details) {        
-        $extra_field = new ExtraField('session');
+    static function transaction_extra_field_editar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') {
+        $extra_field = new ExtraField($type);
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         if (empty($extra_field_info)) {
             return array(
@@ -1291,7 +1294,7 @@ class MigrationCustom {
                 );
         }
         
-        $extra_field_option = new ExtraFieldOption('session');        
+        $extra_field_option = new ExtraFieldOption($type);        
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         $function_name = $extra_field_variable."Detalles";
@@ -1310,7 +1313,7 @@ class MigrationCustom {
                     //var_dump($extra_field_option_info);
                     //Take the first one                
                     error_log('Warning! There are several options with the same key. You should delete doubles. Check your DB with this query:');
-                    error_log("SELECT * FROM session_field_options WHERE field_id =  {$extra_field_info['id']} AND option_value = '{$original_data['item_id']}' ");
+                    error_log("SELECT * FROM ".$type."_field_options WHERE field_id =  {$extra_field_info['id']} AND option_value = '{$original_data['item_id']}' ");
                     error_log('All options are going to be updated');
                 }
                 
@@ -1324,6 +1327,7 @@ class MigrationCustom {
                         'option_order'          => null
                     );        
                     $extra_field_option->update($extra_field_option_info);
+error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     $options_updated[] = $option['id'];
                 }
                 
@@ -1350,11 +1354,11 @@ class MigrationCustom {
     }
     
     /* Delete all options with option_value = item_id */    
-    static function transaction_extra_field_eliminar_generic($extra_field_variable, $original_data, $web_service_details) { //horario        
-        $extra_field = new ExtraField('session');
+    static function transaction_extra_field_eliminar_generic($extra_field_variable, $original_data, $web_service_details, $type='session') { //horario        
+        $extra_field = new ExtraField($type);
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
         
-        $extra_field_option = new ExtraFieldOption('session');        
+        $extra_field_option = new ExtraFieldOption($type);        
         $extra_field_option_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $original_data['item_id']);
         
         if (!empty($extra_field_option_info)) {
@@ -1447,45 +1451,60 @@ class MigrationCustom {
     static function transaction_21($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('sede', $data, $web_service_details);
     }
-    
-    //
+
     //        Frecuencia
     //            añadir frec FID
     // const TRANSACTION_TYPE_ADD_FREQ    = 22;
     static function transaction_22($data, $web_service_details) {
-        return self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_agregar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
     //            eliminar Freca_eliminar FID
     // const TRANSACTION_TYPE_DEL_FREQ    = 23;
     static function transaction_23($data, $web_service_details) {
-        return self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_eliminar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
     //             editar aula_editar FID
     // const TRANSACTION_TYPE_EDIT_FREQ   = 24;
     static function transaction_24($data, $web_service_details) {
-        return self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details);
+        return self::transaction_extra_field_editar_generic('frecuencia', $data, $web_service_details, 'course');
     }
-    
+
     //
     //        Intensidad/Fase
     //            añadir intfase_agregar IID
     // const TRANSACTION_TYPE_ADD_INTENS  = 25;
     static function transaction_25($data, $web_service_details) {
-        return self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details);
+        return self::transaction_extra_field_agregar_generic('intensidad', $data, $web_service_details, 'course');
     }
-    
+
     //            eliminar intfase_eliminar IID
     // const TRANSACTION_TYPE_DEL_INTENS  = 26;
     static function transaction_26($data, $web_service_details) {
-        return self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details);
-    }    
+        return self::transaction_extra_field_eliminar_generic('intensidad', $data, $web_service_details, 'course');
+    }
     
     //            editar intfase_editar IID
     // const TRANSACTION_TYPE_EDIT_INTENS = 27;
     static function transaction_27($data, $web_service_details) {
-        return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details);
+        return self::transaction_extra_field_editar_generic('intensidad', $data, $web_service_details, 'course');
+    }
+    //        Fase
+    //            añadir fase_agregar IID
+    // const TRANSACTION_TYPE_ADD_FASE  = 28;
+    static function transaction_28($data, $web_service_details) {
+        return self::transaction_extra_field_agregar_generic('fase', $data, $web_service_details, 'course');
+    }
+    
+    //            eliminar fase_eliminar IID
+    // const TRANSACTION_TYPE_DEL_FASE  = 29;
+    static function transaction_29($data, $web_service_details) {
+        return self::transaction_extra_field_eliminar_generic('fase', $data, $web_service_details, 'course');
+    }
+    
+    //            editar fase_editar IID
+    // const TRANSACTION_TYPE_EDIT_FASE = 30;
+    static function transaction_30($data, $web_service_details) {
+        return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details, 'course');
     }
     
     //custom class moved here
@@ -1579,9 +1598,9 @@ class MigrationCustom {
                    'transaction_id' => isset($transaction_info['idt']) ? $transaction_info['idt'] : null, 
                    'action'         => isset($transaction_info['ida']) ? $transaction_info['ida'] : null, 
                    'item_id'        => isset($transaction_info['id']) ? strtoupper($transaction_info['id']) : null,
-                   'orig_id'        => isset($transaction_info['ido']) ? $transaction_info['ido'] : null,
+                   'orig_id'        => isset($transaction_info['orig']) ? $transaction_info['orig'] : null,
                    'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
-                   'dest_id'        => isset($transaction_info['idd']) ? $transaction_info['idd'] : null,
+                   'dest_id'        => isset($transaction_info['dest']) ? $transaction_info['dest'] : null,
                    'status_id'      => 0
             );
             
@@ -1703,6 +1722,7 @@ class MigrationCustom {
         
         $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;        
         $result['phone'] = (string)$result['phone'];
+        $result['active'] = (int)$result['bitvigencia'];
         $result['extra_uidIdPersona'] = strtoupper($params['uididpersona']);
         unset($result['rol']);
         return $result;
@@ -1753,6 +1773,14 @@ class MigrationCustom {
         if (isset($extra_field_option_info_sede[0]) && !empty($extra_field_option_info_sede[0]['option_display_text'])) {
             $sede_name = $extra_field_option_info_sede[0]['option_display_text'];
         }
+
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('aula');
+        $extra_field_option_info_aula = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $result['uididaula']);
+        
+        $aula_name = null;
+        if (isset($extra_field_option_info_aula[0]) && !empty($extra_field_option_info_sede[0]['option_display_text'])) {
+            $aula_name = $extra_field_option_info_aula[0]['option_display_text'];
+        }
         
         //Getting horario
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');        
@@ -1764,17 +1792,19 @@ class MigrationCustom {
         }       
         
         //Setting the session name
-        $result['name'] = $result['chrperiodo']." - ".$course_info['title'].' '.$sede_name." ".$horario_name;        
+        $result['name'] = substr($sede_name,13).' - '.$result['chrperiodo']." - ".$course_info['title'].'  '.$horario_name.' '.$aula_name;
         
         $result['extra_uidIdPrograma']  = strtoupper($params['uididprograma']);
         $result['extra_horario']        = strtoupper($result['uididhorario']);
-        $result['extra_sede']           = strtoupper($result['uididsede']);        
+        $result['extra_sede']           = strtoupper($result['uididsede']);
+        $result['extra_aula']           = strtoupper($result['uididaula']);
         $result['extra_periodo']        = strtoupper($result['chrperiodo']);
         
         $result['display_start_date']   = MigrationCustom::clean_date_time_from_ws($result['display_start_date']);
         $result['display_end_date']     = MigrationCustom::clean_date_time_from_ws($result['display_end_date']);
         $result['access_start_date']    = MigrationCustom::clean_date_time_from_ws($result['access_start_date']);
         $result['access_end_date']      = MigrationCustom::clean_date_time_from_ws($result['access_end_date']);
+        //$result['estado'] = intval($result['estado']);
         
         //Searching id_coach
         $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach']);
@@ -1871,6 +1901,13 @@ class MigrationCustom {
         return $result;
     }
     
+    static function aulaDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
+        if ($result['error'] == true) {
+            return $result;
+        }        
+        return $result;        
+    }
     /*Calling sedeDetalles 
     array(1) {
       ["name"]=>

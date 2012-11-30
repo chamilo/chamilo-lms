@@ -70,11 +70,11 @@ switch ($action) {
             $start = 0;
         }        
         
-        $sql = "SELECT exe_id,  exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+        $sql = "SELECT exe_id,  exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id, aa.qlist as qlist
                 FROM $user_table u 
                 INNER JOIN (
                     SELECT  t.exe_id, t.exe_user_id, status,
-                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
+                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id, t.data_tracking as qlist
                     FROM  $track_exercise  t LEFT JOIN $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
                     WHERE t.status = 'incomplete' AND
                           $where_condition  
@@ -99,7 +99,8 @@ switch ($action) {
         $i=0;
         
         if (!empty($results)) {
-            foreach($results as $row) {                
+            foreach($results as $row) {
+		$qcount = count(split(',',$row['qlist'])); 
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a 
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
@@ -119,7 +120,7 @@ switch ($action) {
                 $array = array( $row['firstname'], 
                                 $row['lastname'], 
                                 api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
-                                $row['count_questions'],                                
+                                $row['count_questions'].'/'.$qcount,                              
                                 round($row['score']*100).'%'
                                );
                 $response->rows[$i]['cell'] = $array;

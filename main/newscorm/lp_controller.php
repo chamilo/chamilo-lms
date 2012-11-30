@@ -197,6 +197,9 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 }
 if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
+
 /**
  * Actions switching
  */
@@ -213,9 +216,15 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
             $_REQUEST['action'] = 'list';
         }
     }
+} else {
+    if ($is_allowed_to_edit) {
+        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view') {
+            $_REQUEST['action'] = 'build';
+        }
+    }
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 
@@ -254,9 +263,10 @@ switch ($action) {
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
                         $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
-                    }
-                    // Display.
-                    require 'lp_add_item.php';
+                    }                    
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                    header('Location: '.$url);
+                    exit;
                 }
             } else {
                 require 'lp_add_item.php';
@@ -337,7 +347,10 @@ switch ($action) {
                 if (is_numeric($new_lp_id)) {
                     // TODO: Maybe create a first module directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(api_get_course_id(),$new_lp_id,api_get_user_id());
-                    require 'lp_build.php';
+                    //require 'lp_build.php';
+                    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($new_lp_id);
+                    header('Location: '.$url);
+                    exit;
                 }
             }
         } else {
@@ -380,7 +393,10 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for build', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-            require 'lp_build.php';
+            //require 'lp_build.php';            
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
+            exit;
         }
         break;
     case 'edit_item':
@@ -397,18 +413,21 @@ switch ($action) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
-                //$_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites']);
                 // TODO: mp3 edit
                 $audio = array();
-                
-                if (isset($_FILES['mp3'])) $audio = $_FILES['mp3'];
-                
-                $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
+                if (isset($_FILES['mp3'])) {
+                    $audio = $_FILES['mp3'];
+                }
+                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
 
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
                 $is_success = true;
+                    
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                header('Location: '.$url);
+                exit;
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_edit_item.php';
@@ -423,7 +442,6 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - edit item prereq action triggered', 0);
-
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item prereq', 0); require 'lp_list.php'; }
         else {
             if (isset($_POST['submit_button'])) {
@@ -435,7 +453,10 @@ switch ($action) {
                     $is_success = true;
                 }
             }
-            require 'lp_edit_item_prereq.php';
+            //require 'lp_edit_item_prereq.php';
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
+            exit;
         }
         break;
 
@@ -453,7 +474,9 @@ switch ($action) {
                 $_SESSION['oLP']->set_modified_on();
 
                 $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
-                $is_success = true;
+                $is_success = true;                
+                $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+                header('Location: '.$url);
             }
             if (isset($_GET['view']) && $_GET['view'] == 'build') {
                 require 'lp_move_item.php';
@@ -609,7 +632,6 @@ switch ($action) {
             require 'lp_edit.php';
         }
         break;
-
     case 'update_lp':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -643,7 +665,6 @@ switch ($action) {
 			$_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
-
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];
@@ -687,11 +708,12 @@ switch ($action) {
                         }
                     }
                 }
-            }
-            require 'lp_build.php';
+            }            
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            header('Location: '.$url);
+            exit;
         }
         break;
-
     case 'add_sub_item': // Add an item inside a chapter.
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);

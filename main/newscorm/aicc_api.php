@@ -36,7 +36,6 @@ require_once 'learnpathItem.class.php';
 require_once 'aicc.class.php';
 
 // Is this needed? This is probabaly done in the header file.
-// $_user							= $_SESSION['_user'];
 $file							= $_SESSION['file'];
 $oLP							= unserialize($_SESSION['lpobject']);
 $oItem 							= $oLP->items[$oLP->current];
@@ -444,19 +443,41 @@ function chamilo_save_asset(){
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
-function logit_scorm(message,priority){
-    if(frames["lp_log_name"] && scorm_logs>priority){
+function logit_scorm(message,priority) {
+    if (scorm_logs) {
+        log_in_log("SCORM: " + message);
+    }
+    return false;
+
+    /*if(frames["lp_log_name"] && scorm_logs>priority){
         frames["lp_log_name"].document.getElementById("log_content").innerHTML += "AICC: " + message + "<br/>";
+    }*/
+}
+
+function log_in_log(message) {
+    var ua = $.browser;
+    if (ua.mozilla) {
+        console.log(message);
+    } else {
+        if (window.console) {
+            window.console.log(message);
+        }
     }
 }
+
 /**
  * Logs information about LMS activity into the log frame
  * @param	string	Message to log
  * @param	integer Priority (0 for top priority, 3 for lowest)
  */
-function logit_lms(message,priority){
+function logit_lms(message,priority) {
+    /*
     if(frames["lp_log_name"] && lms_logs>priority){
         frames["lp_log_name"].document.getElementById("log_content").innerHTML += "LMS: " + message + "<br/>";
+    }*/
+
+    if (scorm_logs) {
+        log_in_log("LMS: " + message);
     }
 }
 
@@ -541,10 +562,10 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
         if(nbr_total == 0){nbr_total=1;}
         var percentage = (nbr_complete/nbr_total)*100;
         percentage = Math.round(percentage);
-        
+
         var progress_bar  = $("#progress_bar_value");
         progress_bar.css('width', percentage +"%");
-        
+
     /*
         var pr_text  = myframe.document.getElementById('progress_text');
         var pr_full  = myframe.document.getElementById('progress_img_full');
@@ -553,7 +574,7 @@ function update_progress_bar(nbr_complete, nbr_total, mode)
         pr_full.width = percentage;
         pr_empty.width = 100-percentage;
         */
-        
+
         var mytext = '';
         switch(mode){
             case 'abs':

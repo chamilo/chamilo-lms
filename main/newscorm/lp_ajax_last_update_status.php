@@ -61,7 +61,7 @@ function last_update_status($lp_id, $user_id, $view_id, $item_id) {
             $mylp = new learnpath($code,$lp_id,$user_id);
         } else {
             if ($debug > 2) { error_log('Reusing session lp', 0); }
-            $mylp = & $oLP;
+            $mylp = $oLP;
         }
     }
     error_log(__LINE__);

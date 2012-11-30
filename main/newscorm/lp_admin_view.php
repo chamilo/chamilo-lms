@@ -21,9 +21,6 @@ api_protect_course_script();
 
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 include 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 include 'resourcelinker.inc.php';
@@ -36,7 +33,6 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $tbl_lp      = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-$tbl_lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -46,7 +42,7 @@ $submit			= $_POST['submit_button'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' and $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_admin_view.php');
@@ -59,12 +55,6 @@ $course_id = api_get_course_int_id();
 $sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
 $result = Database::query($sql_query);
 $therow = Database::fetch_array($result);
-
-//$admin_output = '';
-/*
-    Course admin section
-    - all the functions not available for students - always available in this case (page only shown to admin)
-*/
 
 /* SHOWING THE ADMIN TOOLS */
 
@@ -93,7 +83,92 @@ if (isset($_REQUEST['updateaudio'])) {
 $show_learn_path = true;
 $lp_theme_css = $_SESSION['oLP']->get_theme();
 
+/* DISPLAY SECTION */
+
+
+// POST action handling (uploading mp3, deleting mp3)
+if (isset($_POST['save_audio'])) {
+    
+    //Updating the lp.modified_on
+    $_SESSION['oLP']->set_modified_on();                
+                
+    // Deleting the audio fragments.
+    foreach ($_POST as $key => $value) {
+        if (substr($key, 0, 9) == 'removemp3') {
+            $lp_items_to_remove_audio[] = str_ireplace('removemp3', '', $key);
+            // Removing the audio from the learning path item.
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+            $in = implode(',', $lp_items_to_remove_audio);
+        }
+    }
+    if (count($lp_items_to_remove_audio)>0) {
+        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$in.")";
+        $result = Database::query($sql);
+    }           
+
+    // Uploading the audio files.
+    foreach ($_FILES as $key => $value) {
+        if (substr($key, 0, 7) == 'mp3file' AND !empty($_FILES[$key]['tmp_name'])) {
+            // The id of the learning path item.
+            $lp_item_id = str_ireplace('mp3file', '', $key);
+
+            // Create the audio folder if it does not exist yet.
+            global $_course;
+            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
+            if (!is_dir($filepath.'audio')) {
+                mkdir($filepath.'audio', api_get_permissions_for_new_directories());
+                $audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
+                api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(), null, null, null, null, api_get_session_id());
+            }
+
+            // Check if file already exits into document/audio/
+            $file_name = $_FILES[$key]['name'];
+            $file_name = stripslashes($file_name);
+            // Add extension to files without one (if possible).
+            $file_name = add_ext_on_mime($file_name, $_FILES[$key]['type']);
+
+            $clean_name = replace_dangerous_char($file_name);
+            // No "dangerous" files.
+            $clean_name = disable_dangerous_file($clean_name);
+
+            $check_file_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$clean_name;
+
+            // If the file exists we generate a new name.
+            if (file_exists($check_file_path)) {
+                $filename_components = explode('.', $clean_name);
+                // Gettting the extension of the file.
+                $file_extension = $filename_components[count($filename_components) - 1];
+                // Adding something random to prevent overwriting.
+                $filename_components[count($filename_components) - 1] = time();
+                // Reconstructing the new filename.
+                $clean_name = implode($filename_components) .'.'.$file_extension;
+                // Using the new name in the $_FILES superglobal.
+                $_FILES[$key]['name'] = $clean_name;
+            }
+
+            // Upload the file in the documents tool.
+            include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+            $file_path = handle_uploaded_document($_course, $_FILES[$key], api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio', api_get_user_id(), '', '', '', '', false);
+
+            // Getting the filename only.
+            $file_components = explode('/', $file_path);
+            $file = $file_components[count($file_components) - 1];
+
+            // Store the mp3 file in the lp_item table.
+            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' 
+                                 WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
+            Database::query($sql_insert_audio);
+        }
+    }
+    //Display::display_confirmation_message(get_lang('ItemUpdated'));
+    $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+    header('Location: '.$url);
+    exit;
+}
+
 Display::display_header(null, 'Path');
+
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
 ?>
@@ -206,8 +281,14 @@ function confirmation(name) {
 </script>
 <?php
 
-/* DISPLAY SECTION */
+echo $_SESSION['oLP']->build_action_menu();
 
+echo '<div class="row-fluid">';
+echo '<div class="span3">';
+echo $_SESSION['oLP']->return_new_tree(null, true); 
+echo '</div>';
+
+echo '<div class="span9">';
 switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
@@ -223,86 +304,8 @@ switch ($_GET['action']) {
         break;
 }
 
-// POST action handling (uploading mp3, deleting mp3)
-if (isset($_POST['save_audio'])) {
-    
-    //Updating the lp.modified_on
-    $_SESSION['oLP']->set_modified_on();                
-                
-    // Deleting the audio fragments.
-    foreach ($_POST as $key => $value) {
-        if (substr($key, 0, 9) == 'removemp3') {
-            $lp_items_to_remove_audio[] = str_ireplace('removemp3', '', $key);
-            // Removing the audio from the learning path item.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $in = implode(',', $lp_items_to_remove_audio);
-        }
-    }
-    if (count($lp_items_to_remove_audio)>0) {
-        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$in.")";
-        $result = Database::query($sql);
-    }           
-
-    // Uploading the audio files.
-    foreach ($_FILES as $key => $value) {
-        if (substr($key, 0, 7) == 'mp3file' AND !empty($_FILES[$key]['tmp_name'])) {
-            // The id of the learning path item.
-            $lp_item_id = str_ireplace('mp3file', '', $key);
-
-            // Create the audio folder if it does not exist yet.
-            global $_course;
-            $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
-            if (!is_dir($filepath.'audio')) {
-                mkdir($filepath.'audio', api_get_permissions_for_new_directories());
-                $audio_id = add_document($_course, '/audio', 'folder', 0, 'audio');
-                api_item_property_update($_course, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(), null, null, null, null, api_get_session_id());
-            }
-
-            // Check if file already exits into document/audio/
-            $file_name = $_FILES[$key]['name'];
-            $file_name = stripslashes($file_name);
-            // Add extension to files without one (if possible).
-            $file_name = add_ext_on_mime($file_name, $_FILES[$key]['type']);
-
-            $clean_name = replace_dangerous_char($file_name);
-            // No "dangerous" files.
-            $clean_name = disable_dangerous_file($clean_name);
-
-            $check_file_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$clean_name;
-
-            // If the file exists we generate a new name.
-            if (file_exists($check_file_path)) {
-                $filename_components = explode('.', $clean_name);
-                // Gettting the extension of the file.
-                $file_extension = $filename_components[count($filename_components) - 1];
-                // Adding something random to prevent overwriting.
-                $filename_components[count($filename_components) - 1] = time();
-                // Reconstructing the new filename.
-                $clean_name = implode($filename_components) .'.'.$file_extension;
-                // Using the new name in the $_FILES superglobal.
-                $_FILES[$key]['name'] = $clean_name;
-            }
-
-            // Upload the file in the documents tool.
-            include_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-            $file_path = handle_uploaded_document($_course, $_FILES[$key], api_get_path(SYS_COURSE_PATH).$_course['path'].'/document','/audio', api_get_user_id(), '', '', '', '', false);
-
-            // Getting the filename only.
-            $file_components = explode('/', $file_path);
-            $file = $file_components[count($file_components) - 1];
-
-            // Store the mp3 file in the lp_item table.
-            $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file)."' 
-                                 WHERE c_id = $course_id AND id = '".Database::escape_string($lp_item_id)."'";
-            Database::query($sql_insert_audio);
-        }
-    }
-    Display::display_confirmation_message(get_lang('ItemUpdated'));
-}
-echo $_SESSION['oLP']->build_action_menu();
-
-echo $_SESSION['oLP']->overview();
+echo '</div>';
+echo '</div>';
 
 /* FOOTER */
 Display::display_footer();

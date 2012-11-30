@@ -12,12 +12,20 @@
 /**
  * Code
  */
-// Flag to allow for anonymous user - needs to be set before global.inc.php.
+// Flag to allow for anonymous user - needs to be set before global.inc.php
+use \ChamiloSession as Session;
+
 $use_anonymous = true;
 
 // Name of the language file that needs to be included.
 $language_file[] = 'learnpath';
 require_once 'back_compat.inc.php';
+require_once 'learnpath.class.php';
+require_once 'scorm.class.php';
+require_once 'aicc.class.php';
+require_once 'learnpathItem.class.php';
+require_once 'scormItem.class.php';
+require_once 'aiccItem.class.php';
 
 /**
  * Get one item's details
@@ -28,7 +36,7 @@ require_once 'back_compat.inc.php';
  * @param   integer New item ID
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item) {
-    $debug = 0;
+    $debug = 10;
     $return = '';
     if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
     /*$item_id may be one of:
@@ -38,39 +46,43 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
      * -'last'
      * - a real item ID
      */
-    require_once 'learnpath.class.php';
-    require_once 'scorm.class.php';
-    require_once 'aicc.class.php';
-    require_once 'learnpathItem.class.php';
-    require_once 'scormItem.class.php';
-    require_once 'aiccItem.class.php';
+
     $mylp = '';
-    if (isset($_SESSION['lpobject'])) {
-        if ($debug > 1) { error_log('$_SESSION[lpobject] is set', 0); }
-        $oLP = unserialize($_SESSION['lpobject']);
+
+    $lpobject = Session::read('lpobject');
+    if (isset($lpobject)) {
+        $oLP = unserialize($lpobject);
+        if ($debug) error_log("lpobject was set");
         if (!is_object($oLP)) {
-            if ($debug > 1) { error_log(print_r($oLP,true), 0); }
-            if ($debug > 2) { error_log('Building new LP', 0); }
             unset($oLP);
             $code = api_get_course_id();
-            $mylp = new learnpath($code,$lp_id,$user_id);
+            $mylp = new learnpath($code, $lp_id, $user_id);
+            if ($debug) error_log("Creating learnpath");
         } else {
-            if ($debug > 1) { error_log('Reusing session LP', 0); }
             $mylp = $oLP;
+            if ($debug) error_log("Loading learnpath from unserialize");
+        }
+    } else {
+        if ($debug) {
+            error_log("lpobject was not set");
         }
     }
     $mylp->set_current_item($next_item);
     if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
     $mylp->start_current_item(true);
-    
+
     if (is_object($mylp->items[$next_item])) {
         if ($debug > 1) { error_log('In initialize_item - recovering existing item object '.$next_item, 0); }
         $mylpi = $mylp->items[$next_item];
     } else {
         if ($debug > 1) { error_log('In initialize_item - generating new item object '.$next_item, 0); }
         $mylpi = new learnpathItem($next_item, $user_id);
+    }
+
+    if ($mylpi) {
         $mylpi->set_lp_view($view_id);
     }
+
     /*
      * now get what's needed by the SCORM API:
      * -score
@@ -84,8 +96,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
     $mymax = $mylpi->get_max();
     if ($mymax === '') { $mymax = "''"; }
     $mymin = $mylpi->get_min();
-    
-    $mylesson_status = $mylpi->get_status();    
+
+    $mylesson_status = $mylpi->get_status();
     $mytotal_time = $mylpi->get_scorm_time('js', null, true);
     $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
@@ -102,24 +114,25 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
         $myistring = substr($myistring, 1);
     }
 	// Obtention des donnees d'objectifs
-	
+
 	$mycoursedb = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
     $course_id = api_get_course_int_id();
 	$mylp_iv_id = $mylpi->db_item_view_id;
-    
+
     $phpobjectives = array();
-    
+
     if (!empty($mylp_iv_id)) {
         $sql = "SELECT objective_id, status, score_raw, score_max, score_min
-            FROM ".$mycoursedb."
-            WHERE lp_iv_id = ".$mylp_iv_id." AND c_id = $course_id
+            FROM $mycoursedb
+            WHERE lp_iv_id = $mylp_iv_id AND c_id = $course_id
             ORDER BY id ASC;";
         $res = Database::query($sql);
         while ($row = Database::fetch_row($res)) {
-            $phpobjectives[] = $row;	
+            $phpobjectives[] = $row;
         }
     }
 	$myobjectives = json_encode($phpobjectives);
+
     $return .=
             "olms.score=".$myscore.";" .
             "olms.max=".$mymax.";" .
@@ -183,7 +196,8 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
 
     $mylp->set_error_msg('');
     $mylp->prerequisites_match(); // Check the prerequisites are all complete.
-    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }    
+    if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
+    if ($debug > 1) { error_log("return = $return "); }
     return $return;
 }
 echo initialize_item($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid']);

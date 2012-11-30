@@ -68,8 +68,8 @@ $csv_content = array();
 $js = "<script>
         // hide column and display the button to unhide it
         function foldup(in_id) {
-            $('div#reporting_table table tr td:nth-child('+in_id+')').fadeToggle();
-            $('div#reporting_table table tr th:nth-child('+in_id+')').fadeToggle();
+            $('#reporting_table .data_table tr td:nth-child('+in_id+')').fadeToggle();
+            $('#reporting_table .data_table tr th:nth-child('+in_id+')').fadeToggle();
             $('div#unhideButtons span:nth-child('+in_id+')').fadeToggle();
         }
 
@@ -87,7 +87,7 @@ $js = "<script>
         // be sure that these columns always exists
         // see $tab_table_header = array();    // tab of header texts
         $(document).ready( function() {
-            init_hide();
+            //init_hide();
             foldup(1);
             foldup(9);
             foldup(10);

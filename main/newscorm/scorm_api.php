@@ -301,6 +301,10 @@ function LMSInitialize() {
             xajax_start_timer();
         }
 
+        if (olms.lms_item_type == 'quiz') {
+            update_toc(olms.lesson_status, olms.lms_item_id);
+        }
+
         <?php if (api_get_setting('show_glossary_in_documents') == 'ismanual') { ?>
             if (olms.lms_item_type == 'sco') {
                 attach_glossary_into_scorm('automatic');
@@ -1074,14 +1078,19 @@ function lms_save_asset() {
  * Also save the score locally because it hasn't been done through SetValue().
  * Saving the status will be dealt with by the XAJAX function.
  */
-function chamilo_void_save_asset(myscore, mymax) {
+function chamilo_void_save_asset(score, max, min, status) {
     logit_lms('chamilo_void_save_asset',2);
-    olms.score = myscore;
-    if ((mymax == null) || (mymax == '')){
-        mymax = 100;
+    olms.score = score;
+    if ((max == null) || (max == '')){
+        max = 100;
     }
+
+    if ((min == null) || (min == '')){
+        min = 0;
+    }
+
     //assume a default of 100, otherwise the score will not get saved (see lpi->set_score())
-    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, myscore, mymax);
+    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, score, max, min, status);
 }
 
 /**
@@ -1340,10 +1349,8 @@ function switch_item(current_item, next_item){
         if (next_item_type != 'sco' ) {
             //case 1
             logit_lms('Case 1');
-            logit_lms('timer' + olms.asset_timer);
-
             xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
-            xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
+            xajax_switch_item_details(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, next_item);
         } else {
             logit_lms('Case 2');
             //case 2
@@ -1503,7 +1510,7 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
     params += '&status='+lesson_status+'&t='+session_time;
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
-
+    //console.info(session_time);
     if (olms.lms_lp_type == 1) {
         logit_lms('xajax_save_item with params:' + params);
         $.ajax({
@@ -1618,7 +1625,10 @@ function xajax_start_timer() {
         success: function(time) {
             olms.asset_timer = time;
             olms.asset_timer_total = 0;
-            logit_lms('xajax_start_timer result:' + time);
+            logit_lms('xajax_start_timer result: ' + time);
+
+            var date = new Date(time * 1000);
+            logit_lms('xajax_start_timer result: ' + date.toString());
         }
     });
 }

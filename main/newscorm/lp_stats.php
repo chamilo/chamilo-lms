@@ -149,23 +149,23 @@ if (isset($_GET['lp_id']) && isset($_GET['lp_item_id'])) {
     if (Database::num_rows($res_path) > 0) {
         if ($origin != 'tracking') {
             $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . '
-            				 WHERE  exe_exo_id="' . (int) $row_path['path'] . '" AND 
-                                    status <> "incomplete"  AND 
-                                    exe_user_id="' . api_get_user_id() . '" AND 
-                                    orig_lp_id = "' . (int) $clean_lp_id . '" AND 
-                                    orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND 
-                                    exe_cours_id="' . $clean_course_code . '"  AND 
-                                    session_id = ' . $session_id . ' 
+            				 WHERE  exe_exo_id="' . (int) $row_path['path'] . '" AND
+                                    status <> "incomplete"  AND
+                                    exe_user_id="' . api_get_user_id() . '" AND
+                                    orig_lp_id = "' . (int) $clean_lp_id . '" AND
+                                    orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND
+                                    exe_cours_id="' . $clean_course_code . '"  AND
+                                    session_id = ' . $session_id . '
                              ORDER BY exe_date';
         } else {
             $sql_attempts = 'SELECT * FROM ' . $tbl_stats_exercices . '
-            				 WHERE  exe_exo_id="' . (int) $row_path['path'] . '" AND 
-                                    status <> "incomplete"  AND 
-                                    exe_user_id="' . $student_id . '" AND 
-                                    orig_lp_id = "' . (int) $clean_lp_id . '" AND 
-                                    orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND 
-                                    exe_cours_id="' . $clean_course_code . '"  AND 
-                                    session_id = ' . $session_id . ' 
+            				 WHERE  exe_exo_id="' . (int) $row_path['path'] . '" AND
+                                    status <> "incomplete"  AND
+                                    exe_user_id="' . $student_id . '" AND
+                                    orig_lp_id = "' . (int) $clean_lp_id . '" AND
+                                    orig_lp_item_id = "' . (int) $clean_lp_item_id . '" AND
+                                    exe_cours_id="' . $clean_course_code . '"  AND
+                                    session_id = ' . $session_id . '
                              ORDER BY exe_date';
         }
     }
@@ -184,54 +184,54 @@ if (is_array($list) && count($list) > 0) {
 
         // Prepare statement to go through each attempt.
         if (!empty($view)) {
-            $sql = "SELECT  iv.status as mystatus, 
-                            v.view_count as mycount, 
-                            iv.score as myscore, 
-                            iv.total_time as mytime, 
+            $sql = "SELECT  iv.status as mystatus,
+                            v.view_count as mycount,
+                            iv.score as myscore,
+                            iv.total_time as mytime,
                             i.id as myid,
-                            i.lp_id as mylpid, 
-                            iv.lp_view_id as mylpviewid, 
-                            i.title as mytitle, 
+                            i.lp_id as mylpid,
+                            iv.lp_view_id as mylpviewid,
+                            i.title as mytitle,
                             i.max_score as mymaxscore,
-                            iv.max_score as myviewmaxscore, 
-                            i.item_type as item_type, 
-                            iv.view_count as iv_view_count, 
-                            iv.id as iv_id, 
+                            iv.max_score as myviewmaxscore,
+                            i.item_type as item_type,
+                            iv.view_count as iv_view_count,
+                            iv.id as iv_id,
                             path
-                    FROM $TBL_LP_ITEM as i 
+                    FROM $TBL_LP_ITEM as i
                     INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
                     INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
             WHERE
                 i.id = $my_item_id AND
                 i.lp_id = $lp_id  AND
                 v.user_id = $user_id AND
-                v.view_count = $view AND 
+                v.view_count = $view AND
                 v.session_id = $session_id
             ORDER BY iv.view_count $qry_order ";
             //var_dump($sql);
         } else {
-            $sql = "SELECT  iv.status as mystatus, 
-                            v.view_count as mycount, 
-                            iv.score as myscore, 
-                            iv.total_time as mytime, 
-                            i.id as myid, 
-                            i.lp_id as mylpid, 
+            $sql = "SELECT  iv.status as mystatus,
+                            v.view_count as mycount,
+                            iv.score as myscore,
+                            iv.total_time as mytime,
+                            i.id as myid,
+                            i.lp_id as mylpid,
                             iv.lp_view_id as mylpviewid,
-                            i.title as mytitle, 
-                            i.max_score as mymaxscore, 
-                            iv.max_score as myviewmaxscore, 
-                            i.item_type as item_type, 
+                            i.title as mytitle,
+                            i.max_score as mymaxscore,
+                            iv.max_score as myviewmaxscore,
+                            i.item_type as item_type,
                             iv.view_count as iv_view_count,
-                            iv.id as iv_id, 
+                            iv.id as iv_id,
                             path
-                    FROM $TBL_LP_ITEM as i 
+                    FROM $TBL_LP_ITEM as i
                     INNER JOIN $TBL_LP_ITEM_VIEW as iv ON (i.id = iv.lp_item_id  AND i.c_id = $course_id AND iv.c_id = $course_id)
                     INNER JOIN $TBL_LP_VIEW as v ON (iv.lp_view_id = v.id AND v.c_id = $course_id)
-                    WHERE                        
-                        i.id = $my_item_id AND                        
-                        i.lp_id = $lp_id AND 
-                        v.user_id = $user_id AND 
-                        v.session_id = $session_id 
+                    WHERE
+                        i.id = $my_item_id AND
+                        i.lp_id = $lp_id AND
+                        v.user_id = $user_id AND
+                        v.session_id = $session_id
                    ORDER BY iv.view_count $qry_order ";
         }
         $result = Database::query($sql);
@@ -254,7 +254,7 @@ if (is_array($list) && count($list) > 0) {
                     $result_disabled_ext_all = true;
                 }
             }
-            
+
             // If there are several attempts, and the link to extend has been clicked, show each attempt...
             if (($counter % 2) == 0) {
                 $oddclass = 'row_odd';
@@ -274,7 +274,7 @@ if (is_array($list) && count($list) > 0) {
 
             if ($row['item_type'] != 'dokeos_chapter') {
                 $correct_test_link = '-';
-                $title = Security::remove_XSS($title);                
+                $title = Security::remove_XSS($title);
                 $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
                                 <td colspan="4">
@@ -292,7 +292,7 @@ if (is_array($list) && count($list) > 0) {
                 // Check if there are interactions below.
                 $extend_attempt_link = '';
                 $extend_this_attempt = 0;
-                
+
                 if ((learnpath :: get_interactions_count_from_db($row['iv_id'], $course_id) > 0 || learnpath :: get_objectives_count_from_db($row['iv_id'], $course_id) > 0) && !$extend_all) {
                     if (!empty($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                         // The extend button for this attempt has been clicked.
@@ -317,7 +317,7 @@ if (is_array($list) && count($list) > 0) {
 
                 $time = learnpathItem :: get_scorm_time('js', $row['mytime']);
                 $scoIdentifier = $row['myid'];
-                
+
                 if ($score == 0) {
                     $maxscore = $row['mymaxscore'];
                 } else {
@@ -335,7 +335,7 @@ if (is_array($list) && count($list) > 0) {
                 }
 
                 // Remove "NaN" if any (@todo: locate the source of these NaN)
-                $time = str_replace('NaN', '00' . $h . '00\'00"', $time);             
+                $time = str_replace('NaN', '00' . $h . '00\'00"', $time);
 
                 if ($row['item_type'] != 'dokeos_chapter') {
                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
@@ -390,7 +390,7 @@ if (is_array($list) && count($list) > 0) {
 
                 if ($extend_this_attempt OR $extend_all) {
                     $list1 = learnpath :: get_iv_interactions_array($row['iv_id']);
-                                        
+
                     foreach ($list1 as $id => $interaction) {
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';
@@ -421,9 +421,9 @@ if (is_array($list) && count($list) > 0) {
                                         <td></td>
                                     </tr>';
                         $counter++;
-                    }                    
+                    }
                     $list2 = learnpath :: get_iv_objectives_array($row['iv_id']);
-                    
+
                     foreach ($list2 as $id => $interaction) {
                         if (($counter % 2) == 0) {
                             $oddclass = 'row_odd';
@@ -511,24 +511,24 @@ if (is_array($list) && count($list) > 0) {
 
             // Selecting the exe_id from stats attempts tables in order to look the max score value.
             if ($origin != 'tracking') {
-                $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
-                                     WHERE  exe_exo_id="' . $row['path'] . '" AND 
-                                            exe_user_id="' . api_get_user_id() . '" AND 
-                                            orig_lp_id = "' . $lp_id . '" AND 
-                                            orig_lp_item_id = "' . $row['myid'] . '" AND 
-                                            exe_cours_id="' . $course_code . '" AND 
-                                            status <> "incomplete" AND 
-                                            session_id = ' . $session_id . ' 
+                $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . '
+                                     WHERE  exe_exo_id="' . $row['path'] . '" AND
+                                            exe_user_id="' . api_get_user_id() . '" AND
+                                            orig_lp_id = "' . $lp_id . '" AND
+                                            orig_lp_item_id = "' . $row['myid'] . '" AND
+                                            exe_cours_id="' . $course_code . '" AND
+                                            status <> "incomplete" AND
+                                            session_id = ' . $session_id . '
                                      ORDER BY exe_date DESC limit 1';
             } else {
-                $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
-                                     WHERE  exe_exo_id="' . $row['path'] . '" AND 
-                                            exe_user_id="' . $student_id . '" AND 
-                                            orig_lp_id = "' . $lp_id . '" AND 
-                                            orig_lp_item_id = "' . $row['myid'] . '" AND 
-                                            exe_cours_id="' . $course_code . '" AND 
-                                            status <> "incomplete" AND 
-                                            session_id = ' . $session_id . ' 
+                $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . '
+                                     WHERE  exe_exo_id="' . $row['path'] . '" AND
+                                            exe_user_id="' . $student_id . '" AND
+                                            orig_lp_id = "' . $lp_id . '" AND
+                                            orig_lp_item_id = "' . $row['myid'] . '" AND
+                                            exe_cours_id="' . $course_code . '" AND
+                                            status <> "incomplete" AND
+                                            session_id = ' . $session_id . '
                                      ORDER BY exe_date DESC limit 1';
             }
 
@@ -576,11 +576,11 @@ if (is_array($list) && count($list) > 0) {
                         //echo $subtotal_time ;
                         //$time = learnpathItem :: get_scorm_time('js', $subtotal_time);
                         // Selecting the max score from an attempt.
-                        $sql = "SELECT SUM(t.ponderation) as maxscore 
+                        $sql = "SELECT SUM(t.ponderation) as maxscore
                                 FROM (
-                        			SELECT distinct question_id, marks, ponderation 
+                        			SELECT distinct question_id, marks, ponderation
                                     FROM $tbl_stats_attempts as at INNER JOIN  $tbl_quiz_questions as q
-                        			ON (q.id = at.question_id AND q.c_id = $course_id 
+                        			ON (q.id = at.question_id AND q.c_id = $course_id
                                     )
                                 WHERE exe_id ='$id_last_attempt' ) as t";
 
@@ -608,25 +608,25 @@ if (is_array($list) && count($list) > 0) {
 
                     if ($origin != 'tracking' && $origin != 'tracking_course') {
                         $my_url_suffix = '&course=' . api_get_course_id() . '&student_id=' . api_get_user_id() . '&lp_id=' . Security::remove_XSS($row['mylpid']);
-                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
-                                             WHERE  exe_exo_id="' . $row['path'] . '" AND 
-                                                    exe_user_id="' . api_get_user_id() . '" AND 
-                                                    orig_lp_id = "' . $lp_id . '" AND 
-                                                    orig_lp_item_id = "' . $row['myid'] . '" AND 
-                                                    exe_cours_id="' . $course_code . '" AND 
-                                                    status <> "incomplete" AND 
-                                                    session_id = ' . $session_id . ' 
+                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . '
+                                             WHERE  exe_exo_id="' . $row['path'] . '" AND
+                                                    exe_user_id="' . api_get_user_id() . '" AND
+                                                    orig_lp_id = "' . $lp_id . '" AND
+                                                    orig_lp_item_id = "' . $row['myid'] . '" AND
+                                                    exe_cours_id="' . $course_code . '" AND
+                                                    status <> "incomplete" AND
+                                                    session_id = ' . $session_id . '
                                             ORDER BY exe_date DESC ';
                     } else {
                         $my_url_suffix = '&course=' . Security::remove_XSS($_GET['course']) . '&student_id=' . $student_id . '&lp_id=' . Security::remove_XSS($row['mylpid']) . '&origin=' . Security::remove_XSS($_GET['origin'] . $from_link);
-                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . ' 
-                                             WHERE   exe_exo_id="' . $row['path'] . '" AND 
-                                                    exe_user_id="' . $student_id . '" AND 
-                                                    orig_lp_id = "' . $lp_id . '" AND 
-                                                    orig_lp_item_id = "' . $row['myid'] . '" AND 
-                                                    exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND 
-                                                    status <> "incomplete" AND 
-                                                    session_id = ' . $session_id . '  
+                        $sql_last_attempt = 'SELECT * FROM ' . $tbl_stats_exercices . '
+                                             WHERE   exe_exo_id="' . $row['path'] . '" AND
+                                                    exe_user_id="' . $student_id . '" AND
+                                                    orig_lp_id = "' . $lp_id . '" AND
+                                                    orig_lp_item_id = "' . $row['myid'] . '" AND
+                                                    exe_cours_id="' . Database :: escape_string($_GET['course']) . '" AND
+                                                    status <> "incomplete" AND
+                                                    session_id = ' . $session_id . '
                                              ORDER BY exe_date DESC ';
                     }
 
@@ -634,7 +634,7 @@ if (is_array($list) && count($list) > 0) {
                     $num = Database :: num_rows($resultLastAttempt);
                     if ($num > 0) {
                         if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['lp_item_id']) && $_GET['lp_item_id'] == $my_id)) {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';                            
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
                         } else {
                             $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttemptsByExercise') . '"></a>';
                         }
@@ -648,7 +648,7 @@ if (is_array($list) && count($list) > 0) {
                 $title = Security::remove_XSS($title);
 
                 if ((isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id && false)) {
-                    
+
                     $output .= '<tr class =' . $oddclass . '>
                                     <td>' . $extend_link . '</td>
                                     <td colspan="4">' . $title . '</td>
@@ -664,15 +664,15 @@ if (is_array($list) && count($list) > 0) {
                     } else {
                         $output .= "<tr class='$oddclass'>";
                     }
-                    
-                    if (($is_allowed_to_edit || api_is_drh()) && isset($_GET['lp_id']) && isset($course_code)) {                        
-                        $lp = new learnpath($course_code, $_GET['lp_id'], api_get_user_id());                                         
+
+                    if (($is_allowed_to_edit || api_is_drh()) && isset($_GET['lp_id']) && isset($course_code)) {
+                        $lp = new learnpath($course_code, $_GET['lp_id'], api_get_user_id());
                         $lp->set_course_int_id($course_id);
-                        $item_path_url = $lp->get_link('http', $my_id, false);                    
+                        $item_path_url = $lp->get_link('http', $my_id, false);
                         $item_path_url .= "&width=600";
                         $title = Display::url($title, $item_path_url, array('class' => 'ajax'));
                     }
-                    
+
                     $output .= '<td>'.$extend_link.'</td>
                                 <td colspan="4">' . $title . '</td>
                                 <td colspan="2">' . learnpathitem::humanize_status($lesson_status) .'</td>
@@ -680,7 +680,7 @@ if (is_array($list) && count($list) > 0) {
                     if ($row['item_type'] == 'quiz') {
                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                             $output .= Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
-                        } else {                            
+                        } else {
                             $output .= show_score($score, $maxscore, false);
                         }
                     } else {
@@ -787,16 +787,16 @@ if (is_array($list) && count($list) > 0) {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
                             } else {
-                                // Show only float when need it                                
-                                if ($my_score == 0) {                                    
+                                // Show only float when need it
+                                if ($my_score == 0) {
                                     $view_score = show_score(0, $my_maxscore, false);
                                 } else {
                                     if ($my_maxscore == 0) {
                                         $view_score = $my_score;
-                                    } else {                                        
+                                    } else {
                                         $view_score = show_score($my_score, $my_maxscore, false);
                                     }
-                                }                                
+                                }
                             }
                             $my_lesson_status = $row_attempts['status'];
 
@@ -809,14 +809,10 @@ if (is_array($list) && count($list) > 0) {
                             $output .= '<tr class="' . $oddclass . '" >
                                             <td></td>
                                             <td>' . $extend_attempt_link . '</td>
-                                            <td colspan="3">' . get_lang('Attempt') . ' ' . $n . '</td>
+                                            <td colspan="3">' . get_lang('Attempt').' '. $n.'</td>
                                             <td colspan="2">' . $my_lesson_status . '</td>
-                                            <td colspan="2">
-                                                ' . $view_score . '
-                                            </td>
-                                            <td colspan="2">
-                                                ' . $time_attemp . '
-                                            </td>';
+                                            <td colspan="2">'.$view_score . '</td>
+                                            <td colspan="2">'.$time_attemp . '</td>';
                             if ($origin != 'tracking') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></td>';

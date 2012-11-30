@@ -148,6 +148,7 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($objExercise-
 exercise_time_control_delete($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 delete_chat_exercise_session($exe_id);
+
 if ($origin != 'learnpath') {
     echo '<hr>';
     echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
@@ -168,7 +169,7 @@ if ($origin != 'learnpath') {
         Session::erase('exe_id');
     }
 	//record the results in the learning path, using the SCORM interface (API)
-	echo '<script>window.parent.API.void_save_asset('.$total_score.', '.$total_weight.');</script>';
+	echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
     echo '<script type="text/javascript">'.$href.'</script>';
 	echo '</body></html>';
 }

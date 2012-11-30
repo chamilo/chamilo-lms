@@ -24,14 +24,14 @@ define('SPECIAL_CLOSING_TAG', '=]');
 // To be used as a parameter for the function api_format_date()
 
 define('TIME_NO_SEC_FORMAT',    0);	// 15:23
-define('DATE_FORMAT_SHORT',     1); // Aug 25, 09 
-define('DATE_FORMAT_LONG',      2);	// Monday August 25, 09 
+define('DATE_FORMAT_SHORT',     1); // Aug 25, 09
+define('DATE_FORMAT_LONG',      2);	// Monday August 25, 09
 define('DATE_FORMAT_LONG_NO_DAY',     10);	// August 25, 2009
-define('DATE_TIME_FORMAT_LONG', 3);	// Monday August 25, 2009 at 03:28 PM 
+define('DATE_TIME_FORMAT_LONG', 3);	// Monday August 25, 2009 at 03:28 PM
 
 define('DATE_FORMAT_NUMBER',        4);	// 25.08.09
 define('DATE_TIME_FORMAT_LONG_24H', 5); // August 25, 2009 at 15:28
-define('DATE_TIME_FORMAT_SHORT', 6);	// Aug 25, 2009 at 03:28 PM 
+define('DATE_TIME_FORMAT_SHORT', 6);	// Aug 25, 2009 at 03:28 PM
 define('DATE_TIME_FORMAT_SHORT_TIME_FIRST', 7);	// 03:28 PM, Aug 25 2009
 define('DATE_FORMAT_NUMBER_NO_YEAR',  8);	// 25.08 dd-mm
 define('DATE_FORMAT_ONLY_DAYNAME',  9);	// Monday, Sunday, etc
@@ -130,7 +130,7 @@ function get_lang($variable, $reserved = null, $language = null) {
         $language_interface_initial_value,
         // For serving the function is_translated()
         $_api_is_translated, $_api_is_translated_call;
-	
+
     global $used_lang_vars, $_configuration;
     // add language_measure_frequency to your main/inc/conf/configuration.php in order to generate language
     // variables frequency measurements (you can then see them trhough main/cron/lang/langstats.php)
@@ -143,7 +143,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     if (!isset ($used_lang_vars)) {
     	$used_lang_vars = array();
     }
-    
+
     // Caching results from some API functions, for speed.
     static $initialized, $encoding, $is_utf8_encoding, $langpath, $test_server_mode, $show_special_markup;
     if (!isset($initialized)) {
@@ -160,7 +160,7 @@ function get_lang($variable, $reserved = null, $language = null) {
         $language = $language_interface;
     }
     $lang_postfix = isset($is_interface_language) && $is_interface_language ? '' : '('.$language.')';
-    
+
     $is_interface_language = $language == $language_interface_initial_value;
 
     // This is a cache for already translated language variables. By using it, we avoid repetitive translations, gaining speed.
@@ -235,7 +235,7 @@ function get_lang($variable, $reserved = null, $language = null) {
             $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
         }
         //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
-        $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);               
+        $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
     }
@@ -243,7 +243,7 @@ function get_lang($variable, $reserved = null, $language = null) {
     // Translation mode for test/development servers.
     if (!is_string($variable)) {
         //return $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
-        $ret = $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;        
+        $ret = $cache[$language][$variable] = SPECIAL_OPENING_TAG.'get_lang(?)'.SPECIAL_CLOSING_TAG;
         $used_lang_vars[$variable.$lang_postfix] = $ret;
         return $ret;
     }
@@ -258,11 +258,11 @@ function get_lang($variable, $reserved = null, $language = null) {
     }
     if (empty($langvar) || !is_string($langvar)) {
         $_api_is_translated = false;
-        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;        
+        $langvar = $show_special_markup ? SPECIAL_OPENING_TAG.$variable.SPECIAL_CLOSING_TAG : $variable;
     }
     //return $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
-    $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);     
-    $used_lang_vars[$variable.$lang_postfix] = $ret;        
+    $ret = $cache[$language][$variable] = $is_utf8_encoding ? $langvar : api_utf8_decode($langvar, $encoding);
+    $used_lang_vars[$variable.$lang_postfix] = $ret;
     return $ret;
 }
 
@@ -288,21 +288,21 @@ function api_is_translated($variable, $language = null) {
  */
 function api_get_interface_language($purified = false, $check_sub_language = false) {
     global $language_interface;
-    
+
     if (empty($language_interface)) {
         return 'english';
-    }    
-        
+    }
+
     //1. Checking if current language is supported
-    $language_is_supported = api_is_language_supported($language_interface);   
-     
+    $language_is_supported = api_is_language_supported($language_interface);
+
     if ($check_sub_language && !$language_is_supported) {
         static $parent_language_name = null;
-        
+
         if (!isset($parent_language_name)) {
             //2. The current language is a sub language so we grab the father's setting according to the internalization_database/name_order_convetions.php file
-            $language_id   = api_get_language_id($language_interface);            
-            $language_info = api_get_language_info($language_id);            
+            $language_id   = api_get_language_id($language_interface);
+            $language_info = api_get_language_info($language_id);
             if (!empty($language_id) && !empty($language_info)) {
                 $language_info = api_get_language_info($language_info['parent_id']);
                 $parent_language_name = $language_info['english_name'];
@@ -313,9 +313,9 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
             return 'english';
         } else {
             return $parent_language_name;
-        }        
+        }
     } else {
-        //2. Normal way 
+        //2. Normal way
         $interface_language = $purified ? api_purify_language_id($language_interface) : $language_interface;
     }
     return $interface_language;
@@ -328,7 +328,7 @@ function api_get_interface_language($purified = false, $check_sub_language = fal
  */
 function api_is_language_supported($language) {
     static $supported = array();
-    if (!isset($supported[$language])) {               
+    if (!isset($supported[$language])) {
         $supported[$language] = in_array(api_purify_language_id($language), array_keys(_api_non_utf8_encodings()));
     }
     return $supported[$language];
@@ -405,9 +405,9 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
 
 /**
  * Gets language isocode column from the language table
- * 
+ *
  * @return array    An array with the current isocodes
- *  
+ *
  * */
 function api_get_platform_isocodes() {
     $iso_code = array();
@@ -416,7 +416,7 @@ function api_get_platform_isocodes() {
         while ($row = Database::fetch_array($sql_result)) {;
             $iso_code[] = trim($row['isocode']);
         }
-    }    
+    }
     return $iso_code;
 }
 
@@ -429,34 +429,34 @@ function api_get_platform_isocodes() {
  */
 function api_get_text_direction($language = null) {
     static $text_direction = array();
-        
+
     /*
      * Not necessary to validate the language because the list if rtl/ltr is harcoded
-     * 
-    /*  
-     $language_is_supported = api_is_language_supported($language);  
+     *
+    /*
+     $language_is_supported = api_is_language_supported($language);
     if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);        
-    }*/    
+        $language = api_get_interface_language(false, true);
+    }*/
     if (empty($language)) {
     	$language = api_get_interface_language();
-    }    
+    }
     if (!isset($text_direction[$language])) {
         $text_direction[$language] = in_array(api_purify_language_id($language),
             array(
-                'arabic', 
+                'arabic',
                 'ar',
-                'dari', 
+                'dari',
                 'prs',
-                'hebrew', 
+                'hebrew',
                 'he',
                 'iw',
-                'pashto', 
+                'pashto',
                 'ps',
-                'persian', 
+                'persian',
                 'fa',
                 'ur',
-                'yiddish', 
+                'yiddish',
                 'yid'
             )
         ) ? 'rtl' : 'ltr';
@@ -550,7 +550,7 @@ function _api_get_timezone() {
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
     if ($use_users_timezone == 'true') {
-        // Get the timezone based on user preference, if it exists        
+        // Get the timezone based on user preference, if it exists
         $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
         if ($timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];
@@ -567,10 +567,13 @@ function _api_get_timezone() {
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_utc_datetime($time = null) {
+function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false) {
     $from_timezone = _api_get_timezone();
     $to_timezone = 'UTC';
-    if (is_null($time)) {
+    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+        if ($return_null_if_invalid_date) {
+            return null;
+        }
         return gmdate('Y-m-d H:i:s');
     }
     // If time is a timestamp, return directly in utc
@@ -699,14 +702,14 @@ function api_format_date($time, $format = null, $language = null) {
         		}
                 break;
             case DATE_FORMAT_NUMBER_NO_YEAR:
-                $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);                                 		                
+                $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);
         		if (IS_PHP_53 && INTL_INSTALLED) {
         			$datetype = IntlDateFormatter::SHORT;
         			$timetype = IntlDateFormatter::NONE;
         		}
                 break;
-        	case DATE_FORMAT_NUMBER:        		
-        		$date_format = get_lang('dateFormatShortNumber', '', $language);                                 		                
+        	case DATE_FORMAT_NUMBER:
+        		$date_format = get_lang('dateFormatShortNumber', '', $language);
         		if (IS_PHP_53 && INTL_INSTALLED) {
         			$datetype = IntlDateFormatter::SHORT;
         			$timetype = IntlDateFormatter::NONE;
@@ -739,14 +742,14 @@ function api_format_date($time, $format = null, $language = null) {
                     $datetype = IntlDateFormatter::FULL;
                     $timetype = IntlDateFormatter::SHORT;
                 }
-                break;		
+                break;
             case DATE_FORMAT_LONG_NO_DAY:
                 $date_format = get_lang('dateFormatLongNoDay', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {
                     $datetype = IntlDateFormatter::FULL;
                     $timetype = IntlDateFormatter::SHORT;
                 }
-                break;     
+                break;
 			case DATE_TIME_FORMAT_SHORT:
                 $date_format = get_lang('dateTimeFormatShort', '', $language);
                 if (IS_PHP_53 && INTL_INSTALLED) {
@@ -778,8 +781,8 @@ function api_format_date($time, $format = null, $language = null) {
     } else {
         $date_format = $format;
     }
-    
-    //if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {        
+
+    //if (IS_PHP_53 && INTL_INSTALLED && $datetype !== null && $timetype !== null) {
     if (0) {
         //if using PHP 5.3 format dates like: $dateFormatShortNumber, can't be used
         //
@@ -787,9 +790,9 @@ function api_format_date($time, $format = null, $language = null) {
         if (is_null($language)) {
             $language = api_get_language_isocode();
         }
-        /*$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());                        
-        $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');*/        
-        
+        /*$date_formatter = datefmt_create($language, $datetype, $timetype, date_default_timezone_get());
+        $formatted_date = api_to_system_encoding(datefmt_format($date_formatter, $time), 'UTF-8');*/
+
         $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
         //$date_formatter->setPattern($date_format);
         $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
@@ -1027,11 +1030,11 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
     //We check if the language is supported, otherwise we check the interface language of the parent language of sublanguage
-    $language_is_supported = api_is_language_supported($language);   
+    $language_is_supported = api_is_language_supported($language);
     if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);        
-    }    
-    
+        $language = api_get_interface_language(false, true);
+    }
+
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
@@ -1079,10 +1082,10 @@ function api_is_western_name_order($format = null, $language = null) {
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
     }
-    
-    $language_is_supported = api_is_language_supported($language);   
+
+    $language_is_supported = api_is_language_supported($language);
     if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);        
+        $language = api_get_interface_language(false, true);
     }
     if (!isset($order[$format][$language])) {
         $test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
@@ -1102,10 +1105,10 @@ function api_is_western_name_order($format = null, $language = null) {
  */
 function api_sort_by_first_name($language = null) {
     static $sort_by_first_name = array();
-    
-    $language_is_supported = api_is_language_supported($language);   
+
+    $language_is_supported = api_is_language_supported($language);
     if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);        
+        $language = api_get_interface_language(false, true);
     }
     if (!isset($sort_by_first_name[$language])) {
         $sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
@@ -2038,7 +2041,7 @@ function api_strripos($haystack, $needle, $offset = 0, $encoding = null) {
  * @link http://php.net/manual/en/function.mb-strrpos
  */
 function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
-	
+
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
     }
@@ -2055,25 +2058,25 @@ function api_strrpos($haystack, $needle, $offset = 0, $encoding = null) {
     }
     if (_api_is_single_byte_encoding($encoding)) {
         return strrpos($haystack, $needle, $offset);
-    }    
+    }
     if (_api_mb_supports($encoding) && IS_PHP_52) {
         return @mb_strrpos($haystack, $needle, $offset, $encoding);
     } elseif (api_is_encoding_supported($encoding)) {
-    	
+
         if (!api_is_utf8($encoding)) {
             $haystack 	= api_utf8_encode($haystack, $encoding);
             $needle 	= api_utf8_encode($needle, $encoding);
         }
         // In PHP 5.1 the $offset parameter didn't exist see http://php.net/manual/en/function.mb-strrpos.php
-        if (MBSTRING_INSTALLED && IS_PHP_SUP_OR_EQ_51) {       	
+        if (MBSTRING_INSTALLED && IS_PHP_SUP_OR_EQ_51) {
             //return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
             //@todo fix the missing $offset parameter
             return @mb_strrpos($haystack, $needle, 'UTF-8');
-        }        
+        }
         if (MBSTRING_INSTALLED && IS_PHP_SUP_OR_EQ_52) {
         	return @mb_strrpos($haystack, $needle, $offset, 'UTF-8');
         }
-        
+
         // This branch (this fragment of code) is an adaptation from the CakePHP(tm) Project, http://www.cakefoundation.org
         $found = false;
         $haystack = _api_utf8_to_unicode($haystack);
@@ -3602,12 +3605,12 @@ function api_is_encoding_supported($encoding) {
  * if you wish to revise the leading non-UTF-8 encoding for your language.
  */
 function api_get_non_utf8_encoding($language = null) {
-       
-    $language_is_supported = api_is_language_supported($language);   
+
+    $language_is_supported = api_is_language_supported($language);
     if (!$language_is_supported || empty($language)) {
-        $language = api_get_interface_language(false, true);        
+        $language = api_get_interface_language(false, true);
     }
-        
+
     $language = api_purify_language_id($language);
     $encodings = & _api_non_utf8_encodings();
     if (is_array($encodings[$language])) {
@@ -3712,7 +3715,7 @@ function api_detect_encoding($string, $language = null) {
 
 /**
  * Checks a string for UTF-8 validity.
- * 
+ *
  * @deprecated Use Encoding::utf8()->is_valid() instead
  */
 function api_is_valid_utf8(&$string) {
@@ -3732,37 +3735,37 @@ function api_is_valid_ascii(&$string) {
 }
 
 /**
- * 
+ *
  * Experimental translation feature for Chamilo
- * 
+ *
  * Install this in Ubuntu
- * 
+ *
  * sudo locale-gen es_ES
  * sudo apt-get install php-gettext
- * 
+ *
  * Install Spanish locale: $ sudo locale-gen es_ES
  * Install English locale: $ sudo locale-gen en_US
- * 
+ *
  * To view the list of locales installed in ubuntu
  * locale -a
- * 
+ *
  * In Debian check this file More info: http://algorytmy.pl/doc/php/ref.gettext.php
- * sudo vim /etc/locale.gen 
- *  
- * Translate po files using this GUI 
- * sudo apt-get install poedit 
- * 
+ * sudo vim /etc/locale.gen
+ *
+ * Translate po files using this GUI
+ * sudo apt-get install poedit
+ *
  * Some help here:
- * 
+ *
  * Config getext
  * http://zez.org/article/articleview/42/3/
- *  * 
+ *  *
  * Using getext in ubuntu
  * http://www.sourcerally.net/regin/49-How-to-get-PHP-and-gettext-working-%28ubuntu,-debian%29
- * 
+ *
  * Getext tutorial
  * http://mel.melaxis.com/devblog/2005/08/06/localizing-php-web-sites-using-gettext/
- *  
+ *
  */
 function setting_gettext() {
     $domain = 'default';
@@ -3771,7 +3774,7 @@ function setting_gettext() {
     putenv("LC_ALL=$locale");
     setlocale(LC_ALL, $locale);
     bindtextdomain($domain, api_get_path(SYS_LANG_PATH));
-    bind_textdomain_codeset($domain, 'UTF-8');    
+    bind_textdomain_codeset($domain, 'UTF-8');
     textdomain($domain);
 }
 

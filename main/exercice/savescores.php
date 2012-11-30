@@ -54,7 +54,7 @@ function save_scores($file, $score) {
 	global $origin, $_user, $_cid,
 	$TABLETRACK_HOTPOTATOES;
 	// if tracking is disabled record nothing
-	$weighting = 100; // 100%	
+	$weighting = 100; // 100%
 	$date = api_get_utc_datetime();
 
 	if ($_user['user_id']) {
@@ -80,7 +80,7 @@ function save_scores($file, $score) {
 		//table to get tracking in there as well
 	    global $jscript2run;
 		//record the results in the learning path, using the SCORM interface (API)
-	    $jscript2run .= '<script>window.parent.API.void_save_asset('.$score.','.$weighting.');</script>';
+	    $jscript2run .= "<script>window.parent.API.void_save_asset('$score', '$weighting', 0, 'completed');</script>";
 	}
 }
 
@@ -88,7 +88,7 @@ function save_scores($file, $score) {
 save_scores($test, $score);
 
 // Back
-if ($origin != 'learnpath') {	
+if ($origin != 'learnpath') {
 	$url = "exercice.php"; // back to exercices
 	$jscript2run .= '<script>'."window.open('$url', '_top', '')".'</script>';
 	echo $jscript2run;

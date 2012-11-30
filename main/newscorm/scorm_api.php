@@ -276,6 +276,8 @@ function LMSInitialize() {
             async: false
         });
 
+        olms.lms_initialized = 1;
+
         // log a more complete object dump when initializing, so we know what data hasn't been cleaned
         var log = '\nitem             : '+ olms.lms_item_id
                  + '\nitem_type       : '+ olms.lms_item_type
@@ -332,7 +334,6 @@ function Initialize() {
  * @return  string  All return values must be string (see SCORM)
  */
 function LMSGetValue(param) {
-    //logit_scorm("LMSGetValue('"+param+"')",1);
     olms.G_LastError = G_NoError ;
     olms.G_LastErrorMessage = 'No error';
     var result='';

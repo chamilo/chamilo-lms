@@ -301,13 +301,11 @@ class CourseRecycler
      * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
      */
     function recycle_quizzes() {
-    	
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
-            $table_qui_que 	= Database :: get_course_table(TABLE_QUIZ_QUESTION);
-            $table_qui_ans 	= Database :: get_course_table(TABLE_QUIZ_ANSWER);
-            $table_qui 		= Database :: get_course_table(TABLE_QUIZ_TEST);
-            $table_rel 		= Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
-
+            $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+            $table_qui_ans = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+            $table_qui 	   = Database :: get_course_table(TABLE_QUIZ_TEST);
+            $table_rel 	   = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $ids = array_keys($this->course->resources[RESOURCE_QUIZ]);
             $delete_orphan_questions = in_array(-1, $ids);
             $ids = implode(',', $ids);
@@ -315,20 +313,25 @@ class CourseRecycler
             // Deletion of the normal tests, questions in them are not deleted, they become orphan at this moment.
             $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
             Database::query($sql);
-            
+
             $sql = "DELETE FROM ".$table_rel." WHERE c_id = ".$this->course_id." AND exercice_id IN(".$ids.")";
             Database::query($sql);
 
             // Identifying again and deletion of the orphan questions, if it was desired.
             if ($delete_orphan_questions) {
-                $sql = 'SELECT questions.id FROM '.$table_qui_que.' as questions LEFT JOIN '.$table_rel.' as quizz_questions 
-                		ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.' as exercices 
-                		ON exercice_id=exercices.id 
-                		WHERE 
-                			questions.c_id = '.$this->course_id.' AND
-                			quizz_questions.c_id = '.$this->course_id.' AND
-                			exercices.c_id = '.$this->course_id.' AND 
-                			quizz_questions.exercice_id IS NULL OR exercices.active = -1'; // active = -1 means "deleted" test.
+                $sql = 'SELECT questions.id '.
+                       ' FROM '.$table_qui_que.' as questions '.
+                       ' LEFT JOIN '.$table_rel.' as quizz_questions '.
+                       '   ON questions.id=quizz_questions.question_id '.
+                       ' LEFT JOIN '.$table_qui.' as exercices '.
+                       '   ON exercice_id=exercices.id '.
+                       ' WHERE '.
+                       '   questions.c_id = '.$this->course_id.' AND '.
+                       '   quizz_questions.c_id = '.$this->course_id.' AND '.
+                       '   exercices.c_id = '.$this->course_id.' AND '.
+                       '   quizz_questions.exercice_id IS NULL OR '.
+                       '   exercices.active = -1'; 
+                       // active = -1 means "deleted" test.
                 $db_result = Database::query($sql);
                 if (Database::num_rows($db_result) > 0) {
                     $orphan_ids = array();
@@ -343,10 +346,10 @@ class CourseRecycler
                     $sql = "DELETE FROM ".$table_qui_que." WHERE c_id = ".$this->course_id." AND id IN(".$orphan_ids.")";
                     Database::query($sql);
                 }
-            }            
+            }
             $sql = "DELETE FROM ".$table_qui." WHERE c_id = ".$this->course_id." AND active = -1";
-            Database::query($sql);            
-        }        
+            Database::query($sql); 
+        }
     }
     
     /**

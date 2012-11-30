@@ -462,7 +462,6 @@ class CourseBuilder {
             $sql = 'SELECT * FROM '.$table_rel.' WHERE c_id = '.$course_id.' AND exercice_id = '.$obj->id;            
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
-error_log('Adding question '.$obj2->question_id.' to the pack at '.$obj2->question_order);
                 $quiz->add_question($obj2->question_id, $obj2->question_order);
             }            
             $this->course->add_resource($quiz);
@@ -530,7 +529,7 @@ error_log('Adding question '.$obj2->question_id.' to the pack at '.$obj2->questi
         }
         
         if ($build_orphan_questions) {
-            //$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
+            $this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
         }
     }
     

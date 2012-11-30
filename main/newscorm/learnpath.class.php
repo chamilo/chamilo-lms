@@ -2591,19 +2591,18 @@ class learnpath {
      */
     public function get_toc() {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_toc()', 0);
+            error_log('learnpath::get_toc()', 0);
         }
         $toc = array();
         //echo "<pre>".print_r($this->items,true)."</pre>";
         foreach ($this->ordered_items as $item_id) {
             if ($this->debug > 2) {
-                error_log('New LP - learnpath::get_toc(): getting info for item ' . $item_id, 0);
+                error_log('learnpath::get_toc(): getting info for item ' . $item_id, 0);
             }
             // TODO: Change this link generation and use new function instead.
             $toc[] = array (
                 'id'            => $item_id,
                 'title'         => $this->items[$item_id]->get_title(),
-                //'link' => get_addedresource_link_in_learnpath('document', $item_id, 1),
                 'status'        => $this->items[$item_id]->get_status(),
                 'level'         => $this->items[$item_id]->get_level(),
                 'type'          => $this->items[$item_id]->get_type(),
@@ -2616,7 +2615,6 @@ class learnpath {
         }
         return $toc;
     }
-
 
     /**
      * Generate and return the table of contents for this learnpath. The JS
@@ -2720,12 +2718,12 @@ class learnpath {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_html_toc()', 0);
+            error_log('In learnpath::get_html_toc()', 0);
         }
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        $html = '<div id="scorm_title" class="scorm_title">' . Security::remove_XSS($this->get_name()) . '</div>';
+        $html = '<div id="scorm_title" class="scorm_title">'.Security::remove_XSS($this->get_name()) . '</div>';
 
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
@@ -2750,10 +2748,7 @@ class learnpath {
         $i = 0;
 
         foreach ($toc_list as $item) {
-            if ($this->debug > 2) {
-                //error_log('New LP - learnpath::get_html_toc(): using item ' . $item['id'], 0);
-            }
-            // TODO: Complete this.
+            // TODO: Complete this
             $icon_name = array (
                 'not attempted' => '../img/notattempted.gif',
                 'incomplete'    => '../img/incomplete.png',
@@ -2773,7 +2768,6 @@ class learnpath {
                 $style = 'scorm_item_highlight';
                 $scorm_color_background = 'scorm_item_highlight';
             } else {
-
                 if ($color_counter % 2 == 0) {
                     $scorm_color_background = 'scorm_item_1';
                 } else {
@@ -2829,8 +2823,12 @@ class learnpath {
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
+                error_log("1-->>>>>>>>>>>>>>>>");
+                error_log($item['status']);
                 if ($item['status'] == 'completed') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14'  />";
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
+                } else {
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name['not attempted'] . "' alt='" . substr('not attempted', 0, 1) . "' width='14' />";
                 }
             } else {
                 if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {

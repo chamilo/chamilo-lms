@@ -53,7 +53,7 @@ $course_id = api_get_course_int_id();
 if (api_is_allowed_to_edit()) {
 	//Search for all files that are not deleted => visibility != 2
 
-    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props
+    $sql = "SELECT url, title, insert_user_id, insert_date FROM $tbl_student_publication AS work, $prop_table AS props
  			WHERE   props.c_id = $course_id AND
  			        work.c_id = $course_id AND
  			        props.tool='work' AND
@@ -64,7 +64,10 @@ if (api_is_allowed_to_edit()) {
 	//add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
 		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {
-			$files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
+            $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
+            $insert_date = api_get_local_time($not_deleted_file['insert_date']);
+            $insert_date = str_replace(array(':','-', ' '), '_', $insert_date);
+            $files[basename($not_deleted_file['url'])] = $insert_date.'_'.$user_info['username'].'_'.basename($not_deleted_file['title']);
 		    $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 		}
     }

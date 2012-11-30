@@ -3,7 +3,7 @@
 
 /**
  *	Functions and main code for the download folder feature
- *  @todo use ids instead of the path like the document tool 
+ *  @todo use ids instead of the path like the document tool
  *	@package chamilo.work
  */
 
@@ -51,32 +51,32 @@ $files = array();
 $course_id = api_get_course_int_id();
 
 if (api_is_allowed_to_edit()) {
-	//search for all files that are not deleted => visibility != 2
-    
-    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
- 			WHERE   props.c_id = $course_id AND 
- 			        work.c_id = $course_id AND 
- 			        props.tool='work' AND 
- 			        work.id=props.ref AND 
- 			        work.parent_id = $work_id AND 
+	//Search for all files that are not deleted => visibility != 2
+
+    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props
+ 			WHERE   props.c_id = $course_id AND
+ 			        work.c_id = $course_id AND
+ 			        props.tool='work' AND
+ 			        work.id=props.ref AND
+ 			        work.parent_id = $work_id AND
  			        work.filetype='file' AND props.visibility<>'2'";
 	$query = Database::query($sql);
 	//add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
-		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {            
+		if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'])) {
 			$files[basename($not_deleted_file['url'])] = $not_deleted_file['title'];
 		    $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
 		}
-    }    
+    }
 } else {
-    //for other users, we need to create a zipfile with only visible files and folders    
-    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props  
-            WHERE   props.c_id = $course_id AND work.c_id = $course_id AND 
-                    props.tool='work' AND 
-                    work.accepted = 1 AND 
-                    work.id=props.ref AND 
+    //for other users, we need to create a zipfile with only visible files and folders
+    $sql = "SELECT url, title FROM $tbl_student_publication AS work, $prop_table AS props
+            WHERE   props.c_id = $course_id AND work.c_id = $course_id AND
+                    props.tool='work' AND
+                    work.accepted = 1 AND
+                    work.id=props.ref AND
                     work.parent_id = $work_id AND
-                    work.filetype='file' AND 
+                    work.filetype='file' AND
                     props.visibility = '1' AND props.insert_user_id='".api_get_user_id()."' ";
     $query = Database::query($sql);
     //add tem to the zip file
@@ -94,11 +94,11 @@ if (!empty($files)) {
 
     //start download of created file
     $name = basename($work_data['title']).'.zip';
-    
-    if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {    
-        DocumentManager::file_send_for_download($temp_zip_file, true, $name);    
-        @unlink($temp_zip_file);    
-        exit;    
+
+    if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
+        DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+        @unlink($temp_zip_file);
+        exit;
     }
 } else {
     exit;
@@ -107,12 +107,12 @@ if (!empty($files)) {
 /*	Extra function (only used here) */
 
 function my_pre_add_callback($p_event, &$p_header) {
-	global $files;	
+	global $files;
 	if (isset($files[basename($p_header['stored_filename'])])) {
 		$p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
 		return 1;
 	}
-	return 0;	
+	return 0;
 }
 
 /**

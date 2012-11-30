@@ -211,7 +211,7 @@ if (!empty($flat_list)) {
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
         if ($is_allowed_to_edit) {
-        	//&nbsp;'.$details['lp_proximity'].'
+            $url_start_lp .= '&isStudentView=true';
             $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
             $extra = '<div class ="lp_content_type_label">'.$dsp_desc .'</div>';
         }
@@ -223,10 +223,11 @@ if (!empty($flat_list)) {
         if ($details['lp_visibility'] == 0 ) {
             $my_title = Display::tag('font', $name, array('style'=>'color:grey'));
         }
-        $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
-            		'<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'),'',ICON_SIZE_SMALL).'<a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
 
-        //$dsp_desc='<td>'.$details['lp_desc'].'</td>'."\n";
+        $dsp_line =	'<tr align="center" class="'.$oddclass.'">'.
+            		'<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'),'',ICON_SIZE_SMALL).'
+                     <a href="'.$url_start_lp.'">' . $my_title . '</a>' . $session_img .$extra."</td>";
+
         $dsp_desc = '';
         $dsp_export = '';
         $dsp_edit = '';

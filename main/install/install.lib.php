@@ -1020,7 +1020,7 @@ function display_language_selection() { ?>
         <p><?php echo get_lang('PleaseSelectInstallationProcessLanguage'); ?>:</p>
         <form id="lang_form" method="post" action="<?php echo api_get_self(); ?>">
         <?php display_language_selection_box('language_list', api_get_interface_language()); ?>
-        <button type="submit" name="step1" class="btn next" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
+        <button type="submit" name="step1" class="btn next" autofocus="autofocus" value="<?php echo get_lang('Next'); ?>"><?php echo get_lang('Next'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         </form>
     </div>
@@ -1421,7 +1421,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         ?>
         <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
-        <button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) echo 'disabled="disabled"'; ?> ><?php echo get_lang('NewInstallation'); ?></button>
+        <button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) { echo 'disabled="disabled"'; } else { echo 'autofocus="autofocus"'; } ?> ><?php echo get_lang('NewInstallation'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <?php
         // Real code
@@ -1461,7 +1461,7 @@ function display_license_agreement() {
         </tr>
         <tr><td>
               <label class="checkbox">  
-                <input type="checkbox" name="accept" id="accept_licence" value="1" />
+                <input type="checkbox" name="accept" id="accept_licence" value="1" autofocus="autofocus" />
                 <?php echo get_lang('IAccept'); ?>
               </label>
             </td>
@@ -1704,6 +1704,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         if (empty($dbUserForm)) {
             $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
         }
+
+
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingUpgradeIntro');
@@ -1717,6 +1719,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         echo get_lang('DBSettingIntro');
         echo '</div>';                
     }
+    $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
     ?>    
     </td>
     </tr>
@@ -1729,7 +1732,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td width="30%"><input type="hidden" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /><?php echo $dbHostForm; ?></td>
       <td width="30%">&nbsp;</td>
       <?php else: ?>
-      <td width="30%"><input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" /></td>
+      <td width="30%"><input type="text" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" <?php if ($dbConnect == -1) { echo 'autofocus="autofocus"'; } ?> /></td>
       <td width="30%"><?php echo get_lang('EG').' localhost'; ?></td>
       <?php endif; ?>
     </tr>
@@ -1779,7 +1782,6 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         
         <?php
         
-        $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
         
         $database_exists_text = '';
         
@@ -1839,7 +1841,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td align="right">
           <input type="hidden" name="is_executable" id="is_executable" value="-" />
            <?php if ($dbConnect == 1) { ?>          
-            <button type="submit"  class="btn next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button>
+            <button type="submit"  class="btn next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" <?php if ($dbConnect == 1) { echo 'autofocus="autofocus"'; } ?> /><?php echo get_lang('Next'); ?></button>
           <?php } else { ?>
             <button disabled="disabled" type="submit" class="btn next disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button>
           <?php } ?>  
@@ -1859,7 +1861,7 @@ function display_configuration_parameter($install_type, $parameter_name, $form_f
     if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
         echo '<td><input type="hidden" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'.$parameter_value."</td>\n";
     } else {
-        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" />'."</td>\n";
+        echo '<td><input type="text" size="'.FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.MAX_FORM_FIELD_LENGTH.'" name="'.$form_field_name.'" value="'.api_htmlentities($parameter_value, ENT_QUOTES).'" '.($form_field_name=='loginForm'?'autofocus="autofocus"':'').' />'."</td>\n";
     }
     echo "</tr>";
 }
@@ -2038,7 +2040,7 @@ function display_after_install_message($installType) {
     echo '</div>';
     ?></form>
     <br />
-    <a class="btn btn-success btn-large btn-install" href="../../index.php"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
+    <a class="btn btn-success btn-large btn-install" href="../../index.php" autofocus="autofocus"><?php echo get_lang('GoToYourNewlyCreatedPortal'); ?></a>
     <?php
 }
 

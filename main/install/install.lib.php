@@ -1421,7 +1421,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         ?>
         <p align="center" style="padding-top:15px">
         <button type="submit" name="step1" class="back" onclick="javascript: window.location='index.php'; return false;" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
-        <button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) { echo 'disabled="disabled"'; } else { echo 'autofocus="autofocus"'; } ?> ><?php echo get_lang('NewInstallation'); ?></button>
+        <button type="submit" name="step2_install" class="add" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) { echo 'disabled="disabled"'; } ?> ><?php echo get_lang('NewInstallation'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <?php
         // Real code

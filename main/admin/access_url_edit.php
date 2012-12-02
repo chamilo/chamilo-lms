@@ -39,7 +39,7 @@ if( $form->validate()) {
             if ($url_id==1)
                 $active=1;
             //checking url
-            if (substr($url,strlen($url)-1, strlen($url))=='/') {
+            if (substr($url,-1)=='/') {
                 UrlManager::udpate($url_id, $url, $description, $active);
             } else {
                 UrlManager::udpate($url_id, $url.'/', $description, $active);

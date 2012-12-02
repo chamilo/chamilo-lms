@@ -37,7 +37,7 @@ function event_open() {
     // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
     // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
     // $_SERVER['HTTP_REFERER'] : provide information about refering url
-    if(isset($_SERVER['HTT_REFERER']))
+    if(isset($_SERVER['HTTP_REFERER']))
     {
         $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
     } else {

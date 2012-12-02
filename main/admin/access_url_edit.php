@@ -1,10 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-*	@author Julio Montoya <gugli100@gmail.com>
-*/
-
+ * Create or edit access urls and branches
+ * @package chamilo.admin
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
+ */
+/**
+ * Initialization
+ */
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -105,6 +109,10 @@ if( $form->validate()) {
 $form->addElement('text','url', 'URL', array('class'=>'span6'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
+
+$types = array(1=>get_lang('AccessURL'), 2=>get_lang('SincroServer'), 3=>get_lang('SincroClient'));
+$form->addElement('select', 'type', get_lang('Type'), $types);
+
 $form->addElement('textarea','description',get_lang('Description'));
 
 //the first url with id = 1 will be always active
@@ -137,6 +145,9 @@ if (!$_configuration['multiple_access_urls'])
 $tool_name = get_lang('AddUrl');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
+/**
+ * View
+ */
 Display :: display_header($tool_name);
 
 if (isset ($_GET['action'])) {

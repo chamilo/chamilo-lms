@@ -158,9 +158,9 @@ if (api_is_platform_admin()) {
     }   
     
     if (!empty($_configuration['multiple_access_urls'])) {
-		if (api_is_global_platform_admin()) {
+	if (api_is_global_platform_admin()) {
             	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));                
-            }
+        }
     }
     
     if (api_get_setting('allow_reservation') == 'true') {

@@ -39,11 +39,10 @@ if( $form->validate()) {
             if ($url_id==1)
                 $active=1;
             //checking url
-            if (substr($url,-1)=='/') {
-                UrlManager::udpate($url_id, $url, $description, $active);
-            } else {
-                UrlManager::udpate($url_id, $url.'/', $description, $active);
+            if (substr($url,-1)!=='/') {
+                $url_id .= '/';
             }
+            UrlManager::udpate($url_id, $url, $description, $active, $url_array['url_type'], $url_array);
             // URL Images
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
             $image_fields = array("url_image_1", "url_image_2", "url_image_3");
@@ -63,12 +62,11 @@ if( $form->validate()) {
             $num = UrlManager::url_exist($url);
             if ($num == 0) {
                 //checking url
-                if (substr($url,-1)=='/') {
-                    UrlManager::add($url, $description, $active);
-                } else {
-                    //create
-                    UrlManager::add($url.'/', $description, $active);
+                if (substr($url,-1)!='/' && $url_array['url_type'] == 1) {
+                    $url.='/';
                 }
+                $url_array['ip'] = $url_array['url'];
+                UrlManager::add($url, $description, $active, $url_array['url_type'], $url_array);
                 $message = get_lang('URLAdded');
                 $url_to_go='access_urls.php';
             } else {
@@ -106,12 +104,16 @@ if( $form->validate()) {
 }
 
 
-$form->addElement('text','url', 'URL', array('class'=>'span6'));
+$form->addElement('text','url', get_lang('URLIP'), array('class'=>'span6'));
 $form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('url', '', 'maxlength',254);
 
-$types = array(1=>get_lang('AccessURL'), 2=>get_lang('SincroServer'), 3=>get_lang('SincroClient'));
-$form->addElement('select', 'type', get_lang('Type'), $types);
+$types = array(
+  1=>get_lang('AccessURL'), 
+  2=>get_lang('SincroServer'), 
+  3=>get_lang('SincroClient'),
+);
+$form->addElement('select', 'url_type', get_lang('Type'), $types);
 
 $form->addElement('textarea','description',get_lang('Description'));
 

@@ -94,9 +94,17 @@ ALTER TABLE gradebook_link ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('last_transaction_id','0');
 
-CREATE TABLE migration_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id int not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id, transaction_id, branch_id));
-CREATE TABLE migration_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
-INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
+
+ALTER TABLE access_url ADD COLUMN url_type tinyint unsigned default 1;
+
+CREATE TABLE branch_sync( id int unsigned not null AUTO_INCREMENT PRIMARY KEY, access_url_id int unsigned not null, branch_name varchar(250) default '', branch_ip varchar(40) default '', latitude decimal(15,7), longitude decimal(15,7), dwn_speed int unsigned default null, up_speed int unsigned default null, delay int unsigned default null, admin_mail varchar(250) default '', admin_name varchar(250) default '', admin_phone varchar(250) default '', last_sync_trans_id bigint unsigned default 0, last_sync_trans_date datetime, last_sync_type char(20) default 'full');
+
+CREATE TABLE branch_sync_log( id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY, branch_sync_id int unsigned not null, sync_trans_id bigint unsigned default 0, sync_trans_date datetime, sync_type char(20));
+
+CREATE TABLE branch_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
+INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
+
+CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id, transaction_id, branch_id));
 
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20356' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20539' WHERE variable = 'chamilo_database_version';

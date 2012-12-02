@@ -1576,6 +1576,7 @@ CREATE TABLE IF NOT EXISTS access_url(
     active	int unsigned not null default 0,
     created_by	int	not null,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
+    url_type tinyint unsigned default 1,
     PRIMARY KEY (id)
 );
 
@@ -3088,8 +3089,45 @@ CREATE TABLE usergroup_rel_question (
     coefficient float(6,2)
 );
 
-DROP TABLE IF EXISTS migration_transaction;
-CREATE TABLE migration_transaction (
+DROP TABLE IF EXISTS branch_sync;
+CREATE TABLE branch_sync(
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  access_url_id int unsigned not null,
+  branch_name varchar(250) default '',
+  branch_ip varchar(40) default '',
+  latitude decimal(15,7),
+  longitude decimal(15,7),
+  dwn_speed int unsigned default null,
+  up_speed int unsigned default null,
+  delay int unsigned default null,
+  admin_mail varchar(250) default '',
+  admin_name varchar(250) default '',
+  admin_phone varchar(250) default '',
+  last_sync_trans_id bigint unsigned default 0,
+  last_sync_trans_date datetime,
+  last_sync_type char(20) default 'full'
+);
+
+DROP TABLE IF EXISTS branch_sync_log;
+CREATE TABLE branch_sync_log(
+  id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  branch_sync_id int unsigned not null,
+  sync_trans_id bigint unsigned default 0,
+  sync_trans_date datetime,
+  sync_type char(20)
+);
+
+
+DROP TABLE IF EXISTS branch_transaction_status;
+CREATE TABLE branch_transaction_status (
+    id tinyint not null PRIMARY KEY AUTO_INCREMENT,
+    title char(20)
+);
+
+INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
+
+DROP TABLE IF EXISTS branch_transaction;
+CREATE TABLE branch_transaction (
     id bigint unsigned not null AUTO_INCREMENT,
     transaction_id bigint unsigned,
     branch_id int not null default 0,
@@ -3103,13 +3141,5 @@ CREATE TABLE migration_transaction (
     PRIMARY KEY (id, transaction_id, branch_id)
 );
 
-DROP TABLE IF EXISTS migration_transaction_status;
-CREATE TABLE migration_transaction_status (
-    id tinyint not null PRIMARY KEY AUTO_INCREMENT,
-    title char(20)
-);
-
-INSERT INTO migration_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
-
 -- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20356' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20539' WHERE variable = 'chamilo_database_version';

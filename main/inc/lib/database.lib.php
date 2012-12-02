@@ -692,6 +692,11 @@ class Database {
                 strpos($query, 'track_c_referers') === false &&
                 strpos($query, 'track_c_browsers') === false &&
                 strpos($query, 'settings_current') === false &&
+                strpos($query, 'branch_sync') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_transaction') === false &&
+                strpos($query, 'branch_transaction_status') === false &&
                 strpos($query, 'dokeos_classic_2D') === false &&
                 strpos($query, 'cosmic_campus') === false &&
                 strpos($query, 'static_') === false &&

@@ -718,7 +718,7 @@ if (@$_POST['step2']) {
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
                 <input type="hidden" name="step6" value="1" />
-                <button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
+                <button id="button_step6" class="save" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>" autofocus="autofocus">
                     <?php echo get_lang('InstallChamilo'); ?>
                 </button>
                 <button class="save" id="button_please_wait"></button>

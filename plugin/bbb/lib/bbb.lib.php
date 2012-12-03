@@ -26,7 +26,7 @@ class bbb {
 
         $course_code = api_get_course_id();
 
-        $this->logout_url = api_get_path(WEB_COURSE_PATH).$course_code;
+        $this->logout_url = api_get_course_url($course_code);
         $this->table = Database::get_main_table('plugin_bbb_meeting');
 
         if ($bbb_plugin == true) {

@@ -510,13 +510,14 @@ class CourseBuilder {
                 LEFT JOIN $table_qui as exercices
                     ON (exercice_id = exercices.id AND exercices.c_id = $course_id AND questions.c_id = $course_id)
                 WHERE  questions.c_id = $course_id AND
+                       exercices.c_id = $course_id AND
                        (quizz_questions.exercice_id IS NULL OR exercices.active = -1) "; // active = -1 means "deleted" test.
 
         $db_result = Database::query($sql);
         if (Database::num_rows($db_result) > 0) {
             $build_orphan_questions = true;
             while ($obj = Database::fetch_object($db_result)) {
-                //Avoid adding the same question twice 
+                //Avoid adding the same question twice
                 if (!isset($this->course->resources[$obj->id])) {
                     $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
                     $sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;

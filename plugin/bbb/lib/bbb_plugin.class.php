@@ -36,6 +36,7 @@ class BBBPlugin extends Plugin
                 record INT NOT NULL DEFAULT 0,
                 status INT NOT NULL DEFAULT 0,
                 created_at VARCHAR(255) NOT NULL,
+                closed_at VARCHAR(255) NOT NULL,
                 calendar_id INT DEFAULT 0,
                 welcome_msg VARCHAR(255) NOT NULL DEFAULT '')";
         Database::query($sql);

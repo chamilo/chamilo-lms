@@ -17,6 +17,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
 
+api_protect_course_script(true);
+
 if ($teacher) {
     switch ($action) {
         case 'add_to_calendar':

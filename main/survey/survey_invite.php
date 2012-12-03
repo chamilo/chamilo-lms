@@ -180,27 +180,26 @@ if ($form->validate()) {
         	$defaults['send_mail'] = 1;
         	$form->setDefaults($defaults);
             $form->display();
-        } else {
-        	// Save the invitation mail
-        	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
-        	// Saving the invitations for the course users
-        	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
-            $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
-        	// Saving the invitations for the additional users
-        	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
-        	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators
-        	$additional_users = explode(';', $temp);
-        	for ($i = 0; $i < count($additional_users); $i++) {
-        		$additional_users[$i] = trim($additional_users[$i]);
-        	}
-        	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
-            $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
-        	// Updating the invited field in the survey table
-        	SurveyUtil::update_count_invited($survey_data['code']);
-        	$total_count = $count_course_users + $counter_additional_users;
-        	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
-         }
+        }
     }
+    // Save the invitation mail
+	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
+	// Saving the invitations for the course users
+	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
+    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+	// Saving the invitations for the additional users
+	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
+	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators
+	$additional_users = explode(';', $temp);
+	for ($i = 0; $i < count($additional_users); $i++) {
+		$additional_users[$i] = trim($additional_users[$i]);
+	}
+	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
+    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+	// Updating the invited field in the survey table
+	SurveyUtil::update_count_invited($survey_data['code']);
+	$total_count = $count_course_users + $counter_additional_users;
+	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
 } else {
 	// Getting the invited users
 	$defaults = SurveyUtil::get_invited_users($survey_data['code']);

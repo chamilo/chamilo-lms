@@ -267,7 +267,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = array_filter($my_remind_list);
 }
 
-$params = 'exe_id='.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 if ($debug) { error_log("6.1 params: ->  $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {

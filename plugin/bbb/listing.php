@@ -64,14 +64,14 @@ if ($teacher) {
     }
 }
 
-$meetings       = $bbb->get_course_meetings();
+$meetings = $bbb->get_course_meetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
 $users_online   = $bbb->get_users_online_in_current_room();
 $status         = $bbb->is_server_running();
-//$status         = false;
 
+$tpl->assign('allow_to_edit', $teacher);
 $tpl->assign('meetings', $meetings);
 $conference_url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_get_cidreq();
 $tpl->assign('conference_url', $conference_url);
@@ -82,5 +82,4 @@ $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$tpl->assign('content', $content);$tpl->display_one_col_template();

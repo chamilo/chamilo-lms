@@ -736,11 +736,11 @@ function get_action_icon_for_question($in_action, $from_exercice, $in_questionid
 	switch ($in_action) {
 		case "delete" :
 			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";
-			$res .= Display::return_icon("delete.gif", get_lang('Delete'));
+			$res .= Display::return_icon("delete.png", get_lang('Delete'));
 			$res .= "</a>";
 			break;
 		case "edit" :
-			$res = get_a_tag_for_question(1, $from_exercice, $in_questionid, $in_questiontype, Display::return_icon("edit.gif", get_lang('Modify')));
+			$res = get_a_tag_for_question(1, $from_exercice, $in_questionid, $in_questiontype, Display::return_icon("edit.png", get_lang('Modify')));
 			break;
 		case "add":
 			// add if question is not already in test

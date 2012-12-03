@@ -145,7 +145,7 @@ $aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('Fil
 if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once 'export/qti2/qti2_export.php';
 	$export = export_question($_GET['questionId'],true);
-	$qid = (int)$_GET['questionId'];	
+	$qid = (int)$_GET['questionId'];
 	$archive_path = api_get_path(SYS_ARCHIVE_PATH);
 	$temp_dir_short = uniqid();
 	$temp_zip_dir = $archive_path."/".$temp_dir_short;
@@ -300,19 +300,19 @@ if ($modifyIn == 'thisExercise') {
 		$noPHP_SELF=true;
 	}
 }
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 function multiple_answer_true_false_onchange(variable) {
-        var result = variable.checked;
-        var id = variable.id;
-        var weight_id = "weighting_" + id;
-        var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
-        if (result) {
-        	result = 1;
-        } else {
-            result = 0;
-        }
-        document.getElementById(weight_id).value = array_result[result];
+    var result = variable.checked;
+    var id = variable.id;
+    var weight_id = "weighting_" + id;
+    var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
+    if (result) {
+        result = 1;
+    } else {
+        result = 0;
+    }
+    document.getElementById(weight_id).value = array_result[result];
 }
 
 
@@ -452,7 +452,7 @@ if ($inATest) {
     echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
 
     if ($objExercise->edit_exercise_in_lp == false) {
-        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';        
+        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }

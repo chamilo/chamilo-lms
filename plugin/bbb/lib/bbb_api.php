@@ -760,7 +760,4 @@ class BigBlueButtonBN {
 
         return (simplexml_load_file($url,'SimpleXMLElement', LIBXML_NOCDATA));
     }
-
-
 }
-//----End

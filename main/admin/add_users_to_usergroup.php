@@ -227,7 +227,7 @@ echo '</div>';
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <?php
-echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
+echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
@@ -259,79 +259,53 @@ echo Display::input('hidden','id',$id);
 echo Display::input('hidden','form_sent','1');
 echo Display::input('hidden','add_type',null);
 if(!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg); //main API
+    Display::display_normal_message($errorMsg);
 }
+
 ?>
 
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<tr>
-  <td align="center"><b><?php echo get_lang('UsersInPlatform') ?> :</b>
-  </td>
-  <td></td>
-  <td align="center"><b><?php echo get_lang('UsersInGroup') ?> :</b></td>
-</tr>
+<div class="row">
+    <div class="span5">
+    <b><?php echo get_lang('UsersInPlatform') ?> :</b><br />
 
-<?php if ($add_type=='multiple') { ?>
-<tr>
-<td align="center">
-<?php echo get_lang('FirstLetterUser'); ?> :
-     <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
-      <option value = "%">--</option>
-      <?php
-        echo Display :: get_alphabet_options($first_letter_user);
-      ?>
-     </select>
-</td>
-<td align="center">&nbsp;</td>
-</tr>
-<?php } ?>
-<tr>
-  <td align="center">
-  <div id="content_source">
-        <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
-      <br />
-        <label class="control-label">
-            <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
-            <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
-        </label>
-  </div>
-  </td>
-  <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('elements_in'))" ></button>
-  <?php
-  } else {
-  ?>
-    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"></button>
-    <br /><br />
-    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"></button>
-    <?php
-  }
-  ?>
-    <br /><br /><br /><br /><br /><br />
-  </td>
-  <td align="center">
-<?php
-    echo Display::select('elements_in_name[]', $elements_in, '', array('style'=>'width:360px', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
-    unset($sessionUsersList);
-?>
- </td>
-</tr>
-<tr>
-    <td colspan="3" align="center">
-        <br />
+    <?php echo get_lang('FirstLetterUser'); ?> :
+    <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
+        <option value = "%">--</option>
         <?php
-        echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToClass').'</button>';
+        echo Display :: get_alphabet_options($first_letter_user);
         ?>
-    </td>
-</tr>
-</table>
-</form>
+    </select>
 
-<script type="text/javascript">
-<!--
+    <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
+    <br />
+      <label class="control-label">
+          <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
+          <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
+      </label>
+    </div>
+    <div class="span2">
+        <div style="padding-top:54px;width:auto;text-align: center;">
+        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"></button>
+        <br /><br />
+        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"></button>
+        </div>
+    </div>
+    <div class="span5">
+    <br /><br />
+    <b><?php echo get_lang('UsersInGroup') ?> :</b><br />
+
+    <?php
+        echo Display::select('elements_in_name[]', $elements_in, '', array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
+        unset($sessionUsersList);
+    ?>
+    </div>
+</div>
+
+<?php
+    echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToClass').'</button>';
+?>
+</form>
+<script>
 function moveItem(origin , destination){
 
     for(var i = 0 ; i<origin.options.length ; i++) {
@@ -375,48 +349,6 @@ function valide(){
         options[i].selected = true;
     document.forms.formulaire.submit();
 }
-
-
-function loadUsersInSelect(select){
-
-    var xhr_object = null;
-
-    if(window.XMLHttpRequest) // Firefox
-        xhr_object = new XMLHttpRequest();
-    else if(window.ActiveXObject) // Internet Explorer
-        xhr_object = new ActiveXObject("Microsoft.XMLHTTP");
-    else  // XMLHttpRequest non supporté par le navigateur
-    alert("Votre navigateur ne supporte pas les objets XMLHTTPRequest...");
-
-    //xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
-    xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
-    xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
-    nosessionUsers = makepost(document.getElementById('elements_not_in'));
-    sessionUsers = makepost(document.getElementById('elements_in'));
-    nosessionClasses = makepost(document.getElementById('origin_classes'));
-    sessionClasses = makepost(document.getElementById('destination_classes'));
-    xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
-
-    xhr_object.onreadystatechange = function() {
-        if(xhr_object.readyState == 4) {
-            document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
-            //alert(xhr_object.responseText);
-        }
-    }
-}
-
-function makepost(select){
-    var options = select.options;
-    var ret = "";
-    for (i = 0 ; i<options.length ; i++)
-        ret = ret + options[i].value +'::'+options[i].text+";;";
-
-    return ret;
-}
--->
 </script>
 <?php
 Display::display_footer();

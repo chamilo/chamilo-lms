@@ -3596,7 +3596,8 @@ class Exercise {
                 $end_date = api_strtotime($end_date, 'UTC');
                 if ($start_date && $end_date) {
                     $mytime = $end_date- $start_date;
-                    $time_attemp = learnpathItem :: get_scorm_time('js', $mytime);
+                    $new_learnpath_item = new learnpathItem(null);
+                    $time_attemp = $new_learnpath_item->get_scorm_time('js', $mytime);
                     $h = get_lang('h');
                     $time_attemp = str_replace('NaN', '00' . $h . '00\'00"', $time_attemp);
                     $new_array['duration'] = $time_attemp;

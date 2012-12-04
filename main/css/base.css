@@ -2616,6 +2616,7 @@ div.admin_section h4 {
     color: white;
     font-size: 16px;
     float:left;
+    line-height: 16px;
 }
 
 .ribbon .rib-total {
@@ -3439,7 +3440,7 @@ a:active{
 
 /*#homepage, #hot_courses, #announcements {*/
 #top_main_content section{
-    margin-left: 5px;
+    /* margin-left: 5px; */
 }
 .welcome_course li {
     float:left;

@@ -764,16 +764,20 @@ class CourseBuilder {
                 $items[] = $item;
             }
 
-            $sql_tool = "SELECT id FROM ".$table_tool." WHERE c_id = $course_id AND  (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' and image='scormbuilder.gif') AND visibility='1'";
+            $sql_tool = "SELECT id FROM $table_tool
+                         WHERE  c_id = $course_id AND
+                                (link LIKE '%lp_controller.php%lp_id=".$obj->id."%' AND image='scormbuilder.gif') AND
+                                visibility = '1' ";
             $db_tool = Database::query($sql_tool);
 
-            if(Database::num_rows($db_tool)) {
-                $visibility='1';
+            if (Database::num_rows($db_tool)) {
+                $visibility = '1';
             } else {
-                $visibility='0';
+                $visibility = '0';
             }
 
-            $lp = new CourseCopyLearnpath($obj->id,
+            $lp = new CourseCopyLearnpath(
+                                $obj->id,
                                 $obj->lp_type,
                                 $obj->name,
                                 $obj->path,

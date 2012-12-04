@@ -854,7 +854,7 @@ class CourseRestorer
 			$link_table = Database :: get_course_table(TABLE_LINK);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link) {
-				$cat_id = $this->restore_link_category($link->category_id,$session_id);
+				$cat_id = $this->restore_link_category($link->category_id, $session_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE c_id = ".$this->destination_course_id."  AND category_id='" . self::DBUTF8escapestring($cat_id). "'";
 				$result = Database::query($sql);
     			list($max_order) = Database::fetch_array($result);

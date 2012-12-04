@@ -128,21 +128,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 	$interbreadcrumb[] = array ('url' => '../gradebook/' . $_SESSION['gradebook_dest'],'name' => get_lang('ToolGradebook'));
 }
 
-if ($show != 'result') {
-	$nameTools = get_lang('Exercices');
-} else {
-	if ($is_allowedToEdit || $is_tutor) {
-		$nameTools = get_lang('StudentScore');
-		$interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-	    $objExerciseTmp = new Exercise();
-        if ($objExerciseTmp->read($exerciseId)) {
-            $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exerciseId, "name" => $objExerciseTmp->name);
-        }
-	} else {
-		$nameTools = get_lang('YourScore');
-		$interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
-	}
-}
+$nameTools = get_lang('Exercices');
 
 if ($is_allowedToEdit && !empty ($choice) && $choice == 'exportqti2') {
 	require_once 'export/qti2/qti2_export.php';
@@ -342,7 +328,7 @@ if ($is_allowedToEdit) {
             WHERE c_id = $course_id AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from."," .$limit;
-    
+
 }
 
 $result = Database::query($sql);
@@ -368,7 +354,7 @@ if ($is_allowedToEdit) {
                     d.path LIKE '" . Database :: escape_string($uploadPath) . "/%/%' AND
                     ip.visibility ='1' AND
                     d.c_id      = ".$course_id." AND
-                    ip.c_id     = ".$course_id;    
+                    ip.c_id     = ".$course_id;
     $res = Database::query($sql);
     $hp_count = Database :: num_rows($res);
 }
@@ -458,7 +444,7 @@ if (!empty($exercise_list)) {
         if (!empty($exercise_list))
         foreach ($exercise_list as $row) {
             $my_exercise_id = $row['id'];
-            
+
             $exercise_obj = new Exercise();
             $exercise_obj->read($my_exercise_id);
 
@@ -521,14 +507,14 @@ if (!empty($exercise_list)) {
             if ($cut_title != $row['title']) {
                 $alt_title = ' title = "'.$row['title'].'" ';
             }
-            
+
             // Teacher only
             if ($is_allowedToEdit) {
-                $lp_blocked = null;                
-                if ($exercise_obj->edit_exercise_in_lp == false) {            
+                $lp_blocked = null;
+                if ($exercise_obj->edit_exercise_in_lp == false) {
                     $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class'=> 'lp_content_type_label'));
-                }        
-                
+                }
+
                 $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
                 if ($row['active'] == 0 || $visibility == 0) {
@@ -564,7 +550,7 @@ if (!empty($exercise_list)) {
 
                     //Export
                     $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')),       '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
-                    
+
                     //Clean exercise
                     if ($locked == false) {
                         $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'),'',ICON_SIZE_SMALL),'', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));
@@ -573,13 +559,13 @@ if (!empty($exercise_list)) {
                     }
 
                     //Visible / invisible
-                    //Check if this exercise was added in a LP                    
+                    //Check if this exercise was added in a LP
                     if ($exercise_obj->edit_exercise_in_lp == false) {
                         $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                     } else {
                         if ($row['active'] == 0 || $visibility == 0) {
-                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);                            
-                        } else { 
+                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
+                        } else {
                             // else if not active
                             $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         }
@@ -610,11 +596,11 @@ if (!empty($exercise_list)) {
                	    if ($random_number_of_question == -1) {
                	        $random_number_of_question = $rowi;
                	    }
-					if ($row['random_by_category'] > 0) {						
+					if ($row['random_by_category'] > 0) {
 						$nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
 						$number_of_questions = $nbQuestionsTotal." ";
 						$number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase") ;
-						$number_of_questions .= " - ";						
+						$number_of_questions .= " - ";
                         $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
 					} else {
                    		$random_label = ' ('.get_lang('Random').') ';
@@ -627,7 +613,7 @@ if (!empty($exercise_list)) {
                 } else {
                     $number_of_questions = $rowi;
                 }
-                
+
                 //Attempts
                 //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
 
@@ -636,9 +622,9 @@ if (!empty($exercise_list)) {
 
             } else {
                 // Student only
-                
+
                 $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
-                                
+
                 if ($visibility == 0) {
                     continue;
                 }

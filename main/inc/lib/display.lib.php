@@ -17,27 +17,27 @@
  * Code
  */
 class Display {
-    
+
     /* The main template*/
     static $global_template;
     static $preview_style = null;
-        
+
     private function __construct() {
     }
-    
+
      /**
      * Displays the page header
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null) {        
-        self::$global_template = new Template($tool_name);      
+    public static function display_header($tool_name ='', $help = null, $page_header = null) {
+        self::$global_template = new Template($tool_name);
         self::$global_template->set_help($help);
-        if (!empty(self::$preview_style)) {                        
+        if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_css_files();
             self::$global_template->set_js_files();
-            
+
         }
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
@@ -48,34 +48,34 @@ class Display {
     /**
      * Displays the reduced page header (without banner)
      */
-    public static function display_reduced_header() {        
+    public static function display_reduced_header() {
         global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
-        echo self::$global_template ->show_header_template();        
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        echo self::$global_template ->show_header_template();
     }
-    
-    public static function display_no_header() {        
+
+    public static function display_no_header() {
         global $tool_name;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
-        //echo self::$global_template->show_header_template();        
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        //echo self::$global_template->show_header_template();
     }
-    
+
     /**
      * Displays the reduced page header (without banner)
      */
-    public static function set_header() {        
+    public static function set_header() {
         global $show_learnpath;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);                     
+        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
     }
 
     /**
      * Display the page footer
      */
-    public static function display_footer() {        
-        echo self::$global_template ->show_footer_template();        
+    public static function display_footer() {
+        echo self::$global_template ->show_footer_template();
     }
-    
+
     public static function page()
     {
         return new Page();
@@ -93,7 +93,7 @@ class Display {
     public static function display_introduction_section($tool, $editor_config = null) {
         echo self::return_introduction_section($tool, $editor_config);
     }
-    
+
     public static function return_introduction_section($tool, $editor_config = null) {
         $is_allowed_to_edit = api_is_allowed_to_edit();
         $moduleId = $tool;
@@ -211,7 +211,7 @@ class Display {
         global $origin;
         $column =  0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-        $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);        
+        $table = new SortableTableFromArray($content, $column, $default_items_per_page, $name);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
@@ -284,7 +284,7 @@ class Display {
     /**
      * Displays an warning message. Use this if you want to draw attention to something
      * This can also be used for instance with the hint in the exercises
-     *     
+     *
      */
     public static function display_warning_message($message, $filter = true) {
     	echo self::return_message($message, 'warning', $filter);
@@ -309,11 +309,11 @@ class Display {
     public static function display_error_message ($message, $filter = true) {
         echo self::return_message($message, 'error', $filter);
     }
-    
+
     public static function return_message_and_translate($message, $type='normal', $filter = true) {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
-    }    
+    }
 
     /**
      * Returns a div html string with
@@ -324,7 +324,7 @@ class Display {
      */
     public static function return_message($message, $type='normal', $filter = true) {
         if ($filter) {
-        	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());        	
+        	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
             //$message = Security::remove_XSS($message);
         }
         $class = "";
@@ -386,7 +386,7 @@ class Display {
         // Return encrypted mailto hyperlink
         return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$hclickable_text.'</a>';
     }
-    
+
     /**
      * Returns an mailto icon hyperlink
      *
@@ -429,7 +429,7 @@ class Display {
         return '<a href="'.api_get_path(WEB_PATH).'index.php">'.$name.'</a>';
     }
 
-   
+
 
     /**
      * Prints an <option>-list with all letters (A-Z).
@@ -540,22 +540,22 @@ class Display {
      * @version Feb 2011
     */
     public static function return_icon($image, $alt_text = '', $additional_attributes = array(), $size = ICON_SIZE_SMALL, $show_text = true, $return_only_path = false) {
-        
+
         $code_path   = api_get_path(SYS_CODE_PATH);
         $w_code_path = api_get_path(WEB_CODE_PATH);
-        
+
         $image = trim($image);
         $theme = 'css/'.api_get_visual_theme().'/icons/';
         $icon = '';
         $size_extra = '';
-        
+
         if (isset($size)) {
-            $size = intval($size);            
+            $size = intval($size);
             $size_extra = $size.'/';
         } else {
             $size = ICON_SIZE_SMALL;
         }
-        
+
         //Checking the theme icons folder example: main/css/chamilo/icons/XXX
         if (is_file($code_path.$theme.$size_extra.$image)) {
             $icon = $w_code_path.$theme.$size_extra.$image;
@@ -564,13 +564,13 @@ class Display {
             $icon = $w_code_path.'img/icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.'img/'.$image;            
+            $icon = $w_code_path.'img/'.$image;
         }
-        $icon = api_get_cdn_path($icon); 
+        $icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;
         }
-        
+
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
             if ($show_text) {
@@ -676,7 +676,7 @@ class Display {
         }
         return self::tag('input', '', $extra_attributes);
     }
-    
+
     public static function button($name, $value, $extra_attributes = array()) {
     	if (!empty($name)) {
     		$extra_attributes['name']= $name;
@@ -700,21 +700,21 @@ class Display {
         }
         $html .= '<select name="'.$name.'" '.$default_id.' '.$extra.'>';
 
-        if ($show_blank_item) {            
+        if ($show_blank_item) {
             if (empty($blank_item_text)) {
-                $blank_item_text = get_lang('Select');                
+                $blank_item_text = get_lang('Select');
             } else {
                 $blank_item_text = Security::remove_XSS($blank_item_text);
             }
             $html .= self::tag('option', '-- '.$blank_item_text.' --', array('value'=>'-1'));
         }
-        if ($values) {            
+        if ($values) {
             foreach ($values as $key => $value) {
                 if(is_array($value) && isset($value['name'])) {
                     $value = $value['name'];
                 }
                 $html .= '<option value="'.$key.'"';
-                
+
                 if (is_array($default)) {
                     foreach($default as $item) {
                         if ($item == $key) {
@@ -727,7 +727,7 @@ class Display {
                         $html .= 'selected="selected"';
                     }
                 }
-                
+
                 $html .= '>'.$value.'</option>';
             }
         }
@@ -777,7 +777,7 @@ class Display {
         $main_div = self::tag('div',$ul.$divs, $attributes);
         return $main_div ;
     }
-    
+
     public static function tabs_only_link($header_list, $selected = null) {
          $id = uniqid();
          $i = 1;
@@ -786,12 +786,12 @@ class Display {
             $class = null;
             if ($i == $selected) {
                 $class = 'active';
-            }            
+            }
             $item =self::tag('a', $item['content'], array('id'=>$id.'-'.$i, 'href' => $item['url']));
             $lis .=self::tag('li', $item, array('class' => $class));
             $i++;
         }
-        return self::tag('ul',$lis, array('class' => 'nav nav-tabs'));        
+        return self::tag('ul',$lis, array('class' => 'nav nav-tabs'));
     }
 
     /**
@@ -814,7 +814,7 @@ class Display {
         $table .= self::tag('div','',array('id'=>$div_id.'_pager'));
         return $table;
     }
-    
+
     public static function form_row($label, $form_item) {
         $label = self::span($label, array('class' =>'control-label'));
         $form_item = self::div($form_item, array('class' =>'controls'));
@@ -852,14 +852,14 @@ class Display {
         $obj->colModel = $column_model;
         $obj->pager    = '#'.$div_id.'_pager';
 
-        
-        
+
+
         //Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = array(20, 50, 100, 500, 1000);
             //$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
         }
-        
+
         $json = '';
         if (!empty($extra_params['datatype'])) {
             $obj->datatype  = $extra_params['datatype'];
@@ -911,15 +911,15 @@ class Display {
         }
 
         $json_encode = json_encode($obj);
-        
+
         if (!empty($data)) {
             //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
         }
-        
+
         //Fixes datainit datepick
         $json_encode = str_replace('"dataInit"','dataInit', $json_encode);
-        
+
         /*$json_encode = str_replace('"dataEvents"','dataEvents', $json_encode);
         $json_encode = str_replace('"type"','type', $json_encode);
         $json_encode = str_replace('"fn"','fn', $json_encode);
@@ -929,13 +929,13 @@ class Display {
         $json_encode = str_replace('"title"','title', $json_encode);
         */
         $json_encode = str_replace('"register_second_select"','register_second_select', $json_encode);
-        
+
         $json_encode = str_replace('"fill_second_select"','fill_second_select', $json_encode);
-        
+
         $json_encode = str_replace('"date_pick"','date_pick', $json_encode);
         $json_encode = str_replace('"date_pick_today"','date_pick_today', $json_encode);
         $json_encode = str_replace('"date_pick_one_month"','date_pick_one_month', $json_encode);
-        
+
 
         //Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
@@ -996,7 +996,7 @@ class Display {
     }
 
     public static function table($headers, $rows, $attributes = array()) {
-        
+
     	if (empty($attributes)) {
     		$attributes['class'] = 'data_table';
     	}
@@ -1014,7 +1014,7 @@ class Display {
 	        $row = 1;
 	        $column = 0;
         }
-       
+
         if (!empty($rows)) {
 	        foreach($rows as $content) {
 	            $table->setCellContents($row, $column, $content);
@@ -1037,21 +1037,21 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info) {        
-        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);        
+    public static function show_notification($course_info) {
+        $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $user_id = api_get_user_id();
-        
+
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-                
-        $course_code        = Database::escape_string($course_info['code']);        
+
+        $course_code        = Database::escape_string($course_info['code']);
         $course_id          = $course_info['real_id'];
-        
+
         $course_info['id_session'] = intval($course_info['id_session']);
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id) 
-                                 WHERE  access_cours_code = '".$course_code."' AND 
-                                        access_user_id = '$user_id' AND 
+        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
+                                 WHERE  access_cours_code = '".$course_code."' AND
+                                        access_user_id = '$user_id' AND
                                         access_session_id ='".$course_info['id_session']."'";
         $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
 
@@ -1082,7 +1082,7 @@ class Display {
                             " ctt.image image, ctt.link link ".
                         " FROM $tool_edit_table tet, $course_tool_table ctt ".
                         " WHERE tet.c_id = $course_id AND
-                        		ctt.c_id = $course_id AND 
+                        		ctt.c_id = $course_id AND
                         		tet.lastedit_date > '$oldestTrackDate' ".
                         " AND ctt.name = tet.tool ".
                         " AND ctt.visibility = '1' ".
@@ -1142,7 +1142,7 @@ class Display {
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
             $lastDate = date('d/m/Y H:i', convert_sql_date($notification['lastedit_date']));
-            $type = $notification['lastedit_type'];            
+            $type = $notification['lastedit_type'];
             if (empty($course_info['id_session'])) {
                 $my_course['id_session'] = 0;
             } else {
@@ -1233,8 +1233,8 @@ class Display {
 
     /**
      * Return the five star HTML
-     * 
-     * @param  string  id of the rating ul element     
+     *
+     * @param  string  id of the rating ul element
      * @param  string  url that will be added (for jquery see hot_courses.tpl)
 	 * @param	string	point info array see function CourseManager::get_course_ranking()
 	 * @param	bool	add a div wrapper
@@ -1242,16 +1242,16 @@ class Display {
      **/
     public static function return_rating_system($id, $url, $point_info = array(), $add_div_wrapper = true) {
 		$number_of_users_who_voted =  isset($point_info['users_who_voted']) ? $point_info['users_who_voted'] : null;
-        		
+
 		$percentage =  isset($point_info['point_average']) ? $point_info['point_average'] : 0;
-		
+
 		if (!empty($percentage)) {
             $percentage = $percentage*125/100;
         }
-		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : 0;		
-		
+		$accesses =  isset($point_info['accesses']) ? $point_info['accesses'] : 0;
+
 		$star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
-		
+
         $html = '<ul id="'.$id.'" class="star-rating">
 					<li class="current-rating" style="width:'.$percentage.'px;"></li>
 					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
@@ -1260,34 +1260,34 @@ class Display {
 					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
 					<li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
 				</ul>';
-        
+
 		$labels = array();
-		
+
 		$labels[]= $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
 		$labels[]= $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
 		if (!empty($number_of_users_who_voted)) {
 			$labels[]= get_lang('Average').' '.$point_info['point_average_star'].'/5';
 		}
-		
-		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';		
-		
-		if (!$add_div_wrapper && api_is_anonymous()) {  
+
+		$labels[]= $point_info['user_vote']  ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote'). ' [?] ';
+
+		if (!$add_div_wrapper && api_is_anonymous()) {
 			$labels[]= Display::tag('span', get_lang('LoginToVote'), array('class' => 'error'));
 		}
-			
-        $html .= Display::span(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));			
+
+        $html .= Display::span(implode(' | ', $labels) , array('id' =>  'vote_label_'.$id, 'class' => 'vote_label_info'));
         $html .= ' '.Display::span(' ', array('id' =>  'vote_label2_'.$id));
-		
+
         if ($add_div_wrapper) {
 			$html = Display::div($html, array('id' => 'rating_wrapper_'.$id));
 		}
-        return $html;        
+        return $html;
     }
-    
+
     public static function return_default_table_class() {
         return 'data_table';
     }
-    
+
     public static function page_header($title, $second_title = null, $size = 'h1') {
         $title = Security::remove_XSS($title);
         if (!empty($second_title)) {
@@ -1296,37 +1296,29 @@ class Display {
         }
         return '<div class="page-header"><'.$size.'>'.$title.'</'.$size.'></div>';
     }
-    
+
     public static function page_header_and_translate($title, $second_title = null) {
         $title = get_lang($title);
         return self::page_header($title, $second_title);
     }
-    
+
      public static function page_subheader_and_translate($title, $second_title = null) {
         $title = get_lang($title);
         return self::page_subheader($title, $second_title);
     }
-    
+
     public static function page_subheader($title, $second_title = null) {
-        return self::page_header($title, $second_title, 'h2');        
+        return self::page_header($title, $second_title, 'h2');
     }
-    
+
     public static function page_subheader2($title, $second_title = null) {
         return self::page_header($title, $second_title, 'h3');
     }
-    
+
     public static function page_subheader3($title, $second_title = null) {
         return self::page_header($title, $second_title, 'h4');
     }
-    
-    public static function page_subheader2($title, $second_title = null) {
-        return self::page_header($title, $second_title, 'h3');
-    }
-    
-    public static function page_subheader3($title, $second_title = null) {
-        return self::page_header($title, $second_title, 'h4');
-    }
-    
+
     public static function description($list) {
         $html = null;
         if (!empty($list)) {
@@ -1339,25 +1331,25 @@ class Display {
         }
         return $html;
     }
-    
+
     public static function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
         $percentage = intval($percentage);
-        $div = '<div class="progress progress-striped">                                    
-                    <div class="bar" style="width: '.$percentage.'%;"></div>                                            
-                </div>';        
+        $div = '<div class="progress progress-striped">
+                    <div class="bar" style="width: '.$percentage.'%;"></div>
+                </div>';
         if ($show_percentage) {
             $div .= '<div class="progresstext">'.$percentage.'%</div>';
         } else {
             if (!empty($extra_info)) {
                 $div .= '<div class="progresstext">'.$extra_info.'</div>';
-            }                
+            }
         }
         return $div;
     }
-    
-    public static function badge($count, $type ="warning") {  
+
+    public static function badge($count, $type ="warning") {
         $class = '';
-        
+
         switch ($type) {
             case 'success':
                 $class = 'badge-success';
@@ -1373,15 +1365,15 @@ class Display {
                 break;
             case 'inverse':
                 $class = 'badge-inverse';
-                break;            
+                break;
         }
-        
-        if (!empty($count)) {         
+
+        if (!empty($count)) {
             return ' <span class="badge '.$class.'">'.$count.'</span>';
         }
         return null;
     }
-    
+
     public static function badge_group($badge_list) {
         $html = '<div class="badge-group">';
         foreach ($badge_list as $badge) {
@@ -1390,8 +1382,8 @@ class Display {
         $html .= '</div>';
         return $html;
     }
-    
-    public static function label($content, $type = null, $full_content = null) {  
+
+    public static function label($content, $type = null, $full_content = null) {
         $class = '';
         switch ($type) {
             case 'success':
@@ -1408,18 +1400,18 @@ class Display {
                 break;
             case 'inverse':
                 $class = 'label-inverse';
-                break;            
+                break;
         }
-        
+
         $html = '';
-        if (!empty($content)) {        
+        if (!empty($content)) {
             $html = '<span title="'.$full_content.'" class="label '.$class.'">';
             $html .= $content;
             $html .='</span>';
         }
-        return $html;        
-    }    
-    
+        return $html;
+    }
+
     /**
      * Return a list of actions in a div
      * @param array array(array('content' => 'Hello', 'url' => 'chamilo.org'));
@@ -1428,21 +1420,21 @@ class Display {
     public static function actions($items) {
         $html = null;
         if (!empty($items)) {
-            $html = '<div class="new_actions"><ul class="nav nav-pills">';        
+            $html = '<div class="new_actions"><ul class="nav nav-pills">';
             foreach ($items as $value) {
                 $class = null;
                 if (isset($value['active']) && $value['active']) {
                     $class = 'class ="active"';
                 }
-                $html .= "<li $class >"; 
+                $html .= "<li $class >";
                 $html .= self::url($value['content'], $value['url']);
-                $html .= '</li>'; 
-            }        
+                $html .= '</li>';
+            }
             $html .= '</ul></div>';
         }
-        return $html;        
+        return $html;
     }
-    
+
     /**
      * Prints a tooltip
      */
@@ -1452,18 +1444,18 @@ class Display {
         }
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
-    
+
     public static function generate_accordion($items) {
         $html = null;
         if (!empty($items)) {
             $id = api_get_unique_id();
             //$html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
             $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
-            
+
             $count = 1;
-            foreach ($items as $item) {                
+            foreach ($items as $item) {
                 $html .= '<div class="accordion-my-group">';
-                
+
                 $html .= '<div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
                                 '.$item['title'].'
@@ -1471,7 +1463,7 @@ class Display {
                           </div>';
                 //$html .= '<div id="collapse'.$count.'" class="accordion-body collapse in">
                 $html .= '<div id="collapse'.$count.'" class="accordion-body">';
-                
+
                 //$html .= '<div class="accordion-inner">
                 $html .= '<div class="accordion-my-inner">
                             '.$item['content'].'

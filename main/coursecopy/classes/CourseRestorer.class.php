@@ -1705,11 +1705,6 @@ class CourseRestorer
 		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		//query in student publication
-
-	/*	$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.' (c_id, id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
-		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
-		'parent_id,qualificator_id,session_id) ';
-*/
 		$sql = 'SELECT c_id, id, url, title,description,author,active,accepted,post_group_id, sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,qualificator_id,session_id
 		      FROM '.$work_table.'
 		      WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" AND active IN (0, 1) ';

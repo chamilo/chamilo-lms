@@ -294,6 +294,10 @@ abstract class Question
 		$this->question=$title;
 	}
 
+    function updateParentId($id) {
+        $this->parent_id = intval($id);
+    }
+
 	/**
 	 * changes the question description
 	 *
@@ -313,7 +317,6 @@ abstract class Question
 	function updateWeighting($weighting) {
 		$this->weighting=$weighting;
 	}
-
 
 	/**
 	 * @author - Hubert Borderiou 12-10-2011
@@ -337,6 +340,40 @@ abstract class Question
 	 */
 	function updateUncheckedMayScore($in_positive) {
 		$this->uncheckedMayScore=$in_positive;
+	}
+
+    /**
+     * Save category of a question
+     *
+	 * A question can have n categories
+	 * if category is empty, then question has no category then delete the category entry
+     *
+     * @param  - int $in_positive
+     * @author - Julio Montoya - Adding multiple cat support
+	 */
+	function saveCategories($category_list) {
+
+		if (!empty($category_list)) {
+            $this->deleteCategory();
+            $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+
+            // update or add category for a question
+            foreach ($category_list as $category_id) {
+                $category_id = intval($category_id);
+                $question_id = Database::escape_string($this->id);
+                $sql = "SELECT count(*) AS nb FROM $TBL_QUESTION_REL_CATEGORY WHERE category_id = $category_id AND question_id = $question_id AND c_id=".api_get_course_int_id();
+                $res = Database::query($sql);
+                $row = Database::fetch_array($res);
+                if ($row['nb'] > 0) {
+                    //DO nothing
+                    //$sql = "UPDATE $TBL_QUESTION_REL_CATEGORY SET category_id = $category_id WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
+                    //$res = Database::query($sql);
+                } else {
+                    $sql = "INSERT INTO $TBL_QUESTION_REL_CATEGORY (c_id, question_id, category_id) VALUES (".api_get_course_int_id().", $question_id, $category_id)";
+                    $res = Database::query($sql);
+                }
+            }
+		}
 	}
 
 	/**
@@ -377,7 +414,7 @@ abstract class Question
 		$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 		$question_id = Database::escape_string($this->id);
 	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
-	 	$res = Database::query($sql);
+	 	Database::query($sql);
 	}
 
 
@@ -1203,13 +1240,25 @@ abstract class Question
 		$form->addElement('hidden','myid', intval($_REQUEST['myid']));
 
         if (!isset($_GET['fromExercise'])) {
-            switch($answerType) {
-                case 1:	$this->question = get_lang('DefaultUniqueQuestion'); break;
-                case 2:	$this->question = get_lang('DefaultMultipleQuestion'); break;
-                case 3:	$this->question = get_lang('DefaultFillBlankQuestion'); break;
-                case 4:	$this->question = get_lang('DefaultMathingQuestion'); break;
-                case 5:	$this->question = get_lang('DefaultOpenQuestion');	break;
-                case 9:	$this->question = get_lang('DefaultMultipleQuestion'); break;
+            switch ($answerType) {
+                case 1:
+                    $this->question = get_lang('DefaultUniqueQuestion');
+                    break;
+                case 2:
+                    $this->question = get_lang('DefaultMultipleQuestion');
+                    break;
+                case 3:
+                    $this->question = get_lang('DefaultFillBlankQuestion');
+                    break;
+                case 4:
+                    $this->question = get_lang('DefaultMathingQuestion');
+                    break;
+                case 5:
+                    $this->question = get_lang('DefaultOpenQuestion');
+                    break;
+                case 9:
+                    $this->question = get_lang('DefaultMultipleQuestion');
+                    break;
             }
         }
 
@@ -1460,6 +1509,73 @@ abstract class Question
 			eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
 			eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
 			return array($img, $explanation);
+    }
+    /**
+     * Get course medias
+     * @param int course id
+     */
+    static function get_course_medias($course_id, $start = 0, $limit = 100, $sidx = "question", $sord = "ASC", $where_condition = array()) {
+        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
+        if (!empty($where_condition)) {
+            //$where_condition
+        }
+        $result = Database::select('*', $table_question,
+            array(
+                'limit' => " $start, $limit",
+                'where' => $default_where,
+                'order' => "$sidx $sord"));
+        return $result;
+    }
+
+    /**
+     * Get count course medias
+     * @param int course id
+     */
+    static function get_count_course_medias($course_id) {
+        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $result = Database::select('count(*) as count', $table_question, array('where'=>array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION))),'first');
+
+        if ($result && isset($result['count'])) {
+            return $result['count'];
+        }
+        return 0;
+    }
+
+    static function prepare_course_media_select($course_id) {
+        $medias = self::get_course_medias($course_id);
+        $media_list = array();
+        $media_list[0] = get_lang('NoMedia');
+
+        if (!empty($medias)) {
+            foreach($medias as $media) {
+                $media_list[$media['id']] = empty($media['question']) ? get_lang('Untitled') : $media['question'];
+            }
+        }
+        return $media_list;
+    }
+
+    static function get_default_levels() {
+        $select_level = array (
+                1=>1,
+                2=>2,
+                3=>3,
+                4=>4,
+                5=>5
+            );
+        return $select_level;
+    }
+
+    function show_media_content() {
+        $html = null;
+        if ($this->parent_id != 0) {
+            $parent_question = Question::read($this->parent_id);
+            $html = $parent_question->show_media_content();
+        } else {
+            $html .= Display::page_subheader($this->selectTitle());
+            $html .= $this->selectDescription();
+        }
+        return $html;
     }
 }
 endif;

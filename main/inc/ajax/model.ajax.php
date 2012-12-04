@@ -27,6 +27,10 @@ if (strpos(strtolower($sidx), 'desc') !== false) {
     $sord = 'desc';
 }
 
+if (!in_array($sord, array('asc','desc'))) {
+    $sord = 'desc';
+}
+
 if (!in_array($action, array(
         'get_exercise_results',
         'get_hotpotatoes_exercise_results',

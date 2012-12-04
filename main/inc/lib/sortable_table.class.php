@@ -96,6 +96,9 @@ class SortableTable extends HTML_Table {
      * Activates the odd even rows
      * **/
     public $odd_even_rows_enabled = true;
+    public $use_jqgrid = false;
+    public $table_id = null;
+    public $headers = array();
 
 	/**
 	 * Create a new SortableTable

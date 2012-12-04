@@ -541,24 +541,17 @@ if ($question_count != 0) {
 	                } else {
 	                	$sql_exe_result = ", exe_result = 0";
 	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
-	                }
-	                /*
-	                //Clean incomplete - @todo why setting to blank the status?
-	                $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$learnpath_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
-
-	                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }
-	                Database::query($update_query);*/
+                    }
 	            }
 	            if ($objExercise->review_answers) {
 	            	header('Location: exercise_reminder.php?'.$params);
 	            	exit;
 	            } else {
-	            	header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                    header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
 	            }
 	        }
 	    } else {
 	        if ($debug) { error_log('Redirecting to exercise_submit.php'); }
-	        //header("Location: exercise_submit.php?exerciseId=$exerciseId");
 	        exit;
 	    }
 	}
@@ -745,7 +738,7 @@ if (!empty($error)) {
     $onsubmit = '';
     $i = 0;
 
-    if (!strcmp($questionList[0], '') === 0) {
+    if (!empty($questionList)) {
         foreach ($questionList as $questionId) {
             $i++;
             $objQuestionTmp = Question::read($questionId);
@@ -774,7 +767,7 @@ if (!empty($error)) {
 
     echo '<script>
 
-    		$(function() {
+            $(function() {
     			//$(".exercise_save_now_button").hide();
     		    $(".main_question").mouseover(function() {
     		    	//$(this).find(".exercise_save_now_button").show();
@@ -800,7 +793,24 @@ if (!empty($error)) {
                 save_now(question_id_to_save, url);
             }
 
-           function save_now(question_id, url_extra) {
+            function save_question_list(question_list) {
+                $.each(question_list, function(key, question_id) {
+                    save_now(question_id, null, false);
+                });
+
+                var url = "";
+                if ('.$reminder.' == 1 ) {
+                    url = "exercise_reminder.php?'.$params.'&num='.$current_question.'";
+                } else if ('.$reminder.' == 2 ) {
+                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                } else {
+                    url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
+                }
+                //$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+                window.location = url;
+            }
+
+            function save_now(question_id, url_extra) {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
 
@@ -855,6 +865,9 @@ if (!empty($error)) {
                                 if (url_extra) {
                                     url = url_extra;
                                 }
+
+                                $("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('save.png', get_lang('Saved'), array(), ICON_SIZE_SMALL)).'");
+
 								window.location = url;
                         	}
                         },
@@ -941,10 +954,6 @@ if (!empty($error)) {
 
     if (isset($exe_id)) {
         $attempt_list = get_all_exercise_event_by_exe_id($exe_id);
-    }
-
-    if (!empty($attempt_list) && $current_question == 1) {
-        //Display::display_normal_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
     }
 
     $remind_list  = array();

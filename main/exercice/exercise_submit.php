@@ -457,7 +457,7 @@ if ($formSent && isset($_POST)) {
                         }
                     }
                 }
-                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             } else {
                 //Time control is only enabled for ONE PER PAGE
@@ -479,13 +479,12 @@ if ($formSent && isset($_POST)) {
                     Database::query($update_query);*/
                 }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
-                //header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
-                header("Location: exercise_result.php?exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             }
         } else {
             if ($debug) { error_log('10. Redirecting to exercise_submit.php'); }
-            header("Location: exercise_submit.php?exerciseId=$exerciseId&origin=$origin");
+            header("Location: exercise_submit.php?".api_get_cidreq()."&exerciseId=$exerciseId&origin=$origin");
             exit;
         }
     }
@@ -835,6 +834,7 @@ if (!empty($error)) {
           		$("#save_for_now_"+question_id).html("'.addslashes(Display::return_icon('loading1.gif')).'");
                     $.ajax({
                         type:"post",
+                        async: false,
                         url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                         data: "'.$params.'&type=simple&question_id="+question_id+"&"+my_choice+"&"+hotspot+"&"+remind_list,
                         success: function(return_value) {
@@ -899,6 +899,7 @@ if (!empty($error)) {
 
                 $.ajax({
                     type:"post",
+                    async: false,
                     url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?a=save_exercise_by_now",
                     data: "'.$params.'&type=all&"+my_choice+"&"+hotspot+"&"+free_answers+"&"+remind_list,
                     success: function(return_value) {

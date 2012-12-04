@@ -61,7 +61,13 @@ if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
-	api_not_allowed();
+	api_not_allowed(true);
+}
+
+if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {
+    if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
+        api_not_allowed(true);
+    }
 }
 
 $is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
@@ -71,7 +77,7 @@ $track_exercise_info = get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $exercise_id        = $track_exercise_info['id'];
@@ -100,7 +106,7 @@ if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id,
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed();
+    	api_not_allowed(true);
     }
 }
 
@@ -701,7 +707,7 @@ if ($origin != 'learnpath') {
 		echo '<script type="text/javascript">'.$href.'</script>';
 
 		//Record the results in the learning path, using the SCORM interface (API)
-		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting'); </script>";
+		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
 		echo '</body></html>';
 	} else {
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));

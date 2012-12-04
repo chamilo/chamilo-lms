@@ -552,7 +552,7 @@ function _api_get_timezone() {
     if ($use_users_timezone == 'true') {
         // Get the timezone based on user preference, if it exists
         $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
-        if ($timezone_user['timezone'] != null) {
+        if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];
         }
     }
@@ -603,10 +603,11 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
  *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  */
-function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null) {
+function api_get_local_time($time = null, $to_timezone = null, $from_timezone = null, $return_null_if_invalid_date = false) {
     if (!DATE_TIME_INSTALLED) {
         // This occurs when PHP < 5.2
-        if (is_null($time)) {
+        if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+
             $time = time();
         }
         if (is_numeric($time)) {
@@ -624,7 +625,10 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
         $to_timezone = _api_get_timezone();
     }
     // If time is a timestamp, convert it to a string
-    if (is_null($time)) {
+    if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
+        if ($return_null_if_invalid_date) {
+            return null;
+        }
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s');
     }

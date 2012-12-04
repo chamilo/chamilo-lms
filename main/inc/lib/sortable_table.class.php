@@ -91,12 +91,11 @@ class SortableTable extends HTML_Table {
 	 * Array with names of the other tables defined on the same page of this
 	 * table
 	 */
-	public $other_tables;    
-    /** 
-     * Activates the odd even rows  
+	public $other_tables;
+    /**
+     * Activates the odd even rows
      * **/
     public $odd_even_rows_enabled = true;
-
 
 	/**
 	 * Create a new SortableTable
@@ -112,8 +111,13 @@ class SortableTable extends HTML_Table {
 	 * @param string $default_order_direction The default order direction;
 	 * either the constant 'ASC' or 'DESC'
 	 */
-	public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC') {
-		parent :: __construct (array ('class' => 'data_table'));
+	public function __construct($table_name = 'table', $get_total_number_function = null, $get_data_function = null, $default_column = 1, $default_items_per_page = 20, $default_order_direction = 'ASC', $table_id = null) {
+        if (empty($table_id)) {
+            $table_id = $table_name.uniqid();
+        }
+        $this->table_id = $table_id;
+
+		parent :: __construct (array ('class' => 'data_table', 'id' => $table_id));
 		$this->table_name = $table_name;
 		$this->additional_parameters = array ();
 		$this->param_prefix = $table_name.'_';
@@ -122,7 +126,7 @@ class SortableTable extends HTML_Table {
 		$this->page_nr = isset ($_GET[$this->param_prefix.'page_nr']) 	  ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
 		$this->column  = isset ($_SESSION[$this->param_prefix.'column'])  ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
 		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
-		
+
 		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
 
 
@@ -208,7 +212,7 @@ class SortableTable extends HTML_Table {
 		}
 		return $this->pager;
 	}
-	
+
 	public function display() {
 		echo $this->return_table();
 	}
@@ -219,7 +223,7 @@ class SortableTable extends HTML_Table {
 	public function return_table() {
 		$empty_table = false;
 		$content = $this->get_table_html();
-		
+
 		if ($this->get_total_number_of_items() == 0) {
 			$cols = $this->getColCount();
 			$this->setCellAttributes(1, 0, 'style="font-style: italic;text-align:center;" colspan='.$cols);
@@ -232,9 +236,9 @@ class SortableTable extends HTML_Table {
             $table_id = 'form_'.$this->table_name.'_id';
 			$form  = $this->get_page_select_form();
 			$nav   = $this->get_navigation_html();
-			
-			//Only show pagination info when there are items to paginate	
-	
+
+			//Only show pagination info when there are items to paginate
+
             if ($this->get_total_number_of_items() > $this->default_items_per_page) {
     			$html  = '<table class="data_table_pagination">';
     			$html .= '<tr>';
@@ -250,51 +254,51 @@ class SortableTable extends HTML_Table {
     			$html .= '</tr>';
     			$html .= '</table>';
             }
-			
-			if (count($this->form_actions) > 0) {			
+
+			if (count($this->form_actions) > 0) {
 				$params = $this->get_sortable_table_param_string().'&amp;'.$this->get_additional_url_paramstring();
 				$html .= '<form id ="'.$table_id.'" class="form-search" method="post" action="'.api_get_self().'?'.$params.'" name="form_'.$this->table_name.'">';
 			}
 		}
-		
+
 		$html .= $content;
-		
-		if (!$empty_table) {  
+
+		if (!$empty_table) {
             if (!empty($this->additional_parameters)) {
                 foreach($this->additional_parameters as $key => $value) {
-                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';        
+                    $html .= '<input type="hidden" name ="'.Security::remove_XSS($key).'" value ="'.Security::remove_XSS($value).'" />';
                 }
             }
             $html .= '<input type="hidden" name="action">';
 			$html .= '<table style="width:100%;">';
 			$html .= '<tr>';
 			$html .= '<td>';
-            
+
 			if (count($this->form_actions) > 0) {
-                
-				$html .= '<div class="btn-toolbar">';         
+
+				$html .= '<div class="btn-toolbar">';
                     $html .= '<div class="btn-group">';
                     $html .= '<a class="btn" href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
                     $html .= '<a class="btn" href="?'.$params.'" onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
-                    $html .= '</div>';                
+                    $html .= '</div>';
                     $html .= '<div class="btn-group">
-                                <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>                    
+                                <button class="btn" onclick="javascript:return false;">'.get_lang('Actions').'</button>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>';
-                    $html .= '<ul class="dropdown-menu">';				
-                    foreach ($this->form_actions as $action => & $label) {					
+                    $html .= '<ul class="dropdown-menu">';
+                    foreach ($this->form_actions as $action => & $label) {
                         $html .= '<li><a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$table_id.'\');">'.$label.'</a></li>';
                     }
-                    $html .= '</ul>';				
-                    $html .= '</div>';//btn-group                
+                    $html .= '</ul>';
+                    $html .= '</div>';//btn-group
                 $html .= '</div>'; //toolbar
 			} else {
 				$html .= $form;
 			}
-            
+
 			$html .= '</td>';
-			
+
 			if ($this->get_total_number_of_items() > $this->default_items_per_page) {
     			$html .= '<td style="text-align:right;">';
     			$html .= $nav;
@@ -303,7 +307,7 @@ class SortableTable extends HTML_Table {
     			$html .= '<td> ';
     			$html .= '</td>';
             }
-			
+
 			$html .= '</tr>';
 			$html .= '</table>';
 			if (count($this->form_actions) > 0) {
@@ -348,16 +352,16 @@ class SortableTable extends HTML_Table {
 			</style>';
 
 			// @todo  This also must be moved
-			
+
 			// Show only navigations if there are more than 1 page
 			$my_pager = $this->get_pager();
-			
+
 			$html .= '<div class="main-grid">';
-			
-			if ($my_pager->numPages() > 1) {				
+
+			if ($my_pager->numPages() > 1) {
 				$html .= '<div class="sub-header">';
 						$html .= '<div class="grid_selectbox">'.$form.'</div>';
-						$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';				
+						$html .= '<div class="grid_title">'.$this->get_table_title().'</div>';
 						$html .= '<div class="grid_nav">'.$nav.'</div>';
 				$html .= '</div>';
 			}
@@ -386,12 +390,12 @@ class SortableTable extends HTML_Table {
 			}
 		}
 		// Getting the items of the table
-		$items = $this->get_clean_html(false);	//no sort 
-		
+		$items = $this->get_clean_html(false);	//no sort
+
 		// Generation of style classes must be improved. Maybe we need a a table name to create style on the fly:
 		// i.e: .whoisonline_table_grid_container instead of  .grid_container
 		// where whoisonline is the table's name like drupal's template engine
-		
+
 		$html .= '<div class="grid_container">';
 		if (is_array($items) && count($items) > 0) {
 			foreach ($items as & $row) {
@@ -402,13 +406,13 @@ class SortableTable extends HTML_Table {
 					$i++;
 				}
 				$html .= '</div>';
-			}			
+			}
 		}
 		$html .= '</div>'; //close grid_container
-		
+
 		$html .= '</div>'; //close main grid
-		
-	
+
+
 		$html .= '<div class="clear"></div>';
 		/*
 		if (!$empty_table) {
@@ -460,7 +464,7 @@ class SortableTable extends HTML_Table {
 			$message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
 			$this->setCellContents(1, 0, $message_empty);
 			$empty_table = true;
-		}		
+		}
 		$html = '';
 		if (!$empty_table) {
 			// If we show the pagination
@@ -505,10 +509,10 @@ class SortableTable extends HTML_Table {
 		}
 
 		if ($hide_navigation) {
-			$items = $this->table_data; // This is a faster way to get what we want			            
-		} else {		    
-			// The normal way			
-			$items = $this->get_clean_html($sort_data); // Getting the items of the table						
+			$items = $this->table_data; // This is a faster way to get what we want
+		} else {
+			// The normal way
+			$items = $this->get_clean_html($sort_data); // Getting the items of the table
 		}
 
 		// Generation of style classes must be improved. Maybe we need a a table name to create style on the fly:
@@ -520,19 +524,19 @@ class SortableTable extends HTML_Table {
 		} else {
 			$filter = $visibility_options !== false;
 		}
-		
+
 		$item_css_class = $item_css_style = $grid_css_class = $grid_css_style = '';
 		if (!empty($grid_class)) {
 		    $grid_css_class = $grid_class['main']['class'];
 		    $item_css_class = $grid_class['item']['class'];
 
 		    $grid_css_style = isset($grid_class['main']['style']) ? $grid_class['main']['style'] : null;
-            $item_css_style = isset($grid_class['item']['style']) ? $grid_class['item']['style'] : null;		    
+            $item_css_style = isset($grid_class['item']['style']) ? $grid_class['item']['style'] : null;
 		}
-		
-		$div = '';		
+
+		$div = '';
 		if (is_array($items) && count($items) > 0) {
-			foreach ($items as & $row) {				
+			foreach ($items as & $row) {
 				$i = 0;
 				$rows = '';
 				foreach ($row as & $element) {
@@ -541,10 +545,10 @@ class SortableTable extends HTML_Table {
 					}
 					$i++;
 				}
-				$div .= Display::div($rows, array('class'=>$item_css_class.' '.$this->table_name.'_grid_item', 'style' => $item_css_style));				
+				$div .= Display::div($rows, array('class'=>$item_css_class.' '.$this->table_name.'_grid_item', 'style' => $item_css_style));
 			}
-		}	
-		
+		}
+
 		$html .= Display::div($div, array('class'=>$grid_css_class.' '.$this->table_name.'_grid_container', 'style' => $grid_css_style));
 		$html .= '<div class="clear"></div>';
 		return $html;
@@ -557,7 +561,7 @@ class SortableTable extends HTML_Table {
 	public function get_navigation_html () {
 		$pager          = $this->get_pager();
 		$pager_links    = $pager->getLinks();
-        
+
 		$nav            = $pager_links['first'].' '.$pager_links['back'];
 		$nav            .= ' '.$pager->getCurrentPageId().' / '.$pager->numPages().' ';
 		$nav            .= $pager_links['next'].' '.$pager_links['last'];
@@ -568,16 +572,16 @@ class SortableTable extends HTML_Table {
 	 * Get the HTML-code with the data-table.
 	 */
 	public function get_table_html() {
-		$pager    = $this->get_pager();		
+		$pager    = $this->get_pager();
 		$offset   = $pager->getOffsetByPageId();
 		$from     = $offset[0] - 1;
-        
+
 		$table_data = $this->get_table_data($from);
-        
+
 		if (is_array($table_data)) {
             $count = 1;
 			foreach ($table_data as & $row) {
-				$row = $this->filter_data($row);                                
+				$row = $this->filter_data($row);
 				$this->addRow($row);
                 if (isset($row['child_of'])) {
                     $this->setRowAttributes($count, array('class' => 'hidden hidden_'.$row['child_of']), true);
@@ -585,11 +589,11 @@ class SortableTable extends HTML_Table {
                 $count++;
 			}
 		}
-        
+
         if ($this->odd_even_rows_enabled == true) {
             $this->altRowAttributes(0, array ('class' => 'row_odd'), array ('class' => 'row_even'), true);
         }
-		
+
 		foreach ($this->th_attributes as $column => $attributes) {
 			$this->setCellAttributes(0, $column, $attributes);
 		}
@@ -605,12 +609,12 @@ class SortableTable extends HTML_Table {
 	 * @return array table row items
 	 */
 	public function get_clean_html($sort = true) {
-		$pager    = $this->get_pager();		
+		$pager    = $this->get_pager();
 		$offset   = $pager->getOffsetByPageId();
-		$from     = $offset[0] - 1; 
-		        
-		$table_data = $this->get_table_data($from, null, null, null, $sort);	
-		
+		$from     = $offset[0] - 1;
+
+		$table_data = $this->get_table_data($from, null, null, null, $sort);
+
 		$new_table_data = array();
 		if (is_array($table_data)) {
 			foreach ($table_data as $index => & $row) {
@@ -626,7 +630,7 @@ class SortableTable extends HTML_Table {
 	 * should contain.
 	 */
 	public function get_page_select_form () {
-		$total_number_of_items = $this->get_total_number_of_items();		
+		$total_number_of_items = $this->get_total_number_of_items();
 		if ($total_number_of_items <= $this->default_items_per_page) {
 			return '';
 		}
@@ -634,11 +638,11 @@ class SortableTable extends HTML_Table {
 		$param[$this->param_prefix.'direction'] = $this->direction;
 		$param[$this->param_prefix.'page_nr'] = $this->page_nr;
 		$param[$this->param_prefix.'column'] = $this->column;
-		
+
 		if (is_array($this->additional_parameters)) {
 			$param = array_merge($param, $this->additional_parameters);
 		}
-		
+
 		foreach ($param as $key => & $value) {
 			$result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
 		}
@@ -868,7 +872,7 @@ class SortableTable extends HTML_Table {
 	 * or DESC)
 	 */
 	public function get_table_data ($from = null, $per_page = null, $column = null, $direction = null, $sort = null) {
-		if (!is_null($this->get_data_function)) {			
+		if (!is_null($this->get_data_function)) {
 			return call_user_func($this->get_data_function, $from, $this->per_page, $this->column, $this->direction);
 		}
 		return array ();
@@ -900,7 +904,7 @@ class SortableTableFromArray extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {	    
+	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {
 		if ($sort) {
 			$content = TableSort :: sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
 		} else {
@@ -944,7 +948,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * The array containing all data for this table
 	 */
 	private $table_data;
-	
+
 	private $doc_filter;
 
 	/**
@@ -955,7 +959,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * @param int $tablename Name of the table
 	 * @param array $column_show An array with binary values 1: we show the column 2: we don't show it
 	 * @param array $column_order An array of integers that let us decide how the columns are going to be sort.
-	 * @param bool special modification to fix the document name order 
+	 * @param bool special modification to fix the document name order
 	 */
 	public function __construct ($table_data, $default_column = 1, $default_items_per_page = 20, $tablename = 'tablename', $column_show = null, $column_order = null, $direction = 'ASC', $doc_filter = false) {
 		$this->column_show  = $column_show;
@@ -969,7 +973,7 @@ class SortableTableFromArrayConfig extends SortableTable {
 	 * Get table data to show on current page
 	 * @see SortableTable#get_table_data
 	 */
-	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {	    
+	public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = true) {
 		$content = TableSort :: sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC, $this->column_show, $this->column_order, SORT_REGULAR, $this->doc_filter);
 		return array_slice($content, $from, $this->per_page);
 	}

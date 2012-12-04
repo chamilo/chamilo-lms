@@ -28,6 +28,7 @@ define('MULTIPLE_ANSWER_TRUE_FALSE',                11);
 define('MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE',    12);
 define('ORAL_EXPRESSION',                           13);
 define('GLOBAL_MULTIPLE_ANSWER',                    14);
+define('MEDIA_QUESTION',                            15);
 
 //Some alias used in the QTI exports
 define('MCUA',				1);
@@ -55,6 +56,8 @@ abstract class Question
 	public $level;
 	public $picture;
 	public $exerciseList;  // array with the list of exercises which this question is in
+    public $category_list;
+    public $parent_id;
 	public $category;
 	private $isContent;
     public $course;
@@ -75,7 +78,7 @@ abstract class Question
                                 MULTIPLE_ANSWER_TRUE_FALSE =>   array('multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'),
                                 MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE =>   array('multiple_answer_combination_true_false.class.php', 'MultipleAnswerCombinationTrueFalse'),
                                 GLOBAL_MULTIPLE_ANSWER =>		array('global_multiple_answer.class.php' , 'GlobalMultipleAnswer'),
-
+                                //MEDIA_QUESTION =>               array('media_question.class.php' , 'MediaQuestion')
 							);
 
 	/**
@@ -95,6 +98,8 @@ abstract class Question
         $this->extra=''; // This variable is used when loading an exercise like an scenario with an special hotspot: final_overlap, final_missing, final_excess
 		$this->exerciseList=array();
 		$this->course = api_get_course_info();
+        $this->category_list = array();
+        $this->parent_id = 0;
 	}
 
 	public function getIsContent() {
@@ -971,7 +976,7 @@ abstract class Question
                     }
                 }
             }
-            
+
 			$sql = "DELETE FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."'";
 			Database::query($sql);
 

@@ -248,8 +248,7 @@ $htmlHeadXtra[] = "
 	function confirm_your_choice() {
 		return confirm('$confirmYourChoice');
 	}
-</script>
-";
+</script>";
 
 Display::display_header($nameTools,'Exercise');
 

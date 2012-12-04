@@ -36,8 +36,6 @@ define('TF',				1);
 define('MCMA',				2);
 define('FIB',				3);
 
-if (!class_exists('Category')) include_once("testcategory.class.php");
-
 /**
 	QUESTION CLASS
  *
@@ -1005,8 +1003,10 @@ abstract class Question
             if (Database::num_rows($res)>0) {
                 while ($row = Database::fetch_array($res)) {
                     if (!empty($row['question_order'])) {
-                        $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE c_id = $course_id AND exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
-                        $res = Database::query($sql);
+                        $sql = "UPDATE $TBL_EXERCICE_QUESTION
+                                SET question_order = question_order-1
+                                WHERE c_id = $course_id AND exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
+                        Database::query($sql);
                     }
                 }
             }
@@ -1150,8 +1150,7 @@ abstract class Question
 		echo '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
-			function FCKeditor_OnComplete( editorInstance )
-			{
+			function FCKeditor_OnComplete( editorInstance ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
@@ -1163,8 +1162,7 @@ abstract class Question
 			      }
 			}
 
-			function show_media()
-			{
+			function show_media(){
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';

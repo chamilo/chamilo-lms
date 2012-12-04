@@ -201,6 +201,7 @@ if ($objExercise->selectAttempts() > 0) {
 			}
 		} else {
 			$attempt_html .= Display :: return_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), 'warning', false);			
+			//Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttemptsAdmin'), $exercise_title, $objExercise->selectAttempts()), false);
 		}
 
 		if ($origin == 'learnpath') {
@@ -266,7 +267,7 @@ if (!empty($exercise_stat_info['questions_to_check'])) {
 	$my_remind_list = array_filter($my_remind_list);
 }
 
-$params = 'exe_id='.$exe_id.'&exerciseId='.$exerciseId.'&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_item_view_id='.$learnpath_item_view_id;
+$params = "exe_id=$exe_id&exerciseId=$exerciseId&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id&".api_get_cidreq();
 if ($debug) { error_log("6.1 params: ->  $params"); };
 
 if ($reminder == 2 && empty($my_remind_list)) {
@@ -529,6 +530,8 @@ if ($question_count != 0) {
 	                    exit;
 	                }
 	            }	           
+	            //header("Location: exercise_result.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+	            //exit;
 	        } else {
 	            //Time control is only enabled for ONE PER PAGE
 	            if (!empty($exe_id) && is_numeric($exe_id)) {
@@ -542,6 +545,12 @@ if ($question_count != 0) {
 	                	$sql_exe_result = ", exe_result = 0";
 	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
 	                }	   
+	                /*
+	                //Clean incomplete - @todo why setting to blank the status?
+	                $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$learnpath_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
+
+	                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }
+	                Database::query($update_query);*/
 	            }
 	            if ($objExercise->review_answers) {
 	            	header('Location: exercise_reminder.php?'.$params);
@@ -594,7 +603,6 @@ $show_quiz_edition = $objExercise->added_in_lp();
 // I'm in a preview mode
 if (api_is_course_admin() && $origin != 'learnpath') {
     echo '<div class="actions">';
-    //echo '<a href="exercice.php?show=test&id_session='.api_get_session_id().'">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
     if ($show_quiz_edition == false) {
     	echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">'.Display :: return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {

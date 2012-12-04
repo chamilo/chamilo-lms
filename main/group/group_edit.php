@@ -108,6 +108,14 @@ function check_group_members($value) {
 
 /*	MAIN CODE */
 
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {
+    $("#max_member").on("focus", function() {
+        $("#max_member_selected").attr("checked", true);
+    });
+});
+ </script>';
+
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 
@@ -191,8 +199,8 @@ $form->addFormRule('check_group_members');
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array();
-$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
-$group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1'));
+$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
+$group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
 $group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');

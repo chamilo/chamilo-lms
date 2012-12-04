@@ -1932,7 +1932,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     if (!empty($session_id)) {
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
+        //1. Getting session information
         $sql = "SELECT id, visibility, access_start_date, access_end_date, coach_access_start_date, coach_access_end_date
                 FROM $tbl_session
                 WHERE id = $session_id ";
@@ -1942,8 +1942,9 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         if (Database::num_rows($result) > 0 ) {
             $row = Database::fetch_array($result, 'ASSOC');
             $visibility = $original_visibility = $row['visibility'];
+            //2. Setting visibility based in access_start_date and access_end_date
 
-            //I don't care the field visibility
+            //I don't care the field visibility because there are not limit dates
             if ($row['access_start_date'] == '0000-00-00 00:00:00' && $row['access_end_date'] == '0000-00-00 00:00:00') {
                 return SessionManager::DEFAULT_VISIBILITY;
             } else {
@@ -1974,11 +1975,10 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                 }
             }
 
-            //If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values
+            //3. If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values
             $is_coach = api_is_coach($session_id, $course_code);
 
             if ($is_coach) {
-
                 //Test end date
                 if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' &&
                     isset($row['coach_access_end_date']) && !empty($row['coach_access_end_date']) && $row['coach_access_end_date'] != '0000-00-00 00:00:00') {
@@ -2002,7 +2002,6 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
             } else {
-
                 //Student - check the moved_to variable
                 $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
                 if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {

@@ -443,22 +443,8 @@ class CourseBuilder {
                 $doc = Database::fetch_object($res);
                 $obj->sound = $doc->id;
             }
-            $quiz = new Quiz(   $obj->id,
-                                $obj->title,
-                                $obj->description,
-                                $obj->random,
-                                $obj->type,
-                                $obj->active,
-                                $obj->sound,
-                                $obj->max_attempt,
-                                $obj->results_disabled,
-                                $obj->access_condition,
-                                $obj->start_time,
-                                $obj->end_time,
-                                $obj->feedback_type,
-                                $obj->random_answers,
-                                $obj->expired_time,
-                                $obj->session_id);
+            $quiz = new Quiz($obj);
+
             $sql = 'SELECT * FROM '.$table_rel.' WHERE c_id = '.$course_id.' AND exercice_id = '.$obj->id;
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
@@ -533,7 +519,11 @@ class CourseBuilder {
         }
 
         if ($build_orphan_questions) {
-            $this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
+            $obj = array(
+                'id' => -1,
+                'title' => get_lang('OrphanQuestions', '')
+            );
+            $this->course->add_resource(new Quiz((object)$obj));
         }
     }
 

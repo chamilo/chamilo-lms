@@ -1092,6 +1092,8 @@ class CourseRestorer
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
+                $quiz = $quiz->obj;
+
 				$doc = '';
 				if (strlen($quiz->media) > 0) {
 					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored()) {
@@ -1125,24 +1127,28 @@ class CourseRestorer
 						$quiz->end_time   = null;
 					}
 
-
 					// Normal tests are stored in the database.
 					$sql = "INSERT INTO ".$table_qui." SET
 						c_id = ".$this->destination_course_id." ,
 						title = '".self::DBUTF8escapestring($quiz->title).
 						"', description = '".self::DBUTF8escapestring($quiz->description).
-						"', type = '".$quiz->quiz_type.
+						"', type = '".$quiz->type.
 						"', random = '".$quiz->random.
 						"', active = '".$quiz->active.
 						"', sound = '".self::DBUTF8escapestring($doc).
-						"', max_attempt = ".(int)$quiz->attempts.
+						"', max_attempt = ".(int)$quiz->max_attempt.
 						",  results_disabled = ".(int)$quiz->results_disabled.
 						",  access_condition = '".$quiz->access_condition.
 						"', start_time = '".$quiz->start_time.
+                        "', pass_percentage = '".$quiz->pass_percentage.
 						"', end_time = '".$quiz->end_time.
 						"', feedback_type = ".(int)$quiz->feedback_type.
 						", random_answers = ".(int)$quiz->random_answers.
-						", expired_time = ".(int)$quiz->expired_time.
+                        ", random_by_category = ".$quiz->random_by_category.
+                        ", review_answers = ".$quiz->review_answers.
+                        ", propagate_neg = ".$quiz->propagate_neg.
+                        ", text_when_finished = '".$quiz->text_when_finished."',
+						 expired_time = ".(int)$quiz->expired_time.
 						$condition_session;
 					Database::query($sql);
 					$new_id = Database::insert_id();
@@ -1151,7 +1157,7 @@ class CourseRestorer
 					$new_id = -1;
 				}
 
-				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
+				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
 				$order = 0;
 
 				foreach ($quiz->question_ids as $index => $question_id) {

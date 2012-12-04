@@ -210,10 +210,12 @@ class CourseSelectForm
 						echo '</div><br />';
 
 						foreach ($resources as $id => $resource) {
-                            echo '<label class="checkbox">';
-							echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
-							$resource->show();
-							echo '</label>';
+                            if ($resource) {
+                                echo '<label class="checkbox">';
+                                echo '<input type="checkbox" name="resource['.$type.']['.$id.']"  id="resource['.$type.']['.$id.']" />';
+                                $resource->show();
+                                echo '</label>';
+                            }
 						}
 						echo '</blockquote>';
 						echo '</div>';
@@ -254,7 +256,6 @@ class CourseSelectForm
                         echo '</li>';
                         if (isset($forum_topics[$forum_id])) {
                             $my_forum_topics = $forum_topics[$forum_id];
-
                             if (!empty($my_forum_topics)) {
                                 echo '<ul>';
                                 foreach ($my_forum_topics as $topic_id => $topic) {
@@ -491,6 +492,7 @@ class CourseSelectForm
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
 									foreach($course->resources[RESOURCE_QUIZ] as $qid => $quiz) {
+                                        $quiz = $quiz->obj;
 										if ($quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
 										}
@@ -568,7 +570,7 @@ class CourseSelectForm
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
-		foreach($list_course as $course){
+		foreach ($list_course as $course){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					echo '<img id="img_'.$course->code.'" src="../img/1.gif" onclick="javascript:exp('."'$course->code'".');" />';
@@ -582,11 +584,10 @@ class CourseSelectForm
 					echo '</div><br />';
 
 					foreach ($resources as $id => $resource) {
-						echo ' <label class="checkbox" for="resource['.$course->code.']['.$id.']">';
+						echo '<label class="checkbox" for="resource['.$course->code.']['.$id.']">';
                         echo '<input type="checkbox" name="resource['.$course->code.']['.$id.']" id="resource['.$course->code.']['.$id.']"/>';
 						$resource->show();
 						echo '</label>';
-						echo "\n";
 					}
 					echo '</blockquote>';
 					echo '</div>';

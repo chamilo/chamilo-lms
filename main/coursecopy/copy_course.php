@@ -59,7 +59,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 } elseif (isset ($_POST['copy_option']) && $_POST['copy_option'] == 'select_items') {
 	$cb = new CourseBuilder();
 	$course = $cb->build();
-
+    
     $hidden_fields = array();
 	$hidden_fields['same_file_name_option'] = $_POST['same_file_name_option'];
 	$hidden_fields['destination_course']    = $_POST['destination_course'];

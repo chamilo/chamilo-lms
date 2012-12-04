@@ -204,7 +204,7 @@ if (($action == 'deletereceivedfile' OR $action == 'deletesentfile') AND isset($
 	if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 		api_not_allowed();
 	}
-	$dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+	$dropboxfile = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
 	if ($action == 'deletereceivedfile') {
 		$dropboxfile->deleteReceivedWork($_GET['id']);
 		$message = get_lang('ReceivedFileDeleted');
@@ -309,9 +309,7 @@ if ($action != 'add') {
 		}
 	}
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -367,9 +365,7 @@ if ($action != 'add') {
 
 	/*	RECEIVED FILES */
 
-	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('ReceivedFiles').'</h3>';
-
+	if ($_GET['view'] == 'received' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_received_category']) AND $_GET['view_received_category'] != '') {
 			$view_dropbox_category_received = $_GET['view_received_category'];
@@ -378,7 +374,7 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor); // note: are the $is_courseAdmin and $is_courseTutor parameters needed????
 
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
@@ -431,7 +427,8 @@ if ($action != 'add') {
 		// The content of the sortable table = the received files
 		foreach ($dropbox_person -> receivedWork as $dropbox_file) {
 			$dropbox_file_data = array();
-			if ($view_dropbox_category_received == $dropbox_file->category) { // we only display the files that are in the category that we are in.
+			if ($view_dropbox_category_received == $dropbox_file->category) {
+                // we only display the files that are in the category that we are in.
 				$dropbox_file_data[] = $dropbox_file->id;
 
 				if (!is_array($_SESSION['_seen'][$_course['id']][TOOL_DROPBOX])) {
@@ -458,9 +455,9 @@ if ($action != 'add') {
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('move.png', get_lang('Move'),'',ICON_SIZE_SMALL).'</a>
-									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-				//$action_icons='	<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=movereceived&amp;move_id='.$dropbox_file->id.'">'.Display::return_icon('deplacer.gif',get_lang('Move')).'</a>
-				//					<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$_GET['view_received_category'].'&amp;view_sent_category='.$_GET['view_sent_category'].'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
+									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=deletereceivedfile&amp;id='.$dropbox_file->id.'&'.$sort_params.'" onclick="javascript: return confirmation(\''.$dropbox_file->title.'\');">'.
+                                    Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+				
 				// This is a hack to have an additional row in a sortable table
 
 				if ($action == 'viewfeedback' AND isset($_GET['id']) and is_numeric($_GET['id']) AND $dropbox_file->id == $_GET['id']) {
@@ -519,9 +516,7 @@ if ($action != 'add') {
 
 	/*	SENT FILES */
 
-	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {
-		//echo '<h3>'.get_lang('SentFiles').'</h3>';
-
+	if (!$_GET['view'] OR $_GET['view'] == 'sent' OR !$dropbox_cnf['sent_received_tabs']) {		
 		// This is for the categories
 		if (isset($_GET['view_sent_category']) AND $_GET['view_sent_category'] != '') {
 			$view_dropbox_category_sent = $_GET['view_sent_category'];
@@ -530,8 +525,8 @@ if ($action != 'add') {
 		}
 
 		// Object initialisation
-		$dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-
+		$dropbox_person = new Dropbox_Person(api_get_user_id(), $is_courseAdmin, $is_courseTutor);
+        
 		// Constructing the array that contains the total number of feedback messages per document.
 		$number_feedback = get_total_number_feedback();
 
@@ -603,7 +598,6 @@ if ($action != 'add') {
 
 				//$dropbox_file_data[] = $dropbox_file->author;
 				$receivers_celldata = '';
-
 
 				$action_icons = check_number_feedback($dropbox_file->id, $number_feedback).' '.get_lang('Feedback').'
 									<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.Security::remove_XSS($_GET['view_received_category']).'&amp;view_sent_category='.Security::remove_XSS($_GET['view_sent_category']).'&amp;view='.Security::remove_XSS($_GET['view']).'&amp;action=viewfeedback&amp;id='.$dropbox_file->id.'&'.$sort_params.'">'.Display::return_icon('discuss.png', get_lang('Comment'),'',ICON_SIZE_SMALL).'</a>

@@ -122,9 +122,10 @@ if ($is_allowedToEdit) {
 	}
 	// deletes a question from the database and all exercises
 	if ($delete) {
-		// construction of the Question object
+		// Construction of the Question object
+        $objQuestionTmp = Question::read($delete);
 		// if the question exists
-		if ($objQuestionTmp = Question::read($delete)) {
+		if ($objQuestionTmp) {
 			// deletes the question from all exercises
 			$objQuestionTmp->delete();
 		}
@@ -134,7 +135,7 @@ if ($is_allowedToEdit) {
 		// gets an existing question and copies it into a new exercise
 		$objQuestionTmp = Question :: read($recup);
 		// if the question exists
-		if($objQuestionTmp = Question :: read($recup)) {
+		if ($objQuestionTmp) {
 			// adds the exercise ID represented by $fromExercise into the list of exercises for the current question
 			$objQuestionTmp->addToList($fromExercise);
 		}

@@ -76,7 +76,7 @@ $form->setDefaults($default);
 if ($form->validate()) {
 	$values = $form->exportValues();
 
-	$picture_element = & $form->getElement('picture');
+	$picture_element = $form->getElement('picture');
 	$picture 		= $picture_element->getValue();
 	$picture_uri 	= '';
 	$name 			= $values['name'];

@@ -49,12 +49,13 @@ class Display {
      * Displays the reduced page header (without banner)
      */
     public static function display_reduced_header() {        
-        global $show_learnpath;
+        global $show_learnpath, $tool_name;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
         echo self::$global_template ->show_header_template();        
     }
     
     public static function display_no_header() {        
+        global $tool_name;
         $disable_js_and_css_files = true;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);        
         //echo self::$global_template->show_header_template();        
@@ -855,7 +856,8 @@ class Display {
         
         //Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = array(50, 100, 200);
+            $extra_params['rowList'] = array(20, 50, 100, 500, 1000);
+            //$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
         }
         
         $json = '';
@@ -1307,6 +1309,14 @@ class Display {
     
     public static function page_subheader($title, $second_title = null) {
         return self::page_header($title, $second_title, 'h2');        
+    }
+    
+    public static function page_subheader2($title, $second_title = null) {
+        return self::page_header($title, $second_title, 'h3');
+    }
+    
+    public static function page_subheader3($title, $second_title = null) {
+        return self::page_header($title, $second_title, 'h4');
     }
     
     public static function page_subheader2($title, $second_title = null) {

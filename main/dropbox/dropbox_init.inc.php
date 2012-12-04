@@ -54,6 +54,7 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 // protecting the script
 api_protect_course_script();
 
+
 /*	Libraries */
 
 // including the library for the sortable table
@@ -71,12 +72,15 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*	Virtual course support */
 
 $user_id = api_get_user_id();
-$course_code = $_course['sysCode'];
+$course_code = api_get_course_id();
 $course_info = Database::get_course_info($course_code);
 
 $session_id = api_get_session_id();
-$is_course_member = CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code,$session_id);
-
+if (empty($session_id)) {
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, false);
+} else {
+    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true, $session_id);
+}
 
 /*	Object Initialisation */
 

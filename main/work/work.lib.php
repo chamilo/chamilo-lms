@@ -1351,7 +1351,7 @@ function to_javascript_work() {
 					var temp=value.split("\\\");
 				}
 				document.getElementById("file_upload").value=temp[temp.length-1];
-				$("#contains_file_id").attr("checked", true);
+				$("#contains_file_id").attr("value", 1);
 			}
 
 			function checkDate(month, day, year) {

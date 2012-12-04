@@ -1,6 +1,6 @@
 <?php
 // Chamilo LMS
-// See license terms in chamilo/documentation/license.txt
+// See license terms in license.txt
 
 // Training tools
 // Test, proposed answer to a question
@@ -13,8 +13,7 @@
 // Hide/show SpellCheck buttom
 if ((api_get_setting('allow_spellcheck') == 'true')) {
 	$VSpellCheck='SpellCheck';
-}
-else{
+} else {
 	$VSpellCheck='';	
 }
 
@@ -26,7 +25,7 @@ $config['ToolbarSets']['Normal'] = array(
 	array('Image','flvPlayer','Flash','MP3','mimetex','asciimath','asciisvg'),
 	array('TableOC'),
 	array('Bold'),
-	array('FitWindow')	
+	array('Source','FitWindow')	
 );
 
 // This is the visible toolbar set when the editor is maximized.

@@ -217,12 +217,11 @@ if ($objExercise->selectAttempts() > 0) {
 }
 
 
+if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
-
-if ($debug)  error_log('4. Trying to create an attempt ');
  
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
@@ -255,8 +254,6 @@ if (empty($exercise_stat_info)) {
 	$exe_id = $exercise_stat_info['exe_id'];
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
 }
-
-if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //Array to check in order to block the chat
 create_chat_exercise_session($exe_id);
@@ -332,7 +329,7 @@ if ($time_control) {
         $clock_expired_time =  $_SESSION['expired_time'][$current_expired_time_key];
     }
 } else {
-    if ($debug) { error_log("7. No time control"); };
+    if ($debug) { error_log("7 No time control"); };
 }
 
 // Get time left for exipiring time

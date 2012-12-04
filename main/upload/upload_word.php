@@ -153,7 +153,7 @@ $form -> addElement ('html','<br>');
 
 $div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
 
-$renderer = & $form->defaultRenderer();
+$renderer = $form->defaultRenderer();
 // set template for user_file element
 $user_file_template =
 <<<EOT

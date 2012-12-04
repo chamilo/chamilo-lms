@@ -19,13 +19,11 @@ block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? $_REQUEST['editcat'] : '';
 
-
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
-$(document).ready(function () {
-
+$(document).ready(function() {
     $("#skills").fcbkcomplete({
         json_url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=find_skills",
         cache: false,
@@ -112,9 +110,6 @@ if ($form->validate()) {
 	$cat->set_skills($values['skills']);    
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
-    
-    //$cat->update_children_weight($values['weight']);
-    
 	$cat->set_weight($values['weight']);
     
 	if ($values['hid_parent_id'] == 0 ) {

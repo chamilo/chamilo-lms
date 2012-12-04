@@ -78,7 +78,7 @@ if (isset($_GET['details'])) {
 				//$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['title']);
 			}
 			$interbreadcrumb[] = array (
-				"url" => "../tracking/courseLog.php?cidReq=" . $get_course_code . '&studentlist=true&id_session=' . (empty ($_SESSION['id_session']) ? '' : $_SESSION['id_session']),
+				"url" => "../tracking/courseLog.php?cidReq=".$get_course_code.'&id_session=' . (empty ($_SESSION['id_session']) ? '' : $_SESSION['id_session']),
 				"name" => get_lang("Tracking")
 			);
 		} else

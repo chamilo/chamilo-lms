@@ -94,8 +94,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
           original_url = $("#pdf_export").attr('href');
        }
        new_url =  original_url + "&filter=" +filter
-       $("#pdf_export").attr('href', new_url);
-       //console.log(new_url);
+       $("#pdf_export").attr('href', new_url);       
     });
     
     function UpdateTableHeaders() {

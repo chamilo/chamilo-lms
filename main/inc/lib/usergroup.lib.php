@@ -92,10 +92,16 @@ class UserGroup extends Model {
     }
     
     public function get_usergroup_not_in_course($options = array()) {        
-        $sql = "SELECT DISTINCT * 
-                FROM {$this->usergroup_rel_course_table} urc
-                RIGHT JOIN {$this->table} u 
-                ON (u.id = urc.usergroup_id)                
+        $course_id = intval($options['course_id']);        
+        unset($options['course_id']);
+        if (empty($course_id)) {
+            return false;
+        }
+        $sql = "SELECT DISTINCT u.id, name 
+                FROM {$this->table} u
+                LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
+                ON (u.id = urc.usergroup_id AND course_id = $course_id)
+                WHERE course_id is NULL
                ";              
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
@@ -233,7 +239,7 @@ class UserGroup extends Model {
      * @param   int     usergroup id
      * @param   array   list of course ids (integers)
      */
-    function subscribe_courses_to_usergroup($usergroup_id, $list) {
+    function subscribe_courses_to_usergroup($usergroup_id, $list, $delete_groups = true) {
 
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
@@ -255,7 +261,9 @@ class UserGroup extends Model {
             }
         }
 
+        if ($delete_groups) {
         self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
+        }
 
         //Addding new relationships
         if (!empty($new_items)) {

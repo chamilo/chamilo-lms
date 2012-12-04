@@ -1037,6 +1037,7 @@ function api_get_user_courses($userid, $fetch_session = true) {
 
 /**
  * Formats user information into a standard array
+ * This function should be only used inside api_get_user_info()
  *
  * @param array Non-standard user array
  * @return array Standard user array
@@ -2649,9 +2650,10 @@ function api_display_debug_info($debug_info) {
  * this particular course.
  * Optionally checking for tutor and coach roles here allows us to use the
  * student_view feature altogether with these roles as well.
- * @param bool      Whether to check if the user has the tutor role
- * @param bool      Whether to check if the user has the coach role
- * @param bool      Whether to check if the user has the session coach role
+ * @param bool  Whether to check if the user has the tutor role
+ * @param bool  Whether to check if the user has the coach role
+ * @param bool  Whether to check if the user has the session coach role
+ * @param bool  check the student view or not
  *
  * @author Roan Embrechts
  * @author Patrick Cool
@@ -2659,7 +2661,7 @@ function api_display_debug_info($debug_info) {
  * @return boolean, true: the user has the rights to edit, false: he does not
  */
 
-function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false) {
+function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true) {
 
     $my_session_id 				= api_get_session_id();
     $is_allowed_coach_to_edit 	= api_is_coach();
@@ -2668,7 +2670,7 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
     //Admins can edit anything
     if (api_is_platform_admin(false)) {
         //The student preview was on
-        if (isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
+        if ($check_student_view && isset($_SESSION['studentview']) && $_SESSION['studentview'] == "studentview") {
             return false;
         } else {
             return true;
@@ -2710,9 +2712,15 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
             } else {
                 $is_allowed = false;
             }
-            $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+            if ($check_student_view) {
+                $is_allowed = $is_allowed && $_SESSION['studentview'] != 'studentview';
+            }
         } else {
-            $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+            if ($check_student_view) {
+                $is_allowed = $is_courseAdmin && $_SESSION['studentview'] != 'studentview';
+            } else {
+                $is_allowed = $is_courseAdmin;   
+            }
         }
         return $is_allowed;
     } else {
@@ -2889,7 +2897,13 @@ function api_not_found($print_headers = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false, $message = null) {
-    Header::response_code(403);
+    if (api_get_setting('sso_authentication') === 'true') {
+        global $osso;
+        if ($osso) {
+            $osso->logout();
+        }
+    }
+    Header::response_code(403);    
     $home_url   = api_get_path(WEB_PATH);
     $user_id    = api_get_user_id();
     $course     = api_get_course_id();
@@ -2925,7 +2939,7 @@ function api_not_allowed($print_headers = false, $message = null) {
     $tpl = new Template(null, $show_headers, $show_headers);
     $tpl->assign('content', $msg);
 
-    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
+    if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {        
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
         // to the user_portal
@@ -2934,13 +2948,14 @@ function api_not_allowed($print_headers = false, $message = null) {
     }
 
     if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+        
         //only display form and return to the previous URL if there was a course ID included
-        if ($user_id!=0 && !api_is_anonymous()) {
+        if ($user_id != 0 && !api_is_anonymous()) {
             //if there is a user ID, then the user is not allowed but the session is still there. Say so and exit
             $tpl->assign('content', $msg);
             $tpl->display_one_col_template();
             exit;
-        }
+        }       
 
         // If the user has no user ID, then his session has expired
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);

@@ -44,8 +44,8 @@ class UniqueAnswer extends Question {
 	 * @param the answers number to display
 	 */
 	function createAnswersForm ($form) {
-		// getting the exercise list
-		$obj_ex =$_SESSION['objExercise'];
+		// Getting the exercise list
+		$obj_ex = $_SESSION['objExercise'];
 
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
@@ -227,10 +227,10 @@ class UniqueAnswer extends Question {
         
 		$navigator_info = api_get_navigator();
 
-		global $text, $class, $show_quiz_edition;
+		global $text, $class;
         
 		//ie6 fix
-		if ($show_quiz_edition) {
+		if ($obj_ex->edit_exercise_in_lp == true) {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"'); 

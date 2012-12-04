@@ -437,18 +437,8 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 
 Display::display_header($nameTools, 'Exercise');
 
-$course_id = api_get_course_int_id();
-
-$show_quiz_edition = true;
-if (isset($exerciseId) && !empty($exerciseId)) {
-    $TBL_LP_ITEM = Database::get_course_table(TABLE_LP_ITEM);
-    $sql = "SELECT max_score FROM $TBL_LP_ITEM
-		  WHERE c_id = $course_id AND item_type = '" . TOOL_QUIZ . "' AND path ='" . Database::escape_string($exerciseId) . "'";
-    $result = Database::query($sql);
-    if (Database::num_rows($result) > 0) {
+if ($objExercise->edit_exercise_in_lp == false) {
         Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
-        $show_quiz_edition = false;
-    }
 }
 
 // If we are in a test
@@ -465,10 +455,10 @@ if ($inATest) {
 
     echo Display::url(Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_MEDIUM), 'exercise_report.php?' . api_get_cidReq() . '&exerciseId=' . $objExercise->id);
 
-    if ($show_quiz_edition) {
-        echo '<a href="exercise_admin.php?' . api_get_cidreq() . '&modifyExercise=yes&exerciseId=' . $objExercise->id . '">' . Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM) . '</a>';
-    } else {
+    if ($objExercise->edit_exercise_in_lp == false) {
         echo '<a href="">' . Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM) . '</a>';
+    } else {
+        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 
     $maxScoreAllQuestions = 0;

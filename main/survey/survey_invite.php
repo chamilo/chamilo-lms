@@ -52,7 +52,6 @@ if (empty($survey_data)) {
 	exit;
 }
 
-
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$urlname .= '...';
@@ -69,6 +68,14 @@ $tool_name = get_lang('SurveyPublication');
 
 // Displaying the header
 Display::display_header($tool_name,'Survey');
+
+echo '<script>
+$(function() {
+    $("#check_mail").change(function() {
+        $("#mail_text").toggle();
+    });
+});
+</script>';
 
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
@@ -116,24 +123,31 @@ $users->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 // Additional users
 $form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 2));
 
+//$form->addElement('html', '<div> <h3>'.Display::return_icon('course.png', Security::remove_XSS(get_lang('SendMail')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('SendMail')).'</h3><div>');
+$form->addElement('html', '<div id="check_mail">');
+$form->addElement('checkbox', 'send_mail','', get_lang('SendMail'));
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div id="mail_text">');
 // The title of the mail
 $form->addElement('text', 'mail_title', get_lang('MailTitle'), array('class' => 'span6'));
 // The text of the mail
 $form->addElement('html_editor', 'mail_text', array(get_lang('MailText'), get_lang('UseLinkSyntax')), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '150'));
-
-$form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
+$form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
 if ($survey_data['anonymous'] != 1) {
 	$form->addElement('checkbox', 'remindUnAnswered', '', get_lang('RemindUnanswered'));
 }
 // Allow resending to all selected users
 $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
+
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'class="save"');
 // The rules (required fields)
-$form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
-
+/*if ($survey_data['send_mail'] == 0) {
+    $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
+}*/
 $portal_url = api_get_path(WEB_PATH);
 if ($_configuration['multiple_access_urls']) {
 	$access_url_id = api_get_current_access_url_id();
@@ -150,8 +164,25 @@ $form->addElement('label', null, get_lang('AutoInviteLink'));
 $form->addElement('label', null, $auto_survey_link);
 
 if ($form->validate()) {
-	$values = $form->exportValues();
-	// Save the invitation mail
+   	$values = $form->exportValues();
+    if ($values['send_mail'] == 1) {
+        if (empty($values['mail_title']) || empty($values['mail_text'])) {
+            Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
+            // Getting the invited users
+        	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
+        	// Getting the survey mail text
+        	if (!empty($survey_data['reminder_mail'])) {
+        		$defaults['mail_text'] = $survey_data['reminder_mail'];
+        	} else {
+        		$defaults['mail_text'] = $survey_data['invite_mail'];
+        	}
+        	$defaults['mail_title'] = $survey_data['mail_subject'];
+        	$defaults['send_mail'] = 1;
+        	$form->setDefaults($defaults);
+            $form->display();
+        }
+    }
+    // Save the invitation mail
 	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
 	// Saving the invitations for the course users
 	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
@@ -181,8 +212,6 @@ if ($form->validate()) {
 	$defaults['mail_title'] = $survey_data['mail_subject'];
 	$defaults['send_mail'] = 1;
 	$form->setDefaults($defaults);
-	$form->display();
+    $form->display();
 }
-
-// Footer
 Display :: display_footer();

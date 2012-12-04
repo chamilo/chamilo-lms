@@ -70,11 +70,22 @@ switch ($action) {
             $start = 0;
         }        
         
-        $sql = "SELECT exe_id,  exe_user_id, firstname, lastname, aa.status, start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id, aa.qlist as qlist
+        $sql = "SELECT  exe_id,  
+                        exe_user_id, 
+                        firstname, 
+                        lastname, 
+                        aa.status, 
+                        start_date, 
+                        exe_result, 
+                        exe_weighting, 
+                        exe_result/exe_weighting as score, 
+                        exe_duration, 
+                        questions_to_check, 
+                        orig_lp_id
                 FROM $user_table u 
                 INNER JOIN (
                     SELECT  t.exe_id, t.exe_user_id, status,
-                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id, t.data_tracking as qlist
+                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
                     FROM  $track_exercise  t LEFT JOIN $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id ) 
                     WHERE t.status = 'incomplete' AND
                           $where_condition  
@@ -100,7 +111,6 @@ switch ($action) {
         
         if (!empty($results)) {
             foreach($results as $row) {
-		$qcount = count(split(',',$row['qlist'])); 
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a 
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
@@ -120,7 +130,7 @@ switch ($action) {
                 $array = array( $row['firstname'], 
                                 $row['lastname'], 
                                 api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
-                                $row['count_questions'].'/'.$qcount,                              
+                                $row['count_questions'],                                
                                 round($row['score']*100).'%'
                                );
                 $response->rows[$i]['cell'] = $array;
@@ -176,8 +186,8 @@ switch ($action) {
             if ($debug) error_log("exe_id = $exe_id ");
             if ($debug) error_log("type = $type ");
             if ($debug) error_log("choice = ".print_r($choice, 1)." ");
-            if ($debug) error_log("hot_spot_coordinates = $hot_spot_coordinates ");
-            if ($debug) error_log("remind_list = $remind_list ");            
+            if ($debug) error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
+            if ($debug) error_log("remind_list = ".print_r($remind_list));
             
             //Exercise information            
             $objExercise             = $_SESSION['objExercise'];
@@ -285,7 +295,7 @@ switch ($action) {
             	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];                
                 
                 if ($type == 'simple') {
-                    //Getting old attempt in order to decress the total score 
+                    //Getting old attempt in order to decrees the total score 
                     $old_result = $objExercise->manage_answer($exe_id, $my_question_id, null, 'exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());                                                     	
                     
                     //Removing old score
@@ -304,7 +314,7 @@ switch ($action) {
                 
             	
             	// We're inside *one* question. Go through each possible answer for this question
-            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice,'exercise_result', $hot_spot_coordinates, true, false, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
+            	$result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
                 
                 //Adding the new score 
                 $total_score += $result['score'];              
@@ -336,7 +346,17 @@ switch ($action) {
                 
                 $_SESSION['duration_time'][$key] = time();
                 
-                update_event_exercice($exe_id, $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $exercise_stat_info['orig_lp_id'], $exercise_stat_info['orig_lp_item_id'], $exercise_stat_info['orig_lp_item_view_id'], $duration, 'incomplete', $remind_list);
+                update_event_exercice(  $exe_id, 
+                                        $objExercise->selectId(), 
+                                        $total_score, 
+                                        $total_weight, 
+                                        api_get_session_id(),
+                                        $exercise_stat_info['orig_lp_id'], 
+                                        $exercise_stat_info['orig_lp_item_id'], 
+                                        $exercise_stat_info['orig_lp_item_view_id'], 
+                                        $duration, 
+                                        'incomplete', 
+                                        $remind_list);
                 
                  // Destruction of the Question object
             	unset($objQuestionTmp); 

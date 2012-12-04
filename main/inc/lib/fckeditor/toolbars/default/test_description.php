@@ -1,6 +1,6 @@
 <?php
 // Chamilo LMS
-// See license terms in chamilo/documentation/license.txt
+// See license terms in license.txt
 
 // Training tools
 // Test description

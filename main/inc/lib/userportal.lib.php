@@ -758,8 +758,8 @@ class IndexManager {
 				$total_invitations = Display::badge($total_invitations);				                
 				$profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
 			}
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';			
-		}
+        }
+        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
 		$html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
 		return $html;

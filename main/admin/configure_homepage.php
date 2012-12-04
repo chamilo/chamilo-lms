@@ -697,7 +697,7 @@ switch ($action) {
             $form->addElement('select', 'insert_where', get_lang('InsertThisLink') , $options);
 		}        
 		
-		$target_blank_checkbox = & $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
+		$target_blank_checkbox = $form->addElement('checkbox', 'target_blank', null, get_lang('OpenInNewWindow'), 1);
                 
         if ($action == 'insert_tabs' || $action == 'edit_tabs') {
             $form->addElement('checkbox', 'add_in_tab', null, get_lang('AddInMenu'), 1);                

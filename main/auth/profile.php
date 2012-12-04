@@ -446,8 +446,8 @@ if ($form->validate()) {
     
     $changeemail = '';
     
-    //If user is sending the email to be changed (input is available and is not freeze )
-    if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {        
+    //If user sending the email to be changed (input available and not frozen )
+    if (api_get_setting('profile', 'email') == 'true') {        
 
         if ($allow_users_to_change_email_with_no_password) {            
             if (!check_user_email($user_data['email'])) {
@@ -578,7 +578,7 @@ if ($form->validate()) {
 
 	//change email
 	if ($allow_users_to_change_email_with_no_password) {	    
-        if (in_array('email', $available_values_to_modify)) {
+        if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
         }
         if (isset($password) && in_array('password', $available_values_to_modify)) {
@@ -590,7 +590,10 @@ if ($form->validate()) {
         }	    
     } else {
         //normal behaviour
-        if (!empty($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
+        if(empty($changeemail) && isset($password)) {
+            $sql .= " email = y@u.com";
+        }
+        if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
         } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {            
             $sql .= " email = '".Database::escape_string($changeemail)."',";

@@ -1,6 +1,6 @@
 {% for hot_course in hot_courses %}               
     {% if hot_course.extra_info.title %}        
-        <div class="span9">
+        <div class="span9 hot-course-box">
             <div class="well_border">
                 <div class="row">
                     <div class="span2">

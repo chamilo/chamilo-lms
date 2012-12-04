@@ -167,12 +167,12 @@ class Agenda {
      * @param string    event content 
      */
 	function edit_event($id, $start, $end, $all_day, $view, $title, $content) {		
-		$start 		= api_get_utc_datetime($start);
+		$start = api_get_utc_datetime($start);
 		
 		if ($all_day == '0') {
-			$end 		= api_get_utc_datetime($end);			
+			$end = api_get_utc_datetime($end);			
 		}
-		$all_day 	= isset($all_day) && $all_day == '1' ? 1:0;
+		$all_day = isset($all_day) && $all_day == '1' ? 1 : 0;
 		
 		$attributes = array();
 
@@ -185,11 +185,14 @@ class Agenda {
 				Database::update($this->tbl_personal_agenda, $attributes, array('id = ?' => $id));
 				break;
 			case 'course':
+                $course_id = api_get_course_int_id();
 				$attributes['title'] 		= $title;
 				$attributes['content'] 		= $content;
 				$attributes['start_date'] 	= $start;
 				$attributes['end_date'] 	= $end;
-				Database::update($this->tbl_course_agenda, $attributes, array('id = ?' => $id));
+                if (!empty($course_id)) {
+                    Database::update($this->tbl_course_agenda, $attributes, array('id = ? AND c_id = ?' => array($id, $course_id)));
+                }
 				break;
 			case 'admin':
 				$attributes['title'] 		= $title;
@@ -205,13 +208,16 @@ class Agenda {
 	function delete_event($id) {
 		switch($this->type) {
 			case 'personal':
-				Database::delete($this->tbl_personal_agenda, array('id = ?' =>$id));
+				Database::delete($this->tbl_personal_agenda, array('id = ?' => $id));
 				break;
 			case 'course':
-				Database::delete($this->tbl_course_agenda, array('id = ?' =>$id));
+                $course_id = api_get_course_int_id();
+                if (!empty($course_id)) {
+                    Database::delete($this->tbl_course_agenda, array('id = ? AND c_id = ?' => array($id, $course_id)));
+                }
 				break;
 			case 'admin':
-				Database::delete($this->tbl_global_agenda, array('id = ?' =>$id));
+				Database::delete($this->tbl_global_agenda, array('id = ?' => $id));
 				break;
 		}
 	}

@@ -770,7 +770,7 @@ class CourseHome {
                 switch($theme) {
                     case 'activity_big':
                         $data = '';
-                        $html .=  '<div class="span4">';
+                        $html .=  '<div class="span4 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
                         $image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);
                         $data .= Display::url($image , $item['url_params']['href'], $item['url_params']);
@@ -780,7 +780,7 @@ class CourseHome {
 
                         break;
                     case 'activity':
-                        $html .=  '<div class="offset2 span4">';
+                        $html .=  '<div class="offset2 span4 course-tool">';
                             $html .=  $item['extra'];
                             $html .=  $item['visibility'];
                             $html .=  $item['icon'];
@@ -791,7 +791,7 @@ class CourseHome {
                         if ($i == 0) {
                             $html .=  '<ul>';
                         }
-                        $html .=  '<li>';
+                        $html .=  '<li class="course-tool">';
                             $html .=  $item['extra'];
                             $html .=  $item['visibility'];
                             $html .=  $item['icon'];

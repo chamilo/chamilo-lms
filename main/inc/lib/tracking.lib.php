@@ -565,12 +565,9 @@ class Tracking {
 			// count the number of learning paths
 			$lp_id = array();
 			while ($row_lp = Database::fetch_array($res_count_lp,'ASSOC')) {
-				//$visibility = api_get_item_visibility($a_course, TOOL_LEARNPATH, $row_lp['id'], $session_id);
-				//  if ($visibility == 1) {
 				$lp_id[] = $row_lp['id'];
-				//}
-				}
-				$count_lp = count($lp_id);
+			}
+			$count_lp = count($lp_id);
 
 				$avg_progress = 0;
 				//if there is at least one learning path and one student
@@ -3664,8 +3661,8 @@ class TrackingCourseLog {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];
             }
-            $user_row[]= $user['username']; // hubr
-            $user_row[]= $user['time']; //3           
+            $user_row[]= $user['username'];
+            $user_row[]= $user['time'];           
             $user_row[]= $user['average_progress'];            
             $user_row[]= $user['exercise_progress'];
             
@@ -3674,7 +3671,7 @@ class TrackingCourseLog {
         
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
-            $user_row[]= $user['count_messages']; //8
+            $user_row[]= $user['count_messages'];
             
             if (empty($session_id)) {
                 $user_row[]= $user['survey'];

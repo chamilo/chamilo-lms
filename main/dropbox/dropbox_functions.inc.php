@@ -522,20 +522,8 @@ function display_add_form() {
     	}
     	$complete_user_list_for_dropbox = TableSort::sort_table($complete_user_list_for_dropbox, 'lastcommafirst');
     }
-
-	?>
-
-    <select name="recipients[]" size="
-	<?php
-	if ($dropbox_person -> isCourseTutor || $dropbox_person -> isCourseAdmin) {
-		echo 10;
-	} else {
-		echo 6;
-	}
-
-	?>" multiple style="width: 350px;">
-	<?php
-
+    
+    echo '<select name="recipients[]" size="10" multiple class="span4">';	
 	/*
 		Create the options inside the select box:
 		List all selected users their user id as value and a name string as display
@@ -658,15 +646,17 @@ function removeUnusedFiles() {
     $sql = "SELECT DISTINCT f.id, f.filename
 			FROM " . dropbox_cnf('tbl_file') . " f
 			LEFT JOIN " . dropbox_cnf('tbl_person') . " p 
-            ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id )
-			WHERE p.user_id IS NULL";
+            ON (f.id = p.file_id)
+			WHERE p.user_id IS NULL AND
+                  f.c_id = $course_id 
+            ";
     $result = Database::query($sql);
     while ($res = Database::fetch_array($result)) {
         
 		//delete the selected files from the post and file tables
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_post') . " WHERE c_id = $course_id AND file_id = '" . $res['id'] . "'";
         Database::query($sql);
-        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id='" . $res['id'] . "'";
+        $sql = "DELETE FROM " . dropbox_cnf('tbl_file') . " WHERE c_id = $course_id AND id ='" . $res['id'] . "'";
         Database::query($sql);
 
 		//delete file from server
@@ -694,7 +684,10 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '') {
     $sql = "SELECT f.uploader_id
 			FROM " . $dropbox_cnf['tbl_file'] . " f
 			LEFT JOIN " . $dropbox_cnf['tbl_post'] . " p ON (f.id = p.file_id AND f.c_id = $course_id AND p.c_id = $course_id)
-			WHERE p.dest_user_id = '" . $mailingPseudoId . "'";
+			WHERE 
+                p.dest_user_id = '" . $mailingPseudoId . "' AND 
+                p.c_id = $course_id 
+            ";
     $result = Database::query($sql);
 
     if (!($res = Database::fetch_array($result)))

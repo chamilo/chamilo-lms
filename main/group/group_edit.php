@@ -42,11 +42,11 @@ if (!api_is_allowed_to_edit(false,true) && !$is_group_member) {
  *  List all users registered to the course
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword) {
-	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {		
+	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
 		return true;
 	} else {
 		return false;
-	}	
+	}
 }
 
 
@@ -108,6 +108,14 @@ function check_group_members($value) {
 
 /*	MAIN CODE */
 
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {
+    $("#max_member").on("focus", function() {
+        $("#max_member_selected").attr("checked", true);
+    });
+});
+ </script>';
+
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 
@@ -133,7 +141,7 @@ foreach ($complete_user_list as $index => $user) {
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array();
 $selected_tutors = array();
-foreach ($group_tutor_list as $index => $user) {    
+foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
@@ -191,9 +199,9 @@ $form->addFormRule('check_group_members');
 // Members per group
 $form->addElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT);
 $group = array();
-$group[] = & $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1);
-$group[] = & $form->createElement('text', 'max_member', null, array('class' => 'span1'));
-$group[] = & $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
+$group[] = $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected'));
+$group[] = $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member'));
+$group[] = $form->createElement('static', null, null, get_lang('GroupPlacesThis'));
 $form->addGroup($group, 'max_member_group', null, '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
@@ -278,8 +286,8 @@ if ($form->validate()) {
 		GroupManager :: subscribe_users($values['group_members'], $current_group['id']);
 	}
 
-	// Returning to the group area (note: this is inconsistent with the rest of chamilo)    
-	$cat = GroupManager :: get_category_from_group($current_group['id']);      
+	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
+	$cat = GroupManager :: get_category_from_group($current_group['id']);
     if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
     } else {

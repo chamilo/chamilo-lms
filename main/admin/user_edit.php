@@ -134,7 +134,9 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-$form->addRule('email', get_lang('EmailWrong'), 'required');
+if (api_get_setting('registration', 'email') == 'true') {
+    $form->addRule('email', get_lang('EmailWrong'), 'required');
+}
 
 if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -253,8 +255,8 @@ if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
-	$group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-	$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+	$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
 	// Active account or inactive account
@@ -307,7 +309,7 @@ if ( $form->validate()) {
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
 		$error_drh = true;
 	} else {
-		$picture_element = & $form->getElement('picture');
+		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 
 		$picture_uri = $user_data['picture_uri'];

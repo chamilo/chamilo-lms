@@ -1336,33 +1336,24 @@ abstract class Question
 	/**
 	 * Displays the menu of question types
 	 */
-	static function display_type_menu ($feedback_type = 0) {
-		global $exerciseId;
-        $course_id = api_get_course_int_id();
+	static function display_type_menu($objExercise) {
+        $feedback_type = $objExercise->feedback_type;
+        $exerciseId = $objExercise->id;
         
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::get_question_type_list();
 
-		if (!isset($feedback_type)) $feedback_type=0;
+		if (!isset($feedback_type)) {
+            $feedback_type = 0;
+        }
 		if ($feedback_type==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-			//$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
-			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]);  
+			$question_type_custom_list = array (
+                UNIQUE_ANSWER           => self::$questionTypes[UNIQUE_ANSWER],
+                HOT_SPOT_DELINEATION    => self::$questionTypes[HOT_SPOT_DELINEATION]
+            );
 		} else {
 			unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
-		}
-
-		//blocking edition
-
-		$show_quiz_edition = true;
-		if (isset($exerciseId) && !empty($exerciseId)) {
-			$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-			$sql="SELECT max_score FROM $TBL_LP_ITEM
-				  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-			$result = Database::query($sql);
-			if (Database::num_rows($result) > 0) {
-				$show_quiz_edition = false;
-			}
 		}
         
         echo '<div class="actionsbig">';
@@ -1370,19 +1361,19 @@ abstract class Question
 
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
-			require_once($a_type[0]);
+			require_once $a_type[0];
             // get the picture of the type and the langvar which describes it
             $img = $explanation = '';
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
 			echo '<div class="icon_image_content">';
-			if ($show_quiz_edition) {
-				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';				
-			} else {
+			if ($objExercise->edit_exercise_in_lp == false) {
 				$img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
-				echo ''.Display::return_icon($img,$explanation).'';				
+				echo Display::return_icon($img,$explanation);
+			} else {
+                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1390,15 +1381,15 @@ abstract class Question
 
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($show_quiz_edition) {
+		if ($objExercise->edit_exercise_in_lp == false) {
+            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
+		} else {
 			if ($feedback_type==1) {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
 			} else {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
 			}
-			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');
-		} else {
-			echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), '');
+			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
 		}	
 		echo '</a>';
 		echo '</div></li>';
@@ -1441,7 +1432,7 @@ abstract class Question
      * @param type $counter
      * @param type $score
      */
-	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {          
+	function return_header($feedback_type = null, $counter = null, $score = null) {
 	    $counter_label = '';
 	    if (!empty($counter)) {
 	        $counter_label = intval($counter);
@@ -1462,6 +1453,7 @@ abstract class Question
                 $class = 'error';
             }
         }
+        $question_title = $this->question;
         
         $question_title = $this->question;
 	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.get_lang("Question").' '.($counter_label).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));

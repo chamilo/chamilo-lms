@@ -49,4 +49,6 @@ $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
 
 $strings['plugin_tool_bbb'] = 'Video';
 
+$strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recordings for the meetings';
+
 

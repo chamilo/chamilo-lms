@@ -237,10 +237,18 @@ if(!empty($errorMsg)) {
 ?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
-
-<!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
+    <td>
+    <h3>
+    <?php 
+            $total_users = count($nosessionUsersList) +  count($sessionUsersList); 
+            echo get_lang('TotalAvailableUsers').' '.$total_users;
+    ?>
+    </h3>
+    </td>
+</tr>
+<tr>
+  <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> : <?php echo count($nosessionUsersList); ?></b>
   </td>
   <td></td>
   <td align="center"><b><?php echo get_lang('UserListIn').' '.$url_selected; ?> :</b></td>

@@ -153,7 +153,7 @@ class UrlManager
 	 * @param int  access url id
 	 * @return array   Database::store_result of the result
 	 * */
-	public static function get_url_rel_user_data($access_url_id='')
+	public static function get_url_rel_user_data($access_url_id = null, $order_by = null)
 	{
 		$where = '';
 		$table_url_rel_user	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -161,12 +161,16 @@ class UrlManager
 		if (!empty($access_url_id)) {
 			$where ="WHERE $table_url_rel_user.access_url_id = ".Database::escape_string($access_url_id);
 		}
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-		$sql="SELECT u.user_id, lastname, firstname, username, access_url_id
+        if (empty($order_by)) {
+            $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+        } else {
+            $order_clause = $order_by;
+        }
+		$sql="SELECT u.user_id, lastname, firstname, username, official_code, access_url_id
 			FROM $tbl_user u
 			INNER JOIN $table_url_rel_user
 			ON $table_url_rel_user.user_id = u.user_id
-			$where".$order_clause;
+			$where  $order_clause";
 		$result=Database::query($sql);
 		$users=Database::store_result($result);
 		return $users;

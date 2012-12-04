@@ -96,7 +96,7 @@ $form->setDefaults($group_data);
 if ( $form->validate()) {
 	$group = $form->exportValues();
 
-	$picture_element = & $form->getElement('picture');
+	$picture_element = $form->getElement('picture');
 	$picture = $picture_element->getValue();
 
 	$picture_uri = $group_data['picture_uri'];

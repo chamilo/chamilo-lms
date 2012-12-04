@@ -39,9 +39,9 @@ if ($deleteQuestion) {
     }
 </style>
 
-<div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>">
+<div id="dialog-confirm" title="<?php echo get_lang("ConfirmYourChoice"); ?>" style="display:none;">
     <p>
-        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">
+        <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0; display:none;">
         </span>
         <?php echo get_lang("AreYouSureToDelete"); ?>
     </p>
@@ -129,9 +129,8 @@ $(function() {
 </script>
 <?php
 
-
 //we filter the type of questions we can add
-Question :: display_type_menu ($objExercise->feedback_type);
+Question :: display_type_menu($objExercise);
 echo '<div style="clear:both;"></div>';
 echo '<div id="message"></div>';
 $token = Security::get_token();
@@ -155,10 +154,7 @@ if (!$inATest) {
 
     echo '<div id="question_list">';
 	if ($nbrQuestions) {
-        $my_exercise = new Exercise();
-        //forces the query to the database
-        $my_exercise->read($_GET['exerciseId']);
-        $questionList=$my_exercise->selectQuestionList();
+        $questionList = $objExercise->selectQuestionList();                
 
         // Style for columns
 
@@ -181,8 +177,7 @@ if (!$inATest) {
 
 				$clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
 				$edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-				// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-				if ($show_quiz_edition) {
+				if ($objExercise->edit_exercise_in_lp == true) {
 				     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
 				}
 				$edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
@@ -242,7 +237,7 @@ if (!$inATest) {
                         echo '<br />';
                         //echo get_lang('Level').': '.$objQuestionTmp->selectLevel();
                         echo '<br />';
-                        showQuestion($id, false, null, null, false, true, false, true, $my_exercise->feedback_type, true);
+                        showQuestion($id, false, null, null, false, true, false, true, $objExercise->feedback_type, true);
                         echo '</p>';
                     echo '</div>';
                 echo '</div>';

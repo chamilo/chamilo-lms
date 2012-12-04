@@ -90,8 +90,13 @@ $form->addElement('hidden','code',$course_code);
 $form->add_textfield('title', get_lang('Title'), true, array ('class' => 'span6'));
 $form->applyFilter('title','html_filter');
 $form->applyFilter('title','trim');
-// code
-$form->add_textfield('visual_code', array(get_lang('CourseCode'), get_lang('OnlyLettersAndNumbers')), true, array('class' => 'span4'));
+
+// Code
+$element = $form->addElement('text', 'real_code', array(get_lang('CourseCode'), get_lang('ThisValueCantBeChanged')));
+$element->freeze();
+
+// visual code
+$form->add_textfield('visual_code', array(get_lang('VisualCode'), get_lang('OnlyLettersAndNumbers'), get_lang('ThisValueIsUsedInTheCourseURL')), true, array('class' => 'span4'));
 
 $form->applyFilter('visual_code','strtoupper');
 $form->applyFilter('visual_code','html_filter');
@@ -152,7 +157,6 @@ $group[]= $form->createElement('radio', 'visibility', null, get_lang('Private'),
 $group[]= $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
 $form->addGroup($group,'', get_lang('CourseAccess'), '<br />');
 
-
 $group = array();
 $group[]= $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
 $group[]= $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
@@ -187,6 +191,8 @@ $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),
 //$course['disk_quota'] = round($course['disk_quota']/1024/1024, 1);
 $course['disk_quota'] = round(DocumentManager::get_course_quota($course_code) /1024/1024, 1);
 $course['title'] = api_html_entity_decode($course['title'], ENT_QUOTES, $charset);
+
+$course['real_code'] = $course['code'];
 
 $form->setDefaults($course);
 

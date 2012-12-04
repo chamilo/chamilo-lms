@@ -239,7 +239,11 @@ jQuery.isFrameReady = function(fn){
                                     var ele=fd.createElement('script');
                                     ele.setAttribute('id', id);
                                     ele.setAttribute('src', s.src);
-                                    fd.getElementsByTagName("body")[0].appendChild(ele);
+                                    
+                                    if (fd.getElementsByTagName("body") && fd.getElementsByTagName("body")[0]) {
+                                        fd.getElementsByTagName("body")[0].appendChild(ele);
+                                    }
+                                    
                                     frs.loadInit[i] = true;
                                     break;
                                 case "stylesheet" :

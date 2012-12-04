@@ -160,6 +160,8 @@ class CourseBuilder {
 			}
 		}
 
+        // Once we've built the resouces array a bit more, try to get items
+        //  from the item_propry table and order them in the "resources" array
 		foreach ($this->course->resources as $type => $resources) {
 			foreach ($resources as $id => $resource) {
 				$tool = $resource->get_tool();
@@ -438,13 +440,27 @@ class CourseBuilder {
 		$db_result = Database::query($sql);
 		while ($obj = Database::fetch_object($db_result)) {
 			if (strlen($obj->sound) > 0) {
-                $sql = "SELECT id FROM ".$table_doc." WHERE c_id = $course_id AND path = '/audio/".$obj->sound."'";
+                $sql = "SELECT id FROM $table_doc WHERE c_id = $course_id AND path = '/audio/".$obj->sound."'";
                 $res = Database::query($sql);
 				$doc = Database::fetch_object($res);
 				$obj->sound = $doc->id;
 			}
-			$quiz = new Quiz($obj->id, $obj->title, $obj->description, $obj->random, $obj->type, $obj->active, $obj->sound, $obj->max_attempt, 
-			                 $obj->results_disabled, $obj->access_condition, $obj->start_time, $obj->end_time, $obj->feedback_type, $obj->random_answers, $obj->expired_time, $obj->session_id);
+            $quiz = new Quiz(   $obj->id,
+                                $obj->title,
+                                $obj->description,
+                                $obj->random,
+                                $obj->type,
+                                $obj->active,
+                                $obj->sound,
+                                $obj->max_attempt,
+                                $obj->results_disabled,
+                                $obj->access_condition,
+                                $obj->start_time,
+                                $obj->end_time,
+                                $obj->feedback_type,
+                                $obj->random_answers,
+                                $obj->expired_time,
+                                $obj->session_id);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE c_id = '.$course_id.' AND exercice_id = '.$obj->id;            
 			$db_result2 = Database::query($sql);
 			while ($obj2 = Database::fetch_object($db_result2)) {
@@ -474,8 +490,7 @@ class CourseBuilder {
 
 		// Building normal tests.
 		$sql = "SELECT * FROM $table_que WHERE c_id = $course_id ";
-		
-		$db_result = Database::query($sql);
+        $db_result = Database::query($sql);		
 		while ($obj = Database::fetch_object($db_result)) {            
 			$question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture, $obj->level, $obj->extra);
 			$sql = 'SELECT * FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
@@ -489,18 +504,23 @@ class CourseBuilder {
 		// Building a fictional test for collecting orphan questions.
 		$build_orphan_questions = !empty($_POST['recycle_option']); // When a course is emptied this option should be activated (true).
         
-		$sql = "SELECT * FROM $table_que as questions 
+        $sql = "SELECT questions.*
+                FROM $table_que as questions
                 LEFT JOIN $table_rel as quizz_questions 
                     ON (questions.id = quizz_questions.question_id AND questions.c_id = $course_id AND quizz_questions.c_id = $course_id)
                 LEFT JOIN $table_qui as exercices 
                     ON (exercice_id = exercices.id AND exercices.c_id = $course_id AND questions.c_id = $course_id)
-				WHERE quizz_questions.exercice_id IS NULL OR exercices.active = -1"; // active = -1 means "deleted" test.
+                WHERE  questions.c_id = $course_id AND
+                       exercices.c_id = $course_id AND
+                       (quizz_questions.exercice_id IS NULL OR exercices.active = -1) "; // active = -1 means "deleted" test.
         
 		$db_result = Database::query($sql);
 		if (Database::num_rows($db_result) > 0) {
 			$build_orphan_questions = true;
 			while ($obj = Database::fetch_object($db_result)) {
-				$question = new QuizQuestion($obj->id.$course_id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
+                //Avoid adding the same question twice
+                if (!isset($this->course->resources[$obj->id])) {
+                    $question = new QuizQuestion($obj->id, $obj->question, $obj->description, $obj->ponderation, $obj->type, $obj->position, $obj->picture,$obj->level, $obj->extra);
 				$sql = "SELECT * FROM $table_ans WHERE c_id = $course_id AND question_id = ".$obj->id;
 				$db_result2 = Database::query($sql);
                 if (Database::num_rows($db_result2)) {
@@ -511,6 +531,7 @@ class CourseBuilder {
 				$this->course->add_resource($question);
 			}
 		}
+        }
         
 		if ($build_orphan_questions) {
 			//$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
@@ -925,8 +946,12 @@ class CourseBuilder {
             //$sql = 'SELECT * FROM '.$table_thematic_plan.' WHERE c_id = '.$course_id.' AND thematic_id = '.$row['id'];
             
             $sql = "SELECT tp.*
-                FROM $table_thematic_plan tp INNER JOIN $table_thematic t ON (t.id=tp.thematic_id) 			        
-                WHERE  t.c_id = $course_id AND tp.c_id = $course_id  AND thematic_id = {$row['id']}  AND tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
+                    FROM $table_thematic_plan tp
+                        INNER JOIN $table_thematic t ON (t.id=tp.thematic_id)
+                    WHERE   t.c_id = $course_id AND
+                            tp.c_id = $course_id AND
+                            thematic_id = {$row['id']}  AND
+                             tp.id IN (".implode(', ', $thematic_plan_id_list).") ";
 
 				
 			$result = Database::query($sql);

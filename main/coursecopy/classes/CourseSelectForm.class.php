@@ -48,10 +48,7 @@ class CourseSelectForm
 				}
 			}
             
-            function setCheckboxForum(type, value, item_id) {
-                //console.log("#resource["+type+"]["+value+"]");
-                //$("#resource["+type+"]["+value+"]").attr('checked', value);
-                
+            function setCheckboxForum(type, value, item_id) {                
  				d = document.course_select_form;
  				for (i = 0; i < d.elements.length; i++) {
    					if (d.elements[i].type == "checkbox") {
@@ -371,11 +368,17 @@ class CourseSelectForm
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	static function get_posted_course($from='', $session_id = 0, $course_code = '') {
-		$course = Course::unserialize(base64_decode($_POST['course']));
+	static function get_posted_course($from = '', $session_id = 0, $course_code = '') {
+        $course = null;
+        
+        if (isset($_POST['course'])) {
+            $course = Course::unserialize(base64_decode($_POST['course']));
+        } else {
+            return false;
+        }
         
 		//Create the resource DOCUMENT objects
-		//Loading the results from the checkboxes of the javascript
+		//Loading the results from the checkboxes of ethe javascript
 		$resource       = $_POST['resource'][RESOURCE_DOCUMENT];
 
 		$course_info 	= api_get_course_info($course_code);
@@ -408,19 +411,22 @@ class CourseSelectForm
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
 						$doc = new Document($obj->id, $obj->path, $obj->comment, $obj->title, $obj->filetype, $obj->size);
-						$course->add_resource($doc);
-						// adding item property
-						$sql = "SELECT * FROM $table_prop WHERE c_id = '.$course_id.'  AND TOOL = '".RESOURCE_DOCUMENT."' AND ref='".$resource_item."'";
-						$res = Database::query($sql);
-						$all_properties = array ();
-						while ($item_property = Database::fetch_array($res,'ASSOC')) {
-							$all_properties[] = $item_property;
-						}
-						$course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
+                        if ($doc) {
+                            $course->add_resource($doc);
+                            // adding item property
+                            $sql = "SELECT * FROM $table_prop WHERE c_id = $course_id AND tool = '".RESOURCE_DOCUMENT."' AND ref = $resource_item ";
+                            $res = Database::query($sql);
+                            $all_properties = array ();
+                            while ($item_property = Database::fetch_array($res,'ASSOC')) {
+                                $all_properties[] = $item_property;
+                            }
+                            $course->resources[RESOURCE_DOCUMENT][$resource_item]->item_properties = $all_properties;
+                        }
 					}
 				}
 			}
 		}
+        
 		if (is_array($course->resources)) {
 			foreach ($course->resources as $type => $resources) {
 				switch ($type) {

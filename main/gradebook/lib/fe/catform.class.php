@@ -129,18 +129,29 @@ class CatForm extends FormValidator {
         if (empty($links)) {
             $grade_model_id    = 0;
         }
-    
-   		$this->setDefaults(array(
-			'name' 				=> $this->category_object->get_name(),
-    		'description' 		=> $this->category_object->get_description(),
-    		'hid_user_id' 		=> $this->category_object->get_user_id(),
-    		'hid_parent_id' 	=> $this->category_object->get_parent_id(),
-            'grade_model_id' 	=> $grade_model_id,
-    		'skills'            => $skills,
-   	 		'weight' 			=> $this->category_object->get_weight(),
-   	 		'visible' 			=> $this->category_object->is_visible(),
-   	 		'certif_min_score'  => $this->category_object->get_certificate_min_score(),
-    		));
+        
+        $category_name = $this->category_object->get_name();      
+          
+        //The main course category:
+        if (isset($this->category_object) && $this->category_object->get_parent_id() == 0) {
+            if (empty($category_name)) {
+                $category_name = $course_code;
+            }
+        }
+        
+   		$this->setDefaults(
+            array(
+                'name' 				=> $category_name,
+                'description' 		=> $this->category_object->get_description(),
+                'hid_user_id' 		=> $this->category_object->get_user_id(),
+                'hid_parent_id' 	=> $this->category_object->get_parent_id(),
+                'grade_model_id' 	=> $grade_model_id,
+                'skills'            => $skills,
+                'weight' 			=> $this->category_object->get_weight(),
+                'visible' 			=> $this->category_object->is_visible(),
+                'certif_min_score'  => $this->category_object->get_certificate_min_score(),
+            )
+        );
    		$this->addElement('hidden','hid_id', $this->category_object->get_id());
    		$this->addElement('hidden','course_code', $this->category_object->get_course_code());
 		$this->build_basic_form();

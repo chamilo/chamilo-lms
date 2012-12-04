@@ -527,6 +527,58 @@ class Testcategory {
         }        
         return $html;
     }
+
+/**     
+     * Returns a category summary report
+     * @params int exercise id
+     * @params array prefilled array with the category_id, score, and weight example: array(1 => array('score' => '10', 'total' => 20));
+     */
+    public static function get_stats_table_by_attempt($exercise_id, $category_list = array()) {
+        if (empty($category_list)) {
+            return null;
+        }          
+        $category_name_list = Testcategory::getListOfCategoriesNameForTest($exercise_id);
+                
+        $table = new HTML_Table(array('class' => 'data_table'));
+        $table->setHeaderContents(0, 0, get_lang('Categories'));
+        $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
+        $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
+        $row = 1;
+        
+        $none_category = array();
+        if (isset($category_list['none'])) {
+            $none_category = $category_list['none'];                    
+            unset($category_list['none']);            
+        }
+        
+        $total = array();
+        if (isset($category_list['total'])) {
+            $total = $category_list['total'];
+            unset($category_list['total']);
+        }
+        if (count($category_list) > 1) {
+            foreach ($category_list as $category_id => $category_item) {            
+                $table->setCellContents($row, 0, $category_name_list[$category_id]);
+                $table->setCellContents($row, 1, show_score($category_item['score'], $category_item['total'], false));            
+                $table->setCellContents($row, 2, show_score($category_item['score'], $category_item['total'], true, false, true));
+                $row++;
+            }
+
+            if (!empty($none_category)) {
+                $table->setCellContents($row, 0, get_lang('None'));
+                $table->setCellContents($row, 1, show_score($none_category['score'], $none_category['total'], false));            
+                $table->setCellContents($row, 2, show_score($none_category['score'], $none_category['total'], true, false, true));
+                $row++;
+            }
+            if (!empty($total)) {
+                $table->setCellContents($row, 0, get_lang('Total'));
+                $table->setCellContents($row, 1, show_score($total['score'], $total['total'], false));
+                $table->setCellContents($row, 2, show_score($total['score'], $total['total'], true, false, true));
+            }
+            return $table->toHtml();
+        }
+        return null;
+    }
     
     
     

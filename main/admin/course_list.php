@@ -61,10 +61,19 @@ function get_number_of_courses() {
  * Get course data to display
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);    
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);    
     
-    $sql = "SELECT code AS col0, title AS col1, visual_code AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, 
-            code AS col7, visibility AS col8, directory as col9 
+    $sql = "SELECT  code AS col0, 
+                    title AS col1, 
+                    code AS col2, 
+                    course_language AS col3, 
+                    category_code AS col4, 
+                    subscribe AS col5, 
+                    unsubscribe AS col6, 
+                    code AS col7, 
+                    visibility AS col8, 
+                    directory as col9,
+                    visual_code                    
     		FROM $course_table";
     global $_configuration;
     
@@ -97,14 +106,12 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 
     $res = Database::query($sql);
     $courses = array ();
-    while ($course = Database::fetch_row($res)) {
+    while ($course = Database::fetch_array($res)) {        
         // Place colour icons in front of courses.		
-        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a>';
+        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.Display::label($course['visual_code'], 'info');
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-
-        $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);
-        
+        $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);        
         $courses[] = $course_rem;
     }
     return $courses;
@@ -183,7 +190,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $categories = array();
     $categories_select = $form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
     CourseManager::select_and_sort_categories($categories_select);
-    $el = & $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
+    $el = $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);

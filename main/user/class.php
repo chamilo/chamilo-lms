@@ -11,9 +11,6 @@ $language_file = array('registration','admin');
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-/**
- * MAIN CODE	
- */
 api_protect_course_script();
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
@@ -54,7 +51,7 @@ if (api_is_allowed_to_edit()) {
         case 'add_class_to_course':
             $id = $_GET['id'];
             if (!empty($id)) {
-                $usergroup->subscribe_courses_to_usergroup($id, array(api_get_course_int_id()));
+                $usergroup->subscribe_courses_to_usergroup($id, array(api_get_course_int_id()), false);
             }
             break;
         case 'remove_class_from_course':
@@ -67,7 +64,6 @@ if (api_is_allowed_to_edit()) {
 }
 
 //jqgrid will use this URL to do the selects
-
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type;
 
@@ -84,8 +80,7 @@ $column_model = array(
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
-$extra_params['rowList'] = array(50, 100, 500, 1000, 2000, 5000);
-
+//$extra_params['rowList'] = array(50, 100, 500, 1000, 2000, 5000);
 
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
@@ -103,7 +98,5 @@ $(function() {
 });
 </script>
 <?php
-
 $usergroup->display_teacher_view();
-
 Display :: display_footer();

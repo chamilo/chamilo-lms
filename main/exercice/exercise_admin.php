@@ -113,7 +113,8 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
 			}*/
-			if (document.getElementById(\'exerciseType_1\').checked) {
+            
+			if (document.getElementById(\'exerciseType_1\') && document.getElementById(\'exerciseType_1\').checked) {
 				document.getElementById(\'exerciseType_0\').checked = true;
 			}
 		}

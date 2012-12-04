@@ -98,7 +98,7 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 
 	$link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
     $gradebook_link_id = $link_info['id'];
-    
+
 	if ($link_info) {
 		if ($sql_result_array = Database::fetch_array(Database::query('SELECT weight FROM '.$table_gradebook_link.' WHERE id='.$gradebook_link_id))) {
 			$defaults['survey_qualify_gradebook'] = $gradebook_link_id;
@@ -277,7 +277,7 @@ if ($form->validate()) {
 	if ($return['type'] == 'error') {
 		// Display the error
 		Display::display_error_message(get_lang($return['message']), false);
-        
+
         // Displaying the header
         Display::display_header($tool_name);
 
@@ -306,7 +306,7 @@ if ($form->validate()) {
 			}
 		}
 	}
-    
+
 	if ($config['survey']['debug']) {
 		// Displaying a feedback message
    		Display::display_confirmation_message($return['message'], false);

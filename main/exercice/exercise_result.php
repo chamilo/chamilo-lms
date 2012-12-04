@@ -132,6 +132,7 @@ if ($objExercise->selectAttempts() > 0) {
 
 Display :: display_normal_message(get_lang('Saved').'<br />',false);
 
+//Display questions
 display_question_list_by_attempt($objExercise, $exe_id, true);
 
 //If is not valid
@@ -150,7 +151,7 @@ delete_chat_exercise_session($exe_id);
 if ($origin != 'learnpath') {
     echo '<hr>';
     echo Display::url(get_lang('ReturnToCourseHomepage'), api_get_course_url(), array('class' => 'btn btn-large'));
-    
+
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
@@ -160,16 +161,14 @@ if ($origin != 'learnpath') {
 } else {
 	$lp_mode =  $_SESSION['lp_mode'];
 	$url = '../newscorm/lp_controller.php?cidReq='.api_get_course_id().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type;
-	//echo $total_score.','.$total_weight;	exit;
 	$href = ($lp_mode == 'fullscreen')?' window.opener.location.href="'.$url.'" ':' top.location.href="'.$url.'"';
-    
+
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
     }
-
-	echo '<script type="text/javascript">'.$href.'</script>';
 	//record the results in the learning path, using the SCORM interface (API)
-	echo '<script type="text/javascript">window.parent.API.void_save_asset('.$total_score.','.$total_weight.');</script>';
+	echo "<script>window.parent.API.void_save_asset('$total_score', '$total_weight', 0, 'completed');</script>";
+    echo '<script type="text/javascript">'.$href.'</script>';
 	echo '</body></html>';
 }

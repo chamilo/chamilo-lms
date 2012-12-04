@@ -242,14 +242,21 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
           //GROUP BY questions.position, attempts.question_id";
 
 $result = Database::query($query);
+$questionList = array();
 $exerciseResult = array();
 
 while ($row = Database::fetch_array($result)) {	
+	$questionList[] = $row['question_id'];
 	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
-// always getting question list from the DB
-$questionList = explode(',',$track_exercise_info['data_tracking']);
+//Fixing #2073 Fixing order of questions
+if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
+	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
+	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
+		$questionList = $tempquestionList;			
+	}		
+}
 
 // Display the text when finished message if we are on a LP #4227
 $end_of_message = $objExercise->selectTextWhenFinished();
@@ -270,7 +277,7 @@ $counter = 1;
 $exercise_content = null;
 
 $media_list = array();
-
+$category_list = array();
 foreach ($questionList as $questionId) {
     
 	$choice = $exerciseResult[$questionId];
@@ -573,6 +580,27 @@ foreach ($questionList as $questionId) {
 	$my_total_weight = $questionWeighting;   
     $totalWeighting += $questionWeighting;
 	
+    $category_was_added_for_this_test = false;
+
+    if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+        $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+        $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+        $category_was_added_for_this_test = true;
+    }
+
+    if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+        foreach($objQuestionTmp->category_list as $category_id) {
+            $category_list[$category_id]['score'] += $my_total_score;
+            $category_list[$category_id]['total'] += $my_total_weight;
+            $category_was_added_for_this_test = true;
+        }
+    }
+
+    //No category for this question!
+    if ($category_was_added_for_this_test == false) {
+        $category_list['none']['score'] += $my_total_score;
+        $category_list['none']['total'] += $my_total_weight;
+    }
     if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
         $my_total_score = 0;
     }
@@ -621,23 +649,22 @@ $total_score_text = null;
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	if ($show_results || $show_only_total_score ) {
         
-        $total_score_text .= '<div class="question_row">
-        <div class="ribbon">
-        <div class="rib rib-total">';
-        
-		$total_score_text .= '<h3>'.get_lang('YourTotalScore').": ";
+        $total_score_text .= '<div class="question_row">';
         $my_total_score_temp = $totalScore; 
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }          
-        $total_score_text .= show_score($my_total_score_temp, $totalWeighting, false);	        
-		$total_score_text .= '</h3>';
-        $total_score_text .= '</div>';
-        $total_score_text .= '</div>';
+        $total_score_text .= get_question_ribbon($objExercise, $my_total_score_temp, $totalWeighting, true);
         $total_score_text .= '</div>';
 	}
 }
 
+if (!empty($category_list) && ($show_results || $show_only_total_score)) {
+    //Adding total
+    $category_list['total'] = array('score' => $my_total_score_temp, 'total' => $totalWeighting);
+
+    echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
+}
 echo $total_score_text;
 echo $exercise_content;
 echo $total_score_text;
@@ -693,7 +720,7 @@ if ($origin != 'learnpath') {
 		echo '<script type="text/javascript">'.$href.'</script>';		
 		
 		//Record the results in the learning path, using the SCORM interface (API)		
-		echo '<script type="text/javascript">window.parent.API.void_save_asset('.$totalScore.','.$totalWeighting.');</script>'."\n";
+		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting'); </script>";
 		echo '</body></html>';
 	} else {
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));

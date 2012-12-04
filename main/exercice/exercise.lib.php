@@ -422,6 +422,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                             $correct_item = preg_quote($correct_item);
                             $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
 				            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);                            
+                            //$answer = api_preg_replace('/\['.$correct_item.'+\]/', Display::input('text', "choice[$questionId][]", $value), $answer);	
 				        }		        				        
 				        $i++;				        
 				    }
@@ -993,7 +994,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     propagate_neg,
                     revised,
                     group_name,
-                    group_id";
+                    group_id,
+                    orig_lp_id";
         }
         
         $sql = " $sql_select            
@@ -1003,9 +1005,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 WHERE $extra_where_conditions AND
                     te.status != 'incomplete' 
                     AND te.exe_cours_id='" . api_get_course_id() . "' $session_id_and 
-                    AND ce.active <>-1 
-                    AND orig_lp_id = 0 
-                    AND orig_lp_item_id = 0
+                    AND ce.active <>-1
                     AND ce.c_id=".api_get_course_int_id()."					
                     $exercise_where ";
          
@@ -2077,9 +2077,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     if ($show_results || $show_only_score) {
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
-        $objExercise->description = '';
-        //var_dump($exercise_stat_info);
-        echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['exe_date'], DATE_TIME_FORMAT_LONG));
+        echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
     }
     
     if ($save_user_result) {    
@@ -2095,6 +2093,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     $question_list_answers = array();
     $media_list = array();
+    $category_list = array();
 
     // Loop over all question to show results for each of them, one by one
     if (!empty($question_list)) {
@@ -2115,10 +2114,36 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];
             
-            $question_list_answers[] = array('question' => $result['open_question'], 'answer' => $result['open_answer']);            
+            $question_list_answers[] = array(
+                'question' => $result['open_question'],
+                'answer' => $result['open_answer']
+            );
             
             $my_total_score  = $result['score'];
-            $my_total_weight = $result['weight'];   
+            $my_total_weight = $result['weight'];  
+ 
+            //Category report
+            $category_was_added_for_this_test = false;
+
+            if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
+                $category_list[$objQuestionTmp->category]['score'] += $my_total_score;
+                $category_list[$objQuestionTmp->category]['total'] += $my_total_weight;
+                $category_was_added_for_this_test = true;
+            }
+
+            if (isset($objQuestionTmp->category_list) && !empty($objQuestionTmp->category_list)) {
+                foreach($objQuestionTmp->category_list as $category_id) {
+                    $category_list[$category_id]['score'] += $my_total_score;
+                    $category_list[$category_id]['total'] += $my_total_weight;
+                    $category_was_added_for_this_test = true;
+                }
+            }
+
+            //No category for this question!
+            if ($category_was_added_for_this_test == false) {
+                $category_list['none']['score'] += $my_total_score;
+                $category_list['none']['total'] += $my_total_weight;
+            }
 
             if ($objExercise->selectPropagateNeg() == 0 && $my_total_score < 0) {
                 $my_total_score = 0;
@@ -2135,7 +2160,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             
             $score = array();    
             if ($show_results) {	    
-                $score['result'] = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, false);
+                $score['result']    = get_lang('Score')." : ".show_score($my_total_score, $my_total_weight, false, true);
                 $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
                 $score['score'] = $my_total_score;
                 $score['weight'] = $my_total_weight;
@@ -2175,34 +2200,18 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     if ($origin != 'learnpath') {
         if ($show_results || $show_only_score) {
             
-            $is_success = is_success_exercise_result($total_score, $total_weight, $objExercise->selectPassPercentage());
+
             $total_score_text .= '<div class="question_row">';
-            $total_score_text .= '<div class="ribbon ribbon-total ">';
-            
-            // Color the final test score if pass_percentage activated
-            $ribbon_total_success_or_error = "";
-            if (is_pass_pourcentage_enabled($objExercise->selectPassPercentage())) {
-                if ($is_success) {
-                    $ribbon_total_success_or_error = ' ribbon-total-success';
-                } else {
-                    $ribbon_total_success_or_error = ' ribbon-total-error';
+            $total_score_text .= get_question_ribbon($objExercise, $total_score, $total_weight, true);
+            $total_score_text .= '</div>';
                 }
             }
-            $total_score_text .= '<div class="rib rib-total $ribbon_total_success_or_error">';
+
             
-            $total_score_text .= '<h3>';
-            $total_score_text .= get_lang('YourTotalScore')."&nbsp;";
-            if ($objExercise->selectPropagateNeg() == 0 && $total_score < 0) {
-                $total_score = 0;
-            }
-            $total_score_text .= show_score($total_score, $total_weight, false, true);
-            $total_score_text .= '</h3>';            
-            $total_score_text .= '</div>';
-            $total_score_text .= show_success_message($total_score, $total_weight, $objExercise->selectPassPercentage());
-            
-            $total_score_text .= '</div>';
-            $total_score_text .= '</div>';
-        }
+    if (!empty($category_list) && ($show_results || $show_only_score) ) {
+        //Adding total
+        $category_list['total'] = array('score' => $total_score, 'total' => $total_weight);
+        echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
     }
     
     echo $total_score_text;   
@@ -2228,4 +2237,35 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
         }
     }    
+}
+
+
+function get_question_ribbon($objExercise, $score, $weight, $check_pass_percentage = false) {
+    $ribbon = '<div class="ribbon">';
+    if ($check_pass_percentage) {
+        $is_success = is_success_exercise_result($score, $weight, $objExercise->selectPassPercentage());
+        // Color the final test score if pass_percentage activated
+        $ribbon_total_success_or_error = "";
+        if (is_pass_pourcentage_enabled($objExercise->selectPassPercentage())) {
+            if ($is_success) {
+                $ribbon_total_success_or_error = ' ribbon-total-success';
+            } else {
+                $ribbon_total_success_or_error = ' ribbon-total-error';
+            }
+        }
+        $ribbon .= '<div class="rib rib-total '.$ribbon_total_success_or_error.'">';
+    } else {
+        $ribbon .= '<div class="rib rib-total">';
+    }
+    $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
+    $ribbon .= show_score($score, $weight, false, true);
+    $ribbon .= '</h3>';
+    $ribbon .= '</div>';
+    if ($check_pass_percentage) {
+        $ribbon .= show_success_message($score, $weight, $objExercise->selectPassPercentage());
+    }
+
+
+    $ribbon .= '</div>';
+    return $ribbon;
 }

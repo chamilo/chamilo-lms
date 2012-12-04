@@ -10,47 +10,15 @@
  * behaviours with POST requests.
  */
 
-/*
-if (isset($_POST['dropbox_unid'])) {
-	$dropbox_unid = $_POST['dropbox_unid'];
-} elseif (isset($_GET['dropbox_unid'])) {
-	$dropbox_unid = $_GET['dropbox_unid'];
-} else {
-	die(get_lang('BadFormData').' (code 400)');
-}
-
-if (isset($_SESSION['dropbox_uniqueid']) && isset($_GET['dropbox_unid']) && $dropbox_unid == $_SESSION['dropbox_uniqueid']) {
-	//resubmit : go to index.php
-	// only prevent resending of data for GETS, not POSTS because this gives annoying results
-
-	if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-		$mypath = 'https';
-	} else {
-		$mypath = 'http';
-	}
-	$mypath = $mypath.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']).'/index.php';
-
-    header("Location: $mypath");
-}
-
-$dropbox_uniqueid = $dropbox_unid;
-
-api_session_register('dropbox_uniqueid');
-*/
-
-
 /**
  * FORM SUBMIT
  * - VALIDATE POSTED DATA
  * - UPLOAD NEW FILE
  */
 if (isset($_POST['submitWork'])) {
-
     require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-
     $error = false;
     $errormsg = '';
-
     /**
      * FORM SUBMIT : VALIDATE POSTED DATA
      */

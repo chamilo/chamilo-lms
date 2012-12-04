@@ -35,7 +35,6 @@ class Matching extends Question {
 	 * @param the formvalidator instance
 	 */
 	function createAnswersForm ($form) {
-
 		$defaults = array();
 		$navigator_info = api_get_navigator();
 
@@ -71,8 +70,7 @@ class Matching extends Question {
 				}
 
 			}
-		}
-		else {
+		} else {
 			$defaults['answer[1]'] = get_lang('DefaultMakeCorrespond1');
 			$defaults['answer[2]'] = get_lang('DefaultMakeCorrespond2');
 			$defaults['matches[2]'] = '2';
@@ -80,8 +78,7 @@ class Matching extends Question {
 			$defaults['option[2]'] = get_lang('DefaultMatchingOptB');
 		}
 		$a_matches = array();
-		for($i=1 ; $i<=$nb_options ; ++$i)
-		{
+		for($i=1 ; $i<=$nb_options ; ++$i) {
 			$a_matches[$i] = chr(64+$i);  // fill the array with A, B, C.....
 		}
 
@@ -212,8 +209,7 @@ class Matching extends Question {
 		$position = 0;
 
 		// insert the options
-		for($i=1 ; $i<=$nb_options ; ++$i)
-		{
+		for($i=1 ; $i<=$nb_options; ++$i) {
 			$position++;
 			$option = $form -> getSubmitValue('option['.$i.']');
 			$objAnswer->createAnswer($option, 0, '', 0, $position);

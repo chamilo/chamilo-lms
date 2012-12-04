@@ -42,11 +42,11 @@ if (!api_is_allowed_to_edit(false,true) && !$is_group_member) {
  *  List all users registered to the course
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword) {
-	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {		
+	if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos($username, $keyword) !== false || api_strripos($official_code, $keyword) !== false) {
 		return true;
 	} else {
 		return false;
-	}	
+	}
 }
 
 
@@ -133,7 +133,7 @@ foreach ($complete_user_list as $index => $user) {
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
 $selected_users = array();
 $selected_tutors = array();
-foreach ($group_tutor_list as $index => $user) {    
+foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
@@ -278,8 +278,8 @@ if ($form->validate()) {
 		GroupManager :: subscribe_users($values['group_members'], $current_group['id']);
 	}
 
-	// Returning to the group area (note: this is inconsistent with the rest of chamilo)    
-	$cat = GroupManager :: get_category_from_group($current_group['id']);      
+	// Returning to the group area (note: this is inconsistent with the rest of chamilo)
+	$cat = GroupManager :: get_category_from_group($current_group['id']);
     if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
     } else {

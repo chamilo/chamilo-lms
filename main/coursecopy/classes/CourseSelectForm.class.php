@@ -446,6 +446,23 @@ class CourseSelectForm
                             }
                         }
                         break;
+                    case RESOURCE_LEARNPATH:
+                        $lps = $_POST['resource'][RESOURCE_LEARNPATH];
+                        if (!empty($lps)) {
+                            foreach ($lps as $id => $obj) {
+                                $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
+                                if (isset($lp_resource) && !empty($lp_resource) && isset($lp_resource->items)) {
+                                    foreach ($lp_resource->items as $item) {
+                                        switch ($item['item_type']) {
+                                            //Add links added in a LP see #5760
+                                            case 'link':
+                                                $_POST['resource'][RESOURCE_LINK][$item['path']] = 1;
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
 					case RESOURCE_LINKCATEGORY :
 					case RESOURCE_FORUMCATEGORY :
 					case RESOURCE_QUIZQUESTION :

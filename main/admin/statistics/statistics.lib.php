@@ -6,7 +6,7 @@
 * @package chamilo.statistics
 */
 class Statistics {
-    
+
     /**
      * Converts a number of bytes in a formatted string
      * @param int $size
@@ -18,7 +18,7 @@ class Statistics {
         if ($size >= pow(2,20) && $size < pow(2,30)) return round($size / pow(2,20), 1)." MB";
         if ($size > pow(2,30)) return round($size / pow(2,30), 2)." GB";
     }
-    
+
     /**
      * Count courses
      * @param string $category_code  Code of a course category. Default: count
@@ -30,7 +30,7 @@ class Statistics {
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
             if (isset ($category_code)) {
                 $sql .= " AND category_code = '".Database::escape_string($category_code)."'";
@@ -82,8 +82,6 @@ class Statistics {
      * @return int Number of users counted
      */
     static function count_users($status = null, $category_code = null, $count_invisible_courses = true, $only_active = false) {
-
-        global $_configuration;
         // Database table definitions
         $course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table         = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -93,7 +91,7 @@ class Statistics {
         $active_filter = $only_active?' AND active=1':'';
         $status_filter = isset($status)?' AND status = '.intval($status):'';
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             if (isset ($category_code)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
@@ -137,14 +135,14 @@ class Statistics {
         $obj = Database::fetch_object($res);
         return $obj->total_number_of_items;
     }
-    
+
     /**
      * Get activities data to display
      */
     static function get_activities_data($from, $number_of_items, $column, $direction) {
         global $dateTimeFormatLong, $_configuration;
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
-        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);        
+        $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id 			= api_get_current_access_url_id();
 
@@ -189,7 +187,7 @@ class Statistics {
 
         $res = Database::query($sql);
         $activities = array ();
-        while ($row = Database::fetch_row($res)) {            
+        while ($row = Database::fetch_row($res)) {
             if (strpos($row[1], '_object') === false) {
                 $row[2] = $row[2];
             } else {
@@ -200,7 +198,7 @@ class Statistics {
                     }
                 }
             }
-        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
+        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
             	$row['default_date'] = api_get_local_time($row['default_date']);
         	} else {
         		$row['default_date'] = '-';
@@ -224,7 +222,7 @@ class Statistics {
         }
         return $categories;
     }
-    
+
     /**
      * Rescale data
      * @param array $data The data that should be rescaled
@@ -244,7 +242,7 @@ class Statistics {
         }
         return $result;
     }
-    
+
     /**
      * Show statistics
      * @param string $title The title
@@ -262,13 +260,13 @@ class Statistics {
         foreach ($stats as $subtitle => $number) {
             $total += $number;
         }
-        
-        foreach ($stats as $subtitle => $number) {            
+
+        foreach ($stats as $subtitle => $number) {
             if (!$is_file_size) {
                 $number_label = number_format($number, 0, ',', '.');
             } else {
                 $number_label = Statistics::make_size_string($number);
-            }            
+            }
             $percentage = ($total>0?number_format(100*$number/$total, 1, ',', '.'):'0');
 
             echo '<tr class="row_'.($i%2 == 0 ? 'odd' : 'even').'">
@@ -291,7 +289,7 @@ class Statistics {
         }
         echo '</table>';
     }
-    
+
     /**
      * Show some stats about the number of logins
      * @param string $type month, hour or day
@@ -366,7 +364,7 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('AllLogins').' ('.$period.')', $result, true);
     }
-    
+
     /**
      * Print the number of recent logins
      */
@@ -429,7 +427,7 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('PlatformToolAccess'),$result,true);
     }
-    
+
     /**
      * Show some stats about the number of courses per language
      */
@@ -440,8 +438,8 @@ class Statistics {
         $current_url_id = api_get_current_access_url_id();
         if ($_configuration['multiple_access_urls']) {
             $sql = "SELECT course_language, count( c.code ) AS number_of_courses ".
-                   "FROM $table as c, $access_url_rel_course_table as u 
-            		WHERE u.course_code=c.code AND access_url_id='".$current_url_id."' 
+                   "FROM $table as c, $access_url_rel_course_table as u
+            		WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'
             		GROUP BY course_language ORDER BY number_of_courses DESC";
         } else {
             $sql = "SELECT course_language, count( code ) AS number_of_courses ".
@@ -454,7 +452,7 @@ class Statistics {
         }
         Statistics::print_stats(get_lang('CountCourseByLanguage'),$result,true);
     }
-    
+
     /**
      * Shows the number of users having their picture uploaded in Dokeos.
      */
@@ -497,7 +495,7 @@ class Statistics {
         echo '<div class="actions">';
             $form->display();
         echo '</div>';
-        
+
         $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
         $parameters = array();
 
@@ -599,9 +597,9 @@ class Statistics {
         $message_table 				= Database::get_main_table(TABLE_MAIN_MESSAGE);
         $user_table 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        
+
         $current_url_id 			= api_get_current_access_url_id();
-        
+
         switch ($message_type) {
             case 'sent':
                 $field = 'user_sender_id';
@@ -611,7 +609,7 @@ class Statistics {
                 break;
         }
         if ($_configuration['multiple_access_urls']) {
-        	
+
             $sql = "SELECT lastname, firstname, username, COUNT($field) AS count_message ".
                 "FROM ".$access_url_rel_user_table." as url, ".$message_table." m ".
                 "LEFT JOIN ".$user_table." u ON m.$field = u.user_id ".
@@ -644,7 +642,7 @@ class Statistics {
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $current_url_id = api_get_current_access_url_id();
-        
+
         if ($_configuration['multiple_access_urls']) {
             $sql = "SELECT lastname, firstname, username, COUNT(friend_user_id) AS count_friend ".
                 "FROM ".$access_url_rel_user_table." as url, ".$user_friend_table." uf ".
@@ -666,7 +664,7 @@ class Statistics {
         }
         return $list_friends;
     }
-    
+
     /**
      * Print the number of users that didn't login for a certain period of time
      */
@@ -684,23 +682,23 @@ class Statistics {
             $table_url = '';
             $where_url='';
         }
-        $sql[get_lang('Thisday')]    = 
+        $sql[get_lang('Thisday')]    =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last7days')]  = 
+        $sql[get_lang('Last7days')]  =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= NOW() $where_url";
-        $sql[get_lang('Last31days')] = 
+        $sql[get_lang('Last31days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= NOW() $where_url";
-        $sql[sprintf(get_lang('LastXMonths'),6)] = 
+        $sql[sprintf(get_lang('LastXMonths'),6)] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= NOW() $where_url";
-        $sql[get_lang('NeverConnected')]      = 
+        $sql[get_lang('NeverConnected')]      =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {

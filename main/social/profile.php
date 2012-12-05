@@ -679,11 +679,7 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
 
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
-$tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

@@ -2804,9 +2804,10 @@ class CourseManager {
                     }
 
                     $html .= '</div>';
+                    $notifications = isset($params['notifications']) ? $params['notifications'] : null;
 
                     $html .= '<div class="span6">';
-                        $html .='<h3>'.$params['title'].$params['notifications'].'</h3> ';
+                        $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
                         if (!empty($params['subtitle'])) {
                             $html .= '<small>'.$params['subtitle'].'</small>';
@@ -2818,12 +2819,11 @@ class CourseManager {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
                         }
 
-
                     $html .= '</div>';
                 $html .= '</div>';
 
             $html .= '</div>';
-
+            $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
             $html .= '<div class="span1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
         $html .= '</div>';
         $html .= '</div>';

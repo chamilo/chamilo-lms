@@ -164,7 +164,7 @@ class FCKeditor
      */
     public function CreateHtml() {
         // Adaptation for the Chamilo LMS
-        
+
 		//@todo why the BasePath is relative ? we should use this constant WEB_PATH
         $this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
         //$this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
@@ -367,7 +367,7 @@ class FCKeditor
         }
         $toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'default';
         $return = array_merge($config, $this->get_custom_toolbar_configuration($toolbar_dir));
-        return $return; 
+        return $return;
     }
 
     /**
@@ -515,7 +515,7 @@ class FCKeditor
                 $config['BaseHref'] = $script_path;
             }
         } else {
-            if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
+            if (api_is_platform_admin() && isset($_SESSION['this_section']) && $_SESSION['this_section'] == 'platform_admin') {
                 // 3. Platform administration activities.
                 $config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
                 $config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.

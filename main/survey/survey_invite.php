@@ -86,7 +86,7 @@ if (Database::num_rows($result) > 1) {
 }
 
 // Invited / answered message
-if ($survey_data['invited'] > 0) {
+if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
 	$message .= get_lang('HaveAnswered').' ';
 	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
@@ -180,6 +180,7 @@ if ($form->validate()) {
         	$defaults['send_mail'] = 1;
         	$form->setDefaults($defaults);
             $form->display();
+            return;
         }
     }
     // Save the invitation mail
@@ -199,7 +200,20 @@ if ($form->validate()) {
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+    $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+	// Counting the number of people that are invited
+	$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
+	$result = Database::query($sql);
+	$row = Database::fetch_array($result);
+	$total_invited = $row['invited'];
+    if ($total_invited > 0) {
+    	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+    	$message .= get_lang('HaveAnswered').' ';
+    	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
+    	$message .= get_lang('WereInvited');
+    	Display::display_normal_message($message, false);
+    	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+    }
 } else {
 	// Getting the invited users
 	$defaults = SurveyUtil::get_invited_users($survey_data['code']);

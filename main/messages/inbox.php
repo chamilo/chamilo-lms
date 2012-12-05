@@ -101,7 +101,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 	}
 }
 
-if ($_GET['f']=='social') {
+if (isset($_GET['f']) && $_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));
 	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Inbox'));
@@ -112,7 +112,7 @@ if ($_GET['f']=='social') {
 
 $social_parameter = '';
 
-if ($_GET['f']=='social' || api_get_setting('allow_social_tool') == 'true') {
+if (isset($_GET['f']) && $_GET['f'] == 'social' || api_get_setting('allow_social_tool') == 'true') {
 	$social_parameter = '?f=social';
 } else {
 

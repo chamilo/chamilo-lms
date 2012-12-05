@@ -16,7 +16,7 @@ if (api_get_setting('allow_message_tool')!='true') {
 
 /*		HEADER  */
 
-if ($_REQUEST['f']=='social') {
+if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
 	$interbreadcrumb[]= array ('url' => 'inbox.php?f=social','name' => get_lang('Inbox'));
@@ -25,7 +25,9 @@ if ($_REQUEST['f']=='social') {
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 }
 
-if ($_GET['f']=='social') {
+$social_right_content = null;
+
+if (isset($_GET['f']) && $_GET['f']=='social') {
 	$social_parameter = '?f=social';
 } else {
 	if (api_get_setting('extended_profile') == 'true') {
@@ -79,7 +81,6 @@ if (!empty($message)) {
 $tpl = new Template(get_lang('View'));
 if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_content', $social_left_content);
-    $tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);
@@ -87,7 +88,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $content = $social_right_content;
 
     $tpl->assign('actions', $actions);
-    $tpl->assign('message', $show_message);
+    $tpl->assign('message', $message);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }

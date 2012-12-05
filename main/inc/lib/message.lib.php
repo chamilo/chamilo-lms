@@ -166,12 +166,12 @@ class MessageManager
                 $class = 'class = "read"';
             }
             $link = '';
-            if ($_GET['f']=='social') {
+            if (isset($_GET['f']) && $_GET['f'] =='social') {
                 $link = '&f=social';
             }
             $message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName(($result[1]));
-            $message[3] = '<a href="new_message.php?re_id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-                      '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
+            $message[3] = '<a href="new_message.php?re_id='.$result[0].$link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+                      '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].$link.'">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 
 			$message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
 			foreach($message as $key => $value) {
@@ -775,7 +775,7 @@ class MessageManager
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
 		        <div style="padding: 15px 0px 5px 0px">';
 		    $social_link = '';
-		    if ($_GET['f'] == 'social') {
+		    if (isset($_GET['f']) && $_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
 		    }
 		    if ($source == 'outbox') {
@@ -1271,7 +1271,7 @@ class MessageManager
         $table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
         $table->set_header(3,$action,false,array ('style' => 'width:70px;'));
 
-        if ($_REQUEST['f']=='social') {
+        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
@@ -1282,16 +1282,14 @@ class MessageManager
 
 
     static function outbox_display() {
-        $request=api_is_xml_http_request();
         global $charset;
-
         $social_link = false;
-        if ($_REQUEST['f']=='social') {
+        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $social_link ='f=social';
         }
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
-        if (isset ($_REQUEST['action'])) {
+        if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1324,26 +1322,11 @@ class MessageManager
         $table->set_header(2, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:160px;'));
         $table->set_header(3,$action, false,array ('style' => 'width:70px;'));
 
-
-        if ($request===true) {
-            $html .=  '<form name="form_send_out" id="form_send_out" action="" method="post">';
-            $html .=  '<input type="hidden" name="action" value="delete" />';
-            $html .= $table->return_table();
-            $html .=  '</form>';
-            if (get_number_of_messages_send_mask() > 0) {
-                $html .=  '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-                $html .=  '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-                $html .=  '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
-            }
-        } else {
-            $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-            $html .= $table->return_table();
-        }
+        $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+        $html .= $table->return_table();
         return $html;
     }
 }
-
-
 
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();

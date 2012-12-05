@@ -32,11 +32,11 @@ if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
 
-if ($origin == 'learnpath')
+if ($origin == 'learnpath') {
     api_protect_course_script(false, false, true);
-else
+} else {
     api_protect_course_script(true, false, true);
-
+}
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -70,7 +70,7 @@ if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_
     }
 }
 
-$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -216,12 +216,12 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type']) ) {
 if ($show_results || $show_only_total_score) {
     $user_info   = api_get_user_info($student_id);
     //Shows exercise header
-    echo $objExercise->show_exercise_result_header(api_get_person_name($user_info['firstName'], $user_info['lastName']), api_convert_and_format_date($exercise_date));
+    echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_date));
 }
 
 $i = $totalScore = $totalWeighting = 0;
 
-if($debug>0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
+if ($debug > 0){error_log("ExerciseResult: ".print_r($exerciseResult,1)); error_log("QuestionList: ".print_r($questionList,1));}
 
 $arrques = array();
 $arrans  = array();
@@ -238,22 +238,34 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
 				    AND questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-          //GROUP BY questions.position, attempts.question_id";
+
 $result = Database::query($query);
-$questionList = array();
+
+$question_list_from_database = array();
 $exerciseResult = array();
 
 while ($row = Database::fetch_array($result)) {
-	$questionList[] = $row['question_id'];
+	$question_list_from_database[] = $row['question_id'];
 	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
 //Fixing #2073 Fixing order of questions
-if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-	$tempquestionList = explode(',', $track_exercise_info['data_tracking']);
-	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {
+if (!empty($track_exercise_info['data_tracking'])) {
+	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
+
+    //Getting question list from data_tracking
+    if (!empty($temp_question_list)) {
+        $questionList = $temp_question_list;
+    }
+    //If for some reason data_tracking is empty we select the question list from db
+    if (empty($questionList)) {
+        $questionList = $question_list_from_database;
+    }
+	/*if (is_array($temp_question_list) && count($temp_question_list) == count($question_list_from_database)) {
 		$questionList = $tempquestionList;
-	}
+	}*/
+} else {
+    $questionList = $question_list_from_database;
 }
 
 // Display the text when finished message if we are on a LP #4227

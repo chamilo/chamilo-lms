@@ -1913,13 +1913,91 @@ function api_get_session_info($session_id, $add_extra_values = false) {
     return $data;
 }
 
+
+function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true) {
+    if (api_is_platform_admin()) {
+        if ($ignore_visibility_for_admins) {
+            return true;
+        }
+    }
+
+    $session_id = $session_info['id'];
+
+    $now = time();
+
+    $access = false;
+
+    if ($session_info) {
+
+        //I don't care the field visibility because there are not limit dates
+        if ($session_info['access_start_date'] == '0000-00-00 00:00:00' && $session_info['access_end_date'] == '0000-00-00 00:00:00') {
+            return true;
+        } else {
+
+            //If access_start_date is set
+            if (!empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00') {
+                if ($now > api_strtotime($session_info['access_start_date'], 'UTC')) {
+                    $access = true;
+                } else {
+                    $access = false;
+                }
+            }
+
+            //if access_end_date is set
+            if (!empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00') {
+                //only if access_end_date said that it was ok
+
+                if ($now <= api_strtotime($session_info['access_end_date'], 'UTC')) {
+                    //date still available
+                    $access = true;
+                } else {
+                    //session ends
+                    $access = false;
+                }
+            }
+        }
+
+        if ($check_coach_dates) {
+
+            //2. If I'm a coach
+            $is_coach = api_is_coach($session_id, $course_code);
+
+            if ($is_coach) {
+
+                if (isset($session_info['access_end_date']) && !empty($session_info['access_end_date']) && $session_info['access_end_date'] != '0000-00-00 00:00:00' &&
+                    isset($session_info['coach_access_end_date']) && !empty($session_info['coach_access_end_date']) && $session_info['coach_access_end_date'] != '0000-00-00 00:00:00') {
+                    $end_date_extra_for_coach = api_strtotime($session_info['coach_access_end_date'], 'UTC');
+
+                    if ($now <= $end_date_extra_for_coach) {
+                        $access = true;
+                    } else {
+                        $access = false;
+                    }
+                }
+
+                //Test start date
+                if (isset($session_info['access_start_date']) && !empty($session_info['access_start_date']) && $session_info['access_start_date'] != '0000-00-00 00:00:00' &&
+                    isset($session_info['coach_start_date']) && !empty($session_info['coach_start_date']) && $session_info['coach_start_date'] != '0000-00-00 00:00:00') {
+                    $start_date_for_coach = api_strtotime($session_info['coach_start_date'], 'UTC');
+                    if ($now > $start_date_for_coach) {
+                        $access = true;
+                    } else {
+                        $access = false;
+                    }
+                }
+            }
+        }
+        return $access;
+    }
+}
+
+
 /**
  * Gets the session visibility by session id
  * @param int       session id
  * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
 function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
-    $visibility = 0; //means that the session is still available
 
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
@@ -1927,89 +2005,29 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         }
     }
 
-    $now = time();
+    $session_info = api_get_session_info($session_id);
 
-    if (!empty($session_id)) {
-        $session_id = intval($session_id);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        //1. Getting session information
-        $sql = "SELECT id, visibility, access_start_date, access_end_date, coach_access_start_date, coach_access_end_date
-                FROM $tbl_session
-                WHERE id = $session_id ";
+    $visibility = SESSION_AVAILABLE;
 
-        $result = Database::query($sql);
+    if (!empty($session_info)) {
+        $visibility = $session_info['visibility'];
 
-        if (Database::num_rows($result) > 0 ) {
-            $row = Database::fetch_array($result, 'ASSOC');
-            $visibility = $original_visibility = $row['visibility'];
-            //2. Setting visibility based in access_start_date and access_end_date
+        //1. Checking session date validation
+        $date_validation = api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins);
 
-            //I don't care the field visibility because there are not limit dates
-            if ($row['access_start_date'] == '0000-00-00 00:00:00' && $row['access_end_date'] == '0000-00-00 00:00:00') {
-                return SessionManager::DEFAULT_VISIBILITY;
-            } else {
-
-                //If access_start_date is set
-                if (!empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00') {
-                    if ($now > api_strtotime($row['access_start_date'], 'UTC')) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
-                //if access_end_date is set
-                if (!empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00') {
-                    //only if access_end_date said that it was ok
-                    if ($visibility == SESSION_AVAILABLE) {
-                        $visibility = $row['visibility'];
-
-                        if ($now <= api_strtotime($row['access_end_date'], 'UTC')) {
-                            //date still available
-                            $visibility = SESSION_AVAILABLE;
-                        } else {
-                            //session ends
-                            $visibility = $row['visibility'];
-                        }
-                    }
-                }
-            }
-
-            //3. If I'm a coach the visibility can change in my favor depending in the coach_access_start_date and coach_access_end_date values
+        if ($date_validation) {
+            return SessionManager::DEFAULT_VISIBILITY; //visible
+        } else {
+            /*
             $is_coach = api_is_coach($session_id, $course_code);
-
-            if ($is_coach) {
-                //Test end date
-                if (isset($row['access_end_date']) && !empty($row['access_end_date']) && $row['access_end_date'] != '0000-00-00 00:00:00' &&
-                    isset($row['coach_access_end_date']) && !empty($row['coach_access_end_date']) && $row['coach_access_end_date'] != '0000-00-00 00:00:00') {
-                    $end_date_extra_for_coach = api_strtotime($row['coach_access_end_date'], 'UTC');
-
-                    if ($now <= $end_date_extra_for_coach) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-
-                //Test start date
-                if (isset($row['access_start_date']) && !empty($row['access_start_date']) && $row['access_start_date'] != '0000-00-00 00:00:00' &&
-                    isset($row['coach_start_date']) && !empty($row['coach_start_date']) && $row['coach_start_date'] != '0000-00-00 00:00:00') {
-                    $start_date_for_coach = api_strtotime($row['coach_start_date'], 'UTC');
-                    if ($now > $start_date_for_coach) {
-                        $visibility = SESSION_AVAILABLE;
-                    } else {
-                        $visibility = SESSION_INVISIBLE;
-                    }
-                }
-            } else {
+            if (!$is_coach) {
                 //Student - check the moved_to variable
                 $user_status = SessionManager::get_user_status_in_session($session_id, api_get_user_id());
                 if (isset($user_status['moved_to']) && $user_status['moved_to'] != 0) {
-                    return $original_visibility;
+                    return $visibility;
                 }
-            }
-        } else {
-            $visibility = SESSION_INVISIBLE;
+            }*/
+            return $visibility;
         }
     }
     return $visibility;

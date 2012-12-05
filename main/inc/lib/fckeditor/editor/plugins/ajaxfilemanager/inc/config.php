@@ -1,4 +1,5 @@
 <?php
+
 /**
  * system  config setting
  * @author Logan Cai (cailongqun [at] yahoo [dot] com [dot] cn)
@@ -9,23 +10,22 @@
  * Modifications of system config setting for Chamilo
  * @author Juan Carlos Raña Trabado
  * @author Julio Montoya <gugli100@gmail.com> BeezNest 2011 Fixing bugs
- * 
+ *
  * @since 31/December/2008
  */
-
 // Loading the global initialization file.
 require_once '../../../../../../inc/global.inc.php';
 
 // Loading document repositories settings.
 
-require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php' ;
+require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
 //FILESYSTEM CONFIG
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "class.auth.php");
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR."class.auth.php");
 define('CONFIG_QUERY_STRING_ENABLE', true); //Enable passed query string to setting the system configuration
 
-if(!headers_sent()) {
-	header('Content-Type: text/html; charset=utf-8');
+if (!headers_sent()) {
+    header('Content-Type: text/html; charset=utf-8');
 }
 
 /**
@@ -34,65 +34,62 @@ if(!headers_sent()) {
  * @param string $input
  * @return string
  */
-function secureFileName($input)
-{
-	return preg_replace('/[^a-zA-Z0-9\-_]/', '', $input);
+function secureFileName($input) {
+    return preg_replace('/[^a-zA-Z0-9\-_]/', '', $input);
 }
+
 //Directories Declarations
 
-define('DIR_AJAX_ROOT', dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR) ; // the path to ajax file manager
-define('DIR_AJAX_INC', DIR_AJAX_ROOT . "inc" . DIRECTORY_SEPARATOR);
-define('DIR_AJAX_CLASSES', DIR_AJAX_ROOT .  "classes" . DIRECTORY_SEPARATOR);
-define("DIR_AJAX_LANGS", DIR_AJAX_ROOT . "langs" . DIRECTORY_SEPARATOR);
-define('DIR_AJAX_JS', DIR_AJAX_ROOT . 'jscripts' . DIRECTORY_SEPARATOR);
-define('DIR_AJAX_EDIT_AREA', DIR_AJAX_JS . 'edit_area' . DIRECTORY_SEPARATOR);
-define('DIR_LANG', DIR_AJAX_ROOT . 'langs' . DIRECTORY_SEPARATOR);
+define('DIR_AJAX_ROOT', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR); // the path to ajax file manager
+define('DIR_AJAX_INC', DIR_AJAX_ROOT."inc".DIRECTORY_SEPARATOR);
+define('DIR_AJAX_CLASSES', DIR_AJAX_ROOT."classes".DIRECTORY_SEPARATOR);
+define("DIR_AJAX_LANGS", DIR_AJAX_ROOT."langs".DIRECTORY_SEPARATOR);
+define('DIR_AJAX_JS', DIR_AJAX_ROOT.'jscripts'.DIRECTORY_SEPARATOR);
+define('DIR_AJAX_EDIT_AREA', DIR_AJAX_JS.'edit_area'.DIRECTORY_SEPARATOR);
+define('DIR_LANG', DIR_AJAX_ROOT.'langs'.DIRECTORY_SEPARATOR);
 
 
 //Class Declarations
-define('CLASS_FILE', DIR_AJAX_INC .'class.file.php');
-define("CLASS_UPLOAD", DIR_AJAX_INC .  'class.upload.php');
-define('CLASS_MANAGER', DIR_AJAX_INC . 'class.manager.php');
-define('CLASS_IMAGE', DIR_AJAX_INC . "class.image.php");
-define('CLASS_HISTORY', DIR_AJAX_INC . "class.history.php");
-define('CLASS_SESSION_ACTION', DIR_AJAX_INC . "class.sessionaction.php");
-define('CLASS_PAGINATION', DIR_AJAX_INC . 'class.pagination.php');
-define('CLASS_SEARCH', DIR_AJAX_INC . "class.search.php");
+define('CLASS_FILE', DIR_AJAX_INC.'class.file.php');
+define("CLASS_UPLOAD", DIR_AJAX_INC.'class.upload.php');
+define('CLASS_MANAGER', DIR_AJAX_INC.'class.manager.php');
+define('CLASS_IMAGE', DIR_AJAX_INC."class.image.php");
+define('CLASS_HISTORY', DIR_AJAX_INC."class.history.php");
+define('CLASS_SESSION_ACTION', DIR_AJAX_INC."class.sessionaction.php");
+define('CLASS_PAGINATION', DIR_AJAX_INC.'class.pagination.php');
+define('CLASS_SEARCH', DIR_AJAX_INC."class.search.php");
 //SCRIPT FILES declarations
-define('SPT_FUNCTION_BASE', DIR_AJAX_INC . 'function.base.php');
+define('SPT_FUNCTION_BASE', DIR_AJAX_INC.'function.base.php');
 //include different config base file according to query string "config"
 $configBaseFileName = 'config.base.php';
 
-if(CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config.' . secureFileName($_GET['config']) . ".php")
-{
-	$configBaseFileName = 'config.' . secureFileName($_GET['config']) . ".php";
+if (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname(__FILE__)).DIRECTORY_SEPARATOR.'config.'.secureFileName($_GET['config']).".php") {
+    $configBaseFileName = 'config.'.secureFileName($_GET['config']).".php";
 }
 
-require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . $configBaseFileName; 
+require_once dirname(__FILE__).DIRECTORY_SEPARATOR.$configBaseFileName;
 
 
 // Loading the selected language file.
-require_once(DIR_AJAX_LANGS . CONFIG_LANG_DEFAULT . ".php");
+require_once DIR_AJAX_LANGS.CONFIG_LANG_DEFAULT.".php";
+
 // In order the manager not to look ugly in cases of incompleted translations,
 // we will initialize undefined language constants with English strings.
-if (CONFIG_LANG_DEFAULT != "en")
-{
-	require_once(DIR_AJAX_LANGS . "en.php");
+if (CONFIG_LANG_DEFAULT != "en") {
+    require_once(DIR_AJAX_LANGS."en.php");
 }
 
-require_once DIR_AJAX_INC . "function.base.php";
+require_once DIR_AJAX_INC."function.base.php";
 
-require_once dirname(__FILE__) .  DIRECTORY_SEPARATOR . "class.session.php";
+require_once dirname(__FILE__).DIRECTORY_SEPARATOR."class.session.php";
 
 $auth = new Auth();
 
-if(CONFIG_ACCESS_CONTROL_MODE == 1)
-{//access control enabled
-	if(!$auth->isLoggedIn() && strtolower(basename($_SERVER['PHP_SELF']) != strtolower(basename(CONFIG_LOGIN_PAGE))))
-	{//
-		header('Location: ' . appendQueryString(CONFIG_LOGIN_PAGE, makeQueryString()));
-		exit;
-	}
+if (CONFIG_ACCESS_CONTROL_MODE == 1) {//access control enabled
+    if (!$auth->isLoggedIn() && strtolower(basename($_SERVER['PHP_SELF']) != strtolower(basename(CONFIG_LOGIN_PAGE)))) {//
+        header('Location: '.appendQueryString(CONFIG_LOGIN_PAGE, makeQueryString()));
+        exit;
+    }
 }
 addNoCacheHeaders();
 $web_path = api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/';

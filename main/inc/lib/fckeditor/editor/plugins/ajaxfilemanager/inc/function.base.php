@@ -1066,14 +1066,19 @@ function hideFolderName($folderName) {
 
     //show group's directory only if I'm member
     $show_doc_group = true;
-    if (ereg($group_folder, $folderName)) {
+    if (preg_match("/$group_folder/", $folderName)) {
         $show_doc_group = false;
         if ($is_user_in_group) {
             $show_doc_group = true;
         }
     }
 
-    if (!ereg($deleted_by_chamilo, $folderName) && !ereg($css_folder_chamilo, $folderName) && !ereg($hotpotatoes_folder_chamilo, $folderName) && !ereg($chat_files_chamilo, $folderName) && !ereg($certificates_chamilo, $folderName) && !ereg($thumbs_folder, $folderName) && $show_doc_group == true) {
+    if (!preg_match("/$deleted_by_chamilo/", $folderName) &&
+        !preg_match("/$css_folder_chamilo/", $folderName) &&
+        !preg_match("/$hotpotatoes_folder_chamilo/", $folderName) &&
+        !preg_match("/$chat_files_chamilo/", $folderName) &&
+        !preg_match("/$certificates_chamilo/", $folderName) &&
+        !preg_match("/$thumbs_folder/", $folderName) && $show_doc_group == true) {
         return substr($folderName, strpos($folderName, '-'), strlen($folderName)); //hide the firsts numbers
     }
 }

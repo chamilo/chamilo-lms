@@ -195,14 +195,19 @@ class manager
                         $group_folder = '_groupdocs';
                         $hide_doc_group = false;
 
-                        if (ereg($group_folder, $path)) {
+                        if (preg_match("/$group_folder/", $path)) {
                             $hide_doc_group = true;
                             if ($is_user_in_group || ( $to_group_id != 0 && api_is_allowed_to_edit())) {
                                 $hide_doc_group = false;
                             }
                         }
 
-                        if (ereg($deleted_by_Chamilo_folder, $path) || ereg($css_folder_Chamilo, $path) || ereg($hotpotatoes_folder_Chamilo, $path) || ereg($chat_files_Chamilo, $path) || ereg($certificates_Chamilo, $path) || $hide_doc_group || $file[0] == '.') {
+                        if (preg_match("/$deleted_by_Chamilo_folder/", $path) ||
+                            preg_match("/$css_folder_Chamilo/", $path) ||
+                            preg_match("/$hotpotatoes_folder_Chamilo/", $path) ||
+                            preg_match("/$chat_files_Chamilo/", $path) ||
+                            preg_match("/$certificates_Chamilo/", $path) ||
+                            $hide_doc_group || $file[0] == '.') {
                             $this->currentFolderInfo['subdir'] = $this->currentFolderInfo['subdir'] - 1;
                         }
                         //end fix for Chamilo
@@ -230,7 +235,7 @@ class manager
 
                             //fix count left files for Chamilo
                             $deleted_by_Chamilo_file = ' DELETED '; // ' DELETED ' not '_DELETED_' because in $file['name'] _ is replaced with blank see class.manager.php
-                            if (ereg($deleted_by_Chamilo_file, $tem['name']) || $tem['name'][0] == '.') {
+                            if (preg_match("/$deleted_by_Chamilo_file/", $tem['name']) || $tem['name'][0] == '.') {
                                 $this->currentFolderInfo['file'] = $this->currentFolderInfo['file'] - 1;
                             }
                             ///end fix for Chamilo

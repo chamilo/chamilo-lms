@@ -14,7 +14,6 @@ include '../../../../../../inc/global.inc.php'; // Integrating with Chamilo
 api_block_anonymous_users();// from Chamilo
 
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php";
-//$session->gc(); // Disabled for integration with Chamilo
 
 require_once CLASS_SESSION_ACTION;
 $sessionAction = new SessionAction();
@@ -52,8 +51,8 @@ if(!empty($_GET['view'])) {
 	}
 } else {
 	$view = CONFIG_DEFAULT_VIEW;
-}   
-	
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" debug="true" xml:lang="<?php echo CONFIG_LANG_DEFAULT; ?>" lang="<?php echo CONFIG_LANG_DEFAULT; ?>"><!--  hack fon lang default Chamilo -->
@@ -73,7 +72,7 @@ if(!empty($_GET['view'])) {
 <script type="text/javascript">
 
 	var mode_editor = '<?php echo Security::remove_XSS($_GET['editor']);?>';<!-- Chamilo hack for general my files users  -->
-	if (!mode_editor){		
+	if (!mode_editor){
 		// Added by Ivan Tcholakov, 22-JUL-2009.
 		// For integration with the editor's dialig system.
 		var oEditor = null ;
@@ -82,28 +81,32 @@ if(!empty($_GET['view'])) {
 			oEditor = window.parent.InnerDialogLoaded() ;
 		}
 		//end hack
-	}	
-	var globalSettings = {'upload_init':false};		
+	}
+	var globalSettings = {'upload_init':false};
 	var queryString = '<?php echo makeQueryString(array('path')); ?>';
-	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};	
-	
+	var paths = {'root':'<?php echo addTrailingSlash(backslashToSlash(CONFIG_SYS_ROOT_PATH)); ?>', 'root_title':'<?php echo LBL_FOLDER_ROOT; ?>'};
+
 	<!-- Chamilo hack for breadcrumb into shared folders -->
 	var shared_folder = '<?php echo get_lang('UserFolders');?>';
-	
-	<?php	
-	$course_session = explode('_', basename($currentPath));
-	$course_session = strtolower($course_session[sizeof($course_session) - 1]);
+
+	<?php
+    $course_session = array();
+    if (isset($currentPath)) {
+        $course_session = explode('_', basename($currentPath));
+        $course_session = strtolower($course_session[sizeof($course_session) - 1]);
+    }
+
 	?>
 	<!--var shared_folder_session = '<?php //echo get_lang('UserFolders').' ('.api_get_session_name($course_session).')';?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
 	var shared_folder_session = '<?php echo get_lang('UserFolders').'*';?>';
-	<?php 
-	
+	<?php
+
 	//$userinfo=Database::get_user_info_from_id(substr(basename($folderInfo['path']), 8));	// problem with $folderInfo['path'] does not refresh, sincronisation with javascript?>
 	<!--var shared_user_folder = '<?php //echo api_get_person_name($userinfo['firstname'], $userinfo['lastname']);?>'; --><!--// problem does not refresh, does not synchronize with javascript -->
 	var shared_user_folder = '<?php echo get_lang('User');?>';
 
 	<!--end hack -->
-	
+
 	var parentFolder = {};
 	var urls = {
 			'upload':'<?php echo CONFIG_URL_UPLOAD; ?>',
@@ -120,28 +123,28 @@ if(!empty($_GET['view'])) {
 			'download':'<?php echo CONFIG_URL_DOWNLOAD; ?>',
 			'present':'<?php echo getCurrentUrl(); ?>',
 			'home':'<?php echo CONFIG_URL_HOME; ?>',
-			'view':'<?php echo CONFIG_URL_LIST_LISTING; ?>'			
+			'view':'<?php echo CONFIG_URL_LIST_LISTING; ?>'
 		};
-	var permits = {	'del':<?php echo (CONFIG_OPTIONS_DELETE?1:0); ?>, 
-					'cut':<?php echo (CONFIG_OPTIONS_CUT?'1':'0'); ?>, 
-					'copy':<?php echo (CONFIG_OPTIONS_COPY?1:0); ?>, 
-					'newfolder':<?php echo (CONFIG_OPTIONS_NEWFOLDER?1:0); ?>, 
-					'rename':<?php echo (CONFIG_OPTIONS_RENAME?1:0); ?>, 
+	var permits = {	'del':<?php echo (CONFIG_OPTIONS_DELETE?1:0); ?>,
+					'cut':<?php echo (CONFIG_OPTIONS_CUT?'1':'0'); ?>,
+					'copy':<?php echo (CONFIG_OPTIONS_COPY?1:0); ?>,
+					'newfolder':<?php echo (CONFIG_OPTIONS_NEWFOLDER?1:0); ?>,
+					'rename':<?php echo (CONFIG_OPTIONS_RENAME?1:0); ?>,
 					'upload':<?php echo (CONFIG_OPTIONS_UPLOAD?1:0); ?>,
-					'edit':<?php echo (CONFIG_OPTIONS_EDITABLE?1:0); ?>, 
+					'edit':<?php echo (CONFIG_OPTIONS_EDITABLE?1:0); ?>,
 					'view_only':<?php echo (CONFIG_SYS_VIEW_ONLY?1:0); ?>};
 	var currentFolder = {};
 	var warningDelete = '<?php echo WARNING_DELETE; ?>';
 	var newFile = {'num':1, 'label':'<?php echo FILE_LABEL_SELECT; ?>', 'upload':'<?php echo FILE_LBL_UPLOAD; ?>'};
 	var counts = {'new_file':1};
-	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>', 
+	var thickbox = {'width':'<?php echo CONFIG_THICKBOX_MAX_WIDTH; ?>',
 					'height':'<?php echo CONFIG_THICKBOX_MAX_HEIGHT; ?>',
 					'next':'<img src="theme/default/images/next.png" title="<?php echo THICKBOX_NEXT; ?>" style="float:right;">',
 					'previous':'<img src="theme/default/images/prev.png" title="<?php echo THICKBOX_PREVIOUS; ?>" style="float:left">',
-					'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>' 
-		
+					'close':'<img src="theme/default/images/flagno.png"title="<?php echo THICKBOX_CLOSE; ?>"><?php echo THICKBOX_CLOSE; ?>'
+
 	};
-	
+
 	var tb_pathToImage = "theme/<?php echo CONFIG_THEME_NAME; ?>/images/loadingAnimation.gif";
 	var msgInvalidFolderName = '<?php echo ERR_FOLDER_FORMAT; ?>';
 	var msgInvalidFileName = '<?php echo ERR_FILE_NAME_FORMAT; ?>';
@@ -153,23 +156,23 @@ if(!empty($_GET['view'])) {
 	var warningDel = '<?php echo WARNING_DELETE; ?>';
 	var warningNotDocSelected = '<?php echo ERR_NOT_DOC_SELECTED; ?>';
 	//var noFileSelected = '<?php //echo ERR_NOT_FILE_SELECTED; ?>';// Chamilo
-	var noFileSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';// Chamilo	
+	var noFileSelected = '<?php echo TXT_EXT_NOT_SELECTED; ?>';// Chamilo
     var unselectAllText = '<?php echo TIP_UNSELECT_ALL; ?>';
     var selectAllText = '<?php echo TIP_SELECT_ALL; ?>';
 	var action = '<?php echo $sessionAction->getAction(); ?>';
 	var numFiles = <?php echo $sessionAction->count(); ?>;
 	var warningCloseWindow = '<?php echo WARING_WINDOW_CLOSE; ?>';
-	var numRows = 0; 
+	var numRows = 0;
 
 	var wordCloseWindow = '<?php echo LBL_ACTION_CLOSE; ?>';
 	var wordPreviewClick = '<?php echo LBL_CLICK_PREVIEW; ?>';
 
 	var searchRequired = false;
-	var supporedPreviewExts = '<?php echo CONFIG_VIEWABLE_VALID_EXTS; ?>'; 
+	var supporedPreviewExts = '<?php echo CONFIG_VIEWABLE_VALID_EXTS; ?>';
 	var supportedUploadExts = '<?php echo CONFIG_UPLOAD_VALID_EXTS; ?>'
 	var elementId = <?php  echo (!empty($_GET['elementId'])?"'" . Security::remove_XSS($_GET['elementId']) . "'":'null'); ?>;
 	var files = {};
-	
+
     $(document).ready(
 	function() {
 		jQuery(document).bind('keypress', function(event) {
@@ -177,7 +180,7 @@ if(!empty($_GET['view'])) {
 			if(code && code == 13) {// if enter is pressed
 	  			event.preventDefault(); //prevent browser from following the actual href
 			};
-		});		
+		});
 		if(typeof(cancelSelectFile) != 'undefined') {
 			$('#linkClose').show();
 		}
@@ -190,7 +193,7 @@ if(!empty($_GET['view'])) {
 				}
 			}
 		);
-		
+
 		popUpCal.clearText = '<?php echo CALENDAR_CLEAR; ?>';
 		popUpCal.closeText = '<?php echo CALENDAR_CLOSE; ?>';
 		popUpCal.prevText = '<?php echo CALENDAR_PREVIOUS; ?>';
@@ -200,7 +203,7 @@ if(!empty($_GET['view'])) {
 		popUpCal.dayNames = new Array('<?php echo CALENDAR_SUN; ?>','<?php echo CALENDAR_MON; ?>','<?php echo CALENDAR_TUE; ?>','<?php echo CALENDAR_WED; ?>','<?php echo CALENDAR_THU; ?>','<?php echo CALENDAR_FRI; ?>','<?php echo CALENDAR_SAT; ?>');
 		popUpCal.monthNames = new Array('<?php echo CALENDAR_JAN; ?>','<?php echo CALENDAR_FEB; ?>','<?php echo CALENDAR_MAR; ?>','<?php echo CALENDAR_APR; ?>','<?php echo CALENDAR_MAY; ?>','<?php echo CALENDAR_JUN; ?>','<?php echo CALENDAR_JUL; ?>','<?php echo CALENDAR_AUG; ?>','<?php echo CALENDAR_SEP; ?>','<?php echo CALENDAR_OCT; ?>','<?php echo CALENDAR_NOV; ?>','<?php echo CALENDAR_DEC; ?>');
 		popUpCal.dateFormat = 'YMD-';
-		$('.inputMtime').calendar({autoPopUp:'both', buttonImage:'theme/<?php echo CONFIG_THEME_NAME; ?>/images/date_picker.png'});		
+		$('.inputMtime').calendar({autoPopUp:'both', buttonImage:'theme/<?php echo CONFIG_THEME_NAME; ?>/images/date_picker.png'});
 		initAfterListingLoaded();
 		//addMoreFile();
 	} );
@@ -222,39 +225,39 @@ if(!empty($_GET['view'])) {
 <body dir="<?php echo CONFIG_LANG_TEXT_DIRECTION_DEFAULT; ?>"><!-- move style to css and hack for default lang Chamilo -->
 	<div id="wrapper">
   	<div id="header">
-  		<dl id="currentFolderInfo">        
+  		<dl id="currentFolderInfo">
   			<dt><?php echo LBL_CURRENT_FOLDER_PATH; ?></dt>
   			<dt id="currentFolderPath"><?php echo $folderInfo['path']; ?></dt><!-- hack for breadcrumb for Chamilo change <dd> by <dt> -->
   		</dl>
         <br />
     	<div id="viewList">
-    			<label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>                
+    			<label><?php echo LBL_BTN_VIEW_OPTIONS; ?></label>
 					<?php
 						foreach($views as $k=>$v) {
 							?>
-							<input type="radio" name="view"  class="radio" onclick="return changeView(this);" value="<?php echo $k; ?>" <?php echo ($k==$view?'checked':''); ?>> <?php echo $v; ?> &nbsp;&nbsp;							
+							<input type="radio" name="view"  class="radio" onclick="return changeView(this);" value="<?php echo $k; ?>" <?php echo ($k==$view?'checked':''); ?>> <?php echo $v; ?> &nbsp;&nbsp;
 							<?php
 						}
 					?></div>
 				<ul id="actionHeader">
 					<li><a href="#" id="actionRefresh" onclick="return windowRefresh();"><span><?php echo LBL_ACTION_REFRESH; ?></span></a></li>
 					<li><a href="#" id="actionSelectAll" class="check_all" onclick="return checkAll(this);"><span><?php echo LBL_ACTION_SELECT_ALL; ?></span></a></li>
-					<?php 
+					<?php
 						if (CONFIG_OPTIONS_DELETE) {
 							?>
 							<li><a href="#" id="actionDelete" onclick="return deleteDocuments();"><span><?php echo LBL_ACTION_DELETE; ?></span></a></li>
 							<?php
 						}
 					?>
-					<?php 
+					<?php
 						if(CONFIG_OPTIONS_CUT)
 						{
 							?>
-							<li><a href="#" id="actionCut" onclick="return cutDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_CUT; ?>');"><span><?php echo LBL_ACTION_CUT; ?></span></a></li>			
+							<li><a href="#" id="actionCut" onclick="return cutDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_CUT; ?>');"><span><?php echo LBL_ACTION_CUT; ?></span></a></li>
 							<?php
 						}
 					?>
-					<?php 
+					<?php
 						if(CONFIG_OPTIONS_COPY)
 						{
 							?>
@@ -262,16 +265,16 @@ if(!empty($_GET['view'])) {
 							<?php
 						}
 					?>
-					<?php 
+					<?php
 						if(CONFIG_OPTIONS_CUT || CONFIG_OPTIONS_COPY)
 						{
 							?>
 							<li><a href="#" id="actionPaste" onclick="return pasteDocuments('<?php echo ERR_NOT_DOC_SELECTED_FOR_PASTE; ?>');"><span><?php echo LBL_ACTION_PASTE; ?></span></a></li>
 							<?php
 						}
-					?>															
-					
-					<?php 
+					?>
+
+					<?php
 						if(CONFIG_OPTIONS_NEWFOLDER)
 						{
 							?>
@@ -279,7 +282,7 @@ if(!empty($_GET['view'])) {
 							<?php
 						}
 					?>
-					<?php 
+					<?php
 						if(CONFIG_OPTIONS_UPLOAD)
 						{
 							?>
@@ -287,38 +290,38 @@ if(!empty($_GET['view'])) {
 							<?php
 						}
 					?>
-					
+
 <!--					<li><a href="#" id="actionClose" onclick="closeWindow('<?php echo IMG_WARING_WIN_CLOSE; ?>');"><?php echo IMG_BTN_CLOSE; ?></a></li>-->
 					<!--<li><a href="#" class="thickbox" id="actionInfo" onclick="return infoWin(this);"><span>Info</span></a></li> -->
 					<!-- thest functions will be added in the near future
  					<li ><a href="#" id="actionZip"><span>Zip</span></a><li>
 					<li ><a href="#" id="actionUnzip"><span>Unzip</span></a><li>-->
-				</ul>    
+				</ul>
 <form action="" method="post" name="formAction" id="formAction">
 	<input type="hidden" name="currentFolderPath" id="currentFolderPathVal" value="" />
 	<select name="selectedDoc[]" id="selectedDoc" style="display:none;" multiple="multiple"></select>
 	<input type="hidden" name="action_value" value="" id="action_value" />
-</form>				  
-</div>    
-    <div id="body">        
+</form>
+</div>
+    <div id="body">
       <div id="rightCol">
 	      	<?php
 			if(CONFIG_LOAD_DOC_LATTER ) {
 				$currentPath = getCurrentFolderPath();
 				?>
-                
+
 				<script type="text/javascript">
 				parentFolder = {'path_base64':'<?php echo base64_encode(getParentFolderPath($currentPath)); ?>', 'path':'<?php echo getParentFolderPath($currentPath); ?>'};
-				 
+
 				currentFolder = {'friendly_path':'<?php echo transformFilePath($currentPath); ?>'};
 					$(document).ready(
 						function()
 						{
 							var url = getUrl('view', false, false, false);
 							$('#rightCol').empty();
-							ajaxStart('#rightCol');		
-							
-							$('#rightCol').load(url, 
+							ajaxStart('#rightCol');
+
+							$('#rightCol').load(url,
 										{},
 										function(){
 												ajaxStop('#rightCol img.ajaxLoadingImg');
@@ -333,11 +336,11 @@ if(!empty($_GET['view'])) {
 				include_once CONFIG_URL_LIST_LISTING;
 			}
 	      	?>
-      </div> 
-      
+      </div>
+
       <div id="leftCol">
 				<fieldset id="folderFieldSet" >
-					
+
 				<legend><?php echo LBL_FOLDER_INFO; ?></legend>
 				<table cellpadding="0" cellspacing="0" class="tableSummary" id="folderInfo">
 					<tbody>
@@ -363,9 +366,9 @@ if(!empty($_GET['view'])) {
 						</tr>
 						<tr>
 							<th><?php echo LBL_FOLDER_FIELS; ?></th>
-							<td  colspan="3" id="folderFile"><?php echo (isset($folderInfo['file'])?$folderInfo['file']:'&nbsp;'); ?></td>						
+							<td  colspan="3" id="folderFile"><?php echo (isset($folderInfo['file'])?$folderInfo['file']:'&nbsp;'); ?></td>
 						</tr>
-						
+
 						<tr>
 							 <!-- comment these lines while integrating into Chamilo -->
 							<th><?php // echo LBL_FOLDER_WRITABLE; ?></th>
@@ -402,7 +405,7 @@ if(!empty($_GET['view'])) {
 						</tr>
 						<tr>
 							<th><?php echo LBL_FILE_TYPE; ?></th>
-							<td  colspan="3" id="fileType"></td>						
+							<td  colspan="3" id="fileType"></td>
 						</tr>
 						<tr>
 							 <!-- comment these lines while integrating into Chamilo -->
@@ -414,16 +417,16 @@ if(!empty($_GET['view'])) {
 
 					</tbody>
 				</table>
-		
-        <p class="searchButtons" id="returnCurrentUrl">  
+
+        <p class="searchButtons" id="returnCurrentUrl">
         	<span class="right" id="linkSelect">
         		<input type="button" value="<?php echo MENU_SELECT; ?>" id="selectCurrentUrl" class="select_button">
         		<!-- Change button class by Chamilo select_button class -->
-        	</span>        	
-        </p>				
-		</fieldset>		
-     
-      
+        	</span>
+        </p>
+		</fieldset>
+
+
       	<fieldset class="boxSearch">
       		<legend><?php echo LBL_SEARCH; ?></legend>
           <table cellpadding="0" cellspacing="0" class="tableSearch">
@@ -449,19 +452,19 @@ if(!empty($_GET['view'])) {
 	          				$(document).ready(
 	          					function()
 	          					{
-	          						ajaxStart('#searchFolderContainer');		
+	          						ajaxStart('#searchFolderContainer');
 	          						$('#searchFolderContainer').load('<?php echo CONFIG_URL_LOAD_FOLDERS; ?>');
 	          					}
 	          				);
 	          			</script>
 	          			<?php
-	          		}else 
+	          		}else
 	          		{
 	          	?>
-             
+
 		            <select class="input inputSearchSelect" name="search_folder" id="search_folder"><!-- Chamilo integrating, modify name class for disable by css -->
-		            	<?php 
-		            		
+		            	<?php
+
 										foreach(getFolderListing(CONFIG_SYS_ROOT_PATH) as $k=>$v)
 										{
 											if(hideFolderName($k))
@@ -471,17 +474,17 @@ if(!empty($_GET['view'])) {
 		                  						<option value="<?php echo $v; ?>" <?php echo (removeTrailingSlash(backslashToSlash(($folderInfo['path']))) == removeTrailingSlash(backslashToSlash(($v)))?' selected="selected"':''); ?>><?php echo hideFolderName(shortenFileName($k, 30));
 												?></option>
 
-		                  <?php 
+		                  <?php
 											}
 										}
-		            		
-									?>            	
+
+									?>
 		            </select>
 		      <?php
 	          		}
 		      ?></span>
 	        <!--  </td>
-	         </tr>  
+	         </tr>
         		<tr>
         			<td> -->
         		<b><?php //echo LBL_SEARCH_MTIME; ?></b><br />
@@ -490,20 +493,20 @@ if(!empty($_GET['view'])) {
         		<!--<input type="text" class="input inputMtime" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" /> -->
                  <!--This lines replace above lines while integrating into Chamilo -->
                 <input type="hidden" name="search_mtime_from" id="search_mtime_from" value="<?php //echo (!empty($_GET['search_mtime_from'])?$_GET['search_mtime_from']:''); ?>" />
-        		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />        
+        		<input type="hidden" name="search_mtime_to" id="search_mtime_to" value="<?php //echo (!empty($_GET['search_mtime_to'])?$_GET['search_mtime_to']:''); ?>" />
         	<!--</td></tr>
 			<tr>
 				<td>  --><!-- comment these lines while integrating into Chamilo -->
                 </td><td><!--add a col while integrating -->
           	<b><?php  // echo LBL_SEARCH_RECURSIVELY; ?></b>&nbsp;&nbsp;
 		<!--change for Chamilo recursively by default  -->
-     <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->       
+     <!--     	<input type="radio" name="search_recursively" value="1" id="search_recursively_1" class="radio" <?php //echo (empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_YES; ?> -->
         <!--  	<input type="radio" name="search_recursively" value="0" id="search_recursively_0" class="radio" <?php //echo (!empty($_GET['search_recursively'])?'checked="checked"':''); ?> /> <?php //echo LBL_RECURSIVELY_NO; ?> -->
           	</td>
 
-          </tr>	                	
+          </tr>
           	</tbody>
-</table>       	
+</table>
         <p class="searchButtons">
         	<span class="left" id="linkClose" style="display:none">
                   <!-- comment these lines while integrating into Chamilo -->
@@ -511,14 +514,14 @@ if(!empty($_GET['view'])) {
         	</span>
         	<span class="right" id="linkSearch">
         		<input type="button" value="<?php echo BTN_SEARCH; ?>" onclick="return search();" class="search_button">
-        	</span>        	
+        	</span>
         </p>
-        </fieldset>  
-      </div>      
+        </fieldset>
+      </div>
       <div class="clear"></div>
-    </div>  
+    </div>
   </div>
-  <div class="clear"></div>  
+  <div class="clear"></div>
   <div id="ajaxLoading" style="display:none">
   	<img class="ajaxLoadingImg" src="theme/<?php echo CONFIG_THEME_NAME; ?>/images/ajaxLoading.gif" /></div>
   <div id="winUpload" style="display:none">
@@ -560,19 +563,19 @@ if(!empty($_GET['view'])) {
 		  					<a href="#" class="action" title="<?php echo get_lang('Cancel')?>" style="display:none" ><!-- Chamilo lang var added -->
 		  						<span class="cancel">&nbsp;</span><span class="uploadProcessing" style="display:none">&nbsp;</span>
 		  					</a>
-		  					
+
 		  				</td>
-		  			</tr>		
-		  		</tbody>		  
+		  			</tr>
+		  		</tbody>
 		  	</table>
-		  	</form>  		
+		  	</form>
   		</div>
   	</div>
-  </div> 
+  </div>
   <div id="winNewFolder" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
-  			<a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo --> 
+  			<a href="#" onclick="return tb_remove();"><img src="theme/default/images/flagno.png"title="<?php echo LBL_ACTION_CLOSE; ?>"><?php echo LBL_ACTION_CLOSE; ?></a><!-- Add close image for Chamilo -->
   		</div>
   		<div class="jqmBody">
 	    	<form id="formNewFolder" name="formNewFolder" method="post" action="">
@@ -587,7 +590,7 @@ if(!empty($_GET['view'])) {
 	  			<tr>
 	  				<th><label><?php echo FOLDER_LBL_TITLE; ?></label></th>
 	  				<td><input type="text" name="new_folder" id="new_folder" value="" class="input"></td>
-	  			</tr>				
+	  			</tr>
 	  		</tbody>
 	  		<tfoot>
 	  			<tr>
@@ -595,11 +598,11 @@ if(!empty($_GET['view'])) {
 	  				<td><input type="button" value="<?php echo FOLDER_LBL_CREATE; ?>" class="create_button" onclick="return doCreateFolder();"  /></td>
 	  			</tr>
 	  		</tfoot>
-	  	</table>	
-	  	</form>	
+	  	</table>
+	  	</form>
   		</div>
   	</div>
-  </div>   
+  </div>
   <div id="winPlay" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
@@ -640,11 +643,11 @@ if(!empty($_GET['view'])) {
 		  		</tfoot>
 		  	</table>
 		  	</form>
-  		</div>  	
+  		</div>
 
   	</div>
-  	
-  </div>        
+
+  </div>
   <div id="winInfo" style="display:none">
   	<div class="jqmContainer">
   		<div class="jqmHeader">
@@ -690,12 +693,12 @@ if(!empty($_GET['view'])) {
   					<label>&copy;Copyright:</label>
   				</th>
   				<td>
-  					All copyright declarations in the source must remain unchange. Please contact us if you need to make changes to it, in order to avoid any Legal Issues.  
+  					All copyright declarations in the source must remain unchange. Please contact us if you need to make changes to it, in order to avoid any Legal Issues.
   				</td>
   			</tr>
   		</tbody>
   	</table>
-  		</div> 
+  		</div>
   	</div>
   </div>
   <div id="contextMenu" style="display:none">

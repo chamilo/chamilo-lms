@@ -2956,6 +2956,7 @@ class CourseManager {
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
         $result = Database::query($sql);
+        $html = null;
         while ($row = Database::fetch_array($result)) {
             $params = array();
             // We simply display the title of the category.

@@ -72,10 +72,10 @@ $(document).ready(function() {
 			data: "id=" + my_tool_id + "&sent_http_request=1",
 			success: function(data) {
 				eval("var info=" + data);
-				new_current_tool_image = info.image; 
+				new_current_tool_image = info.image;
 				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
 				//eyes
-				$("#" + tool_id).attr("src", new_current_view); 
+				$("#" + tool_id).attr("src", new_current_view);
 				//tool
 				$("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
 				//clase
@@ -106,7 +106,7 @@ $(document).ready(function() {
 $(function() {
 	$(".thematic-postit-head").click(function() {
 		$(".thematic-postit-center").slideToggle("fast");
-	});	
+	});
 });
 
 </script>';
@@ -145,7 +145,7 @@ if ($is_speacialcourse) {
         CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
     }
 }
-if ($_GET['action'] == 'subscribe') {
+if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
         $auth = new Auth();
@@ -171,24 +171,24 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
 $show_autolunch_lp_warning = false;
 $auto_launch = api_get_course_setting('enable_lp_auto_launch');
 if (!empty($auto_launch)) {
-    $session_id = api_get_session_id();    
+    $session_id = api_get_session_id();
     if ($auto_launch == 2) { //LP list
         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
             $show_autolunch_lp_warning = true;
-        } else {        
-            $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();                
+        } else {
+            $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
             if (!isset($_SESSION[$session_key])) {
-                //redirecting to the LP 
-                $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;            
-                $_SESSION[$session_key] = true;                     
+                //redirecting to the LP
+                $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
+                $_SESSION[$session_key] = true;
                 header("Location: $url");
-                exit;             
+                exit;
             }
-        }        
+        }
     } else {
-        $lp_table = Database::get_course_table(TABLE_LP_MAIN);   
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
         $course_id = api_get_course_int_id();
-        $condition = '';        
+        $condition = '';
         if (!empty($session_id)) {
             $condition =  api_get_session_condition($session_id);
             $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
@@ -200,7 +200,7 @@ if (!empty($auto_launch)) {
             	//great, there is an specific auto lunch for this session we leave the $condition
             }
         }
-        
+
         $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
         $result = Database::query($sql);
         if (Database::num_rows($result) >  0) {
@@ -209,16 +209,16 @@ if (!empty($auto_launch)) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                 	$show_autolunch_lp_warning = true;
                 } else {
-                    $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();                
+                    $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        //redirecting to the LP 
+                        //redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
-                    
-                        $_SESSION[$session_key] = true;                     
+
+                        $_SESSION[$session_key] = true;
                         header("Location: $url");
                         exit;
-                    }   
-                }     
+                    }
+                }
             }
         }
     }
@@ -242,10 +242,10 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 /*	SWITCH TO A DIFFERENT HOMEPAGE VIEW
 	the setting homepage_view is adjustable through
 	the platform administration section */
-    
+
 require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
-if ($show_autolunch_lp_warning) {    
+if ($show_autolunch_lp_warning) {
     $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
 }
 if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
@@ -258,10 +258,8 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 	require 'vertical_activity.php';
 }
 $content = '<div id="course_tools">'.$content.'</div>';
-$tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
+$tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();
-
 Session::erase('_gid');

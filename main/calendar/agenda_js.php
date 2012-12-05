@@ -169,7 +169,7 @@ $course_code  = api_get_course_id();
 
 if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
     $order = 'lastname';
-    if (api_is_western_name_order) {
+    if (api_is_western_name_order()) {
         $order = 'firstname';
     }
     if (!empty($group_id)) {

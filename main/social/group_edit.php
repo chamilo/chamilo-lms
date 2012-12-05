@@ -142,7 +142,7 @@ $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 $social_left_content = SocialManager::show_social_menu('group_edit',$group_id);
-$social_right_content = $form->return_form();						
+$social_right_content = $form->return_form();
 
 
 $tpl = new Template($tool_name);
@@ -150,9 +150,9 @@ $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$content = $tpl->fetch($social_layout);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$tpl->display($social_layout);
+

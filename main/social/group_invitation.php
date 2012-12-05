@@ -307,7 +307,7 @@ if ($add_type == 'multiple') {
 
 $social_left_content = SocialManager::show_social_menu('invite_friends',$group_id);
 $social_right_content .=  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
-    
+
 if (count($nosessionUsersList) == 0) {
         $friends = SocialManager::get_friends(api_get_user_id());
         if ($friends == 0) {
@@ -317,7 +317,7 @@ if (count($nosessionUsersList) == 0) {
         }
         $social_right_content .=   '<div>';
         $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
-        $social_right_content .=   '</div>';    
+        $social_right_content .=   '</div>';
 }
 
 if (!empty($_GET['add'])) $add_true = '&add=true';
@@ -368,12 +368,12 @@ $form .= '<table border="0" cellpadding="5" cellspacing="0" width="100%">
   <td align="center"><b>'.get_lang('SendInvitationTo').':</b></td></tr>';
 
 if ($add_type=='no') {
-    $form .='    
+    $form .='
     <tr>
     <td align="center">'.get_lang('FirstLetterUser').' :
         <select name="firstLetterUser" onchange = "xajax_search_users(this.value,\'multiple\')" >
-        <option value = "%">--</option>      
-            '.Display :: get_alphabet_options().'      
+        <option value = "%">--</option>
+            '.Display :: get_alphabet_options().'
         </select>
     </td>
     <td align="center">&nbsp;</td>
@@ -383,41 +383,41 @@ if ($add_type=='no') {
 $form .= '
 <tr>
   <td align="center">
-  <div id="content_source">';  	  
+  <div id="content_source">';
 
-if (!($add_type=='multiple')) {    
+if (!($add_type=='multiple')) {
     $form .='<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,\'single\')" /><div id="ajax_list_users_single"></div>';
-} else {  	        	  
+} else {
     $form .= '<div id="ajax_list_users_multiple">
     <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:290px;">';
 
-    foreach($nosessionUsersList as $enreg) { 		
+    foreach($nosessionUsersList as $enreg) {
         $selected = '';
-        if(in_array($enreg['user_id'],$UserList)) $selected  = 'selected="selected"';        
+        if(in_array($enreg['user_id'],$UserList)) $selected  = 'selected="selected"';
         $form .= '<option value="'.$enreg['user_id'].'" '.$selected.'>'.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') </option>';
-    }		
+    }
     $form .= '</select>';
     $form .= '</div>';
 }
 
 unset($nosessionUsersList);
-$form .= '</div>'; 
+$form .= '</div>';
 $form .= '</td><td width="10%" valign="middle" align="center">';
-  
-if ($ajax_search) {  
-  	$form .= '<button class="arrowl" type="button" onclick="remove_item(document.getElementById(\'destination_users\'))" ></button>';  
+
+if ($ajax_search) {
+  	$form .= '<button class="arrowl" type="button" onclick="remove_item(document.getElementById(\'destination_users\'))" ></button>';
 } else {
     $form .= '<button class="arrowr" type="button" onclick="moveItem(document.getElementById(\'origin_users\'), document.getElementById(\'destination_users\'))" ></button>
     <br /><br />
     <button class="arrowl" type="button" onclick="moveItem(document.getElementById(\'destination_users\'), document.getElementById(\'origin_users\'))" ></button>
-    <br /><br />';  	
+    <br /><br />';
 }
-  
+
  $form .= '	<br /><br /><br /><br /><br />
   </td>
   <td align="center">
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:290px;">';
- 
+
 foreach($sessionUsersList as $enreg) {
 	$form .= ' <option value="'.$enreg['user_id'].'">'.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')</option>';
 }
@@ -426,7 +426,7 @@ $form .= '</select></td>
 </tr>
 <tr>
 	<td colspan="3" align="center">
-		<br />		
+		<br />
 		<button class="save" type="button" value="" onclick="valide()" >'.get_lang('InviteUsersToGroup').'</button>
 	</td>
 </tr>
@@ -445,7 +445,7 @@ if (is_array($members) && count($members)>0) {
 	}
 	$social_right_content .= '<h3>'.get_lang('UsersAlreadyInvited').'</h3>';
 	$social_right_content .= Display::return_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
-}		
+}
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -538,9 +538,9 @@ $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$content = $tpl->fetch($social_layout);
+
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$tpl->display($social_layout);

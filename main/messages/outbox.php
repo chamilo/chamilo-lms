@@ -66,7 +66,7 @@ function deselect_all(formita)
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));	
+	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));
 } else {
 	$this_section = SECTION_MYPROFILE;
 	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
@@ -75,9 +75,9 @@ if ($_GET['f']=='social') {
 
 if ($_GET['f']=='social') {
 
-} else {	
-	if (api_get_setting('extended_profile') == 'true') {		
-		
+} else {
+	if (api_get_setting('extended_profile') == 'true') {
+
 		if (api_get_setting('allow_social_tool') == 'true' && api_get_setting('allow_message_tool') == 'true') {
 			$actions .=  '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
 		}
@@ -85,8 +85,8 @@ if ($_GET['f']=='social') {
 			//echo '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png').' '.get_lang('Messages').'</a>';
 			$actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
             $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
-            $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';          
-		}			
+            $actions .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
+		}
 	}
 }
 
@@ -112,15 +112,15 @@ if (isset($_REQUEST['action'])) {
     $action = $_REQUEST['action'];
 }
 
-if (api_get_setting('allow_social_tool') == 'true') {				    
+if (api_get_setting('allow_social_tool') == 'true') {
     $social_left_content = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="span9">';
-        $social_right_content .= '<div class="actions">';              
+        $social_right_content .= '<div class="actions">';
         $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
         $social_right_content .= '</div>';
     $social_right_content .= '</div>';
     $social_right_content .= '<div class="span9">';
-}	
+}
 //MAIN CONTENT
 if ($action == 'delete') {
     $delete_list_id=array();
@@ -146,7 +146,7 @@ if ($action == 'delete') {
     $social_right_content .= MessageManager::outbox_display();
 }
 
-if (api_get_setting('allow_social_tool') == 'true') {				    
+if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '</div>';
 }
 
@@ -156,11 +156,11 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
-    $content = $tpl->fetch($social_layout);
+    $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
+    $tpl->assign('actions', $actions);
+    $tpl->assign('message', $show_message);
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
 }
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();

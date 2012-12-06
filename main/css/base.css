@@ -2503,9 +2503,30 @@ div.admin_section h4 {
     vertical-align: middle;
 }
 
+/* Fixes questions list */
 .question_options {
     min-height:150px;
 }
+
+.question_options label {
+    margin-bottom: 14px;
+    display:block;
+}
+
+.question_options .radio, .question_options .checkbox {
+    min-height: 18px;
+    padding-left: 25px;
+}
+.question_options .radio input[type="radio"], .question_options .checkbox input[type="checkbox"] {
+    float: left;
+    margin-left: -25px;
+}
+
+.question_options input {
+    /* margin-right:10px; */
+
+}
+
 .question_description {
     padding: 0px;
 }

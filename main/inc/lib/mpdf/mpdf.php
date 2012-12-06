@@ -44,11 +44,11 @@ if (!defined('_JPGRAPH_PATH')) define("_JPGRAPH_PATH", _MPDF_PATH.'jpgraph/');
 // The directories ".../chamilo/main/inc/lib/mpdf/graph_cache/" and ".../chamilo/main/inc/lib/mpdf/tmp/"
 // are moved at new locations ".../chamilo/arcive/mpdf/graph_cache/" and ".../chamilo/arcive/mpdf/tmp/"
 // where access for writting is guaranteed.
-define(_MPDF_GRAPH_CHACHE_PATH, api_get_path(SYS_ARCHIVE_PATH).'mpdf/graph_cache/');
+define('_MPDF_GRAPH_CHACHE_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/graph_cache/');
 if (!file_exists(_MPDF_GRAPH_CHACHE_PATH)) {
 	@mkdir(_MPDF_GRAPH_CHACHE_PATH, api_get_permissions_for_new_directories(), true);
 }
-define(_MPDF_TEMP_PATH, api_get_path(SYS_ARCHIVE_PATH).'mpdf/tmp/');
+define('_MPDF_TEMP_PATH', api_get_path(SYS_ARCHIVE_PATH).'mpdf/tmp/');
 if (!file_exists(_MPDF_TEMP_PATH)) {
 	@mkdir(_MPDF_TEMP_PATH, api_get_permissions_for_new_directories(), true);
 }

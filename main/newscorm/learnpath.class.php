@@ -1608,7 +1608,7 @@ class learnpath {
             }
             $this->last     = $this->current;
             // current is
-            $this->current  = $this->ordered_items[$index];
+            $this->current  = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
             $this->index    = $index;
             if ($this->debug > 2) {
                 error_log('$index ' . $index);
@@ -5030,6 +5030,8 @@ class learnpath {
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
+        $default_data = null;
+        $default_content = null;
 
         $elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6618,7 +6620,9 @@ class learnpath {
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+
         unset ($this->arrMenu);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -7914,7 +7918,7 @@ class learnpath {
             $return .= '</a> ';
 
             $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']).'&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
+            $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
                         ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
         }
@@ -7927,7 +7931,7 @@ class learnpath {
             $return .= '</a> ';
 
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' .
+            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' .
                         Security :: remove_XSS(cut($row_quiz['title'], 80)).
                         '</a>';
             $return .= '</li>';
@@ -7987,7 +7991,7 @@ class learnpath {
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
+        $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
         $return .= '</div>';
         $return .= '</div>';
         return $return;

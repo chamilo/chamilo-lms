@@ -18,6 +18,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
 
 api_protect_course_script(true);
+$message = null;
 
 if ($teacher) {
     switch ($action) {
@@ -80,7 +81,7 @@ $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 
-$tpl->assign('actions', $actions);
+//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

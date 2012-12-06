@@ -429,11 +429,15 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 </script>";
 
 Display::display_header($nameTools,'Exercise');
-if ($objExercise->edit_exercise_in_lp == false) {
-    Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
-}
-else if ($objExercise->force_edit_exercise_in_lp == true) {
-    Display::display_warning_message(get_lang('ForceEditingExerciseInLPWarning'));
+
+if ($objExercise->exercise_was_added_in_lp) {
+    if ($objExercise->force_edit_exercise_in_lp == true) {
+        Display::display_warning_message(get_lang('ForceEditingExerciseInLPWarning'));
+    } else {
+        //if ($objExercise->edit_exercise_in_lp) {
+            Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
+        //}
+    }
 }
 
 // If we are in a test

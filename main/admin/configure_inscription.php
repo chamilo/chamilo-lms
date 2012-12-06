@@ -45,7 +45,8 @@ if (get_setting('allow_terms_conditions') == 'true') {
     }
 }
 
-$action = Security::remove_XSS($_GET['action']);
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $tool_name = get_lang('ConfigureInscription');
 if (!empty($action)) {
@@ -67,7 +68,7 @@ if (!empty($_SESSION['user_language_choice'])) {
 }
 
 // ----- Ensuring availability of main files in the corresponding language -----
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
     $access_url_id = api_get_current_access_url_id();
     if ($access_url_id != -1) {
         $url_info = api_get_access_url($access_url_id);
@@ -97,7 +98,7 @@ $homef = array($topf);
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
             copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
         }

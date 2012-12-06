@@ -59,7 +59,7 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
@@ -114,7 +114,7 @@ if ( $form->validate()) {
 	$description	= $group['description'];
 	$url 			= $group['url'];
 	$status 		= intval($group['visibility']);
-  $parent_group_id = intval($group['parent_group']); 
+  $parent_group_id = intval($group['parent_group']);
 
 	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
   GroupPortalManager::set_parent_group($group_id,$parent_group_id);

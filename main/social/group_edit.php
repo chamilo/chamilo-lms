@@ -71,7 +71,7 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, onKeyDown => "textarea_maxlength()", onKeyUp => "textarea_maxlength()"));
+$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 $form->addRule('name', '', 'maxlength',255);

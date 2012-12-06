@@ -4718,3 +4718,7 @@ i.size-32.icon-new-work{
 .section-social #main_content .span9 {
   float: right;
 }
+
+.xdebug-error {
+    margin-top: 20px;
+}

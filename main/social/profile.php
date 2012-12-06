@@ -541,7 +541,8 @@ if ($show_full_profile) {
         }
         $social_right_content .=  SocialManager::social_wrapper_div($my_groups, 9);
     }
-
+    
+    $my_courses = null;
     // COURSES LIST
     if ( is_array($list) ) {
         $my_courses .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';

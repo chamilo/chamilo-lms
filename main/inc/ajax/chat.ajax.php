@@ -15,20 +15,20 @@ if (api_is_anonymous()) {
 }
 
 if (api_get_setting('allow_global_chat') == 'false') {
-	exit;	
+	exit;
 }
 
-$to_user_id = $_REQUEST['to'];
-$message	= $_REQUEST['message'];
+$to_user_id = isset($_REQUEST['to']) ? $_REQUEST['to'] : null;
+$message	= isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
 
 if (!isset($_SESSION['chatHistory'])) {
-	$_SESSION['chatHistory'] = array();	
+	$_SESSION['chatHistory'] = array();
 }
 
 if (!isset($_SESSION['openChatBoxes'])) {
-	$_SESSION['openChatBoxes'] = array();	
+	$_SESSION['openChatBoxes'] = array();
 }
-	
+
 $chat = new Chat();
 
 if ($chat->is_chat_blocked_by_exercises()) {
@@ -39,22 +39,22 @@ if ($chat->is_chat_blocked_by_exercises()) {
 
 switch ($action) {
 	case 'chatheartbeat':
-		$chat->heartbeat();			
-		break;		    		
-	case 'closechat':		
+		$chat->heartbeat();
+		break;
+	case 'closechat':
 		$chat->close();
-		break;		
-	case 'sendchat':		
+		break;
+	case 'sendchat':
 		$chat->send(api_get_user_id(), $to_user_id, $message);
-		break;		
+		break;
 	case 'startchatsession':
 		$chat->start_session();
-		break;		
+		break;
     case 'set_status':
         $status = isset($_REQUEST['status']) ? intval($_REQUEST['status']) : 0;
 		$chat->set_user_status($status);
 		break;
 	default:
-        echo '';	
+        echo '';
 }
 exit;

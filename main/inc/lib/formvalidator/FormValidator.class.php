@@ -216,7 +216,7 @@ class FormValidator extends HTML_QuickForm
              *
              */
         }
-        
+
         //Set Header template
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
@@ -331,7 +331,7 @@ EOT;
             $config = array('FullPage' => (bool) $full_page);
         }
         if ($full_page) {
-            $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
+            $html_type = isset($_SESSION['status']) && $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
             //First *filter* the HTML (markup, indenting, ...)
             //$this->applyFilter($name,'html_filter_teacher_fullpage');
         } else {

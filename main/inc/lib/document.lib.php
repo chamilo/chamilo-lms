@@ -17,11 +17,11 @@
 class DocumentManager {
 
     private function __construct() {
-        
+
     }
 
     /**
-     * @return the document folder quota for the current course, in bytes, or the default quota     
+     * @return the document folder quota for the current course, in bytes, or the default quota
      */
     public static function get_course_quota($course_code = null) {
         if (empty($course_code)) {
@@ -485,24 +485,24 @@ class DocumentManager {
 
         //condition for search (get ALL folders and documents)
 
-        $sql = "SELECT  docs.id, 
-                        docs.filetype, 
-                        docs.path, 
-                        docs.title, 
-                        docs.comment, 
-                        docs.size, 
-                        docs.readonly, 
-                        docs.session_id, 
-                        last.id_session item_property_session_id, 
-                        last.lastedit_date, 
-                        last.visibility, 
+        $sql = "SELECT  docs.id,
+                        docs.filetype,
+                        docs.path,
+                        docs.title,
+                        docs.comment,
+                        docs.size,
+                        docs.readonly,
+                        docs.session_id,
+                        last.id_session item_property_session_id,
+                        last.lastedit_date,
+                        last.visibility,
                         last.insert_user_id
-                    FROM  " . $TABLE_ITEMPROPERTY . "  AS last INNER JOIN " . $TABLE_DOCUMENT . "  AS docs 
+                    FROM  " . $TABLE_ITEMPROPERTY . "  AS last INNER JOIN " . $TABLE_DOCUMENT . "  AS docs
                         ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']})
                     WHERE
                         docs.path LIKE '" . $path . $added_slash . "%' AND
-                        docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND                        
-                        " . $to_field . " = " . $to_value . " AND 
+                        docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
+                        " . $to_field . " = " . $to_value . " AND
                         last.visibility" . $visibility_bit . $condition_session;
         $result = Database::query($sql);
 
@@ -623,11 +623,11 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
-            $sql = "SELECT DISTINCT docs.id, path 
+            $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
                     ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
-					WHERE 	
-							docs.filetype 		= 'folder' AND							
+					WHERE
+							docs.filetype 		= 'folder' AND
 							last.to_group_id	= " . $to_group_id . " AND
             				last.visibility 	<> 2 $condition_session ";
 
@@ -877,7 +877,7 @@ class DocumentManager {
         if ($document_id) {
             self::delete_document_from_db($document_id);
             //checking
-            //$file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);            
+            //$file_exists_in_db = self::get_document_data_by_id($document_id, $_course['code']);
             $file_deleted_from_db = true;
         }
 
@@ -933,7 +933,7 @@ class DocumentManager {
             }
         }
 
-        //Checking inconsistency        
+        //Checking inconsistency
         if ($file_deleted_from_db && $file_deleted_from_disk ||
                 $file_deleted_from_db && $file_renamed_from_disk) {
             return true;
@@ -1536,7 +1536,7 @@ class DocumentManager {
         $is_certificate_mode = false;
         $is_certificate_array = explode('/', $dir);
         array_shift($is_certificate_array);
-        if ($is_certificate_array[0] == 'certificates') {
+        if (isset($is_certificate_array[0]) && $is_certificate_array[0] == 'certificates') {
             $is_certificate_mode = true;
         }
         return $is_certificate_mode;
@@ -2005,7 +2005,7 @@ class DocumentManager {
                         }
                     } else {
                         if ($type_url == 'url') {
-                            
+
                         }
                     }
                 }
@@ -2368,7 +2368,7 @@ class DocumentManager {
 		        		docs.id 	= props.ref AND
 		        		props.tool 	= '" . TOOL_DOCUMENT . "' AND
                         props.visibility <> 2
-                        $group_condition         
+                        $group_condition
                         $session_condition
                 ";
         $result = Database::query($sql);
@@ -2465,30 +2465,30 @@ class DocumentManager {
     }
 
     /**
-     * 
+     *
      * @param array paremeters: count, url, extension
      * @return string
      */
     static function generate_jplayer_jquery($params = array()) {
         $js_path = api_get_path(WEB_LIBRARY_PATH) . 'javascript/';
 
-        $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({                                
-                            ready: function() {                    
-                                $(this).jPlayer("setMedia", {                                        
-                                    ' . $params['extension'] . ' : "' . $params['url'] . '"                                                                                  
+        $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({
+                            ready: function() {
+                                $(this).jPlayer("setMedia", {
+                                    ' . $params['extension'] . ' : "' . $params['url'] . '"
                                 });
                             },
                             play: function() { // To avoid both jPlayers playing together.
                                 $(this).jPlayer("pauseOthers");
-                            },                                
+                            },
                             //errorAlerts: true,
                             //warningAlerts: true,
                             swfPath: "' . $js_path . 'jquery-jplayer",
                             //supplied: "m4a, oga, mp3, ogg, wav",
                             supplied: "' . $params['extension'] . '",
                             wmode: "window",
-                            solution: "flash, html",  // Do not change this setting 
-                            cssSelectorAncestor: "#jp_container_' . $params['count'] . '", 
+                            solution: "flash, html",  // Do not change this setting
+                            cssSelectorAncestor: "#jp_container_' . $params['count'] . '",
                         });  	 ' . "\n\n";
         return $jplayer_definition;
     }
@@ -2523,8 +2523,8 @@ class DocumentManager {
                                 <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
                                 <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
                                 ' . $extra_controls . '
-                            </ul>                            
-                            ' . $progress . '                            
+                            </ul>
+                            ' . $progress . '
                         </div>
                     </div>
                 </div>';
@@ -2639,13 +2639,13 @@ class DocumentManager {
 
         $sql_doc = "SELECT last.visibility, docs.*
 					FROM  $tbl_item_prop AS last, $tbl_doc AS docs
-    	            WHERE   docs.id = last.ref AND 
-                            docs.path LIKE '" . $path . $added_slash . "%' AND 
-                            docs.path NOT LIKE '%_DELETED_%' AND 
+    	            WHERE   docs.id = last.ref AND
+                            docs.path LIKE '" . $path . $added_slash . "%' AND
+                            docs.path NOT LIKE '%_DELETED_%' AND
                             last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
-                            last.visibility = '1' AND 
-                            docs.c_id = {$course_info['real_id']} AND 
-                            last.c_id = {$course_info['real_id']} 
+                            last.visibility = '1' AND
+                            docs.c_id = {$course_info['real_id']} AND
+                            last.c_id = {$course_info['real_id']}
                             $add_folder_filter
                     ORDER BY docs.title ASC";
 
@@ -2852,7 +2852,7 @@ class DocumentManager {
 
                         // Show the "image name" not the filename of the image.
                         if ($lp_id) {
-                            //LP URL                            
+                            //LP URL
                             $url = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url . '&document_id=' . $key;
@@ -2868,8 +2868,8 @@ class DocumentManager {
                         if (!file_exists($img_sys_path . $icon)) {
                             $img = $img_path . 'icons/16/default_small.gif';
                         }
-                        
-                
+
+
                         $link = Display::url('<img alt="" src="' . $img . '" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));
 
                         if ($lp_id == false) {

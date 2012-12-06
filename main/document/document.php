@@ -244,7 +244,10 @@ switch ($action) {
 }
 
 // I'm in the certification module?
-$is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+$is_certificate_mode = false;
+if (isset($_GET['curdirpath'])) {
+    $is_certificate_mode = DocumentManager::is_certificate_mode($_GET['curdirpath']);
+}
 if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
@@ -491,6 +494,7 @@ $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH) . 'mediaplayer/player.swf';
 $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 
 $count = 1;
+$jquery = null;
 
 if (!empty($docs_and_folders))
     foreach ($docs_and_folders as $file) {

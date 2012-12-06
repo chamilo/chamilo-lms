@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-// YW: 20110209: Script depredated? 
+// YW: 20110209: Script depredated?
 /**
  * 	This script allows to manage answers. It is included from the script admin.php
  * 	@package chamilo.exercise
@@ -13,10 +13,6 @@
  */
 use \ChamiloSession as Session;
 
-// ALLOWED_TO_INCLUDE is defined in admin.php
-if (!defined('ALLOWED_TO_INCLUDE')) {
-    exit();
-}
 if (!is_object($objQuestion)) {
     $objQuestion = Question :: read($_GET['modifyAnswers']);
 }
@@ -545,7 +541,7 @@ if ($modifyAnswers) {
             $weighting = array();
 
 
-            // initializing + Modification de la ligne suivante 
+            // initializing + Modification de la ligne suivante
             if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 $correct = array();
             } else {

@@ -30,9 +30,6 @@ if (isset($_REQUEST["cancel"])) {
 $newName = (!empty($_REQUEST['newName'])?$_REQUEST['newName']:'');
 $hotpotatoesName = (!empty($_REQUEST['hotpotatoesName'])?$_REQUEST['hotpotatoesName']:'');
 
-// allows script inclusions
-define(ALLOWED_TO_INCLUDE,1);
-
 $is_allowedToEdit=api_is_allowed_to_edit(null,true);
 
 // document path

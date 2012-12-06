@@ -71,6 +71,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 $groups = array();
 $groups[0] = get_lang('NoParentship');
 $groups = $groups + GroupPortalManager::get_groups_list($group_id);
+
 $group_data['parent_group'] = GroupPortalManager::get_parent_group($group_id);
 $form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
 

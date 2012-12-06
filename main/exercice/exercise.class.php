@@ -152,7 +152,7 @@ class Exercise {
                 $this->exercise_was_added_in_lp = true;
             }
 
-            $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : false;
+            $this->force_edit_exercise_in_lp = isset($_configuration['force_edit_exercise_in_lp']) ? $_configuration['force_edit_exercise_in_lp'] : true;
 
             if ($this->exercise_was_added_in_lp) {
                 $this->edit_exercise_in_lp = $this->force_edit_exercise_in_lp == true;

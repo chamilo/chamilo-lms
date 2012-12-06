@@ -71,9 +71,6 @@ if (!$is_allowedToEdit) {
 	api_not_allowed(true);
 }
 
-// Allows script inclusions
-define(ALLOWED_TO_INCLUDE,1);
-
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 /*  stripslashes POST data  */

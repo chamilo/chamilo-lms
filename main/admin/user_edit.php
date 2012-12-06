@@ -27,7 +27,7 @@ $htmlHeadXtra[] = '
 <script>
 
 var is_platform_id = "'.$is_platform_admin.'";
-    
+
 <!--
 function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
@@ -54,7 +54,7 @@ function display_drh_list(){
         $radios.filter("[value=0]").attr("checked", true);
 	} else {
         if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";        
+            document.getElementById("id_platform_admin").style.display="none";
         $radios.filter("[value=0]").attr("checked", true);
 	}
 }
@@ -209,7 +209,7 @@ $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 
-$display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
+$display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 
 /*
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
@@ -363,7 +363,7 @@ if ( $form->validate()) {
                 UserManager::remove_user_admin($user_id);
 			}
 		}
-        
+
 		foreach ($user as $key => $value) {
 			if (substr($key, 0, 6) == 'extra_') { //an extra field
 				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
@@ -375,6 +375,7 @@ if ( $form->validate()) {
 	}
 }
 
+$message = null;
 if ($error_drh) {
 	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
 	$message = Display::return_message($err_msg, 'error');
@@ -402,6 +403,7 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
+$content = null;
 if ($image == '') {
 	$content .= '<img '.$img_attributes.' />';
 } else {
@@ -412,7 +414,6 @@ if ($image == '') {
 $content .= $form->return_form();
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

@@ -64,13 +64,21 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             return '';
         }
 
+        $questions_in_table = array(
+                MATCHING,
+                MULTIPLE_ANSWER_TRUE_FALSE,
+                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
+        );
+
         echo '<div class="question_options">';
 
 		$s = '';
         if ($show_comment) {
             $s .= '<table class="table table-bordered">';
         } else {
-            //$s .= '<table class="exercise_options">';
+            if (in_array($answerType, $questions_in_table)) {
+                $s .= '<table class="exercise_options">';
+            }
         }
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
@@ -90,7 +98,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		$num_suggestions = 0;
 
 		if ($answerType == MATCHING) {
-            $s .= '<table class="exercise_options">';
 
 			$x = 1; //iterate through answers
 			$letter = 'A'; //mark letters for each answer
@@ -183,7 +190,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             if ($show_comment) {
                 $header .= Display::tag('th', get_lang('Feedback'));
             }
-            $s .= '<table class="exercise_options">';
             $s .= Display::tag('tr', $header, array('style'=>'text-align:left;'));
         }
 
@@ -493,7 +499,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				}
 			}
 		}	// end for()
-		$s .= '</table>';
+
+        if ($show_comment) {
+            $s .= '</table>';
+        } else {
+            if (in_array($answerType, $questions_in_table)) {
+                $s .= '</table>';
+            }
+        }
+
 		$s .= '</div>';
 
 
@@ -712,8 +726,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 					</table>
 		</td></tr>';
 		echo $s;
+        echo '</table>';
 	}
-	echo '</table>';
 	return $nbrAnswers;
 }
 

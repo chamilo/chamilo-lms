@@ -502,7 +502,7 @@ if (!empty($exercise_list)) {
                 // Teacher only
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
-                    if ($exercise_obj->edit_exercise_in_lp == false) {
+                if ($exercise_obj->exercise_was_added_in_lp == true) {
                         $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class' => 'lp_content_type_label'));
                     }
 
@@ -551,7 +551,7 @@ if (!empty($exercise_list)) {
 
                         //Visible / invisible
                         //Check if this exercise was added in a LP
-                        if ($exercise_obj->edit_exercise_in_lp == false) {
+                    		if ($exercise_obj->exercise_was_added_in_lp == true) {
                             $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
                         } else {
                             if ($row['active'] == 0 || $visibility == 0) {

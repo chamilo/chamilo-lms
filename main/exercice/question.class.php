@@ -1351,7 +1351,7 @@ abstract class Question
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
 			echo '<div class="icon_image_content">';
-			if ($objExercise->edit_exercise_in_lp == false) {
+			if ($objExercise->exercise_was_added_in_lp == true) {
                 $img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
 				echo Display::return_icon($img,$explanation);
@@ -1364,7 +1364,7 @@ abstract class Question
 
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($objExercise->edit_exercise_in_lp == false) {
+		if ($objExercise->exercise_was_added_in_lp == true) {
             echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
 		} else {
 			if ($feedback_type==1) {

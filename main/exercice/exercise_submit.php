@@ -74,18 +74,12 @@ $reminder 				= isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0
 $remind_question_id 	= isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
 $exerciseId				= isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
-if (empty ($formSent)) {
-    $formSent = $_REQUEST['formSent'];
-}
-if (empty($exerciseResult)) {
-    $exerciseResult = $_REQUEST['exerciseResult'];
-}
-if (empty ($exerciseResultCoordinates)) {
-	$exerciseResultCoordinates = $_REQUEST['exerciseResultCoordinates'];
-}
+$formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
+$exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
+$exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
-$choice = empty($choice) ? $_REQUEST['choice2'] : null;
+$choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
 //From submit modal
 $current_question			= isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
@@ -97,7 +91,7 @@ $error = '';
 $exercice_attemp_table 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview, we delete the objExercise from the session in order to get the latest changes in the exercise */
-if (api_is_allowed_to_edit(null,true) && $_GET['preview'] == 1 ) {
+if (api_is_allowed_to_edit(null,true) && isset($_GET['preview']) && $_GET['preview'] == 1 ) {
     Session::erase('objExercise');
 }
 
@@ -225,6 +219,8 @@ if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
+$clock_expired_time = null;
+
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
@@ -233,7 +229,6 @@ if (empty($exercise_stat_info)) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
-	$clock_expired_time = '';
 
 	if ($time_control) {
 		$expected_time = $current_timestamp + $total_seconds;
@@ -579,7 +574,7 @@ $interbreadcrumb[] = array ("url" => "exercice.php?gradebook=$gradebook",	"name"
 $interbreadcrumb[] = array ("url" => "#","name" => $objExercise->name);
 
 if ($origin != 'learnpath') { //so we are not in learnpath tool
-    Display :: display_header($nameTools,'Exercises');
+    Display :: display_header(null,'Exercises');
     if (!api_is_allowed_to_session_edit() ) {
         Display :: display_warning_message(get_lang('SessionIsReadOnly'));
     }
@@ -986,7 +981,7 @@ if (!empty($error)) {
             }
         }
 
-        $user_choice = $attempt_list[$questionId];
+        $user_choice = isset($attempt_list[$questionId]) ? $attempt_list[$questionId] : null;
 
         $remind_highlight = '';
 

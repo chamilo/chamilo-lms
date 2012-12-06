@@ -793,8 +793,11 @@ function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0) {
  * Get session time control
  */
 function get_session_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0) {
+    $return_value = 0;
     $time_control_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
-    $return_value = $_SESSION['expired_time'][$time_control_key];
+    if (isset($_SESSION['expired_time']) && isset($_SESSION['expired_time'][$time_control_key])) {
+        $return_value = $_SESSION['expired_time'][$time_control_key];
+    }
     return $return_value;
 }
 

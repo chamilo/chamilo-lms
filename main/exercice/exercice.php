@@ -91,11 +91,12 @@ if (isset($_SESSION['exerciseResult'])) {
 }
 
 //General POST/GET/SESSION/COOKIES parameters recovery
-$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : isset($origin) ? $origin : null;
-$choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : isset($choice) ? $choice : null;
-$hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : isset($hpchoice) ? $hpchoice : null;
-$exerciseId = isset($_REQUEST['exerciseId']) ? Security::remove_XSS($_REQUEST['exerciseId']) : isset($exerciseId) ? $exerciseId : null;
-$file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : isset($file) ? $file : null;
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
+$choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
+
+$hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? Security::remove_XSS($_REQUEST['exerciseId']) : null;
+$file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
@@ -187,6 +188,7 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 // only for administrator
 
 if ($is_allowedToEdit) {
+
     if (!empty($choice)) {
         // construction of Exercise
 

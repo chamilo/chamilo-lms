@@ -96,6 +96,10 @@ if (empty($objExercise)) {
 }
 $feedback_type = $objExercise->feedback_type;
 
+if ($objExercise->exercise_was_added_in_lp && $learnpath_id != 0) {
+    //Display::display_normal_message(get_lang('ThisExerciseWasResolvedInsideALP'));
+}
+
 //If is not valid
 $session_control_key = get_session_time_control_key($exercise_id, $learnpath_id, $learnpath_item_id);
 if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id) && !in_array($action, array('qualify','edit'))) {

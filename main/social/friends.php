@@ -1,5 +1,6 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+
+/* For licensing terms, see /license.txt */
 /**
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
@@ -8,20 +9,20 @@
  * Initialization
  */
 $language_file = array('userInfo');
-$cidReset=true;
+$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 api_block_anonymous_users();
-if (api_get_setting('allow_social_tool') !='true') {
+if (api_get_setting('allow_social_tool') != 'true') {
     api_not_allowed();
 }
 
 $this_section = SECTION_SOCIAL;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 
 function delete_friend (element_div) {
 	id_image=$(element_div).attr("id");
@@ -82,40 +83,40 @@ function clear_form () {
 
 </script>';
 
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
-$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Friends'));
+$interbreadcrumb[] = array('url' => 'profile.php', 'name' => get_lang('SocialNetwork'));
+$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Friends'));
 
 $social_left_content = SocialManager::show_social_menu('friends');
 
-$user_id	= api_get_user_id();
+$user_id = api_get_user_id();
 
-$user_id	    = api_get_user_id();
-$name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q']: null;
+$user_id = api_get_user_id();
+$name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;
 
-if (isset($name_search) && $name_search!='undefined') {
-	$friends = SocialManager::get_friends($user_id,null,$name_search);
+if (isset($name_search) && $name_search != 'undefined') {
+    $friends = SocialManager::get_friends($user_id, null, $name_search);
 } else {
-	$friends = SocialManager::get_friends($user_id);
+    $friends = SocialManager::get_friends($user_id);
 }
 
 $social_right_content = '<div class="span8">';
 
-if (count($friends) == 0 ) {
-	$social_right_content .= get_lang('NoFriendsInYourContactList').'<br /><br />';
-	$social_right_content .= '<a class="btn" href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+if (count($friends) == 0) {
+    $social_right_content .= get_lang('NoFriendsInYourContactList').'<br /><br />';
+    $social_right_content .= '<a class="btn" href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
 } else {
-	$social_right_content .= get_lang('Search') .'&nbsp;&nbsp; : &nbsp;&nbsp;';
-	$social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
+    $social_right_content .= get_lang('Search').'&nbsp;&nbsp; : &nbsp;&nbsp;';
+    $social_right_content .= '<input class="social-search-image" type="text" id="id_search_image" name="id_search_image" onkeyup="search_image_social()" />';
 
     $friend_html = '<div id="friends">';
 
     $number_friends = count($friends);
-    $j=0;
+    $j = 0;
 
     $friend_html.= '<ul class="thumbnails">';
-    for ($k=0;$k<$number_friends;$k++) {
-        while ($j<$number_friends) {
+    for ($k = 0; $k < $number_friends; $k++) {
+        while ($j < $number_friends) {
 
             if (isset($friends[$j])) {
                 $friend_html.='<li class="span2">';
@@ -135,7 +136,7 @@ if (count($friends) == 0 ) {
     }
     $friend_html.='</ul>';
     $friend_html.='</div>';
-    $social_right_content .=  $friend_html;
+    $social_right_content .= $friend_html;
 }
 $social_right_content .= '</div>';
 
@@ -143,7 +144,6 @@ $social_right_content .= '</div>';
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
+
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

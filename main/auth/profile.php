@@ -688,8 +688,6 @@ if (!empty($msg_is_not_password)){
 $image_syspath = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system', false, true);
 $image_syspath['dir'].$image_syspath['file'];
 
-//$image_size = api_getimagesize($image_syspath['dir'].$image_syspath['file']);
-
 //Web path
 $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', false, true);
 $image_dir = $image_path['dir'];
@@ -698,10 +696,6 @@ $image_file = $image_dir.$image;
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
     .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
     .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
-if ($image_size['width'] > 300) {
-    //limit display width to 300px
-    $img_attributes .= 'width="300" ';
-}
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
@@ -723,7 +717,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
     echo '</div>';
 } else {
     // Style position:absolute has been removed for Opera-compatibility.
-    //echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
     echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
 
     if ($image == 'unknown.jpg') {

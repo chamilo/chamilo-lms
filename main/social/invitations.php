@@ -65,6 +65,8 @@ function register_friend(element_input) {
 }
 
 </script>';
+$show_message = null;
+$content = null;
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
@@ -188,12 +190,10 @@ if (count($pending_invitations) > 0) {
     $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template(null);
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
 
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

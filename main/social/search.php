@@ -40,7 +40,7 @@ if ($query !='') {
         $social_right_content .= get_lang('SorryNoResults');
     }
 
-    $results .= '<div id="online_grid_container"><div class="span9">';
+    $results = '<div id="online_grid_container"><div class="span9">';
 
     if (is_array($users) && count($users)> 0) {
         $results .=  Display::page_subheader(get_lang('Users'));

@@ -118,6 +118,7 @@ jQuery(document).ready(function() {
 
 $allowed_views = array('mygroups','newest','pop');
 $interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork'));
+$content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	if ($_GET['view'] == 'mygroups') {
@@ -186,6 +187,8 @@ if ($group_id != 0 ) {
     }
     $social_left_content = SocialManager::show_social_menu($show_menu);
 }
+
+$social_right_content = null;
 
 if ($group_id != 0 ) {
 
@@ -455,6 +458,8 @@ if ($group_id != 0 ) {
 		// Display groups (newest, mygroups, pop)
         $query_vars = array();
 
+        $newest_content = $popular_content = $my_group_content = null;
+
 	   	if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
 	   		$view_group = $_GET['view'];
 
@@ -521,18 +526,16 @@ if ($group_id != 0 ) {
 		$social_right_content .=  '<div class="span9">'.Display::tabs($headers, array($newest_content, $popular_content, $my_group_content),'tab_browse').'</div>';
     }
 
-//Display :: display_footer();
+$show_message = null;
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && $_REQUEST['msg'] == 'topic_deleted') {
     $show_message = Display::return_message(get_lang('Deleted'), 'success');
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template();
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
 
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');

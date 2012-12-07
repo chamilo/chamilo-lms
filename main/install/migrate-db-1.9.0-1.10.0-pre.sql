@@ -82,12 +82,7 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 ALTER TABLE c_quiz_question ADD COLUMN parent_id INT unsigned NOT NULL DEFAULT 0;
 
-
-CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
-    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
-    name varchar(255),
-    external_id INT unsigned NOT NULL DEFAULT 0
-);
+CREATE TABLE IF NOT EXISTS gradebook_evaluation_type(id INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT, name varchar(255), external_id INT unsigned NOT NULL DEFAULT 0);
 
 ALTER TABLE gradebook_evaluation ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
 ALTER TABLE gradebook_link ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
@@ -106,5 +101,5 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id, transaction_id, branch_id));
 
--- Do not move this 
-UPDATE settings_current SET selected_value = '1.10.0.20539' WHERE variable = 'chamilo_database_version';
+-- Do not move this
+UPDATE settings_current SET selected_value = '1.10.0.20655' WHERE variable = 'chamilo_database_version';

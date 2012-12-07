@@ -1437,7 +1437,7 @@ CREATE TABLE IF NOT EXISTS gradebook_link (
     weight float NOT NULL,
     visible int NOT NULL,
     locked int NOT NULL DEFAULT 0,
-    evaluation_type_id INT NOT NULL DEFAULT 0
+    evaluation_type_id INT NOT NULL DEFAULT 0,
     PRIMARY KEY(id)
 );
 
@@ -3142,4 +3142,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20539' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20655' WHERE variable = 'chamilo_database_version';

@@ -322,7 +322,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                                 if ($key == $presence) {
                                     $input_checked = " checked=checked";
                                 }
-                                echo '&nbsp;&nbsp;<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value = "state_'.$key.'_'.$user['user_id'].'" '.$disabled.' '.$input_checked.' />&nbsp;'.$state;
+                                echo Display::tag('label', '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value = "state_'.$key.'_'.$user['user_id'].'" '.$disabled.' '.$input_checked.' />&nbsp;'.$state, array('class'=> 'checkbox'));
                             }
 
                             echo '<span class="anchor_'.$calendar['id'].'"></span>';

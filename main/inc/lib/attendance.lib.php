@@ -330,9 +330,10 @@ class Attendance
             api_item_property_update($_course, TOOL_ATTENDANCE, $attendance_id,"AttendanceUpdated", $user_id);
 
             // add link to gradebook
+
             if ($link_to_gradebook && !empty($this->category_id)) {
                 $description = '';
-                $link_id=is_resource_in_course_gradebook($course_code,7,$attendance_id,$session_id);
+                $link_id = is_resource_in_course_gradebook($course_code, 7, $attendance_id, $session_id);
                 if (!$link_id) {
                     add_resource_to_course_gradebook($this->category_id, $course_code, 7, $attendance_id, $title_gradebook,$weight_calification,$value_calification,$description,1,$session_id);
                 } else {

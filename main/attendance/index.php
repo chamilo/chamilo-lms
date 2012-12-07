@@ -95,7 +95,7 @@ $(function() {
 		var col_split = col_id.split("_");
 		var calendar_id = col_split[2];
 		var class_img = $(this).attr("class");
-							
+
 		if (class_img == "img_unlock") {
 			//lock
 			$(".checkbox_head_"+calendar_id).attr("disabled", true);
@@ -109,12 +109,17 @@ $(function() {
 			$(this).attr("class","img_lock");
 			$("#hidden_input_"+calendar_id).attr("value","");
 			$("#hidden_input_"+calendar_id).attr("disabled",true);
+
+            $(".checkboxes_col_"+calendar_id).find(".switch").each(function(index) {
+                $(this).addClass("disabled");
+            });
 			return false;
 
 		} else {
 			//Unlock
 			$(".checkbox_head_"+calendar_id).attr("disabled", false);
 			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
+
 
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
@@ -130,12 +135,17 @@ $(function() {
                 //	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 			});
 
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
+			$(".checkboxes_col_"+calendar_id).find(".switch").each(function(index) {
+                $(this).removeClass("disabled");
+            });
+
+
 			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
 			$(this).attr("title","'.get_lang('DateLock').'");
 			$(this).attr("alt","'.get_lang('DateLock').'");
 			$(this).attr("class","img_unlock");
 			$("#hidden_input_"+calendar_id).attr("disabled",false);
+            console.log(calendar_id);
 			$("#hidden_input_"+calendar_id).attr("value",calendar_id);
 			return false;
 		}

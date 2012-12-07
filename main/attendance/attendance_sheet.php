@@ -11,13 +11,6 @@
 // protect a course script
 api_protect_course_script(true);
 
-$attendance_states = array(
-    '1' => get_lang('Present'),
-    '0' => get_lang('Absent'),
-    '2' => get_lang('VeryLate'),
-    '3' => get_lang('Late'),
-);
-
 if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {
 
     $param_gradebook = '';
@@ -91,9 +84,12 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
 
     if (count($users_in_course) > 0) {
+        foreach ($attendance_states as $id => $state) {
+            echo $attendance_obj->get_attendance_state_button($id, true).'&nbsp;';
+        }
 
-    ?>
-    <script>
+?>
+<script>
     var original_url = '';
     $("#filter_id").on('change', function() {
        filter = $(this).val();
@@ -144,30 +140,81 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
         });
     }
 
+    function save_checkboxes() {
+        $('#form_attendance_sheet').submit();
+    }
+
     $(document).ready(function() {
-		$("table.tableWithFloatingHeader").each(function() {
-            $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
 
-            var originalHeaderRow = $("tr:first", this)
-            originalHeaderRow.before(originalHeaderRow.clone());
-            var clonedHeaderRow = $("tr:first", this)
+        $('.switch').click(function() {
+        var state = 0;
+        var my_class = 'btn-info';
+        var current_class = '';
+        var my_button = $(this);
 
-            clonedHeaderRow.addClass("tableFloatingHeader");
-            clonedHeaderRow.css("position", "absolute");
-            clonedHeaderRow.css("top", "0px");
-            clonedHeaderRow.css("left", $(this).css("margin-left"));
-            clonedHeaderRow.css("visibility", "hidden");
+        if (my_button.is('.btn-warning')) {
+            current_class = 'btn-warning';
+            state = 1;
+            my_class = 'btn-success';
+        }
 
-            originalHeaderRow.addClass("tableFloatingHeaderOriginal");
-        });
+        if (my_button.is('.btn-info')) {
+            current_class = 'btn-info';
+            state = 2;
+            my_class = 'btn-warning';
+        }
 
-        UpdateTableHeaders();
-        $(window).scroll(UpdateTableHeaders);
-        $(window).resize(UpdateTableHeaders);
+        if (my_button.is('.btn-danger')) {
+            current_class = 'btn-danger';
+            state =3;
+            my_class = 'btn-info';
+        }
+/*
+        if (my_button.is('.btn-primary')) {
+            current_class = 'btn-primary';
+            state = 3;
+            my_class = 'btn-info';
+        }*/
+
+        if (my_button.is('.btn-success')) {
+            current_class = 'btn-success';
+            state = 0;
+            my_class = 'btn-danger';
+        }
+        var id = my_button.attr('id');
+        $('#hidden_'+id).attr('value', 'state_'+state+'_'+id);
+
+        my_button.attr('data-state', state);
+        my_button.removeClass(current_class);
+
+        my_button.addClass('btn b1');
+        my_button.addClass(my_class);
     });
-	</script>
 
-    <form method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
+    $("table.tableWithFloatingHeader").each(function() {
+        $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
+
+        var originalHeaderRow = $("tr:first", this)
+        originalHeaderRow.before(originalHeaderRow.clone());
+        var clonedHeaderRow = $("tr:first", this)
+
+        clonedHeaderRow.addClass("tableFloatingHeader");
+        clonedHeaderRow.css("position", "absolute");
+        clonedHeaderRow.css("top", "0px");
+        clonedHeaderRow.css("left", $(this).css("margin-left"));
+        clonedHeaderRow.css("visibility", "hidden");
+
+        originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+    });
+
+    UpdateTableHeaders();
+    $(window).scroll(UpdateTableHeaders);
+    $(window).resize(UpdateTableHeaders);
+
+});
+</script>
+
+    <form id="form_attendance_sheet" method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >
 
     <div class="attendance-sheet-content" style="width:100%;background-color:#E1E1E1;margin-top:20px;">
         <div class="divTableWithFloatingHeader attendance-users-table" style="width:45%;float:left;margin:0px;padding:0px;">
@@ -230,19 +277,23 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
             foreach ($attendant_calendar as $calendar) {
                 $date = $calendar['date'];
                 $time = $calendar['time'];
+
                 $datetime = $date.'<br />'.$time;
+                $datetime = api_format_date($calendar['date_time'], DATE_FORMAT_NUMBER_NO_YEAR);
 
                 $img_lock = Display::return_icon('lock.gif',get_lang('DateUnLock'),array('class'=>'img_lock','id'=>'datetime_column_'.$calendar['id']));
 
                 if (!empty($calendar['done_attendance'])){
-                    $datetime = '<font color="blue">'.$date.'<br />'.$time.'</font>';
+                    $datetime = '<font color="blue">'.$datetime.'</font>';
                 }
                 $disabled_check = 'disabled = "true"';
-                $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" disabled />';
+
                 if ($next_attendance_calendar_id == $calendar['id']) {
                     $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
                     $disabled_check = '';
                     $img_lock = Display::return_icon('unlock.gif',get_lang('DateLock'),array('class'=>'img_unlock','id'=>'datetime_column_'.$calendar['id']));
+                } else {
+                    $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" />';
                 }
 
                 $result .= '<th width="800px">';
@@ -254,7 +305,6 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
 
                 if ($is_locked_attendance == false) {
                     if (api_is_allowed_to_edit(null, true)) {
-                        //$result .= '<br /><input type="checkbox" class="checkbox_head_'.$calendar['id'].'" id="checkbox_head_'.$calendar['id'].'" '.$disabled_check.' checked="checked" />';
                         $result .= $input_hidden.'</div></center></th>';
                     }
                 }
@@ -311,19 +361,22 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                     }
 
                     echo '<td style="'.$style_td.'" class="checkboxes_col_'.$calendar['id'].'">';
-                    echo '<div style="height:20px">';
-                    echo '<center>';
+                    echo '<div style="text-align:center; height:20px">';
+
                     if (api_is_allowed_to_edit(null, true)) {
                         if (!$is_locked_attendance || api_is_platform_admin()) {
-
                             //echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                             foreach ($attendance_states as $key => $state) {
                                 $input_checked = null;
                                 if ($key == $presence) {
                                     $input_checked = " checked=checked";
                                 }
-                                echo Display::tag('label', '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value = "state_'.$key.'_'.$user['user_id'].'" '.$disabled.' '.$input_checked.' />&nbsp;'.$state, array('class'=> 'checkbox'));
+                                //echo Display::tag('label', '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value = "state_'.$key.'_'.$user['user_id'].'" '.$disabled.' '.$input_checked.' />&nbsp;'.$state, array('class'=> 'checkbox'));
                             }
+                            $link_id = 'link_'.$key.'_'.$user['user_id'].'_'.$calendar['id'];
+                            $attributes = array('id' => $link_id, 'class' => 'switch '.$disabled);
+                            echo $attendance_obj->get_attendance_state_button($presence, false, $attributes);
+                            echo '<input id = "hidden_'.$link_id.'" type="hidden" name="check_presence['.$calendar['id'].'][]" '.$input_checked.' value="'.$presence.'" />';
 
                             echo '<span class="anchor_'.$calendar['id'].'"></span>';
                         } else {
@@ -342,7 +395,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                                 break;
                         }
                     }
-                    echo '</center>';
+
                     echo '</div>';
                     echo '</td>';
                 }
@@ -364,7 +417,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
         <?php if (!$is_locked_attendance || api_is_platform_admin()) {
                 if (api_is_allowed_to_edit(null, true)) {
             ?>
-            <button type="submit" class="save"><?php echo get_lang('Save') ?></button>
+            <button onclick="save_checkboxes();" type="button" class="save"><?php echo get_lang('Save') ?></button>
         <?php }
             }
         ?>
@@ -409,7 +462,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
             <tr class="<?php echo $class ?>">
                 <td>
                     <?php
-                        echo $attendance_states[$presence['presence']];
+                        echo $attendance_obj->get_attendance_state_button($presence['presence']);
                         //echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence'))
                         echo "&nbsp; ".$presence['date_time'] ?>
                 </td>

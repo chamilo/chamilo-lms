@@ -1418,5 +1418,27 @@ class Attendance
     public function set_course_int_id($course_id) {
 		$this->course_int_id = intval($course_id);
 	}
-    
+
+    public function get_attendance_states() {
+        $attendance_states = array(
+            '1' => array('label' => get_lang('Present'), 'class' => 'btn-success') ,
+            '0' => array('label' => get_lang('Absent'), 'class' => 'btn-danger') ,
+            '3' => array('label' => get_lang('Late'), 'class' => 'btn-info') ,
+            '2' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
+        );
+        return $attendance_states;
+    }
+
+    public function get_attendance_state_button($state_id, $add_label = false, $extra_attributes = array()) {
+        $state_list = $this->get_attendance_states();
+        if (isset($state_list[$state_id])) {
+            $label = '&nbsp;';
+            if ($add_label) {
+                $label = $state_list[$state_id]['label'];
+            }
+            $extra_attributes['class'] = $extra_attributes['class']." btn ".$state_list[$state_id]['class'];
+            return Display::url($label, '', $extra_attributes);
+        }
+        return null;
+    }
 }

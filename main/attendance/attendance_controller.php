@@ -222,6 +222,8 @@
 		$attendance = new Attendance();
 		$data = array();
 		$data['attendance_id']   = $attendance_id;
+        $data['attendance_obj'] = $attendance;
+        $data['attendance_states']   = $attendance->get_attendance_states();
 		$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 
 		$filter_type = 'today';
@@ -256,7 +258,9 @@
 		if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
 
 			if (isset($_POST['hidden_input'])) {
-				foreach ($_POST['hidden_input'] as $cal_id) {
+                $columns_to_update = $_POST['hidden_input'];
+                $columns_to_update = array_unique(array_filter($columns_to_update));
+				foreach ($columns_to_update as $cal_id) {
 					$users_result = array();
 					if (isset($_POST['check_presence'][$cal_id])) {
 						$users_result = $_POST['check_presence'][$cal_id];
@@ -266,16 +270,18 @@
                     if (!empty($users_result)) {
                         foreach ($users_result as $result) {
                             $user_status = explode('_', $result);
-                            if (isset($user_status[2]) && isset($user_status[1])) {
-                                $user_final_results[$user_status[2]] = $user_status[1];
+                            if (isset($user_status[0]) && $user_status[0] == 'state' && isset($user_status[4]) && isset($user_status[1])) {
+                               $user_final_results[$user_status[4]] = $user_status[1];
                             }
                         }
                     }
-					$affected_rows = $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id);
+
+                    if (!empty($user_final_results)) {
+                        $affected_rows = $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id);
+                    }
 				}
 			}
-
-			$data['users_in_course'] 			 = $attendance->get_users_rel_course($attendance_id);
+			$data['users_in_course'] = $attendance->get_users_rel_course($attendance_id);
 			$my_calendar_id = null;
 			if (is_numeric($filter_type)) {
 			    $my_calendar_id = $filter_type;
@@ -490,7 +496,7 @@
         }
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-        //var_dump($cols);exit;
+        
         $rows = count($data_table);
 
         if ($cols > $max_cols_per_page) {

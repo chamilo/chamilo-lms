@@ -473,8 +473,10 @@ abstract class Question
 	 * @param - string $PictureName - Name of the picture
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture,$PictureName) {
-		global $picturePath;
+	function uploadPicture($Picture, $PictureName, $picturePath = null) {
+        if (empty($picturePath)) {
+            global $picturePath;
+        }
 
 		if (!file_exists($picturePath)) {
 			if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
@@ -498,7 +500,6 @@ abstract class Question
                 return api_item_property_update($this->course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
             }
 		}
-
 		return false;
 	}
 

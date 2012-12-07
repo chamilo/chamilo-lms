@@ -1094,11 +1094,11 @@ class CourseRestorer
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
                 $quiz = $quiz->obj;
-
 				$doc = '';
-				if (strlen($quiz->media) > 0) {
-					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored()) {
-						$sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
+
+				if (strlen($quiz->sound) > 0) {
+					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
+						echo $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
 						$doc = Database::query($sql);
 						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
@@ -1192,6 +1192,8 @@ class CourseRestorer
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
+
+
 			$sql = "INSERT INTO ".$table_que." SET
                     c_id = ".$this->destination_course_id." ,
                     question = '".self::DBUTF8escapestring($question->question)."',
@@ -1205,6 +1207,28 @@ class CourseRestorer
 
 			Database::query($sql);
 			$new_id = Database::insert_id();
+
+            if ($new_id) {
+                if (!empty($question->picture)) {
+                    $question_temp = Question::read($new_id, $this->destination_course_info['real_id']);
+
+                    $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
+                    // picture path
+                    $picturePath = $documentPath.'/images';
+
+                    $old_picture = api_get_path(SYS_COURSE_PATH).$this->course->info['path'].'/document/images/'.$question->picture;
+                    if (file_exists($old_picture)) {
+                        $picture_name = 'quiz-'.$new_id.'.jpg';
+
+                        $result = $question_temp->uploadPicture($old_picture, $picture_name, $picturePath);
+                        if ($result) {
+                            $sql = "UPDATE $table_que SET picture = '$picture_name' WHERE c_id = ".$this->destination_course_id." AND id = $new_id ";
+                            Database::query($sql);
+                        }
+                    }
+                }
+            }
+
 			if ($question->quiz_type == MATCHING) {
                 $temp = array();
                 foreach ($question->answers as $index => $answer) {

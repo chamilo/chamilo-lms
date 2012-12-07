@@ -471,7 +471,7 @@ CREATE TABLE IF NOT EXISTS session (
   name char(150) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
   nbr_users mediumint unsigned NOT NULL default '0',
-  nbr_classes mediumint unsigned NOT NULL default '0',   
+  nbr_classes mediumint unsigned NOT NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
@@ -482,7 +482,7 @@ CREATE TABLE IF NOT EXISTS session (
   access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
   coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
   coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
-  PRIMARY KEY (id),  
+  PRIMARY KEY (id),
   UNIQUE KEY name (name)
 );
 
@@ -517,7 +517,7 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY (id_session, course_id, id_user)  
+  PRIMARY KEY (id_session, course_id, id_user)
 );
 
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_category_code (category_code);
@@ -1438,7 +1438,7 @@ CREATE TABLE IF NOT EXISTS gradebook_link (
     visible int NOT NULL,
     locked int NOT NULL DEFAULT 0,
     evaluation_type_id INT NOT NULL DEFAULT 0
-    PRIMARY KEY  (id)
+    PRIMARY KEY(id)
 );
 
 DROP TABLE IF EXISTS gradebook_result;
@@ -1465,7 +1465,7 @@ ALTER TABLE gradebook_score_display ADD INDEX(category_id);
 
 DROP TABLE IF EXISTS gradebook_evaluation_type;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
-    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,   
+    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
     name varchar(255),
     external_id INT unsigned NOT NULL DEFAULT 0
 );
@@ -3056,7 +3056,7 @@ CREATE TABLE grade_components (
     percentage VARCHAR(255)  NOT NULL,
     title VARCHAR(255) NOT NULL,
     acronym VARCHAR(255) NOT NULL,
-    grade_model_id INTEGER NOT NULL,    
+    grade_model_id INTEGER NOT NULL,
     prefix VARCHAR(255) DEFAULT NULL,
     count_elements INT DEFAULT 0,
     exclusions INT DEFAULT 0,
@@ -3069,9 +3069,9 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 DROP TABLE IF EXISTS course_type;
 CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
-    name varchar(50) not null, 
-    translation_var char(40) default 'UndefinedCourseTypeLabel', 
-    description TEXT default '', 
+    name varchar(50) not null,
+    translation_var char(40) default 'UndefinedCourseTypeLabel',
+    description TEXT default '',
     props text default ''
 );
 
@@ -3141,5 +3141,5 @@ CREATE TABLE branch_transaction (
     PRIMARY KEY (id, transaction_id, branch_id)
 );
 
--- Do not move this 
+-- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.20539' WHERE variable = 'chamilo_database_version';

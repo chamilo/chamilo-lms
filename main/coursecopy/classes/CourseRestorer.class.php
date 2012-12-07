@@ -1091,6 +1091,7 @@ class CourseRestorer
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
+
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
                 $quiz = $quiz->obj;
 
@@ -1172,6 +1173,7 @@ class CourseRestorer
 
 	/**
 	 * Restore quiz-questions
+     * @params int question id
 	 */
 	function restore_quiz_question($id) {
 		$resources = $this->course->resources;
@@ -1203,16 +1205,16 @@ class CourseRestorer
 
 			Database::query($sql);
 			$new_id = Database::insert_id();
-
 			if ($question->quiz_type == MATCHING) {
-                $t = array();
+                $temp = array();
                 foreach ($question->answers as $index => $answer) {
-                    $t[$answer['position']] = $answer;
+                    $temp[$answer['position']] = $answer;
                 }
-                foreach ($t as $index => $answer) {
+                foreach ($temp as $index => $answer) {
                     $sql = "INSERT INTO ".$table_ans." SET
                             c_id = ".$this->destination_course_id." ,
-                            id = '".$index."', question_id = '".$new_id."',
+                            id = '".$index."',
+                            question_id = '".$new_id."',
                             answer = '".self::DBUTF8escapestring($answer['answer'])."',
                             correct = '".$answer['correct']."',
                             comment = '".self::DBUTF8escapestring($answer['comment'])."',
@@ -1223,6 +1225,7 @@ class CourseRestorer
 					Database::query($sql);
 				}
 			} else {
+
 				foreach ($question->answers as $index => $answer) {
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
@@ -1244,7 +1247,7 @@ class CourseRestorer
 				}
 			}
 
-            //@todo check this
+            //Current course id
             $course_id = api_get_course_int_id();
 
             //Moving quiz_question_options
@@ -1263,7 +1266,7 @@ class CourseRestorer
                 foreach ($new_answers as $answer_item) {
                     $params = array();
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
+                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? AND question_id = ? '=> array($answer_item['id'], $this->destination_course_id, $new_id)), false);
                 }
             }
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;

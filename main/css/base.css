@@ -2638,6 +2638,7 @@ div.admin_section h4 {
     font-size: 16px;
     float:left;
     line-height: 16px;
+    padding-top: 5px;
 }
 
 .ribbon .rib-total {

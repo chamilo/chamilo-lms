@@ -64,22 +64,11 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             return '';
         }
 
-        $questions_in_table = array(
-                MATCHING,
-                MULTIPLE_ANSWER_TRUE_FALSE,
-                MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE
-        );
 
         echo '<div class="question_options">';
 
 		$s = '';
-        if ($show_comment) {
-            $s .= '<table class="table table-bordered">';
-        } else {
-            if (in_array($answerType, $questions_in_table)) {
-                $s .= '<table class="exercise_options">';
-            }
-        }
+
 		// construction of the Answer object (also gets all answers details)
 		$objAnswerTmp = new Answer($questionId);
 
@@ -98,6 +87,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		$num_suggestions = 0;
 
 		if ($answerType == MATCHING) {
+            $s .= '<table class="data_table">';
 
 			$x = 1; //iterate through answers
 			$letter = 'A'; //mark letters for each answer
@@ -138,9 +128,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Width      = '100%';
 			$oFCKeditor->Height     = '200';
 			$oFCKeditor->Value      = $fck_content;
-            //$s .= '<tr><td>';
             $s .= $oFCKeditor->CreateHtml();
-            //$s .= '</td></tr>';
 		} elseif ($answerType == ORAL_EXPRESSION) {
 			//Add nanog
 			if (api_get_setting('enable_nanogong') == 'true') {
@@ -161,7 +149,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 						'question_id'   => $questionId
 					);
 				}
-
 				$nano = new Nanogong($params);
 				echo $nano->show_button();
 			}
@@ -172,9 +159,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$oFCKeditor->Height = '150';
 			$oFCKeditor->ToolbarStartExpanded = false;
 			$oFCKeditor->Value	= '' ;
-			//$s .= '<tr><td>';
 			$s .= $oFCKeditor->CreateHtml();
-			//$s .= '</td></tr>';
 		}
 
 		// Now navigate through the possible answers, using the max number of
@@ -182,7 +167,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 		$lines_count = 1; // a counter for matching-type answers
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
-
             $header = Display::tag('th', get_lang('Options'));
             foreach ($objQuestionTmp->options as $key=>$item) {
                 $header .= Display::tag('th', $item);
@@ -190,6 +174,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             if ($show_comment) {
                 $header .= Display::tag('th', get_lang('Feedback'));
             }
+            $s .= '<table class="data_table">';
             $s .= Display::tag('tr', $header, array('style'=>'text-align:left;'));
         }
 
@@ -199,7 +184,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 if ($exercise_feedback == EXERCISE_FEEDBACK_TYPE_END) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
-                $s .= '<table class="exercise_options">';
+                $s .= '<table class="data_table">';
                 $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
             }
         }
@@ -237,23 +222,24 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				$answer = Security::remove_XSS($answer, STUDENT);
 
 				$s .= Display::input('hidden','choice2['.$questionId.']','0');
-				//@todo fix $is_ltr_text_direction
-				//<p style="float: '.($is_ltr_text_direction ? 'left' : 'right').'; padding-'.($is_ltr_text_direction ? 'right' : 'left').': 4px;">
-				//$s .= '<div style="margin-'.($is_ltr_text_direction ? 'left' : 'right').': 24px;">'.
 
-				//$s .= '<tr><td>';
-				$s .= '<label class="radio">';
-				$s .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
-				$s .= $answer;
-				$s .= '</label>';
+				$answer_input = '<label class="radio">';
+				$answer_input .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
+				$answer_input .= $answer;
+				$answer_input .= '</label>';
 
                 if ($show_comment) {
-                   // $s .= '<td>';
+                    $s .= '<tr><td>';
+                    $s .= $answer_input;
+                    $s .= '</td>';
+                    $s .= '<td>';
                     $s .= $comment;
-                    //$s .= '</td>';
+                    $s .= '</td>';
+                    $s .= '</tr>';
+                } else {
+                    $s .= $answer_input;
                 }
 
-                $s .= '</tr>';
 			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
 				$input_id = 'choice-'.$questionId.'-'.$answerId;
 				$answer = Security::remove_XSS($answer, STUDENT);
@@ -273,19 +259,23 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
                 if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-                    //$s .= '<tr><td>';
 
-                    $s .= '<label class="checkbox">';
-                    $s .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes);
-                    $s .= $answer;
-                    $s .= '</label>';
+                    $answer_input = '<label class="checkbox">';
+                    $answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', $numAnswer, $attributes);
+                    $answer_input .= $answer;
+                    $answer_input .= '</label>';
 
                     if ($show_comment) {
-                        //$s .= '<td>';
+                        $s .= '<tr><td>';
+                        $s .= $answer_input;
+                        $s .= '</td>';
+                        $s .= '<td>';
                         $s .= $comment;
-                        //$s .= '</td>';
+                        $s .= '</td>';
+                        $s .='</tr>';
+                    } else {
+                        $s .= $answer_input;
                     }
-                    //$s .='</tr>';
                 } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
 
                 	$my_choice = array();
@@ -296,7 +286,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                         }
                     }
 
-                    $s .='<tr>';
+                    $s .= '<tr>';
                     $s .= Display::tag('td', $answer);
 
                     if (!empty($quiz_question_options)) {
@@ -343,18 +333,25 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 				}
 
 				$answer = Security::remove_XSS($answer, STUDENT);
-				$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$s .= '<label class="checkbox">';
-				$s .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
-			    $s .= $answer;
-                $s .= '</label>';
+				$answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
+				$answer_input .= '<label class="checkbox">';
+				$answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
+			    $answer_input .= $answer;
+                $answer_input .= '</label>';
 
                 if ($show_comment) {
-                    //$s .= '<td>';
+                    $s.= '<tr>';
+                    $s .= '<td>';
+                    $s.= $answer_input;
+                    $s .= '</td>';
+                    $s .= '<td>';
                     $s .= $comment;
-                    //$s .= '</td>';
+                    $s .= '</td>';
+                    $s.= '</tr>';
+                } else {
+                    $s.= $answer_input;
                 }
-                //$s.= '</tr>';
+
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
             	$s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
 
@@ -503,13 +500,15 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         if ($show_comment) {
             $s .= '</table>';
         } else {
-            if (in_array($answerType, $questions_in_table)) {
+            if ($answerType == MATCHING || $answerType == UNIQUE_ANSWER_NO_OPTION || $answerType == MULTIPLE_ANSWER_TRUE_FALSE ||
+                $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
                 $s .= '</table>';
             }
         }
 
-		$s .= '</div>';
 
+
+		$s .= '</div>';
 
 		// destruction of the Answer object
 		unset($objAnswerTmp);

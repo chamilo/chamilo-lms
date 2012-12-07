@@ -132,7 +132,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                 floatingHeaderRow.css("width", $(this).css("width"));
                 floatingHeaderRow.css("visibility", "visible");
                 floatingHeaderRow.css("z-index", "1000");
-                originalHeaderRow.css("height", "80px");
+                originalHeaderRow.css("height", "30px");
             } else {
                 floatingHeaderRow.css("visibility", "hidden");
                 floatingHeaderRow.css("top", "0px");
@@ -297,7 +297,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                 }
 
                 $result .= '<th width="800px">';
-                $result .= '<center><div style="font-size:10px;width:125px;">'.$datetime.'&nbsp;';
+                $result .= '<center><div style="width:125px;">'.$datetime.'&nbsp;';
 
                 if (api_is_allowed_to_edit(null, true)) {
                     $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';

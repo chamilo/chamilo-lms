@@ -3050,7 +3050,7 @@ form .formw .freeze {
     padding: 5px 5px 0px 5px;
 }
 .tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
+    height:30px;
 }
 
 /* jsPlumb */

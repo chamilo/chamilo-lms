@@ -270,19 +270,19 @@ class Testcategory {
 		return $categories_in_exercise;
 	}
 	
-	
-	/**
+    /**
 	 * return the list of differents categories NAME for a test
 	 * input : test_id
 	 * return : array of string
 	 * hubert.borderiou 07-04-2011
+     * @author function rewrote by jmontoya
 	 */
 	public static function getListOfCategoriesNameForTest($in_testid) {
 		$tabcatName = array();
-		$tabcatID = getListOfCategoriesNameForTest($in_testid);
+		$tabcatID = self::getListOfCategoriesIDForTest($in_testid);
 		for ($i=0; $i < count($tabcatID); $i++) {
 			$cat = new Testcategory($tabcatID[$i]);
-			$tabcatName[] = $cat->name;
+			$tabcatName[$cat->id] = $cat->name;
 		}
 		return $tabcatName;
 	}
@@ -527,5 +527,8 @@ class Testcategory {
         }        
         return $html;
     }
+    
+    
+    
 }
 endif;

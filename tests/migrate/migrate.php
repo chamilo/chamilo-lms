@@ -71,11 +71,12 @@ if (!empty($servers)) {
                     $m->set_web_service_connection_info($matches);
                     
                     //This functions truncates the transaction lists!
-                    $m->insert_test_transactions();
+                    //$m->insert_test_transactions();
                     
                     //$m->get_transactions_from_webservice();
 
                     //Load transactions saved before
+                    $params = array('branch_id' => 2);
                     $m->execute_transactions();
                 } else {
                     error_log('Make sure you define the web_service_calls array in your db_matches.php file');
@@ -92,3 +93,4 @@ if (!empty($servers)) {
 }
 $end = time();
 echo "Total process took ".($end-$start)." seconds \n";
+error_log("Total process took ".($end-$start)." seconds");

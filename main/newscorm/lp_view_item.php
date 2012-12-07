@@ -53,6 +53,8 @@ if (isset($_GET['lp_item_id'])) {
     }
 }
 
+$mode = isset($_REQUEST['mode']) ? $_REQUEST['mode'] : 'fullpage';
+
 /* INIT SECTION */
 
 $_SESSION['whereami'] = 'lp/build';
@@ -60,9 +62,6 @@ if (isset($_SESSION['oLP']) && isset($_GET['id'])) {
     $_SESSION['oLP'] -> current = intval($_GET['id']);
 }
 $this_section = SECTION_COURSES;
-
-/* Libraries */
-
 
 $language_file = "learnpath";
 
@@ -79,7 +78,7 @@ $learnpath_id   = (int) $_REQUEST['lp_id'];
 
 // Using the resource linker as a tool for adding resources to the learning path.
 if ($action == 'add' && $type == 'learnpathitem') {
-     $htmlHeadXtra[] = "<script language='JavaScript' type='text/javascript'> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
+     $htmlHeadXtra[] = "<script> window.location=\"../resourcelinker/resourcelinker.php?source_id=5&action=$action&learnpath_id=$learnpath_id&chapter_id=$chapter_id&originalresource=no\"; </script>";
 }
 if ((!$is_allowed_to_edit) || ($isStudentView)) {
     error_log('New LP - User not authorized in lp_view_item.php');
@@ -116,12 +115,13 @@ if (isset($_SESSION['oLP']) && is_object($_SESSION['oLP'])) {
 	$lp_theme_css = $_SESSION['oLP']->get_theme();
 }
 
-Display::display_header(get_lang('Item'),'Path');
-//api_display_tool_title($therow['name']);
+if ($mode == 'fullpage') {
+    Display::display_header(get_lang('Item'),'Path');
+}
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 ?>
-<script type='text/javascript'>
+<script>
 /* <![CDATA[ */
 
 function stripslashes(str) {
@@ -141,15 +141,25 @@ function confirmation(name) {
 }
 </script>
 <?php
+
+$id = (isset($new_item_id)) ? $new_item_id : $_GET['id'];
 if (is_object($_SESSION['oLP'])) {
-	echo $_SESSION['oLP']->build_action_menu();
-    echo '<div class="row-fluid">';
-    echo '<div class="span3">';
-    echo $_SESSION['oLP']->return_new_tree();
-    echo '</div>';
-    echo '<div class="span9">';
-        echo $_SESSION['oLP']->display_item((isset($new_item_id)) ? $new_item_id : $_GET['id']);
-    echo '</div>';
-    echo '</div>';
+    switch ($mode) {
+        case 'fullpage':
+            echo $_SESSION['oLP']->build_action_menu();
+            echo '<div class="row-fluid">';
+            echo '<div class="span3">';
+            echo $_SESSION['oLP']->return_new_tree();
+            echo '</div>';
+            echo '<div class="span9">';
+                echo $_SESSION['oLP']->display_item($id);
+            echo '</div>';
+            echo '</div>';
+            Display::display_footer();
+            break;
+        case 'preview_document':
+            echo $_SESSION['oLP']->display_item($id, null, false);
+            break; 
+    }
+	
 }
-Display::display_footer();

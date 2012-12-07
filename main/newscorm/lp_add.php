@@ -19,9 +19,6 @@ api_protect_course_script();
 
 /* Libraries */
 
-// The main_api.lib.php, database.lib.php and display.lib.php
-// libraries are included by default.
-
 require 'learnpath_functions.inc.php';
 //include '../resourcelinker/resourcelinker.inc.php';
 require 'resourcelinker.inc.php';

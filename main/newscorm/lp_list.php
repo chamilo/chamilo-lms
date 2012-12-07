@@ -286,7 +286,6 @@ if (!empty($flat_list)) {
                     //"</a>";
             }*/
 
-
             // EDIT LP
             if ($current_session == $details['lp_session']) {
                 $dsp_edit_lp = '<a href="lp_controller.php?'.api_get_cidreq().'&action=edit&lp_id='.$id.'">'.Display::return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_SMALL).'</a>';
@@ -297,7 +296,7 @@ if (!empty($flat_list)) {
             // BUILD
             if ($current_session == $details['lp_session']) {
                 if ($details['lp_type'] == 1 || $details['lp_type'] == 2) {
-                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=build&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL).'</a>';
+                    $dsp_build = '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=step&amp;lp_id='.$id.'">'.Display::return_icon('edit.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL).'</a>';
                 } else {
                     $dsp_build = Display::return_icon('edit_na.png', get_lang('LearnpathEditLearnpath'),'',ICON_SIZE_SMALL);
                 }

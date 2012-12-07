@@ -586,11 +586,11 @@ class Migration {
             return Database::store_result($result, 'ASSOC');
         }
         return array(
-          //0=>array('branch_id' => 1),
+          0=>array('branch_id' => 1),
           1 => array('branch_id' => 2),
-          //2=>array('branch_id' => 3),
-          //3=>array('branch_id' => 4),
-          //4=>array('branch_id' => 5),
+          2=>array('branch_id' => 3),
+          3=>array('branch_id' => 4),
+          4=>array('branch_id' => 5),
         );
     }
     
@@ -899,7 +899,7 @@ class Migration {
         
         $params = array(
             'ultimo'    => $transaction_external_id, 
-            'cantidad'  => 2,
+            'cantidad'  => 1,
             'intIdSede' => $branch_id
         );
         

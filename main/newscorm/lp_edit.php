@@ -16,7 +16,6 @@ $this_section = SECTION_COURSES;
 event_access_tool(TOOL_LEARNPATH);
 
 api_protect_course_script();
-//if (! $is_allowed_in_course) api_not_allowed();
 
 if (isset($_SESSION['gradebook'])) {
     $gradebook = $_SESSION['gradebook'];
@@ -32,7 +31,7 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
 //$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
 		document.getElementById(\'start_date_div\').style.display = \'block\';
@@ -56,26 +55,7 @@ Display::display_header(get_lang('CourseSettings'), 'Path');
 
 echo $_SESSION['oLP']->build_action_menu();
 
-
-// Action links
-//echo '<div class="actions">';
 $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
-//echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=build&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('Build').'">'.Display::return_icon('build_learnpath.png', get_lang('Build'),'',ICON_SIZE_MEDIUM).'</a>';
-//echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('BasicOverview').'">'.Display::return_icon('move_learnpath.png', get_lang('BasicOverview'),'',ICON_SIZE_MEDIUM).'</a>';
-//echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=view&lp_id='.Security::remove_XSS($_GET['lp_id']).'">'.Display::return_icon('view_remove.png', get_lang('Display'),'',ICON_SIZE_MEDIUM).'</a>';
-//echo ' '.Display::return_icon('i.gif');
-/*echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=step&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewStep').'">
-'.Display::return_icon('add.png', get_lang('NewStep'),'',ICON_SIZE_MEDIUM).'</a>';*/
-
-/*echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=add_item&amp;type=chapter&amp;lp_id=' . Security::remove_XSS($_GET['lp_id']) . '" title="'.get_lang('NewChapter').'">
-'.Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'),'',ICON_SIZE_MEDIUM).'</a>';*/
-
-//echo '<a href="lp_controller.php?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;gradebook='.$gradebook.'&amp;action=admin_view&amp;lp_id='.Security::remove_XSS($_GET['lp_id']).'&amp;updateaudio=true">'.Display::return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
-
-//echo Display::url(Display::return_icon('settings_na.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM), '#');
-//echo '<a href="../newscorm/lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('scorms_na.png',get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
-
-//echo '</div>';
 
 $defaults=array();
 $form = new FormValidator('form1', 'post', 'lp_controller.php');
@@ -95,7 +75,7 @@ $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Encoding
 /* // Chamilo 1.8.8: Deprecated code.
-$encoding_select = &$form->addElement('select', 'lp_encoding', get_lang('Charset'));
+$encoding_select = $form->addElement('select', 'lp_encoding', get_lang('Charset'));
 $encodings = array('UTF-8','ISO-8859-1','ISO-8859-15','cp1251','cp1252','KOI8-R','BIG5','GB2312','Shift_JIS','EUC-JP');
 foreach ($encodings as $encoding) {
     if (api_equal_encodings($encoding, $_SESSION['oLP']->encoding)) {
@@ -108,7 +88,7 @@ $form->addElement('hidden', 'lp_encoding');
 
 // Origin
 /*
-$origin_select = &$form->addElement('select', 'lp_maker', get_lang('Origin'));
+$origin_select = $form->addElement('select', 'lp_maker', get_lang('Origin'));
 $lp_orig = $_SESSION['oLP']->get_maker();
 
 include 'content_makers.inc.php';
@@ -120,7 +100,7 @@ foreach ($content_origins as $origin) {
 }
 
 // Content proximity
-$content_proximity_select = &$form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
+$content_proximity_select = $form->addElement('select', 'lp_proximity', get_lang('ContentProximity'));
 $lp_prox = $_SESSION['oLP']->get_proximity();
 if ($lp_prox != 'local') {
     $s_selected_proximity = 'remote';
@@ -131,12 +111,12 @@ $content_proximity_select->addOption(get_lang('Local'), 'local');
 $content_proximity_select->addOption(get_lang('Remote'), 'remote');
 */
 //Hide toc frame
-$hide_toc_frame = &$form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));
+$hide_toc_frame = $form->addElement('checkbox', 'hide_toc_frame', null, get_lang('HideTocFrame'),array('onclick' => '$("#lp_layout_column").toggle()' ));
 if (api_get_setting('allow_course_theme') == 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme!=-1 && $mycourselptheme== 1) {
         //LP theme picker
-        $theme_select = &$form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
+        $theme_select = $form->addElement('select_theme', 'lp_theme', get_lang('Theme'));
         $form->applyFilter('lp_theme', 'trim');
 
         $s_theme = $_SESSION['oLP']->get_theme();

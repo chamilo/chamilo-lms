@@ -22,9 +22,9 @@ require_once 'learnpath.class.php';
 require_once 'scorm.class.php';
 require_once 'aicc.class.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
       var chamilo_xajax_handler = window.parent.oxajax;
-    </script>';
+</script>';
 
 $progress_bar = '';
 $navigation_bar = '';
@@ -43,12 +43,11 @@ if (isset($_SESSION['lpobject'])) {
     $display_mode = $_SESSION['oLP']->mode;
     $scorm_css_header = true;
     $lp_theme_css = $_SESSION['oLP']->get_theme();
-    
+
     $my_style = api_get_visual_theme();
-    
-   
+
     //Setting up the CSS theme if exists
-    
+
     $mycourselptheme = null;
     if (api_get_setting('allow_course_theme') == 'true') {
     	$mycourselptheme = api_get_course_setting('allow_learning_path_theme');
@@ -59,7 +58,7 @@ if (isset($_SESSION['lpobject'])) {
     } else {
         $lp_theme_css = $my_style;
     }
-   
+
     $progress_bar 	= $_SESSION['oLP']->get_progress_bar('', -1, '', true);
     $navigation_bar = $_SESSION['oLP']->get_navigation_bar();
     $mediaplayer 	= $_SESSION['oLP']->get_mediaplayer($autostart);

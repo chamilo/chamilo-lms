@@ -271,7 +271,7 @@ class scorm extends learnpath {
         $new_lp = Database::get_course_table(TABLE_LP_MAIN);
         $new_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $use_max_score = intval($use_max_score);
-        
+
         foreach ($this->organizations as $id => $dummy) {
             $is_session = api_get_session_id();
             $is_session != 0 ? $session_id = $is_session : $session_id = 0;
@@ -298,7 +298,7 @@ class scorm extends learnpath {
             $res = Database::query($sql);
             $lp_id = Database::insert_id();
             $this->lp_id = $lp_id;
-            
+
             // Insert into item_property.
             api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'LearnpathAdded', api_get_user_id());
             api_item_property_update(api_get_course_info($course_code), TOOL_LEARNPATH, $this->lp_id, 'visible', api_get_user_id());
@@ -310,7 +310,7 @@ class scorm extends learnpath {
             $parent = 0;
             $previous = 0;
             $level = 0;
-            
+
             foreach ($list as $item) {
                 if ($item['level'] > $level) {
                     // Push something into the parents array.
@@ -366,7 +366,7 @@ class scorm extends learnpath {
 
                 $identifier = Database::escape_string($item['identifier']);
                 $prereq = Database::escape_string($item['prerequisites']);
-                
+
                 $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters) VALUES " .
                         "($course_id, $lp_id, '$type','".$identifier."','".$title."'," .
                         "'$path',0,$max_score, $value_add" .
@@ -465,7 +465,7 @@ class scorm extends learnpath {
 
         $zip_file_path = $zip_file_info['tmp_name'];
         $zip_file_name = $zip_file_info['name'];
-        
+
         if ($this->debug > 1) { error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0); }
         $course_rel_dir     = api_get_course_path().'/scorm'; // scorm dir web path starting from /courses
         $course_sys_dir     = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
@@ -498,8 +498,8 @@ class scorm extends learnpath {
         $manifest_list = array();
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
-        foreach ($zipContentArray as $thisContent) {            
-            $thisContent['filename'];            
+        foreach ($zipContentArray as $thisContent) {
+            $thisContent['filename'];
             //error_log('Looking at  '.$thisContent['filename'], 0);
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
                 $this->set_error_msg("File $file contains a PHP script");
@@ -520,7 +520,7 @@ class scorm extends learnpath {
             }
             $realFileSize += $thisContent['size'];
         }
-        
+
         // Now get the shortest path (basically, the imsmanifest that is the closest to the root).
         $shortest_path = $manifest_list[0];
         $slash_count = substr_count($shortest_path, '/');
@@ -572,7 +572,7 @@ class scorm extends learnpath {
             $saved_dir = getcwd();
             chdir($course_sys_dir.$new_dir);
             $unzippingState = $zipFile->extract();
-            
+
             for ($j = 0; $j < count($unzippingState); $j++) {
                 $state = $unzippingState[$j];
 
@@ -604,11 +604,11 @@ class scorm extends learnpath {
 
                         if ($this->debug >= 1) { error_log('Comparing:  '.$safe_file, 0); }
                         if ($this->debug >= 1) { error_log('and:  '.$file, 0); }
-                        
+
                         if ($safe_file != $file) {
                             //@rename($course_sys_dir.$new_dir, $course_sys_dir.'/'.$safe_file);
                             $mydir = dirname($course_sys_dir.$new_dir.$safe_file);
-                            
+
                             if (!is_dir($mydir)) {
                                 $mysubdirs = split('/', $mydir);
                                 $mybasedir = '/';
@@ -755,7 +755,7 @@ class scorm extends learnpath {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
         require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-                
+
         require_once 'learnpath_functions.inc.php';
         $course_id = api_get_course_int_id();
         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -862,7 +862,7 @@ class scorm extends learnpath {
         if ($this->debug > 0) { error_log('In scorm::reimport_manifest() method', 0); }
         global $_course;
         // RECOVERING PATH FROM DB
-        $main_table = Database::get_main_table(TABLE_MAIN_COURSE);        
+        $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $course = Datbase::escape_string($course);
         $sql = "SELECT * FROM $main_table WHERE code = '$course'";
         if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying course: '.$sql, 0); }
@@ -882,7 +882,6 @@ class scorm extends learnpath {
         $lp_id = intval($lp_id);
         $sql = "SELECT * FROM $lp_table WHERE c_id = ".$course_id." AND id = '$lp_id'";
         if ($this->debug > 2) { error_log('New LP - scorm::reimport_manifest() '.__LINE__.' - Querying lp: '.$sql, 0); }
-        //$res = Database::query($sql);
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $this->lp_id = $lp_id;

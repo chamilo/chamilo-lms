@@ -285,7 +285,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             break;
         case TOOL_DOCUMENT:
             Display::display_confirmation_message(get_lang('NewDocumentCreated'));
-            echo $_SESSION['oLP']->display_item($new_item_id, true);
+            echo $_SESSION['oLP']->display_item($new_item_id);
             break;
         case TOOL_FORUM:
             echo $_SESSION['oLP']->display_manipulate($new_item_id, $type);

@@ -38,7 +38,7 @@ echo "Connected$eol";
  * Try querying
  */
 mssql_select_db($db_name,$conn);
-$sql = 'SELECT * FROM Alumno WHERE intIdAlumno = 62165';
+$sql = 'SELECT MAX(idt) FROM Transaccion';
 $res = @mssql_query($sql,$conn);
 if ($res === false) {
   echo "Error with query ".$sql.". MSSQL error: ".mssql_get_last_message().$eol;

@@ -57,7 +57,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
             $mylp = new learnpath($code,$lp_id,$user_id);
         } else {
             if ($debug > 1) { error_log('Reusing session lp', 0); }
-            $mylp = & $oLP;
+            $mylp = $oLP;
         }
     }
     $new_item_id = 0;
@@ -99,7 +99,7 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     }
     //$objResponse->addAlert(api_get_path(REL_CODE_PATH).'newscorm/learnpathItem.class.php');
     if (is_object($mylp->items[$new_item_id])) {
-        $mylpi = & $mylp->items[$new_item_id];
+        $mylpi = $mylp->items[$new_item_id];
     } else {
         if ($debug > 1) { error_log('In switch_item_details - generating new item object', 0); }
         $mylpi = new learnpathItem($new_item_id, $user_id);

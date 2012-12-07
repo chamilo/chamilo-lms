@@ -2208,36 +2208,35 @@ class UserManager {
             }
 		}
 
-        $select = "SELECT DISTINCT session.id, 
-                                session.name,
+        $select = "SELECT DISTINCT session.id, ".
+                                " session.name, ".
                                 
-                                access_start_date, 
-                                access_end_date, 
-                                coach_access_start_date,
-                                coach_access_end_date,
+                                " access_start_date, ".
+                                " access_end_date, ".
+                                " coach_access_start_date, ".
+                                " coach_access_end_date, ".
                                 
-                                session_category_id, 
-                                session_category.name as session_category_name,
-                                session_category.date_start session_category_date_start,
-                                session_category.date_end session_category_date_end,
+                                " session_category_id, ".
+                                " session_category.name as session_category_name, ".
+                                " session_category.date_start session_category_date_start, ".
+                                " session_category.date_end session_category_date_end, ".
                                 
-                                moved_to,
-                                moved_status,
-                                id_coach,
-                                scu.id_user";
+                                " moved_to, ".
+                                " moved_status, ".
+                                " id_coach, ".
+                                " scu.id_user";
         
         if ($get_count) {
             $select = "SELECT count(session.id) as total_rows ";
         }
         
-        $sql = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) 
-                      INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
-                      LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
-                WHERE (
-                         scu.id_user = $user_id OR session.id_coach = $user_id
-                      )  $condition_date_end
-                ORDER BY session_category_name, name";
-        
+        $sql = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ".
+                      " INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id) ".
+                      " LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user ".
+                " WHERE ( ".
+                         " scu.id_user = $user_id OR session.id_coach = $user_id ".
+                     " )  $condition_date_end ".
+                " ORDER BY session_category_name, name";
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             
@@ -2254,13 +2253,18 @@ class UserManager {
                 
                 //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
-                //var_dump($visibility);
-                                
                 switch ($visibility) {
+                    // full access (we are inside normal dates range)
+                    case SESSION_AVAILABLE:
+                       break;
+                    // access restricted by dates - only show in history view 
                     case SESSION_VISIBLE_READ_ONLY:
                     case SESSION_VISIBLE:
-                    case SESSION_AVAILABLE:
+                        if (!$is_time_over) {
+                            continue(2);
+                        }
                         break;
+                    // access totally blocked - do not show
                     case SESSION_INVISIBLE:
                         continue(2);
                 }

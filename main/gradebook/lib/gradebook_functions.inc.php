@@ -32,10 +32,10 @@ function add_resource_to_course_gradebook($category_id, $course_code, $resource_
     $link = LinkFactory :: create($resource_type);
     $link->set_user_id(api_get_user_id());
     $link->set_course_code($course_code);
-    
+
     if (empty($category_id)) {
-        return false;        
-    }        
+        return false;
+    }
     $link->set_category_id($category_id);
     if ($link->needs_name_and_description()) {
     	$link->set_name($resource_name);
@@ -69,11 +69,11 @@ function update_resource_from_course_gradebook($link_id, $course_code, $weight) 
     $course_code = Database::escape_string($course_code);
     if (!empty($link_id)) {
         $link_id = intval($link_id);
-        $sql = 'UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).' 
+        $sql = 'UPDATE '.Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK).'
                 SET weight = '."'".Database::escape_string((float)$weight)."'".'
                 WHERE course_code = "'.$course_code.'" AND id = '.$link_id;
         Database::query($sql);
-    }   
+    }
     return true;
 }
 
@@ -94,8 +94,8 @@ function remove_resource_from_course_gradebook($link_id) {
     return true;
 }
 
-function block_students() {    
-    if (!api_is_allowed_to_edit()) {		
+function block_students() {
+    if (!api_is_allowed_to_edit()) {
 		api_not_allowed();
 	}
 }
@@ -182,36 +182,36 @@ function get_icon_file_name ($type) {
 function build_edit_icons_cat($cat, $selectcat) {
 	$show_message = $cat->show_message_resource_delete($cat->get_course_code());
     $grade_model_id = $selectcat->get_grade_model_id();
-    
+
     $selectcat = $selectcat->get_id();
-    
+
 	if ($show_message === false) {
 		$visibility_icon= ($cat->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($cat->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-        
+
         $modify_icons .= '<a class="view_children" data-cat-id="'.$cat->get_id().'" href="javascript:void(0);">'.Display::return_icon('view_more_stats.gif', get_lang('Show'),'',ICON_SIZE_SMALL).'</a>';
-        
+
         if (api_is_allowed_to_edit(null, true)) {
-            
+
             //Locking button
-            if (api_get_setting('gradebook_locking_enabled') == 'true') {            
-                
+            if (api_get_setting('gradebook_locking_enabled') == 'true') {
+
                 if ($cat->is_locked()) {
                     if (api_is_platform_admin()) {
                         $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=unlock">'.
-                                         Display::return_icon('lock.png', get_lang('UnLockEvaluation'),'',ICON_SIZE_SMALL).'</a>';                                        
+                                         Display::return_icon('lock.png', get_lang('UnLockEvaluation'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';                
+                        $modify_icons .= '&nbsp;<a href="#">'.Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'),'',ICON_SIZE_SMALL).'</a>';
                     }
                     $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'', ICON_SIZE_SMALL).'</a>';
                 } else {
                     $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="' . api_get_self() . '?'.  api_get_cidreq().'&category_id=' . $cat->get_id() . '&action=lock">'.
-                            Display::return_icon('unlock.png', get_lang('LockEvaluation'),'',ICON_SIZE_SMALL).'</a>';                
+                            Display::return_icon('unlock.png', get_lang('LockEvaluation'),'',ICON_SIZE_SMALL).'</a>';
                     $modify_icons .= '&nbsp;<a href="#" >'.Display::return_icon('pdf_na.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
                     //$modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat=' . $cat->get_id() . '" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'),'',ICON_SIZE_SMALL).'</a>';
-                }                
+                }
             }
-            
+
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
@@ -219,9 +219,9 @@ function build_edit_icons_cat($cat, $selectcat) {
                     $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&amp;cidReq='.$cat->get_course_code().'">'.Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
                 }
             }
-            
-            $modify_icons .= '<a href="gradebook_edit_all.php?&selectcat=' . $cat->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).'</a>';            
-            $modify_icons .= '<a href="gradebook_flatview.php?'.api_get_self().'&selectcat=' . $cat->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'', ICON_SIZE_SMALL).'</a>';            
+
+            $modify_icons .= '<a href="gradebook_edit_all.php?&selectcat=' . $cat->get_id() . '">'.Display::return_icon('percentage.png', get_lang('EditAllWeights'),'',ICON_SIZE_SMALL).'</a>';
+            $modify_icons .= '<a href="gradebook_flatview.php?'.api_get_self().'&selectcat=' . $cat->get_id() . '">'.Display::return_icon('stats.png', get_lang('FlatView'),'', ICON_SIZE_SMALL).'</a>';
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 
             //no move ability for root categories
@@ -231,12 +231,12 @@ function build_edit_icons_cat($cat, $selectcat) {
             } else {
                 //$modify_icons .= '&nbsp;<img src="../img/deplacer_fichier_na.gif" border="0" title="' . get_lang('Move') . '" alt="" />';
             }
-            
+
             if ($cat->is_locked() && !api_is_platform_admin()) {
                 $modify_icons .= Display::return_icon('delete_na.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL);
             } else {
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$cat->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('DeleteAll'),'',ICON_SIZE_SMALL).'</a>';
-            }            
+            }
         }
 		return $modify_icons;
 	}
@@ -252,7 +252,7 @@ function build_edit_icons_eval($eval, $selectcat) {
 	$eval->get_course_code();
 	$cat=new Category();
 	$message_eval=$cat->show_message_resource_delete($eval->get_course_code());
-    
+
 	if ($message_eval===false && api_is_allowed_to_edit(null, true)) {
 		$visibility_icon= ($eval->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command= ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
@@ -264,9 +264,9 @@ function build_edit_icons_eval($eval, $selectcat) {
 
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visibleeval=' . $eval->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 		if (api_is_allowed_to_edit(null, true)){
-			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';			
+			$modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';
 		}
-        
+
         /*
 		if ($locked_status == 0){
 			$modify_icons .= "&nbsp;<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureToLockedTheEvaluation'))."')) { location.href='".api_get_self().'?lockedeval=' . $eval->get_id() . '&amp;selectcat=' . $selectcat . ' &amp;cidReq='.$eval->get_course_code()."'; }\">".Display::return_icon('unlock.png',get_lang('LockEvaluation'), array(), ICON_SIZE_SMALL)."</a>";
@@ -276,7 +276,7 @@ function build_edit_icons_eval($eval, $selectcat) {
 			} else {
 				$modify_icons .= '&nbsp;<img src="../img/locked_na.png" border="0" title="' . get_lang('TheEvaluationIsLocked') . '" alt="" />';
 			}
-		}*/        
+		}*/
         if ($is_locked && !api_is_platform_admin()) {
             $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
         } else {
@@ -290,39 +290,39 @@ function build_edit_icons_eval($eval, $selectcat) {
  * @param object $linkobject
  * @param int $selectcat id of selected category
  */
-function build_edit_icons_link($link, $selectcat) {	
+function build_edit_icons_link($link, $selectcat) {
 	$cat = new Category();
-	$message_link = $cat->show_message_resource_delete($link->get_course_code());    
+	$message_link = $cat->show_message_resource_delete($link->get_course_code());
     $is_locked = $link->is_locked();
-    
+
     $modify_icons = null;
-            
+
     if (!api_is_allowed_to_edit(null, true)) {
         return null;
     }
-    
+
 	if ($message_link === false) {
 		$visibility_icon    = ($link->is_visible() == 0) ? 'invisible' : 'visible';
 		$visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
-        
+
         if ($is_locked && !api_is_platform_admin()) {
             $modify_icons = Display::return_icon('edit_na.png', get_lang('Modify'),'',ICON_SIZE_SMALL);
-        } else {            
+        } else {
             $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&amp;cidReq='.$link->get_course_code().'">'.
-                                 Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';            
+                                 Display::return_icon('edit.png', get_lang('Modify'),'',ICON_SIZE_SMALL).'</a>';
         }
 
 		//$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?movelink=' . $link->get_id() . '&selectcat=' . $selectcat . '"><img src="../img/deplacer_fichier.gif" border="0" title="' . get_lang('Move') . '" alt="" /></a>';
 		$modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblelink=' . $link->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">'.Display::return_icon($visibility_icon.'.png', get_lang('Visible'),'',ICON_SIZE_SMALL).'</a>';
 		$modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink=' . $link->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq='.$link->get_course_code().'">'.Display::return_icon('history.png', get_lang('GradebookQualifyLog'),'',ICON_SIZE_SMALL).'</a>';
-		
-		//If a work is added in a gradebook you can only delete the link in the work tool 
-	
+
+		//If a work is added in a gradebook you can only delete the link in the work tool
+
         if ($is_locked && !api_is_platform_admin()) {
-            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);                
+            $modify_icons .= '&nbsp;'.Display::return_icon('delete_na.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
         } else {
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletelink=' . $link->get_id() . '&selectcat=' . $selectcat . ' &amp;cidReq='.$link->get_course_code().'" onclick="return confirmation();">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
-        }	
+        }
 		return $modify_icons;
 	}
 }
@@ -339,22 +339,9 @@ function is_resource_in_course_gradebook($course_code, $resource_type, $resource
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    /*$sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
-    if (!empty($session_id)) {
-        $sql .= " AND session_id = ".(int)$session_id;
-    } else {
-        $sql .= " AND (session_id IS NULL OR session_id = 0) ";
-    }
-    $sql .= " ORDER BY id";
-    $res = Database::query($sql);
-    if (Database::num_rows($res)<1) {
-    	return false;
-    }
-    $row = Database::fetch_array($res,'ASSOC');    
-    $category = $row['id'];*/
-    
+
     $course_code = Database::escape_string($course_code);
-    $sql = "SELECT * FROM $l l WHERE course_code = '$course_code' AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
+    $sql = "SELECT * FROM $l WHERE course_code = '$course_code' AND type = ".(int) $resource_type." and ref_id = ".(int) $resource_id;
     $res = Database::query($sql);
     if (Database::num_rows($res)<1) {
     	return false;
@@ -374,7 +361,7 @@ function get_resource_from_course_gradebook($link_id) {
     }
     // TODO find the corresponding category (the first one for this course, ordered by ID)
     $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;    
+    $sql = "SELECT * FROM $l WHERE id = ".(int)$link_id;
     $res = Database::query($sql);
     $row = array();
     if (Database::num_rows($res) > 0) {
@@ -392,7 +379,7 @@ function get_database_name_by_link_id($id_link) {
 	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links 	= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 	$sql = 'SELECT db_name FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
-			ON c.code=l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);	
+			ON c.code=l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);
 	$res=Database::query($sql);
 	$my_db_name=Database::fetch_array($res,'ASSOC');
 	return $my_db_name['db_name'];
@@ -407,35 +394,35 @@ function get_course_id_by_link_id($id_link) {
 	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$tbl_grade_links 	= Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 	$sql = 'SELECT c.id FROM '.$course_table.' c INNER JOIN '.$tbl_grade_links.' l
-			ON c.code = l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);	
+			ON c.code = l.course_code WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);
 	$res = Database::query($sql);
 	$array = Database::fetch_array($res,'ASSOC');
 	return $array['id'];
 }
 
-function get_table_type_course($type) {	
+function get_table_type_course($type) {
 	global $table_evaluated;
 	return Database::get_course_table($table_evaluated[$type][0]);
 }
 
 function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
 	$datagen = new FlatViewDataGenerator ($users, $alleval, $alllinks, $params);
-    
+
 	$offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
-	$offset = intval($offset);	
-    
+	$offset = intval($offset);
+
     // step 2: generate rows: students
     $datagen->category = $cat;
-        
-	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;	
-	$header_names = $datagen->get_header_names($offset, $count, true);	
+
+	$count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;
+	$header_names = $datagen->get_header_names($offset, $count, true);
 	$data_array   = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true);
 
 	$newarray = array();
 	foreach ($data_array as $data) {
 		$newarray[] = array_slice($data, 1);
 	}
-    $return = array($header_names, $newarray);    
+    $return = array($header_names, $newarray);
 	return $return;
 }
 
@@ -560,7 +547,7 @@ function get_certificate_by_user_id ($cat_id,$user_id) {
 function get_list_users_certificates ($cat_id=null) {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
+    $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
     		FROM '.$table_user.' u INNER JOIN '.$table_certificate.' gc ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id>0) {
     	$sql.=' WHERE cat_id='.Database::escape_string($cat_id);
@@ -587,7 +574,7 @@ function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
     if (!is_null($cat_id) && $cat_id>0) {
     	$sql.=' AND cat_id='.Database::escape_string($cat_id);
     }
-    
+
     $rs = Database::query($sql);
     $list_certificate=array();
     while ($row=Database::fetch_array($rs)) {
@@ -597,22 +584,22 @@ function get_list_gradebook_certificates_by_user_id ($user_id,$cat_id=null) {
 }
 
 function get_user_certificate_content($user_id, $course_code, $is_preview = false) {
-    //generate document HTML    
+    //generate document HTML
     $content_html       = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
-            
-    $new_content        = explode('</head>', $content_html['content']);    
-    $new_content_html   = $new_content[1];                    
+
+    $new_content        = explode('</head>', $content_html['content']);
+    $new_content_html   = $new_content[1];
     $path_image         = api_get_path(WEB_COURSE_PATH).api_get_course_path($course_code).'/document/images/gallery';
     $new_content_html   = str_replace('../images/gallery',$path_image,$new_content_html);
-    
+
     $path_image_in_default_course = api_get_path(WEB_CODE_PATH).'default_course_document';
-    $new_content_html   = str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);    
+    $new_content_html   = str_replace('/main/default_course_document',$path_image_in_default_course,$new_content_html);
     $new_content_html   = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
-    
+
     //add print header
     $print  = '<style media="print" type="text/css">#print_div {visibility:hidden;}</style>';
     $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="'.api_get_path(WEB_CODE_PATH).'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
-    
+
     //add header
     $new_content_html = $new_content[0].$print.'</head>'.$new_content_html;
     return array('content' => $new_content_html, 'variables'=>$content_html['variables']);
@@ -622,13 +609,13 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
     $category_id = null;
     //if (api_is_allowed_to_edit(true, true)) {
         if (!isset($course_code) || empty($course_code)) {
-            $course_code = api_get_course_id();    
+            $course_code = api_get_course_id();
         }
-        
+
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
-        
+
         $t = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = "SELECT * FROM $t WHERE course_code = '".Database::escape_string($course_code)."' ";
         if (!empty($session_id)) {
@@ -641,7 +628,7 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
         if (Database::num_rows($res)<1){
             //there is no unique category for this course+session combination,
             $cat = new Category();
-            if (!empty($session_id)) {                
+            if (!empty($session_id)) {
                 $s_name = api_get_session_name($session_id);
                 $cat->set_name($course_code.' - '.get_lang('Session').' '.$s_name);
                 $cat->set_session_id($session_id);
@@ -654,10 +641,10 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
             $cat->set_parent_id(0);
             $default_weight_setting = api_get_setting('gradebook_default_weight');
             $default_weight = isset($default_weight_setting) && !empty($default_weight_setting) ? $default_weight_setting : 100;
-            $cat->set_weight($default_weight);            
+            $cat->set_weight($default_weight);
             $cat->set_grade_model_id($gradebook_model_id);
-            $cat->set_visible(0);            
-            $cat->add();            
+            $cat->set_visible(0);
+            $cat->add();
             $category_id = $cat->get_id();
             unset ($cat);
         } else {
@@ -667,23 +654,23 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
     //}
     return $category_id;
 }
-function load_gradebook_select_in_tool($form) {     
-    
+function load_gradebook_select_in_tool($form) {
+
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
-    
+
     if (api_is_allowed_to_edit(true, true)) {
         create_default_course_gradebook();
     }
-                
+
     //Cat list
-    $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);    
+    $all_categories = Category :: load(null, null, $course_code, null, null, $session_id, false);
     $select_gradebook = $form->addElement('select', 'category_id', get_lang('SelectGradebook'));
-      
+
     if (!empty($all_categories)) {
         foreach ($all_categories as $my_cat) {
-            if ($my_cat->get_course_code() == api_get_course_id()) {         
-                $grade_model_id = $my_cat->get_grade_model_id();                     
+            if ($my_cat->get_course_code() == api_get_course_id()) {
+                $grade_model_id = $my_cat->get_grade_model_id();
                 if (empty($grade_model_id)) {
                     if ($my_cat->get_parent_id() == 0) {
                         //$default_weight = $my_cat->get_weight();
@@ -697,9 +684,9 @@ function load_gradebook_select_in_tool($form) {
                     $select_gradebook->addoption(get_lang('Select'), 0);
                 }
                 /*if ($this->evaluation_object->get_category_id() == $my_cat->get_id()) {
-                    $default_weight = $my_cat->get_weight();                        
-                } */                                       
-            }           
+                    $default_weight = $my_cat->get_weight();
+                } */
+            }
         }
     }
 }
@@ -710,42 +697,42 @@ function load_gradebook_select_in_tool($form) {
 function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
     global $flatviewtable;
     //Getting data
-    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);    
+    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);
 
-    // HTML report creation first    
+    // HTML report creation first
     $course_code = trim($cat[0]->get_course_code());
-    
+
     $displayscore = ScoreDisplay :: instance();
     $customdisplays = $displayscore->get_custom_score_display_settings();
-    
+
     $total = array();
-    if (is_array($customdisplays) && count(($customdisplays))) {        
+    if (is_array($customdisplays) && count(($customdisplays))) {
         foreach($customdisplays  as $custom) {
-            $total[$custom['display']]  = 0; 
-        }			
+            $total[$custom['display']]  = 0;
+        }
         $user_results = $flatviewtable->datagen->get_data_to_graph2();
         foreach($user_results  as $user_result) {
             $total[$user_result[count($user_result)-1][1]]++;
         }
     }
-    
-    $parent_id = $cat[0]->get_parent_id();    
+
+    $parent_id = $cat[0]->get_parent_id();
     if (isset($cat[0]) && isset($parent_id)) {
         if ($parent_id == 0) {
-            $grade_model_id = $cat[0]->get_grade_model_id();            
+            $grade_model_id = $cat[0]->get_grade_model_id();
         } else {
-            $parent_cat = Category::load($parent_id);            
-            $grade_model_id = $parent_cat[0]->get_grade_model_id();                    
+            $parent_cat = Category::load($parent_id);
+            $grade_model_id = $parent_cat[0]->get_grade_model_id();
         }
     }
-    
+
     $use_grade_model = true;
     if (empty($grade_model_id) || $grade_model_id == -1) {
-        $use_grade_model = false;    
+        $use_grade_model = false;
     }
-    
-    if ($use_grade_model) {   
-        if ($parent_id == 0) {         
+
+    if ($use_grade_model) {
+        if ($parent_id == 0) {
             $title = api_strtoupper(get_lang('Average')).'<br />'.get_lang('Detailed');
         } else {
             $title = api_strtoupper(get_lang('Average')).'<br />'.$cat[0]->get_description().' - ('.$cat[0]->get_name().')';
@@ -757,14 +744,14 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
             $title = api_strtoupper(get_lang('Average'));
         }
     }
- 
+
     $columns  = count($printable_data[0]);
     $has_data = is_array($printable_data[1]) && count($printable_data[1]) > 0;
-        
+
     $table = new HTML_Table(array('class' => 'data_table'));
     $row = 0;
-    $column = 0;    
-    
+    $column = 0;
+
     $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
     $column++;
     foreach ($printable_data[0] as $printable_data_cell) {
@@ -773,27 +760,27 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
         $column++;
     }
     $row++;
-    
+
     if ($has_data) {
         $counter = 1;
         //var_dump($printable_data);exit;
         foreach ($printable_data[1] as &$printable_data_row) {
             $column = 0;
-            $table->setCellContents($row, $column, $counter); 
+            $table->setCellContents($row, $column, $counter);
             $table->updateCellAttributes($row, $column, 'align="center"');
-            $column++; 
-            $counter++;            
-            
+            $column++;
+            $counter++;
+
             foreach ($printable_data_row as $key => &$printable_data_cell) {
                 $attributes = array();
-                $attributes['align'] = 'center';                
+                $attributes['align'] = 'center';
                 $attributes['style'] = null;
-                
+
                 if ($key === 'name') {
                     $attributes['align'] = 'left';
                 }
                 if ($key === 'total') {
-                    $attributes['style'] = 'font-weight:bold';                 
+                    $attributes['style'] = 'font-weight:bold';
                 }
                 //var_dump($key, $printable_data_cell, $attributes);
                 $table->setCellContents($row, $column, $printable_data_cell);
@@ -802,24 +789,24 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
             }
             $table->updateRowAttributes($row, $row % 2 ? 'class="row_even"' : 'class="row_odd"', true);
             $row++;
-        }        
+        }
     } else {
         $column = 0;
         $table->setCellContents($row, $column, get_lang('NoResults'));
         $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
     }
 
-    $params = array(        
+    $params = array(
         'filename' => get_lang('FlatView').'_'.api_get_utc_datetime(),
         'pdf_title' => $title,
         'course_code' => $course_code,
         'add_signatures' => true
     );
-    
-    $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';    
-    $pdf = new PDF($page_format, $params['orientation'], $params);    
+
+    $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+    $pdf = new PDF($page_format, $params['orientation'], $params);
     $pdf->html_to_pdf_with_template($table->toHtml());
-    exit;	
+    exit;
 }
 
 function score_badges($list_values) {
@@ -828,11 +815,11 @@ function score_badges($list_values) {
     foreach ($list_values as $value) {
         $class = 'info';
         if ($counter == 1) {
-            $class = 'success';    
-        }        
+            $class = 'success';
+        }
         $counter++;
-        $badges[] = Display::badge($value, $class);        
-        
+        $badges[] = Display::badge($value, $class);
+
     }
     return Display::badge_group($badges);
 }

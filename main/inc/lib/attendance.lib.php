@@ -1418,4 +1418,5 @@ class Attendance
     public function set_course_int_id($course_id) {
 		$this->course_int_id = intval($course_id);
 	}
+    
 }

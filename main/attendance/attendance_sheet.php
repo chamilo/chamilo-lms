@@ -11,6 +11,13 @@
 // protect a course script
 api_protect_course_script(true);
 
+$attendance_states = array(
+    '1' => get_lang('Present'),
+    '0' => get_lang('Absent'),
+    '2' => get_lang('VeryLate'),
+    '3' => get_lang('Late'),
+);
+
 if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api_get_course_id())) {
 
     $param_gradebook = '';
@@ -268,12 +275,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
         echo '<tbody>';
         $i = 0;
 
-        $attendance_states = array(
-            '1' => get_lang('Present'),
-            '0' => get_lang('Absent'),
-            '2' => get_lang('VeryLate'),
-            '3' => get_lang('Late'),
-        );
+
         $default_presence_value = 1;
 
         foreach ($users_in_course as $user) {
@@ -406,8 +408,10 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
             ?>
             <tr class="<?php echo $class ?>">
                 <td>
-                    <?php echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence')) ?>
-                    <?php echo "&nbsp; ".$presence['date_time'] ?>
+                    <?php
+                        echo $attendance_states[$presence['presence']];
+                        //echo $presence['presence']?Display::return_icon('checkbox_on.gif',get_lang('Presence')):Display::return_icon('checkbox_off.gif',get_lang('Presence'))
+                        echo "&nbsp; ".$presence['date_time'] ?>
                 </td>
             </tr>
         <?php }

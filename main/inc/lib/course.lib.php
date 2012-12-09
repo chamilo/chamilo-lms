@@ -4516,9 +4516,9 @@ class CourseManager {
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {        
                 $default_course_folder_path = $default_course_path.$folder.'/';
-                $files = browse_folders($default_course_folder_path, array(), $folder);
-                $sorted_array = sort_pictures($files, 'dir');
-                $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));          
+                $files = self::browse_folders($default_course_folder_path, array(), $folder);
+                $sorted_array = self::sort_pictures($files, 'dir');
+                $sorted_array = array_merge($sorted_array, self::sort_pictures($files, 'file'));          
                 $default_document_array[$folder] = $sorted_array;
             }
 

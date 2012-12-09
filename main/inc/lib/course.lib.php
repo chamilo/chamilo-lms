@@ -80,6 +80,8 @@ class CourseManager {
      * Creates a course
      * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
+     * @return mixed    Array with course details, or false on error
+     * @assert (null) === false
      */
     static function create_course($params) {
         global $_configuration;

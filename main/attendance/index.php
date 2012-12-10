@@ -145,7 +145,7 @@ $(function() {
 			$(this).attr("alt","'.get_lang('DateLock').'");
 			$(this).attr("class","img_unlock");
 			$("#hidden_input_"+calendar_id).attr("disabled",false);
-            console.log(calendar_id);
+
 			$("#hidden_input_"+calendar_id).attr("value",calendar_id);
 			return false;
 		}

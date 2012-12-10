@@ -98,7 +98,6 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
        }
        new_url =  original_url + "&filter=" +filter
        $("#pdf_export").attr('href', new_url);
-       //console.log(new_url);
     });
 
     function UpdateTableHeaders() {
@@ -145,73 +144,75 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
     }
 
     $(document).ready(function() {
-
         $('.switch').click(function() {
-        var state = 0;
-        var my_class = 'btn-info';
-        var current_class = '';
-        var my_button = $(this);
+            var state = 0;
+            var my_class = 'btn-info';
+            var current_class = '';
+            var my_button = $(this);
 
-        if (my_button.is('.btn-warning')) {
-            current_class = 'btn-warning';
-            state = 1;
-            my_class = 'btn-success';
-        }
+            if (my_button.is('.disabled')) {
+                return false;
+            }
 
-        if (my_button.is('.btn-info')) {
-            current_class = 'btn-info';
-            state = 2;
-            my_class = 'btn-warning';
-        }
+            if (my_button.is('.btn-warning')) {
+                current_class = 'btn-warning';
+                state = 1;
+                my_class = 'btn-success';
+            }
 
-        if (my_button.is('.btn-danger')) {
-            current_class = 'btn-danger';
-            state =3;
-            my_class = 'btn-info';
-        }
-/*
-        if (my_button.is('.btn-primary')) {
-            current_class = 'btn-primary';
-            state = 3;
-            my_class = 'btn-info';
-        }*/
+            if (my_button.is('.btn-info')) {
+                current_class = 'btn-info';
+                state = 2;
+                my_class = 'btn-warning';
+            }
 
-        if (my_button.is('.btn-success')) {
-            current_class = 'btn-success';
-            state = 0;
-            my_class = 'btn-danger';
-        }
-        var id = my_button.attr('id');
-        $('#hidden_'+id).attr('value', 'state_'+state+'_'+id);
+            if (my_button.is('.btn-danger')) {
+                current_class = 'btn-danger';
+                state =3;
+                my_class = 'btn-info';
+            }
+    /*
+            if (my_button.is('.btn-primary')) {
+                current_class = 'btn-primary';
+                state = 3;
+                my_class = 'btn-info';
+            }*/
 
-        my_button.attr('data-state', state);
-        my_button.removeClass(current_class);
+            if (my_button.is('.btn-success')) {
+                current_class = 'btn-success';
+                state = 0;
+                my_class = 'btn-danger';
+            }
+            var id = my_button.attr('id');
+            $('#hidden_'+id).attr('value', 'state_'+state+'_'+id);
 
-        my_button.addClass('btn b1');
-        my_button.addClass(my_class);
-    });
+            my_button.attr('data-state', state);
+            my_button.removeClass(current_class);
 
-    $("table.tableWithFloatingHeader").each(function() {
-        $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
+            my_button.addClass('btn b1');
+            my_button.addClass(my_class);
+        });
 
-        var originalHeaderRow = $("tr:first", this)
-        originalHeaderRow.before(originalHeaderRow.clone());
-        var clonedHeaderRow = $("tr:first", this)
+        $("table.tableWithFloatingHeader").each(function() {
+            $(this).wrap("<div class=\"divTableWithFloatingHeader\" style=\"position:relative\"></div>");
 
-        clonedHeaderRow.addClass("tableFloatingHeader");
-        clonedHeaderRow.css("position", "absolute");
-        clonedHeaderRow.css("top", "0px");
-        clonedHeaderRow.css("left", $(this).css("margin-left"));
-        clonedHeaderRow.css("visibility", "hidden");
+            var originalHeaderRow = $("tr:first", this)
+            originalHeaderRow.before(originalHeaderRow.clone());
+            var clonedHeaderRow = $("tr:first", this)
 
-        originalHeaderRow.addClass("tableFloatingHeaderOriginal");
-    });
+            clonedHeaderRow.addClass("tableFloatingHeader");
+            clonedHeaderRow.css("position", "absolute");
+            clonedHeaderRow.css("top", "0px");
+            clonedHeaderRow.css("left", $(this).css("margin-left"));
+            clonedHeaderRow.css("visibility", "hidden");
+
+            originalHeaderRow.addClass("tableFloatingHeaderOriginal");
+        });
 
     UpdateTableHeaders();
     $(window).scroll(UpdateTableHeaders);
     $(window).resize(UpdateTableHeaders);
-
-});
+    });
 </script>
 
     <form id="form_attendance_sheet" method="post" action="index.php?action=attendance_sheet_add&<?php echo api_get_cidreq().$param_gradebook.$param_filter ?>&attendance_id=<?php echo $attendance_id?>" >

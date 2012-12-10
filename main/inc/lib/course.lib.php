@@ -80,6 +80,8 @@ class CourseManager {
      * Creates a course
      * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
+     * @return mixed    Array with course details, or false on error
+     * @assert (null) === false
      */
     static function create_course($params) {
         global $_configuration;
@@ -4514,9 +4516,9 @@ class CourseManager {
             $default_document_array = array();
             foreach ($folders_to_copy_from_default_course as $folder) {        
                 $default_course_folder_path = $default_course_path.$folder.'/';
-                $files = browse_folders($default_course_folder_path, array(), $folder);
-                $sorted_array = sort_pictures($files, 'dir');
-                $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));          
+                $files = self::browse_folders($default_course_folder_path, array(), $folder);
+                $sorted_array = self::sort_pictures($files, 'dir');
+                $sorted_array = array_merge($sorted_array, self::sort_pictures($files, 'file'));          
                 $default_document_array[$folder] = $sorted_array;
             }
 

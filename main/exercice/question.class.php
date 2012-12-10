@@ -744,18 +744,18 @@ abstract class Question
 			$current_position = Database::result($result,0,0);
 			$this->updatePosition($current_position+1);
 			$position = $this->position;
-			$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, picture, extra, level, parent_id) VALUES ( 
-					$c_id,
-					'".Database::escape_string($question)."',
-					'".Database::escape_string($description)."',
-					'".Database::escape_string($weighting)."',
-					'".Database::escape_string($position)."',
-					'".Database::escape_string($type)."',
-					'".Database::escape_string($picture)."',
-					'".Database::escape_string($extra)."',
-                    '".Database::escape_string($level)."',
-                    '".$this->parent_id."'
-					)";			
+			$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, picture, extra, level, parent_id) VALUES ( ".
+					" $c_id, ".
+					" '".Database::escape_string($question)."', ".
+					" '".Database::escape_string($description)."', ".
+					" '".Database::escape_string($weighting)."', ".
+					" '".Database::escape_string($position)."', ".
+					" '".Database::escape_string($type)."', ".
+					" '".Database::escape_string($picture)."', ".
+					" '".Database::escape_string($extra)."', ".
+                    " '".Database::escape_string($level)."', ".
+                    " '".$this->parent_id."' ".
+					" )";
 			Database::query($sql);
 
 			$this->id = Database::insert_id();

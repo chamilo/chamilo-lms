@@ -365,11 +365,26 @@ class UniqueAnswer extends Question {
         $header .= '</tr>';
         return $header;	
     }
-    
-  function create_answer($id, $question_id, $answer_title, $comment, $score = 0, $correct = 0) {
+  /**
+   * Create database record for the given answer
+   * @param int The answer ID (technically 1 is OK if you don't know)
+   * @param int The question this answer is attached to
+   * @param string The answer itself
+   * @param string The answer comment (shown as feedback if enabled)
+   * @param float  Score given by this answer if selected (can be negative)
+   * @param int Whether this answer is considered correct (1) or not (0)
+   * @param int The course ID - if not provided, will be guessed from the context
+   * @return void
+   * @assert (1,null,'a','',1,1,null) === false
+   * @assert (1,1,'','',1,1,null) === false
+   */  
+  function create_answer($id=1, $question_id, $answer_title, $comment = '', $score = 0, $correct = 0, $course_id = null) {
+    if (empty($question_id) or empty($answer_title)) { return false; }
     $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    $course_id = api_get_course_int_id();
+    if (empty($course_id)) {
+        $course_id = api_get_course_int_id();
+    }
     $position = 1;
     $question_id = filter_var($question_id,FILTER_SANITIZE_NUMBER_INT);
     $score = filter_var($score,FILTER_SANITIZE_NUMBER_FLOAT);
@@ -391,6 +406,7 @@ class UniqueAnswer extends Question {
         $sql = "UPDATE $tbl_quiz_question "
         ." SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND id = ".$question_id;
         $rs = Database::query($sql);
+        return $rs;
     }
   }
 }

@@ -50,20 +50,6 @@ class Migration {
      */
     public $odbrows = null;    
 
-    /**
-     * Temporary holder for the list of users, courses and sessions and their 
-     * data. Store values here (preferably using the same indexes as the
-     * destination database field names) until ready to insert into Chamilo.
-     */
-    public $data_list = array(
-      'boost_users' => false,
-      'users' => array(), 
-      'boost_courses' => false,
-      'courses' => array(),
-      'boost_sessions' => false,
-      'sessions' => array(),
-    );
-    
     public $web_service_connection_info = array();
     
     /**
@@ -90,9 +76,10 @@ class Migration {
         
         // Set the boost level if set in config.php
         if (!empty($boost) && is_array($boost)) {
+            global $data_list;
             foreach ($boost as $item => $val) {
                 if ($val == true) {
-                    $this->data_list[$item] = true;
+                    $data_list[$item] = true;
                 }
             }
         }
@@ -1014,6 +1001,7 @@ class Migration {
             $extra_field_value_obj = new ExtraFieldValue($table['dest_table']);
         }
         $extra_fields_to_insert = array();
+        global $data_list;
         
         foreach ($table['fields_match'] as $id_field => $details) {
             //if ($table['dest_table'] == 'session') {error_log('Processing field '.$details['orig']);}
@@ -1033,7 +1021,7 @@ class Migration {
             } else {
                 // if an alteration function is defined, run it on the field
                 //error_log(__FILE__.' '.__LINE__.' Preparing to treat field with '.$details['func']);
-                $dest_data = MigrationCustom::$details['func']($row[$details['orig']], $this->data_list, $row);
+                $dest_data = MigrationCustom::$details['func']($row[$details['orig']], $data_list, $row);
             }
 
             if (isset($dest_row[$details['dest']])) {
@@ -1098,7 +1086,7 @@ class Migration {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));            
             $dest_row['return_item_if_already_exists'] = true;
 
-            $item_result = call_user_func_array($table['dest_func'], array($dest_row, $this->data_list));
+            $item_result = call_user_func_array($table['dest_func'], array($dest_row, $data_list));
 
 /*            if (isset($table['show_in_error_log']) && $table['show_in_error_log'] == false) {
                 
@@ -1107,12 +1095,12 @@ class Migration {
             }
 */
             //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
-            //After the function was executed fill the $this->data_list array
+            //After the function was executed fill the $data_list array
             switch ($table['dest_table']) {
                 case 'course':
                     //Saving courses in array
                     if ($item_result) {
-                        //$this->data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
+                        //$data_list['courses'][$dest_row['uidIdCurso']] = $item_result;        
                     } else {
                         error_log('Course Not FOUND');
                         error_log(print_r($item_result, 1));
@@ -1125,11 +1113,11 @@ class Migration {
                         $handler_id = $item_result['user_id'];
                         //error_log($dest_row['email'].' '.$dest_row['uidIdPersona']);
                         if (isset($dest_row['uidIdAlumno'])) {
-                            //$this->data_list['users_alumno'][$dest_row['uidIdAlumno']]['extra'] = $item_result;
+                            //$data_list['users_alumno'][$dest_row['uidIdAlumno']]['extra'] = $item_result;
                         }
                         if (isset($dest_row['uidIdEmpleado'])) {
                             //print_r($dest_row['uidIdEmpleado']);exit;                           
-                            //$this->data_list['users_empleado'][$dest_row['uidIdEmpleado']]['extra'] = $item_result;
+                            //$data_list['users_empleado'][$dest_row['uidIdEmpleado']]['extra'] = $item_result;
                         }
                     } else {
                         global $api_failureList;
@@ -1138,7 +1126,7 @@ class Migration {
                     }
                     break;
                 case 'session':
-                    //$this->data_list['sessions'][$dest_row['uidIdPrograma']] = $item_result;                    
+                    //$data_list['sessions'][$dest_row['uidIdPrograma']] = $item_result;                    
                     $handler_id = $item_result; //session_id
                     break;
             }

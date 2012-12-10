@@ -27,6 +27,8 @@ if (empty($servers)) {
     die("This script requires a servers array with the connection settings and the file to parse\n");
 }
 
+$data_list = array('users'=>array(),'courses'=>array(),'sessions'=>array());
+
 $start = time();
 echo "\n-- Starting at ".date('h:i:s')." local server time\n";
 if (!empty($servers)) {
@@ -34,6 +36,7 @@ if (!empty($servers)) {
         if ($server_info['active']) {
             echo "\n---- Start loading server----- \n";
             echo $server_info['name']."\n\n";
+            error_log('Treating server '.$server_info['name']);
             //echo "---- ----------------------- \n";            
             
             $config_info = $server_info['connection'];            

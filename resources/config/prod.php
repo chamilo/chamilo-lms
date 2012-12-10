@@ -55,14 +55,13 @@ $app['assetic.filter.yui_compressor.path'] = '/usr/share/yui-compressor/yui-comp
 
 //Create directories?
 if (!is_dir($app['assetic.path_to_web'])) {
-    mkdir($app['assetic.path_to_web'], api_get_permissions_for_new_directories());
+    //mkdir($app['assetic.path_to_web'], api_get_permissions_for_new_directories());
 }
 
 if (!is_dir($app['assetic.path_to_web'].'/css')) {
-    mkdir($app['assetic.path_to_web'].'/css', api_get_permissions_for_new_directories());
+    //mkdir($app['assetic.path_to_web'].'/css', api_get_permissions_for_new_directories());
 }
 
 if (!is_dir($app['assetic.path_to_web'].'/js')) {
-    mkdir($app['assetic.path_to_web'].'/js', api_get_permissions_for_new_directories());
+    //mkdir($app['assetic.path_to_web'].'/js', api_get_permissions_for_new_directories());
 }
-

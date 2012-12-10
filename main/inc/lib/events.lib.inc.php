@@ -707,6 +707,30 @@ function get_latest_event_by_user_and_type($user_id, $event_type) {
     }
 }
 
+function get_events_by_user_and_type($user_id, $event_type) {
+    global $TABLETRACK_DEFAULT;
+    $user_id = intval($user_id);
+    $event_type = Database::escape_string($event_type);
+
+    $sql = "SELECT * FROM $TABLETRACK_DEFAULT
+            WHERE default_value_type = 'user_id' AND
+                  default_value = $user_id AND
+                  default_event_type = '$event_type'
+            ORDER BY default_date ";
+    $result = Database::query($sql);
+    if ($result) {
+        return Database::store_result($result, 'ASSOC');
+    }
+    return false;
+}
+
+function get_latest_event_by_user_and_type($user_id, $event_type) {
+    $result = get_events_by_user_and_type($user_id, $event_type);
+    if ($result && !empty($result)) {
+        return $result[0];
+    }
+}
+
 /**
  * Save the new message for one event and for one language
  *

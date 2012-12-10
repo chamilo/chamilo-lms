@@ -95,8 +95,7 @@ class GroupPortalManager
 	* @param int id
 	* @return boolean true if success
 	* */
-	public static function delete($id)
-	{
+    public static function delete($id) {
 		$id = intval($id);
 		$table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql= "DELETE FROM $table WHERE id = ".Database::escape_string($id);
@@ -117,8 +116,7 @@ class GroupPortalManager
 	 * @param int	number of items
 	 * @return array
 	 * */
-	public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from=0, $number_of_items=10)
-	{
+    public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10) {
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
 		$visibility = intval($visibility);
 		$sql = "SELECT name, description, picture_uri FROM $table WHERE visibility = $visibility ";
@@ -154,8 +152,7 @@ class GroupPortalManager
 	 *
 	 *
 	 */
-	public static function get_group_data($group_id)
-	{
+    public static function get_group_data($group_id) {
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
 		$group_id = intval($group_id);
 		$sql = "SELECT id, name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
@@ -494,8 +491,7 @@ class GroupPortalManager
 	 * @param int group id
 	 * @return array
 	 */
-	public static function get_all_users_by_group($group_id)
-	{
+    public static function get_all_users_by_group($group_id) {
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
@@ -522,8 +518,7 @@ class GroupPortalManager
 	* @param int group_id
 	* @return int 0 if there are not relationship otherwise returns the user group
 	* */
-	public static function get_user_group_role($user_id, $group_id)
-	{
+    public static function get_user_group_role($user_id, $group_id) {
 		$table_group_rel_user= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$return_value = 0;
 		if (!empty($user_id) && !empty($group_id)) {
@@ -600,8 +595,7 @@ class GroupPortalManager
 	* @param int relation type (optional)
 	* @return boolean true if success
 	* */
-	public static function delete_users($group_id,$relation_type='')
-	{
+    public static function delete_users($group_id, $relation_type = '') {
 		$table_	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$condition_relation = "";
 		if (!empty($relation_type)) {
@@ -634,8 +628,7 @@ class GroupPortalManager
 	 * @param int group id
 	 * @param int relation type
 	 * */
-	public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
-	{
+    public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER) {
 		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$group_id = intval($group_id);
 		$user_id = intval($user_id);
@@ -646,8 +639,7 @@ class GroupPortalManager
 	}
 
 
-	public static function get_group_admin_list($user_id, $group_id)
-	{
+    public static function get_group_admin_list($user_id, $group_id) {
 		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$group_id = intval($group_id);
 		$user_id = intval($user_id);

@@ -123,4 +123,4 @@ syntax: regexp
 
 nbproject/*
 
-
+.git

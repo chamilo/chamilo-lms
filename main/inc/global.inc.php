@@ -120,8 +120,8 @@ require_once __DIR__.'../../../vendor/autoload.php';
 use Silex\Application;
 $app = new Application();
 
-require_once __DIR__.'/../../resources/config/prod.php';
-//require_once __DIR__.'/../../resources/config/dev.php';
+//require_once __DIR__.'/../../resources/config/prod.php';
+require_once __DIR__.'/../../resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(

@@ -2167,6 +2167,12 @@ function api_get_settings_params($params) {
     return $result;
 }
 
+function api_get_settings_params_simple($params) {
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $result = Database::select('*', $table, array('where' => $params), 'one');
+    return $result;
+}
+
 /**
  * Returns the value of a setting from the web-adjustable admin config settings.
  **/
@@ -6414,4 +6420,93 @@ function api_coach_can_edit_view_results($course_code = null, $session_id = null
         }
         return false;
     }
+}
+
+function api_get_js_simple($file) {
+    return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+}
+
+
+function api_set_settings_and_plugins() {
+    global $_configuration;
+    //error_log('Loading settings from DB');
+    $_setting = array();
+    $_plugins = array();
+
+    // access_url == 1 is the default chamilo location
+    $settings_by_access_list = array();
+
+    if ($_configuration['access_url'] != 1) {
+        $url_info = api_get_access_url($_configuration['access_url']);
+        if ($url_info['active'] == 1) {
+            $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            foreach ($settings_by_access as & $row) {
+                if (empty($row['variable'])) {
+                    $row['variable'] = 0;
+                }
+                if (empty($row['subkey'])) {
+                    $row['subkey'] = 0;
+                }
+                if (empty($row['category'])) {
+                    $row['category'] = 0;
+                }
+                $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+            }
+        }
+    }
+
+    $result = api_get_settings(null, 'list', 1);
+
+    foreach ($result as & $row) {
+        if ($_configuration['access_url'] != 1) {
+            if ($url_info['active'] == 1) {
+                $var = empty($row['variable']) ? 0 : $row['variable'];
+                $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
+                $category = empty($row['category']) ? 0 : $row['category'];
+            }
+
+            if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+                if (isset($settings_by_access_list[$var]) &&
+                    $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
+                    if ($row['subkey'] == null) {
+                        $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                    } else {
+                        $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                    }
+                } else {
+                    if ($row['subkey'] == null) {
+                        $_setting[$row['variable']] = $row['selected_value'];
+                    } else {
+                        $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                    }
+                }
+            } else {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $row['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                }
+            }
+        } else {
+            if ($row['subkey'] == null) {
+                $_setting[$row['variable']] = $row['selected_value'];
+            } else {
+                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+            }
+        }
+    }
+
+    $result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
+    $_plugins = array();
+    foreach ($result as & $row) {
+        $key = & $row['variable'];
+        if (is_string($_setting[$key])) {
+            $_setting[$key] = array();
+        }
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    }
+    //global $app;
+    $_SESSION['_setting'] = $_setting;
+    $_SESSION['_plugins'] = $_plugins;
 }

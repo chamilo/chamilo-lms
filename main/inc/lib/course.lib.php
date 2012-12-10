@@ -41,7 +41,7 @@
     CourseManager::has_virtual_courses_from_code($real_course_code, $user_id)
     CourseManager::get_target_of_linked_course($virtual_course_code)
 
-    TITLE AND CODE FUNCTIONS    
+    TITLE AND CODE FUNCTIONS
     CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
     CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
 
@@ -75,7 +75,7 @@ class CourseManager {
     CONST COURSE_FIELD_TYPE_CHECKBOX = 10;
 
     var $columns = array();
-    
+
     /**
      * Creates a course
      * @param   array   with the columns in the main.course table
@@ -83,20 +83,20 @@ class CourseManager {
      */
     static function create_course($params) {
         global $_configuration;
-        
+
         // Check portal limits
         $access_url_id = 1;
         if (api_get_multiple_access_url()) {
             $access_url_id = api_get_current_access_url_id();
         }
-        
+
         if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_courses']) && $_configuration[$access_url_id]['hosting_limit_courses'] > 0) {
             $num = self::count_courses();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_courses']) {
                 return api_set_failure('PortalCoursesLimitReached');
             }
         }
-        
+
         if (empty($params['title'])) {
             return false;
         }
@@ -125,25 +125,25 @@ class CourseManager {
                 $course_info    = api_get_course_info_by_id($course_id);
 
                 if (!empty($course_info)) {
-                    self::prepare_course_repository($course_info['directory'], $course_info['code']);                    
+                    self::prepare_course_repository($course_info['directory'], $course_info['code']);
                     self::fill_db_course($course_id, $course_info['directory'], $course_info['course_language'], $params['exemplary_content']);
-                    
-                    //Create an empty gradebook                    
+
+                    //Create an empty gradebook
                     if (isset($params['create_gradebook_evaluation']) && $params['create_gradebook_evaluation'] == true) {
                         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
                         $category_id = create_default_course_gradebook($course_info['code']);
                         if ($category_id && isset($params['gradebook_params'])) {
                             $eval = new Evaluation();
-                            $eval->set_name($params['gradebook_params']['name']);                        
+                            $eval->set_name($params['gradebook_params']['name']);
                             $eval->set_user_id($params['gradebook_params']['user_id']);
                             $eval->set_course_code($course_info['code']);
                             $eval->set_category_id($category_id);
-                            $eval->set_weight($params['gradebook_params']['weight']);	
+                            $eval->set_weight($params['gradebook_params']['weight']);
                             $eval->set_max($params['gradebook_params']['max']);
                             $eval->set_visible(0);
-                            $eval->add();                 
+                            $eval->add();
                         }
-                    }                    
+                    }
                     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
                         //Create gradebook_category for the new course and add a gradebook model for the course
                         if (isset($params['gradebook_model_id']) && !empty($params['gradebook_model_id']) && $params['gradebook_model_id'] != '-1') {
@@ -151,12 +151,12 @@ class CourseManager {
                             create_default_course_gradebook($course_info['code'], $params['gradebook_model_id']);
                         }
                     }
-                    
+
                     //Saving extra course fields
                     $field_value = new ExtraFieldValue('course');
-                    $params['course_code'] = $course_info['code'];   
+                    $params['course_code'] = $course_info['code'];
                     $field_value->save_field_values($params);
-                    
+
                     return $course_info;
                 }
             } else {
@@ -170,17 +170,17 @@ class CourseManager {
         }
         return false;
     }
-    
+
     static function update($params) {
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-            
+
         $course_code = $params['code'];
         $visual_code = $params['visual_code'];
 
-        $field_value = new ExtraFieldValue('course');        
-        $params['course_code'] = $course_code; 
-        $field_value->save_field_values($params); 
+        $field_value = new ExtraFieldValue('course');
+        $params['course_code'] = $course_code;
+        $field_value->save_field_values($params);
 
         /*$tutor_id = $params['tutor_name'];
         $tutor_name=$platform_teachers[$tutor_id];*/
@@ -202,12 +202,12 @@ class CourseManager {
         if (!stristr($department_url, 'http://')) {
             $department_url = 'http://'.$department_url;
         }
-        
+
         //tutor_name='".Database::escape_string($tutor_name)."',
         $sql = "UPDATE $course_table SET
                     course_language='".Database::escape_string($course_language)."',
                     title='".Database::escape_string($title)."',
-                    category_code='".Database::escape_string($category_code)."',                                    
+                    category_code='".Database::escape_string($category_code)."',
                     visual_code='".Database::escape_string($visual_code)."',
                     department_name='".Database::escape_string($department_name)."',
                     department_url='".Database::escape_string($department_url)."',
@@ -247,10 +247,10 @@ class CourseManager {
                 Database::query($sql);
             }
         }
-        
+
         //user_id = '".$tutor_id . "',
         $sql = "INSERT IGNORE INTO ".$course_user_table . " SET
-                    course_code = '".Database::escape_string($course_code). "',                  
+                    course_code = '".Database::escape_string($course_code). "',
                     status = '1',
                     role = '',
                     tutor_id='0',
@@ -841,7 +841,7 @@ class CourseManager {
                         foreach ($students_in_course as $user_item) {
                             if ($user_item['moved_to'] == 0) {
                                 $students_in_courses[$user_item['user_id']] = $user_item['user_id'];
-                            }                        
+                            }
                         }
                     }
                 }
@@ -1243,14 +1243,14 @@ class CourseManager {
      * @param integer   $session_id the id of the session
      * @param string    $limit the LIMIT statement of the sql statement
      * @param string    $order_by the field to order the users by. Valid values are 'lastname', 'firstname', 'username', 'email', 'official_code' OR a part of a SQL statement that starts with ORDER BY ...
-     * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER 
+     * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER
      * @return array
      */
     public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = null, $order_by =null, $filter_by_status = null, $keyword = null) {
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
         $keyword        = Database::escape_string($keyword);
-        $where          = array();        
+        $where          = array();
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
@@ -1260,59 +1260,59 @@ class CourseManager {
                 $order_by = '';
             }
         }
-        
+
         $filter_by_status_condition = null;
 
         if (!empty($session_id)) {
             $sql = 'SELECT DISTINCT user.user_id, session_course_user.status as status_session, user.*  ';
-            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user                      
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code="'.$course_code.'"
-                      AND session_course_user.id_session = '.$session_id.' 
-                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su 
-                      ON (  su.id_session = session_course_user.id_session AND 
-                            user.user_id = su.id_user AND 
+                      AND session_course_user.id_session = '.$session_id.'
+                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su
+                      ON (  su.id_session = session_course_user.id_session AND
+                            user.user_id = su.id_user AND
                             su.moved_to = 0 AND
                             su.moved_status <> '.SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.'
                       ) ';
             $where[] = ' AND session_course_user.course_code IS NOT NULL ';
-            
+
             // 2 = coach
-            // 0 = student            
-            if (isset($filter_by_status)) {                
+            // 0 = student
+            if (isset($filter_by_status)) {
                 $filter_by_status = intval($filter_by_status);
-                $filter_by_status_condition = " AND session_course_user.status = $filter_by_status AND ";                
+                $filter_by_status_condition = " AND session_course_user.status = $filter_by_status AND ";
             }
-        } else {            
+        } else {
             $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
-            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';            
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
                         ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
                         AND course_rel_user.course_code="'.$course_code.'"';
             $where[] = ' AND course_rel_user.course_code IS NOT NULL ';
-            
+
             if (isset($filter_by_status) && $filter_by_status != '') {
                 $filter_by_status = intval($filter_by_status);
                 $filter_by_status_condition = " AND course_rel_user.status = $filter_by_status AND ";
             }
         }
-        
+
         $multiple_access_url = api_get_multiple_access_url();
         if ($multiple_access_url) {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
-        
+
         $keyword_condition = null;
         if (!empty($keyword)) {
             $where_keyword = array();
             $where_keyword[] = "firstname LIKE '%$keyword%'";
             $where_keyword[] = "lastname LIKE '%$keyword%'";
             $where_keyword[] = "username LIKE '%$keyword%'";
-            $where_keyword[] = "official_code LIKE '%$keyword%'";    
+            $where_keyword[] = "official_code LIKE '%$keyword%'";
             $keyword_condition = ' AND ('.implode(' OR ', $where_keyword).') ';
         }
-        
+
         $where_condition = null;
         if (!empty($where)) {
             $where_condition = implode(' OR ', $where);
@@ -1324,18 +1324,18 @@ class CourseManager {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
-        
+
         $sql .= ' '.$order_by;
-        
+
         if (!empty($keyword)) {
             $sql .= ' '.$limit;
         }
-        
+
         $rs = Database::query($sql);
         $users = array();
 
         if (Database::num_rows($rs)) {
-            while ($user = Database::fetch_array($rs)) {                
+            while ($user = Database::fetch_array($rs)) {
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
@@ -1361,7 +1361,7 @@ class CourseManager {
      * @param   int       $session_id
      * @return  int
      */
-    public static function get_users_count_in_course($course_code, $session_id = 0) {        
+    public static function get_users_count_in_course($course_code, $session_id = 0) {
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
 
@@ -1371,10 +1371,10 @@ class CourseManager {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user
                       ON user.user_id = session_course_user.id_user
                       AND session_course_user.course_code = "'.$course_code.'"
-                      AND session_course_user.id_session  = '.$session_id.'  
-                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su 
-                      ON ( su.id_session = session_course_user.id_session AND 
-                           user.user_id = su.id_user AND 
+                      AND session_course_user.id_session  = '.$session_id.'
+                      INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_USER).' as su
+                      ON ( su.id_session = session_course_user.id_session AND
+                           user.user_id = su.id_user AND
                            su.moved_to = 0 AND
                            su.moved_status <> '.SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION.'
                          )';
@@ -1398,7 +1398,7 @@ class CourseManager {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
-        $rs = Database::query($sql);        
+        $rs = Database::query($sql);
         $count = 0;
         if (Database::num_rows($rs)) {
             $user = Database::fetch_array($rs);
@@ -1436,7 +1436,7 @@ class CourseManager {
         }
 
         // We get the session coach.
-        $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id="'.$session_id.'"');        
+        $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id="'.$session_id.'"');
         $session_id_coach = Database::result($rs, 0, 'id_coach');
         $user_info = Database::get_user_info_from_id($session_id_coach);
         $user_info['status'] = $user['status'];
@@ -1475,7 +1475,7 @@ class CourseManager {
         // students subscribed to the course through a session
 
         if ($with_session) {
-            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." 
+            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
                           WHERE course_code = '$course_code' AND status <> 2";
             if ($session_id != 0) {
                 $sql_query .= ' AND id_session = '.$session_id;
@@ -1497,11 +1497,11 @@ class CourseManager {
      */
     public static function get_teacher_list_from_course_code($course_code) {
         $course_code = Database::escape_string($course_code);
-        $teachers = array();        
-        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status 
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u 
+        $teachers = array();
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
                 ON (cu.user_id = u.user_id)
-                WHERE   cu.course_code = '$course_code' AND 
+                WHERE   cu.course_code = '$course_code' AND
                         cu.status = 1 ";
         $rs = Database::query($sql);
         while ($teacher = Database::fetch_array($rs)) {
@@ -1555,7 +1555,7 @@ class CourseManager {
         $tbl_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $coaches = array();
 
-        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username 
+        $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
                 FROM $tbl_user u, $tbl_session_course_user scu
                 WHERE u.user_id = scu.id_user AND scu.id_session = '$session_id' AND scu.course_code = '$course_code' AND scu.status = 2";
         $rs = Database::query($sql);
@@ -1682,15 +1682,15 @@ class CourseManager {
         $course_id = $course_info['real_id'];
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
-        
+
         $sql = "SELECT g.id, g.name
                 FROM ".Database::get_course_table(TABLE_GROUP)." AS g
                 INNER JOIN ".Database::get_course_table(TABLE_GROUP_USER)." gu
                 ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
-                $session_condition                
+                $session_condition
                 ORDER BY g.name";
         $result = Database::query($sql);
-        
+
         while ($group_data = Database::fetch_array($result)) {
             $group_data['userNb'] = GroupManager::number_of_students($group_data['id'], $course_id);
             $group_list[$group_data['id']] = $group_data;
@@ -1796,7 +1796,7 @@ class CourseManager {
      * that real course.
      * @todo Remove globals
      */
-    public static function delete_course($code) {        
+    public static function delete_course($code) {
 
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1821,7 +1821,7 @@ class CourseManager {
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
 
         $code = Database::escape_string($code);
-        
+
         // Unsubscribe all classes from the course
         $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
         Database::query($sql);
@@ -2809,7 +2809,7 @@ class CourseManager {
         $course_image         = $store_path.'/course-pic.png';                      // image name for courses
         $course_medium_image  = $store_path.'/course-pic85x85.png';
         //$extension            = strtolower(substr(strrchr($filename, '.'), 1));
-        
+
         if (file_exists($course_image)) {
             @unlink($course_image);
         }
@@ -2842,7 +2842,7 @@ class CourseManager {
      */
     public static function course_item_html($params, $is_sub_content = false) {
         $html = '';
-        $class = "well";
+        $class = "well course-box";
         if ($is_sub_content) {
             $class = "course_item";
         }
@@ -2850,7 +2850,7 @@ class CourseManager {
             $html .= '<div class="row">';
             $html .= '<div class="span7">';
                 $html .= ' <div class="row">';
-                    $html .= '<div class="span1">';
+                    $html .= '<div class="span1 course-box-thumbnail-box">';
                     if (!empty($params['link'])) {
                         $html .= '<a class="thumbnail" href="'.$params['link'].'">';
                         $html .= $params['icon'];
@@ -2860,33 +2860,29 @@ class CourseManager {
                         $html .= $params['icon'];
                         $html .= '</div>';
                     }
+
                     $html .= '</div>';
+                    $notifications = isset($params['notifications']) ? $params['notifications'] : null;
 
                     $html .= '<div class="span6">';
-                        $html .='<h3>'.$params['title'].$params['notifications'].'</h3> ';
-                        
+                        $html .='<h3>'.$params['title'].$notifications.'</h3> ';
+
                         if (!empty($params['subtitle'])) {
                             $html .= '<small>'.$params['subtitle'].'</small>';
-                        }
-                        if (!empty($params['dates'])) {
-                            if (!empty($params['subtitle'])) {
-                                $html .= " | ";
-                            }
-                            $html .= '<small>'.$params['dates'].'</small>';
                         }
                         if (!empty($params['teachers'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
                         }
                         if (!empty($params['coaches'])) {
                             $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
-                        }                        
-                        
+                        }
+
                     $html .= '</div>';
                 $html .= '</div>';
 
             $html .= '</div>';
-
-            $html .= '<div class="span1 pull-right">'.$params['right_actions'].'</div>';
+            $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
+            $html .= '<div class="span1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
         $html .= '</div>';
         $html .= '</div>';
         return $html;
@@ -2912,7 +2908,7 @@ class CourseManager {
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
         $special_course_list        = self::get_special_course_list();
-
+        $html = null;
         $with_special_courses = $without_special_courses = '';
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("'.implode('","',$special_course_list).'")';
@@ -2928,7 +2924,7 @@ class CourseManager {
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
             $key = 0;
-            
+
             $html = '';
 
             if ($number_of_courses > 0) {
@@ -2949,7 +2945,7 @@ class CourseManager {
 
                     $params['icon'] = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
 
-                    $params['right_actions'] = '';                    
+                    $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
                         if ($load_dirs) {
                             $params['right_actions'] .= '<a id="document_preview_'.$course['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
@@ -2963,9 +2959,9 @@ class CourseManager {
                         }
                     } else {
                         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
-                            if ($load_dirs) {                            
+                            if ($load_dirs) {
                                 $params['right_actions'] .=  '<a id="document_preview_'.$course['real_id'].'_0" class="document_preview" href="javascript:void(0);">'.Display::return_icon('folder.png', get_lang('Documents'), array('align' => 'absmiddle'),ICON_SIZE_SMALL).'</a>';
-                                $params['right_actions'] .=  Display::div('', array('id' => 'document_result_'.$course['real_id'].'_0', 'class'=>'document_preview_container'));                            
+                                $params['right_actions'] .=  Display::div('', array('id' => 'document_result_'.$course['real_id'].'_0', 'class'=>'document_preview_container'));
                             }
                         }
                     }
@@ -2987,11 +2983,11 @@ class CourseManager {
 
                     $params['title'] = $course_title;
                     $params['link'] = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session=0&amp;autoreg=1';
-                    
+
                     if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                         $params['notifications'] = $show_notification;
                     }
-                    
+
                     $html .= self::course_item_html($params, false);
                     $key++;
                 }
@@ -3013,6 +3009,7 @@ class CourseManager {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
+        $html = null;
 
         // Step 1: We get all the categories of the user
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
@@ -3025,9 +3022,9 @@ class CourseManager {
             $params['title'] = $row['title'];
             $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
         }
-        
+
         // Step 2: We display the course without a user category.
-        $html .= self :: display_courses_in_category(0, $load_dirs);        
+        $html .= self :: display_courses_in_category(0, $load_dirs);
         return $html;
     }
 
@@ -3048,7 +3045,7 @@ class CourseManager {
 
         // Get course list auto-register
         $special_course_list            = self::get_special_course_list();
-        
+
         $without_special_courses = '';
         if (!empty($special_course_list)) {
             $without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
@@ -3069,11 +3066,11 @@ class CourseManager {
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
-        
-        $result = Database::query($sql);        
+
+        $result = Database::query($sql);
         $status_icon = '';
         $html = '';
-        
+
         $course_list = array();
 
         // Browse through all courses.
@@ -3082,7 +3079,7 @@ class CourseManager {
             //$course['id_session'] = null;
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
-            
+
             //In order to avoid doubles
             if (in_array($course_info['real_id'], $course_list)) {
                 continue;
@@ -3124,7 +3121,7 @@ class CourseManager {
                     }
                 }
             }
-            
+
             $course_title = $course_info['title'];
 
             $course_title_url = '';
@@ -3147,7 +3144,7 @@ class CourseManager {
             $params['icon'] = $status_icon;
             $params['title'] = $course_title;
             $params['teachers'] = $teachers;
-            
+
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $show_notification;
             }
@@ -3156,7 +3153,7 @@ class CourseManager {
             if (empty($user_category_id)) {
                 $is_subcontent = false;
             }
-            $html .= self::course_item_html($params, $is_subcontent);            
+            $html .= self::course_item_html($params, $is_subcontent);
         }
         return $html;
     }
@@ -3220,20 +3217,20 @@ class CourseManager {
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false) {        
-        $course_info = api_get_course_info($course['code']);                
+    public static function get_logged_user_course_html($course, $session_id = 0, $load_dirs = false) {
+        $course_info = api_get_course_info($course['code']);
         $course_info['id_session'] = $session_id;
 
         // Display course entry.
         // Show a link to the course, unless the course is closed and user is not course admin.
         $session_url = '';
-        $session_title = $course_info['name'];        
-                 
-        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {                       
+        $session_title = $course_info['name'];
+
+        if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course_info['user_status_in_course'] == COURSEMANAGER) {
             //if ($course_info['user_status_in_course'] == COURSEMANAGER) {
                 $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
                 $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
-            //}            
+            //}
         } else {
             $session_title = $course_info['name'].' '.Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
         }
@@ -3243,10 +3240,10 @@ class CourseManager {
         $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
-        
+
 
         $params['right_actions'] = '';
-        
+
         if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
             if ($load_dirs) {
                 $params['right_actions'] .= '<a id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" class="document_preview" href="javascript:void(0);">'.
@@ -3259,11 +3256,11 @@ class CourseManager {
             $session_title .= ' ('.$course_info['visual_code'].') ';
         }
 
-        if (api_get_setting('display_teacher_in_courselist') == 'true') {            
+        if (api_get_setting('display_teacher_in_courselist') == 'true') {
             $teacher_list = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code'], self::USER_SEPARATOR, true);
-            $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);            
+            $course_coachs = CourseManager::get_coachs_from_course_to_string($course_info['id_session'], $course['code'], self::USER_SEPARATOR, true);
             $params['teachers'] = $teacher_list;
-            $params['coaches'] = $course_coachs;            
+            $params['coaches'] = $course_coachs;
         }
         $session_title .= isset($course['special_course']) ? ' '.Display::return_icon('klipper.png', get_lang('CourseAutoRegister')) : '';
 
@@ -3463,7 +3460,7 @@ class CourseManager {
         $params = array(
             'c_id'          => $course_id,
             'session_id'    => $session_id,
-            'url_id'        => $url_id            
+            'url_id'        => $url_id
         );
 
         $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
@@ -3502,7 +3499,7 @@ class CourseManager {
     public static function update_course_ranking($course_id = null, $session_id = null, $url_id = null, $points_to_add = null, $add_access = true, $add_user = true) {
         //Course catalog stats modifications see #4191
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
-        
+
         $course_id  = empty($course_id)     ? api_get_course_int_id() : intval($course_id);
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
@@ -3510,7 +3507,7 @@ class CourseManager {
         $params = array(
             'c_id'          => $course_id,
             'session_id'    => $session_id,
-            'url_id'        => $url_id            
+            'url_id'        => $url_id
         );
 
         $result = Database::select('id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
@@ -3643,22 +3640,22 @@ class CourseManager {
     public static function return_hot_courses($days = 30, $limit = 5) {
         global $_configuration;
         $limit  = intval($limit);
-        
+
         //Getting my courses
         $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
-        
+
         $my_course_code_list = array();
         foreach ($my_course_list as $course) {
             $my_course_code_list[$course['real_id']] = $course['real_id'];
         }
-                
+
         if (api_is_drh()) {
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
             foreach ($courses as $course) {
                 $my_course_code_list[$course['real_id']] = $course['real_id'];
-            }            
+            }
         }
-        
+
         $table_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -3676,7 +3673,7 @@ class CourseManager {
 
        $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
               "FROM $table_course c INNER JOIN $table_course_access a ".
-              "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ". 
+              "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ".
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
               "          login_course_date <= now() AND ".
               "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
@@ -3688,36 +3685,36 @@ class CourseManager {
         $result = Database::query($sql);
         $courses = array();
         if (Database::num_rows($result)) {
-            $courses = Database::store_result($result, 'ASSOC');            
-            $courses = self::process_hot_course_item($courses, $my_course_code_list);            
+            $courses = Database::store_result($result, 'ASSOC');
+            $courses = self::process_hot_course_item($courses, $my_course_code_list);
         }
         return $courses;
     }
-    
+
     public static function process_hot_course_item($courses, $my_course_code_list = array()) {
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
-        
+
         foreach ($courses as &$my_course) {
-            $course_info = api_get_course_info($my_course['course_code']);            
+            $course_info = api_get_course_info($my_course['course_code']);
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
             $my_course['extra_info']['register_button'] = '';
             $access_link = self::get_access_link_by_user(api_get_user_id(), $course_info, $my_course_code_list);
 
-            //Course visibility 
+            //Course visibility
             if ($access_link && in_array('register', $access_link)) {
                 $stok = Security::get_token();
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
             }
-            
+
             if ($access_link && in_array('enter', $access_link)) {
-                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));                        
+                $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
             }
 
             //Description
             $my_course['extra_info']['description_button'] = '';
             if ($course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || in_array($course_info['real_id'], $my_course_code_list) ) {
-                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'], array('class' => 'ajax btn'));                        
+                $my_course['extra_info']['description_button'] = Display::url(get_lang('Description'), api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=show_course_information&code='.$course_info['code'], array('class' => 'ajax btn'));
             }
 
             $my_course['extra_info']['teachers'] = CourseManager::get_teacher_list_from_course_code_to_string($course_info['code']);
@@ -3779,8 +3776,8 @@ class CourseManager {
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         return $row[0];
-    }    
-    
+    }
+
     /**
      * Return a link to go to the course, validating the visibility of the
      * course and the user status
@@ -3793,43 +3790,43 @@ class CourseManager {
         if (empty($uid) or empty($course)) { return false; }
         if (empty($user_courses)) {
             // get the array of courses to which the user is subscribed
-            $user_courses = CourseManager::get_courses_list_by_user_id($uid);            
+            $user_courses = CourseManager::get_courses_list_by_user_id($uid);
             foreach ($user_courses as $k => $v) {
                 $user_courses[$k] = $v['real_id'];
-            }            
+            }
         }
-        
+
         if (!isset($course['real_id']) && empty($course['real_id'])) {
             $course = api_get_course_info($course['code']);
         }
-        
+
         $is_admin = api_is_platform_admin_by_id($uid);
         $options =  array();
-        
+
         // Register button
-        if (!api_is_anonymous($uid) && 
-            !$is_admin && 
+        if (!api_is_anonymous($uid) &&
+            !$is_admin &&
             (
-                ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || 
+                ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) ||
                 $course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
-            ) && 
+            ) &&
             $course['subscribe'] == SUBSCRIBE_ALLOWED &&
             (!in_array($course['real_id'], $user_courses) || empty($user_courses))
           ) {
             $options[]= 'register';
         }
-        
+
          // Go To Course button (only if admin, if course public or if student already subscribed)
-        if ($is_admin || 
+        if ($is_admin ||
             $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
-            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) || 
-            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)            
+            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) ||
+            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
         ) {
             $options[]=  'enter';
         }
-        return $options;          
+        return $options;
     }
-    
+
     // TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.
     // Also, the function might be upgraded for avoiding code duplications.
     static function generate_course_code($course_title, $encoding = null) {
@@ -3838,7 +3835,7 @@ class CourseManager {
         }
         return substr(preg_replace('/[^A-Z0-9]/', '', strtoupper(api_transliterate($course_title, 'X', $encoding))), 0, CourseManager::MAX_COURSE_LENGTH_CODE);
     }
-    
+
 
     /**
      * Defines the four needed keys to create a course based on several parameters.
@@ -3906,7 +3903,7 @@ class CourseManager {
 
         return $keys;
     }
-    
+
     /**
      * Initializes a file repository for a newly created course.
      */
@@ -3915,18 +3912,18 @@ class CourseManager {
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
-        $cp = api_get_path(SYS_COURSE_PATH).$course_repository;        
+        $cp = api_get_path(SYS_COURSE_PATH).$course_repository;
 
         //Creating document folder
-        mkdir($cp, $perm);        
+        mkdir($cp, $perm);
         mkdir($cp . '/document', $perm);
-        $cpt = $cp.'/document/index.html';    
+        $cpt = $cp.'/document/index.html';
         $fd = fopen($cpt, 'w');
         fwrite($fd, $htmlpage);
         fclose($fd);
 
         /*
-        @chmod($cpt, $perm_file);    
+        @chmod($cpt, $perm_file);
         @copy($cpt, $cp . '/document/index.html');
         mkdir($cp . '/document/images', $perm);
         @copy($cpt, $cp . '/document/images/index.html');
@@ -3947,7 +3944,7 @@ class CourseManager {
         $fd = fopen($cpt, 'w');
         fwrite($fd, $htmlpage);
         fclose($fd);
-        @chmod($cpt, $perm_file);  
+        @chmod($cpt, $perm_file);
         mkdir($cp . '/group', $perm);
         @copy($cpt, $cp . '/group/index.html');
         mkdir($cp . '/page', $perm);
@@ -4009,7 +4006,7 @@ class CourseManager {
         @chmod($cp . '/index.php',$perm_file);
         return 0;
     }
-    
+
     static function get_course_tables() {
         $tables = array();
 
@@ -4320,7 +4317,7 @@ class CourseManager {
         }
         return $default_document_array;
     }
-    
+
 
     /**
      * Fills the course database with some required content and example content.
@@ -4329,7 +4326,7 @@ class CourseManager {
     static function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null) {
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
-        }        
+        }
         $course_id = intval($course_id);
 
         if (empty($course_id)) {
@@ -4476,7 +4473,7 @@ class CourseManager {
         if ($fill_with_exemplary_content) {
 
             Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id,path,title,filetype,size) VALUES ($course_id,'/images','".get_lang('Images')."','folder','0')");
-            $example_doc_id = Database :: insert_id();    
+            $example_doc_id = Database :: insert_id();
             Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
             Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')");
@@ -4492,7 +4489,7 @@ class CourseManager {
             Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
             Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/video','".get_lang('Video')."','folder','0')");
-            $example_doc_id = Database :: insert_id();    
+            $example_doc_id = Database :: insert_id();
             Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
             Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/certificates','".get_lang('Certificates')."','folder','0')");
@@ -4512,11 +4509,11 @@ class CourseManager {
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
 
             $default_document_array = array();
-            foreach ($folders_to_copy_from_default_course as $folder) {        
+            foreach ($folders_to_copy_from_default_course as $folder) {
                 $default_course_folder_path = $default_course_path.$folder.'/';
                 $files = browse_folders($default_course_folder_path, array(), $folder);
                 $sorted_array = sort_pictures($files, 'dir');
-                $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));          
+                $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));
                 $default_document_array[$folder] = $sorted_array;
             }
 
@@ -4530,16 +4527,16 @@ class CourseManager {
                 foreach ($default_document_array as $media_type => $array_media) {
                     $path_documents = "/$media_type/";
 
-                    //hack until feature #5242 is implemented 
+                    //hack until feature #5242 is implemented
                     if ($media_type == 'images') {
                         $media_type = 'images/gallery';
                         $images_folder = $sys_course_path.$course_repository."/document/images/";
 
                         if (!is_dir($images_folder)) {
-                            //Creating index.html 
+                            //Creating index.html
                             mkdir($images_folder, $perm);
                             $fd = fopen($images_folder.'index.html', 'w');
-                            fwrite($fd, $htmlpage);                    
+                            fwrite($fd, $htmlpage);
                             @chmod($images_folder.'index.html', $perm_file);
                         }
                     }
@@ -4550,10 +4547,10 @@ class CourseManager {
                     //echo 'try '.$course_documents_folder; echo '<br />';
 
                     if (!is_dir($course_documents_folder)) {
-                        //Creating index.html 
+                        //Creating index.html
                         mkdir($course_documents_folder, $perm);
                         $fd = fopen($course_documents_folder.'index.html', 'w');
-                        fwrite($fd, $htmlpage);                    
+                        fwrite($fd, $htmlpage);
                         @chmod($course_documents_folder.'index.html', $perm_file);
                     }
 
@@ -4568,7 +4565,7 @@ class CourseManager {
                                     //Creating index.html (for light protection)
                                     $index_html = $course_documents_folder.$value['dir'].'/index.html';
                                     $fd = fopen($index_html, 'w');
-                                    fwrite($fd, $htmlpage); 
+                                    fwrite($fd, $htmlpage);
                                     @chmod($index_html, $perm_file);
 
                                     //Inserting folder in the DB
@@ -4576,13 +4573,13 @@ class CourseManager {
                                     $temp = explode('/', $folder_path);
                                     $title = $temp[count($temp)-1];
 
-                                    //hack until feature #5242 is implemented 
+                                    //hack until feature #5242 is implemented
                                     if ($title == 'gallery') {
                                         $title = get_lang('DefaultCourseImages');
                                     }
 
                                     if ($media_type == 'images/gallery') {
-                                        $folder_path = 'gallery/'.$folder_path;                                    
+                                        $folder_path = 'gallery/'.$folder_path;
                                     }
 
                                     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents".$folder_path."','".$title."','folder','0')");
@@ -4595,14 +4592,14 @@ class CourseManager {
                                 if (!file_exists($course_documents_folder.$value['file'])) {
                                     //Copying file
                                     copy($default_course_path.$value['file'], $course_documents_folder.$value['file']);
-                                    chmod($course_documents_folder.$value['file'], $perm_file);                                
+                                    chmod($course_documents_folder.$value['file'], $perm_file);
                                     //echo $default_course_path.$value['file']; echo ' - '; echo $course_documents_folder.$value['file']; echo '<br />';
                                     $temp = explode('/', $value['file']);
                                     $file_size = filesize($course_documents_folder.$value['file']);
 
-                                    //hack until feature #5242 is implemented 
+                                    //hack until feature #5242 is implemented
                                     if ($media_type == 'images/gallery') {
-                                        $value["file"] = 'gallery/'.$value["file"];                                    
+                                        $value["file"] = 'gallery/'.$value["file"];
                                     }
 
                                     //Inserting file in the DB
@@ -4682,7 +4679,7 @@ class CourseManager {
 
             $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
-            Database::query('INSERT INTO '.$TABLEQUIZ . 
+            Database::query('INSERT INTO '.$TABLEQUIZ .
               ' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
               ' VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '",' .
               ' "'.$html.'", "1", "0", "0", "1", "0")');
@@ -4764,7 +4761,7 @@ class CourseManager {
         $department_name    = isset($params['department_name']) ? $params['department_name'] : null;
         $department_url     = isset($params['department_url']) ? $params['department_url'] : null;
         $disk_quota         = isset($params['disk_quota']) ? $params['disk_quota'] : null;
-        
+
         if (!isset($params['visibility'])) {
             $default_course_visibility = api_get_setting('courses_default_creation_visibility');
             if (isset($default_course_visibility)) {
@@ -4777,7 +4774,7 @@ class CourseManager {
         }
         $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
         $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
-        $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;        
+        $expiration_date    = isset($params['expiration_date']) ? $params['expiration_date'] : null;
         $teachers           = isset($params['teachers']) ? $params['teachers'] : null;
         $status             = isset($params['status']) ? $params['status'] : null;
 
@@ -4899,7 +4896,7 @@ class CourseManager {
                     }
                 }
 
-                // Adding the course to an URL                  
+                // Adding the course to an URL
                 if (api_is_multiple_url_enabled()) {
                     $url_id = 1;
                     if (api_get_current_access_url_id() != -1) {
@@ -4936,7 +4933,7 @@ class CourseManager {
 
         return $course_id;
     }
-    
+
 
     /**
      * Extract properties of the files from a ZIP package, write them to disk and

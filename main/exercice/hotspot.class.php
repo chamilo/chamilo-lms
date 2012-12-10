@@ -54,7 +54,7 @@ class HotSpot extends Question {
 
 	}
 
-	function processCreation ($form, $objExercise) {
+	function processCreation ($form, $objExercise = null) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 		if(!empty($file_info['tmp_name'])) {
@@ -102,7 +102,7 @@ class HotSpotDelineation extends HotSpot {
 		parent::createForm ($form, $fck_config);
 	}
 
-	function processCreation ($form, $objExercise) {
+	function processCreation ($form, $objExercise = null) {
 		$file_info = $form -> getSubmitValue('imageUpload');
 		parent::processCreation ($form, $objExercise);
 	}

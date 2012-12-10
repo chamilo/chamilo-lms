@@ -1559,6 +1559,34 @@ class SessionManager {
         return $return_array;
     }
 
+     /**
+     * The general coach (field: session.id_coach)
+     * @param int user id
+     */
+    public static function get_sessions_by_general_coach($user_id) {
+        $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
+        $user_id = intval($user_id);
+
+        // session where we are general coach
+        $sql = "SELECT DISTINCT *
+                FROM $session_table
+                WHERE id_coach = $user_id";
+
+        if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $sql = 'SELECT DISTINCT session.*
+                    FROM '.$session_table.' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                    ON (session.id = session_rel_url.session_id)
+                    WHERE id_coach = '.$user_id.' AND access_url_id = '.$access_url_id;
+            }
+        }
+        $sql .= ' ORDER by name';
+        $result = Database::query($sql);
+        return Database::store_result($result, 'ASSOC');
+    }
+
     public static function get_sessions_by_coach($user_id) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $session_table, array('where'=>array('id_coach = ?'=>$user_id)));

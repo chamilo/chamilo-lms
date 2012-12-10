@@ -2089,6 +2089,12 @@ function api_get_settings_params($params) {
     return $result;
 }
 
+function api_get_settings_params_simple($params) {
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $result = Database::select('*', $table, array('where' => $params), 'one');
+    return $result;
+}
+
 /**
  * Returns the value of a setting from the web-adjustable admin config settings.
  **/

@@ -1095,4 +1095,28 @@ class GroupPortalManager
         Database::query($sql);
     }
 
+    public static function get_groups_by_user_count($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
+        $table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
+		$user_id 				= intval($user_id);
+
+		if ($relation_type == 0) {
+			$where_relation_condition = '';
+		} else {
+			$relation_type 			= intval($relation_type);
+			$where_relation_condition = "AND gu.relation_type = $relation_type ";
+		}
+
+		$sql = "SELECT count(g.id) as count
+				FROM $tbl_group g
+				INNER JOIN $table_group_rel_user gu
+				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ";
+
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {
+			$row = Database::fetch_array($result, 'ASSOC');
+            return $row['count'];
+		}
+		return 0;
+    }
 }

@@ -21,28 +21,28 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = '
 <script>
 
-var hide_bar = function() {    
-    $("#template_col").hide(); 
-    $("#doc_form").removeClass("span9"); 
-    $("#doc_form").addClass("span11");   
+var hide_bar = function() {
+    $("#template_col").hide();
+    $("#doc_form").removeClass("span9");
+    $("#doc_form").addClass("span11");
     $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
 $(document).ready(function() {
     if ($(window).width() <= 785 ) {
-        hide_bar();      
+        hide_bar();
     }
     $("#hide_bar_template").toggle(
-        function() { 
+        function() {
           hide_bar();
         },
-        function() { 
-            $("#template_col").show(); 
-            $("#doc_form").removeClass("span11"); 
-            $("#doc_form").addClass("span9"); 
-            $(this).css("background-image", \'url("../img/hide0.png")\'); 
-        }            
-    );    
+        function() {
+            $("#template_col").show();
+            $("#doc_form").removeClass("span11");
+            $("#doc_form").addClass("span9");
+            $(this).css("background-image", \'url("../img/hide0.png")\');
+        }
+    );
 });
 
 function InnerDialogLoaded() {
@@ -75,7 +75,7 @@ function InnerDialogLoaded() {
 };
 
 	var temp=false;
-	var temp2=false;	
+	var temp2=false;
 	var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 	function FCKeditor_OnComplete( editorInstance ) {
@@ -147,7 +147,7 @@ function InnerDialogLoaded() {
 	function setFocus() {
 	   $("#document_title").focus();
     }
-    
+
 	$(window).load(function () {
         setFocus();
     });
@@ -174,13 +174,13 @@ if ($is_certificate_mode) {
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $course_id = api_get_course_int_id();
 
-$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);    
+$document_data = DocumentManager::get_document_data_by_id($_REQUEST['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
-        
+
         $dir                = $document_data['path'];
         $folder_id          = $document_data['id'];
     } else {
@@ -223,8 +223,8 @@ $doc_tree  = explode('/', $dir);
 $count_dir = count($doc_tree) -2; // "2" because at the begin and end there are 2 "/"
 
 if (api_is_in_group()) {
-    $group_properties = GroupManager::get_group_properties(api_get_group_id()); 
-        
+    $group_properties = GroupManager::get_group_properties(api_get_group_id());
+
     // Level correction for group documents.
     if (!empty($group_properties['directory'])) {
     	$count_dir = $count_dir > 0 ? $count_dir - 1 : 0;
@@ -262,7 +262,7 @@ if ($is_certificate_mode) {
 }
 
 $filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$dir;
-        
+
 if (!is_dir($filepath)) {
 	$filepath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/';
 	$dir = '/';
@@ -271,12 +271,13 @@ if (!is_dir($filepath)) {
 $to_group_id = 0;
 
 if (!$is_certificate_mode) {
+    $req_gid = null;
 	if (api_is_in_group()) {
 		$req_gid = '&amp;gidReq='.api_get_group_id();
 		$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".api_get_group_id(), "name" => get_lang('GroupSpace'));
 		$noPHP_SELF = true;
-		$to_group_id = api_get_group_id();		
-		$path = explode('/', $dir);				
+		$to_group_id = api_get_group_id();
+		$path = explode('/', $dir);
 		if ('/'.$path[1] != $group_properties['directory']) {
 			api_not_allowed(true);
 		}
@@ -296,6 +297,7 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 /*	Header */
 
 event_access_tool(TOOL_DOCUMENT);
+
 $display_dir = $dir;
 if (isset ($group_properties)) {
 	$display_dir = explode('/', $dir);
@@ -304,8 +306,10 @@ if (isset ($group_properties)) {
 	$display_dir = implode('/', $display_dir);
 }
 
+$select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
+
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.Security::remove_XSS($_GET['selectcat']), null, array('class' =>'form-vertical' ));
+$form = new FormValidator('create_document','post',api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.$select_cat, null, array('class' =>'form-vertical'));
 
 // form title
 $form->addElement('header', $nameTools);
@@ -313,7 +317,7 @@ $form->addElement('header', $nameTools);
 if ($is_certificate_mode) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
 	if (isset($_GET['selectcat']))
-		$form->addElement('hidden','selectcat', intval($_GET['selectcat']));
+		$form->addElement('hidden','selectcat', $select_cat);
 
 }
 // Hidden element with current directory
@@ -337,7 +341,7 @@ function document_exists($filename) {
 }
 
 // Add group to the form
-if ($is_certificate_mode) {	
+if ($is_certificate_mode) {
     $form->addElement('text', 'title', get_lang('CertificateName'), 'class="span4" id="document_title"');
 } else {
 	$form->addElement('text', 'title', get_lang('Title'), 'class="span4" id="document_title"');
@@ -357,25 +361,25 @@ $form->add_html_editor('content','', false, false, $html_editor_config);
 $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
 
 // If we are not in the certificates creation, display a folder chooser for the
-// new document created 
+// new document created
 
 if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $current_session_id)) {
 	$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit);
-	
+
 	$parent_select = $form->addElement('select', 'curdirpath', array(null, get_lang('DestinationDirectory')));
-	
+
 	// Following two conditions copied from document.inc.php::build_directory_selector()
 	$folder_titles = array();
-	
-    if (is_array($folders)) {		
-        $escaped_folders = array();			
+
+    if (is_array($folders)) {
+        $escaped_folders = array();
         foreach ($folders as $key => & $val) {
             //Hide some folders
-            if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){			
+            if ($val=='/HotPotatoes_files' || $val=='/certificates' || basename($val)=='css'){
                 continue;
             }
-            //Admin setting for Hide/Show the folders of all users		
-            if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){	
+            //Admin setting for Hide/Show the folders of all users
+            if (api_get_setting('show_users_folders') == 'false' && (strstr($val, '/shared_folder') || strstr($val, 'shared_folder_session_'))){
                 continue;
             }
             //Admin setting for Hide/Show Default folders to all users
@@ -385,7 +389,7 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
             //Admin setting for Hide/Show chat history folder
             if (api_get_setting('show_chat_folder') == 'false' && $val=='/chat_files'){
                 continue;
-            }				
+            }
 
             $escaped_folders[$key] = Database::escape_string($val);
         }
@@ -393,22 +397,22 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 
         $sql = "SELECT * FROM $doc_table WHERE c_id = $course_id AND filetype='folder' AND path IN ('".$folder_sql."')";
         $res = Database::query($sql);
-        $folder_titles = array();	
-        while ($obj = Database::fetch_object($res)) {				
+        $folder_titles = array();
+        while ($obj = Database::fetch_object($res)) {
             $folder_titles[$obj->path] = $obj->title;
         }
-    }	
-	
+    }
+
 	if (empty($group_dir)) {
 		$parent_select -> addOption(get_lang('HomeDirectory'), '/');
 		if (is_array($folders)) {
 			foreach ($folders as & $folder) {
 				//Hide some folders
-				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){			
+				if ($folder=='/HotPotatoes_files' || $folder=='/certificates' || basename($folder)=='css'){
 				 continue;
 				}
-				//Admin setting for Hide/Show the folders of all users		
-				if (api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){	
+				//Admin setting for Hide/Show the folders of all users
+				if (api_get_setting('show_users_folders') == 'false' && (strstr($folder, '/shared_folder') || strstr($folder, 'shared_folder_session_'))){
 					continue;
 				}
 				//Admin setting for Hide/Show Default folders to all users
@@ -418,8 +422,8 @@ if (!$is_certificate_mode && !is_my_shared_folder($_user['user_id'], $dir, $curr
 				//Admin setting for Hide/Show chat history folder
 				if (api_get_setting('show_chat_folder') == 'false' && $folder=='/chat_files'){
 					continue;
-				}			
-				
+				}
+
 				$selected = (substr($dir,0,-1) == $folder) ? ' selected="selected"' : '';
 				$path_parts = explode('/', $folder);
 				$folder_titles[$folder] = cut($folder_titles[$folder], 80);
@@ -463,29 +467,29 @@ $form->setDefaults($defaults);
 
 // If form validates -> save the new document
 if ($form->validate()) {
-	$values = $form->exportValues();    
+	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
-	
-	$values['title'] = trim($values['title']);	
-	
+
+	$values['title'] = trim($values['title']);
+
 	if (!empty($values['curdirpath'])) {
 		$dir = $values['curdirpath'];
 	}
-    
+
 	if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
-    
+
     //Setting the filename
-	$filename = $values['title'];    
+	$filename = $values['title'];
 	$filename = addslashes(trim($filename));
 	$filename = Security::remove_XSS($filename);
 	$filename = replace_dangerous_char($filename);
-	$filename = disable_dangerous_file($filename);	
-    
+	$filename = disable_dangerous_file($filename);
+
     //Setting the title
 	$title 		= $values['title'];
-    
+
     //Setting the extension
 	$extension = 'html';
 
@@ -493,10 +497,10 @@ if ($form->validate()) {
 
 	if (strpos($content, '/css/frames.css') === false) {
 		$content = str_replace('</head>', '<style> body{margin:10px;}</style><link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
-	}	
+	}
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
-		
+
 		// change the path of mp3 to absolute
 		// first regexp deals with ../../../ urls
 		// Disabled by Ivan Tcholakov.
@@ -572,7 +576,7 @@ if ($form->validate()) {
 	// Copied from document.php
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
-	
+
 	// Interbreadcrumb for the current directory root path
 	if (empty($document_data['parents'])) {
 		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
@@ -584,26 +588,26 @@ if ($form->validate()) {
 
 	Display :: display_header($nameTools, "Doc");
 	//api_display_tool_title($nameTools);
-	// actions	
+	// actions
 	echo '<div class="actions">';
-	
+
 	// link back to the documents overview
 	if ($is_certificate_mode)
 		echo '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat=' . Security::remove_XSS($_GET['selectcat']).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	else
 		echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon('back.png',get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 	echo '</div>';
-	
+
 	if ($is_certificate_mode) {
 		$all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(api_get_user_id(), api_get_course_id());
-	
+
 		$str_info = '';
 		foreach ($all_information_by_create_certificate[0] as $info_value) {
 			$str_info.=$info_value.'<br/>';
 		}
 		$create_certificate = get_lang('CreateCertificateWithTags');
 		Display::display_normal_message($create_certificate.': <br /><br/>'.$str_info,false);
-	}    
+	}
     // HTML-editor
     echo '<div class="row-fluid" style="overflow:hidden">
             <div id="template_col" class="span2" style="width:162px">

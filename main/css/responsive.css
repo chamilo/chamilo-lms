@@ -22,7 +22,7 @@ The more frequent ones have been marked with *
 @media (max-width: 320px) {
     header #header_center, header #header_right, header #header_left {
         display:none;
-    }    
+    }
     .navbar {
       margin-top: 0em;
     }
@@ -39,7 +39,7 @@ The more frequent ones have been marked with *
         margin-left: 10px;
         margin-right: 10px;
     }
-    
+
     /* No view as link*/
     #view_as_link {
         display:none;
@@ -48,7 +48,7 @@ The more frequent ones have been marked with *
     .navbar .brand {
          font-size: 14px;
     }
-    
+
     /* In order to avoid clicking in the main title instead of the expand button */
     .subnav .navbar-inner .in{
         margin-top: 45px;
@@ -86,14 +86,14 @@ The more frequent ones have been marked with *
     .section-mycampus .menu-column #login_block {
         width: 95%;
     }
-    .section-mycourses .menu-column #user_image_block, 
-    .section-mycourses .menu-column #profile_block, 
-    .section-mycourses .menu-column #skill_block, 
-    .section-mycourses .menu-column #search_block, 
-    .section-mycourses .menu-column #classes_block, 
-    .section-mycourses .menu-column #reservation_block, 
-    .section-mycourses .menu-column #skill_block, 
-    .section-mycampus .menu-column #help_block, 
+    .section-mycourses .menu-column #user_image_block,
+    .section-mycourses .menu-column #profile_block,
+    .section-mycourses .menu-column #skill_block,
+    .section-mycourses .menu-column #search_block,
+    .section-mycourses .menu-column #classes_block,
+    .section-mycourses .menu-column #reservation_block,
+    .section-mycourses .menu-column #skill_block,
+    .section-mycampus .menu-column #help_block,
     .section-mycourses .menu-column #notice_block {
         display: none;
     }
@@ -129,7 +129,7 @@ The more frequent ones have been marked with *
       margin-top: 0em;
     }
     .subnav .navbar-inner .in{
-        margin-top: 45px; 
+        margin-top: 45px;
     }
 
     /* No chat in mobiles */
@@ -241,14 +241,14 @@ The more frequent ones have been marked with *
     .section-mycampus .menu-column #login_block {
         width: 95%;
     }
-    .section-mycourses .menu-column #user_image_block, 
-    .section-mycourses .menu-column #profile_block, 
-    .section-mycourses .menu-column #skill_block, 
-    .section-mycourses .menu-column #search_block, 
-    .section-mycourses .menu-column #classes_block, 
-    .section-mycourses .menu-column #reservation_block, 
-    .section-mycourses .menu-column #skill_block, 
-    .section-mycampus .menu-column #help_block, 
+    .section-mycourses .menu-column #user_image_block,
+    .section-mycourses .menu-column #profile_block,
+    .section-mycourses .menu-column #skill_block,
+    .section-mycourses .menu-column #search_block,
+    .section-mycourses .menu-column #classes_block,
+    .section-mycourses .menu-column #reservation_block,
+    .section-mycourses .menu-column #skill_block,
+    .section-mycampus .menu-column #help_block,
     .section-mycourses .menu-column #notice_block {
         display: none;
     }
@@ -280,11 +280,11 @@ The more frequent ones have been marked with *
     /* No topbar */
     #topbar {
         display:none;
-    }    
-    
+    }
+
     /* only for the course tools */
-    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
-        float: left;     
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
+        float: left;
     }
     .course-tool {
         width: 210px;
@@ -292,30 +292,30 @@ The more frequent ones have been marked with *
     .course-tool h4 {
         font-size: 14px;
     }
-    
+
     .subnav .dropdown-toggle {
         display:none;
     }
-    
+
     header #header_center, header #header_right {
         display:none;
     }
-    
+
      #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
-    }    
-    
-    .subnav .nav > li > a, .navbar .dropdown-menu a {        
+    }
+
+    .subnav .nav > li > a, .navbar .dropdown-menu a {
         color: white;
     }
-    
+
     footer .container .row {
-        padding-top: 15px;        
+        padding-top: 15px;
     }
     .notification-panel {
         display:none;
     }
-    
+
     /* Remove any padding from the body */
     body {
         padding-top: 0;
@@ -326,19 +326,19 @@ The more frequent ones have been marked with *
     }
 
     /* Subnav */
-    .subnav {           
+    .subnav {
         border:1px solid #fff;
         position: static;
         top: auto;
         z-index: auto;
         width: 100%;
-        height: auto;    
+        height: auto;
         -webkit-box-shadow: none;
             -moz-box-shadow: none;
                 box-shadow: none;
     }
     .subnav .nav > li {
-        float: none;    
+        float: none;
     }
     .subnav .nav > li > a {
         border: 0;
@@ -352,27 +352,27 @@ The more frequent ones have been marked with *
             -moz-border-radius: 4px 4px 0 0;
                 border-radius: 4px 4px 0 0;
     }
-    
+
     .subnav .navbar-inner li a:hover {
         background-color: #666;
         color: #fff;
-    }    
-    
+    }
+
      /* .new_actions */
-    .new_actions {           
+    .new_actions {
         border:1px solid #fff;
         position: static;
         top: auto;
         z-index: auto;
         width: 100%;
-        height: auto;    
+        height: auto;
         -webkit-box-shadow: none;
             -moz-box-shadow: none;
                 box-shadow: none;
                 text-align: center;
     }
     .new_actions .nav > li {
-        float: none;    
+        float: none;
     }
     .new_actions .nav > li > a {
         border: 0;
@@ -387,8 +387,8 @@ The more frequent ones have been marked with *
                 border-radius: 4px 4px 0 0;
     }
 
-    #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {     
-        float: left;     
+    #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {
+        float: left;
     }
     /* Some fixes for w~720px */
     .section-mycampus #top_main_content .content-column {
@@ -413,24 +413,24 @@ The more frequent ones have been marked with *
     }
 
     /* Footer fixes */
-    
+
     footer {
         border-top: 1px solid #CCCCCC;
         background-color: #fff;
         background-image: none;
         color: #666;
     }
-    
+
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
         color : #999;
     }
-    
+
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
-    }    
-    
+    }
+
     footer .container .row {
-        padding-top: 15px;        
+        padding-top: 15px;
     }
 }
 
@@ -439,21 +439,21 @@ The more frequent ones have been marked with *
     #topbar {
         display:none;
     }
-    
+
     /* fixes tabs */
     .subnav .nav-tabs > li > a, .subnav .nav-pills > li > a {
         padding-left: 6px;
         padding-right: 6px;
     }
-    
+
     .subnav .dropdown-toggle {
         display:none;
-    }    
-    
-    .subnav .nav > li > a, .navbar .dropdown-menu a {      
-        color: #ccc;        
     }
-    
+
+    .subnav .nav > li > a, .navbar .dropdown-menu a {
+        color: #ccc;
+    }
+
    .subnav .nav > li > a:hover,
    .subnav .dropdown-menu a:hover {
     }
@@ -482,10 +482,10 @@ The more frequent ones have been marked with *
         padding-left: 6px;
         padding-right: 6px;
     }
-    
+
     /* only for the course tools */
-    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {     
-        float: left;     
+    #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
+        float: left;
     }
     .course-tool {
         width: 280px;
@@ -504,7 +504,7 @@ The more frequent ones have been marked with *
 /* LARGE DESKTOP SCREENS */
 @media (min-width: 1201px) {
     #top_main_content .span12 {
-      width: 98%;
+       /* width: 98%; */
     }
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {

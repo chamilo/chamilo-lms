@@ -445,22 +445,7 @@ class CourseBuilder {
 				$doc = Database::fetch_object($res);
 				$obj->sound = $doc->id;
 			}
-            $quiz = new Quiz(   $obj->id,
-                                $obj->title,
-                                $obj->description,
-                                $obj->random,
-                                $obj->type,
-                                $obj->active,
-                                $obj->sound,
-                                $obj->max_attempt,
-                                $obj->results_disabled,
-                                $obj->access_condition,
-                                $obj->start_time,
-                                $obj->end_time,
-                                $obj->feedback_type,
-                                $obj->random_answers,
-                                $obj->expired_time,
-                                $obj->session_id);
+            $quiz = new Quiz($obj);
 			$sql = 'SELECT * FROM '.$table_rel.' WHERE c_id = '.$course_id.' AND exercice_id = '.$obj->id;            
 			$db_result2 = Database::query($sql);
 			while ($obj2 = Database::fetch_object($db_result2)) {
@@ -534,7 +519,11 @@ class CourseBuilder {
         }
         
 		if ($build_orphan_questions) {
-			//$this->course->add_resource(new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0));
+            $obj = array(
+                'id' => -1,
+                'title' => get_lang('OrphanQuestions', '')
+            );
+            $this->course->add_resource(new Quiz((object)$obj));
 		}
 	}
     
@@ -549,14 +538,17 @@ class CourseBuilder {
 		
 		$course_id = api_get_course_int_id();		
 
-		$sql = 'SELECT * FROM '.$table_que.' as questions LEFT JOIN '.$table_rel.' as quizz_questions 
-				ON questions.id=quizz_questions.question_id LEFT JOIN '.$table_qui.' as exercices 
+        $sql = 'SELECT *
+                FROM '.$table_que.' as questions
+                LEFT JOIN '.$table_rel.' as quizz_questions
+                ON questions.id=quizz_questions.question_id
+                LEFT JOIN '.$table_qui.' as exercices
 				ON exercice_id=exercices.id 
 				WHERE 	questions.c_id = '.$course_id.'  AND 
 						quizz_questions.c_id = '.$course_id.' AND
 						exercices.c_id = '.$course_id.' AND
-						quizz_questions.exercice_id IS NULL OR 
-						exercices.active = -1';
+                        (quizz_questions.exercice_id IS NULL OR
+                        exercices.active = -1)';
 		$db_result = Database::query($sql);
 		if (Database::num_rows($db_result) > 0) {
 			$orphan_questions = new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0); // Tjis is the fictional test for collecting orphan questions.

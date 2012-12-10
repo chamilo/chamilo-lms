@@ -247,6 +247,7 @@ $ModifyHotPotatoes = "Spremeni hotpotatoes";
 $SaveHotpotatoes = "Shrani hotpotatoes";
 $ReturnToLPList = "Povratek na seznam";
 $LpPrerequisiteDescription = "Izbira druge učne poti za predzahtevo trenutne učne poti skrije vse obstoječe predzahteve dokler ta ne bo popolnoma (100%) izpolnjena";
+$ClickOnTheLearnerViewToSeeYourLearningPath = "Klikni na gumb [Uporabnik pogled] za ogled učne poti";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Testa ne morete urejati po vključitvi v učno pot";
 $EnableTimeLimits = "Omogoči omejevanje dostopnosti";
 $PublicationDate = "Datum objave";

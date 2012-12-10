@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ShowHotCoursesTitle = "Visa populära kurser";
 $AdminBy = "Admin för";
 $AdministrationTools = "Administratörsverktyg";
 $State = "Status";
@@ -190,7 +191,7 @@ $langtitulary = "Titulera";
 $langUpgradeBase = "Uppgradera databas";
 $langManage = "Hantera portal";
 $langErrorsFound = "Fel funna";
-$langMaintenance = "Underhåll";
+$langMaintenance = "Backup";
 $langUpgrade = "Uppgradera Chamilo";
 $langWebsite = "Chamilo webbsida";
 $langDocumentation = "Dokumentation";
@@ -322,9 +323,9 @@ $NoSearchResults = "Inga sökträffar";
 $UserDeleted = "Användaren är raderad";
 $NoClassesForThisCourse = "Det finns inga klasser som prenumererar på denna kurs";
 $CourseUsage = "Kursutnyttjande";
-$NoCoursesForThisUser = "Denna anv�ndare prenumererar inte p� n�gon kurs";
+$NoCoursesForThisUser = "Denna användare prenumererar inte på någon kurs";
 $NoClassesForThisUser = "Denna anv�ndare prenumererar inte p� n�gon klass";
-$NoCoursesForThisClass = "Denna klass prenumererar inte p� n�gon kurs";
+$NoCoursesForThisClass = "Denna klass prenumererar inte på någon kurs";
 $langOpenToTheWorld = "Öppen - access tillåten för hela världen";
 $OpenToThePlatform = "Öppen - access tillåten för registrerade användare";
 $langPrivate = "Privat access (endast tillgänglig för personer på användarlistan)";
@@ -794,4 +795,5 @@ $FieldHidden = "Fältet är nu osynligt för användaren";
 $CreateBackup = "Säkerhetskopiera";
 $MessagesSent = "Antalet skickade meddelanden";
 $MessagesReceived = "Antalet mottagna meddelanden";
+$YouHaveEnteredTheCourseXInY = "Du har anmält dig till kursen %s i %s";
 ?>

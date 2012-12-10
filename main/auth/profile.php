@@ -124,28 +124,6 @@ if ($user_data !== false) {
  */
 $form = new FormValidator('profile', 'post', api_get_self()."?".str_replace('&fe=1', '', $_SERVER['QUERY_STRING']), null, array('style' => 'width: 70%; float: '.($text_dir == 'rtl' ? 'right;' : 'left;')));
 
-/* Make sure this is the first submit on the form, even though it is hidden!
- * Otherwise, if a user has productions and presses ENTER to submit, he will
- * attempt to delete the first production in the list. */
-//if (is_profile_editable()) {
-//	$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"', array('style' => 'visibility:hidden;'));
-//}
-
-//	SUBMIT (visible)
-/*if (is_profile_editable()) {
-	$form->addElement('style_submit_button', 'apply_change', get_lang('SaveSettings'), 'class="save"');
-} else {
-	$form->freeze();
-}*/
-
-//THEME
-if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
-        $form->addElement('select_theme', 'theme', get_lang('Theme'));
-	if (api_get_setting('profile', 'theme') !== 'true')
-		$form->freeze('theme');
-	$form->applyFilter('theme', 'trim');
-}
-
 if (api_is_western_name_order()) {
 	//	FIRST NAME and LAST NAME
 	$form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
@@ -241,6 +219,14 @@ if (api_get_setting('profile', 'language') !== 'true') {
 	$form->freeze('language');
 }
 
+//THEME
+if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
+    $form->addElement('select_theme', 'theme', get_lang('Theme'));
+    if (api_get_setting('profile', 'theme') !== 'true') {
+        $form->freeze('theme');
+    }
+    $form->applyFilter('theme', 'trim');
+}
 //	EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
 	if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
@@ -442,10 +428,7 @@ if ($form->validate()) {
     if (is_platform_authentication() && api_get_setting('allow_users_to_change_email_with_no_password') == 'false') {
         $allow_users_to_change_email_with_no_password = false;
     }
-    
-    
-    $changeemail = '';
-    
+       
     //If user sending the email to be changed (input available and not frozen )
     if (api_get_setting('profile', 'email') == 'true') {        
 

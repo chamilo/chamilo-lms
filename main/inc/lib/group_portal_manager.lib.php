@@ -33,7 +33,8 @@ define('GROUP_TITLE_LENGTH',       50);
  * Class
  * @package chamilo.library
  */
-class GroupPortalManager {
+class GroupPortalManager
+{
     /**
      * Creates a new group
      *

@@ -30,11 +30,12 @@ if (empty($origin) ) {
     $origin = $_REQUEST['origin'];
 }
 
-if ($origin == 'learnpath')
+if ($origin == 'learnpath') {
     api_protect_course_script(false, false, true);
-else
+} else {
     api_protect_course_script(true, false, true);
 
+}
 
 // Database table definitions
 $TBL_EXERCICE_QUESTION 	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -62,14 +63,13 @@ if (empty($id)) {
 	api_not_allowed(true);
 }
 
-$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
-
-//if (api_is_coach(api_get_session_id(), api_get_course_id())) {    
+  
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {    
     if (!api_coach_can_edit_view_results(api_get_course_id(), api_get_session_id())) {
         api_not_allowed(true);
     }
 }
+$is_allowedToEdit    = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -172,8 +172,6 @@ $show_only_total_score  = false;
 
 // Avoiding the "Score 0/0" message  when the exe_id is not set
 if (!empty($track_exercise_info)) {
-	$exerciseTitle			= $track_exercise_info['title'];
-	$exerciseDescription	= $track_exercise_info['description'];
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 	
@@ -242,20 +240,31 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
           //GROUP BY questions.position, attempts.question_id";
 
 $result = Database::query($query);
-$questionList = array();
+$question_list_from_database = array();
 $exerciseResult = array();
 
 while ($row = Database::fetch_array($result)) {	
-	$questionList[] = $row['question_id'];
+	$question_list_from_database[] = $row['question_id'];
 	$exerciseResult[$row['question_id']] = $row['answer'];
 }
 
 //Fixing #2073 Fixing order of questions
-if (!empty($track_exercise_info['data_tracking']) && !empty($track_exercise_info['random']) ) {
-	$tempquestionList = explode(',',$track_exercise_info['data_tracking']);
-	if (is_array($tempquestionList) && count($tempquestionList) == count($questionList)) {	
+if (!empty($track_exercise_info['data_tracking'])) {
+	$temp_question_list = explode(',', $track_exercise_info['data_tracking']);
+
+    //Getting question list from data_tracking
+    if (!empty($temp_question_list)) {
+        $questionList = $temp_question_list;
+    }
+    //If for some reason data_tracking is empty we select the question list from db
+    if (empty($questionList)) {
+        $questionList = $question_list_from_database;
+    }
+	/*if (is_array($temp_question_list) && count($temp_question_list) == count($question_list_from_database)) {
 		$questionList = $tempquestionList;			
-	}		
+	}*/
+} else {
+    $questionList = $question_list_from_database;
 }
 
 // Display the text when finished message if we are on a LP #4227
@@ -720,7 +729,7 @@ if ($origin != 'learnpath') {
 		echo '<script type="text/javascript">'.$href.'</script>';		
 		
 		//Record the results in the learning path, using the SCORM interface (API)		
-		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting'); </script>";
+		echo "<script>window.parent.API.void_save_asset('$totalScore', '$totalWeighting', 0, 'completed'); </script>";
 		echo '</body></html>';
 	} else {
 		Display::display_normal_message(get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'));

@@ -41,8 +41,8 @@ class bbb {
             }
 
             // Setting BBB api
-            define(CONFIG_SECURITY_SALT, $this->salt);
-            define(CONFIG_SERVER_BASE_URL, $this->url);
+            define('CONFIG_SECURITY_SALT', $this->salt);
+            define('CONFIG_SERVER_BASE_URL', $this->url);
 
             $this->api = new BigBlueButtonBN();
             $this->plugin_enabled = true;

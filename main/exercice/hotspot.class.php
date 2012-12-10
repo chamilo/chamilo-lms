@@ -62,7 +62,6 @@ class HotSpot extends Question {
 			global $picturePath;
 			//fixed width ang height 
 			if (file_exists($picturePath.'/'.$this->picture)) { 
-				//list($width,$height) = @getimagesize($file_info['tmp_name']); does not work	
 				list($width,$height) = @getimagesize($picturePath.'/'.$this->picture);
 				if($width>$height) {
 					$this->resizePicture('width',545);

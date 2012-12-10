@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-// YW: 20110209: Script depredated? 
+// YW: 20110209: Script depredated?
 /**
  * 	This script allows to manage answers. It is included from the script admin.php
  * 	@package chamilo.exercise
@@ -541,7 +541,7 @@ if ($modifyAnswers) {
             $weighting = array();
 
 
-            // initializing + Modification de la ligne suivante 
+            // initializing + Modification de la ligne suivante
             if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 $correct = array();
             } else {

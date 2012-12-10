@@ -28,7 +28,7 @@ $current_course_tool  = TOOL_CALENDAR_EVENT;
 
 $this_section = SECTION_MYAGENDA;
 
-$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui-i18n'));
+$htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'));
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
@@ -133,8 +133,8 @@ $export_icon_high = '../img/export_high_fade.png';
 
 $tpl->assign('export_ical_confidential_icon', 	Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
 
+$actions = null;
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true) OR $is_group_tutor) {
-    $actions = null;
     if ($type == 'course') {
         $actions = display_courseadmin_links();
     }

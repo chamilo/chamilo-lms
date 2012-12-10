@@ -140,12 +140,6 @@ $audioPath = $documentPath . '/audio';
 $aType = array(get_lang('UniqueSelect'), get_lang('MultipleSelect'), get_lang('FillBlanks'), get_lang('Matching'), get_lang('FreeAnswer'));
 
 // tables used in the exercise tool
-//@todo remove if this declarations are not used
-$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-$TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
-$TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
 if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';
@@ -154,8 +148,7 @@ if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $temp_dir_short = uniqid();
     $temp_zip_dir = $archive_path . "/" . $temp_dir_short;
-    if (!is_dir($temp_zip_dir))
-        mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
+	if(!is_dir($temp_zip_dir)) mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
     $temp_zip_file = $temp_zip_dir . "/" . api_get_unique_id() . ".zip";
     $temp_xml_file = $temp_zip_dir . "/qti2export_" . $qid . '.xml';
     file_put_contents($temp_xml_file, $export);

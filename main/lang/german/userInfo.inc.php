@@ -91,6 +91,7 @@ $ClearSearchResults = "Suchergebnis löschen";
 $SendInvitation = "Einladung versenden";
 $SocialInvitationToFriends = "In die Freunde-Gruppe einladen";
 $MyCertificates = "Meine Zertifikate";
+$UnsubscribeFromPlatformSuccess = "Der Benutzeraccount %s wurde vollständig von dieser Plattform entfernt.";
 $ToChangeYourEmailMustTypeYourPassword = "Um Ihre Email-Adresse zu ändern, müssen Sie Ihr Passwort eingeben.";
 $Invitations = "Einladungen";
 $MyGroups = "Meine Gruppen";
@@ -198,4 +199,7 @@ $MySocialGroups = "Meine sozialen Gruppen";
 $SocialGroups = "Soziale Gruppen";
 $CreateASocialGroup = "Eine soziale Gruppe anlegen";
 $EditMembersList = "Mitgliederliste bearbeiten";
+$IAmAHRM = "Ich bin ein HR-Manager";
+$UnsubscribeFromPlatform = "Um alle benutzerbezogenen Daten von dieser Plattform zu löschen, bitte auf den unten angezeigten Button klicken und bestätigen.";
+$UnsubscribeFromPlatformConfirm = "Ja, bitte Zugang löschen. Ich bin mir bewußt, daß alle Daten auf dem Server gelöscht werden. Für einen erneuten Login ist eine Registrierung erforderlich.";
 ?>

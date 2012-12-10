@@ -2913,6 +2913,7 @@ class CourseManager {
         if (!empty($special_course_list)) {
             $with_special_courses = ' course.code IN ("'.implode('","',$special_course_list).'")';
         }
+        $html = null;
 
         if (!empty($with_special_courses)) {
             $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
@@ -2924,8 +2925,6 @@ class CourseManager {
             $rs_special_course = Database::query($sql);
             $number_of_courses = Database::num_rows($rs_special_course);
             $key = 0;
-
-            $html = '';
 
             if ($number_of_courses > 0) {
                 while ($course = Database::fetch_array($rs_special_course)) {
@@ -3015,6 +3014,7 @@ class CourseManager {
         $tucc = Database::get_user_personal_table(TABLE_USER_COURSE_CATEGORY);
         $sql = "SELECT id, title FROM $tucc WHERE user_id='".$user_id."' ORDER BY sort ASC";
         $result = Database::query($sql);
+        $html = null;
         while ($row = Database::fetch_array($result)) {
             $params = array();
             // We simply display the title of the category.

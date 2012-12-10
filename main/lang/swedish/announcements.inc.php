@@ -50,4 +50,6 @@ $NoAnnouncements = "Det finns inga tillkännagivanden";
 $SelectEverybody = "Välj alla";
 $SelectedUsersGroups = "valda användargrupper";
 $LearnerMessage = "Meddelande från en användare";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Hej,
+Ditt konto är nu aktiverat. Vänligen logga in för att förtsätta.";
 ?>

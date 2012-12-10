@@ -38,8 +38,8 @@ if (empty($group_id)) {
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     $group_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
-    
-    if (api_is_platform_admin() || in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {        
+
+    if (api_is_platform_admin() || in_array($group_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
         GroupPortalManager::delete_topic($group_id, $topic_id);
         header("Location: groups.php?id=$group_id&action=show_message&msg=topic_deleted");
     }
@@ -47,7 +47,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
-	
+
 	if (isset($_POST['action'])) {
 		$title        = isset($_POST['title']) ? $_POST['title'] : null;
 		$content      = $_POST['content'];
@@ -58,7 +58,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 			$title = cut($content, 50);
 		}
 		if ($_POST['action'] == 'edit_message_group') {
-			$edit_message_id =  intval($_POST['message_id']);			
+			$edit_message_id =  intval($_POST['message_id']);
 			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
 		} else {
 			if ($_POST['action'] == 'add_message_group' && !$is_member) {
@@ -79,7 +79,7 @@ if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 	}
 }
 
-$htmlHeadXtra[] = '<script type="text/javascript"> 
+$htmlHeadXtra[] = '<script type="text/javascript">
 
 var counter_image = 1;
 function remove_image_form(id_elem1) {
@@ -117,16 +117,16 @@ function add_image_form() {
 		}
 	}
 }
-        
-function show_icon_edit(element_html) { 
+
+function show_icon_edit(element_html) {
     ident="#edit_image";
     $(ident).show();
-}       
+}
 
 function hide_icon_edit(element_html)  {
     ident="#edit_image";
     $(ident).hide();
-}  
+}
 
 function validate_text_empty(str,msg) {
 	var str = str.replace(/^\s*|\s*$/g,"");
@@ -143,31 +143,31 @@ $(document).ready(function() {
 			scrollTop: $("#msg_'.$message_id.'").offset().top
 		})
 	}
-	   
+
 	$(\'.group_message_popup\').live(\'click\', function() {
 		var url     = this.href;
 	    var dialog  = $("#dialog");
 	    if ($("#dialog").length == 0) {
 	    	dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
 		}
-	            
+
 	    // load remote content
 	    dialog.load(
-	    	url,                    
+	    	url,
 	        {},
 	        	function(responseText, textStatus, XMLHttpRequest) {
 	                        dialog.dialog({
-	                            modal	: true, 
-	            				width	: 520, 
-	            				height	: 400,	            				
-	                        });	                    
+	                            modal	: true,
+	            				width	: 520,
+	            				height	: 400,
+	                        });
 				});
 	            //prevent the browser to follow the link
 	            return false;
 	        });
         });
-        
-        
+
+
 </script>';
 
 $this_section = SECTION_SOCIAL;
@@ -181,7 +181,7 @@ $social_right_content = '<div class="breadcrumb">
                            <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>
                          </div> ';
 $social_left_content .= SocialManager::show_social_menu('member_list', $group_id);
-         
+
 if (!empty($show_message)) {
     $social_right_content .= Display::return_message($show_message, 'confirmation');
 }
@@ -195,9 +195,8 @@ $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$content = $tpl->fetch($social_layout);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$tpl->display($social_layout);

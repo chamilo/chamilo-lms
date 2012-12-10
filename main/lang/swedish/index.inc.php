@@ -16,7 +16,7 @@ $langSupportForum = "Supportforum";
 $langCategories = "kategorier";
 $langBackToHomePage = "Tillbaka till hemsidan";
 $lang_No_course_publicly_available = "Inga publika kurser tillgängliga.";
-$langLostPassword = "Förlorat lösenordet";
+$langLostPassword = "Glömt inloggningsuppgifter?";
 $lang_edit_my_course_list = "Redigera min kurslista";
 $langAgenda = "Agenda";
 $langValvas = "Senaste tillkännagivanden";
@@ -67,5 +67,6 @@ $LinkAdded = "Länk tillagd";
 $AnnouncementAdded = "Tillkännagivande har lagts till";
 $AgendaAdded = "Kalenderpost skapad";
 $Messages = "Meddelande";
-$PendingInvitations = "Inbjudan avvaktar svar";
+$PendingInvitations = "Obesvarade inbjudningar";
+$Profile = "Profil";
 ?>

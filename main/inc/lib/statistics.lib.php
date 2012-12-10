@@ -30,7 +30,7 @@ class Statistics {
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
             if (isset ($category_code)) {
                 $sql .= " AND category_code = '".Database::escape_string($category_code)."'";
@@ -57,7 +57,7 @@ class Statistics {
         $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $access_url_rel_course_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $current_url_id = api_get_current_access_url_id();
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number FROM ".$course_table." as c, ".$access_url_rel_course_table." as u WHERE u.course_code=c.code AND access_url_id='".$current_url_id."'";
             if (isset ($vis)) {
                 $sql .= " AND visibility = ".intval($vis);
@@ -83,7 +83,6 @@ class Statistics {
      */
     static function count_users($status = null, $category_code = null, $count_invisible_courses = true, $only_active = false) {
 
-        global $_configuration;
         // Database table definitions
         $course_user_table     = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table         = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -93,7 +92,7 @@ class Statistics {
         $active_filter = $only_active?' AND active=1':'';
         $status_filter = isset($status)?' AND status = '.intval($status):'';
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(DISTINCT(u.user_id)) AS number FROM $user_table as u, $access_url_rel_user_table as url WHERE u.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
             if (isset ($category_code)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url WHERE c.code = cu.course_code AND c.category_code = '".Database::escape_string($category_code)."' AND cu.user_id=url.user_id AND access_url_id='".$current_url_id."' $status_filter $active_filter";
@@ -200,16 +199,10 @@ class Statistics {
                     }
                 }
             }
-        	/*if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
+        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {        	
             	$row['default_date'] = api_get_local_time($row['default_date']);
         	} else {
         		$row['default_date'] = '-';
-        	}*/
-            
-            if (!empty($row[4]) && $row[4] != '0000-00-00 00:00:00') {        	
-            	$row[4] = api_get_local_time($row[4]);
-        	} else {
-        		$row[4] = '-';
         	}
             
             $activities[] = $row;

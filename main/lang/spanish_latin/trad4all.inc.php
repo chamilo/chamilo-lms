@@ -395,4 +395,5 @@ $HumanAndTechnicalResourcesInformation = "Breve descripción de las personas de 
 $Assessment = "Asignaciones";
 $AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuáles son las estrategias para que éstos acaben dominando la materia ?";
 $AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
+$LowerCaseUser = "usuario";
 ?>

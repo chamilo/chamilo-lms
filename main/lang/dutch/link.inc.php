@@ -43,4 +43,15 @@ $langAll_Link_Deleted = "Link is verwijderd.";
 $langOnHomepage = "Toon link op cursushoofdpagina";
 $langShowLinkOnHomepage = "Toon deze link als een icoon op de cursushoofdpagina";
 $General = "algemeen";
+$SearchFeatureDoIndexLink = "Index link titel en beschrijving";
+$langSaveLink = "Koppeling bewaren";
+$langSaveCategory = "Map bewaren";
+$BackToLinksOverview = "Terug naar overzicht koppelingen";
+$AddTargetOfLinkOnHomepage = "Selecteer het \"doel\" waarin de link van de homepage wordt getoond";
+$Url = "URL";
+$LinkOpenSelf = "Open _self";
+$LinkOpenBlank = "Open _blank";
+$LinkOpenParent = "Open _parent";
+$LinkOpenTop = "Open _top";
+$LinkTarget = "Doel van de koppeling";
 ?>

@@ -165,13 +165,13 @@ switch ($action) {
         if (api_is_allowed_to_session_edit()) {
         	            
             //"all" or "simple" strings means that there's one or all questions exercise type          
-            $type                   = $_REQUEST['type'];         
+            $type                   = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
             
             //Questions choices
-            $choice                 = $_REQUEST['choice'];
+            $choice                 = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
             
             //Hotspot coordinates from all questions 
-            $hot_spot_coordinates   = $_REQUEST['hotspot'];
+            $hot_spot_coordinates   = isset($_REQUEST['hotspot']) ? $_REQUEST['hotspot'] : null;
             
             //There is a reminder?
             $remind_list            = isset($_REQUEST['remind_list']) && !empty($_REQUEST['remind_list'])? array_keys($_REQUEST['remind_list']) : null;
@@ -190,7 +190,7 @@ switch ($action) {
             if ($debug) error_log("remind_list = ".print_r($remind_list));
             
             //Exercise information            
-            $objExercise             = $_SESSION['objExercise'];
+            $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
             
             //Question info
             $question_id             = intval($_REQUEST['question_id']);            
@@ -292,7 +292,10 @@ switch ($action) {
                 }      
             	
             	//this variable commes from exercise_submit_modal.php
+                $hotspot_delineation_result = null;
+                if (isset($_SESSION['hotspot_delineation_result']) && isset($_SESSION['hotspot_delineation_result'][$objExercise->selectId()])) {
             	$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];                
+                }
                 
                 if ($type == 'simple') {
                     //Getting old attempt in order to decrees the total score 
@@ -309,7 +312,9 @@ switch ($action) {
                     if ($objQuestionTmp->type  == HOT_SPOT) {            	        
             	        delete_attempt_hotspot($exe_id, api_get_user_id() , api_get_course_id(), $my_question_id);
                     }
+                    if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
             	    $total_score  -= $attempt_list[$my_question_id]['marks'];            	    
+            	}
             	}
                 
             	

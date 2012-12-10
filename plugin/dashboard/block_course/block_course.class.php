@@ -20,15 +20,15 @@ class BlockCourse extends Block {
 
 	private $user_id;
 	private $courses;
-	private $path;	
+	private $path;
 	private $permission = array(DRH);
 
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {    	
+    public function __construct ($user_id) {
     	$this->user_id 		= $user_id;
-    	$this->path 		= 'block_course';				
+    	$this->path 		= 'block_course';
 		if ($this->is_block_visible_for_user($user_id)) {
 			/*if (api_is_platform_admin()) {
 				$this->courses = CourseManager::get_real_course_list();
@@ -37,22 +37,22 @@ class BlockCourse extends Block {
 			//}
 		}
     }
-    
+
 	/**
 	 * This method check if a user is allowed to see the block inside dashboard interface
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
-	 */    
-    public function is_block_visible_for_user($user_id) {	
+	 */
+    public function is_block_visible_for_user($user_id) {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
     	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
     		$is_block_visible_for_user = true;
-    	}    	
-    	return $is_block_visible_for_user;    	
+    	}
+    	return $is_block_visible_for_user;
     }
-    
+
 
     /**
      * This method return content html containing information about courses and its position for showing it inside dashboard interface
@@ -93,13 +93,14 @@ class BlockCourse extends Block {
 
  		$course_data = $this->get_course_information_data();
  		$content = '<div style="margin:10px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourCourseList').'</font></h3>'; 		
+ 		$content .= '<h3><font color="#000">'.get_lang('YourCourseList').'</font></h3>';
+        $data_table = null;
  		if (!empty($course_data)) {
-	    	$data_table = '<table class="data_table" width:"95%">';
+	    	$data_table .= '<table class="data_table" width:"95%">';
 	    	$data_table .= '<tr>
 	    						<th>'.get_lang('CourseTitle').'</th>
 	    						<th width="20%">'.get_lang('NbStudents').'</th>
-	    						<th width="20%">'.get_lang('AvgTimeSpentInTheCourse').'</th>	    						
+	    						<th width="20%">'.get_lang('AvgTimeSpentInTheCourse').'</th>
 	    						<th width="20%">'.get_lang('ThematicAdvance').'</th>
 	    					</tr>';
 	    	$i = 1;
@@ -122,7 +123,7 @@ class BlockCourse extends Block {
 	    	$data_table .= '</table>';
 		} else {
 			$data_table .= get_lang('ThereIsNoInformationAboutYourCourses');
-		}		
+		}
 		$content .= $data_table;
 		if (!empty($course_data)) {
 			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
@@ -151,9 +152,9 @@ class BlockCourse extends Block {
 		$a_course_students  = array();
 		$course_data = array();
 		$courses = $this->courses;
-		
+
 		$thematic = new Thematic();
-		
+
 		foreach ($courses as $row_course) {
 
 			$course_code = $row_course['code'];
@@ -173,8 +174,8 @@ class BlockCourse extends Block {
 				$avg_time_spent_in_course = null;
 			}
 
-			$tematic_advance_progress = 0;			
-			
+			$tematic_advance_progress = 0;
+
 			$tematic_advance = $thematic->get_total_average_of_thematic_advances($course_code, 0);
 
 			if (!empty($tematic_advance)) {
@@ -186,7 +187,7 @@ class BlockCourse extends Block {
 			$table_row = array();
 			$table_row[] = $row_course['title'];
 			$table_row[] = $nb_students_in_course;
-			$table_row[] = $avg_time_spent_in_course;			
+			$table_row[] = $avg_time_spent_in_course;
 			$table_row[] = $tematic_advance_progress;
 			$course_data[] = $table_row;
 		}

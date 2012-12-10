@@ -29,7 +29,7 @@ class Course
 		$this->backup_path  = '';
 		$this->encoding     = api_get_system_encoding();
 	}
-    
+
 	/**
 	 * Check if a resource links to the given resource
 	 */
@@ -40,7 +40,7 @@ class Course
 					if( $resource->links_to($resource_to_check) ) {
 						return true;
 					}
-					if( $type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
+					if ($type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
 						if($resource->has_item($resource_to_check)) {
 							return true;
 						}
@@ -50,14 +50,14 @@ class Course
 		}
 		return false;
 	}
-    
+
 	/**
 	 * Add a resource from a given type to this course
 	 */
 	function add_resource(& $resource) {
 		$this->resources[$resource->get_type()][$resource->get_id()] = $resource;
 	}
-    
+
 	/**
 	 * Does this course has resources?
 	 * @param const $resource_type Check if this course has resources of the
@@ -92,7 +92,7 @@ class Course
 				foreach ($resources as $id => & $resource) {
 					$title = '';
 					$description = '';
-                    
+
 					switch ($type) {
 						case RESOURCE_ANNOUNCEMENT:
 							$title = $resource->title;
@@ -168,7 +168,7 @@ class Course
 							$title 			= $resource->title;
 							$description 	= $resource->content;
 							break;
-						case RESOURCE_ATTENDANCE:							
+						case RESOURCE_ATTENDANCE:
 							$title 			= $resource->params['name'];
 							$description 	= $resource->params['description'];
 							break;
@@ -320,18 +320,18 @@ class Course
 		}
 		$this->encoding = api_get_system_encoding();
 	}
-    
-    /**	
-	* Serialize the course with the best serializer available	
-	*/	
-	public static function serialize($course) {	
-		if (extension_loaded('igbinary')) {	
-			return igbinary_serialize($course);	
-		} else {	
+
+    /**
+	* Serialize the course with the best serializer available
+	*/
+	public static function serialize($course) {
+		if (extension_loaded('igbinary')) {
+			return igbinary_serialize($course);
+		} else {
 			return serialize($course);
-        }	
-	}	
-	
+        }
+	}
+
 	/**
 	* Unserialize the course with the best serializer available
 	*/

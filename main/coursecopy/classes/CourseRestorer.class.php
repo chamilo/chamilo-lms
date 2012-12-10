@@ -854,7 +854,7 @@ class CourseRestorer
 			$link_table = Database :: get_course_table(TABLE_LINK);
 			$resources = $this->course->resources;
 			foreach ($resources[RESOURCE_LINK] as $id => $link) {
-				$cat_id = $this->restore_link_category($link->category_id,$session_id);
+				$cat_id = $this->restore_link_category($link->category_id, $session_id);
 				$sql = "SELECT MAX(display_order) FROM  $link_table WHERE c_id = ".$this->destination_course_id."  AND category_id='" . self::DBUTF8escapestring($cat_id). "'";
 				$result = Database::query($sql);
     			list($max_order) = Database::fetch_array($result);
@@ -1091,30 +1091,27 @@ class CourseRestorer
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
 			$table_doc = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
+
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
+                if (isset($quiz->obj)) {
+                    //For new imports
+                    $quiz = $quiz->obj;
+                } else {
+                    //For backward compatibility
+                    $quiz = $quiz->obj;
+                }
+                
 				$doc = '';
-				if (strlen($quiz->media) > 0) {
-					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->media]->is_restored()) {
-						$sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->media]->destination_id;
+				if (strlen($quiz->sound) > 0) {
+					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
+						echo $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
 						$doc = Database::query($sql);
 						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
 					}
 				}
 				if ($id != -1) {
-                    if ($respect_base_content) {
-                        $my_session_id = $quiz->session_id;
-                        if (!empty($quiz->session_id)) {
-                            $my_session_id = $session_id;
-                        }
-                        $condition_session = " , session_id = '$my_session_id' ";
-                    } else {
-    					$condition_session = "";
-        				if (!empty($session_id)) {
-        					$session_id = intval($session_id);
-        					$condition_session = " , session_id = '$session_id' ";
-    				    }
-                    }
+
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
@@ -1125,33 +1122,49 @@ class CourseRestorer
 						$quiz->end_time   = null;
 					}
 
+                    $params = array(
+                        'c_id' => $this->destination_course_id,
+                        'title' => self::DBUTF8escapestring($quiz->title),
+                        'description' => self::DBUTF8escapestring($quiz->description),
+                        'type' => $quiz->type,
+                        'random' => $quiz->random,
+                        'active' => $quiz->active,
+                        'sound' => self::DBUTF8escapestring($doc),
+                        'max_attempt' => (int)$quiz->max_attempt,
+                        'results_disabled' => (int)$quiz->results_disabled,
+                        'access_condition' => $quiz->access_condition,
+                        'start_time' => $quiz->start_time,
+                        'pass_percentage' => $quiz->pass_percentage,
+                        'end_time' => $quiz->end_time,
+                        'feedback_type' => (int)$quiz->feedback_type,
+                        'random_answers' => (int)$quiz->random_answers,
+                        'random_by_category' => $quiz->random_by_category,
+                        'review_answers' => $quiz->review_answers,
+                        'propagate_neg' => $quiz->propagate_neg,
+                        'text_when_finished' => $quiz->text_when_finished,
+                        'expired_time' => (int)$quiz->expired_time,
+                    );
 
-					// Normal tests are stored in the database.
-					$sql = "INSERT INTO ".$table_qui." SET
-						c_id = ".$this->destination_course_id." ,
-						title = '".self::DBUTF8escapestring($quiz->title).
-						"', description = '".self::DBUTF8escapestring($quiz->description).
-						"', type = '".$quiz->quiz_type.
-						"', random = '".$quiz->random.
-						"', active = '".$quiz->active.
-						"', sound = '".self::DBUTF8escapestring($doc).
-						"', max_attempt = ".(int)$quiz->attempts.
-						",  results_disabled = ".(int)$quiz->results_disabled.
-						",  access_condition = '".$quiz->access_condition.
-						"', start_time = '".$quiz->start_time.
-						"', end_time = '".$quiz->end_time.
-						"', feedback_type = ".(int)$quiz->feedback_type.
-						", random_answers = ".(int)$quiz->random_answers.
-						", expired_time = ".(int)$quiz->expired_time.
-						$condition_session;
-					Database::query($sql);
-					$new_id = Database::insert_id();
+                    if ($respect_base_content) {
+                        $my_session_id = $quiz->session_id;
+                        if (!empty($quiz->session_id)) {
+                            $my_session_id = $session_id;
+                        }
+                        $params['session_id'] = $my_session_id;
+                    } else {
+        				if (!empty($session_id)) {
+        					$session_id = intval($session_id);
+                            $params['session_id'] = $session_id;
+    				    }
+                    }
+
+                    $new_id = Database::insert($table_qui, $params);
 				} else {
 					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
 					$new_id = -1;
 				}
 
-				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
+				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
 				$order = 0;
 
 				foreach ($quiz->question_ids as $index => $question_id) {
@@ -1166,6 +1179,7 @@ class CourseRestorer
 
 	/**
 	 * Restore quiz-questions
+     * @params int question id
 	 */
 	function restore_quiz_question($id) {
 		$resources = $this->course->resources;
@@ -1184,6 +1198,8 @@ class CourseRestorer
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
 
+
+
 			$sql = "INSERT INTO ".$table_que." SET
                     c_id = ".$this->destination_course_id." ,
                     question = '".self::DBUTF8escapestring($question->question)."',
@@ -1198,15 +1214,37 @@ class CourseRestorer
 			Database::query($sql);
 			$new_id = Database::insert_id();
 
-			if ($question->quiz_type == MATCHING) {
-                $t = array();
-                foreach ($question->answers as $index => $answer) {
-                    $t[$answer['position']] = $answer;
+            if ($new_id) {
+                if (!empty($question->picture)) {
+                    $question_temp = Question::read($new_id, $this->destination_course_info['real_id']);
+
+                    $documentPath = api_get_path(SYS_COURSE_PATH).$this->destination_course_info['path'].'/document';
+                    // picture path
+                    $picturePath = $documentPath.'/images';
+
+                    $old_picture = api_get_path(SYS_COURSE_PATH).$this->course->info['path'].'/document/images/'.$question->picture;
+                    if (file_exists($old_picture)) {
+                        $picture_name = 'quiz-'.$new_id.'.jpg';
+
+                        $result = $question_temp->uploadPicture($old_picture, $picture_name, $picturePath);
+                        if ($result) {
+                            $sql = "UPDATE $table_que SET picture = '$picture_name' WHERE c_id = ".$this->destination_course_id." AND id = $new_id ";
+                            Database::query($sql);
+                        }
+                    }
                 }
-                foreach ($t as $index => $answer) {
+            }
+
+			if ($question->quiz_type == MATCHING) {
+                $temp = array();
+                foreach ($question->answers as $index => $answer) {
+                    $temp[$answer['position']] = $answer;
+                }
+                foreach ($temp as $index => $answer) {
                     $sql = "INSERT INTO ".$table_ans." SET
                             c_id = ".$this->destination_course_id." ,
-                            id = '".$index."', question_id = '".$new_id."',
+                            id = '".$index."',
+                            question_id = '".$new_id."',
                             answer = '".self::DBUTF8escapestring($answer['answer'])."',
                             correct = '".$answer['correct']."',
                             comment = '".self::DBUTF8escapestring($answer['comment'])."',
@@ -1217,6 +1255,7 @@ class CourseRestorer
 					Database::query($sql);
 				}
 			} else {
+
 				foreach ($question->answers as $index => $answer) {
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
@@ -1238,7 +1277,7 @@ class CourseRestorer
 				}
 			}
 
-            //@todo check this
+            //Current course id
             $course_id = api_get_course_int_id();
 
             //Moving quiz_question_options
@@ -1257,7 +1296,7 @@ class CourseRestorer
                 foreach ($new_answers as $answer_item) {
                     $params = array();
                     $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? '=> array($answer_item['id'], $this->destination_course_id)));
+                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? AND question_id = ? '=> array($answer_item['id'], $this->destination_course_id, $new_id)), false);
                 }
             }
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;
@@ -1705,11 +1744,6 @@ class CourseRestorer
 		$item_property_table  	= Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
 		//query in student publication
-
-	/*	$query_sql_fin_sp='INSERT IGNORE INTO '.$my_tbl_db_destination.' (c_id, id,url,title,description,author,active,accepted,post_group_id,sent_date,' .
-		'filetype,has_properties,view_properties,qualification,date_of_qualification,' .
-		'parent_id,qualificator_id,session_id) ';
-*/
 		$sql = 'SELECT c_id, id, url, title,description,author,active,accepted,post_group_id, sent_date,filetype,has_properties,view_properties,qualification,date_of_qualification,qualificator_id,session_id
 		      FROM '.$work_table.'
 		      WHERE c_id = '.$this->course_origin_id.' AND filetype="folder" AND active IN (0, 1) ';

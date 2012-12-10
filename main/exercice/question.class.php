@@ -471,8 +471,10 @@ abstract class Question
 	 * @param - string $PictureName - Name of the picture
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture,$PictureName) {
+	function uploadPicture($Picture, $PictureName, $picturePath = null) {
+        if (empty($picturePath)) {
 		global $picturePath;
+        }
 
 		if (!file_exists($picturePath)) {
 			if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
@@ -943,7 +945,7 @@ abstract class Question
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
-		global $TBL_EXERCICE_QUESTION;
+	        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 		$id = $this->id;
 
@@ -1366,7 +1368,7 @@ abstract class Question
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
 			echo '<div class="icon_image_content">';
-			if ($objExercise->edit_exercise_in_lp == false) {
+			if ($objExercise->exercise_was_added_in_lp == true) {
 				$img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
 				echo Display::return_icon($img,$explanation);
@@ -1452,14 +1454,19 @@ abstract class Question
             }
         }
         $question_title = $this->question;
-        
-        $question_title = $this->question;
-	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.get_lang("Question").' '.($counter_label).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+
+        // display question category, if any
+        $header = Testcategory::returnCategoryAndTitle($this->id);
+
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-        $header .= Display::page_subheader3($question_title);
-	    $header .= Display::div($this->description, array('id'=>'question_description'));	    
+        $header .= Display::page_subheader2($counter_label.". ".$question_title);
+        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
+	    $header .= Display::div($this->description, array('id'=>'question_description'));
+        
+
         return $header;
 	}
     

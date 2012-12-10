@@ -34,4 +34,5 @@ $PageUnlockedExtra = "Sidan är oskyddad. Alla kurs- eller gruppmedlemmar kan re
 $AddOptionProtected = "Möjligheten att lägga till sidor är endast för lärare i den här wikin. Men kurs- och gruppmedlemmar kan redigera sidor som redan finns.";
 $NotifyByEmail = "Meddela mig via e-post när någon svarar";
 $CancelNotifyByEmail = "Skicka inga meddelanden om ändringar på sidan";
+$Visits = "Besök";
 ?>

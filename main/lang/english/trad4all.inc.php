@@ -976,6 +976,7 @@ $NumberOfCoursesPrivate = "Number of private courses";
 $NumberOfCoursesClosed = "Number of closed courses";
 $NumberOfCoursesTotal = "Total number of courses";
 $NumberOfUsersActive = "Number of active users";
+$EditSettings = "Edit settings";
 $ThisValueCantBeChanged = "This value can't be changed.";
 $TotalAvailableUsers = "Total available users";
 $LowerCaseUser = "user";

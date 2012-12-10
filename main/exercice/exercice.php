@@ -88,25 +88,16 @@ if (isset ($_SESSION['exerciseResult'])) {
 }
 
 //General POST/GET/SESSION/COOKIES parameters recovery
-if (empty ($origin)) {
-	$origin = Security::remove_XSS($_REQUEST['origin']);
-}
-if (empty ($choice)) {
-	$choice = $_REQUEST['choice'];
-}
-if (empty ($hpchoice)) {
-	$hpchoice = $_REQUEST['hpchoice'];
-}
-if (empty ($exerciseId)) {
-	$exerciseId = intval($_REQUEST['exerciseId']);
-}
-if (empty ($file)) {
-	$file = Database :: escape_string($_REQUEST['file']);
-}
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : null;
+$choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
 
-$learnpath_id       = intval($_REQUEST['learnpath_id']);
-$learnpath_item_id  = intval($_REQUEST['learnpath_item_id']);
-$page               = intval($_REQUEST['page']);
+$hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? Security::remove_XSS($_REQUEST['exerciseId']) : null;
+$file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
+
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : null;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : null;
+$page = isset($_REQUEST['page']) ? intval($_REQUEST['page']) : null;
 
 $course_info        = api_get_course_info();
 $course_id          = api_get_course_int_id();

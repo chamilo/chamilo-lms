@@ -224,6 +224,7 @@ if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
  
+$clock_expired_time = null;
 if (empty($exercise_stat_info)) {
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
@@ -233,7 +234,6 @@ if (empty($exercise_stat_info)) {
 		$objQuestionTmp = Question::read($question_id);
 		$total_weight += floatval($objQuestionTmp->weighting);
 	}
-	$clock_expired_time = '';
 
 	if ($time_control) {
 		$expected_time = $current_timestamp + $total_seconds;
@@ -347,6 +347,7 @@ if ($time_control) { //Sends the exercice form when the expired time is finished
 // if the user has submitted the form
 
 $exercise_title			= $objExercise->selectTitle();
+$exercise_description  	= $objExercise->selectDescription();
 $exercise_sound 		= $objExercise->selectSound();
 
 //Media questions
@@ -483,7 +484,6 @@ if ($formSent && isset($_POST)) {
                     Database::query($update_query);*/
                 }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
-                //header("Location: exercise_show.php?id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
             }
@@ -545,12 +545,6 @@ if ($question_count != 0) {
 	                	$sql_exe_result = ", exe_result = 0";
 	                    if ($debug) { error_log('12. exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
 	                }	   
-	                /*
-	                //Clean incomplete - @todo why setting to blank the status?
-	                $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$learnpath_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
-
-	                //if ($debug) { error_log('Updating track_e_exercises '.$update_query); }
-	                Database::query($update_query);*/
 	            }
 	            if ($objExercise->review_answers) {
 	            	header('Location: exercise_reminder.php?'.$params);
@@ -561,7 +555,6 @@ if ($question_count != 0) {
 	        }
 	    } else {
 	        if ($debug) { error_log('Redirecting to exercise_submit.php'); }
-	        //header("Location: exercise_submit.php?exerciseId=$exerciseId");
 	        exit;
 	    }
 	}
@@ -965,6 +958,7 @@ if (!empty($error)) {
          <input type="hidden" name="learnpath_item_view_id" value="'.$learnpath_item_view_id . '" />';
 
 	//Show list of questions
+    $i = 1;
     
     $attempt_list = array();
     if (isset($exe_id)) {

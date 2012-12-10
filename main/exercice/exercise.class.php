@@ -1086,19 +1086,8 @@ class Exercise {
 			$form->addElement('text', 'enabletimercontroltotalminutes',get_lang('ExerciseTotalDurationInMinutes'),array('style' => 'width : 35px','id' => 'enabletimercontroltotalminutes'));
 			$form->addElement('html','</div>');
 
-
-            //Pass percentage
-            /*$options = array('' => '-');
-            for ($i = 0; $i <= 20 ; $i++) {
-                $options[$i*5] = $i*5;
-            }
-            $form->addElement('select', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'), $options, array('id' => 'pass_percentage', 'class' => 'chzn-select'));
-            */
-
             $form->addElement('text', 'pass_percentage', array(get_lang('PassPercentage'), null, '%'),  array('id' => 'pass_percentage'));
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
-
-			//$form->addElement('text', 'exerciseAttempts', get_lang('ExerciseAttempts').' : ',array('size'=>'2'));
 
 			// add the text_when_finished textbox
 			$form -> add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
@@ -1918,6 +1907,16 @@ class Exercise {
         if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
 
 		$extra_data = array();
+        $final_overlap = 0;
+        $final_missing =0;
+        $final_excess =0;
+        $overlap_color =0;
+        $missing_color =0;
+        $excess_color =0;
+        $threadhold1 =0;
+        $threadhold2 =0;
+        $threadhold3 = 0;
+
         $arrques = null;
         $arrans  = null;
 
@@ -2958,7 +2957,6 @@ class Exercise {
 			}
 		}
 
-
 		//we add the total score after dealing with the answers
 		if ($answerType == MULTIPLE_ANSWER_COMBINATION || $answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE ) {
 			if ($final_answer) {
@@ -3000,9 +2998,15 @@ class Exercise {
             }
         }
 
-		$extra_data = array('final_overlap' => $final_overlap, 'final_missing'=>$final_missing, 'final_excess'=> $final_excess,
-        					'overlap_color' => $overlap_color, 'missing_color'=>$missing_color, 'excess_color'=> $excess_color,
-        					'threadhold1'   => $threadhold1,   'threadhold2'=>$threadhold2, 'threadhold3'=> $threadhold3,
+		$extra_data = array('final_overlap' => $final_overlap,
+                            'final_missing'=>$final_missing,
+                            'final_excess'=> $final_excess,
+        					'overlap_color' => $overlap_color,
+                            'missing_color'=>$missing_color,
+                            'excess_color'=> $excess_color,
+        					'threadhold1'   => $threadhold1,
+                            'threadhold2'=>$threadhold2,
+                            'threadhold3'=> $threadhold3,
 		);
 
 		if ($from == 'exercise_result') {
@@ -3154,7 +3158,6 @@ class Exercise {
 			}
 		}
 		unset ($objAnswerTmp);
-		$i++;
 
 		$totalWeighting += $questionWeighting;
 		// Store results directly in the database

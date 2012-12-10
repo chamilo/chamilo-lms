@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DokeosLearningPaths = "Utbildningsväg";
 $AddResult = "Lägg till resultat";
 $ExportPDF = "Exportera till PDF";
 $Print = "Skriv ut";
@@ -21,6 +22,8 @@ $LinkAdded = "Länk tillagd";
 $LinkDeleted = "Länk borttagen";
 $Average = "Genomsnitt";
 $ViewStatistics = "Visa statistik";
+$ResultAdded = "Resultat tillagd";
 $TotalUser = "Totalt för användaren";
 $AverageTotal = "Genomsnitt totalt";
+$ResultDeleted = "Resultat raderat";
 ?>

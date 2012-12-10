@@ -247,6 +247,7 @@ $ModifyHotPotatoes = "Modificar Hot Potatoes";
 $SaveHotpotatoes = "Guardar Hot Potatoes";
 $ReturnToLPList = "Volver a la lista de lecciones";
 $LpPrerequisiteDescription = "Si selecciona otra lección como prerrequisito, la actual se ocultará hasta que la previa haya sido completada por los estudiantes";
+$ClickOnTheLearnerViewToSeeYourLearningPath = "Dar clic en el botón [Vista alumno] para ver su lección";
 $ExerciseCantBeEditedAfterAddingToTheLP = "No es posible editar un ejercicio después de que se agregue a una lección";
 $EnableTimeLimits = "Activar límites de disponibilidad";
 $PublicationDate = "Fecha de publicación";

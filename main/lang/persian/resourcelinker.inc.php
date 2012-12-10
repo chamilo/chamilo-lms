@@ -2,14 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$ResourceAdded = "منبعمورد نظر افزودهشد";
-$LearningPath = "خط سیرآموزشی";
-$LevelUp = "سطحبالاتر";
-$AddIt = "اضافهکردن";
-$MainCategory = "طبقۀاصلی";
-$lang_delete_added_resources = "حذف\nمنابع افزوده\nشده";
-$AddToLinks = "افزودنبه پیوندهایدرس";
-$DontAdd = "اضافهنکردن";
+$ResourceAdded = "منبع مورد نظر افزوده شد";
+$LearningPath = "مسیر آموزشی";
+$LevelUp = "سطح بالاتر";
+$AddIt = "اضافه کردن";
+$MainCategory = "دسته اصلی";
+$lang_delete_added_resources = "حذف منابع افزوده شده";
+$AddToLinks = "افزودن به پیوندهای درس";
+$DontAdd = "اضافه نکردن";
 $lang_show_all_added_resources = "نمایش\nتمامی منابع\nافزوده شد&#1607";
 $ResourcesAdded = "منابعمورد نظر افزودهشدند";
 $BackTo = "بازگشتبه";

@@ -67,6 +67,8 @@ class Resource {
      */
     var $item_properties;
 
+    var $obj = null;
+
     /**
      * Create a new Resource
      * @param int $id The id of this resource in the source course.

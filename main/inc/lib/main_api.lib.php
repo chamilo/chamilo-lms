@@ -1044,6 +1044,9 @@ function api_get_user_courses($userid, $fetch_session = true) {
  */
 function _api_format_user($user, $add_password = false) {
     $result = array();
+    if (api_is_anonymous()) {
+        return $user;
+    }
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
@@ -2457,7 +2460,7 @@ function api_is_coach($session_id = 0, $course_code = null) {
  */
 function api_is_session_admin() {
     global $_user;
-    return $_user['status'] == SESSIONADMIN;
+    return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
 /**
@@ -2466,7 +2469,7 @@ function api_is_session_admin() {
  */
 function api_is_drh() {
     global $_user;
-    return $_user['status'] == DRH;
+    return isset($_user['status']) && $_user['status'] == DRH;
 }
 
 /**
@@ -2475,7 +2478,7 @@ function api_is_drh() {
  */
 function api_is_student() {
     global $_user;
-    return $_user['status'] == STUDENT;
+    return isset($_user['status']) && $_user['status'] == STUDENT;
 
 }
 /**
@@ -2484,7 +2487,7 @@ function api_is_student() {
  */
 function api_is_teacher() {
     global $_user;
-    return $_user['status'] == COURSEMANAGER;
+    return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
 }
 
 /**

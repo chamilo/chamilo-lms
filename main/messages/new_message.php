@@ -64,28 +64,28 @@ $(document).ready(function () {
 function check_users() {
     //selecting only selected users
     $("#users option:selected").each(function() {
-        var user_id = $(this).val();        
-        if (user_id != "" ) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_id_exists", 
+        var user_id = $(this).val();
+        if (user_id != "" ) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_id_exists",
                 data: "user_id="+user_id,
                 success: function(return_value) {
                     if (return_value == 0 ) {
                         alert("'.get_lang('UserDoesNotExist').'");
-                                                
+
                         //Deleting select option tag
                         $("#users option[value="+user_id+"]").remove();
-                        
+
                         //Deleting holder
                         $(".holder li").each(function () {
                             if ($(this).attr("rel") == user_id) {
                                 $(this).remove();
                             }
-                        });                        
-                    }                    
-                },            
-            });                
-        }        
+                        });
+                    }
+                },
+            });
+        }
     });
 }
 
@@ -144,7 +144,7 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 	}
 	$pre_html = '<div class="control-group">
 				<label class="control-label">'.get_lang('SendMessageTo').': </label>
-				<div class="controls">';                
+				<div class="controls">';
 	$post = '</div></div>';
     $sent_to = $pre_html.'<strong>'.GetFullUserName($row['user_sender_id']).'</strong>'.$post;
 	$default['users'] = array($row['user_sender_id']);
@@ -163,7 +163,7 @@ function show_compose_to_user ($receiver_id) {
 
 function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$group_id 		= isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
-	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;	
+	$message_id 	= isset($_GET['message_id'])  ?  intval($_GET['message_id']) : null;
 	$param_f 		= isset($_GET['f']) ? Security::remove_XSS($_GET['f']):'';
 
 	$form = new FormValidator('compose_message',null,api_get_self().'?f='.$param_f, null, array('enctype'=>'multipart/form-data'));
@@ -177,7 +177,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
             if (!empty($sent_to)) {
                 $form->addElement('html',$sent_to);
             }
-			if (empty($default['users'])) {				
+			if (empty($default['users'])) {
                 //fb select
                 $form->addElement('select', 'users', get_lang('SendMessageTo'), array(), array('id' => 'users'));
 			} else {
@@ -186,7 +186,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 		}
 	} else {
 		$group_info = GroupPortalManager::get_group_data($group_id);
-        
+
 		$form->addElement('label', get_lang('ToGroup'), api_xml_http_response_encode($group_info['name']));
 		$form->addElement('hidden','group_id',$group_id);
 		$form->addElement('hidden','parent_id',$message_id);
@@ -195,20 +195,20 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$form->add_textfield('title', get_lang('Subject'),true , array('class' => 'span4'));
 
 	$form->add_html_editor('content', get_lang('Message'), false, false, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
-	
-	if (isset($_GET['re_id'])) {		
-		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);				
+
+	if (isset($_GET['re_id'])) {
+		$message_reply_info = MessageManager::get_message_by_id($_GET['re_id']);
 		$form->addElement('hidden','re_id', intval($_GET['re_id']));
 		$form->addElement('hidden','save_form','save_form');
 
 		//adding reply mail
-		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);		
+		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
 		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
 	}
-    
-	if (empty($group_id)) {        
+
+	if (empty($group_id)) {
         $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
-                    <div id="filepath_1">                    
+                    <div id="filepath_1">
                         <input type="file" name="attach_1"/><br />
                         '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
                     </div>
@@ -225,18 +225,18 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	$form->setDefaults($default);
     $html = '';
 	if ($form->validate()) {
-		$check = Security::check_token('post');		
-		if ($check) {			
+		$check = Security::check_token('post');
+		if ($check) {
 			$user_list		= $default['users'];
 			$file_comments	= $_POST['legend'];
-			$title 			= $default['title'];			
+			$title 			= $default['title'];
 			$content 		= $default['content'];
 			$group_id		= $default['group_id'];
-			$parent_id 		= $default['parent_id'];	
-			if (is_array($user_list) && count($user_list)> 0) {                
-				//all is well, send the message                 
+			$parent_id 		= $default['parent_id'];
+			if (is_array($user_list) && count($user_list)> 0) {
+				//all is well, send the message
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);				
+					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
 					if ($res) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');
@@ -245,10 +245,10 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 							$html .= Display::return_message(get_lang('MessageSentTo')." &nbsp;<b>".$user_info['complete_name']."</b>", 'confirmation', false);
 						}
 					}
-				}       
+				}
 			} else {
 				Display::display_error_message('ErrorSendingMessage');
-			}			
+			}
 		}
 		Security::clear_token();
 	} else {
@@ -263,10 +263,10 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 /* MAIN SECTION */
 if ($_GET['f']=='social') {
 	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));	
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));
 } else {
 	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));	
+	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
 }
 
 //Display::display_header(get_lang('ComposeMessage'));
@@ -288,19 +288,19 @@ if ($group_id != 0) {
 		if (api_get_setting('allow_message_tool') == 'true') {
 			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.Display::return_icon('message_new.png',get_lang('ComposeMessage')).'</a>';
 			$social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.Display::return_icon('inbox.png',get_lang('Inbox')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';		    
+            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.Display::return_icon('outbox.png',get_lang('Outbox')).'</a>';
 		}
 		$social_right_content .= '</div>';
 	}
 }
 
-	
-//LEFT COLUMN	
 
-if (api_get_setting('allow_social_tool') == 'true') {			
-    $social_left_content = SocialManager::show_social_menu('messages');			
+//LEFT COLUMN
+
+if (api_get_setting('allow_social_tool') == 'true') {
+    $social_left_content = SocialManager::show_social_menu('messages');
     $social_right_content .= '<div class="span9">';
-    $social_right_content .= '<div class="actions">';              
+    $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .=  '</div>';
     $social_right_content .=  '</div>';
@@ -342,14 +342,14 @@ if (!isset($_POST['compose'])) {
             }
             if (isset($_POST['hidden_user'])) {
                 $default['users']	 = array($_POST['hidden_user']);
-            }					
+            }
             $social_right_content .= manage_form($default);
         } else {
             $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'),'error');
         }
     }
 }
-if (api_get_setting('allow_social_tool') == 'true') {			
+if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .=  '</div>';
 }
 
@@ -359,11 +359,11 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
-    $content = $tpl->fetch($social_layout);
+    $tpl->display($social_layout);
 } else {
     $content = $social_right_content;
+    $tpl->assign('actions', $actions);
+    $tpl->assign('message', $show_message);
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
 }
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();

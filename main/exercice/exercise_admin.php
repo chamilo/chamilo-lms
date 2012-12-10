@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 * Exercise administration
-* This script allows to manage an exercise. It is included from 
+* This script allows to manage an exercise. It is included from
 * the script admin.php
 * @package chamilo.exercise
 * @author Olivier Brouckaert
@@ -23,7 +23,7 @@ require_once '../inc/global.inc.php';
 require_once 'exercise.lib.php';
 $this_section = SECTION_COURSES;
 
-if(!api_is_allowed_to_edit(null,true)) {
+if (!api_is_allowed_to_edit(null,true)) {
 	api_not_allowed(true);
 }
 
@@ -50,7 +50,7 @@ $htmlHeadXtra[] = '<script>
 			      document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
 			}
 		}
-		
+
 		function show_media() {
 			var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\') {
@@ -69,7 +69,7 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'start_date_div\').style.display = \'none\';
 			}
 		}
-		
+
 		function activate_end_date() {
             if(document.getElementById(\'end_date_div\').style.display == \'none\') {
                 document.getElementById(\'end_date_div\').style.display = \'block\';
@@ -77,7 +77,7 @@ $htmlHeadXtra[] = '<script>
                 document.getElementById(\'end_date_div\').style.display = \'none\';
             }
         }
-        
+
 
 		function feedbackselection() {
 			var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
@@ -89,7 +89,7 @@ $htmlHeadXtra[] = '<script>
 				document.exercise_admin.exerciseType[0].disabled=false;
 			}
 		}
-              
+
 	    function option_time_expired() {
 		    if(document.getElementById(\'timercontrol\').style.display == \'none\')
 		    {
@@ -97,10 +97,10 @@ $htmlHeadXtra[] = '<script>
 		    } else {
 		      document.getElementById(\'timercontrol\').style.display = \'none\';
 		    }
-	    }  	
-      	
+	    }
+
      	function check_per_page_one() {
-     		/*if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {     		
+     		/*if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {
      			document.getElementById(\'divtimecontrol\').style.display=\'block\';
      			document.getElementById(\'divtimecontrol\').display=block;
      			document.getElementById(\'timecontrol\').display=none;
@@ -113,22 +113,22 @@ $htmlHeadXtra[] = '<script>
 				document.getElementById(\'divtimecontrol\').style.display=\'none\';
 				document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
 			}*/
-            
+
 			if (document.getElementById(\'exerciseType_1\') && document.getElementById(\'exerciseType_1\').checked) {
 				document.getElementById(\'exerciseType_0\').checked = true;
 			}
 		}
-		
+
 		function check_feedback() {
 			document.getElementById(\'result_disabled_0\').checked = true;
 		}
-		
+
 		function check_direct_feedback() {
 			document.getElementById(\'option_page_one\').checked = true;
-			document.getElementById(\'result_disabled_0\').checked = true;			
+			document.getElementById(\'result_disabled_0\').checked = true;
 	    }
-		
-		function check_results_disabled() {		
+
+		function check_results_disabled() {
 			document.getElementById(\'exerciseType_2\').checked = true;
 		}
 		</script>';
@@ -140,7 +140,7 @@ function setFocus(){
 }
 $(document).ready(function () {
     setFocus();
-}); 
+});
 window.onload=advanced_parameters;
 </script>';
 
@@ -163,18 +163,18 @@ $objExercise->createForm($form);
 
 // VALIDATE FORM
 if ($form->validate()) {
-	$objExercise->processCreation($form);	
+	$objExercise->processCreation($form);
 	if ($form->getSubmitValue('edit') == 'true') {
-	    $message = 'ExerciseEdited';		
+	    $message = 'ExerciseEdited';
 	} else {
-	    $message = 'ExerciseAdded';		
+	    $message = 'ExerciseAdded';
 	}
 	$exercise_id = $objExercise->id;
 	Session::erase('objExercise');
 	header('Location:admin.php?message='.$message.'&exerciseId='.$exercise_id);
 	exit;
-} else {	
-    // DISPLAY FORM	 
+} else {
+    // DISPLAY FORM
 	if (isset($_SESSION['gradebook'])) {
 		$gradebook=	$_SESSION['gradebook'];
 	}
@@ -185,46 +185,40 @@ if ($form->validate()) {
 	$nameTools = get_lang('ExerciseManagement');
 	$interbreadcrumb[] = array("url"=>'exercice.php', 'name'=> get_lang('Exercices'));
     $interbreadcrumb[] = array("url"=>"admin.php?exerciseId=".$objExercise->id, "name" => $objExercise->name);
-	
+
 	Display::display_header($nameTools,get_lang('Exercise'));
-	
+
 	echo '<div class="actions">';
-	
+
 	if ($objExercise->id != 0) {
 	    echo '<a href="admin.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id.'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 	} else {
-		if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){		
-			if (!empty($_POST['lp_id'])){			
+		if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
+			if (!empty($_POST['lp_id'])){
 				$lp_id = Security::remove_XSS($_POST['lp_id']);//TODO:this remains to be implemented after press the first post
 			} else {
 				$lp_id = Security::remove_XSS($_GET['lp_id']);
-			}			
-			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";		
-        } else {			
+			}
+			echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
+        } else {
 	    	echo '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
 	}
-	echo '</div>';	
-	
+	echo '</div>';
+
 	if ($objExercise->feedback_type==1)
 		Display::display_normal_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
-		
+
 	if (api_get_setting('search_enabled')=='true' && !extension_loaded('xapian')) {
 		Display::display_error_message(get_lang('SearchXapianModuleNotInstalled'));
 	}
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';
-		
-	if (isset($objExercise) && !empty($objExercise->id)) {
-		$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-		$sql="SELECT max_score FROM $TBL_LP_ITEM
-			  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($objExercise->id)."'";			  
-		$result = Database::query($sql);
-		if (Database::num_rows($result) > 0) {		
-			$form->freeze();
-		}	
-	}
+    
+    if ($objExercise->id != 0 && $objExercise->edit_exercise_in_lp == false) {
+        $form->freeze();
+    }
 	$form->display();
 }
 Display::display_footer();

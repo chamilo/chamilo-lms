@@ -1079,6 +1079,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             }
         }
             
+        $lp_list_obj = new learnpathList(api_get_user_id());
+        $lp_list = $lp_list_obj->get_flat_list();
+
         if (is_array($results)) {
 			
             $users_array_id = array();
@@ -1100,6 +1103,14 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         continue;
                     }
                     $users_array_id[] = $results[$i]['username'] . $results[$i]['firstname'] . $results[$i]['lastname'];
+                }
+
+                $lp_obj = isset($results[$i]['orig_lp_id']) && isset($lp_list[$results[$i]['orig_lp_id']]) ? $lp_list[$results[$i]['orig_lp_id']] : null;
+                $lp_name = null;
+
+                if ($lp_obj) {
+                    $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$results[$i]['orig_lp_id'];
+                    $lp_name =  Display::url($lp_obj['lp_name'], $url, array('target' => '_blank'));
                 }
                                  
                 //Add all groups by user
@@ -1182,6 +1193,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     if ($is_allowedToEdit) {                        					
 						$results[$i]['status']  =  $revised;
 						$results[$i]['score']   =  $score;
+                        $results[$i]['lp']      =  $lp_name;
 						$results[$i]['actions'] =  $actions;
 						$list_info[] = $results[$i];                        
                     } else {
@@ -1231,7 +1243,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
  * @param	 bool	use or not the platform settings
  * @return  string  an html with the score modified
  */
-function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true) {
+function show_score($score, $weight, $show_percentage = true, $use_platform_settings = true, $show_only_percentage = false) {
     if (is_null($score) && is_null($weight)) {
         return '-';
     }
@@ -1249,17 +1261,22 @@ function show_score($score, $weight, $show_percentage = true, $use_platform_sett
             $weight         = $max_note;
         }
     }
-    $score_rounded = float_format($score, 1);    
+    $percentage = (100 * $score)/ ($weight != 0 ? $weight : 1);
+
+    //Formats values
+    $percentage = float_format($percentage, 1);
+    $score = float_format($score, 1);
     $weight = float_format($weight, 1);    
     
-    $percentage = float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
-    
-    $html  = '';
+    $html  = null;
     if ($show_percentage) {        
-        $parent = '(' . $score_rounded . ' / ' . $weight . ')';
+        $parent = '(' . $score . ' / ' . $weight . ')';
         $html = $percentage." %  $parent";	
+        if ($show_only_percentage) {
+            $html = $percentage."% ";
+        }
     } else {    
-    	$html = $score_rounded . ' / ' . $weight;
+    	$html = $score . ' / ' . $weight;
     }  
     $html  = Display::span($html, array('class' => 'score_exercise'));
     return $html;	
@@ -1281,8 +1298,7 @@ function show_success_message($score, $weight, $pass_percentage) {
         $is_success = is_success_exercise_result($score, $weight, $pass_percentage);
         
         $icon = '';
-        if ($is_success) {        
-            //$html .= Display::return_message(get_lang('CongratulationsYouPassedTheTest'), 'success');
+        if ($is_success) {
             $html = get_lang('CongratulationsYouPassedTheTest');
             $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
         } else {
@@ -1291,7 +1307,7 @@ function show_success_message($score, $weight, $pass_percentage) {
             $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
         }    
         $html = Display::tag('h4', $html);
-        $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:5px 10px 0px 0px'));
+        $html .= Display::tag('h5', $icon, array('style' => 'width:40px; padding:2px 10px 0px 0px'));
         $res = $html;
     }
     return $res;
@@ -1587,8 +1603,7 @@ function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session
  * @return 	float	Average score
  */
 function get_average_score($exercise_id, $course_code, $session_id) { 
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id);
-    $avg_score_data = array();    
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id); 
     $avg_score = 0;
     if (!empty($user_results)) {        
         foreach($user_results as $result) {
@@ -2045,8 +2060,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     
     //Getting attempt info
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
-    $question_list = array();
     
+    $question_list = array();
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list		= explode(',', $exercise_stat_info['data_tracking']);
     } else {        
@@ -2105,7 +2120,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             //this variable commes from exercise_submit_modal.php
 
-            //$hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$quesId];
             ob_start();
             
             // We're inside *one* question. Go through each possible answer for this question        
@@ -2229,7 +2243,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
         
         if (api_is_allowed_to_session_edit()) {    
-            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array());
+            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], '', array(), $end_date);
         }
         
         // Send notification ..

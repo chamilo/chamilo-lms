@@ -1542,7 +1542,7 @@ class DocumentManager {
         $is_certificate_mode = false;
         $is_certificate_array = explode('/',$dir);
         array_shift($is_certificate_array);
-        if ($is_certificate_array[0]=='certificates') {
+        if (isset($is_certificate_array[0]) && $is_certificate_array[0] == 'certificates') {
             $is_certificate_mode = true;
         }
         return $is_certificate_mode;
@@ -1904,7 +1904,7 @@ class DocumentManager {
                 }
             }
         } else {
-            error_log('preg_match did not find anything', 0);
+            //error_log('preg_match did not find anything', 0);
         }
         return $attributes;
     }

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddedToLPCannotBeAccessed = "Diese Übung wird in einem Lernpfad verwendet, somit kann sich nicht direkt von Studenten aufgerufen werden. Um die gleiche Übung über das Übungs-Tool verfügbar zu machen, bitte eine Kopie mit Klick auf das Kopieren-Symbol erstellen.";
 $langExercice = "Test";
 $langActivate = "Anzeigen";
 $langDeactivate = "Verstecken";
@@ -368,6 +369,7 @@ $ReUseACopyInCurrentTest = "Verwenden Sie eine Kopie im aktuellen Test";
 $Copy = "Kopie";
 $ScoreAverageFromAllAttempts = "Durchschnittsergebnis aus allen Versuchen";
 $DefaultContent = "Standard-Inhalt erstellen";
+$ExerciseDescriptionLabel = "Beschreibung";
 $ExerciseEditionNotAvailableInSession = "Sie können diesen Test nicht aus eineim Session-Kurs heraus bearbeiten";
 $UniqueAnswerNoOption = "Eindeutige Antwort mit unbekannten";
 $MultipleAnswerTrueFalse = "Mehrere Antworten richtig / falsch / weiss nicht";
@@ -375,6 +377,7 @@ $MultipleAnswerCombinationTrueFalse = "Kombination richtig / falsch / weiss nich
 $DontKnow = "Weiss nicht";
 $False = "Falsch";
 $DoubtScore = "Weiss nicht";
+$HotSpotDelineation = "Hotspot Beschreibung";
 $PropagateNegativeResults = "Negative Ergebnisse zwischen den Fragen anzeigen";
 $InsertALinkToThisQuestionInTheExercise = "Verwenden Sie diese Frage im Test als Verweis (keine Kopie)";
 $OnlyShowScore = "Übungsmodus: Nur Punkte anzeigen";
@@ -386,6 +389,7 @@ $EnableEndTime = "Endzeit aktivieren";
 $ExerciseAvailableFromX = "Test verfügbar ab %s";
 $ExerciseAvailableUntilX = "Test verfügbar bis %s";
 $TestLimitsAdded = "Test Beschränkungen hinzugefügt";
+$AddLimits = "Limit hinzufügen";
 $Unlimited = "unbeschränkt";
 $LimitedTime = "Beschränkte Zeit";
 $LimitedAttempts = "Beschränkte Versuche";
@@ -394,6 +398,7 @@ $Random = "Zufall";
 $ExerciseTimerControlMinutes = "Zeitkontrolle aktivieren.";
 $Numeric = "Numerisch";
 $Acceptable = "zulässing";
+$Hotspot = "Hotspot";
 $ChangeTheVisibilityOfTheCurrentImage = "Sichtbarkeit des aktuellen Bildes ändern";
 $Steps = "Schritte";
 $OriginalValue = "Original Wert";
@@ -490,4 +495,11 @@ $OralExpression = "Mündlicher Ausdruck";
 $CongratulationsYouPassedTheTest = "Herzlichen Glückwunsch, Sie haben den Test bestanden!";
 $YouDidNotReachTheMinimumScore = "Sie haben leider die Mindestpunktzahl nicht erreicht";
 $EndTest = "Test beenden";
+$PassPercentage = "Prozent zum Bestehen";
+$NoCategorySelected = "keine Kategorie selektiert";
+$ExerciseAverage = "Übungs-Durchschnitt";
+$NoNegativeScore = "keine Minuspunkte";
+$GlobalMultipleAnswer = "globale Mehrfachantwort";
+$AllQuestionsShort = "Alle";
+$ProblemsRecordingUploadYourOwnAudioFile = "Probleme mit der Aufzeichnung? Einfach eigene Audio-Datei hochladen.";
 ?>

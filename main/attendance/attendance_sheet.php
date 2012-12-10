@@ -233,7 +233,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                     <th width="10px"><?php echo get_lang('Photo')?></th>
                     <th width="150px"><?php echo get_lang('LastName')?></th>
                     <th width="140px"><?php echo get_lang('FirstName')?></th>
-                    <th width="100px"><?php echo get_lang('AttendancesFaults')?></th>
+                    <th width="92px"><?php echo get_lang('AttendancesFaults')?></th>
                 </tr>
                 </thead>
 
@@ -297,8 +297,8 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                     $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="" />';
                 }
 
-                $result .= '<th width="800px">';
-                $result .= '<center><div style="width:125px;">'.$datetime.'&nbsp;';
+                $result .= '<th width="800px" style="text-align:center">';
+                $result .= '<center><div style="width:65px;">'.$datetime.'&nbsp;';
 
                 if (api_is_allowed_to_edit(null, true)) {
                     $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';
@@ -306,7 +306,7 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
 
                 if ($is_locked_attendance == false) {
                     if (api_is_allowed_to_edit(null, true)) {
-                        $result .= $input_hidden.'</div></center></th>';
+                        $result .= $input_hidden.'</div><center></th>';
                     }
                 }
              }

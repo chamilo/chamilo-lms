@@ -636,7 +636,8 @@ class Exercise {
 
 	/**
 	 * updates the exercise in the data base
-	 *
+         * @param string If "simple", then only updates title, description and visibility. Otherwise updates all fields
+	 * @return mixed False on error, void otherwise
 	 * @author - Olivier Brouckaert
 	 */
 	function save($type_e = '') {
@@ -681,7 +682,6 @@ class Exercise {
         } else {
             $end_time = '0000-00-00 00:00:00';
         }
-
 		// Exercise already exists
 		if ($id) {
 			$sql="UPDATE $TBL_EXERCICES SET
@@ -708,7 +708,8 @@ class Exercise {
 					results_disabled='".Database::escape_string($results_disabled)."'";
 			}			
 			$sql .= " WHERE c_id = ".$this->course_id." AND id='".Database::escape_string($id)."'";			
-			Database::query($sql);
+			$r = Database::query($sql);
+                        if ($r === false) { return false; }
 
 			// update into the item_property table
 			api_item_property_update($_course, TOOL_QUIZ, $id,'QuizUpdated',api_get_user_id());
@@ -718,36 +719,37 @@ class Exercise {
 			}
 		} else {
 			// creates a new exercise
-			$sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, 
-                                                results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, 
-                                                text_when_finished, display_category_name, pass_percentage)
-					VALUES(
-						".$this->course_id.",
-						'$start_time','$end_time',
-						'".Database::escape_string($exercise)."',
-						'".Database::escape_string($description)."',
-						'".Database::escape_string($sound)."',
-						'".Database::escape_string($type)."',
-						'".Database::escape_string($random)."',
-						'".Database::escape_string($random_answers)."',
-						'".Database::escape_string($active)."',
-						'".Database::escape_string($results_disabled)."',
-						'".Database::escape_string($attempts)."',
-						'".Database::escape_string($feedback_type)."',
-						'".Database::escape_string($expired_time)."',
-						'".Database::escape_string($session_id)."',
-						'".Database::escape_string($review_answers)."',
-						'".Database::escape_string($randomByCat)."',
-						'".Database::escape_string($text_when_finished)."',
-						'".Database::escape_string($display_category_name)."',
-                        '".Database::escape_string($pass_percentage)."'
-						)";			
-			Database::query($sql);
+			$sql = "INSERT INTO $TBL_EXERCICES (c_id, start_time, end_time, title, description, sound, type, random, random_answers, active, ".
+                                               " results_disabled, max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category, ". 
+                                               " text_when_finished, display_category_name, pass_percentage) ".
+					" VALUES( ".
+						$this->course_id.", ".
+						" '$start_time','$end_time', ".
+						" '".Database::escape_string($exercise)."', ".
+						" '".Database::escape_string($description)."', ".
+						" '".Database::escape_string($sound)."', ".
+						" '".Database::escape_string($type)."', ".
+						" '".Database::escape_string($random)."', ".
+						" '".Database::escape_string($random_answers)."', ".
+						" '".Database::escape_string($active)."', ".
+						" '".Database::escape_string($results_disabled)."', ".
+						" '".Database::escape_string($attempts)."', ".
+						" '".Database::escape_string($feedback_type)."', ".
+						" '".Database::escape_string($expired_time)."', ".
+						" '".Database::escape_string($session_id)."', ".
+						" '".Database::escape_string($review_answers)."', ".
+						" '".Database::escape_string($randomByCat)."', ".
+						" '".Database::escape_string($text_when_finished)."', ".
+						" '".Database::escape_string($display_category_name)."', ".
+						" '".Database::escape_string($pass_percentage)."' ".
+						" )";
+			$r = Database::query($sql);
+                        if ($r === false) { return false; }
 			$this->id = Database::insert_id();
             
 			// insert into the item_property table
 			api_item_property_update($this->course, TOOL_QUIZ, $this->id, 'QuizAdded', api_get_user_id());            
-            api_set_default_visibility($this->id, TOOL_QUIZ);
+                        api_set_default_visibility($this->id, TOOL_QUIZ);
             
 			if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
 				$this->search_engine_save();

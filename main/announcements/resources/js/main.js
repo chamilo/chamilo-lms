@@ -157,12 +157,14 @@ function move(fbox, tbox) {
     var arrLookup = [];
     var arrFboxIsDisabled = []; // if this from checkbox after move is disabled or not
     var arrTboxIsDisabled = []; // if this to checkbox after move is disabled or not
-
+    var key_value = "";         // key for arrays arrFboxIsDisabled and arrTboxIsDisabled, use associative array key_value is the value of the array element (eg : GROUP:1 or USER:24)
+    
     var i;
     for (i = 0; i < tbox.options.length; i++) {
         arrLookup[tbox.options[i].text] = tbox.options[i].value;
         arrTbox[i] = tbox.options[i].text;
-        arrTboxIsDisabled[i] = tbox.options[i].disabled;
+        key_value = tbox.options[i].value;
+        arrTboxIsDisabled[key_value] = tbox.options[i].disabled;
     }
 
     var fLength = 0;
@@ -180,7 +182,8 @@ function move(fbox, tbox) {
         else 
         {
             arrFbox[fLength] = fbox.options[i].text;
-            arrFboxIsDisabled[fLength] = fbox.options[i].disabled;
+            key_value = fbox.options[i].value;
+            arrFboxIsDisabled[key_value] = fbox.options[i].disabled;
             fLength++;
         }
     }
@@ -233,7 +236,8 @@ function move(fbox, tbox) {
         var no = new Option();
         no.value = arrLookup[arrFbox[c]];
         no.text = arrFbox[c];
-        if (arrFboxIsDisabled[c]) {
+        key_value = no.value;
+        if (arrFboxIsDisabled[key_value]) {
             no.disabled = "disabled";
         }
         fbox[c] = no;
@@ -243,7 +247,8 @@ function move(fbox, tbox) {
         var no = new Option();
         no.value = arrLookup[arrTbox[c]];
         no.text = arrTbox[c];
-        if (arrTboxIsDisabled[c]) {
+        key_value = no.value;
+        if (arrTboxIsDisabled[key_value]) {
             no.disabled = "disabled";
         }        
         tbox[c] = no;

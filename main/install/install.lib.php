@@ -2626,6 +2626,9 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
+    $sql = "ALTER TABLE `".$TABLEQUIZANSWERSLIST . "` ADD INDEX idx_quiz_answer_c_q (c_id, question_id)";
+    Database::query($sql);
+
     // Exercise tool - answer options
     $sql = "
         CREATE TABLE `".$TABLEQUIZQUESTIONOPTION . "` (

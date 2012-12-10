@@ -75,4 +75,11 @@ $AgendaSortChronologicallyDown = "Aflopend";
 $ItemForUserSelection = "Selecteer gebruikers";
 $IsNotiCalFormatFile = "Dit bestand is geen iCal bestand.";
 $RepeatEvent = "Herhaal gebeurtenis";
+$SessionCalendar = "Sessie agenda";
+$RepeatDate = "Herhaal datum";
+$EndDateMustBeMoreThanStartDate = "De einddatum moet na de begindatum liggen";
+$SelectACourse = "Selecteer een cursus";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Gelieve een cursus of sessie te selecteren in de zijkolom";
+$DisableEndDate = "Schakel einddatum uit";
+$AllEvents = "Alle evenementen";
 ?>

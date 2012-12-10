@@ -369,6 +369,7 @@ $ReUseACopyInCurrentTest = "Réutiliser une copie dans le test courant";
 $Copy = "Copie";
 $ScoreAverageFromAllAttempts = "Moyenne du score sur l'ensemble des tentatives";
 $DefaultContent = "Générer contenu par défaut";
+$EditQuestions = "Éditer les questions";
 $ExerciseDescriptionLabel = "Description";
 $ExerciseEditionNotAvailableInSession = "Édition d'exercice de cours interdite depuis la session";
 $UniqueAnswerNoOption = "Rép. unique avec ne-sais-pas";

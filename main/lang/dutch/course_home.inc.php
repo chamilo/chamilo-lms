@@ -29,4 +29,5 @@ $SessionIdentifier = "Sessie herkenningsteken";
 $SessionName = "Sessienaam";
 $SessionCategory = "Sessiecategorie";
 $SessionData = "Sessiedata";
+$ToolSearch = "Zoeken";
 ?>

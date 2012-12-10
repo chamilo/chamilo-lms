@@ -18,4 +18,6 @@ $NextSlide = "Nächstes Bild";
 $ViewSlideshow = "Diashow anzeigen";
 $FirstSlide = "Erstes Bild";
 $LastSlide = "Letztes Bild";
+$ResizingAuto = "automatische Größe (Standard)";
+$ResizingAutoComment = "Diese Slideshow wird automatisch an die Bildschirmgröße angepaßt. Dies ist die Voreinstellung.";
 ?>

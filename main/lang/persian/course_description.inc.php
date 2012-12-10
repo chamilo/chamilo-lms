@@ -2,15 +2,22 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langCourseProgram = "&#1578;&#1608;&#1590;&#1740;&#1581;&#1575;&#157";
-$langThisCourseDescriptionIsEmpty = "&#1578;&#1575;&#1705;&#1606;&#1608;&#160";
-$langEditCourseProgram = "نگارش\nیا تغییر توضیحات";
-$QuestionPlan = "پرسشاز مسئول";
-$langInfo2Say = "اطلاعات\nبرای کاربران";
+$langCourseProgram = "توضیحات";
+$langThisCourseDescriptionIsEmpty = "تا حالا توضیحات دروس وارد نشده است";
+$langEditCourseProgram = "ساخت یا ویرایش یک توضیحات";
+$QuestionPlan = "راهنمایی";
+$langInfo2Say = "اطلاعات برای کاربران";
 $langOuAutreTitre = "عنوان";
 $langNewBloc = "دیگر موارد";
-$langAddCat = "اضافه\nکردن طبقه جدید";
-$langAdd = "اضافه\nکردن";
+$langAddCat = "اضافه کردن دسته";
+$langAdd = "اضافه کردن";
 $langValid = "تأیید";
-$langBackAndForget = "رها\nکردن";
+$langBackAndForget = "لغو کردن";
+$CourseDescriptionUpdated = "توضیحات بروزرسانی شد";
+$CourseDescriptionDeleted = "توضیحات حذف شد";
+$CourseDescriptionIntro = "برای ادامه کلیک کنید";
+$langSaveDescription = "ذخیره کردن توضیحات";
+$AddCourseDescription = "اضافه کردن توضیحات درس";
+$DescriptionUpdated = "توضیحات بروز رسانی شد";
+$CourseDescriptions = "توضیحات درس";
 ?>

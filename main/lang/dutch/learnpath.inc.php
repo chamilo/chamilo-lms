@@ -4,6 +4,9 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Het nieuwe forum is aangemaakt";
 $NewThreadCreated = "Een nieuw forum thread werd aangemaakt.";
+$AddHotpotatoes = "Hotpotatoes toevoegen";
+$HideAttemptView = "Verberg pogingen";
+$ExtendAttemptView = "Pogingen uitbreiden";
 $LearnPathAddedTitle = "Welkom in de Chamilo cursus auteursomgeving";
 $BuildComment = "Voeg leerobjecten en activiteiten toe aan uw cursus";
 $BasicOverviewComment = "Voeg audio commentaar toe en wijzig de volgorde van de stappen in de inhoudstafel";
@@ -196,10 +199,26 @@ $OogieBadExtension = "Gelieve enkel presentatie up te loaden. Bestandsnamen dien
 $WoogieBadExtension = "Gelieve enkel text bestanden up te loaden. De bestandsnaam dient te eindigen met .doc, .docx of .odt";
 $ShowAudioRecorder = "Geef de geluidsopnemer weer.";
 $SearchFeatureNotEnabledComment = "Full-text zoeken is niet geactiveerd in Chamilo. Gelieve de Chamilo beheerder te contacteren.";
+$SearchFeatureSearchExplanation = "Om de cursussen-database te doorzoeken, gelieve volgende syntax te gebruiken:
+   term tag:tag_name -exclude +include \"exact phrase\"
+Bijvoorbeeld:
+   car tag:truck -ferrari +ford \"high consumption\".
+Dit zal alle resultaten tonen voor het woord 'car' met de tag 'truck', behalve met het woord 'ferrari' maar met het woord ford en de exacte zin 'high consumption'.";
+$ViewLearningPath = "Toon cursus";
+$SearchFeatureDocumentTagsIfIndexing = "Tags die moeten toegevoegd worden aan het document, indien geïndexeerd";
+$ReturnToLearningPaths = "Terug naar leerpaden";
+$UploadMp3audio = "MP3 audio uploaden";
 $UpdateAllAudioFragments = "Geluidsfragment toevoegen";
+$LeaveEmptyToKeepCurrentFile = "Maak het importeren-formulier leeg om huidig geluidsbestand te behouden";
+$RemoveAudio = "Geluid verwijderen";
+$SaveAudio = "Goedkeuren";
+$ChangesStored = "Geluid toegevoegd";
+$ViewScoreChangeHistory = "Toon historiek  van scorewijzigingen";
+$ImageWillResizeMsg = "Foto begeleider zal verschaald worden indien nodig";
 $ImagePreview = "Voorbeeldweergave";
 $UplAlreadyExists = "bestaat reeds.";
 $UplUnableToSaveFile = "Het doorgestuurde bestand kon niet bewaard worden (misschien is er een permissieprobleem).";
+$UnknownPackageFormat = "Het bestandsformaat van dit pakket kon niet herkend worden. Gelieve na te gaan of het een geldig pakket is.";
 $MoveDocument = "Verplaats document";
 $EditLPSettings = "Wijzig cursus instellingen";
 $SaveLPSettings = "Bewaar cursus instellingen";
@@ -209,8 +228,26 @@ $ShowAllAttemptsByExercise = "Alle pogingen per test weergeven";
 $ShowAttempt = "Poging weergeven";
 $ShowAndQualifyAttempt = "Toon en evalueer poging";
 $langAddEdit = "Toevoegen / wijzigen";
+$ModifyPrerequisites = "Bewaar voorinstellingen";
+$CreateLearningPath = "Volgende";
+$AddExercise = "Voeg de test toe aan de cursus";
+$AddForum = "Voeg een forum toe";
+$LPCreateDocument = "Voeg dit document toe aan de cursus";
+$ObjectiveID = "Doelstelling ID";
+$ObjectiveStatus = "Doelstelling status";
+$ObjectiveRawScore = "Doelstelling score";
+$ObjectiveMaxScore = "Doelstelling maximum score";
+$ObjectiveMinScore = "Doelstelling minimum score";
+$LPName = "Cursusnaam";
+$AuthoringOptions = "Bewerkingsopties";
+$CourseSettings = "Cursuseigenschappen";
 $SaveSection = "Bewaar sectie";
 $AddLinkToCourse = "Voeg een link toe aan de cursus";
 $AddAssignmentToCourse = "Voeg een taak toe aan de cursus";
 $AddForumToCourse = "Voeg een forum toe aan de cursus";
+$SaveAudioAndOrganization = "Geluid en organisatie bewaren";
+$UploadOnlyMp3Files = "Gelieve enkel MP3 bestanden te uploaden";
+$ModifyHotPotatoes = "Hotpotatoes wijzigen";
+$SaveHotpotatoes = "Hotpotatoes bewaren";
+$ReturnToLPList = "Terug naar de lijst";
 ?>

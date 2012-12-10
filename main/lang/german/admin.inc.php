@@ -3,6 +3,13 @@
 for more information: see languages.txt in the lang folder.
 */
 $CasMainActivateComment = "Das einschalten der CAS-Authentifizierung ermöglicht den Nutzern die Authentifizierung mit ihren CAS-Berechtigungen.";
+$UsersRegisteredInAnyGroup = "Benutzer in beliebiger Gruppe registriert";
+$ShowHotCoursesComment = "Die Liste der meistbesuchten Kurse wird auf der Startseite hinzugefügt";
+$ShowHotCoursesTitle = "Zeige meistbesuchte Kurse";
+$EnableIframeInclusionComment = "Mit Aktivierung dieser Option wird ein großes Sicherheitsloch geöffnet. Aktivieren Sie diese nur dann, wenn Sie Ihren Benutzern vertrauen, keine fragwürdigen externen Inhalte einzubinden.";
+$EnableIframeInclusionTitle = "Iframes im HTML-Editor erlauben";
+$MailTemplateRegistrationMessage = "Sehr geehrte/r ((firstname)) ((lastname)),\n\nDu bist auf ((sitename)) mit den folgenden Daten registriert:\n\nBenutzername: ((username))\nKennwort: ((password))\n\nDie URL zum Einloggen auf ((sitename)) ist: ((url))\n\n\nMit freundlichen Grüßen \n((admin_name)) ((admin_surname)).";
+$MailTemplateRegistrationTitle = "Neue Benutzer auf ((sitename))";
 $AdminBy = "Administrator/in:";
 $AdministrationTools = "Administration";
 $State = "System-Status";
@@ -1058,6 +1065,9 @@ $DeleteSelectedFullSessionCategory = "Ausgewählte Kategorien inkl. Kurs-Session
 $EditTopRegister = "Notiz bearbeiten";
 $InsertTabs = "Menüreiter einfügen";
 $EditTabs = "Menüreiter bearbeiten";
+$YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Die Bewertungsmappe benötigt ein Zertifikat um mit einer Fähigkeit verlinkt werden zu können";
+$PlatformUnsubscribeTitle = "Erlaube das Abmelden von der Plattform";
+$PlatformUnsubscribeComment = "Mit Aktivierung dieser Option können sich alle Benutzer nachhaltig von der Plattform abmelden und all ihre Daten löschen. Dies ist zwar eine sehr radikale Möglichkeit, jedoch aus Gründen des Datenschutzes auf öffentlichen Portalen notwendig.";
 $BabyOrange = "Baby Orange";
 $BlueLagoon = "Blue lagoon";
 $CoolBlue = "Cool blue";
@@ -1401,6 +1411,7 @@ $SelectARelationType = "Beziehung auswählen";
 $AddUserToURL = "Benutzer zu dieser URL hinzufügen";
 $CourseBelongURL = "Kurs ist dieser URL zugeordnet";
 $AtLeastOneSessionAndOneURL = "Sie müssen mindestens eine Kurs-Session und eine eine URL auswählen.";
+$SelectURL = "URL auswählen";
 $SessionsWereEdited = "Die Kurs-Sessions wurden aktualisiert.";
 $URLDeleted = "URL wurde gelöscht.";
 $CannotDeleteURL = "Kann URL nicht löschen!";
@@ -1463,4 +1474,145 @@ $ArchiveDirCleanupProceedButton = "Archiv-Verzeichnis aufräumen";
 $ArchiveDirCleanupSucceeded = "Das Aufräumen des Archiv-Verzeichnis wurde erfolgreich ausgeführt.";
 $ArchiveDirCleanupFailed = "Das Aufräumen des Archiv-Verzeichnis konnte nicht erfolgreich ausgeführt werden. Bitte verbinden Sie sich manuell mit dem Server und löschen Sie die Inhalte aus dem Chamilo-Verzeichnis chamilo/archive/ ohne die Datei .htaccess zu löschen.";
 $LocalTimeUsingPortalTimezoneXIsY = "Die lokale Zeit in der Portal-Zeitzone (%s) ist %s";
+$AllowTeacherChangeGradebookGradingModelTitle = "Lehrern das Anpassen des Bewertungsschema erlauben";
+$AllowTeacherChangeGradebookGradingModelComment = "Mit dieser Option haben Kursleiter die Möglichkeit, ein individuelles Bewertungsschema innerhalb des Bewertungstools zu selektieren.";
+$NumberOfSubEvaluations = "Anzahl an Unterauswertungen";
+$AddNewModel = "Neues Model hinzufügen";
+$GroupParentship = "Elternelement gruppieren";
+$NoParentship = "kein Elternelement";
+$NoCertificate = "kein Zertifikat";
+$ShowDocumentPreviewTitle = "Zeige Dateivorschau";
+$ShowDocumentPreviewComment = "Mit der Dateivorschau ist es möglich, ohne Neuladen den Inhalt eines Dokumentes anzuzeigen, jedoch könnten Probleme mit älteren Browsern oder geringen Auflösungen entstehen.";
+$CasMainActivateTitle = "CAS Authentifizierung aktivieren";
+$CasMainServerTitle = "Hauptserver CAS";
+$CasMainServerComment = "Dies ist der Hauptserver für CAS, welcher für den Authentifizierungsprozeß verwendet wird (IP oder Hostname)";
+$CasMainServerURITitle = "URI des CAS-Hauptservers";
+$CasMainServerURIComment = "Pfad zum CAS-Dienst";
+$CasMainPortTitle = "Port des CAS-Hauptservers";
+$CasMainPortComment = "Der Port, welcher zur Verbindung zum CAS-Hauptserver verwendet wird";
+$CasMainProtocolTitle = "Protokoll des CAS-Hauptservers";
+$CAS1Text = "CAS 1";
+$CAS2Text = "CAS 2";
+$SAMLText = "SAML";
+$CasMainProtocolComment = "Protokoll, das zur Verbindung zum CAS-Hauptserver genutzt wird";
+$CasUserAddActivateTitle = "aktiviere das Hinzufügen neuer Benutzer durch CAS";
+$CasUserAddActivateComment = "Hinzufügen von Benutzern durch CAS";
+$CasUserAddLoginAttributeTitle = "Füge CAS Benutzerlogin hinzu";
+$CasUserAddLoginAttributeComment = "Zum Registrierungsprozeß CAS Benutzerdaten hinzufügen";
+$CasUserAddEmailAttributeTitle = "CAS Benutzer-Email hinzufügen";
+$CasUserAddEmailAttributeComment = "CAS Email-Details bei Neuregisrierung hinzufügen";
+$CasUserAddFirstnameAttributeTitle = "CAS Vorname des Benutzers hinzufügen";
+$CasUserAddFirstnameAttributeComment = "CAS Benutzer-Vorname bei Registrierung hinzufügen";
+$CasUserAddLastnameAttributeTitle = "CAS Benutzer-Nachname hinzufügen";
+$CasUserAddLastnameAttributeComment = "CAS Benutzer-Nachname wird bei Registrierung hinzugefügt";
+$ShowAdminToolbarTitle = "Zeige Administrator-Leiste";
+$ShowAdminToolbarComment = "Zeigt eine globale Toolbar ganz oben für selektierte Benutzergruppen. Mit dieser Leiste, ähnlich von Wordpress und Google, lassen sich gewisse Vorgänge beschleunigen, für manche User ist dies jedoch verwirrend.";
+$AddInMenu = "Im Menü hinzufügen";
+$AllowUsersToChangeEmailWithNoPasswordTitle = "Benutzern das Ändern der Emailadresse ohne Kennwort ermöglichen";
+$AllowUsersToChangeEmailWithNoPasswordComment = "Bei Benutzerkonto-Änderungen";
+$EnableHelpLinkTitle = "Hilfe-Link aktivieren";
+$EnableHelpLinkComment = "Der Hilfe-Link ist in der oberen rechten Seite des Bildschirms zu sehen";
+$BackToAdmin = "zurück zur Administration";
+$AllowGlobalChatTitle = "Chat global verfügbar machen";
+$HeaderExtraContentTitle = "Zusätzliche Informationen im Kopfbereich";
+$HeaderExtraContentComment = "Es kann HTML-Code wie z.B. Meta-Tags hinzugefügt werden";
+$FooterExtraContentTitle = "Extra Inhalt im Fußbereich";
+$AllowGlobalChatComment = "Benutzer können kursunabhängig miteinander chatten";
+$FooterExtraContentComment = "Es können HTML-Inhalte, wie z.B. Meta-Tags hinzugefügt werden";
+$CopyOnlySessionItems = "Nur Session-Inhalte kopieren";
+$FirstLetterCourseTitle = "Erster Buchstabe des Kurstitels";
+$UsersFoundInOtherPortals = "User in anderen Portalen gefunden";
+$AddUserToMyURL = "Benutzer zu meiner Plattform hinzufügen";
+$UsersDeleted = "Benutzer gelöscht";
+$UsersAdded = "Benutzer hinzugefügt";
+$PluginArea = "Plugin-Bereich";
+$NoConfigurationSettingsForThisPlugin = "Keine Einstellungsmöglichkeiten zu diesem Plugin gefunden";
+$Regions = "Regionen";
+$CoursesDefaultCreationVisibilityTitle = "Standard-Sichtbarkeit von Kursinhalten";
+$CoursesDefaultCreationVisibilityComment = "Diese Module sind bei Erstellung eines neuen Kurses sichtbar";
+$YouHaveEnteredTheCourseXInY = "Kurs <strong>%s</strong> in <strong>%s</strong> beigetreten";
+$LoginIsEmailTitle = "Emailadresse als Benutzernamen verwenden";
+$LoginIsEmailComment = "Die registrierte Emailadresse wird zum Login verwendet";
+$AllowBrowserSnifferTitle = "Browser-Sniffer aktivieren";
+$AllowBrowserSnifferComment = "Durch diese Aktivierung wird beim ersten Anmelden an der Plattform der Login etwas verzögert, da Chamilo anhand des Web-Browsers einige Einstellungen vornimmt.";
+$EnableWamiRecordTitle = "Wami-Rekorder aktivieren";
+$EnableWamiRecordComment = "Flash-basierendes Audio-Aufnahmetool";
+$ChangeSharedSetting = "Ändere sichtbare Einstellungen der anderen Plattformen";
+$AllowHRSkillsManagementTitle = "Erlaube HR die Verwaltung von Fähigkeiten";
+$AllowHRSkillsManagementComment = "Ermöglicht der Personalabteilung die Verwaltung von Fähigkeiten";
+$GradebookDefaultWeightTitle = "Standard-Gewichtung in der Bewertungsmappe";
+$GradebookDefaultWeightComment = "Diese Gewichtung wird in allen Kursen als Standard festgelegt";
+$TeachersCanChangeScoreSettingsTitle = "Kursleiter können Kriterien der Bewertungsmappe ändern";
+$TeachersCanChangeScoreSettingsComment = "Kursleiter können so individuell Einstellungen an der Bewertungsmappe vornehmen";
+$GradebookEnableLockingTitle = "Kursleitern das Sperren von Bewertungen erlauben";
+$GradebookEnableLockingComment = "Wenn diese Funktion aktiviert wird, können Kursleiter keinerlei Änderungen an Bewertungen mehr vornehmen (Übungen, Lernpfade, Aufgaben, etc.). Diese Sperre kann nur durch einen Administrator aufgehoben werden. Der Kursleiter wird explizit darauf hingewiesen, und eine Eintragung im Systemprotokoll verzeichnet";
+$ShibbolethMainActivateTitle = "Authentifizierung über Shibboleth";
+$ShibbolethMainActivateComment = "Zuerst muß Shibboleth für die Nutzung mit Ihrem Webserver konfiguriert sein.
+<br />
+Anschließend muß für die Nutzung mit Chamilo die Datei:
+<br /><br />
+<strong>main/auth/shibboleth/config/aai.class.php</strong>
+<br /><br />
+geändert werden. Hierzu werden die folgenden Werte für object $result mit den eigenen Werten ergänzt.
+<br />
+<ul>
+<li>$result->unique_id = 'mail';</li>
+<li>$result->firstname = 'cn';</li>
+<li>$result->lastname = 'uid';</li>
+<li>$result->email = 'mail';</li>
+<li>$result->language = '-';</li>
+<li>$result->gender = '-';</li>
+<li>$result->address = '-';</li>
+<li>$result->staff_category = '-';</li>
+<li>$result->home_organization_type = '-';</li>
+<li>$result->home_organization = '-';</li>
+<li>$result->affiliation = '-';</li>
+<li>$result->persistent_id = '-';</li>
+<li>...</li>
+</ul>
+
+Anschließend unter <a href=\"/settings.php?category=Shibboleth\">Plugins</a> den 'Shibboleth Login' Button für die Plattform freischalten.";
+$LdapDescriptionTitle = "LDAP Authentifizierung";
+$FacebookMainActivateTitle = "Authentifizierung über Facebook";
+$FacebookMainActivateComment = "Zuerst muß eine Facebook Anwendung erstellt werden (siehe hierzu <a href=\"https://developers.facebook.com/apps\" target=\"_blank\">https://developers.facebook.com/apps</a>). In den Einstellungen der Anwendung wird nach einer URL gefragt, diese sollte den Parameter 'action=fbconnect' (z.B. http://mychamilo.com/?action=fbconnect) haben.
+<br /><br />
+Danach die Datei
+<br /><br />
+<strong>main/auth/external_login/facebook.conf.php</strong>
+<br /><br />
+öffnen und 'appId' und 'secret' für $facebook_config aus der FB-Anwendung einfügen.
+Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";
+$LanguagePriority1Title = "Priorität der Sprachwahl";
+$LanguagePriority2Title = "Sprachpriorität 2";
+$LanguagePriority3Title = "Sprachpriorität 3";
+$LanguagePriority4Title = "Sprachpriorität 4";
+$LanguagePriority5Title = "Sprachpriorität 5";
+$LanguagePriority1Comment = "Die Sprache mit der höchsten Priorität";
+$LanguagePriority2Comment = "Sprachwahl mit zweithöchster Priorität";
+$LanguagePriority3Comment = "Diese Sprache greift an dritter Stelle";
+$LanguagePriority4Comment = "Vierte Sprachpriorität";
+$LanguagePriority5Comment = "Sprache mit der geringsten Priorität";
+$UserLanguage = "Benutzersprache";
+$UserSelectedLanguage = "Sprache, die der Benutzer gewählt hat";
+$TeachersCanChangeGradeModelSettingsTitle = "Kursleiter können das Bewertungsmodell der Bewertungsmappe verändern";
+$TeachersCanChangeGradeModelSettingsComment = "Beim Ändern der Bewertungsmappe";
+$GradebookDefaultGradeModelTitle = "Standard Bewertungs-Modell";
+$GradebookDefaultGradeModelComment = "Dieser Wert wird standardmäßig bei der Erstellung eines Kurses verwendet";
+$GradebookEnableGradeModelTitle = "Bewertungsschema für Bewertungsmappe aktivieren";
+$GradebookEnableGradeModelComment = "Aktiviert die automatische Erstellung von Bewertungskategorien in einem Kurs basierend auf vordefinierten Bewertungsmodellen.";
+$AllowSessionAdminsToSeeAllSessionsTitle = "Erlaube Session-Administratoren alle Sessions zu sehen";
+$AllowSessionAdminsToSeeAllSessionsComment = "Mit Aktivierung dieser Option haben Session-Administratoren die Möglichkeit, alle verfügbaren Sessions zu sehen. Standardmäßig ist diese Option deaktiviert.";
+$AllowSkillsToolTitle = "Erlaube Fähigkeiten-Modul";
+$AllowSkillsToolComment = "Benutzer können Ihre Fähigkeiten im sozialen Netzwerk und einem Block auf der Plattform sehen.";
+$AllowPublicCertificatesTitle = "Ermögliche öffentliche Zertifikate";
+$AllowPublicCertificatesComment = "Zertifikate von Benutzern können global eingesehen werden (ohne Anmeldung/Registrierung).";
+$EnableWebCamClipTitle = "Webcam-Clip aktivieren";
+$EnableWebCamClipComment = "Mit Webcam-Clip haben Benutzer die Möglichkeit, Bilder mit ihrer Webcam aufzunehmen, und auf dem Server als JPEG abzuspeichern";
+$YouShouldCreateTermAndConditionsForAllAvailableLanguages = "Die \"Nutzungsbedingungen\" sollten für alle auf der Plattform verfügbaren Sprachen erstellt werden.";
+$ActivateEmailTemplateTitle = "Ermögliche Vorlagen für Email-Alarm";
+$ActivateEmailTemplateComment = "Mit dieser Option werden benutzerspezifische Vorlagen für spezielle Aktionen (und für spezielle Benutzer) möglich";
+$SystemManagement = "Systemverwaltung";
+$RemoveOldDatabaseMessage = "Alte Datenbank entfernen";
+$RemoveOldTables = "Alte Tabellen entfernen";
+$TotalSpaceUsedByPortalXLimitIsYMB = "Gesamtspeicherplatz des Plattformlimits von %s beträgt %s MB";
 ?>

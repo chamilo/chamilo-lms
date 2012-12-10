@@ -10,4 +10,5 @@ $langCouldNotSendPage = "&#1575;&#1585;&#1587;&#1575;&#1604; &#1589;&#1601;&#158
 $langSendPage = "صفحهمورد نظر برای ارسال";
 $langPageTitleModified = "عنوان\nصفحه تغییر\nیافت";
 $langPageAdded = "صفحه\nافزوده شد";
+$Choose = "انتخاب";
 ?>

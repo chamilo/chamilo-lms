@@ -169,6 +169,7 @@ $ItemEdited = "Inhalt aktualisiert";
 $CategoryFilter = "Kategorie Filter";
 $ItemCreator = "Inhalt Ersteller";
 $DeleteSelectedItems = "Ausgewählte Inhalte löschen";
+$BookingPeriodTimepickerLimitation = "Beschränkung des Zeitfensters";
 $Blackout = "Ausfall";
 $EveryDay = "Jeden Tag";
 $EveryWeek = "Jede Woche";

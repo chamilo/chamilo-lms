@@ -369,6 +369,7 @@ $ReUseACopyInCurrentTest = "Re-use a copy inside the current test";
 $Copy = "Copy";
 $ScoreAverageFromAllAttempts = "Score average from all attempts";
 $DefaultContent = "Generate default content";
+$EditQuestions = "Edit questions";
 $ExerciseDescriptionLabel = "Description";
 $ExerciseEditionNotAvailableInSession = "You can't edit this course exercise from inside a session";
 $UniqueAnswerNoOption = "Unique answer with unknown";

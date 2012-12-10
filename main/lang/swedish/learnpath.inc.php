@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $NewForumCreated = "Det nya forumet har skapats";
 $NewThreadCreated = "Den nya forumtråden har skapats";
+$AddHotpotatoes = "Lägg till \"hot potatoes\"";
 $lang_learning_path = "Inlärningsväg";
 $lang_learning_path_builder = "Inlärningsvägsverktyg";
 $lang_description = "beskrivning";
@@ -100,5 +101,12 @@ $CreateTheLink = "Importera en länk";
 $MoveCurrentLink = "Flytta den aktuella länken";
 $EditCurrentLink = "Ändra den aktuella länken";
 $Url = "Url";
+$LatencyTimeSpent = "Nedlagd tid";
+$Result = "Resultat";
+$ReturnToLearningPaths = "Tillbaka till utbildningsväg";
+$HideAllAttempts = "Dölja alla försök";
+$ShowAttempt = "Försök";
+$ShowAndQualifyAttempt = "Visa och betygsätta prov";
+$LPName = "Kursnamn";
 $CourseSettings = "Inställningar";
 ?>

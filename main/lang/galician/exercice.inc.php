@@ -369,6 +369,7 @@ $ReUseACopyInCurrentTest = "Realizar unha copia desta pregunta no exercicio actu
 $Copy = "Copia";
 $ScoreAverageFromAllAttempts = "Promedio de todos os intentos en exercicios";
 $DefaultContent = "Xerar contido por defecto";
+$ExerciseDescriptionLabel = "Descrición";
 $ExerciseEditionNotAvailableInSession = "Non pode editar este exercicio do curso dende unha sesión";
 $UniqueAnswerNoOption = "Resposta única con non sei";
 $MultipleAnswerTrueFalse = "Respostas múltiples v/f/non-sei";

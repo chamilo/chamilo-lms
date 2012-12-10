@@ -66,4 +66,11 @@ $RepeatYearly = "Årsvis";
 $RepeatEnd = "Slutdatum för upprepning";
 $RepeatedEventViewOriginalEvent = "Visa ursprunglig händelse";
 $ICalFileImport = "Importera iCal/ics fil";
+$AllUsersOfThePlatform = "Alla system användarna";
+$AgendaSortChronologicallyUp = "Stigande";
+$AgendaSortChronologicallyDown = "Fallande";
+$SelectACourse = "Välj en kurs";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Välj en kurs eller en session från sidofältet.";
+$DisableEndDate = "Inaktivera slutdatum";
+$AllEvents = "Alla händelse";
 ?>

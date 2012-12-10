@@ -76,7 +76,7 @@ function event_login() {
     global $TABLETRACK_LOGIN;
 
     $reallyNow = api_get_utc_datetime();
-    $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES	
+    $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
                 ('".$_user['user_id']."',
         		'".Database::escape_string(api_get_real_ip())."',
         		'".$reallyNow."',
@@ -322,15 +322,15 @@ function event_link($link_id) {
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {    
+function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) error_log('Called to update_event_exercice');
-    if ($debug) error_log('duration:' . $duration);    
-    
+    if ($debug) error_log('duration:' . $duration);
+
     if ($exeid != '') {
-        // Validation in case of fraud with actived control time        
-        if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {            
+        // Validation in case of fraud with actived control time
+        if (!exercise_time_control_is_valid($exo_id, $learnpath_id, $learnpath_item_id)) {
         	$score = 0;
         }
 
@@ -369,7 +369,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         		   exe_duration 		= '".Database::escape_string($duration)."',
         		   exe_date				= '".$end_date."',
         		   status 				= '".$status."',
-        		   questions_to_check 	= '".$remind_list."'        		   
+        		   questions_to_check 	= '".$remind_list."'
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
         $res = Database::query($sql);
 
@@ -396,7 +396,7 @@ function create_event_exercice($exo_id) {
     if (empty($exo_id) or (intval($exo_id)!=$exo_id)) { return false; }
     //error_log('create_event_exercice');
     $tbl_track_exe = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    $tbl_exe = Database::get_course_table(TABLE_QUIZ_TEST);	
+    $tbl_exe = Database::get_course_table(TABLE_QUIZ_TEST);
     $uid = api_get_user_id();
     $course_id = api_get_course_int_id();
 
@@ -573,11 +573,11 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
             unset($event_value['avatar']);
             unset($event_value['mail']);
             unset($event_value['password']);
-            unset($event_value['lastLogin']);            
+            unset($event_value['lastLogin']);
             unset($event_value['picture_uri']);
             $event_value = serialize($event_value);
         }
-    } 
+    }
 
     $event_value        = Database::escape_string($event_value);
     $course_info        = api_get_course_info($course_code);
@@ -637,8 +637,8 @@ function get_all_event_types() {
             INNER JOIN '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' l
             ON etm.language_id = l.id';
 
-    $events_types = Database::store_result(Database::query($sql),'ASSOC');    
-    
+    $events_types = Database::store_result(Database::query($sql),'ASSOC');
+
     $to_return = array();
     foreach ($events_types as $et) {
         $et['nameLangVar'] = $event_config[$et["event_type_name"]]["name_lang_var"];
@@ -673,38 +673,14 @@ function get_users_subscribed_to_event($event_name) {
  */
 function get_event_users($event_name) {
     $event_name = Database::escape_string($event_name);
-    $sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser 
+    $sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' user JOIN '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' relUser
             ON relUser.user_id = user.user_id
-            WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';    
+            WHERE user.status <> '.ANONYMOUS.' AND relUser.event_type_name = "'.$event_name.'"';
     //For tests
     //$sql = 'SELECT user.user_id,  user.firstname, user.lastname FROM '.Database::get_main_table(TABLE_MAIN_USER);
-        
+
     $user_list = Database::store_result(Database::query($sql), 'ASSOC');
-    return json_encode($user_list);	
-}
-
-function get_events_by_user_and_type($user_id, $event_type) {
-    global $TABLETRACK_DEFAULT;
-    $user_id = intval($user_id);
-    $event_type = Database::escape_string($event_type);
-    
-    $sql = "SELECT * FROM $TABLETRACK_DEFAULT 
-            WHERE default_value_type = 'user_id' AND 
-                  default_value = $user_id AND
-                  default_event_type = '$event_type'
-            ORDER BY default_date ";
-    $result = Database::query($sql);
-    if ($result) {
-        return Database::store_result($result, 'ASSOC');
-    }
-    return false;
-}
-
-function get_latest_event_by_user_and_type($user_id, $event_type) {
-    $result = get_events_by_user_and_type($user_id, $event_type);
-    if ($result && !empty($result)) {
-        return $result[0];
-    }
+    return json_encode($user_list);
 }
 
 function get_events_by_user_and_type($user_id, $event_type) {
@@ -745,7 +721,7 @@ function save_event_type_message($event_name, $users, $message, $subject, $event
     $event_name = Database::escape_string($event_name);
     $activated = intval($activated);
     $event_message_language = Database::escape_string($event_message_language);
-    
+
     // Deletes then re-adds the users linked to the event
     $sql = 'DELETE FROM '.Database::get_main_table(TABLE_EVENT_TYPE_REL_USER).' WHERE event_type_name = "'.$event_name.'"	';
     Database::query($sql);
@@ -758,7 +734,7 @@ function save_event_type_message($event_name, $users, $message, $subject, $event
     // check if this template in this language already exists or not
     $sql = 'SELECT COUNT(id) as total FROM '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).'
             WHERE event_type_name = "'.$event_name.'" AND language_id = '.$language_id;
-    
+
     $sql = Database::store_result(Database::query($sql),'ASSOC');
 
     // if already exists, we update
@@ -772,10 +748,10 @@ function save_event_type_message($event_name, $users, $message, $subject, $event
         Database::query($sql);
     } else { // else we create a new record
         // gets the language_-_id
-        $lang_id = '(SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).' 
+        $lang_id = '(SELECT id FROM '.Database::get_main_table(TABLE_MAIN_LANGUAGE).'
                     WHERE dokeos_folder = "'.$event_message_language.'")';
         $lang_id = Database::store_result(Database::query($lang_id),'ASSOC');
-        
+
         if (!empty($lang_id[0]["id"])) {
             $sql = 'INSERT INTO '.Database::get_main_table(TABLE_EVENT_EMAIL_TEMPLATE).' (event_type_name, language_id, message, subject, activated)
                 VALUES("'.$event_name.'", '.$lang_id[0]["id"].', "'.Database::escape_string($message).'", "'.Database::escape_string($subject).'", '.$activated.')';
@@ -816,7 +792,7 @@ function eventType_mod($etId, $users, $message, $subject) {
 function get_last_attempt_date_of_exercise($exe_id) {
     $exe_id = intval($exe_id);
     $track_attempts 		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    
+
     $sql_track_attempt 		= 'SELECT max(tms) as last_attempt_date FROM '.$track_attempts.' WHERE exe_id='.$exe_id;
 
     $rs_last_attempt 		= Database::query($sql_track_attempt);
@@ -895,7 +871,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $lp_view_table         = Database::get_course_table(TABLE_LP_VIEW);
     $lp_item_view_table    = Database::get_course_table(TABLE_LP_ITEM_VIEW);
     $course_id 			   = $course['real_id'];
-    
+
     if (empty($course_id)) {
         $course_id = api_get_course_int_id();
     }
@@ -909,18 +885,18 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
     $session_id            = intval($session_id);
 
     //Make sure we have the exact lp_view_id
-    $sql       = "SELECT id FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";            
+    $sql       = "SELECT id FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id = $lp_id AND session_id = $session_id ";
     $result    = Database::query($sql);
 
     if (Database::num_rows($result)) {
         $view          = Database::fetch_array($result, 'ASSOC');
         $lp_view_id    = $view['id'];
 
-        $sql = "DELETE FROM $lp_item_view_table WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";              
+        $sql = "DELETE FROM $lp_item_view_table WHERE c_id = $course_id AND lp_view_id = $lp_view_id ";
         Database::query($sql);
     }
 
-    $sql = "DELETE FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id = $session_id ";    
+    $sql = "DELETE FROM $lp_view_table WHERE c_id = $course_id AND user_id = $user_id AND lp_id= $lp_id AND session_id = $session_id ";
     Database::query($sql);
 
     $sql = "SELECT exe_id FROM $track_e_exercises WHERE exe_user_id = $user_id AND session_id = $session_id  AND exe_cours_id = '{$course['code']}' AND orig_lp_id = $lp_id";
@@ -951,7 +927,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
  * @param 	int		session id
   */
 function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $session_id = 0) {
-    $track_e_exercises    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);    
+    $track_e_exercises    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $user_id              = intval($user_id);
     $exercise_id          = intval($exercise_id);
     $course_code          = Database::escape_string($course_code);
@@ -1170,7 +1146,7 @@ function get_exercise_results_by_user($user_id, $exercise_id, $course_code, $ses
  *
  */
 function count_exercise_attempts_by_user($user_id, $exercise_id, $course_code, $session_id = 0) {
-    $TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);	
+    $TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $course_code           = Database::escape_string($course_code);
     $exercise_id           = intval($exercise_id);
     $session_id            = intval($session_id);
@@ -1377,7 +1353,7 @@ function get_all_exercises_from_lp($lp_id, $course_id) {
  */
 function get_comments($exe_id, $question_id) {
     $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-    $sql = "SELECT teacher_comment FROM ".$table_track_attempt." 
+    $sql = "SELECT teacher_comment FROM ".$table_track_attempt."
             WHERE exe_id='".Database::escape_string($exe_id)."' AND question_id = '".Database::escape_string($question_id)."' ORDER by question_id";
     $sqlres = Database::query($sql);
     $comm = Database::result($sqlres, 0, "teacher_comment");
@@ -1452,11 +1428,11 @@ function event_course_login($course_code, $user_id, $session_id) {
  * For the sake of genericity, this function is a switch.
  * It's called by EventsDispatcher and fires the good function
  * with the good require_once.
- * 
+ *
  * @param string $event_name
- * @param array $params 
+ * @param array $params
  */
-function event_send_mail($event_name, $params) {    
+function event_send_mail($event_name, $params) {
     EventsMail::send_mail($event_name, $params);
 }
 
@@ -1467,24 +1443,24 @@ function event_send_mail($event_name, $params) {
  * @param string $event_name
  * @param int $user_from
  * @param int $user_to
- * @return boolean 
+ * @return boolean
  */
 function check_if_mail_already_sent($event_name, $user_from, $user_to = null) {
     if ($user_to == null) {
-        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
+        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . '
                 WHERE user_from = '.$user_from.' AND event_type_name = "'.$event_name.'"';
     } else {
-        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . ' 
+        $sql = 'SELECT COUNT(*) as total FROM ' . Database::get_main_table(TABLE_EVENT_SENT) . '
                 WHERE user_from = '.$user_from.' AND user_to = '.$user_to.' AND event_type_name = "'.$event_name.'"';
-    }    
+    }
     $result = Database::store_result(Database::query($sql), 'ASSOC');
     return $result[0]["total"];
 }
 
-/* 
- * 
+/*
+ *
  * Filter EventEmailTemplate Filters see the main/inc/conf/events.conf.dist.php
- * 
+ *
  */
 
 /**
@@ -1519,7 +1495,7 @@ function portal_homepage_edited_event_send_mail_filter_func(&$values) {
 
 
 /**
- * 
+ *
  */
 
 /*  End of filters   */

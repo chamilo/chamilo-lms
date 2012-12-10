@@ -568,7 +568,7 @@ if (!empty($exercise_list)) {
 
                 if ($session_id == $row['session_id']) {
                     //Settings
-                    $actions =  Display::url(Display::return_icon('edit.png',get_lang('Edit'),'',ICON_SIZE_SMALL), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                    $actions =  Display::url(Display::return_icon('edit.png',get_lang('EditQuestions'),'',ICON_SIZE_SMALL), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
 
                     //Exercise results
                     $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).'</a>';
@@ -609,6 +609,12 @@ if (!empty($exercise_list)) {
                         $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL), '', array('onclick'=>"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'),ENT_QUOTES,$charset))." ".addslashes($row['title'])."?"."')) return false;",'href'=>'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));
                     } else {
                         $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'),'',ICON_SIZE_SMALL);
+                    }
+                    if ($rowi > 50) {
+                        // Showing the direct link to exercise settings only 
+                        // if there are more than 50 questions, so the list of
+                        // questions does not slow down everything
+                        $actions .=  Display::url(Display::return_icon('settings.png',get_lang('EditSettings'),'',ICON_SIZE_SMALL), 'exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$row['id']);
                     }
                 }
 

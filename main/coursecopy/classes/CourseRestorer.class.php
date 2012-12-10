@@ -1093,9 +1093,15 @@ class CourseRestorer
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
-                $quiz = $quiz->obj;
+                if (isset($quiz->obj)) {
+                    //For new imports
+                    $quiz = $quiz->obj;
+                } else {
+                    //For backward compatibility
+                    $quiz = $quiz->obj;
+                }
+                
 				$doc = '';
-
 				if (strlen($quiz->sound) > 0) {
 					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
 						echo $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
@@ -1105,19 +1111,7 @@ class CourseRestorer
 					}
 				}
 				if ($id != -1) {
-                    if ($respect_base_content) {
-                        $my_session_id = $quiz->session_id;
-                        if (!empty($quiz->session_id)) {
-                            $my_session_id = $session_id;
-                        }
-                        $condition_session = " , session_id = '$my_session_id' ";
-                    } else {
-    					$condition_session = "";
-        				if (!empty($session_id)) {
-        					$session_id = intval($session_id);
-        					$condition_session = " , session_id = '$session_id' ";
-    				    }
-                    }
+
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
@@ -1128,31 +1122,43 @@ class CourseRestorer
 						$quiz->end_time   = null;
 					}
 
-					// Normal tests are stored in the database.
-					$sql = "INSERT INTO ".$table_qui." SET
-						c_id = ".$this->destination_course_id." ,
-						title = '".self::DBUTF8escapestring($quiz->title).
-						"', description = '".self::DBUTF8escapestring($quiz->description).
-						"', type = '".$quiz->type.
-						"', random = '".$quiz->random.
-						"', active = '".$quiz->active.
-						"', sound = '".self::DBUTF8escapestring($doc).
-						"', max_attempt = ".(int)$quiz->max_attempt.
-						",  results_disabled = ".(int)$quiz->results_disabled.
-						",  access_condition = '".$quiz->access_condition.
-						"', start_time = '".$quiz->start_time.
-                        "', pass_percentage = '".$quiz->pass_percentage.
-						"', end_time = '".$quiz->end_time.
-						"', feedback_type = ".(int)$quiz->feedback_type.
-						", random_answers = ".(int)$quiz->random_answers.
-                        ", random_by_category = ".$quiz->random_by_category.
-                        ", review_answers = ".$quiz->review_answers.
-                        ", propagate_neg = ".$quiz->propagate_neg.
-                        ", text_when_finished = '".$quiz->text_when_finished."',
-						 expired_time = ".(int)$quiz->expired_time.
-						$condition_session;
-					Database::query($sql);
-					$new_id = Database::insert_id();
+                    $params = array(
+                        'c_id' => $this->destination_course_id,
+                        'title' => self::DBUTF8escapestring($quiz->title),
+                        'description' => self::DBUTF8escapestring($quiz->description),
+                        'type' => $quiz->type,
+                        'random' => $quiz->random,
+                        'active' => $quiz->active,
+                        'sound' => self::DBUTF8escapestring($doc),
+                        'max_attempt' => (int)$quiz->max_attempt,
+                        'results_disabled' => (int)$quiz->results_disabled,
+                        'access_condition' => $quiz->access_condition,
+                        'start_time' => $quiz->start_time,
+                        'pass_percentage' => $quiz->pass_percentage,
+                        'end_time' => $quiz->end_time,
+                        'feedback_type' => (int)$quiz->feedback_type,
+                        'random_answers' => (int)$quiz->random_answers,
+                        'random_by_category' => $quiz->random_by_category,
+                        'review_answers' => $quiz->review_answers,
+                        'propagate_neg' => $quiz->propagate_neg,
+                        'text_when_finished' => $quiz->text_when_finished,
+                        'expired_time' => (int)$quiz->expired_time,
+                    );
+
+                    if ($respect_base_content) {
+                        $my_session_id = $quiz->session_id;
+                        if (!empty($quiz->session_id)) {
+                            $my_session_id = $session_id;
+                        }
+                        $params['session_id'] = $my_session_id;
+                    } else {
+        				if (!empty($session_id)) {
+        					$session_id = intval($session_id);
+                            $params['session_id'] = $session_id;
+    				    }
+                    }
+
+                    $new_id = Database::insert($table_qui, $params);
 				} else {
 					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
 					$new_id = -1;

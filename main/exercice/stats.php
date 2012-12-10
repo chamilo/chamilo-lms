@@ -51,7 +51,10 @@ if (!empty($question_list)) {
 		$data[$question_id]['name'] 						= cut($question_obj->question, 100);
         $data[$question_id]['type'] 						= $question_obj->get_question_type_name();
 		//$data[$question_id]['students_who_try_exercise'] 	= $exercise_stats['users'];
-        $percentange = $count_users/$count_students*100;
+        $percentange = 0;
+        if ($count_students) {
+            $percentange = $count_users/$count_students*100;
+        }
         
         $data[$question_id]['students_who_try_exercise'] 	= Display::bar_progress($percentange, false, $count_users .' / '.$count_students);
                 
@@ -133,7 +136,10 @@ if (!empty($question_list)) {
                         
                         $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), FILL_IN_BLANKS, $answer_info_db, $answer_item);
                         
-                        $percentange = $count/$count_students*100;
+                        $percentange = 0;
+                        if (!empty($count_students)) {
+                            $percentange = $count/$count_students*100;
+                        }
                         $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
                     
                         $id++;
@@ -160,8 +166,10 @@ if (!empty($question_list)) {
                         $data[$id]['correct'] 	= $answer_info;
                         
                         $count = get_number_students_answer_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id(), MATCHING);
-                        
-                        $percentange = $count/$count_students*100;
+                        $percentange = 0;
+                        if (!empty($count_students)) {
+                            $percentange = $count/$count_students*100;
+                        }
                         $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
                     }                    
                     break;
@@ -175,7 +183,10 @@ if (!empty($question_list)) {
                     $data[$id]['correct'] 	= '-';
                     
                     $count = get_number_students_answer_hotspot_count($answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());                    
-                    $percentange = $count/$count_students*100;
+                    $percentange = 0;
+                    if (!empty($count_students)) {
+                        $percentange = $count/$count_students*100;
+                    }
                     $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);                    
                     break;
                 default:
@@ -188,7 +199,10 @@ if (!empty($question_list)) {
                     $data[$id]['correct'] 	= $correct_answer;
                     
                     $count = get_number_students_answer_count($real_answer_id, $question_id, $exercise_id, api_get_course_id(), api_get_session_id());
-                    $percentange = $count/$count_students*100;
+                    $percentange = 0;
+                    if (!empty($count_students)) {
+                        $percentange = $count/$count_students*100;
+                    }
                     $data[$id]['attempts'] 	= Display::bar_progress($percentange, false, $count .' / '.$count_students);
             }            
             $id++;

@@ -46,7 +46,7 @@ class UniqueAnswerNoOption extends Question {
 	 */
 	function createAnswersForm ($form) {
 		// getting the exercise list
-		$obj_ex =$_SESSION['objExercise'];
+		$obj_ex = $_SESSION['objExercise'];
 
 		$editor_config = array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '125');
 
@@ -213,53 +213,53 @@ class UniqueAnswerNoOption extends Question {
         
         //Adding the "I don't know" question answer
         //if (empty($this -> id)) {
-            $i = 666;        
-            $form -> addElement ('html', '<tr>'); 
-    
-            $defaults['answer['.$i.']']     = get_lang('DontKnow');
-            $defaults['weighting['.$i.']']  = 0;
-            $defaults['scenario']=$temp_scenario;
-            $renderer = & $form->defaultRenderer();
-            
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']'); 
-             
-            $answer_number=$form->addElement('text', 'counter['.$i.']',null,'value="-"');
-            $answer_number->freeze();
-            
-            $form->addElement('hidden', 'position['.$i.']', '666');
-    
-            $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
-            $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-         
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
-       
-    
-            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-                // feedback
-                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
+        $i = 666;        
+        $form -> addElement ('html', '<tr>'); 
 
-            }
-    
-            //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
-    
-            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0', 'readonly' =>'readonly'));
-            $form->addElement ('html', '</tr>');
-        
-         //}
+        $defaults['answer['.$i.']']     = get_lang('DontKnow');
+        $defaults['weighting['.$i.']']  = 0;
+        $defaults['scenario']=$temp_scenario;
+        $renderer = & $form->defaultRenderer();
+
+        $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
+        $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
+        $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+        $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');  
+        $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']'); 
+
+        $answer_number=$form->addElement('text', 'counter['.$i.']',null,'value="-"');
+        $answer_number->freeze();
+
+        $form->addElement('hidden', 'position['.$i.']', '666');
+
+        $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
+        $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+
+        $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+
+
+        if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
+            // feedback
+            $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
+        } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
+
+        }
+
+        //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
+
+        $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0', 'readonly' =>'readonly'));
+        $form->addElement ('html', '</tr>');
+
+     //}
     
        
 		$form -> addElement ('html', '</table>');
 		$form -> addElement ('html', '<br />');
 		$navigator_info = api_get_navigator();
 
-		global $text, $class, $show_quiz_edition;
+		global $text, $class;
 		//ie6 fix
-		if ($show_quiz_edition) {
+		if ($obj_ex->edit_exercise_in_lp == true) {
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                
                 $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');                
 				$form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');

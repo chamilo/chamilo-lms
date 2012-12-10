@@ -22,4 +22,11 @@ $InvalidMessageId = "Felaktigt id på meddelandet";
 $ErrorSendingMessage = "Det uppstod ett fel när meddelandet försökte skickas";
 $SureYouWantToDeleteSelectedMessages = "Är du säker på att du vill ta bort de valda meddelandena?";
 $SelectedMessagesDeleted = "De valda meddelandena har tagits bort";
+$EnterTitle = "Skriv in rubrik";
+$TypeYourMessage = "Skriv ditt meddelande här";
+$MessageDeleted = "Meddelandet har tagits bort";
+$ConfirmDeleteMessage = "Är du säker på att du vill radera markerat meddelande?";
+$DeleteMessage = "Ta bort meddelande";
+$SendInviteMessage = "Skicka inbjudan";
+$WriteAMessage = "Skriv ett meddelande";
 ?>

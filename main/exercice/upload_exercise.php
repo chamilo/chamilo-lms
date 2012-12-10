@@ -3,7 +3,7 @@
 /**
  * 	Upload quiz: This script shows the upload quiz feature
  *  Initial work by Isaac flores on Nov 4 of 2010
- *  Encoding fixes Julio Montoya 
+ *  Encoding fixes Julio Montoya
  * 	@package chamilo.exercise
  */
 /**
@@ -87,26 +87,23 @@ function lp_upload_quiz_secondary_actions() {
 }
 
 function lp_upload_quiz_main() {
-        
+
     // variable initialisation
     $lp_id = Security::remove_XSS($_GET['lp_id']);
-    
-    $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id=' . $lp_id, '', 'enctype="multipart/form-data"');
-    $form->addElement('html', '<div><h3>' .Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), array('style'=>'margin-bottom:-2px;'),ICON_SIZE_MEDIUM). get_lang('ImportExcelQuiz') . '</h3></div>');
-    $form->addElement('file', 'user_upload_quiz', '');
+
+    $form = new FormValidator('upload', 'POST', api_get_self() . '?' . api_get_cidreq() . '&lp_id=' . $lp_id, '', array('enctype' => 'multipart/form-data'));
+    $form->addElement('header', get_lang('ImportExcelQuiz'));
+    $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
+
+    $link = '<a href="../exercice/quiz_template.xls">'.Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate'),null,16).get_lang('DownloadExcelTemplate');
+
+    $form->addElement('advanced_settings', $link);
+
     //button send document
     $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Send'), 'class="upload"');
-    
+
     // Display the upload field
-    echo '<table style="text-align: left; width: 100%;" border="0" cellpadding="2"cellspacing="2"><tbody><tr>';
-    echo '<td style="vertical-align: top; width: 25%;">';
-    echo '<a href="../exercice/quiz_template.xls">'.Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate'),null,16).get_lang('DownloadExcelTemplate').'';
-    echo '</a>';
-    echo '</td>';
-    echo '</tr>';
-    echo '<tr><td>';
     $form->display();
-    echo '</td></tr></tbody></table>';
 }
 
 /**
@@ -129,7 +126,7 @@ function lp_upload_quiz_action_handling() {
     $data->setOutputEncoding(api_get_system_encoding());
     // Reading the xls document.
     $data->read($_FILES['user_upload_quiz']['tmp_name']);
- 
+
     // Variables
     $quiz_index = 0;
     $question_title_index = array();
@@ -197,7 +194,7 @@ function lp_upload_quiz_action_handling() {
             $l++;
         }
     }
-    
+
     // Get answers
     for ($i = 0; $i < count($question_name_index_init); $i++) {
         for ($j = $question_name_index_init[$i]; $j <= $question_name_index_end[$i]; $j++) {
@@ -217,33 +214,35 @@ function lp_upload_quiz_action_handling() {
             }
         }
     }
-    
+
     $quiz_title = $quiz[2]; // Quiz title
-    
+
     if ($quiz_title != '') {
         // Variables
         $type = 2;
         $random = $active = $results = $max_attempt = $expired_time = 0;
         //make sure feedback is enabled (3 to disable), otherwise the fields
         // added to the XLS are not shown, which is confusing
-        $feedback = 0; 
+        $feedback = 0;
         // Quiz object
-        $quiz_object = new Exercise();        
+        $quiz_object = new Exercise();
         $quiz_id = $quiz_object->create_quiz($quiz_title, $expired_time, $type, $random, $active, $results, $max_attempt, $feedback);
-        
-        if ($quiz_id) {           
-        
+
+        if ($quiz_id) {
+
             // insert into the item_property table
             api_item_property_update($_course, TOOL_QUIZ, $quiz_id, 'QuizAdded', api_get_user_id());
-            
+
             // Import questions
             for ($i = 0; $i < $number_questions; $i++) {
                 // Create questions
                 $question_title = $question[$i][2]; // Question name
-                if ($question_title != '') {
-                    $question_id = Question::create_question($quiz_id, ($question_title));
-                }
+                // Unique answers are the only question types available for now
+                // through xls-format import
                 $unique_answer = new UniqueAnswer();
+                if ($question_title != '') {
+                    $question_id = $unique_answer->create_question($quiz_id, ($question_title));
+                }
                 if (is_array($new_answer[$i])) {
                     $id = 1;
                     $answers_data = $new_answer[$i];
@@ -257,7 +256,7 @@ function lp_upload_quiz_action_handling() {
                             $score = $score_list[$i][3];
                             $comment = $feedback_true_list[$i][2];
                         } else {
-                            $comment = $feedback_false_list[$i][2];                    	
+                            $comment = $feedback_false_list[$i][2];
                         }
     /*
                         if ($id == 1) {
@@ -297,7 +296,7 @@ function lp_upload_quiz_action_handling() {
             }
         }
         if (isset($_SESSION['oLP']) && isset($_GET['lp_id'])) {
-        	
+
             $previous = $_SESSION['oLP']->select_previous_item_id();
             $parent = 0;
             // Add a Quiz as Lp Item
@@ -306,7 +305,7 @@ function lp_upload_quiz_action_handling() {
             header('location: ../newscorm/lp_controller.php?' . api_get_cidreq() . '&action=add_item&type=step&lp_id=' . Security::remove_XSS($_GET['lp_id']).'&session_id='.api_get_session_id());
             exit;
         } else {
-            //  header('location: exercice.php?' . api_get_cidreq());	
+            //  header('location: exercice.php?' . api_get_cidreq());
             echo '<script>window.location.href = "admin.php?'.api_get_cidReq().'&exerciseId='.$quiz_id.'&session_id='.api_get_session_id().'"</script>';
         }
     }

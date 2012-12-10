@@ -22,7 +22,7 @@ class FormValidator extends HTML_QuickForm
 
     /**
      * Create a form validator based on an array of form data:
-     * 
+     *
      *         array(
      *             'name' => 'zombie_report_parameters',    //optional
      *             'method' => 'GET',                       //optional
@@ -42,13 +42,13 @@ class FormValidator extends HTML_QuickForm
      *                 array(
      *                     'name' => 'submit_button',
      *                     'type' => 'style_submit_button',
-     *                     'value' => get_lang('Search'),   
+     *                     'value' => get_lang('Search'),
      *                     'attributes' => array('class' => 'search')
      *                 )
      *             )
      *         );
-     * 
-     * @param array form_data 
+     *
+     * @param array form_data
      * @return FormValidator
      */
     static function create($form_data)
@@ -150,7 +150,7 @@ class FormValidator extends HTML_QuickForm
         // Modify the default templates
         $renderer = & $this->defaultRenderer();
 
-        //Form template        
+        //Form template
         $form_template = '<form{attributes}>
 <fieldset>
 	{content}
@@ -168,8 +168,8 @@ class FormValidator extends HTML_QuickForm
             $element_template = ' {label}  {element} ';
             $renderer->setElementTemplate($element_template);
         } else {
-            $element_template = '   
-            <div class="control-group {error_class}">				
+            $element_template = '
+            <div class="control-group {error_class}">
                 <label class="control-label">
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
@@ -181,13 +181,13 @@ class FormValidator extends HTML_QuickForm
                         {label_3}
                     <!-- END label_3 -->
 
-                    <!-- BEGIN label_2 -->                    
+                    <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                     <!-- END label_2 -->
 
                     <!-- BEGIN error -->
                         <span class="help-inline">{error}</span>
-                    <!-- END error -->	
+                    <!-- END error -->
                 </div>
             </div>';
             $renderer->setElementTemplate($element_template);
@@ -201,7 +201,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');
 
             //When you want to group buttons use something like this
-            /* $group = array();    
+            /* $group = array();
               $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
               $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
               $form->addGroup($group, 'buttons_in_action');
@@ -219,18 +219,13 @@ class FormValidator extends HTML_QuickForm
              */
         }
 
-
-
-
-
-
-        //Set Header template        
+        //Set Header template
         $renderer->setHeaderTemplate('<legend>{header}</legend>');
 
         //Set required field template
         HTML_QuickForm::setRequiredNote('<span class="form_required">*</span> <small>' . get_lang('ThisFieldIsRequired') . '</small>');
         $required_note_template = <<<EOT
-	<div class="control-group">		
+	<div class="control-group">
 		<div class="controls">{requiredNote}</div>
 	</div>
 EOT;
@@ -338,7 +333,7 @@ EOT;
             $config = array('FullPage' => (bool) $full_page);
         }
         if ($full_page) {
-            $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
+            $html_type = isset($_SESSION['status']) && $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML_FULLPAGE : STUDENT_HTML_FULLPAGE;
             //First *filter* the HTML (markup, indenting, ...)
             //$this->applyFilter($name,'html_filter_teacher_fullpage');
         } else {

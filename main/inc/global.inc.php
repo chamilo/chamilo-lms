@@ -22,10 +22,12 @@
  */
 
  //@todo will be removed before a stable release
-$mtime = microtime(); 
-$mtime = explode(" ",$mtime); 
-$mtime = $mtime[1] + $mtime[0]; 
-$starttime = $mtime; 
+//require '/var/www/chamilo11/tests/xhprof/header.php';
+
+$mtime = microtime();
+$mtime = explode(" ",$mtime);
+$mtime = $mtime[1] + $mtime[0];
+$starttime = $mtime;
 define('START', $starttime);
 
 // Showing/hiding error codes in global error messages.
@@ -106,7 +108,7 @@ ini_set('auto_detect_line_endings', '1');
 //require_once dirname(__FILE__).'/autoload.inc.php';
 
 //Fixes Htmlpurifier autoloader issue with composer
-define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library'); 
+define('HTMLPURIFIER_PREFIX', $lib_path.'htmlpurifier/library');
 
 //mpdf constants
 define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
@@ -114,6 +116,85 @@ define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
+
+use Silex\Application;
+$app = new Application();
+
+require_once __DIR__.'/../../resources/config/prod.php';
+//require_once __DIR__.'/../../resources/config/dev.php';
+
+//Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
+$app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
+    'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
+));
+
+//Setting the Twig service provider
+$app->register(new Silex\Provider\TwigServiceProvider(), array(
+    'twig.path' => array(
+        api_get_path(SYS_CODE_PATH).'template', //template folder
+        api_get_path(SYS_PLUGIN_PATH)             //plugin folder
+    ),
+    'twig.options'          => array(
+        //'twig.form.templates' => array('form_div_layout.html.twig', 'common/form_div_layout.html.twig'),
+        'debug'             => $app['debug'],
+        'charset'           => 'utf-8',
+        'strict_variables'  => false,
+        'autoescape'        => false,
+        'cache'             => $app['debug'] ? false : $app['cache.path'].'twig',
+        'optimizations' => -1, // turn on optimizations with -1
+    )
+));
+
+//Setting Twig options
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
+    $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
+    $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
+    $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
+    $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
+    $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+    $twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
+    $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
+    $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
+    return $twig;
+}));
+
+//Creating Chamilo service provider
+use Silex\ServiceProviderInterface;
+
+class ChamiloServiceProvider implements ServiceProviderInterface {
+    public function register(Application $app) {
+        //Template
+        $app['template'] = $app->share(function() use($app){
+            return new Template(null, $app);
+        });
+
+        //Formvalidator
+        $app['form_validator'] = $app->share(function() use($app){
+            return new FormValidator();
+        });
+    }
+    public function boot(Application $app) {
+    }
+}
+//Registering Chamilo service provider
+$app->register(new ChamiloServiceProvider(), array());
+
+$app->finish(function() {
+    //require '/var/www/chamilo11/tests/xhprof/footer.php';
+    //error_log($xhprof);
+});
+
+$app['template.show_header']        = true;
+$app['template.show_footer']        = true;
+$app['template.show_learnpath']     = true;
+$app['template.hide_global_chat']   = true;
+$app['template.load_plugins']       = true;
+
+//Default template style
+$app['template_style'] = 'default';
+$app['default_layout'] = 'layout_1_col.tpl';
+
 
 //Database constants
 require_once $lib_path.'database.constants.inc.php';
@@ -155,6 +236,7 @@ if (!$_configuration['db_host']) {
     require $includePath.'/global_error_message.inc.php';
     die();
 }
+
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
 if (!empty($_configuration['multiple_access_urls'])) {
@@ -216,84 +298,18 @@ if (api_is_utf8($charset)) {
 // Start session after the internationalization library has been initialized.
 Chamilo::session()->start($already_installed);
 
-// Remove quotes added by PHP  - get_magic_quotes_gpc() is deprecated in PHP 5 see #2970
- 
-if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {	
-	array_walk_recursive_limited($_GET,     	'stripslashes', true);	
-	array_walk_recursive_limited($_POST, 	'stripslashes', true);
-	array_walk_recursive_limited($_COOKIE,  'stripslashes', true);
-	array_walk_recursive_limited($_REQUEST, 'stripslashes', true);
-}
+$settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_date_refresh'));
+$settings_date_refresh = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
-// access_url == 1 is the default chamilo location
-if ($_configuration['access_url'] != 1) {
-    $url_info = api_get_access_url($_configuration['access_url']);
-    if ($url_info['active'] == 1) {
-        $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
-        foreach ($settings_by_access as & $row) {
-            if (empty($row['variable'])) {
-                $row['variable'] = 0;
-            }
-            if (empty($row['subkey'])) {
-                $row['subkey'] = 0;
-            }
-            if (empty($row['category'])) {
-                $row['category'] = 0;
-            }
-            $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
-        }
+$_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+$_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+
+if (!isset($_setting)) {
+    api_set_settings_and_plugins();
+} else {
+    if (isset($_setting['settings_date_refresh']) && $_setting['settings_date_refresh'] != $settings_date_refresh) {
+        api_set_settings_and_plugins();
     }
-}
-
-$result = & api_get_settings(null, 'list', 1);
-foreach ($result as & $row) {
-    if ($_configuration['access_url'] != 1) {
-        if ($url_info['active'] == 1) {
-            $var = empty($row['variable']) ? 0 : $row['variable'];
-            $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
-            $category = empty($row['category']) ? 0 : $row['category'];
-        }
-
-        if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
-            if (isset($settings_by_access_list[$var]) &&
-                $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
-                if ($row['subkey'] == null) {
-                    $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
-                } else {
-                    $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
-                }
-            } else {
-                if ($row['subkey'] == null) {
-                    $_setting[$row['variable']] = $row['selected_value'];
-                } else {
-                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-                }
-            }
-        } else {
-            if ($row['subkey'] == null) {
-                $_setting[$row['variable']] = $row['selected_value'];
-            } else {
-                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-            }
-        }
-    } else {
-        if ($row['subkey'] == null) {
-            $_setting[$row['variable']] = $row['selected_value'];
-        } else {
-            $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
-        }
-    }
-}
-
-$result = & api_get_settings('Plugins', 'list', $_configuration['access_url']);
-$_plugins = array();
-foreach ($result as & $row) {
-    $key = & $row['variable'];
-    if (is_string($_setting[$key])) {
-        $_setting[$key] = array();
-    }
-    $_setting[$key][] = $row['selected_value'];
-    $_plugins[$key][] = $row['selected_value'];
 }
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
@@ -301,7 +317,7 @@ require_once $lib_path.'formvalidator/Rule/allowed_tags.inc.php';
 // Load HTMLPurifier.
 //require_once $lib_path.'htmlpurifier/library/HTMLPurifier.auto.php'; // It will be loaded later, in a lazy manner.
 
-// Before we call local.inc.php, let's define a global $this_section variable 
+// Before we call local.inc.php, let's define a global $this_section variable
 // which will then be usable from the banner and header scripts
 $this_section = SECTION_GLOBAL;
 
@@ -313,10 +329,10 @@ require $includePath.'/local.inc.php';
 //Fixes bug in Chamilo 1.8.7.1 array was not set
 $administrator['email'] = isset($administrator['email']) ? $administrator['email'] : 'admin@example.com';
 $administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
- 
+
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
 if (file_exists($mail_conf)) {
-	require_once $mail_conf; 
+	require_once $mail_conf;
 }
 
 // ===== "who is logged in?" module section =====
@@ -327,10 +343,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 }
 
 // ===== end "who is logged in?" module section =====
-
-if (api_get_setting('server_type') == 'test') {    
+//error_reporting(-1);
+if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    error_reporting(-1);
 } else {
     /*
     Server type is not test
@@ -394,18 +409,18 @@ if (isset($this_script) && $this_script == 'sub_language') {
     //getting parent info
     $parent_language = SubLanguageManager::get_all_information_of_language($_REQUEST['id']);
     //getting sub language info
-    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);    
+    $sub_language = SubLanguageManager::get_all_information_of_language($_REQUEST['sub_language_id']);
 
     $english_language_array = $parent_language_array = $sub_language_array = array();
 
     foreach ($language_files_to_load as $language_file_item) {
         $lang_list_pre = array_keys($GLOBALS);
-        //loading english        
-        $path = $langpath.'english/'.$language_file_item.'.inc.php';        
+        //loading english
+        $path = $langpath.'english/'.$language_file_item.'.inc.php';
         if (file_exists($path)) {
             include $path;
         }
-        
+
         $lang_list_post = array_keys($GLOBALS);
         $lang_list_result = array_diff($lang_list_post, $lang_list_pre);
         unset($lang_list_pre);
@@ -418,7 +433,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
             unset(${$item});
         }
         $parent_file = $langpath.$parent_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
-        
+
         if (file_exists($parent_file) && is_file($parent_file)) {
             include_once $parent_file;
         }
@@ -429,7 +444,7 @@ if (isset($this_script) && $this_script == 'sub_language') {
         foreach($lang_list_result as $item) {
             unset(${$item});
         }
-        
+
         $sub_file = $langpath.$sub_language['dokeos_folder'].'/'.$language_file_item.'.inc.php';
         if (file_exists($sub_file) && is_file($sub_file)) {
             include $sub_file;
@@ -494,7 +509,7 @@ if (!empty($valid_languages)) {
         }
     }
 }
-  
+
 // Sometimes the variable $language_interface is changed
 // temporarily for achieving translation in different language.
 // We need to save the genuine value of this variable and
@@ -592,8 +607,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($s_sql_update_logout_date);
     }
 }
-// Add language_measure_frequency to your main/inc/conf/configuration.php in 
-// order to generate language variables frequency measurements (you can then 
+// Add language_measure_frequency to your main/inc/conf/configuration.php in
+// order to generate language variables frequency measurements (you can then
 // see them through main/cron/lang/langstats.php)
 // The langstat object will then be used in the get_lang() function.
 // This block can be removed to speed things up a bit as it should only ever
@@ -605,7 +620,7 @@ if (isset($_configuration['language_measure_frequency']) && $_configuration['lan
 
 //Default quota for the course documents folder
 $default_quota = api_get_setting('default_document_quotum');
-//Just in case the setting is not correctly set 
+//Just in case the setting is not correctly set
 if (empty($default_quota)) {
     $default_quota = 100000000;
 }

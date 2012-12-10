@@ -250,16 +250,23 @@ class Tracking {
 		$session_id  = intval($session_id);
 
 		$tbl_track_e_course_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-		$sql = 'SELECT login_course_date FROM '.$tbl_track_e_course_access.'
-                        WHERE user_id = '.$student_id.'
-                        AND course_code = "'.$course_code.'"
-                        AND session_id = '.$session_id.'
-                        ORDER BY login_course_date DESC LIMIT 0,1';
+		$sql = 'SELECT login_course_date 
+                FROM '.$tbl_track_e_course_access.'
+                WHERE   user_id = '.$student_id.' AND 
+                        course_code = "'.$course_code.'" AND 
+                        session_id = '.$session_id.'
+                ORDER BY login_course_date DESC 
+                LIMIT 0,1';
 
 		$rs = Database::query($sql);
 		if (Database::num_rows($rs) > 0) {
 			if ($last_login_date = Database::result($rs, 0, 0)) {
-                $last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
+                if (empty($last_login_date) || $last_login_date == '0000-00-00 00:00:00') {
+                    return false;
+                }
+                //$last_login_date_timestamp = api_strtotime($last_login_date, 'UTC');
+                //see #5736
+                $last_login_date_timestamp = api_strtotime($last_login_date);                
                 
 				$now = time();
 				//If the last connection is > than 7 days, the text is red
@@ -268,7 +275,7 @@ class Tracking {
 					if ($convert_date) {		
                         $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                         $icon = api_is_allowed_to_edit() ? '<a href="'.api_get_path(REL_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'" title="'.get_lang('RemindInactiveUser').'"><img src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" /> </a>': null;
-						return $icon. Display::label(api_format_date($last_login_date, DATE_FORMAT_SHORT), 'warning');
+						return $icon. Display::label($last_login_date, 'warning');
 					} else {
 						return $last_login_date;
 					}
@@ -545,8 +552,8 @@ class Tracking {
 	public static function get_avg_student_progress($student_id, $course_code, $lp_ids = array(), $session_id = null, $return_array = false) {
 
 		// get the informations of the course
-		$a_course = CourseManager :: get_course_information($course_code);
-		if (!empty($a_course)) {
+		$course_info = api_get_course_info($course_code);
+		if (!empty($course_info)) {
 			// table definition
 			$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
 			$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -560,17 +567,14 @@ class Tracking {
 				}
 			}
 			$session_id = intval($session_id);
-			$sql = "SELECT id FROM $tbl_course_lp lp WHERE c_id = {$a_course['real_id']} $condition_lp";
+			$sql = "SELECT id FROM $tbl_course_lp lp WHERE c_id = {$course_info['real_id']} $condition_lp";
 			$res_count_lp = Database::query($sql);
 			// count the number of learning paths
 			$lp_id = array();
 			while ($row_lp = Database::fetch_array($res_count_lp,'ASSOC')) {
-				//$visibility = api_get_item_visibility($a_course, TOOL_LEARNPATH, $row_lp['id'], $session_id);
-				//  if ($visibility == 1) {
 				$lp_id[] = $row_lp['id'];
-				//}
-				}
-				$count_lp = count($lp_id);
+			}
+			$count_lp = count($lp_id);
 
 				$avg_progress = 0;
 				//if there is at least one learning path and one student
@@ -585,11 +589,11 @@ class Tracking {
 					}
 					// Get last view for each student (in case of multi-attempt)
 					// Also filter on LPs of this session
-					$sql_maxes = "SELECT MAX(view_count), progress FROM $tbl_course_lp_view lp_view ".
-                             	"WHERE 	c_id = {$a_course['real_id']} AND 
+                $sql_maxes = "SELECT MAX(view_count), progress FROM $tbl_course_lp_view lp_view 
+                              WHERE 	c_id = {$course_info['real_id']} AND 
                              			$condition_user session_id = $session_id AND 
-                             			lp_view.lp_id IN (".implode(',',$lp_id).") ".
-                             "GROUP BY lp_id, user_id";                
+                                    lp_view.lp_id IN (".implode(',',$lp_id).") 
+                              GROUP BY lp_id, user_id";                
 					$res_maxes = Database::query($sql_maxes);
 					$sum =  0;
 					while ($row_maxes = Database::fetch_array($res_maxes)) {
@@ -1210,21 +1214,13 @@ class Tracking {
 
 			// At first, courses where $coach_id is coach of the course //
 
-			/*$sql = 'SELECT 1
-			FROM ' . $tbl_session_course_user . ' AS session_course_user
-			INNER JOIN ' . $tbl_session_course . ' AS session_course
-			ON session_course.course_code = session_course_user.course_code
-			AND id_coach=' . $coach_id . '
-			WHERE id_user=' . $student_id;*/
-
-			$sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';
-
+            $sql = 'SELECT 1 FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id .' AND status=2';
 			$result = Database::query($sql);
 			if (Database::num_rows($result) > 0) {
 				return true;
 			}
 
-			// Then, courses where $coach_id is coach of the session    //
+            // Then, courses where $coach_id is coach of the session
 
 			$sql = 'SELECT session_course_user.id_user
                         FROM ' . $tbl_session_course_user . ' as session_course_user
@@ -1332,10 +1328,57 @@ class Tracking {
 		 * @return    array    Sessions list
 		 */
 		public static function get_sessions_coached_by_user($coach_id) {
+        // table definition
+        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
  
+        // protect datas
+        $coach_id = intval($coach_id);
+
+        // session where we are general coach
+        $sql = 'SELECT DISTINCT id, name, date_start, date_end
+                    FROM ' . $tbl_session . '
+                    WHERE id_coach=' . $coach_id;
+
+        global $_configuration;
+        if ($_configuration['multiple_access_urls']) {
+            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1){
+                $sql = 'SELECT DISTINCT id, name, date_start, date_end
+                    FROM ' . $tbl_session . ' session INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                    ON (session.id = session_rel_url.session_id)
+                    WHERE id_coach=' . $coach_id.' AND access_url_id = '.$access_url_id;
+            }
+        }
+
+        $rs = Database::query($sql);
+        while ($row = Database::fetch_array($rs)) {
+            $a_sessions[$row["id"]] = $row;
+        }
 
 			// session where we are coach of a course
-/*		
+        $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                    FROM ' . $tbl_session . ' as session
+                    INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
+                        ON session.id = session_course_user.id_session
+                        AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2';
+
+        global $_configuration;
+        if ($_configuration['multiple_access_urls']) {
+            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1){
+                $sql = 'SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                    FROM ' . $tbl_session . ' as session
+                    INNER JOIN ' . $tbl_session_course_user . ' as session_course_user
+                        ON session.id = session_course_user.id_session AND session_course_user.id_user=' . $coach_id.' AND session_course_user.status=2
+                    INNER JOIN '.$tbl_session_rel_access_url.' session_rel_url
+                    ON (session.id = session_rel_url.session_id)
+                    WHERE access_url_id = '.$access_url_id;
+            }
+        }
 
 			$rs = Database::query($sql);
 			while ($row = Database::fetch_array($rs)) {
@@ -1367,7 +1410,7 @@ class Tracking {
 					}
 				}
 			}
-			return $a_sessions;*/
+        return $a_sessions;
 
 		}
 
@@ -3664,8 +3707,8 @@ class TrackingCourseLog {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];
             }
-            $user_row[]= $user['username']; // hubr
-            $user_row[]= $user['time']; //3           
+            $user_row[]= $user['username'];
+            $user_row[]= $user['time'];           
             $user_row[]= $user['average_progress'];            
             $user_row[]= $user['exercise_progress'];
             
@@ -3674,7 +3717,7 @@ class TrackingCourseLog {
         
             $user_row[]= $user['student_score'];
             $user_row[]= $user['count_assignments'];
-            $user_row[]= $user['count_messages']; //8
+            $user_row[]= $user['count_messages'];
             
             if (empty($session_id)) {
                 $user_row[]= $user['survey'];

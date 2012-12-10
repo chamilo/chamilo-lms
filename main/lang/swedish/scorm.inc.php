@@ -39,6 +39,8 @@ $langAutodetect = "Automatisk";
 $langAccomplishedStepsTotal = "Totalt antal slutförda steg";
 $langUnknown = "Okänd";
 $AreYouSureToDeleteSteps = "Är du säker på att du vill radera stegen?";
+$Local = "Lokal";
+$Remote = "Fjärr";
 $FileToUpload = "SCORM- eller AICC-paket att ladda upp";
 $ContentMaker = "Innehållets ursprung";
 $ContentProximity = "Kursplacering";
@@ -47,4 +49,5 @@ $UnknownPackageFormat = "Paketets format känns inte igen. Se till att det är v
 $Attempt = "Försök";
 $MoveTheCurrentForum = "Flytta detta forum";
 $WarningWhenEditingScorm = "Varning!<br /> När du ändrar i innehållet för ett SCORM-steg kanske du ändrar rapportdelen för inlärningsvägen eller funktionen i steget.";
+$ScormUnknownPackageFormat = "Det paket du försöker ladda upp har ett okänt format. Vänligen kontrollera att paketet har format som stöds.";
 ?>

@@ -40,18 +40,22 @@
 
 use \ChamiloSession as Session;
 
-require_once dirname(__FILE__).'/ldap.inc.php';
-require_once dirname(__FILE__).'/functions.inc.php';
-
+require_once dirname(__FILE__) . '/ldap.inc.php';
+require_once dirname(__FILE__) . '/functions.inc.php';
+error_log('Entering login.ldap.php');
 $ldap_user = extldap_authenticate($login, $password);
 if ($ldap_user !== false) {
+    error_log('extldap_authenticate works');
     $chamilo_user = extldap_get_chamilo_user($ldap_user);
     //userid is not on the ldap, we have to use $uData variable from local.inc.php
     $chamilo_user['user_id'] = $uData['user_id'];
 
+    error_log("chamilo_user found user_id: {$uData['user_id']}");
+
     //Update user info
     if (isset($extldap_config['update_userinfo']) && $extldap_config['update_userinfo']) {
         external_update_user($chamilo_user);
+        error_log("Calling external_update_user");
     }
 
     $loginFailed = false;
@@ -60,9 +64,11 @@ if ($ldap_user !== false) {
     $_user['uidReset'] = true;
     Session::write('_user', $_user);
     $uidReset = true;
-    event_login();
     $logging_in = true;
+    event_login();
+    error_log("Calling event_login");
 } else {
+    error_log('extldap_authenticate error');
     $loginFailed = true;
     $uidReset = false;
     unset($_user['user_id']);

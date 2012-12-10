@@ -247,6 +247,7 @@ $ModifyHotPotatoes = "Modify hotpotatoes";
 $SaveHotpotatoes = "Save hotpotatoes";
 $ReturnToLPList = "Return to list";
 $LpPrerequisiteDescription = "Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)";
+$ClickOnTheLearnerViewToSeeYourLearningPath = "Click on the [Learner view] button to see your learning path";
 $ExerciseCantBeEditedAfterAddingToTheLP = "Exercise can't be edited after being added to the Learning Path";
 $EnableTimeLimits = "Enable availability limits";
 $PublicationDate = "Publication date";

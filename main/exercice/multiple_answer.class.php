@@ -137,8 +137,8 @@ class MultipleAnswer extends Question {
 
 		$navigator_info = api_get_navigator();
 
-		global $text, $class, $show_quiz_edition;
-		if ($show_quiz_edition) {
+		global $text, $class;
+		if ($obj_ex->edit_exercise_in_lp == true) {
 			//ie6 fix
 			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');

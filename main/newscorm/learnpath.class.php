@@ -1608,7 +1608,7 @@ class learnpath {
             }
             $this->last     = $this->current;
             // current is
-            $this->current  = $this->ordered_items[$index];
+            $this->current  = isset($this->ordered_items[$index]) ? $this->ordered_items[$index] : null;
             $this->index    = $index;
             if ($this->debug > 2) {
                 error_log('$index ' . $index);
@@ -2591,19 +2591,18 @@ class learnpath {
      */
     public function get_toc() {
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_toc()', 0);
+            error_log('learnpath::get_toc()', 0);
         }
         $toc = array();
         //echo "<pre>".print_r($this->items,true)."</pre>";
         foreach ($this->ordered_items as $item_id) {
             if ($this->debug > 2) {
-                error_log('New LP - learnpath::get_toc(): getting info for item ' . $item_id, 0);
+                error_log('learnpath::get_toc(): getting info for item ' . $item_id, 0);
             }
             // TODO: Change this link generation and use new function instead.
             $toc[] = array (
                 'id'            => $item_id,
                 'title'         => $this->items[$item_id]->get_title(),
-                //'link' => get_addedresource_link_in_learnpath('document', $item_id, 1),
                 'status'        => $this->items[$item_id]->get_status(),
                 'level'         => $this->items[$item_id]->get_level(),
                 'type'          => $this->items[$item_id]->get_type(),
@@ -2616,7 +2615,6 @@ class learnpath {
         }
         return $toc;
     }
-
 
     /**
      * Generate and return the table of contents for this learnpath. The JS
@@ -2720,12 +2718,12 @@ class learnpath {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 
         if ($this->debug > 0) {
-            error_log('New LP - In learnpath::get_html_toc()', 0);
+            error_log('In learnpath::get_html_toc()', 0);
         }
         if (empty($toc_list)) {
             $toc_list = $this->get_toc();
         }
-        $html = '<div id="scorm_title" class="scorm_title">' . Security::remove_XSS($this->get_name()) . '</div>';
+        $html = '<div id="scorm_title" class="scorm_title">'.Security::remove_XSS($this->get_name()) . '</div>';
 
         $hide_teacher_icons_lp = isset($_configuration['hide_teacher_icons_lp']) ? $_configuration['hide_teacher_icons_lp'] : true;
 
@@ -2750,10 +2748,7 @@ class learnpath {
         $i = 0;
 
         foreach ($toc_list as $item) {
-            if ($this->debug > 2) {
-                //error_log('New LP - learnpath::get_html_toc(): using item ' . $item['id'], 0);
-            }
-            // TODO: Complete this.
+            // TODO: Complete this
             $icon_name = array (
                 'not attempted' => '../img/notattempted.gif',
                 'incomplete'    => '../img/incomplete.png',
@@ -2773,7 +2768,6 @@ class learnpath {
                 $style = 'scorm_item_highlight';
                 $scorm_color_background = 'scorm_item_highlight';
             } else {
-
                 if ($color_counter % 2 == 0) {
                     $scorm_color_background = 'scorm_item_1';
                 } else {
@@ -2829,8 +2823,12 @@ class learnpath {
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
+                error_log("1-->>>>>>>>>>>>>>>>");
+                error_log($item['status']);
                 if ($item['status'] == 'completed') {
-                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14'  />";
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
+                } else {
+                    $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name['not attempted'] . "' alt='" . substr('not attempted', 0, 1) . "' width='14' />";
                 }
             } else {
                 if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dokeos_module' && $item['type'] != 'dir') {
@@ -5034,6 +5032,8 @@ class learnpath {
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
+        $default_data = null;
+        $default_content = null;
 
         $elements = array();
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -6622,7 +6622,9 @@ class learnpath {
         }
 
         $this->tree_array($arrLP);
-        $arrLP = $this->arrMenu;
+
+        $arrLP = isset($this->arrMenu) ? $this->arrMenu : null;
+
         unset ($this->arrMenu);
 
         $gradebook = isset($_GET['gradebook']) ? Security :: remove_XSS($_GET['gradebook']) : null;
@@ -7918,7 +7920,7 @@ class learnpath {
             $return .= '</a> ';
 
             $return .= '<img src="../img/hotpotatoes_s.png" style="margin-right:5px;" title="" width="16px" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']).'&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
+            $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_HOTPOTATOES . '&amp;file=' . $row_hot['id'] . '&amp;lp_id=' . $this->lp_id . '">'.
                         ((!empty ($row_hot['comment'])) ? $row_hot['comment'] : Security :: remove_XSS($row_hot['title'])) . '</a>';
             $return .= '</li>';
         }
@@ -7931,7 +7933,7 @@ class learnpath {
             $return .= '</a> ';
 
             $return .= '<img alt="" src="../img/quizz_small.gif" style="margin-right:5px;" title="" />';
-            $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' .
+            $return .= '<a href="' . api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_QUIZ . '&amp;file=' . $row_quiz['id'] . '&amp;lp_id=' . $this->lp_id . '">' .
                         Security :: remove_XSS(cut($row_quiz['title'], 80)).
                         '</a>';
             $return .= '</li>';
@@ -7991,7 +7993,7 @@ class learnpath {
         $return = '<div class="lp_resource" >';
         $return .= '<div class="lp_resource_element">';
         $return .= '<img align="left" alt="" src="../img/works_small.gif" style="margin-right:5px;" title="" />';
-        $return .= '<a href="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
+        $return .= '<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;action=add_item&amp;type=' . TOOL_STUDENTPUBLICATION . '&amp;lp_id=' . $this->lp_id . '">' . get_lang('AddAssignmentPage') . '</a>';
         $return .= '</div>';
         $return .= '</div>';
         return $return;

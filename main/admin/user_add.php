@@ -20,6 +20,8 @@ api_protect_admin_script(true);
 
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
+$message = null;
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
@@ -46,16 +48,16 @@ function display_drh_list(){
 		document.getElementById("drh_list").style.display="block";
         if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
-            
+
 	} else if (document.getElementById("status_select").value=='.COURSEMANAGER.') {
 		document.getElementById("drh_list").style.display="none";
-        
-        if (is_platform_id == 1) 
+
+        if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="block";
 	} else {
 		document.getElementById("drh_list").style.display="none";
-        
-        if (is_platform_id == 1) 
+
+        if (is_platform_id == 1)
             document.getElementById("id_platform_admin").style.display="none";
 	}
 }
@@ -103,11 +105,13 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-$form->addRule('email', get_lang('EmailWrong'), 'required');
+if (api_get_setting('registration', 'email') == 'true') {
+    $form->addRule('email', get_lang('EmailWrong'), 'required');
+}
 
 if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-    $form->addRule('email', get_lang('UserTaken'), 'username_available', $user_data['username']);
+    $form->addRule('email', get_lang('UserTaken'), 'username_available');
 }
 
 // Phone
@@ -124,7 +128,7 @@ if (api_get_setting('login_is_email') != 'true') {
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-    $form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+    $form->addRule('username', get_lang('UserTaken'), 'username_available');
 }
 
 // Password
@@ -164,11 +168,12 @@ $status[SESSIONADMIN] = get_lang('SessionsAdmin');
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'class'=>'chzn-select', 'onchange' => 'javascript: display_drh_list();'));
 
 //drh list (display only if student)
-$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'block' : 'none';
+$display = isset($_POST['status']) && $_POST['status'] == STUDENT  || !isset($_POST['status']) ? 'block' : 'none';
 
+//@todo remove the drh list here. This code is unused
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
 
-if (is_array($drh_list)) {
+if (isset($drh_list) && is_array($drh_list)) {
 	foreach ($drh_list as $drh) {
 		$drh_select->addOption(api_get_person_name($drh['firstname'], $drh['lastname']), $drh['user_id']);
 	}
@@ -180,7 +185,7 @@ if (api_is_platform_admin()) {
     $group = array();
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
-    $display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
+    //$display = ($_POST['status'] == STUDENT || !isset($_POST['status'])) ? 'none' : 'block';
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
     $form->addGroup($group, 'admin', get_lang('PlatformAdmin'), '&nbsp;');
     $form->addElement('html', '</div>');
@@ -291,7 +296,7 @@ if( $form->validate()) {
 				$picture_uri = UserManager::update_user_picture($user_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
 				UserManager::update_user($user_id, $firstname, $lastname, $username, $password, $auth_source, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, null, $hr_dept_id, null, $language);
 			}
-			           
+
 			foreach ($user as $key => $value) {
 				if (substr($key, 0, 6) == 'extra_') { //an extra field
 					UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
@@ -321,13 +326,13 @@ if( $form->validate()) {
 	$form->setConstants(array('sec_token' => $token));
 }
 
-if(!empty($message)){
+if (!empty($message)){
 	$message = Display::return_message(stripslashes($message));
 }
-$content .= $form->return_form();
+$content = $form->return_form();
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
+//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

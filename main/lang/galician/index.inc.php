@@ -87,5 +87,6 @@ Disfrute, e non dubide en unirse á comunidade e proporcionarnos feedback a trav
 $Username = "Nome de usuario";
 $GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Adiante, vaia ao catálogo de cursos %s para inscribirse nun curso que lle interese. Unha vez inscrito/a no curso aparecerá  %s, no lugar desta mensaxe.";
 $HelloXAsYouCanSeeYourCourseListIsEmpty = "Como podes ver, a túa lista de cursos está baleira. Iso é porque non tes rexistrado ningún curso ainda.";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Permítanos un pouco de tempo para subscribirse a un dos nosos cursos. Se considera que nos olvidamos de vostede, póñase en contacto cos administradores da plataforma. Pode atopar os seus datos de contacto ao pé da páxina.";
 $Profile = "Perfil";
 ?>

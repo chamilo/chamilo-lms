@@ -71,7 +71,7 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, onKeyDown => "textarea_maxlength()", onKeyUp => "textarea_maxlength()"));
+$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 $form->addRule('name', '', 'maxlength',255);
@@ -105,7 +105,7 @@ $form->setDefaults($group_data);
 // Validate form
 if ( $form->validate()) {
 	$group = $form->exportValues();
-	$picture_element = & $form->getElement('picture');
+	$picture_element = $form->getElement('picture');
 	$picture = $picture_element->getValue();
 	$picture_uri = $group_data['picture_uri'];
 
@@ -142,7 +142,7 @@ $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 $social_left_content = SocialManager::show_social_menu('group_edit',$group_id);
-$social_right_content = $form->return_form();						
+$social_right_content = $form->return_form();
 
 
 $tpl = new Template($tool_name);
@@ -150,9 +150,9 @@ $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$content = $tpl->fetch($social_layout);
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
-$tpl->display_one_col_template();
+$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$tpl->display($social_layout);
+

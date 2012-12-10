@@ -124,6 +124,8 @@ function addlinkcategory($type) {
 				require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
+                
+                $course_int_id = api_get_course_int_id();
 
 				$courseid = api_get_course_id();
 				$specific_fields = get_specific_field_list();
@@ -165,8 +167,8 @@ function addlinkcategory($type) {
 				// Add category name if set.
 				if (isset ($_POST['selectcategory']) && $selectcategory > 0) {
 					$table_link_category = Database :: get_course_table(TABLE_LINK_CATEGORY);
-					$sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
-					$sql_cat = sprintf($sql_cat, $table_link_category, (int) $selectcategory);
+					$sql_cat = 'SELECT * FROM %s WHERE id=%d AND c_id = %d LIMIT 1';
+					$sql_cat = sprintf($sql_cat, $table_link_category, (int) $selectcategory, $course_int_id);
 					$result = Database :: query($sql_cat);
 					if (Database :: num_rows($result) == 1) {
 						$row = Database :: fetch_array($result);
@@ -186,7 +188,7 @@ function addlinkcategory($type) {
 					$tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
 					$sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
 					                        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-					$sql = sprintf($sql, $tbl_se_ref, api_get_course_int_id(), $courseid, TOOL_LINK, $link_id, $did);
+					$sql = sprintf($sql, $tbl_se_ref, $course_int_id, $courseid, TOOL_LINK, $link_id, $did);
 					Database :: query($sql);
 				}
 			}
@@ -438,6 +440,9 @@ function editlinkcategory($type) {
 			// Update search enchine and its values table if enabled.
 			if (api_get_setting('search_enabled') == 'true') {
 				$link_id = intval($_POST['id']);
+                
+                $course_int_id = api_get_course_int_id();
+                
 				$course_id = api_get_course_id();
 				$link_url = Database :: escape_string($_POST['urllink']);
 				$link_title = Database :: escape_string($_POST['title']);
@@ -495,8 +500,8 @@ function editlinkcategory($type) {
 					// Add category name if set.
 					if (isset ($_POST['selectcategory']) && $selectcategory > 0) {
 						$table_link_category = Database :: get_course_table(TABLE_LINK_CATEGORY);
-						$sql_cat = 'SELECT * FROM %s WHERE id=%d LIMIT 1';
-						$sql_cat = sprintf($sql_cat, $table_link_category, (int) $selectcategory);
+						$sql_cat = 'SELECT * FROM %s WHERE id=%d and c_id = %d LIMIT 1';
+						$sql_cat = sprintf($sql_cat, $table_link_category, (int) $selectcategory, $course_int_id);
 						$result = Database :: query($sql_cat);
 						if (Database :: num_rows($result) == 1) {
 							$row = Database :: fetch_array($result);
@@ -519,7 +524,7 @@ function editlinkcategory($type) {
 						Database :: query($sql);
 						$sql = 'INSERT INTO %s (c_id, id, course_code, tool_id, ref_id_high_level, search_did)
 						        VALUES (NULL , \'%s\', \'%s\', %s, %s)';
-						$sql = sprintf($sql, $tbl_se_ref, api_get_course_int_id(), $course_id, TOOL_LINK, $link_id, $did);
+						$sql = sprintf($sql, $tbl_se_ref, $course_int_id, $course_id, TOOL_LINK, $link_id, $did);
 						Database :: query($sql);
 					}
 				}
@@ -544,7 +549,8 @@ function editlinkcategory($type) {
 
 		// This is used to put the modified info of the category-form into the database.
 		if ($submit_category) {
-			$sql = "UPDATE " . $tbl_categories . " SET category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "'
+			$sql = "UPDATE " . $tbl_categories . " 
+                    SET category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "'
 			        WHERE c_id = $course_id AND id='" . Database :: escape_string($_POST['id']) . "'";
 			Database :: query($sql);
 			Display :: display_confirmation_message(get_lang('CategoryModded'));
@@ -809,7 +815,7 @@ function get_cat($catname) {
 		return $row['id']; // Several categories with same name: take the first.
 	}
 
-	$result = Database :: query("SELECT MAX(display_order) FROM " . $tbl_categories);
+	$result = Database :: query("SELECT MAX(display_order) FROM " . $tbl_categories." WHERE c_id = $course_id ");
 	list ($max_order) = Database :: fetch_row($result);
 	Database :: query("INSERT INTO " . $tbl_categories . " (c_id, category_title, description, display_order)
 					   VALUES (".$course_id.", '" . Database::escape_string($catname) . "','','" . ($max_order +1) . "')");

@@ -33,7 +33,8 @@ define('GROUP_TITLE_LENGTH',       50);
  * Class
  * @package chamilo.library
  */
-class GroupPortalManager {
+class GroupPortalManager
+{
     /**
      * Creates a new group
      *
@@ -94,8 +95,7 @@ class GroupPortalManager {
 	* @param int id
 	* @return boolean true if success
 	* */
-	public static function delete($id)
-	{
+    public static function delete($id) {
 		$id = intval($id);
 		$table = Database :: get_main_table(TABLE_MAIN_GROUP);
 		$sql= "DELETE FROM $table WHERE id = ".Database::escape_string($id);
@@ -116,8 +116,7 @@ class GroupPortalManager {
 	 * @param int	number of items
 	 * @return array
 	 * */
-	public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from=0, $number_of_items=10)
-	{
+    public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10) {
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
 		$visibility = intval($visibility);
 		$sql = "SELECT name, description, picture_uri FROM $table WHERE visibility = $visibility ";
@@ -153,10 +152,9 @@ class GroupPortalManager {
 	 *
 	 *
 	 */
-	public static function get_group_data($group_id)
-	{
+    public static function get_group_data($group_id) {
 		$table	= Database :: get_main_table(TABLE_MAIN_GROUP);
-		$group_id = intval($group_id);		
+		$group_id = intval($group_id);
 		$sql = "SELECT id, name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
 		$res = Database::query($sql);
 		$item = array();
@@ -294,7 +292,7 @@ class GroupPortalManager {
 		$tag					= Database :: get_main_table(TABLE_MAIN_TAG);
 		$table_group_rel_tag	= Database :: get_main_table(TABLE_MAIN_GROUP_REL_TAG);
 		$group_id 				= intval($group_id);
-		
+
 		$sql = "SELECT tag FROM $tag t INNER JOIN $table_group_rel_tag gt ON (gt.tag_id= t.id) WHERE gt.group_id = $group_id ";
 		$res = Database::query($sql);
 		$tags = array();
@@ -323,7 +321,7 @@ class GroupPortalManager {
 	 * @return array   Database::store_result of the result
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {		
+	public static function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
 		$user_id 				= intval($user_id);
@@ -361,7 +359,7 @@ class GroupPortalManager {
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_popularity($num = 6, $with_image = true) {		
+	public static function get_groups_by_popularity($num = 6, $with_image = true) {
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
 		if (empty($num)) {
@@ -398,7 +396,7 @@ class GroupPortalManager {
 	 * @return array  with group content
 	 * @author Julio Montoya
 	 * */
-	public static function get_groups_by_age($num = 6, $with_image = true) {		
+	public static function get_groups_by_age($num = 6, $with_image = true) {
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
 
@@ -493,8 +491,7 @@ class GroupPortalManager {
 	 * @param int group id
 	 * @return array
 	 */
-	public static function get_all_users_by_group($group_id)
-	{
+    public static function get_all_users_by_group($group_id) {
 		$table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_user				= Database::get_main_table(TABLE_MAIN_USER);
 		$group_id 				= intval($group_id);
@@ -521,8 +518,7 @@ class GroupPortalManager {
 	* @param int group_id
 	* @return int 0 if there are not relationship otherwise returns the user group
 	* */
-	public static function get_user_group_role($user_id, $group_id)
-	{
+    public static function get_user_group_role($user_id, $group_id) {
 		$table_group_rel_user= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$return_value = 0;
 		if (!empty($user_id) && !empty($group_id)) {
@@ -599,8 +595,7 @@ class GroupPortalManager {
 	* @param int relation type (optional)
 	* @return boolean true if success
 	* */
-	public static function delete_users($group_id,$relation_type='')
-	{
+    public static function delete_users($group_id, $relation_type = '') {
 		$table_	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$condition_relation = "";
 		if (!empty($relation_type)) {
@@ -633,8 +628,7 @@ class GroupPortalManager {
 	 * @param int group id
 	 * @param int relation type
 	 * */
-	public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
-	{
+    public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER) {
 		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$group_id = intval($group_id);
 		$user_id = intval($user_id);
@@ -645,8 +639,7 @@ class GroupPortalManager {
 	}
 
 
-	public static function get_group_admin_list($user_id, $group_id)
-	{
+    public static function get_group_admin_list($user_id, $group_id) {
 		$table_group_rel_user	= Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$group_id = intval($group_id);
 		$user_id = intval($user_id);
@@ -817,7 +810,7 @@ class GroupPortalManager {
 		$medium = self::resize_picture($source_file, 85);
 		$normal = self::resize_picture($source_file, 200);
 
-		$big = new Image($source_file); // This is the original picture.		
+		$big = new Image($source_file); // This is the original picture.
 		$ok = $small->send_image($path.'small_'.$filename)
 				&& $medium->send_image($path.'medium_'.$filename)
 				&& $normal->send_image($path.'big_'.$filename)
@@ -1103,5 +1096,30 @@ class GroupPortalManager {
         $group_id = intval($group_id);
         $sql = "UPDATE $table_message SET msg_status=3 WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
         Database::query($sql);
+    }
+    
+    public static function get_groups_by_user_count($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
+        $table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
+		$user_id 				= intval($user_id);
+
+		if ($relation_type == 0) {
+			$where_relation_condition = '';
+		} else {
+			$relation_type 			= intval($relation_type);
+			$where_relation_condition = "AND gu.relation_type = $relation_type ";
+		}
+
+		$sql = "SELECT count(g.id) as count
+				FROM $tbl_group g
+				INNER JOIN $table_group_rel_user gu
+				ON gu.group_id = g.id WHERE gu.user_id = $user_id $where_relation_condition ";
+
+		$result = Database::query($sql);
+		if (Database::num_rows($result) > 0) {
+			$row = Database::fetch_array($result, 'ASSOC');
+            return $row['count'];
+		}
+		return 0;
     }
 }

@@ -52,7 +52,7 @@ $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, onKeyDown => "text_longitud()", onKeyUp => "text_longitud()"));
+$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
@@ -70,6 +70,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 $groups = array();
 $groups[0] = get_lang('NoParentship');
 $groups = $groups + GroupPortalManager::get_groups_list($group_id);
+
 $group_data['parent_group'] = GroupPortalManager::get_parent_group($group_id);
 $form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups, array());
 
@@ -94,7 +95,7 @@ if( $form->validate()) {
 	if ($check) {
 		$values = $form->exportValues();
 
-		$picture_element = & $form->getElement('picture');
+		$picture_element = $form->getElement('picture');
 		$picture 		= $picture_element->getValue();
 		$picture_uri 	= '';
 		$name 			= $values['name'];

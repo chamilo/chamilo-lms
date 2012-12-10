@@ -27,7 +27,7 @@ function get_number_of_courses() {
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 
     global $_configuration;
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
@@ -48,7 +48,7 @@ function get_number_of_courses() {
     }
 
      // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -61,14 +61,23 @@ function get_number_of_courses() {
  * Get course data to display
  */
 function get_course_data($from, $number_of_items, $column, $direction) {
-    $course_table       = Database :: get_main_table(TABLE_MAIN_COURSE);    
-    
-    $sql = "SELECT code AS col0, title AS col1, visual_code AS col2, course_language AS col3, category_code AS col4, subscribe AS col5, unsubscribe AS col6, 
-            code AS col7, visibility AS col8, directory as col9 
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+
+    $sql = "SELECT  code AS col0,
+                    title AS col1,
+                    code AS col2,
+                    course_language AS col3,
+                    category_code AS col4,
+                    subscribe AS col5,
+                    unsubscribe AS col6,
+                    code AS col7,
+                    visibility AS col8,
+                    directory as col9,
+                    visual_code
     		FROM $course_table";
     global $_configuration;
-    
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
+
+    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
     }
@@ -88,7 +97,7 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     }
 
     // Adding the filter to see the user's only of the current access_url.
-    if ((api_is_platform_admin() || api_is_session_admin()) && $_configuration['multiple_access_urls'] && api_get_current_access_url_id() != -1) {
+    if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $sql.= " AND url_rel_course.access_url_id=".api_get_current_access_url_id();
     }
 
@@ -97,14 +106,12 @@ function get_course_data($from, $number_of_items, $column, $direction) {
 
     $res = Database::query($sql);
     $courses = array ();
-    while ($course = Database::fetch_row($res)) {
-        // Place colour icons in front of courses.		
-        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a>';
+    while ($course = Database::fetch_array($res)) {
+        // Place colour icons in front of courses.
+        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.Display::label($course['visual_code'], 'info');
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
-
         $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);
-        
         $courses[] = $course_rem;
     }
     return $courses;
@@ -120,7 +127,7 @@ function modify_filter($code) {
         //'<a href="../course_home/course_home.php?cidReq='.$code.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'. // This is not the preferable way to go to the homepage.
         '<a href="'.api_get_path(WEB_COURSE_PATH).$icourse['path'].'/index.php">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>&nbsp;'.
         '<a href="../tracking/courseLog.php?cidReq='.$code.'">'.Display::return_icon('statistics.gif', get_lang('Tracking')).'</a>&nbsp;'.
-        '<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.        
+        '<a href="course_edit.php?course_code='.$code.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;'.
         '<a href="../coursecopy/backup.php?cidReq='.$code.'">'.Display::return_icon('backup.gif', get_lang('CreateBackup')).'</a>&nbsp;'.
         '<a href="course_list.php?delete_course='.$code.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
 }
@@ -149,13 +156,13 @@ function get_course_visibility_icon($v) {
     }
 }
 
-if (isset ($_POST['action'])) {    
-    switch ($_POST['action']) {        
+if (isset ($_POST['action'])) {
+    switch ($_POST['action']) {
         // Delete selected courses
         case 'delete_courses' :
-            $course_codes = $_POST['course'];            
+            $course_codes = $_POST['course'];
             if (count($course_codes) > 0) {
-                foreach ($course_codes as $index => $course_code) {                    
+                foreach ($course_codes as $index => $course_code) {
                     CourseManager :: delete_course($course_code);
                     $obj_cat = new Category();
                     $obj_cat->update_category_delete($course_code);
@@ -174,7 +181,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
     $tool_name = get_lang('SearchACourse');
-    
+
     //api_display_tool_title($tool_name);
     $form = new FormValidator('advanced_course_search', 'get');
     $form->addElement('header', $tool_name);
@@ -183,7 +190,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $categories = array();
     $categories_select = $form->addElement('select', 'keyword_category', get_lang('CourseFaculty'), $categories);
     CourseManager::select_and_sort_categories($categories_select);
-    $el = & $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
+    $el = $form->addElement('select_language', 'keyword_language', get_lang('CourseLanguage'));
     $el->addOption(get_lang('All'), '%');
     $form->addElement('radio', 'keyword_visibility', get_lang("CourseAccess"), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
     $form->addElement('radio', 'keyword_visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
@@ -206,7 +213,7 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 } else {
     $interbreadcrumb[] = array ('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
     $tool_name = get_lang('CourseList');
-    
+
     if (isset($_GET['action'])) {
         switch ($_GET['action']) {
             case 'show_msg':
@@ -228,20 +235,20 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
 
     }
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);        
+    $form = new FormValidator('search_simple', 'get', '', '', array('class'=>'form-search'), false);
     $form->addElement('text', 'keyword', null);
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
-    
-    $actions .= '<div style="float: right; ">';    
+
+    $actions .= '<div style="float: right; ">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
-    
-    if (api_get_setting('course_validation') == 'true') {    
+
+    if (api_get_setting('course_validation') == 'true') {
         $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
     }
-    $actions .= '</div>';    
+    $actions .= '</div>';
     $actions .= $form->return_form();
-    
+
     // Create a sortable table with the course data
     $table = new SortableTable('courses', 'get_number_of_courses', 'get_course_data', 2);
     $parameters=array();

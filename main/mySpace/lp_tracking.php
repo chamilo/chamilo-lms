@@ -35,7 +35,7 @@ if (isset($_GET['course'])) {
 $user_infos = UserManager :: get_user_info_by_id($user_id);
 $name = api_get_person_name($user_infos['firstname'], $user_infos['lastname']);
 
-if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher($_user['user_id'], $cidReq) && !Tracking :: is_allowed_to_coach_student($_user['user_id'],$_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
+if (!api_is_platform_admin(true) && !CourseManager :: is_course_teacher(api_get_user_id(), $cidReq) && !Tracking :: is_allowed_to_coach_student(api_get_user_id(), $_GET['student_id']) && !api_is_drh() && !api_is_course_tutor()) {	
 	api_not_allowed();	
 }
 $course_exits = CourseManager::course_exists($cidReq);
@@ -50,8 +50,7 @@ if (!empty($_GET['origin']) && $_GET['origin'] == 'user_course') {
 	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
 	$interbreadcrumb[] = array ("url" => "../user/user.php?cidReq=".$cidReq, "name" => get_lang("Users"));
 } else if(!empty($_GET['origin']) && $_GET['origin'] == 'tracking_course') {
-//	$interbreadcrumb[] = array ("url" => api_get_path(WEB_COURSE_PATH).$course_info['directory'], 'name' => $course_info['name']);
-	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&studentlist=true&id_session='.$session_id, "name" => get_lang("Tracking"));
+	$interbreadcrumb[] = array ("url" => "../tracking/courseLog.php?cidReq=".$cidReq.'&id_session='.$session_id, "name" => get_lang("Tracking"));
 } else {
 	$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
 	$interbreadcrumb[] = array ("url" => "student.php", "name" => get_lang("MyStudents"));

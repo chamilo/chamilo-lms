@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AlreadyRegisteredToCourse = "Reeds geregistreerd in deze cursus";
 $lang_already_enrolled = "reeds ingeschreven";
 $lang_my_personnal_course_list = "Mijn cursuslijst";
 $lang_course_enrollment = "Inschrijven/uitschrijven voor cursussen";
@@ -83,4 +84,5 @@ $Collapse = "Verbergen";
 $CourseDetails = "Cursusomschrijving";
 $GroupPendingInvitations = "Zwevende uitnodigingen voor groep";
 $Compose = "Opstellen";
+$ThereAreNoCoursesInThisCategory = "Er zijn geen cursussen in deze categorie";
 ?>

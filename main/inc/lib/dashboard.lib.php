@@ -9,7 +9,6 @@
  * Code
  */
 // required files
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 /**
  * DashboardManager can be used to manage dashboard
  * @package chamilo.dashboard
@@ -30,7 +29,7 @@ class DashboardManager {
 		$dashboard_pluginpath = api_get_path(SYS_PLUGIN_PATH).'dashboard/';
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
-		$table_cols = array('name', 'version', 'description');		
+		$table_cols = array('name', 'version', 'description');
         echo Display::page_subheader(get_lang('DashboardPlugins'));
 		echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
 		echo '<table class="data_table">';
@@ -45,14 +44,14 @@ class DashboardManager {
 
 		// We display all the possible enabled or disabled plugins
 		foreach ($possibleplugins as $testplugin) {
-			$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";			
+			$plugin_info_file = $dashboard_pluginpath.$testplugin."/$testplugin.info";
 			$plugin_info = array();
 			if (file_exists($plugin_info_file) && is_readable($plugin_info_file)) {
 				$plugin_info = parse_info_file($plugin_info_file);
-    
+
     			// change index to lower case
     			$plugin_info = array_change_key_case($plugin_info);
-    
+
     			echo '<tr>';
     				self::display_dashboard_plugin_checkboxes($testplugin);
     				for ($i = 0 ; $i < count($table_cols); $i++) {
@@ -69,7 +68,7 @@ class DashboardManager {
                 echo Display::tag('tr',  Display::tag('td', get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file) , array('colspan'=>'3')));
             }
 		}
-		
+
 		// display all disabled block data
 		if (count($disabled_blocks_data) > 0) {
 			foreach ($disabled_blocks_data as $disabled_block) {
@@ -94,7 +93,7 @@ class DashboardManager {
 				echo '</tr>';
 			}
 		}
-		
+
 		echo '</table>';
 		echo '<br />';
 		echo '<button class="save" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.get_lang('EnableDashboardPlugins').'</button></form>';
@@ -139,11 +138,11 @@ class DashboardManager {
 		$possibleplugins = self::get_posible_dashboard_plugins_path();
 
 		if (count($possibleplugins) > 0) {
-			
+
 			$selected_plugins = array_intersect(array_keys($plugin_paths),$possibleplugins);
 			$not_selected_plugins = array_diff($possibleplugins,array_keys($plugin_paths));
 
-			// get blocks id from not selected path			
+			// get blocks id from not selected path
 			$not_selected_blocks_id = array();
 			foreach ($not_selected_plugins as $plugin) {
 				$block_data = self::get_enabled_dashboard_blocks($plugin);
@@ -151,23 +150,23 @@ class DashboardManager {
 					$not_selected_blocks_id[] = $block_data[$plugin]['id'];
 				}
 			}
-						
+
 			/* clean not selected plugins for extra user data and block data */
 			// clean from extra user data
 			$field_variable = 'dashboard';
-			$extra_user_data = UserManager::get_extra_user_data_by_field_variable($field_variable);			
+			$extra_user_data = UserManager::get_extra_user_data_by_field_variable($field_variable);
 			foreach ($extra_user_data as $key => $user_data) {
 				$user_id = $key;
 				$user_block_data = self::get_user_block_data($user_id);
 				$user_block_id   = array_keys($user_block_data);
 
 				// clean disabled block data
-				foreach ($user_block_id as $block_id) {					
+				foreach ($user_block_id as $block_id) {
 					if (in_array($block_id, $not_selected_blocks_id)) {
 						unset($user_block_data[$block_id]);
 					}
 				}
-				
+
 				// get columns and blocks id for updating extra user data
 				$columns = array();
 				$user_blocks_id = array();
@@ -178,9 +177,9 @@ class DashboardManager {
 
 				// update extra user blocks data
 				$upd_extra_field = self::store_user_blocks($user_id, $user_blocks_id, $columns);
-				
+
 			}
-			
+
 			// clean from block data
 			if (!empty($not_selected_blocks_id)) {
 				$sql_check = "SELECT id FROM $tbl_block WHERE id IN(".implode(',',$not_selected_blocks_id).")";
@@ -191,11 +190,11 @@ class DashboardManager {
 				}
 			}
 
-			
+
 			// store selected plugins
 			foreach ($selected_plugins as $testplugin) {
 				$selected_path = Database::escape_string($testplugin);
-				
+
 				// check if the path already stored inside block table for updating or adding it
 				$sql = "SELECT path FROM $tbl_block WHERE path = '$selected_path'";
 				$rs	 = Database::query($sql);
@@ -234,10 +233,10 @@ class DashboardManager {
 					Database::query($ins);
 				}
 				$affected_rows = Database::affected_rows();
-			}	
-							
+			}
+
 		}
-				
+
 		return $affected_rows;
 	}
 
@@ -359,21 +358,21 @@ class DashboardManager {
 
 			// We display all enabled plugins and the checkboxes
 			foreach ($enabled_dashboard_plugins as $block) {
-				
+
 				$path = $block['path'];
 				$controller_class = $block['controller'];
-				$filename_controller = $path.'.class.php';			
-				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';	
+				$filename_controller = $path.'.class.php';
+				$dashboard_plugin_path = api_get_path(SYS_PLUGIN_PATH).'dashboard/'.$path.'/';
 				require_once $dashboard_plugin_path.$filename_controller;
 				if (class_exists($controller_class)) {
-				    $obj_block = new $controller_class($user_id);    				
-    				
+				    $obj_block = new $controller_class($user_id);
+
     				// check if user is allowed to see the block
-    				if (method_exists($obj_block, 'is_block_visible_for_user')) {					
-    					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);					
+    				if (method_exists($obj_block, 'is_block_visible_for_user')) {
+    					$is_block_visible_for_user = $obj_block->is_block_visible_for_user($user_id);
     					if (!$is_block_visible_for_user) continue;
     				}
-    				
+
     				echo '<tr>';
                     // checkboxes
                     self::display_user_dashboard_list_checkboxes($user_id, $block['id']);
@@ -381,14 +380,14 @@ class DashboardManager {
                     echo '<td>'.$block['description'].'</td>';
                     echo '<td><center>
                             <select name="columns['.$block['id'].']">
-                            <option value="1" '.($user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
-                            <option value="2" '.($user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
+                            <option value="1" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==1?'selected':'').' >1</option>
+                            <option value="2" '.(isset($user_block_data[$block['id']]) && $user_block_data[$block['id']]['column']==2?'selected':'').' >2</option>
                             </select></center>
                           </td>';
-                    echo '</tr>';    				
+                    echo '</tr>';
 				} else {
-			         echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));	    
-				}				
+			         echo Display::tag('tr',  Display::tag('td', get_lang('Error').' '.$controller_class, array('colspan'=>'3')));
+				}
 			}
 
 			echo '</table>';
@@ -398,7 +397,7 @@ class DashboardManager {
 		} else {
 			echo '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
 			if (api_is_platform_admin()) {
-				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a>';	
+				echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.get_lang('ConfigureDashboardPlugin').'</a>';
 			}
 		}
 	}
@@ -464,13 +463,13 @@ class DashboardManager {
 		$data = array();
 		foreach ($extra_user_data as $extra) {
 			$split_extra = explode(':',$extra);
-			$block_id = $split_extra[0];
-			$column = $split_extra[1];
-			$data[$block_id] = array('block_id' => $block_id, 'column' => $column);
+            if (!empty($split_extra)) {
+                $block_id = $split_extra[0];
+                $column = isset($split_extra[1]) ? $split_extra[1] : null;
+                $data[$block_id] = array('block_id' => $block_id, 'column' => $column);
+            }
 		}
-
 		return $data;
-
 	}
 
 	/**

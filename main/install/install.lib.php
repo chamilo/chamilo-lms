@@ -679,7 +679,7 @@ function load_main_database($installation_settings, $db_script = '') {
             $sql_text = file_get_contents($db_script);
         }
     } else {
-        $db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
+        $db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;        
         if (file_exists($db_script)) {
             $sql_text = file_get_contents($db_script);
         }
@@ -688,18 +688,8 @@ function load_main_database($installation_settings, $db_script = '') {
     //replace symbolic parameters with user-specified values
     foreach ($installation_settings as $key => $value) {
         $sql_text = str_replace($key, Database::escape_string($value), $sql_text);
-    }
-
-    //split in array of sql strings
-    $sql_instructions = array();
-    $success = split_sql_file($sql_instructions, $sql_text);
-
-    //execute the sql instructions
-    $count = count($sql_instructions);
-    for ($i = 0; $i < $count; $i++) {
-        $this_sql_query = $sql_instructions[$i]['query'];
-        Database::query($this_sql_query);
-    }
+    }    
+    parse_sql_queries($sql_text);
 }
 
 /**
@@ -711,18 +701,32 @@ function load_database_script($db_script) {
     if (file_exists($db_script)) {
         $sql_text = file_get_contents($db_script);
     }
+    parse_sql_queries($sql_text);
+}
+
+function parse_sql_queries($sql_text) {
 
     //split in array of sql strings
     $sql_instructions = array();
-    $success = split_sql_file($sql_instructions, $sql_text);
+    split_sql_file($sql_instructions, $sql_text);    
 
     //execute the sql instructions
     $count = count($sql_instructions);
     for ($i = 0; $i < $count; $i++) {
-        $this_sql_query = $sql_instructions[$i]['query'];    
+        $this_sql_query = $sql_instructions[$i]['query'];
         Database::query($this_sql_query);
-    }    
+        //UTF8 fix see #5678
+        /*
+        if (strpos(strtolower($this_sql_query), 'create table') === false) {            
+            Database::query($this_sql_query);
+        } else {
+            //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1); 
+            $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';            
+            Database::query($this_sql_query);            
+        }*/
+    }
 }
+
 
 /**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)

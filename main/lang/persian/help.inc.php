@@ -47,4 +47,35 @@ $langClarContent2 = "حذف محتوا";
 $langHGroups = "راهنمایی در مورد قسمت گروه ها";
 $langGroupsContent = ": قسمت گروه ها <br><p><b>Introduction</b></p><p>This tool allows to create and manage workgroups.At creation (Create groups), groups are empty. There aremany ways to fill them:<ul><li>automatically ('Fill groups (random)'),</li><li>manually ('Edit'),</li><li>self-registration by users (Groups settings: 'Self registration allowed...').</li></ul>These three ways can be combined. You can, for instance, ask users to self-register first.Then discover that some of them didn't register and decide to fill groups automatically (random) inorder to complete them. You can also edit each group to compose membership user by user after or before self-registration and/or automatical filling.</p><p>Groups filling, whether automatical or manual, works only if there are already usersregistered in the area. Users list is visible in <b>Users</b> tool. </p><p><b>Create groups</b></p><p>To create new groups, click on 'Create new group(s)' and determine number of groups tocreate.</p><p><b>Group settings</b></p><p>You can determine Group settings globally (for all groups).<b>Users are allowed to self-register in groups</b>:<p>You create empty groups, users self-register.If you have defined a maximum number, full groups do not accept new members.This method is good for teachers who do not know the users list whencreating groups.</p><b>Tools</b>:</p><p>Every group possesses either a forum (private or public) or a Documents area(a shared file manager) or (in most cases) both.</p><p><b>Manual editing</b></p><p>Once groups are created (Create groups), you see at the bottom of the page, a list of groupswith a series of informations and functions <ul><li><b>Edit</b> to modify manually Group name, description, tutor,members list.</li><li><b>Delete</b> deletes a group.</li></ul>";
 $langGuide = "راهنما";
+$HSurvey = "راهنمای بررسی";
+$SurveyContent = "Getting proper feedback on your courses is extremely important. You will find the dedicated Survey tool invaluable for getting effective feedback from users.
+
+Creating a new survey
+
+Click on the link 'Create a new survey' and fill in the fields 'Survey code' and 'Survey title'. With the help of the calendar, you can control the duration of your survey. There's no need to keep it open for a whole year; allow access for a few days at the end of the training program. Filling in the text fields 'Survey introduction' and 'Survey thanks' is also good practice; this will add clarity and a certain friendliness to your survey.
+
+Adding questions to the survey
+
+Once the survey outline is created, it is up to you to create the questions. The 'Survey' tool has many question types: open/closed questions, percentage, QCM, multiple responses... You should certainly find everything you need for your (ever increasing) feedback requirements.
+
+Previewing the survey
+
+Once you have created questions, you may want to check what the survey will look like to learners. Click on the 'Preview' icon and the preview screen will show you exactly this.
+
+Publishing the survey
+
+Happy with the preview? Any modifications to be made? No? Then click on the icon 'Publish survey' to send the survey to the selected list of recipients. As with creating groups, use the list 'Users of this course' on the left and the one for 'receivers' on its right to arrrange this. Next, fill in the email subject 'Title of the email' and the content, 'Text of the email'. Potential surveyees will be alerted by email of the availability of a survey. Think carefully about the wording of the email because it will play a big part in motivating users to take the survey.
+
+Survey reports
+Analyzing surveys is a tedious task. The survey Reporting tool will help with analysis as it sorts reports according to question, user, comparisons etc...
+
+Managing surveys
+When managing surveys you will see some new icons, apart from the usual 'Edit' and 'Delete' options.You can preview, publish and keep track of your surveys and responses using these.";
+$HBlogs = "راهنمای پروژه";
+$BlogsContent = "The Project tool facilitates collaborative project work.
+One way to use the tool is to use it to assign authors charged with keeping written reports on activities throughout the day/week.
+
+Coupled with this is a task management tool through which you can assign a relevant task to any of the designated authors (eg to report on the evolution of safety standards in the business).
+
+An item representing new content is called an article . To create a new article, just follow the link in the menu prompting you to do. To edit (if you are the author of the article) or add a comment to an article, just click on the title of this article.";
 ?>

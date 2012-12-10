@@ -1,16 +1,17 @@
-<?php //Script loaded by local.inc.php providing update user information of type external_logininfo.
+<?php
+
+//Script loaded by local.inc.php providing update user information of type external_logininfo.
 /*
-This script must not exit.
+  This script must not exit.
  */
 
 use \ChamiloSession as Session;
 
-require_once(api_get_path(LIBRARY_PATH).'usermanager.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
-require_once(dirname(__FILE__).'/functions.inc.php');
+require_once(api_get_path(LIBRARY_PATH) . 'usermanager.lib.php');
+require_once(api_get_path(LIBRARY_PATH) . 'course.lib.php');
+require_once(dirname(__FILE__) . '/functions.inc.php');
 
 //MAIN CODE
-
 //$uData variable is set in local.inc.php
 $user = UserManager::get_user_info_by_id($uData['user_id']);
 $new_user = external_get_user_info($login);
@@ -27,17 +28,16 @@ $user['country_bu'] = $new_user['country_bu'];
 $user['extra'] = $new_user['extra'];
 
 if ($new_user !== false) { //User can login    
-  external_update_user($user); 
-  $loginFailed = false;
-  $_user['user_id'] = $user['user_id'];
-  $_user['uidReset'] = true;   
-  $uidReset=true;              
-  Session::write('_user',$_user);
+    external_update_user($user);
+    $loginFailed = false;
+    $_user['user_id'] = $user['user_id'];
+    $_user['uidReset'] = true;
+    $uidReset = true;
+    Session::write('_user', $_user);
 } else { //User cannot login
-  $loginFailed = true;         
-  Session::erase('_uid');   
-  header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');  
-  exit;
-} 
-
+    $loginFailed = true;
+    Session::erase('_uid');
+    header('Location: ' . api_get_path(WEB_PATH) . 'index.php?loginFailed=1&error=user_password_incorrect');
+    exit;
+}
 ?>

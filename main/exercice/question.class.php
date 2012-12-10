@@ -36,8 +36,6 @@ define('TF',				1);
 define('MCMA',				2);
 define('FIB',				3);
 
-if (!class_exists('Category')) include_once("testcategory.class.php");
-
 /**
 	QUESTION CLASS
  *
@@ -473,8 +471,10 @@ abstract class Question
 	 * @param - string $PictureName - Name of the picture
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
-	function uploadPicture($Picture,$PictureName) {
+	function uploadPicture($Picture, $PictureName, $picturePath = null) {
+        if (empty($picturePath)) {
 		global $picturePath;
+        }
 
 		if (!file_exists($picturePath)) {
 			if (mkdir($picturePath, api_get_permissions_for_new_directories())) {
@@ -945,7 +945,7 @@ abstract class Question
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
-		global $TBL_EXERCICE_QUESTION;
+	        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 		$id = $this->id;
 
@@ -1005,8 +1005,10 @@ abstract class Question
             if (Database::num_rows($res)>0) {
                 while ($row = Database::fetch_array($res)) {
                     if (!empty($row['question_order'])) {
-                        $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 WHERE c_id = $course_id AND exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
-                        $res = Database::query($sql);
+                        $sql = "UPDATE $TBL_EXERCICE_QUESTION
+                                SET question_order = question_order-1
+                                WHERE c_id = $course_id AND exercice_id='".Database::escape_string($row['exercice_id'])."' AND question_order > ".$row['question_order'];
+                        Database::query($sql);
                     }
                 }
             }
@@ -1150,8 +1152,7 @@ abstract class Question
 		echo '<script>
 			// hack to hide http://cksource.com/forums/viewtopic.php?f=6&t=8700
 
-			function FCKeditor_OnComplete( editorInstance )
-			{
+			function FCKeditor_OnComplete( editorInstance ) {
 			   if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
 			      HideFCKEditorByInstanceName (editorInstance.Name);
 			   }
@@ -1163,8 +1164,7 @@ abstract class Question
 			      }
 			}
 
-			function show_media()
-			{
+			function show_media(){
 				var my_display = document.getElementById(\'HiddenFCKquestionDescription\').style.display;
 				if(my_display== \'none\' || my_display == \'\') {
 				document.getElementById(\'HiddenFCKquestionDescription\').style.display = \'block\';
@@ -1336,33 +1336,24 @@ abstract class Question
 	/**
 	 * Displays the menu of question types
 	 */
-	static function display_type_menu ($feedback_type = 0) {
-		global $exerciseId;
-        $course_id = api_get_course_int_id();
+	static function display_type_menu($objExercise) {
+        $feedback_type = $objExercise->feedback_type;
+        $exerciseId = $objExercise->id;
         
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::get_question_type_list();
 
-		if (!isset($feedback_type)) $feedback_type=0;
+		if (!isset($feedback_type)) {
+            $feedback_type = 0;
+        }
 		if ($feedback_type==1) {
 			//2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-			//$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER]);
-			$question_type_custom_list = array ( UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION]);  
+			$question_type_custom_list = array (
+                UNIQUE_ANSWER           => self::$questionTypes[UNIQUE_ANSWER],
+                HOT_SPOT_DELINEATION    => self::$questionTypes[HOT_SPOT_DELINEATION]
+            );
 		} else {
 			unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
-		}
-
-		//blocking edition
-
-		$show_quiz_edition = true;
-		if (isset($exerciseId) && !empty($exerciseId)) {
-			$TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
-			$sql="SELECT max_score FROM $TBL_LP_ITEM
-				  WHERE c_id = $course_id AND item_type = '".TOOL_QUIZ."' AND path ='".Database::escape_string($exerciseId)."'";
-			$result = Database::query($sql);
-			if (Database::num_rows($result) > 0) {
-				$show_quiz_edition = false;
-			}
 		}
         
         echo '<div class="actionsbig">';
@@ -1370,19 +1361,19 @@ abstract class Question
 
 		foreach ($question_type_custom_list as $i=>$a_type) {
 			// include the class of the type
-			require_once($a_type[0]);
+			require_once $a_type[0];
             // get the picture of the type and the langvar which describes it
             $img = $explanation = '';
 			eval('$img = '.$a_type[1].'::$typePicture;');
 			eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
 			echo '<li>';
 			echo '<div class="icon_image_content">';
-			if ($show_quiz_edition) {
-				echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';				
-			} else {
+			if ($objExercise->exercise_was_added_in_lp == true) {
 				$img = pathinfo($img);
 				$img = $img['filename'].'_na.'.$img['extension'];
-				echo ''.Display::return_icon($img,$explanation).'';				
+				echo Display::return_icon($img,$explanation);
+			} else {
+                echo '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.Display::return_icon($img, $explanation).'</a>';
 			}
 			echo '</div>';
 			echo '</li>';
@@ -1390,15 +1381,15 @@ abstract class Question
 
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($show_quiz_edition) {
+		if ($objExercise->edit_exercise_in_lp == false) {
+            echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
+		} else {
 			if ($feedback_type==1) {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&type=1&fromExercise='.$exerciseId.'">';
 			} else {
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
 			}
-			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'), '');
-		} else {
-			echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'), '');
+			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
 		}	
 		echo '</a>';
 		echo '</div></li>';
@@ -1441,7 +1432,7 @@ abstract class Question
      * @param type $counter
      * @param type $score
      */
-	function return_header($feedback_type = null, $counter = null, $score = null, $show_media = false) {          
+	function return_header($feedback_type = null, $counter = null, $score = null) {
 	    $counter_label = '';
 	    if (!empty($counter)) {
 	        $counter_label = intval($counter);
@@ -1462,14 +1453,20 @@ abstract class Question
                 $class = 'error';
             }
         }
-        
         $question_title = $this->question;
-	    $header =  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.get_lang("Question").' '.($counter_label).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+
+        // display question category, if any
+        $header = Testcategory::returnCategoryAndTitle($this->id);
+
         if ($show_media) {
             $header .= $this->show_media_content();
         }
-        $header .= Display::page_subheader3($question_title);
-	    $header .= Display::div($this->description, array('id'=>'question_description'));	    
+        $header .= Display::page_subheader2($counter_label.". ".$question_title);
+        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
+	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
+	    $header .= Display::div($this->description, array('id'=>'question_description'));
+        
+
         return $header;
 	}
     

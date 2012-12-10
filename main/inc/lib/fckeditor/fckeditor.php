@@ -58,7 +58,12 @@ function FCKeditor_IsCompatibleBrowser()
     }
     else if ( strpos($sAgent, 'Gecko/') !== false )
     {
-        $iVersion = (int)substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
+        $iVersion = substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
+        // Special fix for Firefox 17 and followers - see #5752
+        if ( preg_match('/^\d{2,3}\.\d{1,4}\s/', $iVersion) ) {
+          return true;
+        }
+        $iVersion = (int)$iVersion;
         return ($iVersion >= 20030210) ;
     }
     else if ( strpos($sAgent, 'Opera/') !== false )
@@ -159,7 +164,7 @@ class FCKeditor
      */
     public function CreateHtml() {
         // Adaptation for the Chamilo LMS
-        
+
 		//@todo why the BasePath is relative ? we should use this constant WEB_PATH
         $this->BasePath = api_get_path(REL_PATH).'main/inc/lib/fckeditor/';
         //$this->BasePath = api_get_path(WEB_PATH).'main/inc/lib/fckeditor/';
@@ -362,7 +367,7 @@ class FCKeditor
         }
         $toolbar_dir = isset($config['ToolbarSets']['Directory']) ? $config['ToolbarSets']['Directory'] : 'default';
         $return = array_merge($config, $this->get_custom_toolbar_configuration($toolbar_dir));
-        return $return; 
+        return $return;
     }
 
     /**
@@ -510,7 +515,7 @@ class FCKeditor
                 $config['BaseHref'] = $script_path;
             }
         } else {
-            if (api_is_platform_admin() && $_SESSION['this_section'] == 'platform_admin') {
+            if (api_is_platform_admin() && isset($_SESSION['this_section']) && $_SESSION['this_section'] == 'platform_admin') {
                 // 3. Platform administration activities.
                 $config['CreateDocumentWebDir'] = api_get_path(WEB_PATH).'home/default_platform_document/';
                 $config['CreateDocumentDir'] = api_get_path(WEB_PATH).'home/default_platform_document/'; // A side-effect is in use here.

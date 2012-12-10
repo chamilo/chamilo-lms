@@ -16,6 +16,13 @@
 
                 {% if _u.logged == 1 %}
                 <ul class="nav pull-right">
+                    
+                    {% if user_notifications is not null %}
+                    <li>
+                        <a href="{{ profile_url }}">{{ user_notifications }}</a>
+                    </li>                    
+                    {% endif %}
+                    
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>
@@ -30,7 +37,7 @@
                         </ul>
 
                     <li>
-                        <a class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
+                        <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
                             <img src="{{ "exit.png"|icon(22) }}">                            
                         </a>
                     </li>            

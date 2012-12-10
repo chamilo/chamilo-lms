@@ -56,4 +56,7 @@ $AnnounceSentToUserSelection = "De aankondiging is gestuurd naar de geslecteerde
 $SendAnnouncement = "Stuur aankondiging";
 $ModifyAnnouncement = "Wijzig aankondiging";
 $ButtonPublishAnnouncement = "Plaats aankondiging";
+$YourAccountIsActiveYouCanLoginAndCheckYourCourses = "Beste, Uw account werd nu geactiveerd op het platform. Gelieve u aan te melden. Veel plezier met uw opleidingen.";
+$AddAsAnnouncement = "Toevoegen als aankondiging";
+$AnnouncementForGroup = "Aankondiging voor een groep";
 ?>

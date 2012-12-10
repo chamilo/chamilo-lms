@@ -45,6 +45,33 @@ class MessageManager
 	}
     
 	/**
+	* Displays info stating that the message is sent successfully.
+	*/
+	public static function display_success_message($uid) {
+			global $charset;
+		if ($_SESSION['social_exist']===true) {
+			$redirect="#remote-tab-2";
+			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
+				$success=get_lang('MessageSentTo').
+				"&nbsp;<b>".
+				GetFullUserName($uid).
+				"</b>";
+			}else {
+				$success=get_lang('MessageSentTo').
+				"&nbsp;<b>".
+				GetFullUserName($uid).
+				"</b>";
+			}
+		} else {
+				$success=get_lang('MessageSentTo').
+				"&nbsp;<b>".
+				GetFullUserName($uid).
+				"</b>";
+		}
+		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
+	}
+
+	/**
 	* Displays the wysiwyg html editor.
 	*/
 	public static function display_html_editor_area($name, $resp) {
@@ -148,13 +175,12 @@ class MessageManager
 					$class = 'class = "read"';
 				}
 				$link = '';
-				if ($_GET['f']=='social') {
+            if (isset($_GET['f']) && $_GET['f'] =='social') {
 					$link = '&f=social';
 				}
 				$message[1] = '<a '.$class.' href="view_message.php?id='.$result[0].$link.'">'.$result[2].'</a><br />'.GetFullUserName(($result[1]));				
-				$message[3] = '<a href="new_message.php?re_id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
-						  '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].'&f='.Security::remove_XSS($_GET['f']).'">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
-			}
+            $message[3] = '<a href="new_message.php?re_id='.$result[0].$link.'">'.Display::return_icon('message_reply.png',get_lang('ReplyToMessage')).'</a>'.
+                      '&nbsp;&nbsp;<a onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmDeleteMessage')))."'".')) return false;" href="inbox.php?action=deleteone&id='.$result[0].$link.'">'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>';
 			$message[2] = api_convert_and_format_date($result[3], DATE_TIME_FORMAT_LONG); //date stays the same
 			foreach($message as $key => $value) {
 				$message[$key] = api_xml_http_response_encode($value);

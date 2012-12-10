@@ -27,7 +27,7 @@ $htmlHeadXtra[] = '
 <script>
 
 var is_platform_id = "'.$is_platform_admin.'";
-    
+
 <!--
 function enable_expiration_date() {
 	document.user_edit.radio_expiration_date[0].checked=false;
@@ -54,7 +54,7 @@ function display_drh_list(){
         $radios.filter("[value=0]").attr("checked", true);
 	} else {
         if (is_platform_id == 1)
-            document.getElementById("id_platform_admin").style.display="none";        
+            document.getElementById("id_platform_admin").style.display="none";
         $radios.filter("[value=0]").attr("checked", true);
 	}
 }
@@ -134,7 +134,9 @@ $form->applyFilter('official_code', 'trim');
 // Email
 $form->addElement('text', 'email', get_lang('Email'), array('size' => '40'));
 $form->addRule('email', get_lang('EmailWrong'), 'email');
-$form->addRule('email', get_lang('EmailWrong'), 'required');
+if (api_get_setting('registration', 'email') == 'true') {
+    $form->addRule('email', get_lang('EmailWrong'), 'required');
+}
 
 if (api_get_setting('login_is_email') == 'true') {
     $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -205,7 +207,7 @@ $status[SESSIONADMIN] 	= get_lang('SessionsAdmin');
 
 $form->addElement('select', 'status', get_lang('Profile'), $status, array('id' => 'status_select', 'onchange' => 'javascript: display_drh_list();','class'=>'chzn-select'));
 
-$display = $user_data['status'] == STUDENT || $_POST['status'] == STUDENT ? 'block' : 'none';
+$display = isset($user_data['status']) && ($user_data['status'] == STUDENT || (isset($_POST['status']) && $_POST['status'] == STUDENT)) ? 'block' : 'none';
 
 /*
 $form->addElement('html', '<div id="drh_list" style="display:'.$display.';">');
@@ -253,8 +255,8 @@ if (!$user_data['platform_admin']) {
 	// Expiration Date
 	$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
 	$group = array ();
-	$group[] = & $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
-	$group[] = & $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
+	$group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('On'), 1);
+	$group[] = $form->createElement('datepicker', 'expiration_date', null, array('form_name' => $form->getAttribute('name'), 'onchange' => 'javascript: enable_expiration_date();'));
 	$form->addGroup($group, 'max_member_group', null, '', false);
 
 	// Active account or inactive account
@@ -307,7 +309,7 @@ if ( $form->validate()) {
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
 		$error_drh = true;
 	} else {
-		$picture_element = & $form->getElement('picture');
+		$picture_element = $form->getElement('picture');
 		$picture = $picture_element->getValue();
 
 		$picture_uri = $user_data['picture_uri'];
@@ -359,7 +361,7 @@ if ( $form->validate()) {
                 UserManager::remove_user_admin($user_id);
 			}
 		}
-        
+
 		foreach ($user as $key => $value) {
 			if (substr($key, 0, 6) == 'extra_') { //an extra field
 				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
@@ -371,6 +373,7 @@ if ( $form->validate()) {
 	}
 }
 
+$message = null;
 if ($error_drh) {
 	$err_msg = get_lang('StatusCanNotBeChangedToHumanResourcesManager');
 	$message = Display::return_message($err_msg, 'error');
@@ -398,6 +401,7 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
+$content = null;
 if ($image == '') {
 	$content .= '<img '.$img_attributes.' />';
 } else {
@@ -408,7 +412,6 @@ if ($image == '') {
 $content .= $form->return_form();
 
 $tpl = new Template($tool_name);
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

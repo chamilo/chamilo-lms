@@ -357,7 +357,6 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         }
-        //data_tracking    	= '".implode(',', $question_list)."'
 
         $sql = "UPDATE $TABLETRACK_EXERCICES SET
         		   exe_exo_id 			= '".Database::escape_string($exo_id)."',
@@ -459,7 +458,7 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
 
     $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-    if ($debug) error_log("----- entering exercise_attempt function ------");
+    if ($debug) error_log("----- entering exercise_attempt() function ------");
 
     if ($debug) error_log("answer: $answer");
     if ($debug) error_log("score: $score");
@@ -501,7 +500,6 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
 
     if ($debug) error_log("Saving question attempt: ");
     if ($debug) error_log($sql);
-    if ($debug) error_log("");
 
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
         $res = Database::query($sql);
@@ -701,6 +699,31 @@ function get_events_by_user_and_type($user_id, $event_type) {
     }
     return false;
 }
+
+function get_latest_event_by_user_and_type($user_id, $event_type) {
+    $result = get_events_by_user_and_type($user_id, $event_type);
+    if ($result && !empty($result)) {
+        return $result[0];
+    }
+}
+
+function get_events_by_user_and_type($user_id, $event_type) {
+    global $TABLETRACK_DEFAULT;
+    $user_id = intval($user_id);
+    $event_type = Database::escape_string($event_type);
+
+    $sql = "SELECT * FROM $TABLETRACK_DEFAULT
+            WHERE default_value_type = 'user_id' AND
+                  default_value = $user_id AND
+                  default_event_type = '$event_type'
+            ORDER BY default_date ";
+    $result = Database::query($sql);
+    if ($result) {
+        return Database::store_result($result, 'ASSOC');
+    }
+    return false;
+}
+
 function get_latest_event_by_user_and_type($user_id, $event_type) {
     $result = get_events_by_user_and_type($user_id, $event_type);
     if ($result && !empty($result)) {

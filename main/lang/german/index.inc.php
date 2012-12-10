@@ -14,7 +14,7 @@ $langGetCourseFromOldPortal = "Klicken Sie hier, um den Kurs von ihrem alten Por
 $langOtherCourses = "andere Kurse";
 $langSupportForum = "Support Forum";
 $langCategories = "Kategorien";
-$langBackToHomePage = "Übersicht Kategorien";
+$langBackToHomePage = "Kategorie-Übersicht";
 $lang_No_course_publicly_available = "Es werden keine öffentlich zugänglichen Kurse angeboten.";
 $langLostPassword = "Passwort vergessen";
 $lang_edit_my_course_list = "Meine Kursliste bearbeiten";
@@ -60,7 +60,7 @@ $langRequestDenied = "Die Anfrage wurde abgewiesen";
 $UsageDatacreated = "Daten wurden erfasst";
 $SessionView = "Kurse nach Session-Kursen geordnet anzeigen";
 $CourseView = "Die Gesamtliste aller Kurse anzeigen";
-$DropboxFileAdded = "Dateikiste Datei wurde hinzugefügt";
+$DropboxFileAdded = "Datei wurde der Dateikiste hinzugefügt";
 $NewMessageInForum = "Neuer Beitrag wurde im Forum hinzugefügt";
 $FolderCreated = "Neues Verzeichnis wurde erstellt";
 $LinkAdded = "Bewertung hinzugefügt";
@@ -72,6 +72,12 @@ $Inbox = "Nachrichten-Eingang";
 $Comppose = "Nachricht erstellen";
 $PendingInvitations = "Offene Einladungen";
 $YouDoNotHaveAnySessionInItsHistory = "Sie haben keine Session in Ihrer Session-Liste";
+$PortalHomepageDefaultIntroduction = "<h2>Herzlichen Glückwunsch! Die Installation von Chamilo ist abgeschlossen!</h2><p>Sie können jetzt mit der Einrichtung fortfahren, indem Sie folgende 3 Schritte ausführen:<br /><ol><li>Globale Konfigurationsmöglichkeiten sind im Administrationsbereich unter Plattform -> <a href=\\"main/admin/settings.php\\">Chamilo Konfigurations-Einstellungen</a> zu finden.</li><li>Füllen Sie Ihre Installation mit ein wenig Leben durch das Hinzufügen von Benutzern und/oder Kursen. Am Leichtesten geht dies durch das Versenden von Einladungen oder eigenes Erstellen von Logins im Administrationsbereich Benutzer -> <a href=\\"main/admin/\\">Benutzer hinzufügen</a>.</li><li>Diese Seite hier kann im Administrationsbereich unter Plattform -> <a href=\\"main/admin/configure_homepage.php\\">Startseite konfigurieren</a> bearbeitet werden.</li></ol><p>Mehr Informationen und Neuigkeiten gibt es auf der Webseite: <a href=\\"http://www.chamilo.org\\">http://www.chamilo.org</a>.</p><p>Jetzt viel Spaß mit Chamilo, und zögere nicht, der Community zum <a href=\\"http://www.chamilo.org/forum\\">Chamilo Forum</a> beizutreten.</p>";
 $Username = "Benutzername";
+$GoAheadAndBrowseOurCourseCatalogXOnceRegisteredYouWillSeeTheCourseHereX = "Im Kursverzeichnis %s einen der bestehenden Kurse auswählen. Mit erfolgreicher Anmeldung wird dann der jeweilige Kurs anstelle dieser Nachricht %s erscheinen.";
+$HelloXAsYouCanSeeYourCourseListIsEmpty = "Hallo <strong>%s</strong> herzlich willkommen,
+Deine Kursliste ist im Moment noch leer.
+Zeit, sich für ein paar Kurse anzumelden!";
+$PleaseAllowUsALittleTimeToSubscribeYouToOneOfOurCourses = "Bitte um etwas Geduld für die Registrierung zu den Kursen. Bei Verdacht auf Vergessen bitte den Plattform-Administrator kontaktieren, welcher üblicherweise im Fußbereich angezeigt wird.";
 $Profile = "Profil";
 ?>

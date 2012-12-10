@@ -424,7 +424,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
             }
         } elseif(!$logout) {
             // Handle cookie comming from Master Server
-            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed'])) {
+            if (!isset($_GET['sso_referer']) && !isset($_GET['loginFailed']) && isset($_GET['sso_cookie'])) {
                 // Redirect to master server
                 $osso->ask_master();
             } elseif (isset($_GET['sso_cookie'])) {
@@ -535,8 +535,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     } elseif (KeyAuth::is_enabled()) {
         $success = KeyAuth::instance()->login();
-        if($success)
-        {
+        if($success) {
             $use_anonymous = false;
         }
     }
@@ -815,12 +814,6 @@ if (isset($cidReset) && $cidReset) {
     }
 }
 
-// if the requested group is different from the group in session
-/*
-$gid = isset($_SESSION['_gid']) ? $_SESSION['_gid'] : 0;
-if (isset($gidReq) && $gidReq != $gid) {
-    $gidReset = true;
-}*/
 /*  COURSE / USER REL. INIT */
 
 $session_id = api_get_session_id();
@@ -1088,7 +1081,7 @@ if (api_get_setting('student_view_enabled') == "true") {
     }
 }
 
-if (isset($_cid) && $_cid != '-1') {
+if (isset($_cid)) {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $time = api_get_utc_datetime();
     $sql="UPDATE $tbl_course SET last_visit= '$time' WHERE code='$_cid'";

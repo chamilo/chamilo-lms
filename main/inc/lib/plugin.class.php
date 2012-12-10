@@ -392,6 +392,6 @@ class Plugin {
      * @param array Values sent back from the course configuration script
      * @return void
      */
-    private function course_settings_updated($values = array()) {
+    public function course_settings_updated($values = array()) {
     }
 }

@@ -60,8 +60,10 @@ function get_tabs() {
 		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
-
-	// Social
+    
+    
+    // Social
+    /*
 	if (api_get_setting('allow_social_tool')=='true') {
 		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
 
@@ -79,7 +81,14 @@ function get_tabs() {
 
 		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}
-
+    */
+    
+	// Social
+	if (api_get_setting('allow_social_tool')=='true') {
+		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+		$navigation['social']['title'] = get_lang('SocialNetwork');
+	} 
+   
 	// Dashboard
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
 		$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
@@ -307,15 +316,17 @@ function return_navigation_array() {
             }
         }
 
-		// Custom tabs
-		for ($i=1;$i<=3;$i++)
-			if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
-				$navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
-			} else {
-			    if (isset($possible_tabs['custom_tab_'.$i])) {
+        // Custom tabs
+        for ($i=1;$i<=3;$i++) {
+            if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true' && isset($possible_tabs['custom_tab_'.$i])) {
+                $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+            } else {
+                if (isset($possible_tabs['custom_tab_'.$i])) {
                     $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
                 }
-			}
+            }
+        }
+
     }
     return array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
 }
@@ -409,7 +420,6 @@ function return_menu() {
 }
 
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
-
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
     $_course        = api_get_course_info();
@@ -463,6 +473,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
     // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
+            if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
+                continue;
+            }
             if ($breadcrumb_step['url'] != '#') {
                 $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
                 $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
@@ -498,6 +511,24 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             $navigation[] = $navigation_item;
         }
     }
+    
+    $navigation_right = array();
+    
+    if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
+        foreach ($interbreadcrumb as $breadcrumb_step) {
+            if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
+                if ($breadcrumb_step['url'] != '#') {
+                    $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
+                    $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
+                } else {
+                    $navigation_item['url'] = '#';
+                }
+                $breadcrumb_step['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
+                $breadcrumb_step['title'] = Security::remove_XSS($navigation_item['title']);
+                $navigation_right[] = $breadcrumb_step;
+            }
+        }
+    }
 
 
     // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
@@ -513,7 +544,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
-
             if ($navigation_info['url'] == '#') {
                 $final_navigation[$index] = $navigation_info['title'];
             } else {
@@ -566,6 +596,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
             $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+        }
+        
+        if (!empty($navigation_right)) {            
+            foreach($navigation_right as $item){
+                $extra_class = isset($item['class']) ? $item['class'] : null;
+                $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));    
+            }
         }
         
         if (!empty($lis)) {

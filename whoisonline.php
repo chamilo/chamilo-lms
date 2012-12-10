@@ -14,6 +14,11 @@ if (!isset($_GET['cidReq'])) {
 
 // including necessary files
 require_once './main/inc/global.inc.php';
+
+if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0 ) {
+    api_protect_course_script(true);
+}
+
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $_SESSION['who_is_online_counter'] = 2;
@@ -88,6 +93,7 @@ $(document).ready(function() {
 });        
 </script>';
 
+
 if ($_GET['chatid'] != '') {
 	//send out call request
 	$time = time();
@@ -105,7 +111,7 @@ if ($_GET['chatid'] != '') {
 // This if statement prevents users accessing the who's online feature when it has been disabled.
 if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || ((api_get_setting('showonline', 'users') == 'true' || api_get_setting('showonline', 'course') == 'true') && $_user['user_id'])) {
 
-	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
+	if(isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0 ) {
 		$user_list = who_is_online_in_this_course(0, 9, api_get_user_id(), api_get_setting('time_limit_whosonline'), $_GET['cidReq']);
 	} else {
 		$user_list = who_is_online(0, 9);		

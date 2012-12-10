@@ -5,7 +5,7 @@
  * @package chamilo.dashboard
  * @author Marco Sousa original code
  * @author Julio Montoya class named was changed of name, and some minor changes
- 
+
  */
 
 /**
@@ -25,15 +25,15 @@ class BlockDaily extends Block {
 
 	private $user_id;
 	private $courses;
-	private $path;	
+	private $path;
 	private $permission = array(DRH);
 
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {    	
+    public function __construct ($user_id) {
     	$this->user_id 		= $user_id;
-    	$this->path 		= 'block_daily';				
+    	$this->path 		= 'block_daily';
 		if ($this->is_block_visible_for_user($user_id)) {
 			/*if (api_is_platform_admin()) {
 				$this->courses = CourseManager::get_real_course_list();
@@ -42,22 +42,22 @@ class BlockDaily extends Block {
 			//}
 		}
     }
-    
+
 	/**
 	 * This method check if a user is allowed to see the block inside dashboard interface
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
-	 */    
-    public function is_block_visible_for_user($user_id) {	
+	 */
+    public function is_block_visible_for_user($user_id) {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
     	if (UserManager::is_admin($user_id) || in_array($user_status, $this->permission)) {
     		$is_block_visible_for_user = true;
-    	}    	
-    	return $is_block_visible_for_user;    	
+    	}
+    	return $is_block_visible_for_user;
     }
-    
+
 
     /**
      * This method return content html containing information about courses and its position for showing it inside dashboard interface
@@ -97,9 +97,10 @@ class BlockDaily extends Block {
 
  		$course_data = $this->get_course_information_data();
  		$content = '<div style="margin:10px;">';
- 		$content .= '<h3><font color="#000">'.get_lang('YourCourseList').'</font></h3>'; 		
+ 		$content .= '<h3><font color="#000">'.get_lang('YourCourseList').'</font></h3>';
+        $data_table = null;
  		if (!empty($course_data)) {
-	    	$data_table = '<table class="data_table" width:"95%">';
+	    	$data_table .= '<table class="data_table" width:"95%">';
 	    	$data_table .= '<tr>
 	    						<th>'.get_lang('CourseTitle').'</th>
 	    						<th width="20%">'.get_lang('NbStudents').'</th>
@@ -126,7 +127,7 @@ class BlockDaily extends Block {
 	    	$data_table .= '</table>';
 		} else {
 			$data_table .= get_lang('ThereIsNoInformationAboutYourCourses');
-		}		
+		}
 		$content .= $data_table;
 		if (!empty($course_data)) {
 			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
@@ -154,7 +155,7 @@ class BlockDaily extends Block {
 		$a_course_students  = array();
 		$course_data = array();
 		$courses = $this->courses;
-		
+
 		foreach ($courses as $row_course) {
             $score = null;
             $course_code = $row_course['code'];
@@ -162,12 +163,12 @@ class BlockDaily extends Block {
             if (empty($course_info)) {
                 continue;
             }
-            
+
             // Attendance table
             $table_course = Database::get_course_table(TABLE_ATTENDANCE);
 
             $sql = "SELECT id, name, attendance_qualify_max FROM $table_course WHERE c_id = ".$course_info['real_id']." AND active = 1 AND session_id = 0";
-            $rs  = Database::query($sql); 
+            $rs  = Database::query($sql);
 			$attendance = array();
             $attendances = array();
 
@@ -176,12 +177,12 @@ class BlockDaily extends Block {
                 $param_gradebook = '&gradebook='.$_SESSION['gradebook'];
             }
 
-			while ($row = Database::fetch_array($rs,'ASSOC')) {			    
+			while ($row = Database::fetch_array($rs,'ASSOC')) {
                 $attendance['done'] = $row['attendance_qualify_max'];
                 $attendance['id'] = $row['id'];
                 //$attendance['name'] = $row['name'];
                 $attendance['course_code'] = $course_code;
-    
+
                 if ($attendance['done'] != '0')
                     $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].$param_gradebook.'">'.Display::return_icon('printmgr.gif',get_lang('Print')).'</a>';
                 else
@@ -191,7 +192,7 @@ class BlockDaily extends Block {
              // quantidade de alunos
 
 			$sql = "SELECT user_id FROM $tbl_course_user as course_rel_user WHERE course_rel_user.status=".STUDENT." AND course_rel_user.course_code='$course_code'";
-			$rs = Database::query($sql); 
+			$rs = Database::query($sql);
 			$users = array();
 			while ($row = Database::fetch_array($rs)) {
 				$users[] = $row['user_id'];
@@ -214,16 +215,16 @@ class BlockDaily extends Block {
 			while ($row = Database::fetch_array($rs)) {
 				$category = $row['id'];
 			}
-                        
+
 			if (!empty($category)) {
                 $cat = Category::load($category);
-                $eval = $cat[0]->get_evaluations();    
+                $eval = $cat[0]->get_evaluations();
                 if (count($eval) > 0){
                     $i = 0;
-                    foreach ($eval as $item) {                        
-                        $score .= '<a href="'.api_get_path(WEB_PATH).'main/gradebook/gradebook_view_result.php?export=pdf&cat_code='.$cat[0]->get_id().'&official_code='.$cat[0]->get_course_code().'&selecteval='.$item->get_id().$param_gradebook.'">'.$item->get_name().'</a>';                        
+                    foreach ($eval as $item) {
+                        $score .= '<a href="'.api_get_path(WEB_PATH).'main/gradebook/gradebook_view_result.php?export=pdf&cat_code='.$cat[0]->get_id().'&official_code='.$cat[0]->get_course_code().'&selecteval='.$item->get_id().$param_gradebook.'">'.$item->get_name().'</a>';
                         if (count($eval)-1 != $i) {
-                            $score .= ', ';    
+                            $score .= ', ';
                         }
                         $i++;
                     }

@@ -1745,8 +1745,8 @@ class UserManager {
 		$t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
 		$t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
 		$user_id = Database::escape_string($user_id);
-		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
 
+		$sql = "SELECT f.id as id, f.field_variable as fvar, f.field_type as type FROM $t_uf f ";
 		$sql .= " WHERE f.field_variable = '$field_variable' ";
 
 		if (!$all_visibility) {

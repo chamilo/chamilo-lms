@@ -1123,7 +1123,7 @@ class CourseManager {
      * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER
      * @return array
      */
-    public static function get_user_list_from_course_code($course_code, $session_id = 0, $limit = '', $order_by = '', $filter_by_status = null) {
+    public static function get_user_list_from_course_code($course_code = null, $session_id = 0, $limit = null, $order_by = null, $filter_by_status = null, $return_count = null, $add_reports = false) {
         // variable initialisation
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
@@ -1131,8 +1131,9 @@ class CourseManager {
 
         // if the $order_by does not contain 'ORDER BY' we have to check if it is a valid field that can be sorted on
         if (!strstr($order_by,'ORDER BY')) {
-            if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
-                $order_by = 'ORDER BY user.'.$order_by;
+            //if (!empty($order_by) AND in_array($order_by, array('lastname', 'firstname', 'username', 'email', 'official_code'))) {
+            if (!empty($order_by)) {
+                $order_by = 'ORDER BY '.$order_by;
             } else {
                 $order_by = '';
             }
@@ -1156,12 +1157,26 @@ class CourseManager {
                 $filter_by_status_condition = " session_course_user.status = $filter_by_status AND ";
             }
         } else {
-            $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
-            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+            if ($return_count) {
+                $sql = " SELECT COUNT(*) as count";
+            } else {
+                if (empty($course_code)) {
+                    $sql = 'SELECT DISTINCT course.title, course.code, course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+                } else {
+                    $sql = 'SELECT DISTINCT course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
+                }
+            }
 
+            $sql .= ' FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_COURSE_USER).' as course_rel_user
-                        ON user.user_id = course_rel_user.user_id AND course_rel_user.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
-                        AND course_rel_user.course_code="'.$course_code.'"';
+                        ON user.user_id = course_rel_user.user_id AND
+                        course_rel_user.relation_type <> '.COURSE_RELATION_TYPE_RRHH.'  ';
+            if (!empty($course_code)) {
+                $sql .= ' AND course_rel_user.course_code="'.$course_code.'"';
+            } else {
+                $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+                $sql .= " INNER JOIN  $course_table course ON course_rel_user.course_code = course.code ";
+            }
             $where[] = ' course_rel_user.course_code IS NOT NULL ';
 
             if (isset($filter_by_status) && $filter_by_status != '') {
@@ -1182,12 +1197,19 @@ class CourseManager {
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
         $sql .= ' '.$order_by.' '.$limit;
-
+        //echo $sql;
         $rs = Database::query($sql);
         $users = array();
 
+        if ($add_reports) {
+            $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+        }
+
         if (Database::num_rows($rs)) {
             while ($user = Database::fetch_array($rs)) {
+                if ($return_count) {
+                    return $user['count'];
+                }
                 $user_info = $user;
                 $user_info['status'] = $user['status'];
 
@@ -1202,11 +1224,38 @@ class CourseManager {
                     $user_info['status_session'] = $user['status_session'];
                 }
 
-                $users[$user['user_id']] = $user_info;
+                if ($add_reports) {
+                    $course_code = $user['code'];
+                    $report_info['course'] = $user['title'];
+                    $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
+                    $report_info['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0));
+
+
+                    $category = Category :: load (null, null, $course_code);
+                    $report_info['status'] = Display::label(get_lang('No'));
+                    if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
+                        $report_info['status'] = Display::label(get_lang('Yes'));
+                    }
+                    $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
+
+                    foreach ($extra_fields as $extra) {
+                        $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
+                        $report_info[$extra['1']] = $user_data[$extra['1']];
+                    }
+                    //var_dump($report_info);
+                    $users[] = $report_info;
+                } else {
+                    $users[$user['user_id']] = $user_info;
+                }
             }
         }
         return $users;
     }
+
+    static function get_count_user_list_from_course_code() {
+        return self::get_user_list_from_course_code(null, 0, null, null, null, true);
+    }
+
 
     /**
      * Gets subscribed users in a course or in a course/session
@@ -3860,4 +3909,4 @@ class CourseManager {
         }
         return $options;
     }
-} //end class CourseManager
+}

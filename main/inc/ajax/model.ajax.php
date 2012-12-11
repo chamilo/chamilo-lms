@@ -68,14 +68,16 @@ function get_where_clause($col, $oper, $val) {
     if (empty($col)){
         return '';
     }
-    if($oper == 'bw' || $oper == 'bn') $val .= '%';
-    if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
-    if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
+    if ($oper == 'bw' || $oper == 'bn') $val .= '%';
+    if ($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
+    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
     $val = Database::escape_string($val);
     return " $col {$ops[$oper]} '$val' ";
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
+
+$operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
 
 $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
@@ -114,6 +116,9 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_user_course_report':
+        $count = CourseManager::get_count_user_list_from_course_code();
+        break;
 	case 'get_user_skill_ranking':
     	$skill = new Skill();
 	    $count = $skill->get_user_list_skill_ranking_count();
@@ -216,6 +221,16 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_user_course_report':
+        $columns = array('course', 'user', 'time', 'status', 'score');
+        $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+        if (!empty($extra_fields)) {
+            foreach($extra_fields as $extra) {
+                $columns[] = $extra['1'];
+            }
+        }
+        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
+        break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
@@ -467,7 +482,9 @@ $allowed_actions = array('get_careers',
                          'get_timelines',
                          'get_grade_models',
                          'get_event_email_template',
-                         'get_user_skill_ranking');
+                         'get_user_skill_ranking',
+                          'get_user_course_report'
+);
 
 //5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
@@ -475,7 +492,26 @@ if (in_array($action, $allowed_actions)) {
     $response->page     = $page;
     $response->total    = $total_pages;
     $response->records  = $count;
-    $i=0;
+
+    if ($operation && $operation == 'excel') {
+        $j = 1;
+        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+        $array = array();
+        foreach ($columns as $col) {
+            $array[0][] = $col;
+        }
+        foreach ($result as $row) {
+            foreach ($columns as $col) {
+                $array[$j][] = strip_tags($row[$col]);
+            }
+            $j++;
+        }
+        Export :: export_table_csv($array, 'company_report');
+        exit;
+    }
+
+    $i = 0;
+
     if (!empty($result)) {
         foreach ($result as $row) {
             //print_r($row);

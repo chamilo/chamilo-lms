@@ -40,17 +40,17 @@ $lp_id = intval($_GET['lp_id']);
 
 // Check if the learning path is visible for student - (LP requisites)
 if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 //Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
-if (!api_is_allowed_to_edit(null, true) && intval($visibility) == 0 ) {
-     api_not_allowed();
+if (!api_is_allowed_to_edit(false, true, false, false) && intval($visibility) == 0) {
+    api_not_allowed(true);
 }
 
 if (empty($_SESSION['oLP'])) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 $debug = 0;

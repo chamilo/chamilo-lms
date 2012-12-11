@@ -1232,9 +1232,9 @@ class CourseManager {
 
 
                     $category = Category :: load (null, null, $course_code);
-                    $report_info['status'] = Display::label(get_lang('No'));
+                    $report_info['certificate'] = Display::label(get_lang('No'));
                     if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
-                        $report_info['status'] = Display::label(get_lang('Yes'));
+                        $report_info['certificate'] = Display::label(get_lang('Yes'));
                     }
                     $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
 

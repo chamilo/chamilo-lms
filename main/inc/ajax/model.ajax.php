@@ -78,6 +78,7 @@ function get_where_clause($col, $oper, $val) {
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
 
 $operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
+$export_format    = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 
 $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
@@ -222,11 +223,13 @@ $columns = array();
 
 switch ($action) {
     case 'get_user_course_report':
-        $columns = array('course', 'user', 'time', 'status', 'score');
+        $columns = array('course', 'user', 'time', 'certificate', 'score');
+        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('TotalTime'), get_lang('Certificate'), get_lang('Score'));
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
             foreach($extra_fields as $extra) {
                 $columns[] = $extra['1'];
+                $column_names[] = $extra['3'];
             }
         }
         $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
@@ -483,7 +486,7 @@ $allowed_actions = array('get_careers',
                          'get_grade_models',
                          'get_event_email_template',
                          'get_user_skill_ranking',
-                          'get_user_course_report'
+                         'get_user_course_report'
 );
 
 //5. Creating an obj to return a json
@@ -496,8 +499,14 @@ if (in_array($action, $allowed_actions)) {
     if ($operation && $operation == 'excel') {
         $j = 1;
         require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+
         $array = array();
-        foreach ($columns as $col) {
+        if (empty($column_names)) {
+            $column_names = $columns;
+        }
+
+        //Headers
+        foreach ($column_names as $col) {
             $array[0][] = $col;
         }
         foreach ($result as $row) {
@@ -506,7 +515,15 @@ if (in_array($action, $allowed_actions)) {
             }
             $j++;
         }
-        Export :: export_table_csv($array, 'company_report');
+        switch ($export_format) {
+            case 'xls':
+                Export::export_table_xls($array, 'company_report');
+                break;
+            case 'csv':
+            default:
+                Export::export_table_csv($array, 'company_report');
+                break;
+        }
         exit;
     }
 

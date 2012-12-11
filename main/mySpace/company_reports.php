@@ -28,7 +28,7 @@ $column_model   = array(
                         array('name'=>'course',     'index'=>'title',   'width'=>'120', 'align'=>'left'),
                         array('name'=>'user',       'index'=>'user',    'width'=>'120', 'align'=>'left','sortable'=>'false'),
                         array('name'=>'time',       'index'=>'time',    'width'=>'50',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'status',     'index'=>'status',  'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'certificate',     'index'=>'certificate',  'width'=>'50',  'align'=>'left','sortable'=>'false'),
                         array('name'=>'score',      'index'=>'score',   'width'=>'50',  'align'=>'left','sortable'=>'false'),
 );
 
@@ -68,20 +68,14 @@ $(function() {
     jQuery("#user_course_report").jqGrid("navButtonAdd","#user_course_report_pager",{
            caption:"",
            onClickButton : function () {
-               jQuery("#user_course_report").jqGrid("excelExport",{"url":"'.$url.'"});
+               jQuery("#user_course_report").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
            }
     });
-
 });
-
-
-
-
 </script>';
 $content = Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);
-//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

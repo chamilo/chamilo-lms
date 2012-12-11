@@ -104,5 +104,7 @@ CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   t
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
 
+CREATE TABLE c_quiz_order( id int unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (id));
+
 -- Do not move this
 UPDATE settings_current SET selected_value = '1.10.0.20672' WHERE variable = 'chamilo_database_version';

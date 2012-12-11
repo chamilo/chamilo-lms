@@ -39,7 +39,7 @@ function is_already_installed_system() {
         return false; // Configuration file does not exist, install the system.
     }
     require $current_config_file;
-    
+
     $current_version = null;
     if (isset($_configuration['dokeos_version'])) {
         $current_version = trim($_configuration['dokeos_version']);
@@ -90,7 +90,7 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
     if ($current_php_value == $recommended_value) {
         return Display::label($current_php_value.' '.$return_success, 'success');
     } else {
-        return Display::label($current_php_value.' '.$return_success, 'important');        
+        return Display::label($current_php_value.' '.$return_success, 'important');
     }
 }
 
@@ -225,9 +225,9 @@ function check_writable($folder, $suggestion = false) {
         return Display::label(get_lang('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotWritable'), 'info');            
+            return Display::label(get_lang('NotWritable'), 'info');
         } else {
-            return Display::label(get_lang('NotWritable'), 'important');            
+            return Display::label(get_lang('NotWritable'), 'important');
         }
     }
 }
@@ -308,8 +308,8 @@ function write_system_config_file($path) {
     $config['{DATABASE_PASSWORD}']      = $dbPassForm;
     $config['TRACKING_ENABLED']         = true_false($enableTrackingForm);
     $config['SINGLE_DATABASE']          = true_false($singleDbForm);
-    $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');    
-    $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');  
+    $config['{COURSE_TABLE_PREFIX}']    = ($singleDbForm ? 'crs_' : '');
+    $config['{DATABASE_GLUE}']          = ($singleDbForm ? '_' : '`.`');
     $config['{DATABASE_PREFIX}']        = '';
     $config['{DATABASE_MAIN}']          = $dbNameForm;
     $config['{DATABASE_STATS}']         = $dbNameForm;
@@ -442,7 +442,7 @@ function get_config_param($param, $updatePath = '') {
     }
 
     if (file_exists($updatePath.$updateFromConfigFile) && !is_dir($updatePath.$updateFromConfigFile)) {
-     
+
         // The parameter was not found among the global variables, so look into the old configuration file.
 
         // Make sure the installedVersion file is read first so it is overwritten
@@ -612,27 +612,27 @@ function database_server_connect() {
 /**
  * Database exists for the MYSQL user
  * @param type $database_name
- * @return boolean 
+ * @return boolean
  */
-function database_exists($database_name) {    
+function database_exists($database_name) {
     if (empty($database_name)) {
         return false;
-    }    
-    $select_database = @Database::select_db($database_name);    
-    $show_database = false;    
-    $sql = "SHOW DATABASES LIKE '".addslashes($database_name)."'";    
+    }
+    $select_database = @Database::select_db($database_name);
+    $show_database = false;
+    $sql = "SHOW DATABASES LIKE '".addslashes($database_name)."'";
     $result = @Database::query($sql);
     if (Database::num_rows($result)) {
         $show_database = true;
-    }    
+    }
     return $select_database || $show_database;
 }
 
 /**
- * In step 3. Tests establishing connection to the database server. 
- * If it's a single database environment the function checks if the database exist. 
- * If the database doesn't exist we check the creation permissions. 
- * 
+ * In step 3. Tests establishing connection to the database server.
+ * If it's a single database environment the function checks if the database exist.
+ * If the database doesn't exist we check the creation permissions.
+ *
  * @return int      1 when there is no problem;
  *                  0 when a new database is impossible to be created, then the single/multiple database configuration is impossible too
  *                 -1 when there is no connection established.
@@ -641,10 +641,10 @@ function test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbFor
     $dbConnect = -1;
     //Checking user credentials
     if (@Database::connect(array('server' => $dbHostForm, 'username' => $dbUsernameForm, 'password' => $dbPassForm)) !== false) {
-        $dbConnect = 1; 
+        $dbConnect = 1;
     } else {
         $dbConnect = -1;
-    }    
+    }
     return $dbConnect; //return 1, if no problems, "0" if, in case we can't create a new DB and "-1" if there is no connection.
 }
 
@@ -679,7 +679,7 @@ function load_main_database($installation_settings, $db_script = '') {
             $sql_text = file_get_contents($db_script);
         }
     } else {
-        $db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;        
+        $db_script = api_get_path(SYS_CODE_PATH).'install/'.SYSTEM_MAIN_DATABASE_FILE;
         if (file_exists($db_script)) {
             $sql_text = file_get_contents($db_script);
         }
@@ -688,7 +688,7 @@ function load_main_database($installation_settings, $db_script = '') {
     //replace symbolic parameters with user-specified values
     foreach ($installation_settings as $key => $value) {
         $sql_text = str_replace($key, Database::escape_string($value), $sql_text);
-    }    
+    }
     parse_sql_queries($sql_text);
 }
 
@@ -708,7 +708,7 @@ function parse_sql_queries($sql_text) {
 
     //split in array of sql strings
     $sql_instructions = array();
-    split_sql_file($sql_instructions, $sql_text);    
+    split_sql_file($sql_instructions, $sql_text);
 
     //execute the sql instructions
     $count = count($sql_instructions);
@@ -717,12 +717,12 @@ function parse_sql_queries($sql_text) {
         Database::query($this_sql_query);
         //UTF8 fix see #5678
         /*
-        if (strpos(strtolower($this_sql_query), 'create table') === false) {            
+        if (strpos(strtolower($this_sql_query), 'create table') === false) {
             Database::query($this_sql_query);
         } else {
-            //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1); 
-            $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';            
-            Database::query($this_sql_query);            
+            //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1);
+            $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';
+            Database::query($this_sql_query);
         }*/
     }
 }
@@ -1049,7 +1049,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
     echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallGuide').'</a>.<br />'."\n";
-    
+
     if ($installType == 'update')  {
         echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
     }
@@ -1118,7 +1118,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('xapian', get_lang('Yes'), get_lang('No'), true).'</td>
             </tr>
-            
+
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a> '.get_lang('support').' ('.get_lang('Optional').')</td>
                 <td class="requirements-value">'.check_extension('curl', get_lang('Yes'), get_lang('No'), true).'</td>
@@ -1194,7 +1194,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-item"><a href="http://php.net/manual/ini.core.php#ini.post-max-size">Maximum post size</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_POST_MAX_SIZE.'M', 'success').'</td>
                 <td class="requirements-value">'.compare_setting_values(ini_get('post_max_size'), REQUIRED_MIN_POST_MAX_SIZE).'</td>
-            </tr>            
+            </tr>
             <tr>
                 <td class="requirements-item"><a href="http://www.php.net/manual/en/ini.core.php#ini.memory-limit">Memory Limit</a></td>
                 <td class="requirements-recommended">'.Display::label('>= '.REQUIRED_MIN_MEMORY_LIMIT.'M', 'success').'</td>
@@ -1208,50 +1208,50 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     echo '<div class="RequirementHeading"><h2>'.get_lang('DirectoryAndFilePermissions').'</h2>';
     echo '<div class="RequirementText">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
     echo '<div class="RequirementContent">';
-    
+
     $course_attempt_name = '__XxTestxX__';
-    $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;    
-    
+    $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
+
     //Just in case
     @unlink($course_dir.'/test.txt');
     @rmdir($course_dir);
-    
+
     $perms_dir = array(0777, 0755, 0775, 0770, 0750, 0700);
     $perms_fil = array(0666, 0644, 0664, 0660, 0640, 0600);
-    
+
     $course_test_was_created = false;
-    
+
     $dir_perm_verified = 0777;
     foreach ($perms_dir as $perm) {
-        $r = @mkdir($course_dir, $perm);        
-        if ($r === true) { 
+        $r = @mkdir($course_dir, $perm);
+        if ($r === true) {
             $dir_perm_verified = $perm;
             $course_test_was_created = true;
             break;
         }
     }
-    
+
     $fil_perm_verified = 0666;
-    
-    if (is_dir($course_dir)) {    
+
+    if (is_dir($course_dir)) {
         foreach ($perms_fil as $perm) {
             $r = @touch($course_dir.'/test.txt',$perm);
-            if ($r === true) { 
+            if ($r === true) {
                 $fil_perm_verified = $perm;
                 break;
             }
         }
-    }   
-    
+    }
+
     @unlink($course_dir.'/test.txt');
     @rmdir($course_dir);
-    
+
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
     $_SESSION['permissions_for_new_files']       = $_setting['permissions_for_new_files'] = $fil_perm_verified;
-    
+
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
-    
+
     $course_test_was_created  = $course_test_was_created == true ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'), 'warning');
 
     echo '<table class="table">
@@ -1274,19 +1274,19 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             <tr>
                 <td class="requirements-item">chamilo/courses/</td>
                 <td class="requirements-value">'.check_writable('../courses/').' </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
                 <td class="requirements-value">'.$course_test_was_created.' </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
                 <td class="requirements-value">'.$dir_perm.' </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
-            </tr>            
+            </tr>
             <tr>
                 <td class="requirements-item">chamilo/home/</td>
                 <td class="requirements-value">'.check_writable('../home/').'</td>
@@ -1342,7 +1342,7 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
     } else {
         $error = false;
         // First, attempt to set writing permissions if we don't have them yet
-        $perm = api_get_permissions_for_new_directories();        
+        $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
 
         $notwritable = array();
@@ -1377,11 +1377,11 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
             $notwritable[] = $checked_writable;
             @chmod($checked_writable, $perm);
         }
-        
+
         if ($course_test_was_created == false) {
             $error = true;
         }
-        
+
 
         $checked_writable = api_get_path(SYS_PATH).'home/';
         if (!is_writable($checked_writable)) {
@@ -1405,13 +1405,13 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 	            printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
 	            <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
 			echo '</div>';
-				
+
             echo '<ul>';
             foreach ($notwritable as $value) {
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
-            
+
         }
 
         // Check wether a Chamilo configuration file already exists.
@@ -1464,7 +1464,7 @@ function display_license_agreement() {
         </td>
         </tr>
         <tr><td>
-              <label class="checkbox">  
+              <label class="checkbox">
                 <input type="checkbox" name="accept" id="accept_licence" value="1" autofocus="autofocus" />
                 <?php echo get_lang('IAccept'); ?>
               </label>
@@ -1489,18 +1489,18 @@ function display_license_agreement() {
 
     <!-- Contact information form -->
 	<div>
-    	
+
         	<a href="javascript://" class = "advanced_parameters" >
             	<span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
            	</a>
-		
+
 	</div>
-                    
+
     <div id="id_contact_form" style="display:block">
     	<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
         <div id="contact_registration">
         	<p><?php echo get_contact_registration_form() ?></p><br />
-    	</div>	
+    	</div>
 	</div>
     <?php
 }
@@ -1512,9 +1512,9 @@ function display_license_agreement() {
 function get_contact_registration_form() {
 
     $html ='
-   <form class="form-horizontal">    
+   <form class="form-horizontal">
    <fieldset style="width:95%;padding:15px;border:1pt solid #eee">
-    <div id="div_sent_information"></div>  
+    <div id="div_sent_information"></div>
     <div class="control-group">
             <label class="control-label"><span class="form_required">*</span>'.get_lang('Name').'</label>
             <div class="controls"><input id="person_name" type="text" name="person_name" size="30" /></div>
@@ -1570,7 +1570,7 @@ function get_contact_registration_form() {
                     </select>
             </div>
     </div>
-    
+
     <div class="control-group">
             <div class="control-label"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</div>
             <div class="controls">'.get_countries_list_from_array(true).'</div>
@@ -1601,7 +1601,7 @@ function get_contact_registration_form() {
                     </select>
             </div>
     </div>
-    
+
     <div class="control-group">
             <div class="control-label">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</div>
             <div class="controls">
@@ -1617,7 +1617,7 @@ function get_contact_registration_form() {
     <div class="control-group">
             <div class="control-label">&nbsp;</div>
             <div class="controls"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
-    </div>    
+    </div>
 </fieldset></form>';
 
 return $html;
@@ -1638,7 +1638,7 @@ return $html;
 function display_database_parameter($install_type, $parameter_name, $form_field_name, $parameter_value, $extra_notice, $display_when_update = true, $tr_attribute = '') {
     echo "<tr ".$tr_attribute.">";
     echo "<td>$parameter_name&nbsp;&nbsp;</td>";
-    
+
     if ($install_type == INSTALL_TYPE_UPDATE && $display_when_update) {
         echo '<td><input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'.$parameter_value."</td>";
     } else {
@@ -1648,12 +1648,12 @@ function display_database_parameter($install_type, $parameter_name, $form_field_
         $maxlength = $form_field_name == 'dbPrefixForm' ? '15' : MAX_FORM_FIELD_LENGTH;
         if ($install_type == INSTALL_TYPE_UPDATE) {
             echo '<input type="hidden" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />';
-            echo '<td>'.api_htmlentities($parameter_value)."</td>";            
+            echo '<td>'.api_htmlentities($parameter_value)."</td>";
         } else {
             echo '<td><input type="'.$inputtype.'" size="'.DATABASE_FORM_FIELD_DISPLAY_LENGTH.'" maxlength="'.$maxlength.'" name="'.$form_field_name.'" id="'.$form_field_name.'" value="'.api_htmlentities($parameter_value).'" />'."</td>";
             echo "<td>$extra_notice</td>";
         }
-        
+
     }
     echo "</tr>";
 }
@@ -1670,14 +1670,14 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
             $dbHostForm     	= get_config_param('dbHost');
-            
+
             $dbUsernameForm 	= get_config_param('dbLogin');
             $dbPassForm     	= get_config_param('dbPass');
             $dbPrefixForm   	= get_config_param('dbNamePrefix');
             $enableTrackingForm = get_config_param('is_trackingEnabled');
             $singleDbForm   	= get_config_param('singleDbEnabled');
             $dbHostForm     	= get_config_param('mainDbName');
-                        
+
             $dbStatsForm    	= get_config_param('statsDbName');
             $dbScormForm    	= get_config_param('scormDbName');
             $dbUserForm     	= get_config_param('user_personal_database');
@@ -1704,7 +1704,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                 $dbScormExists = false;
             }
         }
-        
+
         if (empty($dbUserForm)) {
             $dbUserForm = $singleDbForm ? $dbNameForm : $dbPrefixForm.'chamilo_user';
         }
@@ -1721,14 +1721,14 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         echo '<div class="RequirementHeading"><h2>' . display_step_sequence() .get_lang('DBSetting') . '</h2></div>';
         echo '<div class="RequirementContent">';
         echo get_lang('DBSettingIntro');
-        echo '</div>';                
+        echo '</div>';
     }
-    $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);        
-    ?>    
+    $dbConnect = test_db_connect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleDbForm, $dbPrefixForm, $dbNameForm);
+    ?>
     </td>
     </tr>
     <tr>
-    <td>    
+    <td>
     <table class="data_table_no_border">
     <tr>
       <td width="40%"><?php echo get_lang('DBHost'); ?> </td>
@@ -1741,7 +1741,7 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <?php endif; ?>
     </tr>
     <tr>
-    <?php	
+    <?php
     //database user username
     $example_login = get_lang('EG').' root';
     display_database_parameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login);
@@ -1751,26 +1751,26 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
     display_database_parameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password);
 
     echo '<input type="hidden" name="enableTrackingForm" value="1" />';
-        
-    $style = '';    
+
+    $style = '';
     if ($installType == INSTALL_TYPE_UPDATE) {
         $style = '';
-    } 
-       
+    }
+
     //Database Name fix replace weird chars
     if ($installType != INSTALL_TYPE_UPDATE) {
         $dbNameForm = str_replace(array('-','*', '$', ' ', '.'), '', $dbNameForm);
-        $dbNameForm = replace_dangerous_char($dbNameForm);        
+        $dbNameForm = replace_dangerous_char($dbNameForm);
     }
-    
+
     display_database_parameter($installType, get_lang('MainDB'), 'dbNameForm',  $dbNameForm,  '&nbsp;', null, 'id="optional_param1" '.$style);
-    
+
     //Only for updates we show this options
     if ($installType == INSTALL_TYPE_UPDATE) {
     	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
 	    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
         	display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
-    	}    
+    	}
     	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
     ?>
@@ -1780,42 +1780,42 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
             <button type="submit" class="btn" name="step3" value="<?php echo get_lang('CheckDatabaseConnection'); ?>" >
                 <?php echo get_lang('CheckDatabaseConnection'); ?></button>
         </td>
-    </tr>    
+    </tr>
     <tr>
         <td>
-        
+
         <?php
-        
-        
+
+
         $database_exists_text = '';
-        
+
         if (database_exists($dbNameForm)) {
             $database_exists_text = '<div class="warning-message">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
-        } else {            
+        } else {
             if ($dbConnect == -1) {
-                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';                 
+                 $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('UserXCantHaveAccessInTheDatabaseX'), $dbUsernameForm, $dbNameForm).'</div>';
             } else {
                  //Try to create the database
-                $user_can_create_databases = false;            
+                $user_can_create_databases = false;
                 $multipleDbCheck = @Database::query("CREATE DATABASE ".mysql_real_escape_string($dbNameForm));
                 if ($multipleDbCheck !== false) {
-                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".mysql_real_escape_string($dbNameForm));                
+                    $multipleDbCheck = @Database::query("DROP DATABASE IF EXISTS ".mysql_real_escape_string($dbNameForm));
                     $user_can_create_databases = true;
-                }             
+                }
 
                 if ($user_can_create_databases) {
                     $database_exists_text = '<div class="normal-message">'.sprintf(get_lang('DatabaseXWillBeCreated'), $dbNameForm, $dbUsernameForm).'</div>';
                 } else {
                     $dbConnect = 0;
-                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';                
+                    $database_exists_text = '<div class="warning-message">'.sprintf(get_lang('DatabaseXCantBeCreatedUserXDoestHaveEnoughPermissions'), $dbNameForm, $dbUsernameForm).'</div>';
                 }
-            }       
-        }         
-            
+            }
+        }
+
         if ($dbConnect == 1): ?>
         <td colspan="2">
             <?php echo $database_exists_text ?>
-            <div id="db_status" class="confirmation-message">                
+            <div id="db_status" class="confirmation-message">
                 Database host: <strong><?php echo Database::get_host_info(); ?></strong><br />
                 Database server version: <strong><?php echo Database::get_server_info(); ?></strong><br />
                 Database client version: <strong><?php echo Database::get_client_info(); ?></strong><br />
@@ -1823,15 +1823,15 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
                 <div style="clear:both;"></div>
             </div>
         </td>
-        <?php else: ?>        
+        <?php else: ?>
         <td colspan="2">
             <?php echo $database_exists_text ?>
-            <div id="db_status" style="float:left;" class="error-message">                
+            <div id="db_status" style="float:left;" class="error-message">
                 <div style="float:left;">
                     <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br />
 	                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
 	                <?php echo Database::error().'<br />'; ?>
-	                
+
                 </div>
             </div>
         </td>
@@ -1844,11 +1844,11 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
       <td>&nbsp;</td>
       <td align="right">
           <input type="hidden" name="is_executable" id="is_executable" value="-" />
-           <?php if ($dbConnect == 1) { ?>          
+           <?php if ($dbConnect == 1) { ?>
             <button type="submit"  class="btn next" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" <?php if ($dbConnect == 1) { echo 'autofocus="autofocus"'; } ?> /><?php echo get_lang('Next'); ?></button>
           <?php } else { ?>
             <button disabled="disabled" type="submit" class="btn next disabled" name="step4" value="<?php echo get_lang('Next'); ?> &gt;" /><?php echo get_lang('Next'); ?></button>
-          <?php } ?>  
+          <?php } ?>
       </td>
     </tr>
     </table>
@@ -1883,20 +1883,20 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
     echo '<div class="RequirementContent">';
     echo '<p>'.get_lang('ConfigSettingsInfo').' <strong>main/inc/conf/configuration.php</strong></p>';
     echo '</div>';
-    
+
     echo '<fieldset>';
     echo '<legend>'.get_lang('Administrator').'</legend>';
     echo '<table class="data_table_no_border">';
-    
+
     //Parameter 1: administrator's login
-    
+
     display_configuration_parameter($installType, get_lang('AdminLogin'), 'loginForm', $loginForm, $installType == 'update');
-    
+
     //Parameter 2: administrator's password
     if ($installType != 'update') {
         display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
-    }    
-    
+    }
+
     //Parameters 3 and 4: administrator's names
     if (api_is_western_name_order()) {
         display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
@@ -1905,21 +1905,21 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
         display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
         display_configuration_parameter($installType, get_lang('AdminFirstName'), 'adminFirstName', $adminFirstName);
     }
-    
+
     //Parameter 3: administrator's email
     display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
 
     //Parameter 6: administrator's telephone
     display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
-    
-    echo '</table>';    
+
+    echo '</table>';
     echo '</fieldset>';
-    
+
     echo '<fieldset>';
     echo '<legend>'.get_lang('Platform').'</legend>';
-    
-    echo '<table class="data_table_no_border">';    
-    
+
+    echo '<table class="data_table_no_border">';
+
     //First parameter: language
     echo "<tr>";
     echo '<td>'.get_lang('MainLang')."&nbsp;&nbsp;</td>";
@@ -1932,8 +1932,8 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
         echo "</td>\n";
     }
     echo "</tr>\n";
-    
-    
+
+
     //Second parameter: Chamilo URL
     echo "<tr>";
     echo '<td>'.get_lang('ChamiloURL').' (<font color="red">'.get_lang('ThisFieldIsRequired')."</font>)&nbsp;&nbsp;</td>";
@@ -1966,15 +1966,15 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
               <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
               </label>
-       
-              <label class="checkbox inline">  
+
+              <label class="checkbox inline">
                 <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
               </label>
-            
+
                 <label class="checkbox inline">
                     <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
                 </label>
-           
+
           </div>
           </td>
       <?php } ?>
@@ -2096,7 +2096,7 @@ function get_countries_list_from_array($combo = false) {
 }
 
 /**
- * Lockis settings that can't be changed in other portals 
+ * Lockis settings that can't be changed in other portals
  */
 function locking_settings() {
     $access_url_locked_settings = api_get_locked_settings();
@@ -2107,36 +2107,36 @@ function locking_settings() {
     }
 }
 
-function update_dir_and_files_permissions() {    
-    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);    
+function update_dir_and_files_permissions() {
+    $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $permissions_for_new_directories = isset($_SESSION['permissions_for_new_directories']) ? $_SESSION['permissions_for_new_directories'] : 0770;
     $permissions_for_new_files = isset($_SESSION['permissions_for_new_files']) ? $_SESSION['permissions_for_new_files'] : 0660;
     // use decoct() to store as string
     $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_directories)."' WHERE variable  = 'permissions_for_new_directories'";
     Database::query($sql);
-     
+
     $sql = "UPDATE $table SET selected_value = '0".decoct($permissions_for_new_files)."' WHERE variable  = 'permissions_for_new_files'";
     Database::query($sql);
-    
+
     unset($_SESSION['permissions_for_new_directories']);
     unset($_SESSION['permissions_for_new_files']);
 }
 
 function compare_setting_values($current_value, $wanted_value) {
     $current_value_string = $current_value;
-    $current_value = (float)$current_value;    
+    $current_value = (float)$current_value;
     $wanted_value = (float)$wanted_value;
-    
+
     if ($current_value >= $wanted_value) {
         return Display::label($current_value_string, 'success');
     } else {
         return Display::label($current_value_string, 'important');
-    }    
+    }
 }
 
 
-    
-    
+
+
 
 /* Executed only before create_course_tables() */
 function drop_course_tables() {
@@ -2298,8 +2298,9 @@ function create_course_tables($course_db_name = null) {
     $TBL_THEMATIC_ADVANCE       = $course_db_name . 'thematic_advance';
     $TBL_METADATA               = $course_db_name . 'metadata';
 
+
     $add_to_all_tables = ' c_id INT NOT NULL, ';
-    
+
 
     /*  Announcement tool	*/
 
@@ -2477,15 +2478,15 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
-    Database::query($sql);    
-    
+    Database::query($sql);
+
     // Forum Mailcue
     $sql = "
         CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
          id int NOT NULL auto_increment,
-         user_id int default NULL, 
-         thread_id int default NULL, 
+         user_id int default NULL,
+         thread_id int default NULL,
          post_id int default NULL,
          PRIMARY KEY (id, c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
@@ -2624,9 +2625,9 @@ function create_course_tables($course_db_name = null) {
         position mediumint unsigned NOT NULL default 1,
         hotspot_coordinates text,
         hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
-        destination text NOT NULL,        
+        destination text NOT NULL,
         answer_code char(10) default '',
-        PRIMARY KEY (c_id, id_auto)  
+        PRIMARY KEY (c_id, id_auto)
         )" . $charset_clause;
     Database::query($sql);
 
@@ -3263,10 +3264,10 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
     Database::query($sql);
-    
+
     $sql = "ALTER TABLE $TABLELPITEM ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id)";
     Database::query($sql);
-    
+
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEMVIEW` (
     	$add_to_all_tables
     	" .
@@ -3292,11 +3293,11 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
     Database::query($sql);
-    
+
     $sql = "ALTER TABLE $TABLELPITEMVIEW ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id) ";
     Database::query($sql);
-    
-    
+
+
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(
     	 $add_to_all_tables" .
         "id             bigint unsigned     auto_increment," .
@@ -3489,7 +3490,7 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "
         CREATE TABLE `" . $tbl_role . "` (
-        	$add_to_all_tables            
+        	$add_to_all_tables
             role_id int NOT NULL AUTO_INCREMENT,
             role_name varchar( 250 ) NOT NULL default '',
             role_comment text,
@@ -3498,7 +3499,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
 
     Database::query($sql);
-    
+
     $sql = "
         CREATE TABLE `" . $tbl_role_group . "` (
         	$add_to_all_tables
@@ -3523,7 +3524,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
 
     Database::query($sql);
-    
+
     $sql = "
         CREATE TABLE `" . $tbl_role_user . "` (
         	$add_to_all_tables
@@ -3638,7 +3639,7 @@ function create_course_tables($course_db_name = null) {
       value int NOT NULL default '0',
       PRIMARY KEY  (c_id, question_option_id)
     )" . $charset_clause;
-    
+
     $result = Database::query($sql);
 
     $sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
@@ -3843,6 +3844,29 @@ function create_course_tables($course_db_name = null) {
             "indexabletext TEXT default ''," .  // indexable for search
             "PRIMARY KEY (c_id, eid)           )".$charset_clause;
 
+    Database::query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS " . $TBL_METADATA . " (    " .
+            $add_to_all_tables.
+            "eid VARCHAR(250) NOT NULL," .      // entry-id, e.g. doc.1
+            "mdxmltext TEXT default ''," .      // MD-text, XML-formatted
+            "md5 CHAR(32) default ''," .        // hash-validator
+            "htmlcache1 TEXT default ''," .     // cached HTML, part 1
+            "htmlcache2 TEXT default ''," .     // cached HTML, part 2
+            "indexabletext TEXT default ''," .  // indexable for search
+            "PRIMARY KEY (c_id, eid)           )".$charset_clause;
+    Database::query($sql);
+
+    $table_quiz_order = $course_db_name . 'quiz_order';
+    
+    $sql = " CREATE TABLE $table_quiz_order(
+        id int unsigned NOT NULL auto_increment,
+        c_id int unsigned NOT NULL,
+        session_id int unsigned NOT NULL,
+        exercise_id int NOT NULL,
+        exercise_order INT NOT NULL,
+        PRIMARY KEY (id)
+        ) ".$charset_clause;
     Database::query($sql);
 
     return 0;

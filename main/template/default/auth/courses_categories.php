@@ -149,10 +149,10 @@ $stok = Security::get_token();
                         echo '<div class="thumbnail">';
                         if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                             echo '<a class="ajax" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" rel="gb_page_center[778]">';
-                            echo '<img src="'.$course_medium_image.'" />';
+                            echo '<img src="'.$course_medium_image.'" alt="'.$title.'" />';
                             echo '</a>';
                         } else {
-                            echo '<img src="'.$course_medium_image.'" />';
+                            echo '<img src="'.$course_medium_image.'" alt="'.$title.'"/>';
                         }
                         echo '</div>';//thumb
                     echo '</div>';

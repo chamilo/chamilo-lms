@@ -26,7 +26,6 @@ function get_number_of_courses() {
     $course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table";
 
-    global $_configuration;
     if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $sql.= " INNER JOIN $access_url_rel_course_table url_rel_course ON (code=url_rel_course.course_code)";
@@ -35,8 +34,7 @@ function get_number_of_courses() {
     if (isset ($_GET['keyword'])) {
         $keyword = Database::escape_string($_GET['keyword']);
         $sql .= " WHERE (title LIKE '%".$keyword."%' OR code LIKE '%".$keyword."%' OR visual_code LIKE '%".$keyword."%')";
-    }
-    elseif (isset ($_GET['keyword_code'])) {
+    } elseif (isset ($_GET['keyword_code'])) {
         $keyword_code = Database::escape_string($_GET['keyword_code']);
         $keyword_title = Database::escape_string($_GET['keyword_title']);
         $keyword_category = Database::escape_string($_GET['keyword_category']);
@@ -75,7 +73,6 @@ function get_course_data($from, $number_of_items, $column, $direction) {
                     directory as col9,
                     visual_code
     		FROM $course_table";
-    global $_configuration;
 
     if ((api_is_platform_admin() || api_is_session_admin()) && api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1) {
         $access_url_rel_course_table = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -136,7 +133,6 @@ function modify_filter($code) {
  * Return an icon representing the visibility of the course
  */
 function get_course_visibility_icon($v) {
-    $path = api_get_path(REL_CODE_PATH);
     $style = 'margin-bottom:-5px;margin-right:5px;';
     switch($v) {
         case 0:
@@ -162,7 +158,7 @@ if (isset ($_POST['action'])) {
         case 'delete_courses' :
             $course_codes = $_POST['course'];
             if (count($course_codes) > 0) {
-                foreach ($course_codes as $index => $course_code) {
+                foreach ($course_codes as $course_code) {
                     CourseManager :: delete_course($course_code);
                     $obj_cat = new Category();
                     $obj_cat->update_category_delete($course_code);
@@ -177,7 +173,6 @@ $actions = '';
 
 if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     // Get all course categories
-    $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
     $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
     $interbreadcrumb[] = array('url' => 'course_list.php', 'name' => get_lang('CourseList'));
     $tool_name = get_lang('SearchACourse');

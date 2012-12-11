@@ -197,7 +197,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
 }
 if ($debug > 0) error_log('New LP - Passed oLP creation check', 0);
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true, false, false);
 
 
 /**

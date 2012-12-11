@@ -26,7 +26,7 @@ $language_file = 'learnpath';
 
 $htmlHeadXtra[] = '
 <script>
-var temp    = false;
+var temp = false;
 var load_default_template = '. ((isset($_POST['submit']) || empty($_SERVER['QUERY_STRING'])) ? 'false' : 'true' ) .';
 
 function FCKeditor_OnComplete( editorInstance ) {
@@ -35,9 +35,9 @@ function FCKeditor_OnComplete( editorInstance ) {
     loaded = true;
 }
 
-function check_for_title() {   
-    if (temp) {  
-    
+function check_for_title() {
+    if (temp) {
+
         // This functions shows that you can interact directly with the editor area
         // DOM. In this way you have the freedom to do anything you want with it.
 
@@ -119,17 +119,18 @@ $(function() {
         }
     }
     //Loads LP item tabs
-    
+
     $("#resource_tab").tabs();
     $(\'.lp_resource_element\').click(function() {
         window.location.href = $(\'a\', this).attr(\'href\');
-    });        
+    });
 });
 </script>';
 
 /* Constants and variables */
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+//Already set in lp_controller.php
+//$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 $isStudentView  = (int) $_REQUEST['isStudentView'];
 $learnpath_id   = (int) $_REQUEST['lp_id'];
@@ -156,9 +157,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
@@ -196,13 +197,13 @@ $suredel = trim(get_lang('AreYouSureToDelete'));
     #resExercise .ui-selected { background: #F39814; color: white; }
     #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
     #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-    
+
     /* Fixes LP toolbar */
     #resource_tab li a {
         padding: 5px 4px;
     }
 </style>
-    
+
 <script>
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -220,21 +221,21 @@ function confirmation(name) {
     }
 }
 
-$(document).ready(function() {    
+$(document).ready(function() {
     $("#hide_bar_template").toggle(
-        function() { 
-            $("#lp_sidebar").hide(); 
+        function() {
+            $("#lp_sidebar").hide();
             $(this).css({'background-image' : 'url("../img/hide2.png")'})
-            $("#doc_form").removeClass("span8"); 
-            $("#doc_form").addClass("span11");   
+            $("#doc_form").removeClass("span8");
+            $("#doc_form").addClass("span11");
         },
-        function() { 
+        function() {
             $("#lp_sidebar").show();
-            $("#doc_form").removeClass("span11"); 
-            $("#doc_form").addClass("span8"); 
-            $(this).css('background-image', 'url("../img/hide0.png")'); 
-        }            
-    );    
+            $("#doc_form").removeClass("span11");
+            $("#doc_form").addClass("span8");
+            $(this).css('background-image', 'url("../img/hide0.png")');
+        }
+    );
 });
 </script>
 <?php
@@ -246,22 +247,22 @@ echo $_SESSION['oLP']->build_action_menu();
 echo '<div class="row-fluid" style="overflow:hidden">';
 echo '<div id="lp_sidebar" class="span4">';
 
-echo $_SESSION['oLP']->return_new_tree(null, true); 
+echo $_SESSION['oLP']->return_new_tree(null, true);
 
 // Show the template list.
-if ($type == 'document' && !isset($_GET['file'])) {    
-    // Show the template list.        
+if ($type == 'document' && !isset($_GET['file'])) {
+    // Show the template list.
     echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';}
 echo '</div>';
 
 //hide bar div
-if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {    
-    echo '<div id="hide_bar_template"></div>';    
+if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
+    echo '<div id="hide_bar_template"></div>';
 }
 
 echo '<div id="doc_form" class="span8">';
 
-if (isset($new_item_id) && is_numeric($new_item_id)) {        
+if (isset($new_item_id) && is_numeric($new_item_id)) {
     switch ($type) {
         case 'chapter':
             echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);

@@ -3,7 +3,7 @@
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 
-$language_file = array('admin','exercice');
+$language_file = array('admin', 'exercice', 'gradebook', 'tracking');
 
 require_once '../global.inc.php';
 
@@ -76,6 +76,8 @@ function get_where_clause($col, $oper, $val) {
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
+$operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
+$export_format    = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 
 $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
@@ -176,6 +178,9 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_user_course_report':
+        $count = CourseManager::get_count_user_list_from_course_code();
+        break;
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();
         $count = Question::get_count_course_medias($course_id);
@@ -300,7 +305,19 @@ switch ($action) {
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);        
-        break;  
+        break;
+    case 'get_user_course_report':
+        $columns = array('course', 'user', 'time', 'certificate', 'score');
+        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('TimeSpentInTheCourse'), get_lang('Certificate'), get_lang('Score'));
+        $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
+        if (!empty($extra_fields)) {
+            foreach($extra_fields as $extra) {
+                $columns[] = $extra['1'];
+                $column_names[] = $extra['3'];
+            }
+        }
+    $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
+    break;
 	case 'get_user_skill_ranking':	
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
@@ -339,7 +356,7 @@ switch ($action) {
         //used inside get_exam_results_data()
 		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document"; 		
 		if ($is_allowedToEdit) {
-			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
+			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions');
 		} else {
 			//$columns = array('exe_duration', 'start_date', 'exe_date', 'score', 'status', 'actions');
 		}       
@@ -597,6 +614,7 @@ $allowed_actions = array('get_careers',
                          'get_extra_fields',
                          'get_extra_field_options',
                          'get_course_exercise_medias',
+                         'get_user_course_report',
 );
                          	
 //5. Creating an obj to return a json

@@ -150,6 +150,7 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
+    $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',          'label' => get_lang('Reports'));
 
     /* Event settings */
     
@@ -222,12 +223,9 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-	//if (api_is_global_platform_admin()) {
 		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-	//}
     
 	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
-    //$items[] = array('url'=>'statistics/index.php?action=activities', 	'label' => get_lang('ImportantActivities'));
     
 	$blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;

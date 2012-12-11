@@ -139,9 +139,27 @@ switch ($action) {
         }
         echo json_encode($response);
         break;
+    case 'update_exercise_list_order':
+        $session_id = api_get_session_id();
+        if (api_is_allowed_to_edit(null, true)) {
+            $new_list = $_REQUEST['exercise_list'];
+            $table = Database::get_course_table(TABLE_QUIZ_ORDER);
+            $counter = 1;
+            //Drop all
+            Database::query("DELETE FROM $table WHERE session_id = $session_id AND c_id = $course_id");
+            //Insert alll
+            foreach ($new_list as $new_order_id) {
+                /*Database::update($table, array('exercise_order' => $counter),
+                    array('session_id = ? AND exercise_id = ? AND c_id = ? '=> array($session_id, intval($new_order_id), $course_id)));*/
+                Database::insert($table, array('exercise_order' => $counter, 'session_id' => $session_id, 'exercise_id' => intval($new_order_id), 'c_id' => $course_id));
+                $counter++;
+            }
+            Display::display_confirmation_message(get_lang('Saved'));
+        }
+        break;
     case 'update_question_order':
         if (api_is_allowed_to_edit(null, true)) {
-            $new_question_list     = $_POST['question_id_list'];
+            $new_question_list = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {
@@ -313,7 +331,7 @@ switch ($action) {
                     if ($objQuestionTmp->type  == HOT_SPOT) {
             	        delete_attempt_hotspot($exe_id, api_get_user_id() , api_get_course_id(), $my_question_id);
                     }
-                    
+
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
                         $total_score  -= $attempt_list[$my_question_id]['marks'];
                     }

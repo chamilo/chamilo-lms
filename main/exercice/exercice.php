@@ -162,7 +162,23 @@ $htmlHeadXtra[] = '<script>
                 hide: true, //
             });
         });*/
-    });
+
+
+
+      /*
+     $(".data_table tbody").sortable({
+        cursor: "move", // works?
+        update: function(event, ui) {
+            var order = $(this).sortable("serialize") + "&a=update_exercise_list_order";
+            $.get("'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php", order, function(reponse) {
+                $("#message").html(reponse);
+            });
+        },
+        axis: "y",
+        placeholder: "ui-state-highlight", //defines the yellow highlight
+        handle: ".moved", //only the class "moved"
+    });*/
+});
 </script>';
 
 if ($origin != 'learnpath') {
@@ -174,7 +190,6 @@ if ($origin != 'learnpath') {
         }
     }
 } else {
-    //echo '<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_CODE_PATH) . 'css/default.css"/>';
     Display :: display_reduced_header();
 }
 
@@ -399,8 +414,20 @@ $online_icon = Display::return_icon('online.png', get_lang('Visible'), array('wi
 $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array('width' => '12px'));
 
 $exercise_list = array();
+$exercise_obj = new Exercise();
+//$list_ordered = $exercise_obj->get_exercise_list_ordered();
+$list_ordered = null;
+
 while ($row = Database :: fetch_array($result, 'ASSOC')) {
-    $exercise_list[] = $row;
+    $exercise_list[$row['id']] = $row;
+}
+
+if (isset($list_ordered) && !empty($list_ordered)) {
+    $new_question_list = array();
+    foreach ($list_ordered as $exercise_id) {
+        $new_question_list[] = $exercise_list[$exercise_id];
+    }
+    $exercise_list = $new_question_list;
 }
 
 echo '<table class="'.Display::return_default_table_class().'">';
@@ -516,16 +543,20 @@ if (!empty($exercise_list)) {
                         $title = $cut_title;
                     }
 
-                    $count = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+                    $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
+
+                    //$move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                    $move = null;
 
                     $class_tip = '';
-                    if (!empty($count)) {
-                        $results_text = $count == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
-                        $title .= '<span class="exercise_tooltip" style="display: none;">'.$count.' '.$results_text.' </span>';
+
+                    if (!empty($count_exercise_not_validated)) {
+                        $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
+                        $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
                         $class_tip = 'link_tooltip';
                     }
-
-                    $url = '<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
+                    //$class_tip = 'exercise_link';
+                    $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
 
                     $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
@@ -740,7 +771,7 @@ if (!empty($exercise_list)) {
                 if ($is_allowedToEdit) {
                     $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
                 }
-                echo Display::tag('tr', $item, array('class' => $class));
+                echo Display::tag('tr', $item, array('id' => 'exercise_list_'.$my_exercise_id, 'class' => $class));
 
                 $count++;
             } // end foreach()

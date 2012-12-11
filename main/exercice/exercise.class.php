@@ -3689,5 +3689,20 @@ class Exercise {
         $html .= '<div id="exercise_clock_warning" class="well count_down"></div>';
         return $html;
     }
+
+    function get_exercise_list_ordered() {
+        $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+        $result = Database::query($sql);
+        $list = array();
+        if (Database::num_rows($result)) {
+            while($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[$row['exercise_order']] = $row['exercise_id'];
+            }
+        }
+        return $list;
+    }
 }
 endif;

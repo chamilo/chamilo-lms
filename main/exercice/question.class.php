@@ -143,7 +143,7 @@ abstract class Question
 		// if the question has been found
 		if ($object = Database::fetch_object($result)) {
 
-			$objQuestion 				= Question::getInstance($object->type);
+			$objQuestion = Question::getInstance($object->type);
             if (!empty($objQuestion)) {
 
                 $objQuestion->id			= $id;
@@ -416,7 +416,6 @@ abstract class Question
 	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id=$question_id AND c_id=".api_get_course_int_id();
 	 	Database::query($sql);
 	}
-
 
 	/**
 	 * changes the question position
@@ -946,7 +945,7 @@ abstract class Question
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
-	        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 
 		$id = $this->id;
 

@@ -2,16 +2,16 @@
 /* For licensing terms, see /license.txt */
 /**
  *	This is the database constants definition for Chamilo
- *  This file is called by database.lib.php and database.mysqli.lib.php  
- *  
+ *  This file is called by database.lib.php and database.mysqli.lib.php
+ *
  *  @todo the table constants have all to start with TABLE_
  *        This is because of the analogy with the tool constants TOOL_
  *
- *	@package chamilo.library 
+ *	@package chamilo.library
  */
 
 /**
- * CONSTANTS 
+ * CONSTANTS
  */
 
 //See #3910 defines the default prefix for the single course database
@@ -113,7 +113,7 @@ define('TABLE_MAIN_LEGAL', 'legal');
 // Dashboard blocks plugin
 define('TABLE_MAIN_BLOCK', 'block');
 
-// Statistic database tables 
+// Statistic database tables
 define('TABLE_STATISTIC_TRACK_E_LASTACCESS',        'track_e_lastaccess');
 define('TABLE_STATISTIC_TRACK_E_ACCESS',            'track_e_access');
 define('TABLE_STATISTIC_TRACK_E_LOGIN',             'track_e_login');
@@ -193,6 +193,7 @@ define('TABLE_DROPBOX_PERSON',  'dropbox_person');
 // Course quiz (or test, or exercice) tables
 define('TABLE_QUIZ_QUESTION',               'quiz_question');
 define('TABLE_QUIZ_TEST',                   'quiz');
+define('TABLE_QUIZ_ORDER',                  'quiz_order');
 define('TABLE_QUIZ_ANSWER',                 'quiz_answer');
 define('TABLE_QUIZ_TEST_QUESTION',          'quiz_rel_question');
 define('TABLE_QUIZ_QUESTION_OPTION',        'quiz_question_option');

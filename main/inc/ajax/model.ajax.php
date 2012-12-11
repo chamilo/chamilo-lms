@@ -3,7 +3,7 @@
 
 //@todo this could be integrated in the inc/lib/model.lib.php + try to clean this file
 
-$language_file = array('admin','exercice');
+$language_file = array('admin', 'exercice', 'gradebook', 'tracking');
 
 require_once '../global.inc.php';
 
@@ -224,7 +224,7 @@ $columns = array();
 switch ($action) {
     case 'get_user_course_report':
         $columns = array('course', 'user', 'time', 'certificate', 'score');
-        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('TotalTime'), get_lang('Certificate'), get_lang('Score'));
+        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('TimeSpentInTheCourse'), get_lang('Certificate'), get_lang('Score'));
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
             foreach($extra_fields as $extra) {

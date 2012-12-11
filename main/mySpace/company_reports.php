@@ -1,9 +1,11 @@
 <?php
 
-$language_file = array('admin');
+$language_file = array('admin', 'gradebook', 'tracking');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
+
+api_protect_admin_script();
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
 //$interbreadcrumb[] = array ("url" => 'user_list.php', "name" => get_lang('Report'));
@@ -21,15 +23,15 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Course'), get_lang('User'), get_lang('TotalTime'), get_lang('Certificate'), get_lang('Score'));
+$columns        = array(get_lang('Course'), get_lang('User'), get_lang('TimeSpentInTheCourse'), get_lang('Certificate'), get_lang('Score'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'course',     'index'=>'title',   'width'=>'120', 'align'=>'left'),
-                        array('name'=>'user',       'index'=>'user',    'width'=>'120', 'align'=>'left','sortable'=>'false'),
-                        array('name'=>'time',       'index'=>'time',    'width'=>'50',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'certificate',     'index'=>'certificate',  'width'=>'50',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'score',      'index'=>'score',   'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'course',         'index'=>'title',   'width'=>'200', 'align'=>'left'),
+                        array('name'=>'user',           'index'=>'user',    'width'=>'120', 'align'=>'left','sortable'=>'false'),
+                        array('name'=>'time',           'index'=>'time',    'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'certificate',    'index'=>'certificate',  'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                        array('name'=>'score',          'index'=>'score',   'width'=>'50',  'align'=>'left','sortable'=>'false'),
 );
 
 if (!empty($extra_fields)) {

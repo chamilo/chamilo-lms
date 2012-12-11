@@ -14,7 +14,7 @@
 class AnnouncementManager {
 
     public function __construct() {
-        
+
     }
 
     public static function get_tags() {
@@ -241,17 +241,17 @@ class AnnouncementManager {
             return false;
         }
     }
-    
+
     public static function get_last_announcement_order() {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $course_id = api_get_course_int_id();
         $sql_max = "SELECT MAX(display_order) FROM $tbl_announcement WHERE c_id = $course_id ";
         $res_max = Database::query($sql_max);
-        
+
         $order = 0;
         if (Database::num_rows($res_max)) {
             $row_max = Database::fetch_array($res_max);
-            $order   = intval($row_max[0])+1;  
+            $order   = intval($row_max[0])+1;
         }
         return $order;
     }
@@ -273,22 +273,22 @@ class AnnouncementManager {
         // filter data
         $emailTitle = Database::escape_string($emailTitle);
         $newContent = Database::escape_string($newContent);
-        
+
         if (empty($end_date)) {
             $end_date = api_get_utc_datetime();
         } else {
             $end_date = Database::escape_string($end_date);
         }
-        
+
         $course_id = api_get_course_int_id();
-        
+
         $order = self::get_last_announcement_order();
 
         // store in the table announcement
         $sql = "INSERT INTO $tbl_announcement SET
 				c_id 			= '$course_id',
 				content 		= '$newContent',
-				title 			= '$emailTitle', 
+				title 			= '$emailTitle',
                 end_date        = '$end_date',
 				display_order 	= '$order',
 				session_id		= " . api_get_session_id();
@@ -301,7 +301,7 @@ class AnnouncementManager {
             if (!empty($file)) {
                 self::add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
             }
-            
+
             // store in item_property (first the groups, then the users
             if (!is_null($sent_to)) {
                 // !is_null($sent_to): when no user is selected we send it to everyone
@@ -336,7 +336,7 @@ class AnnouncementManager {
 
         // database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        
+
         $emailTitle = Database::escape_string($emailTitle);
         $newContent = Database::escape_string($newContent);
         $order = self::get_last_announcement_order();
@@ -719,13 +719,13 @@ class AnnouncementManager {
 
         $sql = "SELECT DISTINCT announcement.id, announcement.title, announcement.content
                            FROM $tbl_announcement announcement INNER JOIN $tbl_item_property toolitemproperties
-                           ON   announcement.id = toolitemproperties.ref AND 
+                           ON   announcement.id = toolitemproperties.ref AND
                                 announcement.c_id = $course_id AND
-                                toolitemproperties.c_id = $course_id 
-                           WHERE toolitemproperties.tool='announcement' AND                                 
+                                toolitemproperties.c_id = $course_id
+                           WHERE toolitemproperties.tool='announcement' AND
                                  announcement.id = $annoucement_id";
         $result = Database::query($sql);
-        if (Database::num_rows($result)) {            
+        if (Database::num_rows($result)) {
             return Database::fetch_array($result);
         }
         return array();
@@ -734,12 +734,11 @@ class AnnouncementManager {
     /**
      * this function gets all the users of the course,
      * including users from linked courses
+     * @todo deprecate this function, use CourseManager class
      */
     public static function get_course_users() {
         //this would return only the users from real courses:
-        //$user_list = CourseManager::get_user_list_from_course_code(api_get_course_id());
         $session_id = api_get_session_id();
-
         if ($session_id != 0) {
             $user_list = CourseManager::get_real_and_linked_user_list(api_get_course_id(), true, $session_id);
         } else {
@@ -836,8 +835,8 @@ class AnnouncementManager {
             $src = $www . 'main/announcements/resources/js/main.js';
         } else {
             $src = $www . 'main/announcements/resources/js/main.min.js';
-        }*/        
-        $src = $www . 'main/announcements/resources/js/main.js';        
+        }*/
+        $src = $www . 'main/announcements/resources/js/main.js';
         $result = Javascript::tag($src);
         $root = Chamilo::url();
         $code = "var www = '$root';\n";

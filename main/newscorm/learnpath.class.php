@@ -5051,6 +5051,8 @@ class learnpath {
         $default_content = null;
 
         $elements = array();
+        $return_audio = null;
+        
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
 

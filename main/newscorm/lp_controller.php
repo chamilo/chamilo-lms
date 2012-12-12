@@ -660,10 +660,19 @@ switch ($action) {
 
             $_SESSION['oLP']->set_author($author_fixed);
             $_SESSION['oLP']->set_encoding($_REQUEST['lp_encoding']);  // TODO (as of Chamilo 1.8.8): Check in the future whether this field is needed.
-            $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
-            $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
+
+            if (isset($_REQUEST['lp_maker'])) {
+                $_SESSION['oLP']->set_maker($_REQUEST['lp_maker']);
+            }
+            if (isset($_REQUEST['lp_proximity'])) {
+                $_SESSION['oLP']->set_proximity($_REQUEST['lp_proximity']);
+            }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
-			$_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
+
+            if (isset($_REQUEST['hide_toc_frame'])) {
+                $_SESSION['oLP']->set_hide_toc_frame($_REQUEST['hide_toc_frame']);
+            }
+
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
@@ -685,7 +694,7 @@ switch ($action) {
             $_SESSION['oLP']->set_publicated_on($publicated_on);
             $_SESSION['oLP']->set_expired_on($expired_on);
 
-            if ($_REQUEST['remove_picture']) {
+            if (isset($_REQUEST['remove_picture']) && $_REQUEST['remove_picture']) {
                 $_SESSION['oLP']->delete_lp_image();
             }
 
@@ -710,7 +719,7 @@ switch ($action) {
                     }
                 }
             }
-            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+            $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
         }

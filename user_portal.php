@@ -173,8 +173,8 @@ if (api_get_setting('allow_browser_sniffer') == 'true') {
 
 //check for flash and message
 $sniff_notification = '';
-$some_activex=$_SESSION['sniff_check_some_activex'];
-$some_plugins=$_SESSION['sniff_check_some_plugins'];
+$some_activex = isset($_SESSION['sniff_check_some_activex']) ? $_SESSION['sniff_check_some_activex'] : null;
+$some_plugins = isset($_SESSION['sniff_check_some_plugins']) ? $_SESSION['sniff_check_some_plugins'] : null;
 
 if(!empty($some_activex) || !empty($some_plugins)){
 	if (! preg_match("/flash_yes/", $some_activex) && ! preg_match("/flash_yes/", $some_plugins)) {

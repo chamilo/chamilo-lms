@@ -276,7 +276,7 @@ class IndexManager {
         $html = null;
 		$home_menu = @(string)file_get_contents($sys_path.$this->home.'home_menu_'.$user_selected_language.'.html');
 		if (!empty($home_menu)) {
-			$home_menu_content .= '<ul class="nav nav-list">';
+			$home_menu_content = '<ul class="nav nav-list">';
 			$home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
 			$home_menu_content .= '</ul>';
 			$html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');

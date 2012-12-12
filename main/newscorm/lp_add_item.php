@@ -132,10 +132,9 @@ $(function() {
 //Already set in lp_controller.php
 //$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
-$learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
-
+$isStudentView  = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$learnpath_id   = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
+$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;

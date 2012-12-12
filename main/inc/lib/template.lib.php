@@ -8,9 +8,6 @@
  * */
 use \ChamiloSession as Session;
 
-require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
-
 class Template {
 
     public $style = 'default'; //see the template folder
@@ -402,8 +399,8 @@ class Template {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
 
-        //$css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-        //$css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {

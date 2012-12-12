@@ -22,7 +22,6 @@ define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 
 use \ChamiloSession as Session;
 
-
 // USER STATUS CONSTANTS
 /** global status of a user: student */
 define('STUDENT', 5);
@@ -5953,7 +5952,6 @@ function api_get_jquery_libraries_js($libraries) {
         if (in_array($platform_isocode, $jqgrid_langs)) {
             $languaje = $platform_isocode;
         }
-        //$js .= '<link rel="stylesheet" href="'.$js_path.'jqgrid/css/ui.jqgrid.css" type="text/css">';
         $js .= api_get_css($js_path.'jqgrid/css/ui.jqgrid.css');
         $js .= api_get_js('jqgrid/js/i18n/grid.locale-'.$languaje.'.js');
         $js .= api_get_js('jqgrid/js/jquery.jqGrid.min.js');

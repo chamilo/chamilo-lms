@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 
+ *
  * @package chamilo.library
  */
 /**
@@ -56,15 +56,13 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @see             class.phpmailer.php
  */
 function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
-
-    //global $regexp_rfc3696; // Deprecated, 13-OCT-2010.
     global $platform_email;
 
     $mail = new PHPMailer();
     $mail->Mailer  = $platform_email['SMTP_MAILER'];
     $mail->Host    = $platform_email['SMTP_HOST'];
     $mail->Port    = $platform_email['SMTP_PORT'];
-    $mail->CharSet = $platform_email['SMTP_CHARSET'];    
+    $mail->CharSet = $platform_email['SMTP_CHARSET'];
     $mail->WordWrap = 200; // Stay far below SMTP protocol 980 chars limit.
 
     if ($platform_email['SMTP_AUTH']) {
@@ -75,7 +73,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     $mail->Priority = 3; // 5 = low, 1 = high
     $mail->AddCustomHeader('Errors-To: '.$platform_email['SMTP_FROM_EMAIL']);
-        
+
     $mail->SMTPKeepAlive = true;
 
     if (($sender_email != '') && ($sender_name != '')) {
@@ -124,7 +122,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                 $i++;
 			}
 		}
-		
+
 	    // Replace origin image for new embedded image html.
 	    $x = 0;
 	    if (!empty($m[0])) {
@@ -145,14 +143,12 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
     // Only valid addresses are accepted.
     if (is_array($recipient_email)) {
         foreach ($recipient_email as $dest) {
-            //if (eregi($regexp_rfc3696, $dest)) { // Deprecated, 13-OCT-2010.
             if (api_valid_email($dest)) {
                 $mail->AddAddress($dest, $recipient_name);
                 //$mail->AddAddress($dest, ($i > 1 ? '' : $recipient_name));
             }
         }
     } else {
-        //if (eregi($regexp_rfc3696, $recipient_email)) { // Deprecated, 13-OCT-2010.
         if (api_valid_email($recipient_email)) {
             $mail->AddAddress($recipient_email, $recipient_name);
         } else {

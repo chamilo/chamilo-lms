@@ -2621,10 +2621,6 @@ class Tracking {
                         $exercise_obj->read($exercices['id']);
                         $visible_return = $exercise_obj->is_visible();
                         
-                        //user can see the exercise results even if the exercise was set to invisible?
-                        /*if ($visible_return['value'] == false) {
-                            continue;
-                        }*/
                         						
 						$score = $weighting = $attempts = 0;
                         
@@ -2709,7 +2705,7 @@ class Tracking {
 				
 				
 				//LP table results				
-				$html .='<table class="data_table" width="100%">';
+                $html .='<table class="data_table">';
 				$html .= Display::tag('th', get_lang('Learnpaths'),         array('class'=>'head', 'style'=>'color:#000'));
 				$html .= Display::tag('th', get_lang('LatencyTimeSpent'),   array('class'=>'head', 'style'=>'color:#000'));
 				$html .= Display::tag('th', get_lang('Progress'),           array('class'=>'head', 'style'=>'color:#000'));

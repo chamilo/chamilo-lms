@@ -23,11 +23,6 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
-if(!class_exists('Exercise')):
-/**
- * Exercise class
-* @package chamilo.exercise
-*/
 class Exercise {
 
 	public $id;
@@ -1609,10 +1604,10 @@ class Exercise {
 		return $id;
 	}
 
-	public function show_button($question_id, $questionNum) {
+	public function show_button($question_id, $questionNum, $questions_in_media = array()) {
 		global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
-        $question_list = $this->get_validated_question_list();
-		$nbrQuestions = count($question_list);
+
+        $nbrQuestions = $this->get_count_question_list();
 
 		$all_button = $html = $label = '';
 		$hotspot_get = isset($_POST['hotspot']) ? Security::remove_XSS($_POST['hotspot']):null;
@@ -1646,9 +1641,15 @@ class Exercise {
 						$all_button .= '<a href="javascript://" class="btn" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
 					}
 
-					//Next question
-					$all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
-					$all_button .= '<span id="save_for_now_'.$question_id.'"></span>&nbsp;';
+                    //Next question
+                    if (!empty($questions_in_media)) {
+                        $questions_in_media = "['".implode("','",$questions_in_media)."']";
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
+                    } else {
+                        $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
+                    }
+                    $all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
+
 					$html .= $all_button;
 				} else {
 					if ($this->review_answers) {
@@ -3520,6 +3521,40 @@ class Exercise {
 		return false;
 	}
 
+    function get_media_list() {
+        $media_questions = array();
+        $question_list = $this->get_validated_question_list();
+        if (!empty($question_list)) {
+            foreach ($question_list as $questionId) {
+                $objQuestionTmp = Question::read($questionId);
+                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
+                    $media_questions[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
+                } else {
+                    //Always the last item
+                    $media_questions[999][] = $objQuestionTmp->id;
+                }
+            }
+        }
+        return $media_questions;
+    }
+
+    function media_is_activated($media_list) {
+        $active = false;
+        if (isset($media_list) && !empty($media_list)) {
+            $media_count = count($media_list);
+            if ($media_count > 1) {
+                return true;
+            } elseif ($media_count == 1) {
+                if (isset($media_list[999])) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+        return $active;
+    }
+
 	function get_validated_question_list() {
 		$tabres = array();
 		$isRandomByCategory = $this->isRandomByCat();
@@ -3531,30 +3566,24 @@ class Exercise {
 			}
 		} else {
 			if ($this->isRandom()) {
-				if (!class_exists("Testcategory")) {
-					require_once("testcategory.class.php");
-				}
-				//
 				// USE question categories
-				//
 				// get questions by category for this exercice
 				// we have to choice $objExercise->random question in each array values of $tabCategoryQuestions
 				// key of $tabCategoryQuestions are the categopy id (0 for not in a category)
 				// value is the array of question id of this category
 				$questionList = array();
-				$tabCategoryQuestions = array();
 				$tabCategoryQuestions = Testcategory::getQuestionsByCat($this->id);
 				$isRandomByCategory = $this->selectRandomByCat();
-				// on tri les catÃ©gories en fonction du terme entre [] en tÃªte de la description de la catÃ©gorie
+				// on tri les categories en fonction du terme entre [] en tÃªte de la description de la catégorie
 				/*
-				 * ex de catÃ©gories :
-				 * [biologie] MaÃ®triser les mÃ©canismes de base de la gÃ©nÃ©tique
-				 * [biologie] Relier les moyens de dÃ©fenses et les agents infectieux
-				 * [biologie] Savoir oÃ¹ est produite l'Ã©nergie dans les cellules et sous quelle forme
-				 * [chimie] Classer les molÃ©cules suivant leur pouvoir oxydant ou rÃ©ducteur
-				 * [chimie] ConnaÃ®tre la dÃ©finition de la thÃ©orie acide/base selon BrÃ¶nsted
+				 * ex de catégories :
+				 * [biologie] MaÃ®triser les mécanismes de base de la génétique
+				 * [biologie] Relier les moyens de défenses et les agents infectieux
+				 * [biologie] Savoir oÃ¹ est produite l'énergie dans les cellules et sous quelle forme
+				 * [chimie] Classer les molécules suivant leur pouvoir oxydant ou réducteur
+				 * [chimie] ConnaÃ®tre la définition de la théorie acide/base selon BrÃ¶nsted
 				 * [chimie] ConnaÃ®tre les charges des particules
-				 * On veut dans l'ordre des groupes dÃ©finis par le terme entre crochet au dÃ©but du titre de la catÃ©gorie
+				 * On veut dans l'ordre des groupes définis par le terme entre crochet au début du titre de la catégorie
 				*/
 				// If test option is Grouped By Categories
 				if ($isRandomByCategory == 2) {
@@ -3578,6 +3607,53 @@ class Exercise {
 			}
 		}
 		return $tabres;
+    }
+
+    function get_question_list($expand_media_questions = false) {
+        $question_list = $this->get_validated_question_list();
+        $question_list = $this->transform_question_list_with_medias($question_list, $expand_media_questions);
+        return $question_list;
+    }
+
+    function transform_question_list_with_medias($question_list, $expand_media_questions = false) {
+        $new_question_list = array();
+        if (!empty($question_list)) {
+            $media_questions = $this->get_media_list();
+            $media_active = $this->media_is_activated($media_questions);
+
+            if ($media_active) {
+                $counter = 1;
+                foreach ($question_list as $question_id) {
+                    $add_question = true;
+                    foreach ($media_questions as $media_id => $question_list_in_media) {
+                        if ($media_id != 999 && in_array($question_id, $question_list_in_media)) {
+                            $add_question = false;
+                            if (!in_array($media_id, $new_question_list)) {
+                                $new_question_list[$counter] = $media_id;
+                                $counter++;
+                            }
+                            break;
+                        }
+                    }
+                    if ($add_question) {
+                        $new_question_list[$counter] = $question_id;
+                        $counter++;
+                    }
+                }
+                if ($expand_media_questions) {
+                    $media_key_list = array_keys($media_questions);
+                    foreach ($new_question_list as &$question_id) {
+                        if (in_array($question_id, $media_key_list)) {
+                            $question_id = $media_questions[$question_id];
+                        }
+                    }
+                    $new_question_list = array_flatten($new_question_list);
+                }
+            } else {
+                $new_question_list = $question_list;
+            }
+        }
+        return $new_question_list;
     }
 
 	public function get_stat_track_exercise_info_by_exe_id($exe_id) {
@@ -3690,6 +3766,16 @@ class Exercise {
         return $html;
     }
 
+    function get_count_question_list() {
+        //Real question count
+        $question_count = 0;
+        $question_list = $this->get_question_list();
+        if (!empty($question_list)) {
+            $question_count = count($question_list);
+        }
+        return $question_count;
+    }
+
     function get_exercise_list_ordered() {
         $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
         $course_id = api_get_course_int_id();
@@ -3705,4 +3791,3 @@ class Exercise {
         return $list;
     }
 }
-endif;

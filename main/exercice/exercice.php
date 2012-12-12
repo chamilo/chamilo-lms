@@ -184,7 +184,6 @@ if ($origin != 'learnpath') {
 		}
 	}
 } else {
-	//echo '<link rel="stylesheet" type="text/css" href="' . api_get_path(WEB_CODE_PATH) . 'css/default.css"/>';
 	Display :: display_reduced_header();
 }
 
@@ -412,8 +411,19 @@ $online_icon  = Display::return_icon('online.png', get_lang('Visible'),array('wi
 $offline_icon = Display::return_icon('offline.png',get_lang('Invisible'),array('width'=>'12px'));
 
 $exercise_list = array();
+$exercise_obj = new Exercise();
+//$list_ordered = $exercise_obj->get_exercise_list_ordered();
+$list_ordered = null;
 while ($row = Database :: fetch_array($result,'ASSOC')) {
-    $exercise_list[] = $row;
+    $exercise_list[$row['id']] = $row;
+}
+
+if (isset($list_ordered) && !empty($list_ordered)) {
+    $new_question_list = array();
+    foreach ($list_ordered as $exercise_id) {
+        $new_question_list[] = $exercise_list[$exercise_id];
+    }
+    $exercise_list = $new_question_list;
 }
 
 echo '<table class="'.Display::return_default_table_class().'">';
@@ -765,7 +775,7 @@ if (!empty($exercise_list)) {
             if ($is_allowedToEdit) {
                 $item .=  Display::tag('td', $actions, array('class' => 'td_actions'));
             }
-            echo Display::tag('tr',$item, array('class'=>$class));
+            echo Display::tag('tr', $item, array('id' => 'exercise_list_'.$my_exercise_id, 'class' => $class));
 
             $count++;
         } // end foreach()

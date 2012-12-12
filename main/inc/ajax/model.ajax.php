@@ -622,8 +622,39 @@ if (in_array($action, $allowed_actions)) {
     $response           = new stdClass();           
     $response->page     = $page; 
     $response->total    = $total_pages;
-    $response->records  = $count; 
-    $i=0;
+    $response->records  = $count;
+
+    if ($operation && $operation == 'excel') {
+        $j = 1;
+        require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+
+        $array = array();
+        if (empty($column_names)) {
+            $column_names = $columns;
+        }
+
+        //Headers
+        foreach ($column_names as $col) {
+            $array[0][] = $col;
+        }
+        foreach ($result as $row) {
+            foreach ($columns as $col) {
+                $array[$j][] = strip_tags($row[$col]);
+            }
+            $j++;
+        }
+        switch ($export_format) {
+            case 'xls':
+                Export::export_table_xls($array, 'company_report');
+                break;
+            case 'csv':
+            default:
+                Export::export_table_csv($array, 'company_report');
+                break;
+        }
+        exit;
+    }
+    $i = 0;
     if (!empty($result)) {        
         foreach ($result as $row) {
             //print_r($row);

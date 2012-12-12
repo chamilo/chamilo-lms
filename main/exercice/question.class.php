@@ -11,7 +11,6 @@
  * Code
  */
 
-if(!class_exists('Question')):
 
 // Question types
 define('UNIQUE_ANSWER',                             1);
@@ -94,10 +93,10 @@ abstract class Question
 		$this->position=1;
 		$this->picture='';
 		$this->level = 1;
-		$this->category_list = array();
         $this->extra=''; // This variable is used when loading an exercise like an scenario with an special hotspot: final_overlap, final_missing, final_excess
 		$this->exerciseList=array();
 		$this->course = api_get_course_info();
+        $this->category_list = array();
         $this->parent_id = 0;
 	}
 
@@ -1225,9 +1224,7 @@ abstract class Question
         
         // hidden values
 		$form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
-        
-        //Advance settings
-        
+                
         if ($this->type != MEDIA_QUESTION) {
             
             // Advanced parameters
@@ -1238,9 +1235,13 @@ abstract class Question
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
-            // Categories		
-            $category_list = Testcategory::getCategoriesIdAndName(); 
+            // Categories
+            $category_list = Testcategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
+
+            // Categories		
+    		//$tabCat = Testcategory::getCategoriesIdAndName();
+		    //$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
             //Medias
             $course_medias = Question::prepare_course_media_select(api_get_course_int_id());        

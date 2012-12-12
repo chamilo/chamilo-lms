@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="span2">
                         <div class="thumbnail">
-                            <img src="{{ hot_course.extra_info.course_image }}"i alt="{{ hot_course.extra_info.title}}" />                                    
+                            <img src="{{ hot_course.extra_info.course_image }}" alt="{{ hot_course.extra_info.title}}" /> 
                         </div>
                     </div>
                     <div class="span6">

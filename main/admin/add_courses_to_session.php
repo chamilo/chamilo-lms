@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.admin
@@ -9,13 +9,12 @@
 $language_file='admin';
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
-// including additonal libraries
-
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 SessionManager::protect_session_edit($id_session);
 
@@ -45,6 +44,8 @@ $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 $xajax -> processRequests();
 

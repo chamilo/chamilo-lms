@@ -29,6 +29,8 @@ $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('Sessi
 $interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
 
 // Database Table Definitions
+$tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user							= Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
@@ -41,7 +43,9 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
-//Checking for extra field with filter on
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
+
+//checking for extra field with filter on
 
 $extra_field_list = UserManager::get_extra_fields();
 $new_field_list = array();
@@ -98,7 +102,7 @@ function search_users($needle, $type) {
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
                         WHERE (username LIKE "'.$needle.'%" OR firstname LIKE "'.$needle.'%"
-                            OR lastname LIKE "'.$needle.'%") AND user.status <> 6 AND user.status<>'.DRH.' '.$cond_user_id.' '.
+                            OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.''.
                             $order_clause.
                             ' LIMIT 11';
                 break;
@@ -177,7 +181,7 @@ function search_users($needle, $type) {
 	return $xajax_response;
 }
 
-$xajax->processRequests();
+$xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
@@ -258,7 +262,6 @@ Display::display_header($tool_name);
 $nosessionUsersList = $sessionUsersList = array();
 
 $ajax_search = $add_type == 'unique' ? true : false;
-global $_configuration;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
@@ -273,7 +276,7 @@ if ($ajax_search) {
                     $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."                        
                 $order_clause";
 
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -328,7 +331,7 @@ if ($ajax_search) {
         }
 
         $where_filter ='';
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             if (is_array($final_result) && count($final_result)>0) {
                 $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
             } else {
@@ -368,8 +371,7 @@ if ($ajax_search) {
                         u.status<>6                         
                 $order_clause";
     }
-    
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -411,7 +413,7 @@ if ($ajax_search) {
                 $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." 
           $order_clause";
 
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -457,8 +459,7 @@ if ($add_type == 'multiple') {
 <div class="actions">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
 </div>
-
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
 if ($add_type=='multiple') {

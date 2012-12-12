@@ -30,7 +30,7 @@ if (!empty($session_cat_info)) {
     $session_category = $session_cat_info['name'];
 }
 
-$action = $_GET['action'];
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $url_id = api_get_current_access_url_id();     
 

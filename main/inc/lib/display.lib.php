@@ -49,24 +49,32 @@ class Display {
      * Displays the reduced page header (without banner)
      */
     public static function display_reduced_header() {
-        global $show_learnpath, $tool_name;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        global $show_learnpath, $tool_name, $app;
+        $app['template.show_header'] = false;
+        $app['template.show_footer'] = false;
+        $app['template.show_learnpath'] = $show_learnpath;
+        self::$global_template = new Template($tool_name);
         echo self::$global_template ->show_header_template();
     }
 
     public static function display_no_header() {
-        global $tool_name;
+        global $tool_name, $app, $show_learnpath;
         $disable_js_and_css_files = true;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
-        //echo self::$global_template->show_header_template();
+        $app['template.show_header'] = false;
+        $app['template.show_footer'] = false;
+        $app['template.show_learnpath'] = $show_learnpath;
+        self::$global_template = new Template($tool_name);
     }
 
     /**
      * Displays the reduced page header (without banner)
      */
     public static function set_header() {
-        global $show_learnpath;
-        self::$global_template = new Template($tool_name, false, false, $show_learnpath);
+        global $tool_name, $show_learnpath, $app;
+        $app['template.show_header'] = false;
+        $app['template.show_footer'] = false;
+        $app['template.show_learnpath'] = $show_learnpath;
+        self::$global_template = new Template($tool_name);
     }
 
     /**

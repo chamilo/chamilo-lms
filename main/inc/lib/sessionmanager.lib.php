@@ -193,8 +193,7 @@ class SessionManager {
             INNER JOIN $tbl_user u ON s.id_coach = u.user_id
          $where ";
 
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $table_access_url_rel_session= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -471,6 +470,7 @@ class SessionManager {
 			}
 		}
 	}
+
 	/**
 	 * Delete session
 	 * @author Carlos Vargas  from existing code
@@ -479,7 +479,7 @@ class SessionManager {
      * @return	void	Nothing, or false on error
 	 * The parameters is a array to delete sessions
 	 **/
-	public static function delete_session ($id_checked,$from_ws = false) {
+	public static function delete_session($id_checked,$from_ws = false) {
 		$tbl_session=						Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_course=			Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 		$tbl_session_rel_course_rel_user=	Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -897,9 +897,7 @@ class SessionManager {
 		}
 	}
 
-
-
-  /**
+    /**
   * Creates a new extra field for a given session
   * @param	string	Field's internal variable name
   * @param	int		Field's type
@@ -944,7 +942,7 @@ class SessionManager {
 		return $field_id;
 	}
 
-/**
+    /**
  * Update an extra field value for a given session
  * @param	integer	Course ID
  * @param	string	Field variable name
@@ -958,14 +956,11 @@ class SessionManager {
 		$fname = Database::escape_string($fname);
 		$session_id = (int)$session_id;
 		$fvalues = '';
-		if(is_array($fvalue))
-		{
-			foreach($fvalue as $val)
-			{
+		if(is_array($fvalue)) {
+			foreach($fvalue as $val) {
 				$fvalues .= Database::escape_string($val).';';
 			}
-			if(!empty($fvalues))
-			{
+			if(!empty($fvalues)) {
 				$fvalues = substr($fvalues,0,-1);
 			}
 		}
@@ -1084,8 +1079,8 @@ class SessionManager {
 		$month_end=intval($smonth_end);
 		$day_end=intval($sday_end);
 
-    $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
-    $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
+        $date_start = "$year_start-".(($month_start < 10)?"0$month_start":$month_start)."-".(($day_start < 10)?"0$day_start":$day_start);
+        $date_end = "$year_end-".(($month_end < 10)?"0$month_end":$month_end)."-".(($day_end < 10)?"0$day_end":$day_end);
 
 		if (empty($name)) {
 			$msg=get_lang('SessionCategoryNameIsRequired');
@@ -1354,9 +1349,7 @@ class SessionManager {
 		$rs_check_user = Database::query($sql);
 
 		if (Database::num_rows($rs_check_user) > 0) {
-
 			if ($nocoach) {
-
 				// check if user_id exits int session_rel_user
 				$sql = "SELECT id_user FROM $tbl_session_rel_user WHERE id_session = '$session_id' AND id_user = '$user_id'";
 				$res = Database::query($sql);
@@ -1374,7 +1367,6 @@ class SessionManager {
 					if (Database::affected_rows() > 0) return true;
 					else return false;
 				}
-
 			} else {
 				// Assign user like a coach to course
 				// First check if the user is registered in the course
@@ -1388,8 +1380,8 @@ class SessionManager {
 					if (Database::affected_rows() > 0) return true;
 					else return false;
 				} else {
-					$sql = " INSERT INTO $tbl_session_rel_course_rel_user(id_session, course_code, id_user, status) VALUES('$session_id', '$course_code', '$user_id', 2)";
-					$rs_insert = Database::query($sql);
+					$sql = "INSERT INTO $tbl_session_rel_course_rel_user(id_session, course_code, id_user, status) VALUES('$session_id', '$course_code', '$user_id', 2)";
+					Database::query($sql);
 					if (Database::affected_rows() > 0) return true;
 					else return false;
 				}
@@ -1636,12 +1628,12 @@ class SessionManager {
         return $status;
     }
 
-    function get_all_sessions_by_promotion($id) {
+    static function get_all_sessions_by_promotion($id) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         return Database::select('*', $t, array('where'=>array('promotion_id = ?'=>$id)));
     }
 
-    function suscribe_sessions_to_promotion($promotion_id, $list) {
+    static function suscribe_sessions_to_promotion($promotion_id, $list) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params = array();
         $params['promotion_id'] = 0;
@@ -1661,7 +1653,7 @@ class SessionManager {
     * @param	int 	session id
     * @param	int 	status
     */
-    public function set_session_status($session_id, $status) {
+    public static function set_session_status($session_id, $status) {
         $t = Database::get_main_table(TABLE_MAIN_SESSION);
         $params['visibility'] = $status;
     	Database::update($t, $params, array('id = ?'=>$session_id));
@@ -1787,7 +1779,7 @@ class SessionManager {
     	return $sid;
     }
 
-    function user_is_general_coach($user_id, $session_id) {
+    static function user_is_general_coach($user_id, $session_id) {
     	$session_id = intval($session_id);
     	$user_id = intval($user_id);
     	$session_table = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1806,7 +1798,7 @@ class SessionManager {
      * @param  int ID of the URL we want to filter on (optional)
      * @return int Number of sessions
      */
-    public function count_sessions($access_url_id=null) {
+    public static function count_sessions($access_url_id=null) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $sql = "SELECT count(id) FROM $session_table s";

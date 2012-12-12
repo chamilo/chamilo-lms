@@ -1072,8 +1072,7 @@ class Tracking {
         // At first, courses where $coach_id is coach of the course //
         $sql = 'SELECT id_session, course_code FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id.' AND status=2';
 
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
@@ -1113,7 +1112,7 @@ class Tracking {
                     INNER JOIN ' . $tbl_session . ' as session
                         ON session.id = session_course.id_session
                         AND session.id_coach = ' . $coach_id;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
@@ -1130,9 +1129,7 @@ class Tracking {
                 ON session.id = session_rel_url.session_id WHERE access_url_id = '.$access_url_id;
             }
         }
-
         $result = Database::query($sql);
-
         while ($row = Database::fetch_array($result)) {
             $a_students[$row['id_user']] = $row['id_user'];
         }
@@ -1158,7 +1155,6 @@ class Tracking {
         // At first, courses where $coach_id is coach of the course //
 
         $sql = 'SELECT course_code FROM ' . $tbl_session_course_user . ' WHERE id_session="' . $id_session . '" AND id_user=' . $coach_id.' AND status=2';
-
         $result = Database::query($sql);
 
         while ($a_courses = Database::fetch_array($result)) {

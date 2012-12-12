@@ -49,15 +49,6 @@ if (file_exists($main_configuration_file_path)) {
     $_configuration = array();
 }
 
-//Redirects to the main/install/ page
-if (!$already_installed) {
-    $global_error_code = 2;
-    // The system has not been installed yet.
-    require $includePath.'/global_error_message.inc.php';
-    die();
-}
-
-
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
@@ -120,6 +111,8 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 $app = new Application();
+$app['configuration_file'] = $main_configuration_file_path;
+
 //$app['include_path'] = $includePath;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
@@ -211,6 +204,11 @@ $app->before(function() use ($app) {
     if (api_check_php_version() == false) {
         $app->abort(500, "Incorrect PHP version"); //error 1
     }
+
+    if (!file_exists($app['configuration_file'])) {
+        $app->abort(500, "Chamilo has not been installed"); //error 2
+    }
+
 });
 
 $app->after(function() {
@@ -250,6 +248,7 @@ require_once $lib_path.'online.inc.php';
 if (empty($_configuration['statistics_database']) && $already_installed) {
     $_configuration['statistics_database'] = $_configuration['main_database'];
 }
+
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -259,16 +258,11 @@ if (!($conn_return = @Database::connect(
         'password'      => $_configuration['db_password'],
         'persistent'    => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
     )))) {
-    $global_error_code = 3;
-    // The database server is not available or credentials are invalid.
-    require $includePath.'/global_error_message.inc.php';
-    die();
+    $app->abort(500, "Database is unavailable"); //error 3
 }
+
 if (!$_configuration['db_host']) {
-    $global_error_code = 4;
-    // A configuration option about database server is missing.
-    require $includePath.'/global_error_message.inc.php';
-    die();
+    $app->abort(500, "Database is unavailable"); //error 3
 }
 
 
@@ -294,13 +288,11 @@ if (!empty($_configuration['multiple_access_urls'])) {
 Database::query("set session sql_mode='';");
 
 if (!Database::select_db($_configuration['main_database'], $database_connection)) {
-    $global_error_code = 5;
-    // Connection to the main Chamilo database is impossible, it might be missing or restricted or its configuration option might be incorrect.
-    require $includePath.'/global_error_message.inc.php';
-    die();
+    $app->abort(500, "Database is unavailable"); //error 3
 }
 
 /*   Initialization of the default encodings */
+/*
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
@@ -309,7 +301,10 @@ while ($row = @Database::fetch_array($result)) {
 }
 if (empty($charset)) {
     $charset = 'UTF-8';
-}
+}*/
+
+$charset = 'UTF-8';
+
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
 
@@ -322,12 +317,14 @@ api_set_internationalization_default_encoding($charset);
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 
+/*
 if (api_is_utf8($charset)) {
     // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
     Database::query("SET NAMES 'utf8';");
 } else {
     Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
-}
+}*/
+Database::query("SET NAMES 'utf8';");
 
 // Start session after the internationalization library has been initialized.
 Chamilo::session()->start($already_installed);
@@ -641,6 +638,7 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($s_sql_update_logout_date);
     }
 }
+
 // Add language_measure_frequency to your main/inc/conf/configuration.php in
 // order to generate language variables frequency measurements (you can then
 // see them through main/cron/lang/langstats.php)

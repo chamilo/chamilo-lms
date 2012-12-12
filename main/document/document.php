@@ -1139,7 +1139,8 @@ if (isset($message)) {
 if (isset($_POST['move_to'])) {
     $document_id = DocumentManager::get_document_id($course_info, $_POST['move_to']);
 }
-if(isset($_GET['createdir']) && $_POST['dirname'] != '') {
+
+if (isset($_GET['createdir']) && isset($_POST['dirname']) && $_POST['dirname'] != '') {
     $post_dir_name = $_POST['dirname'];
     $document_id = DocumentManager::get_document_id($course_info, $_POST['dirname']);
 }

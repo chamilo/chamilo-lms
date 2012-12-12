@@ -552,7 +552,7 @@ if (!empty($exercise_list)) {
 
                 if ($session_id == $row['session_id']) {
                     //Settings
-                    $actions =  Display::url(Display::return_icon('edit.png',get_lang('EditQuestions'),'',ICON_SIZE_SMALL), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
+                    $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
 
                     //Exercise results
                     $actions .='<a href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).'</a>';

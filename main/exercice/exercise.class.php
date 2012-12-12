@@ -23,10 +23,6 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
-/**
- * Exercise class
-* @package chamilo.exercise
-*/
 class Exercise {
 
 	public $id;
@@ -177,7 +173,6 @@ class Exercise {
 			global $_configuration, $questionList;
 			if ($this->type == ONE_PER_PAGE && $_SERVER['REQUEST_METHOD'] != 'POST' && defined('QUESTION_LIST_ALREADY_LOGGED') &&
 			isset($_configuration['live_exercise_tracking']) && $_configuration['live_exercise_tracking']) {
-				//if(empty($_SESSION['questionList']))
 				$this->questionList = $questionList;
 			}*/
 			return true;
@@ -1640,14 +1635,14 @@ class Exercise {
 						$prev_question = $questionNum - 2;
 						$all_button .= '<a href="javascript://" class="btn" onclick="previous_question_and_save('.$prev_question.', '.$question_id.' ); ">'.get_lang('PreviousQuestion').'</a>';
 					}
-					if (!empty($questions_in_media)) {
+
+                    //Next question
+                    if (!empty($questions_in_media)) {
                         $questions_in_media = "['".implode("','",$questions_in_media)."']";
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_question_list('.$questions_in_media.'); ">'.$label.'</a>';
                     } else {
                         $all_button .= '&nbsp;<a href="javascript://" class="'.$class.'" onclick="save_now('.$question_id.'); ">'.$label.'</a>';
                     }
-					//Next question
-
 					$all_button .= '<span id="save_for_now_'.$question_id.'" class="exercise_save_mini_message"></span>&nbsp;';
 					$html .= $all_button;
 				} else {
@@ -1902,6 +1897,7 @@ class Exercise {
 		if ($debug) error_log('manage_answer $from_database: '.$from_database);
 		if ($debug) error_log('manage_answer $show_result: '.$show_result);
 		if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
+        if ($debug) error_log('manage_answer $exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
 		if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
         if ($debug) error_log('manage_answer $learnpath_id: '.$learnpath_id);
         if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
@@ -3338,7 +3334,7 @@ class Exercise {
             }
 	}
 
-	function show_exercise_result_header($user_data, $date = null) {
+	function show_exercise_result_header($user_data, $start_date = null, $duration = null) {
 		$array = array();
 
         if (!empty($user_data)) {
@@ -3349,8 +3345,12 @@ class Exercise {
             $array[] = array('title' => get_lang("Description"), 'content' => $this->description);
 		}
 
-		if (!empty($date)) {
-             $array[] = array('title' => get_lang("Date"), 'content' => $date);
+		if (!empty($start_date)) {
+            $array[] = array('title' => get_lang("StartDate"), 'content' => $start_date);
+		}
+
+        if (!empty($duration)) {
+            $array[] = array('title' => get_lang("Duration"), 'content' => $duration);
 		}
 
 		$html = Display::page_header(Display::return_icon('quiz_big.png', get_lang('Result')).' '.$this->exercise.' : '.get_lang('Result'));
@@ -3799,5 +3799,20 @@ class Exercise {
             $question_count = count($question_list);
         }
         return $question_count;
+    }
+
+    function get_exercise_list_ordered() {
+        $table_exercise_order = Database::get_course_table(TABLE_QUIZ_ORDER);
+        $course_id = api_get_course_int_id();
+        $session_id = api_get_session_id();
+        $sql = "SELECT exercise_id, exercise_order FROM $table_exercise_order WHERE c_id = $course_id AND session_id = $session_id ORDER BY exercise_order";
+        $result = Database::query($sql);
+        $list = array();
+        if (Database::num_rows($result)) {
+            while($row = Database::fetch_array($result, 'ASSOC')) {
+                $list[$row['exercise_order']] = $row['exercise_id'];
+            }
+        }
+        return $list;
     }
 }

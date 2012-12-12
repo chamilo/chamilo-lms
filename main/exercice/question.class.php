@@ -1381,7 +1381,7 @@ abstract class Question
 
 		echo '<li>';
 		echo '<div class="icon_image_content">';
-		if ($objExercise->edit_exercise_in_lp == false) {
+		if ($objExercise->exercise_was_added_in_lp == true) {
             echo Display::return_icon('database_na.png', get_lang('GetExistingQuestion'));
 		} else {
 			if ($feedback_type==1) {

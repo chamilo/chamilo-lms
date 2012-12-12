@@ -2898,7 +2898,7 @@ class CourseManager {
                     $html .= '</div>';
                     $notifications = isset($params['notifications']) ? $params['notifications'] : null;
 
-                    $html .= '<div class="span6">';
+                    $html .= '<div class="span6 '.$params['class'].'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';
 
                         if (!empty($params['subtitle'])) {
@@ -3052,6 +3052,7 @@ class CourseManager {
             // We simply display the title of the category.
             $params['icon'] = Display::return_icon('folder_yellow.png', $row['title'], array(), ICON_SIZE_LARGE);
             $params['title'] = $row['title'];
+            $params['class'] = 'table_user_course_category';
             $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
         }
 

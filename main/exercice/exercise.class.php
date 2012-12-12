@@ -3532,12 +3532,6 @@ class Exercise {
         return $media_questions;
     }
 
-    /*function get_count_questions_when_using_medias() {
-        $media_questions = $this->get_media_list();
-        $questions_with_no_group = isset($media_questions[999]) ? count($media_questions[999]) : 0;
-        return count($media_questions) - 1 + $questions_with_no_group;
-    }*/
-
     function media_is_activated($media_list) {
         $active = false;
         if (isset($media_list) && !empty($media_list)) {

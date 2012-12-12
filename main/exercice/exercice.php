@@ -424,7 +424,9 @@ while ($row = Database :: fetch_array($result, 'ASSOC')) {
 if (isset($list_ordered) && !empty($list_ordered)) {
     $new_question_list = array();
     foreach ($list_ordered as $exercise_id) {
-        $new_question_list[] = $exercise_list[$exercise_id];
+        if (isset($exercise_list[$exercise_id])) {
+            $new_question_list[] = $exercise_list[$exercise_id];
+        }
     }
     $exercise_list = $new_question_list;
 }
@@ -466,6 +468,10 @@ if (!empty($exercise_list)) {
 
                 $exercise_obj = new Exercise();
                 $exercise_obj->read($my_exercise_id);
+
+                if (empty($exercise_obj->id)) {
+                    continue;
+                }
 
                 $locked = $exercise_obj->is_gradebook_locked;
 

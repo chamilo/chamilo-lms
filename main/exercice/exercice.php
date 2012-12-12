@@ -327,7 +327,7 @@ if ($is_allowedToEdit) {
 } else {
     // Only for students
     $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active = '1' $condition_session ";
-    $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES
+    $sql = "SELECT * FROM $TBL_EXERCICES
             WHERE c_id = $course_id AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from."," .$limit;

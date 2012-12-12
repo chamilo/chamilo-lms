@@ -1912,7 +1912,7 @@ class SessionManager {
      * The general coach (field: session.id_coach)  
      * @param int user id
      */
-    public static function get_sessions_by_general_coach($user_id) {
+    public function get_sessions_by_general_coach($user_id) {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $user_id = intval($user_id);
         
@@ -2735,5 +2735,5 @@ class SessionManager {
             'simple_column_name' => $simple_column_name            
         );        
         return $return_array;
-    }   
+    }  
 }

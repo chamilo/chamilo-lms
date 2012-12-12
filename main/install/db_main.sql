@@ -604,6 +604,7 @@ CREATE TABLE IF NOT EXISTS settings_current (
 );
 
 ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(110), category(110), access_url);
+ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
 
 --
 -- Dumping data for table settings_current
@@ -3142,4 +3143,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20655' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20672' WHERE variable = 'chamilo_database_version';

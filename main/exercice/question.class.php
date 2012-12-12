@@ -11,8 +11,6 @@
  * Code
  */
 
-if(!class_exists('Question')):
-
 // Question types
 define('UNIQUE_ANSWER',                             1);
 define('MULTIPLE_ANSWER',                           2);
@@ -1209,35 +1207,49 @@ abstract class Question
 
 		// html editor
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
-		if(is_array($fck_config)){
+		if (is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
 		}
 
-		if(!api_is_allowed_to_edit(null,true)) $editor_config['UserStatus'] = 'student';
+		if (!api_is_allowed_to_edit(null,true)) {
+            $editor_config['UserStatus'] = 'student';
+        }
 
 		$form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		');
 
-		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
+		$form->addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
-		$form -> addElement ('html','</div>');
+		$form->addElement ('html','</div>');
 
-		// Advanced parameters
-		$form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
+        // hidden values
+		$form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
 
-		$select_level = array (1=>1,2=>2,3=>3,4=>4,5=>5);
+        if ($this->type != MEDIA_QUESTION) {
 
-        $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
+            // Advanced parameters
+            $form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
 
-        $form->addElement('select', 'questionLevel',get_lang('Difficulty'), $select_level);
+            $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
 
-		// Categories
-		$tabCat = Testcategory::getCategoriesIdAndName();
-		$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
+            $select_level = Question::get_default_levels();
+            $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
-		// hidden values
-		$form->addElement('hidden','myid', intval($_REQUEST['myid']));
+            // Categories
+            //$category_list = Testcategory::getCategoriesIdAndName();
+            //$form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
+
+            // Categories
+            $tabCat = Testcategory::getCategoriesIdAndName();
+            $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
+
+            //Medias
+            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
+            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+
+            $form->addElement('html','</div>');
+        }
 
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
@@ -1262,7 +1274,6 @@ abstract class Question
             }
         }
 
-		$form->addElement('html','</div>');
 
 		// default values
 		$defaults = array();
@@ -1270,6 +1281,9 @@ abstract class Question
 		$defaults['questionDescription']    = $this -> description;
 		$defaults['questionLevel']          = $this -> level;
 		$defaults['questionCategory']       = $this->category;
+
+        //$defaults['questionCategory']       = $this->category_list;
+        //$defaults['parent_id']              = $this->parent_id;
 
         //Came from he question pool
         if (isset($_GET['fromExercise'])) {
@@ -1291,15 +1305,21 @@ abstract class Question
 	 * @param FormValidator $form the formvalidator instance
 	 * @param Exercise $objExercise the Exercise instance
 	 */
-	function processCreation ($form, $objExercise) {
+	function processCreation ($form, $objExercise = null) {
+        //$this->updateParentId($form->getSubmitValue('parent_id'));
 		$this->updateTitle($form->getSubmitValue('questionName'));
 		$this->updateDescription($form->getSubmitValue('questionDescription'));
 		$this->updateLevel($form->getSubmitValue('questionLevel'));
 		$this->updateCategory($form->getSubmitValue('questionCategory'));
-		$this->save($objExercise -> id);
-		// modify the exercise
-		$objExercise->addToList($this -> id);
-		$objExercise->update_question_positions();
+
+          //Save normal question if NOT media
+        if ($this->type != MEDIA_QUESTION) {
+            $this->save($objExercise->id);
+
+            // modify the exercise
+            $objExercise->addToList($this->id);
+            $objExercise->update_question_positions();
+        }
 	}
 
 	/**
@@ -1441,6 +1461,10 @@ abstract class Question
         // display question category, if any
         $header = Testcategory::returnCategoryAndTitle($this->id);
 
+        if ($show_media) {
+            $header .= $this->show_media_content();
+        }
+
         $header .= Display::page_subheader2($counter_label.". ".$question_title);
         //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
 	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
@@ -1556,13 +1580,13 @@ abstract class Question
     }
 
     static function get_default_levels() {
-        $select_level = array (
+        $select_level = array(
                 1=>1,
                 2=>2,
                 3=>3,
                 4=>4,
                 5=>5
-            );
+        );
         return $select_level;
     }
 
@@ -1578,4 +1602,3 @@ abstract class Question
         return $html;
     }
 }
-endif;

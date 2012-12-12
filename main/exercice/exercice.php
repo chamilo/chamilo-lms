@@ -163,7 +163,7 @@ $htmlHeadXtra[] = '<script>
             });
         });*/
 
-     $(".data_table tbody").sortable({
+     /*$(".data_table tbody").sortable({
         cursor: "move", // works?
         update: function(event, ui) {
             var order = $(this).sortable("serialize") + "&a=update_exercise_list_order";
@@ -174,7 +174,7 @@ $htmlHeadXtra[] = '<script>
         axis: "y",
         placeholder: "ui-state-highlight", //defines the yellow highlight
         handle: ".moved", //only the class "moved"
-    });
+    });*/
 });
 </script>';
 

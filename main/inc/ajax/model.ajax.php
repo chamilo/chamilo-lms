@@ -123,6 +123,7 @@ switch ($action) {
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();
         $count = Question::get_count_course_medias($course_id);
+        break;
 	case 'get_user_skill_ranking':
     	$skill = new Skill();
 	    $count = $skill->get_user_list_skill_ranking_count();
@@ -536,6 +537,9 @@ $allowed_actions = array('get_careers',
                          'get_grade_models',
                          'get_event_email_template',
                          'get_user_skill_ranking',
+                         //'get_extra_fields',
+                         //'get_extra_field_options',
+                         //'get_course_exercise_medias',
                          'get_user_course_report'
 );
 

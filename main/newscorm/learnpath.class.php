@@ -74,6 +74,7 @@ class learnpath {
     public $expired_on      = '';
     public $ref = null;
     public $course_int_id;
+    public $course_info = array();
 
     public function get_course_int_id() {
         return isset($this->course_int_id) ? $this->course_int_id : api_get_course_int_id();
@@ -101,15 +102,11 @@ class learnpath {
             $this->error = 'Course code is empty';
             return false;
         } else {
-            $main_table = Database::get_main_table(TABLE_MAIN_COURSE);
-            $course = Database::escape_string($course);
-            $sql = "SELECT * FROM $main_table WHERE code = '$course'";
-            if ($this->debug > 2) { error_log('New LP - learnpath::__construct() '.__LINE__.' - Querying course: '.$sql, 0); }
-            $res = Database::query($sql);
-            if (Database::num_rows($res) > 0) {
-                $this->cc 			= $course;
-                $row_course         = Database::fetch_array($res);
-                $course_id 	        = $row_course['id'];
+            $course_info = api_get_course_info($course);
+            if (!empty($course_info)) {
+                $this->cc 			= $course_info['code'];
+                $this->course_info  = $course_info;
+                $course_id 	        = $course_info['real_id'];
             } else {
                 $this->error = 'Course code does not exist in database ('.$sql.')';
                 return false;
@@ -2132,7 +2129,7 @@ class learnpath {
         }
         $text = $percentage . $text_add;
         //@todo use Display::display_progress();
-        $output .= '<div class="progress progress-striped">
+        $output = '<div class="progress progress-striped">
                         <div id="progress_bar_value" class="bar" style="width: '.$text.';"></div>
                     </div>
                     <div class="progresstext" id="progress_text">' . $text . '</div>';
@@ -2258,11 +2255,29 @@ class learnpath {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_preview_image()', 0);
         }
-        if (!empty ($this->preview_image)) {
+        if (!empty($this->preview_image)) {
             return $this->preview_image;
         } else {
             return '';
         }
+    }
+
+    public function get_preview_image_path($size = null) {
+        $preview_image = $this->get_preview_image();
+        if (isset($preview_image) && !empty($preview_image)) {
+            $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
+            $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
+            if (!empty($size)) {
+                $info = pathinfo($preview_image);
+                $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
+                if (file_exists($image_sys_path.$image_custom_size)) {
+                    return $image_path.$image_custom_size;
+                }
+            } else {
+                return $image_path.$preview_image;
+            }
+        }
+        return false;
     }
 
     /**
@@ -4162,7 +4177,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview author : ' . $this->author, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
 	}
 	/**
@@ -4184,7 +4199,7 @@ class learnpath {
             if ($this->debug > 2) {
                 error_log('New LP - lp updated with new preview hide_toc_frame : ' . $this->author, 0);
             }
-            $res = Database::query($sql);
+            Database::query($sql);
             return true;
         } else {
             return false;
@@ -5052,7 +5067,7 @@ class learnpath {
 
         $elements = array();
         $return_audio = null;
-        
+
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
 
@@ -9037,11 +9052,10 @@ EOD;
         if ($img != '') {
             $del_file = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/upload/learning_path/images/' . $img;
             $this->set_preview_image('');
-            return @ unlink($del_file);
+            return @unlink($del_file);
         } else {
             return false;
         }
-
     }
 
     /**
@@ -9072,8 +9086,9 @@ EOD;
                 } else {
                     $file_extension = explode('.', $image_array['name']);
                     $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
-                    $new_file_name = uniqid('') . '.' . $file_extension;
-                    $new_path = $updir . '/' . $new_file_name;
+                    $filename = uniqid('');
+                    $new_file_name = $filename.'.'.$file_extension;
+                    $new_path = $updir.'/'.$new_file_name;
 
                     // Resize the image.
                     $temp = new Image($image_array['tmp_name']);
@@ -9096,6 +9111,10 @@ EOD;
                     if ($result) {
                         $image_moved = true;
                         $this->set_preview_image($new_file_name);
+
+                        //Resize to 32
+                        $temp->resize(64, 64, 0);
+                        $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
                         return true;
                     }
                 }

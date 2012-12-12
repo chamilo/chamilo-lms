@@ -275,7 +275,7 @@ if ($_SESSION['oLP']->mode == 'fullscreen') {
 Display::display_reduced_header($nameTools);
 
 // Check if audio recorder needs to be in studentview.
-if ($_SESSION['status'][$course_code] == 5) {
+if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
 	$audio_recorder_studentview = true;
 } else {
 	$audio_recorder_studentview = false;
@@ -369,11 +369,14 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         <div id="author_image">
             <div id="author_icon">
                 <?php
-                if ($_SESSION['oLP']->get_preview_image()!='') {
+                if ($_SESSION['oLP']->get_preview_image() != '') {
                     $picture = getimagesize(api_get_path(SYS_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image());
-                    if($picture['1'] < 96) { $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" '; }
+                    $style = null;
+                    if ($picture['1'] < 96) {
+                        $style = ' style="padding-top:'.((94 -$picture['1'])/2).'px;" ';
+                    }
                     $size = ($picture['0'] > 104 && $picture['1'] > 96 )? ' width="104" height="96" ': $style;
-                    $my_path = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/upload/learning_path/images/'.$_SESSION['oLP']->get_preview_image();
+                    $my_path = $_SESSION['oLP']->get_preview_image_path();
                     echo '<img src="'.$my_path.'">';
                 } else {
                     echo Display :: display_icon('unknown_250_100.jpg');

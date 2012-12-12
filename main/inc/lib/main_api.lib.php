@@ -284,6 +284,18 @@ define('USER_RELATION_TYPE_ENEMY',		5); // should be deprecated is useless
 define('USER_RELATION_TYPE_DELETED',     6);
 define('USER_RELATION_TYPE_RRHH',		7);
 
+//Gradebook link constants
+//Please do not change existing values, they are used in the database !
+
+define('LINK_EXERCISE',				1);
+define('LINK_DROPBOX',				2);
+define('LINK_STUDENTPUBLICATION',	3);
+define('LINK_LEARNPATH',            4);
+define('LINK_FORUM_THREAD',			5);
+//define('LINK_WORK',6);
+define('LINK_ATTENDANCE',			7);
+define('LINK_SURVEY',				8);
+
 //Course request
 define('COURSE_REQUEST_PENDING',  0);
 define('COURSE_REQUEST_ACCEPTED', 1);
@@ -2909,7 +2921,7 @@ function api_not_found($print_headers = false) {
     //$tpl = new Template(null, $show_headers, $show_headers);
     $app['template.show_header'] = $show_headers;
     $app['template.show_footer'] = $show_headers;
-    
+
     $tpl = new Template(null);
     $msg = get_lang('NotFound');
     $tpl->assign('content', $msg);

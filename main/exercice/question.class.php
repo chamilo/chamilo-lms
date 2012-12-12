@@ -56,16 +56,16 @@ abstract class Question
 	public $picture;
 	public $exerciseList;  // array with the list of exercises which this question is in
 	public $category_list;
-    public $parent_id;  
+    public $parent_id;
 	private $isContent;
-    public $course;        
+    public $course;
 	static $typePicture = 'new_question.png';
-	static $explanationLangVar = '';    
+	static $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
-    
+
 	static $questionTypes = array(
                                 UNIQUE_ANSWER => 				array('unique_answer.class.php' , 	'UniqueAnswer'),
-                                MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),								
+                                MULTIPLE_ANSWER => 				array('multiple_answer.class.php' , 'MultipleAnswer'),
 								FILL_IN_BLANKS => 				array('fill_blanks.class.php' , 	'FillBlanks'),
                                 MATCHING => 					array('matching.class.php' , 		'Matching'),
                                 FREE_ANSWER => 					array('freeanswer.class.php' , 		'FreeAnswer'),
@@ -116,33 +116,33 @@ abstract class Question
 	 * @return - boolean - true if question exists, otherwise false
 	 */
 	static function read($id, $course_id = null) {
-        $id = intval($id);	
-        
-        if (!empty($course_id)) {            
+        $id = intval($id);
+
+        if (!empty($course_id)) {
             $course_info =  api_get_course_info_by_id($course_id);
-        } else {            
+        } else {
             $course_info = api_get_course_info();
-        }        
-        
+        }
+
         $course_id = $course_info['real_id'];
-        
+
         if (empty($course_id) || $course_id == -1 ) {
             return false;
         }
 
 		$TBL_QUESTIONS         = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        
+
 		$sql = "SELECT question,description,ponderation,position,type,picture,level, extra, parent_id FROM $TBL_QUESTIONS WHERE c_id = $course_id AND id = $id ";
-        
+
 		$result = Database::query($sql);
 
 		// if the question has been found
 		if ($object = Database::fetch_object($result)) {
-			
-			$objQuestion 				= Question::getInstance($object->type);            
+
+			$objQuestion 				= Question::getInstance($object->type);
             if (!empty($objQuestion)) {
-			
+
                 $objQuestion->id                = $id;
                 $objQuestion->question          = $object->question;
                 $objQuestion->description       = $object->description;
@@ -155,7 +155,7 @@ abstract class Question
                 $objQuestion->course            = $course_info;
                 $objQuestion->parent_id         = $object->parent_id;
                 $objQuestion->category_list	    = Testcategory::getCategoryForQuestion($id);
-                
+
                 $sql = "SELECT exercice_id FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND question_id = $id";
                 $result_exercise_list = Database::query($sql);
 
@@ -254,12 +254,12 @@ abstract class Question
 	function selectPicture() {
 		return $this->picture;
 	}
-    
+
     function selectPicturePath() {
         if (!empty($this->picture)) {
             return api_get_path(WEB_COURSE_PATH).$this->course['path'].'/document/images/'.$this->picture;
         }
-        return false;        
+        return false;
     }
 
 	/**
@@ -291,10 +291,10 @@ abstract class Question
 	function updateTitle($title) {
 		$this->question=$title;
 	}
-    
+
     function updateParentId($id) {
         $this->parent_id = intval($id);
-    }    
+    }
 
 	/**
 	 * changes the question description
@@ -323,7 +323,7 @@ abstract class Question
 	function updateCategory($category_list) {
 		$this->category_list = $category_list;
 	}
-	
+
 	/**
 	 * @author - Hubert Borderiou 12-10-2011
 	 * @param - interger $in_positive
@@ -331,7 +331,7 @@ abstract class Question
 	function updateScoreAlwaysPositive($in_positive) {
 		$this->scoreAlwaysPositive=$in_positive;
 	}
-	
+
 	/**
 	 * @author - Hubert Borderiou 12-10-2011
 	 * @param - interger $in_positive
@@ -339,22 +339,22 @@ abstract class Question
 	function updateUncheckedMayScore($in_positive) {
 		$this->uncheckedMayScore = $in_positive;
 	}
-	
+
 	/**
      * Save category of a question
-     * 
+     *
 	 * A question can have n categories
 	 * if category is empty, then question has no category then delete the category entry
-     * 
-     * @param  - int $in_positive	 
-     * @author - Julio Montoya - Adding multiple cat support	 
+     *
+     * @param  - int $in_positive
+     * @author - Julio Montoya - Adding multiple cat support
 	 */
-	function saveCategories($category_list) {      
-        
+	function saveCategories($category_list) {
+
 		if (!empty($category_list)) {
             $this->deleteCategory();
             $TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-            
+
             // update or add category for a question
             foreach ($category_list as $category_id) {
                 $category_id = intval($category_id);
@@ -373,7 +373,7 @@ abstract class Question
             }
 		}
 	}
-    
+
     /**
 	 * @author - Hubert Borderiou 12-10-2011
 	 * @param - interger $in_positive
@@ -385,7 +385,7 @@ abstract class Question
 			$this->deleteCategory();
 		} else {
             // update or add category for a question
-            
+
 			$TBL_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
 			$category_id = Database::escape_string($in_category);
 			$question_id = Database::escape_string($this->id);
@@ -401,7 +401,7 @@ abstract class Question
 			}
 		}
 	}
-	
+
 	/**
 	 * @author hubert borderiou 12-10-2011
 	 * delete any category entry for question id
@@ -413,7 +413,7 @@ abstract class Question
 		$question_id = Database::escape_string($this->id);
 	 	$sql = "DELETE FROM $TBL_QUESTION_REL_CATEGORY WHERE question_id = $question_id AND c_id = ".api_get_course_int_id();
 	 	Database::query($sql);
-	}	
+	}
 
 	/**
 	 * changes the question position
@@ -445,7 +445,7 @@ abstract class Question
 	function updateType($type) {
 		$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $course_id              = $this->course['real_id'];
-        
+
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
@@ -488,8 +488,8 @@ abstract class Question
 
 		// if the question has got an ID
 		if ($this->id) {
-			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);						
-			$this->picture = 'quiz-'.$this->id.'.jpg';						    			
+			$extension = pathinfo($PictureName, PATHINFO_EXTENSION);
+			$this->picture = 'quiz-'.$this->id.'.jpg';
     		$o_img = new Image($Picture);
     		$o_img->send_image($picturePath.'/'.$this->picture, -1, 'jpg');
             $document_id = add_document($this->course, '/images/'.$this->picture, 'file', filesize($picturePath.'/'.$this->picture),$this->picture);
@@ -516,10 +516,10 @@ abstract class Question
 		if($this->id) {
 	  		// Get dimensions from current image.
 	  		$my_image = new Image($picturePath.'/'.$this->picture);
-	  		
+
 	  		$current_image_size = $my_image->get_image_size();
 	  		$current_width      = $current_image_size['width'];
-	  		$current_height     = $current_image_size['height'];		
+	  		$current_height     = $current_image_size['height'];
 
 			if($current_width < $Max && $current_height <$Max)
 				return true;
@@ -555,10 +555,10 @@ abstract class Question
 					$new_height = ceil($current_height / $resize_scale);
 				}
 			}
-			
+
             $my_image->resize($new_width, $new_height);
             $result = $my_image->send_image($picturePath.'/'.$this->picture);
-            
+
 			if ($result) {
 				return true;
 			} else {
@@ -597,27 +597,27 @@ abstract class Question
 		$course_id          = $course_info['real_id'];
         $TBL_QUESTIONS      = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $destination_path   = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/images';
-        $source_path        = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';        
+        $source_path        = api_get_path(SYS_COURSE_PATH).$this->course['path'].'/document/images';
 
 		// if the question has got an ID and if the picture exists
 		if ($this->id && !empty($this->picture)) {
 			$picture=explode('.',$this->picture);
 			$extension = $picture[sizeof($picture)-1];
-			$picture = 'quiz-'.$questionId.'.'.$extension;			          
+			$picture = 'quiz-'.$questionId.'.'.$extension;
 			$result = @copy($source_path.'/'.$this->picture, $destination_path.'/'.$picture) ? true : false;
             //If copy was correct then add to the database
             if ($result) {
                 $sql = "UPDATE $TBL_QUESTIONS SET picture='".Database::escape_string($picture)."' WHERE c_id = $course_id AND id='".intval($questionId)."'";
-                Database::query($sql);            
-            
+                Database::query($sql);
+
                 $document_id = add_document($course_info, '/images/'.$picture, 'file', filesize($destination_path.'/'.$picture), $picture);
                 if ($document_id) {
                     return api_item_property_update($course_info, TOOL_DOCUMENT, $document_id, 'DocumentAdded', api_get_user_id());
                 }
             }
-            
+
             return $result;
-		}        
+		}
 		return false;
 	}
 
@@ -645,7 +645,7 @@ abstract class Question
 	public function setTitle($title) {
 		$this->question = $title;
 	}
-    
+
     /**
         Sets the title
     */
@@ -701,7 +701,7 @@ abstract class Question
         $extra			= $this->extra;
         $c_id 			= $this->course['real_id'];
         $category_list  = $this->category_list;
-            
+
 		// question already exists
 		if (!empty($id)) {
 			$sql="UPDATE $TBL_QUESTIONS SET
@@ -715,10 +715,10 @@ abstract class Question
 					level		='".Database::escape_string($level)."',
                     parent_id   =  ".$this->parent_id."
 				WHERE c_id = $c_id AND id='".Database::escape_string($id)."'";
-            
-			Database::query($sql);            
+
+			Database::query($sql);
 			$this->saveCategories($category_list);
-            
+
 			if (!empty($exerciseId)) {
 				api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionUpdated',api_get_user_id());
 			}
@@ -734,8 +734,8 @@ abstract class Question
             }
 		} else {
 			// creates a new question
-			$sql	= "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question 
-					   WHERE 	question.id					= test_question.question_id AND 
+			$sql	= "SELECT max(position) FROM $TBL_QUESTIONS as question, $TBL_EXERCICE_QUESTION as test_question
+					   WHERE 	question.id					= test_question.question_id AND
 								test_question.exercice_id	= '".Database::escape_string($exerciseId)."' AND
 								question.c_id 				= $c_id AND
 								test_question.c_id 			= $c_id ";
@@ -764,18 +764,18 @@ abstract class Question
 			// If hotspot, create first answer
 			if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-				$sql = "INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) 
+				$sql = "INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
 					    VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'square')";
 				Database::query($sql);
             }
-            
+
 			if ($type == HOT_SPOT_DELINEATION ) {
 				$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-				$sql="INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type ) 
+				$sql="INSERT INTO $TBL_ANSWERS (c_id, id, question_id , answer , correct , comment , ponderation , position , hotspot_coordinates , hotspot_type )
 					  VALUES (".$c_id.", '1', '".Database::escape_string($this->id)."', '', NULL , '', '10' , '1', '0;0|0|0', 'delineation')";
 				Database::query($sql);
 			}
-			
+
             if (api_get_setting('search_enabled')=='true') {
                 if ($exerciseId != 0) {
                     $this -> search_engine_edit($exerciseId, TRUE);
@@ -919,16 +919,16 @@ abstract class Question
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$id = $this->id;
 		// checks if the exercise ID is not in the list
-		if (!in_array($exerciseId,$this->exerciseList)) {            
-			$this->exerciseList[]=$exerciseId;            
+		if (!in_array($exerciseId,$this->exerciseList)) {
+			$this->exerciseList[]=$exerciseId;
             $new_exercise = new Exercise();
             $new_exercise->read($exerciseId);
             $count = $new_exercise->selectNbrQuestions();
             $count++;
-			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES 
+			$sql="INSERT INTO $TBL_EXERCICE_QUESTION (c_id, question_id, exercice_id, question_order) VALUES
 				 ({$this->course['real_id']}, '".Database::escape_string($id)."','".Database::escape_string($exerciseId)."', '$count' )";
 			Database::query($sql);
-            
+
             // we do not want to reindex if we had just saved adnd indexed the question
             if (!$fromSave) {
             	$this->search_engine_edit($exerciseId, TRUE);
@@ -950,7 +950,7 @@ abstract class Question
 
 		// searches the position of the exercise ID in the list
 		$pos=array_search($exerciseId,$this->exerciseList);
-        
+
         $course_id = api_get_course_int_id();
 
 		// exercise not found
@@ -965,7 +965,7 @@ abstract class Question
             if (Database::num_rows($res)>0) {
                 $row = Database::fetch_array($res);
                 if (!empty($row['question_order'])) {
-                    $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1 
+                    $sql = "UPDATE $TBL_EXERCICE_QUESTION SET question_order = question_order-1
                             WHERE c_id = $course_id AND exercice_id='".Database::escape_string($exerciseId)."' AND question_order > ".$row['question_order'];
                     $res = Database::query($sql);
                 }
@@ -986,14 +986,14 @@ abstract class Question
 	 * @author - Olivier Brouckaert
 	 * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
 	 */
-	function delete($deleteFromEx = 0) {		       
+	function delete($deleteFromEx = 0) {
         $course_id = api_get_course_int_id();
 
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 		$TBL_QUESTIONS			= Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_QUIZ_QUESTION_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-		
+
 		$id = $this->id;
 
 		// if the question must be removed from all exercises
@@ -1023,14 +1023,14 @@ abstract class Question
 			// remove the category of this question in the question_rel_category table
 			$sql = "DELETE FROM $TBL_QUIZ_QUESTION_REL_CATEGORY WHERE c_id = $course_id AND question_id='".Database::escape_string($id)."' AND c_id=".api_get_course_int_id();
 			Database::query($sql);
-			
+
 			api_item_property_update($this->course, TOOL_QUIZ, $id,'QuizQuestionDeleted',api_get_user_id());
 			$this->removePicture();
 
 			// resets the object
 			$this->Question();
 		} else {
-            // just removes the exercise from the list            
+            // just removes the exercise from the list
 			$this->removeFromList($deleteFromEx);
             if (api_get_setting('search_enabled')=='true' && extension_loaded('xapian')) {
                 // disassociate question with this exercise
@@ -1047,8 +1047,8 @@ abstract class Question
      * @param  array   Course info of the destination course
 	 * @return int     ID of the new question
     */
-     
-	function duplicate($course_info = null) {        
+
+	function duplicate($course_info = null) {
         if (empty($course_info)) {
         	$course_info = $this->course;
         } else {
@@ -1064,36 +1064,36 @@ abstract class Question
 		$type         = $this->type;
 		$level        = intval($this->level);
         $extra        = $this->extra;
-        
+
         //Using the same method used in the course copy to transform URLs
-        
+
         if ($this->course['id'] != $course_info['id']) {
             $description  = DocumentManager::replace_urls_inside_content_html_from_copy_course($description, $this->course['id'], $course_info['id']);
             $question     = DocumentManager::replace_urls_inside_content_html_from_copy_course($question, $this->course['id'], $course_info['id']);
         }
-        
+
         $course_id = $course_info['real_id'];
-        
+
         //Read the source options
         $options = self::readQuestionOption($this->id, $this->course['real_id']);
-                
+
         //Inserting in the new course db / or the same course db
-		$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, level, extra ) 
+		$sql = "INSERT INTO $TBL_QUESTIONS (c_id, question, description, ponderation, position, type, level, extra )
 				VALUES ('$course_id', '".Database::escape_string($question)."','".Database::escape_string($description)."','".Database::escape_string($weighting)."','".Database::escape_string($position)."','".Database::escape_string($type)."' ,'".Database::escape_string($level)."' ,'".Database::escape_string($extra)."'  )";
-		Database::query($sql);    
-            
-		$new_question_id = Database::insert_id();        
-        
+		Database::query($sql);
+
+		$new_question_id = Database::insert_id();
+
         if (!empty($options)) {
-            //Saving the quiz_options      
+            //Saving the quiz_options
             foreach ($options as $item) {
                 $item['question_id'] 	= $new_question_id;
                 $item['c_id'] 			= $course_id;
-                unset($item['id']); 
-                Database::insert($TBL_QUESTION_OPTIONS, $item);	
+                unset($item['id']);
+                Database::insert($TBL_QUESTION_OPTIONS, $item);
             }
         }
-        
+
 		// Duplicates the picture of the hotspot
 		$this->exportPicture($new_question_id, $course_info);
 		return $new_question_id;
@@ -1103,19 +1103,19 @@ abstract class Question
         $key = self::$questionTypes[$this->type];
         return get_lang($key[1]);
     }
-    
+
     static function get_question_type($type) {
         if ($type == ORAL_EXPRESSION && api_get_setting('enable_nanogong') != 'true') {
             return null;
-        }        
+        }
         return self::$questionTypes[$type];
     }
-    
+
     static function get_question_type_list() {
         if (api_get_setting('enable_nanogong') != 'true') {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
-        }   
+        }
         return self::$questionTypes;
     }
 
@@ -1125,14 +1125,14 @@ abstract class Question
 	 * @return an instance of a Question subclass (or of Questionc class by default)
 	 */
 	static function getInstance($type) {
-		if (!is_null($type)) {            
+		if (!is_null($type)) {
 			list($file_name, $class_name) = self::get_question_type($type);
             if (!empty($file_name)) {
                 include_once $file_name;
                 if (class_exists($class_name)) {
                     return new $class_name();
                 } else {
-                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;                   
+                    echo 'Can\'t instanciate class '.$class_name.' of type '.$type;
                 }
             }
 		}
@@ -1145,7 +1145,7 @@ abstract class Question
 	 * @param FormValidator $form the formvalidator instance (by reference)
 	 */
 	function createForm (&$form, $fck_config=0) {
-		echo '	<style>					
+		echo '	<style>
 					.media { display:none;}
 				</style>';
 		echo '<script>
@@ -1173,7 +1173,7 @@ abstract class Question
 				document.getElementById(\'media_icon\').innerHTML=\'&nbsp;<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'\';
 			}
 		}
-		
+
 		// hub 13-12-2010
 		function visiblerDevisibler(in_id) {
 			if (document.getElementById(in_id)) {
@@ -1190,11 +1190,11 @@ abstract class Question
 					}
 				}
 			}
-		}		
+		}
 		</script>';
-        
+
 		// question name
-		$form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));		        
+		$form->addElement('text', 'questionName', get_lang('Question'), array('class' => 'span6'));
 		$form->addRule('questionName', get_lang('GiveQuestion'), 'required');
 
 		// default content
@@ -1209,29 +1209,29 @@ abstract class Question
 		if(is_array($fck_config)){
 			$editor_config = array_merge($editor_config, $fck_config);
 		}
-        
+
 		if (!api_is_allowed_to_edit(null,true)) {
             $editor_config['UserStatus'] = 'student';
         }
 
 		$form->addElement('advanced_settings','
-			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>		
+			<a href="javascript://" onclick=" return show_media()"><span id="media_icon"><img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />&nbsp;'.get_lang('EnrichQuestion').'</span></a>
 		');
 
 		$form -> addElement ('html','<div class="HideFCKEditor" id="HiddenFCKquestionDescription" >');
 		$form->add_html_editor('questionDescription', get_lang('QuestionDescription'), false, false, $editor_config);
 		$form -> addElement ('html','</div>');
-        
+
         // hidden values
 		$form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
-                
+
         if ($this->type != MEDIA_QUESTION) {
-            
+
             // Advanced parameters
             $form->addElement('advanced_settings','<a href="javascript:void(0)" onclick="visiblerDevisibler(\'id_advancedOption\')"><img id="id_advancedOptionImg" style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang("AdvancedParameters").'</a>');
-        
-            $form->addElement('html','<div id="id_advancedOption" style="display:none;">');        
-            
+
+            $form->addElement('html','<div id="id_advancedOption" style="display:none;">');
+
             $select_level = Question::get_default_levels();
             $form->addElement('select', 'questionLevel', get_lang('Difficulty'), $select_level);
 
@@ -1239,54 +1239,54 @@ abstract class Question
             $category_list = Testcategory::getCategoriesIdAndName();
             $form->addElement('select', 'questionCategory', get_lang('Category'), $category_list, array('multiple' => 'multiple'));
 
-            // Categories		
+            // Categories
     		//$tabCat = Testcategory::getCategoriesIdAndName();
 		    //$form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
             //Medias
-            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());        
+            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
             $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
-            
+
             $form->addElement('html','</div>');
         }
-		
-        
-        if (!isset($_GET['fromExercise'])) {            
+
+
+        if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
-                case 1:	
-                    $this->question = get_lang('DefaultUniqueQuestion'); 
+                case 1:
+                    $this->question = get_lang('DefaultUniqueQuestion');
                     break;
-                case 2:	
-                    $this->question = get_lang('DefaultMultipleQuestion'); 
+                case 2:
+                    $this->question = get_lang('DefaultMultipleQuestion');
                     break;
-                case 3:	
-                    $this->question = get_lang('DefaultFillBlankQuestion'); 
+                case 3:
+                    $this->question = get_lang('DefaultFillBlankQuestion');
                     break;
-                case 4:	
+                case 4:
                     $this->question = get_lang('DefaultMathingQuestion');
                     break;
-                case 5:	
+                case 5:
                     $this->question = get_lang('DefaultOpenQuestion');
                     break;
-                case 9:	
+                case 9:
                     $this->question = get_lang('DefaultMultipleQuestion');
                     break;
             }
         }
-        
-		
-        
+
+
+
 		// default values
-		$defaults = array();		
+		$defaults = array();
 		$defaults['questionName']           = $this->question;
 		$defaults['questionDescription']    = $this->description;
-		$defaults['questionLevel']          = $this->level;        
+		$defaults['questionLevel']          = $this->level;
 		$defaults['questionCategory']       = $this->category_list;
         $defaults['parent_id']              = $this->parent_id;
-		
-        //Came from he question pool        
-        if (isset($_GET['fromExercise'])) {   
-            $form->setDefaults($defaults);   
+
+        //Came from he question pool
+        if (isset($_GET['fromExercise'])) {
+            $form->setDefaults($defaults);
         }
 
 		if (!empty($_REQUEST['myid'])) {
@@ -1295,26 +1295,26 @@ abstract class Question
 			if ($isContent == 1) {
 				$form->setDefaults($defaults);
 			}
-		}        
+		}
 	}
-    
+
 
 	/**
 	 * function which process the creation of questions
 	 * @param FormValidator $form the formvalidator instance
 	 * @param Exercise $objExercise the Exercise instance
 	 */
-	function processCreation ($form, $objExercise = null) {        
+	function processCreation ($form, $objExercise = null) {
         $this->updateParentId($form->getSubmitValue('parent_id'));
 		$this->updateTitle($form->getSubmitValue('questionName'));
 		$this->updateDescription($form->getSubmitValue('questionDescription'));
 		$this->updateLevel($form->getSubmitValue('questionLevel'));
 		$this->updateCategory($form->getSubmitValue('questionCategory'));
-        
+
         //Save normal question if NOT media
         if ($this->type != MEDIA_QUESTION) {
             $this->save($objExercise->id);
-        
+
             // modify the exercise
             $objExercise->addToList($this->id);
             $objExercise->update_question_positions();
@@ -1340,7 +1340,7 @@ abstract class Question
 	static function display_type_menu($objExercise) {
         $feedback_type = $objExercise->feedback_type;
         $exerciseId = $objExercise->id;
-        
+
 		// 1. by default we show all the question types
 		$question_type_custom_list = self::get_question_type_list();
 
@@ -1356,7 +1356,7 @@ abstract class Question
 		} else {
 			unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
 		}
-        
+
         echo '<div class="actionsbig">';
 		echo '<ul class="question_menu">';
 
@@ -1391,44 +1391,44 @@ abstract class Question
 				echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
 			}
 			echo Display::return_icon('database.png', get_lang('GetExistingQuestion'));
-		}	
+		}
 		echo '</a>';
 		echo '</div></li>';
 		echo '</ul>';
         echo '</div>';
 	}
-    
+
     static function saveQuestionOption($question_id, $name, $course_id, $position = 0) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);   
+        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $params['question_id']  = intval($question_id);
-        $params['name']         = $name;        
+        $params['name']         = $name;
         $params['position']     = $position;
-        $params['c_id']         = $course_id;                   
+        $params['c_id']         = $course_id;
         $result  = self::readQuestionOption($question_id, $course_id);
         $last_id = Database::insert($TBL_EXERCICE_QUESTION_OPTION, $params);
-        return $last_id; 
+        return $last_id;
     }
-    
+
     static function deleteAllQuestionOptions($question_id, $course_id) {
     	$TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         Database::delete($TBL_EXERCICE_QUESTION_OPTION, array('c_id = ? AND question_id = ?'=> array($course_id, $question_id)));
     }
-    
+
     static function updateQuestionOption($id, $params, $course_id) {
         $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
-        $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?'=>array($course_id, $id)));             
-        return $result;        
+        $result = Database::update($TBL_EXERCICE_QUESTION_OPTION, $params, array('c_id = ? AND id = ?'=>array($course_id, $id)));
+        return $result;
     }
-    
+
     static function readQuestionOption($question_id, $course_id) {
-        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);               
+        $TBL_EXERCICE_QUESTION_OPTION    = Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
         $result = Database::select('*', $TBL_EXERCICE_QUESTION_OPTION, array('where'=>array('c_id = ? AND question_id = ?' =>array($course_id, $question_id)), 'order'=>'id ASC'));
-        return $result;        
+        return $result;
     }
-    
-    /** 
+
+    /**
      * Shows question title an description
-     * 
+     *
      * @param type $feedback_type
      * @param type $counter
      * @param type $score
@@ -1444,7 +1444,7 @@ abstract class Question
             $score_label = get_lang('Correct');
             $class = 'success';
         }
-        
+
         if ($this->type == FREE_ANSWER) {
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
@@ -1466,11 +1466,11 @@ abstract class Question
         //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
 	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
 	    $header .= Display::div($this->description, array('id'=>'question_description'));
-        
+
 
         return $header;
 	}
-    
+
     /**
      * Create a question from a set of parameters
      * @param   int     Quiz ID
@@ -1481,15 +1481,15 @@ abstract class Question
      */
     function create_question ($quiz_id, $question_name, $max_score = 0, $type = 1, $level = 1) {
         $course_id = api_get_course_int_id();
-        
+
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $tbl_quiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        
+
         $quiz_id = intval($quiz_id);
         $max_score = (float) $max_score;
         $type = intval($type);
         $level = intval($level);
-        
+
         // Get the max position
         $sql = "SELECT max(position) as max_position"
                ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
@@ -1498,14 +1498,14 @@ abstract class Question
         $rs_max = Database::query($sql, __FILE__, __LINE__);
         $row_max = Database::fetch_object($rs_max);
         $max_position = $row_max->max_position +1;
-   
+
         // Insert the new question
-        $sql = "INSERT INTO $tbl_quiz_question (c_id, question, ponderation, position, type, level) 
+        $sql = "INSERT INTO $tbl_quiz_question (c_id, question, ponderation, position, type, level)
                 VALUES ($course_id, '".Database::escape_string($question_name)."', '$max_score', $max_position, $type, $level)";
         $rs = Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
-        
+
         // Get the max question_order
         $sql = "SELECT max(question_order) as max_order "
               ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";
@@ -1519,58 +1519,58 @@ abstract class Question
         $rs = Database::query($sql);
         return $question_id;
     }
-    
+
     /**
      * return the image filename of the question type
      *
     */
     public function get_type_icon_html() {
-    	$type            = $this->selectType();        
+    	$type            = $this->selectType();
     	$tabQuestionList = Question::get_question_type_list(); // [0]=file to include [1]=type name
-        
+
     	require_once $tabQuestionList[$type][0];
 			eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
 			eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
 			return array($img, $explanation);
     }
-    
+
     /**
-     * Get course medias 
+     * Get course medias
      * @param int course id
      */
-    static function get_course_medias($course_id, $start = 0, $limit = 100, $sidx = "question", $sord = "ASC", $where_condition = array()) {        
+    static function get_course_medias($course_id, $start = 0, $limit = 100, $sidx = "question", $sord = "ASC", $where_condition = array()) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
         $default_where = array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION));
         if (!empty($where_condition)) {
             //$where_condition
         }
-        $result = Database::select('*', $table_question, 
+        $result = Database::select('*', $table_question,
             array(
-                'limit' => " $start, $limit", 
-                'where' => $default_where, 
-                'order' => "$sidx $sord"));        
-        return $result;    
+                'limit' => " $start, $limit",
+                'where' => $default_where,
+                'order' => "$sidx $sord"));
+        return $result;
     }
-    
+
     /**
-     * Get count course medias 
+     * Get count course medias
      * @param int course id
      */
-    static function get_count_course_medias($course_id) {        
-        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);               
-        $result = Database::select('count(*) as count', $table_question, array('where'=>array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION))),'first');        
-        
+    static function get_count_course_medias($course_id) {
+        $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $result = Database::select('count(*) as count', $table_question, array('where'=>array('c_id = ? AND parent_id = 0 AND type = ?' => array($course_id, MEDIA_QUESTION))),'first');
+
         if ($result && isset($result['count'])) {
-            return $result['count'];    
+            return $result['count'];
         }
         return 0;
     }
-    
+
     static function prepare_course_media_select($course_id) {
         $medias = self::get_course_medias($course_id);
         $media_list = array();
         $media_list[0] = get_lang('NoMedia');
-        
+
         if (!empty($medias)) {
             foreach($medias as $media) {
                 $media_list[$media['id']] = empty($media['question']) ? get_lang('Untitled') : $media['question'];
@@ -1578,7 +1578,7 @@ abstract class Question
         }
         return $media_list;
     }
-    
+
     static function get_default_levels() {
         $select_level = array (
                 1=>1,
@@ -1587,11 +1587,11 @@ abstract class Question
                 4=>4,
                 5=>5
             );
-        return $select_level;        
+        return $select_level;
     }
-    
+
     function show_media_content() {
-        $html = null;        
+        $html = null;
         if ($this->parent_id != 0) {
             $parent_question = Question::read($this->parent_id);
             $html = $parent_question->show_media_content();
@@ -1600,6 +1600,5 @@ abstract class Question
             $html .= $this->selectDescription();
         }
         return $html;
-    }    
+    }
 }
-endif;

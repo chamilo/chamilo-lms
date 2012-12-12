@@ -163,9 +163,6 @@ $htmlHeadXtra[] = '<script>
             });
         });*/
 
-
-
-      /*
      $(".data_table tbody").sortable({
         cursor: "move", // works?
         update: function(event, ui) {
@@ -177,7 +174,7 @@ $htmlHeadXtra[] = '<script>
         axis: "y",
         placeholder: "ui-state-highlight", //defines the yellow highlight
         handle: ".moved", //only the class "moved"
-    });*/
+    });
 });
 </script>';
 
@@ -545,7 +542,7 @@ if (!empty($exercise_list)) {
 
                     $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
 
-                    //$move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                    $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
                     $move = null;
 
                     $class_tip = '';

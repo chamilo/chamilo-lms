@@ -120,6 +120,9 @@ switch ($action) {
     case 'get_user_course_report':
         $count = CourseManager::get_count_user_list_from_course_code();
         break;
+    case 'get_course_exercise_medias':
+        $course_id = api_get_course_int_id();
+        $count = Question::get_count_course_medias($course_id);
 	case 'get_user_skill_ranking':
     	$skill = new Skill();
 	    $count = $skill->get_user_list_skill_ranking_count();
@@ -222,6 +225,10 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_course_exercise_medias':
+        $columns = array('question');
+        $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
+        break;
     case 'get_user_course_report':
         $columns = array('course', 'user', 'time', 'certificate', 'score');
         $column_names = array(get_lang('Course'), get_lang('User'), get_lang('TimeSpentInTheCourse'), get_lang('Certificate'), get_lang('Score'));
@@ -288,6 +295,17 @@ switch ($action) {
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));
+        break;
+    case 'get_extra_fields':
+        $type = $_REQUEST['type'];
+        $obj = new ExtraField($type);
+        $count = $obj->get_count();
+        break;
+    case 'get_extra_field_options':
+        $type = $_REQUEST['type'];
+        $field_id = $_REQUEST['field_id'];
+        $obj = new ExtraFieldOption($type);
+        $count = $obj->get_count_by_field_id($field_id);
         break;
      case 'get_timelines':
         $columns = array('headline', 'actions');
@@ -432,12 +450,44 @@ switch ($action) {
         //Multidimensional sort
         msort($result, $sidx);
         break;
+    case 'get_extra_fields':
+        $obj = new ExtraField($type);
+        $columns = array('field_display_text', 'field_variable', 'field_type', 'field_changeable', 'field_visible', 'field_filter', 'field_order');
+        $result  = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }
+        break;
+    case 'get_extra_field_options':
+        $obj = new ExtraFieldOption($type);
+        $columns = array('option_display_text', 'option_value', 'option_order');
+        $result  = Database::select('*', $obj->table, array('where' => array("field_id = ? " => $field_id),'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        /*$new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $item) {
+                $item['field_type']         = $obj->get_field_type_by_id($item['field_type']);
+                $item['field_changeable']   = $item['field_changeable'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_visible']      = $item['field_visible'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $item['field_filter']       = $item['field_filter'] ? Display::return_icon('right.gif') : Display::return_icon('wrong.gif');
+                $new_result[]        = $item;
+            }
+            $result = $new_result;
+        }*/
+        break;
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         switch ($type) {
             case 'not_registered':
-                $options['course_id'] = $course_id;
+                $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
                 $result = $obj->get_usergroup_not_in_course($options);
                 break;
             case 'registered':

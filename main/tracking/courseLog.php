@@ -85,7 +85,7 @@ $js = "<script>
 
         // hide some column at startup
         // be sure that these columns always exists
-        // see $tab_table_header = array();    // tab of header texts
+        // see tab_table_header = array();    // tab of header texts
         $(document).ready( function() {
             //init_hide();
             foldup(1);

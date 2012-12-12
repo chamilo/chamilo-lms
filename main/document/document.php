@@ -566,7 +566,6 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
         }
         $document_to_move = DocumentManager::get_document_data_by_id($my_get_move, api_get_course_id());
         $move_path = $document_to_move['path'];
-
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
 
@@ -1139,6 +1138,10 @@ if (isset($message)) {
 }
 if (isset($_POST['move_to'])) {
     $document_id = DocumentManager::get_document_id($course_info, $_POST['move_to']);
+}
+if(isset($_GET['createdir']) && $_POST['dirname'] != '') {
+    $post_dir_name = $_POST['dirname'];
+    $document_id = DocumentManager::get_document_id($course_info, $_POST['dirname']);
 }
 if (!$is_certificate_mode) {
     echo build_directory_selector($folders, $document_id, (isset($group_properties['directory']) ? $group_properties['directory'] : array()), true);

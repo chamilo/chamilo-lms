@@ -776,11 +776,10 @@ class CourseHome {
 
                         $original_image = Display::return_icon($image, $item['name'], array('id'=>'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);
 
-                        switch($image) {
+                        switch ($image) {
                             case 'scormbuilder.png':
                                 $image = $original_image;
-
-                                $lp_id = self::get_published_lp_id_from_link($tool['link']);
+                                $lp_id = self::get_published_lp_id_from_link($item['link']);
                                 if ($lp_id) {
                                     $lp = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                                     $path = $lp->get_preview_image_path(64);

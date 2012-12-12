@@ -2267,7 +2267,7 @@ class learnpath {
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
             $image_path = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
-            if (!empty($size)) {
+            if (isset($size)) {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
                 if (file_exists($image_sys_path.$image_custom_size)) {

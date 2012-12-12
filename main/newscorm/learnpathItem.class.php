@@ -1267,6 +1267,7 @@ class learnpathItem {
 		// Deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order.
 		$this->prereq_alert = '';
 		// First parse all parenthesis by using a sequential loop (looking for less-inclusives first).
+
 		if ($prereqs_string == '_true_') { return true; }
 		if ($prereqs_string == '_false_') {
 			if (empty($this->prereq_alert)) {
@@ -1342,7 +1343,6 @@ class learnpathItem {
 						return false;
 					}
 				} else {
-
 					// No ANDs found, look for <>
 
 					if (self::debug > 1) { error_log('New LP - Didnt find any =, looking for <>', 0); }
@@ -1364,9 +1364,7 @@ class learnpathItem {
 							return false;
 						}
 					} else {
-
-						// No <> found, look for ~ (unary).
-
+						// No <> found, look for ~ (unary)
 						if (self::debug > 1) { error_log('New LP - Didnt find any =, looking for ~', 0); }
 						// Only remains: ~ and X*{}
 						if (strpos($prereqs_string, '~') !== false) {
@@ -1385,13 +1383,13 @@ class learnpathItem {
 								if (self::debug > 1) { error_log('New LP - Found ~ but strange string: '.$prereqs_string, 0); }
 							}
 						} else {
-
-							// Finally, look for sets/groups.
+							// Finally, look for sets/groups
 
 							if (self::debug > 1) { error_log('New LP - Didnt find any ~, looking for groups', 0); }
 							// Only groups here.
 							$groups = array();
 							$groups_there = preg_match_all('/((\d+\*)?\{([^\}]+)\}+)/', $prereqs_string, $groups);
+
 							if ($groups_there) {
 								foreach ($groups[1] as $gr) { // Only take the results that correspond to the big brackets-enclosed condition.
 									if (self::debug > 1) { error_log('New LP - Dealing with group '.$gr, 0); }
@@ -1419,8 +1417,7 @@ class learnpathItem {
 										} else {
 											if (self::debug > 1) { error_log('New LP - Not enough true results', 0); }
 										}
-									}
-									else {
+									} else {
 										if (self::debug > 1) { error_log('New LP - No multiplier', 0); }
 										$list = split(',', $gr);
 										$mycond = true;
@@ -1522,11 +1519,9 @@ class learnpathItem {
 												$this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
 												$returnstatus = false;
 											}
-
 										}
 										return $returnstatus;
 									} else {
-
 										$status = $items[$refs_list[$prereqs_string]]->get_status(false);
 										$returnstatus = (($status == $this->possible_status[2]) OR ($status == $this->possible_status[3]));
 

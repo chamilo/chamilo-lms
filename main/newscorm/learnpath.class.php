@@ -230,6 +230,7 @@ class learnpath {
         }
 
         $lp_item_id_list = array();
+
         while ($row = Database::fetch_array($res)) {
             $oItem = '';
             $lp_item_id_list[] = $row['id'];
@@ -1307,17 +1308,21 @@ class learnpath {
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
-        if (!is_numeric($mastery_score) || $mastery_score < 0)
+        if (!is_numeric($mastery_score) || $mastery_score < 0) {
             $mastery_score = 0;
+        }
 
-        if (!is_numeric($max_score) || $max_score < 0)
+        if (!is_numeric($max_score) || $max_score < 0) {
             $max_score = 100;
+        }
 
-        if ($mastery_score > $max_score)
+        if ($mastery_score > $max_score) {
             $max_score = $mastery_score;
+        }
 
-        if (!is_numeric($prerequisite_id))
+        if (!is_numeric($prerequisite_id)) {
             $prerequisite_id = 'NULL';
+        }
 
         $sql_upd = " UPDATE " . $tbl_lp_item . "
                      SET prerequisite = " . $prerequisite_id . " WHERE c_id = ".$course_id." AND id = " . $id;
@@ -2307,17 +2312,22 @@ class learnpath {
         }
         $oItem = $this->items[$item_id];
         $prereq = $oItem->get_prereq_string();
-        if (empty ($prereq)) {
+        if (empty($prereq)) {
             return '';
         }
-        if (preg_match('/^\d+$/', $prereq) && is_object($this->items[$prereq])) {	// If the prerequisite is a simple integer ID and this ID exists as an item ID,
-                                                                                    // then simply return it (with the ITEM_ prefix).
-            return 'ITEM_' . $prereq;
+        //var_dump($this->refs_list, $prereq);
+        if (preg_match('/^\d+$/', $prereq) && is_object($this->items[$prereq])) {
+            // If the prerequisite is a simple integer ID and this ID exists as an item ID,
+            // then simply return it (with the ITEM_ prefix).
+            //return 'ITEM_' . $prereq;
+            return $this->items[$prereq]->ref;
         } else {
-            if (isset ($this->refs_list[$prereq])) {
+            if (isset($this->refs_list[$prereq])) {
                 // It's a simple string item from which the ID can be found in the refs list,
                 // so we can transform it directly to an ID for export.
                 return 'ITEM_' . $this->refs_list[$prereq];
+            } else if (isset($this->refs_list['ITEM_'.$prereq])) {
+                return 'ITEM_'.$prereq;
             } else {
                 // The last case, if it's a complex form, then find all the IDs (SCORM strings)
                 // and replace them, one by one, by the internal IDs (chamilo db)
@@ -3566,7 +3576,14 @@ class learnpath {
             $item = $this->current;
         }
         if (is_object($this->items[$item])) {
-            $prereq_string = $this->items[$item]->get_prereq_string();
+            if ($this->type == 2) {
+                //Getting prereq from scorm
+                $prereq_string = $this->get_scorm_prereq_string($item);
+            } else {
+                $prereq_string = $this->items[$item]->get_prereq_string();
+            }
+
+
             if (empty($prereq_string)) {
                 return true;
             }

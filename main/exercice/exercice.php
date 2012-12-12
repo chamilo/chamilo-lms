@@ -162,19 +162,19 @@ $htmlHeadXtra[] = '<script>
                 hide: true, //
             });
         });*/
-
-     /*$(".data_table tbody").sortable({
-        cursor: "move", // works?
-        update: function(event, ui) {
-            var order = $(this).sortable("serialize") + "&a=update_exercise_list_order";
-            $.get("'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php", order, function(reponse) {
-                $("#message").html(reponse);
-            });
-        },
-        axis: "y",
-        placeholder: "ui-state-highlight", //defines the yellow highlight
-        handle: ".moved", //only the class "moved"
-    });*/
+        /*
+        $(".data_table tbody").sortable({
+            cursor: "move", // works?
+            update: function(event, ui) {
+                var order = $(this).sortable("serialize") + "&a=update_exercise_list_order";
+                $.get("'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php", order, function(reponse) {
+                    $("#message").html(reponse);
+                });
+            },
+            axis: "y",
+            placeholder: "ui-state-highlight", //defines the yellow highlight
+            handle: ".moved", //only the class "moved"
+        }); */
 });
 </script>';
 
@@ -330,7 +330,7 @@ if ($is_allowedToEdit) {
 } else {
     // Only for students
     $total_sql = "SELECT count(id) as count FROM $TBL_EXERCICES WHERE c_id = $course_id AND active = '1' $condition_session ";
-    $sql = "SELECT id, title, type, description, results_disabled, session_id, start_time, end_time, max_attempt FROM $TBL_EXERCICES
+    $sql = "SELECT * FROM $TBL_EXERCICES
             WHERE c_id = $course_id AND
                   active='1' $condition_session
             ORDER BY title LIMIT ".$from.",".$limit;
@@ -386,6 +386,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 if ($is_allowedToEdit) {
     echo '</div>'; // closing the actions div
+    //echo '<div id="message"></div>';
 }
 
 if ($total > $limit) {
@@ -407,7 +408,6 @@ if ($total > $limit) {
 }
 
 $i = 1;
-$lis = '';
 
 $online_icon = Display::return_icon('online.png', get_lang('Visible'), array('width' => '12px'));
 $offline_icon = Display::return_icon('offline.png', get_lang('Invisible'), array('width' => '12px'));

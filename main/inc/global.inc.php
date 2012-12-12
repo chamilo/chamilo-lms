@@ -78,9 +78,6 @@ $_configuration['dokeos_stable']        = $_configuration['system_stable'];
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
 
-//Check the PHP version
-api_check_php_version($includePath.'/');
-
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
@@ -90,6 +87,7 @@ $default_username_length = 40;
 if (api_get_setting('login_is_email') == 'true') {
     $default_username_length = 100;
 }
+
 define('USERNAME_MAX_LENGTH', $default_username_length);
 
 // Do not over-use this variable. It is only for this script's local use.
@@ -117,16 +115,22 @@ define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 //Composer autoloader
 require_once __DIR__.'../../../vendor/autoload.php';
 
+//Start Silex
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Response;
+
 $app = new Application();
+//$app['include_path'] = $includePath;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
 
 //Setting HttpCacheService provider in order to use do: $app['http_cache']->run();
+/*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));
+*/
 
 //Setting the Twig service provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -177,12 +181,42 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
     public function boot(Application $app) {
     }
 }
+
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
+//Manage error messages
+$app->error(function (\Exception $e, $code) use ($app) {
+    if ($app['debug']) {
+        //return;
+    }
+    switch ($code) {
+         case 404:
+            $message = 'The requested page could not be found.';
+            break;
+        default:
+            //$message = 'We are sorry, but something went terribly wrong.';
+            $message = $e->getMessage();
+    }
+    //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
+    $app['template']->assign('code', $code);
+    $app['template']->assign('error_message', $message);
+    $response = $app['template']->render_layout('error.tpl');
+    return new Response($response);
+});
+
+//Filters
+$app->before(function() use ($app) {
+    //Check the PHP version
+    if (api_check_php_version() == false) {
+        $app->abort(500, "Incorrect PHP version"); //error 1
+    }
+});
+
+$app->after(function() {
+});
+
 $app->finish(function() {
-    //require '/var/www/chamilo11/tests/xhprof/footer.php';
-    //error_log($xhprof);
 });
 
 $app['template.show_header']        = true;

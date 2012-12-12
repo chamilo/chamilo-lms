@@ -6109,17 +6109,13 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
  * @param string Include path (used to load the error page)
  * @return void
  */
-function api_check_php_version($my_inc_path = null) {
+function api_check_php_version() {
     if (!function_exists('version_compare') || version_compare( phpversion(), REQUIRED_PHP_VERSION, '<')) {
-        $global_error_code = 1;
-        // Incorrect PHP version
-        $global_page = $my_inc_path.'global_error_message.inc.php';
-        if (file_exists($global_page)) {
-            require $global_page;
-        }
-        exit;
+        return false;
     }
+    return true;
 }
+
 /**
  * Checks whether the Archive directory is present and writeable. If not,
  * prints a warning message.

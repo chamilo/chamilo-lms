@@ -384,6 +384,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 if ($is_allowedToEdit) {
     echo '</div>'; // closing the actions div
+    echo '<div id="message"></div>';
 }
 
 if ($total > $limit) {
@@ -405,15 +406,14 @@ if ($total > $limit) {
     }
 
     $i =1;
-    $lis = '';
 
 $online_icon  = Display::return_icon('online.png', get_lang('Visible'),array('width'=>'12px'));
 $offline_icon = Display::return_icon('offline.png',get_lang('Invisible'),array('width'=>'12px'));
 
 $exercise_list = array();
 $exercise_obj = new Exercise();
-//$list_ordered = $exercise_obj->get_exercise_list_ordered();
-$list_ordered = null;
+$list_ordered = $exercise_obj->get_exercise_list_ordered();
+
 while ($row = Database :: fetch_array($result,'ASSOC')) {
     $exercise_list[$row['id']] = $row;
 }

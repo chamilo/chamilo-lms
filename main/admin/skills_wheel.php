@@ -27,7 +27,8 @@ $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
-$tpl = new Template(null, false, false);
+//$tpl = new Template(null, false, false);
+$tpl = new Template();
 
 $load_user = 0;
 if (isset($_GET['load_user'])) {

@@ -2900,12 +2900,17 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  * @todo use templates to customize the not found page
  */
 function api_not_found($print_headers = false) {
+    global $app;
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
     $show_headers = 0;
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
         $show_headers = 1;
     }
-    $tpl = new Template(null, $show_headers, $show_headers);
+    //$tpl = new Template(null, $show_headers, $show_headers);
+    $app['template.show_header'] = $show_headers;
+    $app['template.show_footer'] = $show_headers;
+    
+    $tpl = new Template(null);
     $msg = get_lang('NotFound');
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
@@ -2923,6 +2928,7 @@ function api_not_found($print_headers = false) {
  * @version dokeos 1.8, August 2006
  */
 function api_not_allowed($print_headers = false, $message = null) {
+    global $app;
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -2962,7 +2968,10 @@ function api_not_allowed($print_headers = false, $message = null) {
         $show_headers = 1;
     }
 
-    $tpl = new Template(null, $show_headers, $show_headers);
+    $app['template.show_header'] = $show_headers;
+    $app['template.show_footer'] = $show_headers;
+
+    $tpl = new Template();
     $tpl->assign('content', $msg);
 
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {

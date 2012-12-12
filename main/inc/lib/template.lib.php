@@ -32,7 +32,6 @@ class Template {
     public $app;
 
     function __construct($title = null, $app = null) {
-
         if (empty($app)) {
             global $app;
             $this->app = $app;

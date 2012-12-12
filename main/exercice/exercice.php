@@ -629,7 +629,7 @@ if (!empty($exercise_list)) {
                         $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
 					} else {
                    		$random_label = ' ('.get_lang('Random').') ';
-                   	    $number_of_questions = $random_number_of_question . ' ' .$random_label.' '.$textByCategory;
+                   	    $number_of_questions = $random_number_of_question . ' ' .$random_label;
                    	    //Bug if we set a random value bigger than the real number of questions
                    	    if ($random_number_of_question > $rowi) {
 							$number_of_questions = $rowi. ' ' .$random_label;

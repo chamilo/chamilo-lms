@@ -155,6 +155,17 @@ switch ($action) {
     case 'get_sessions':
         $count = SessionManager::get_count_admin();
         break;
+    /*case 'get_extra_fields':
+        $type = $_REQUEST['type'];
+        $obj = new ExtraField($type);
+        $count = $obj->get_count();
+        break;
+    case 'get_extra_field_options':
+        $type = $_REQUEST['type'];
+        $field_id = $_REQUEST['field_id'];
+        $obj = new ExtraFieldOption($type);
+        $count = $obj->get_count_by_field_id($field_id);
+        break;*/
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
         $obj        = new Timeline();
@@ -296,17 +307,6 @@ switch ($action) {
     case 'get_sessions':
         $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');
         $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));
-        break;
-    case 'get_extra_fields':
-        $type = $_REQUEST['type'];
-        $obj = new ExtraField($type);
-        $count = $obj->get_count();
-        break;
-    case 'get_extra_field_options':
-        $type = $_REQUEST['type'];
-        $field_id = $_REQUEST['field_id'];
-        $obj = new ExtraFieldOption($type);
-        $count = $obj->get_count_by_field_id($field_id);
         break;
      case 'get_timelines':
         $columns = array('headline', 'actions');

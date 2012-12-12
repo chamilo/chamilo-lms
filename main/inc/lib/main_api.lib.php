@@ -273,7 +273,7 @@ define('USER_RELATION_TYPE_DELETED',     6);
 define('USER_RELATION_TYPE_RRHH',		7);
 
 //Gradebook link constants
-// Please do not change existing values, they are used in the database !
+//Please do not change existing values, they are used in the database !
 
 define('LINK_EXERCISE',				1);
 define('LINK_DROPBOX',				2);

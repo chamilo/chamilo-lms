@@ -301,7 +301,7 @@ class MessageManager
                 foreach($user_list as $user_data) {
                     $new_user_list[] = $user_data['user_id'];
                 }
-                $group_info = array('group_info'=>$group_info, 'user_info' => $sender_info);
+                $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
                 $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);
 		    }
 			return $inbox_last_id;

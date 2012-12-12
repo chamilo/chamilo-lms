@@ -57,8 +57,7 @@ function search_coachs($needle) {
 				$order_clause.
 				' LIMIT 10';
 
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1){
@@ -111,15 +110,15 @@ if ($_POST['formSent']) {
 	$coach_username        = $_POST['coach_username'];
 	$id_session_category   = $_POST['session_category'];
 	$id_visibility         = $_POST['session_visibility'];
-    
+
     $end_limit             = $_POST['end_limit'];
-    $start_limit           = $_POST['start_limit'];  
-    
+    $start_limit           = $_POST['start_limit'];
+
     if (empty($end_limit) && empty($start_limit)) {
         $nolimit = 1;
     } else {
     	$nolimit = null;
-    }    
+    }
 	$return = SessionManager::create_session($name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$coach_username, $id_session_category,$id_visibility, $start_limit, $end_limit);
 
 	if ($return == strval(intval($return))) {
@@ -156,15 +155,15 @@ echo '</div>';
         </label>
         <div class="controls">
             <input type="text" name="name" class="span4" maxlength="50" value="<?php if($formSent) echo api_htmlentities($name,ENT_QUOTES,$charset); ?>">
-        </div>        
-    </div>   
-  
+        </div>
+    </div>
+
     <div class="control-group">
         <label class="control-label">
             <?php echo get_lang('CoachName') ?>
         </label>
         <div class="controls">
-  
+
 <?php
 
 $sql = 'SELECT COUNT(1) FROM '.$tbl_user.' WHERE status=1';
@@ -174,9 +173,8 @@ $count_users = Database::result($rs, 0, 0);
 if (intval($count_users)<50) {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 	$sql="SELECT user_id, lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
-	
-	global $_configuration;
-	if ($_configuration['multiple_access_urls']) {
+
+	if (api_is_multiple_url_enabled()) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -187,7 +185,7 @@ if (intval($count_users)<50) {
 	}
 	$result = Database::query($sql);
 	$Coaches = Database::store_result($result);
-	
+
 	?>
 	<select id="coach_username" class="chzn-select" name="coach_username" style="width:350px;" title="<?php echo get_lang('Select'); ?>" >
 		<option value="0"><?php get_lang('None'); ?></option>
@@ -203,10 +201,10 @@ if (intval($count_users)<50) {
 	<?php
 }
 $Categories = SessionManager::get_all_session_category();
-?>	
-        </div>        
+?>
+        </div>
     </div>
-  
+
 
 
     <div class="control-group">
@@ -215,8 +213,8 @@ $Categories = SessionManager::get_all_session_category();
         </label>
         <div class="controls">
             <select id="session_category" class="chzn-select" name="session_category" style="width:350px;" title="<?php echo get_lang('Select'); ?>">
-                <option value="0"><?php get_lang('None'); ?></option>       
-            <?php 
+                <option value="0"><?php get_lang('None'); ?></option>
+            <?php
             if (!empty($Categories)) {
                 foreach($Categories as $Rows) { ?>
                     <option value="<?php echo $Rows['id']; ?>" <?php if($Rows['id'] == $id_session_category) echo 'selected="selected"'; ?>><?php echo $Rows['name']; ?></option>
@@ -224,9 +222,9 @@ $Categories = SessionManager::get_all_session_category();
             }
             ?>
         </select>
-        </div>        
-    </div>   
-    
+        </div>
+    </div>
+
  <div class="control-group">
         <div class="controls">
             <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('DefineSessionOptions') ?></a>
@@ -236,19 +234,19 @@ $Categories = SessionManager::get_all_session_category();
             <input type="text" name="nb_days_acess_after" value="<?php echo $nb_days_acess_after; ?>" style="width: 30px;">&nbsp;<?php echo get_lang('DaysAfter') ?>
             <br />
         </div>
-        </div>        
-</div>   
-    
- <div class="control-group">        
-        <div class="controls">                
+        </div>
+</div>
+
+ <div class="control-group">
+        <div class="controls">
     <label for="start_limit">
         <input id="start_limit" type="checkbox" name="start_limit" onchange="disable_starttime(this)" />
     <?php echo get_lang('DateStartSession');?>
-    </label> 
- 
+    </label>
+
     <div id="start_date" style="display:none">
        <br />
-    
+
   <select name="day_start">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_start == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -306,23 +304,23 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
 <?php
 }
 ?>
-    </select>  
+    </select>
     </div>
-       
-        </div>        
-    </div>   
+
+        </div>
+    </div>
 
 
-    
+
  <div class="control-group">
-        <div class="controls">            
+        <div class="controls">
             <label for="end_limit">
                 <input id="end_limit" type="checkbox" name="end_limit" onchange="disable_endtime(this)" />
                 <?php echo get_lang('DateEndSession') ?>
             </label>
   <div id="end_date" style="display:none">
   <br />
-  
+
   <select name="day_end">
 	<option value="1">01</option>
 	<option value="2" <?php if((!$formSent && $thisDay == 2) || ($formSent && $day_end == 2)) echo 'selected="selected"'; ?> >02</option>
@@ -390,14 +388,14 @@ for ($i=$thisYear-5;$i <= ($thisYear+5);$i++) {
         foreach($visibility_list as $key=>$item): ?>
         <option value="<?php echo $key; ?>" <?php if($item == $visibility_id) echo 'selected="selected"'; ?>><?php echo $item; ?></option>
         <?php endforeach; ?>
-    </select>    
-     </div>  
-       
-        </div>        
-    </div>   
-    
-    
- <div class="control-group">        
+    </select>
+     </div>
+
+        </div>
+    </div>
+
+
+ <div class="control-group">
     <div class="controls">
         <button class="save" type="submit" value="<?php echo get_lang('NextStep') ?>"><?php echo get_lang('NextStep') ?></button>
     </div>
@@ -416,24 +414,24 @@ function setDisable(select){
 
 	document.form.session_visibility.disabled = (select.checked) ? true : false;
 	document.form.session_visibility.selectedIndex = 0;
-    
+
     document.form.start_limit.disabled = (select.checked) ? true : false;
     document.form.start_limit.checked = false;
     document.form.end_limit.disabled = (select.checked) ? true : false;
     document.form.end_limit.checked = false;
-       
+
     var end_div = document.getElementById('end_date');
     end_div.style.display = 'none';
-        
+
     var start_div = document.getElementById('start_date');
-    start_div.style.display = 'none';        
+    start_div.style.display = 'none';
 }
 
 function disable_endtime(select) {
     var end_div = document.getElementById('end_date');
     if (end_div.style.display == 'none')
         end_div.style.display = 'block';
-     else 
+     else
         end_div.style.display = 'none';
 }
 
@@ -441,7 +439,7 @@ function disable_starttime(select) {
     var start_div = document.getElementById('start_date');
     if (start_div.style.display == 'none')
         start_div.style.display = 'block';
-     else 
+     else
         start_div.style.display = 'none';
 }
 </script>

@@ -1,4 +1,4 @@
-<?php //$id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.admin
@@ -9,15 +9,12 @@
 $language_file='admin';
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 require_once '../inc/global.inc.php';
-
-// including additonal libraries
-
 require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 
 SessionManager::protect_session_edit($id_session);
 
@@ -47,6 +44,8 @@ $add_type = 'multiple';
 if(isset($_GET['add_type']) && $_GET['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 $xajax -> processRequests();
 
@@ -89,7 +88,7 @@ $CourseList=$SessionList=array();
 $courses=$sessions=array();
 $noPHP_SELF=true;
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
 
 	$formSent              = $_POST['formSent'];
 	$firstLetterCourse     = $_POST['firstLetterCourse'];
@@ -200,8 +199,7 @@ if ($ajax_search) {
 				AND session_rel_course.id_session = ".intval($id_session)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
-	global $_configuration;
-	if ($_configuration['multiple_access_urls']) {
+	if (api_is_multiple_url_enabled()) {
 		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -231,8 +229,7 @@ if ($ajax_search) {
 				AND session_rel_course.id_session = ".intval($id_session)."
 			ORDER BY ".(sizeof($courses)?"(code IN(".implode(',',$courses).")) DESC,":"")." title";
 
-	global $_configuration;
-	if ($_configuration['multiple_access_urls']) {
+	if (api_is_multiple_url_enabled()) {
 		$tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -259,7 +256,7 @@ if ($ajax_search) {
 }
 unset($Courses);
 ?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']) ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <legend><?php echo $tool_name.' ('.$session_info['name'].')'; ?></legend>
 <input type="hidden" name="formSent" value="1" />
 

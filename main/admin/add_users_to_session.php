@@ -44,6 +44,8 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
+$page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
+
 //checking for extra field with filter on
 
 $extra_field_list= UserManager::get_extra_fields();
@@ -117,9 +119,7 @@ function search_users($needle, $type) {
                         $order_clause;
                 break;
 		}
-
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -238,14 +238,14 @@ $UserList=$SessionList=array();
 $sessions=array();
 $noPHP_SELF=true;
 
-if($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent             = $_POST['form_sent'];
     $firstLetterUser       = $_POST['firstLetterUser'];
     $firstLetterSession    = $_POST['firstLetterSession'];
     $UserList              = $_POST['sessionUsersList'];
 
     if (!is_array($UserList)) {
-	$UserList=array();
+        $UserList=array();
     }
 
     if ($form_sent == 1) {
@@ -262,7 +262,6 @@ Display::display_header($tool_name);
 $nosessionUsersList = $sessionUsersList = array();
 
 $ajax_search = $add_type == 'unique' ? true : false;
-global $_configuration;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
@@ -273,7 +272,7 @@ if ($ajax_search) {
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
                 WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -324,7 +323,7 @@ if ($ajax_search) {
         }
 
         $where_filter ='';
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             if (is_array($final_result) && count($final_result)>0) {
                 $where_filter = " AND u.user_id IN  ('".implode("','",$final_result)."') ";
             } else {
@@ -357,7 +356,7 @@ if ($ajax_search) {
                 WHERE u.status<>".DRH." AND u.status<>6
                 $order_clause";
     }
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -366,7 +365,7 @@ if ($ajax_search) {
                     LEFT JOIN $tbl_session_rel_user
                         ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                     INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                    WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6 
+                    WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6
                     $order_clause";
         }
     }
@@ -389,7 +388,7 @@ if ($ajax_search) {
           ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
           WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
 
-    if ($_configuration['multiple_access_urls']) {
+    if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
         $access_url_id = api_get_current_access_url_id();
         if ($access_url_id != -1) {
@@ -428,7 +427,7 @@ if ($add_type == 'multiple') {
 <div class="actions">
 	<?php echo $link_add_type_unique ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
 </div>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo Security::remove_XSS($_GET['page']); ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
+<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
 if ($add_type=='multiple') {

@@ -2218,6 +2218,9 @@ class UserManager {
                     coach_access_start_date,
                     coach_access_end_date,
 
+                    display_start_date,
+                    display_end_date,
+
                     session_category_id,
                     session_category.name as session_category_name,
                     session_category.date_start session_category_date_start,
@@ -2233,7 +2236,7 @@ class UserManager {
         }
 
         $sql = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                      INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id AND scu.id_user = $user_id)
+                      INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id)
                       LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE (
                          scu.id_user = $user_id OR session.id_coach = $user_id

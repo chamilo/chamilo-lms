@@ -1123,7 +1123,7 @@ class CourseManager {
      * @param int       if using the session_id: 0 or 2 (student, coach), if using session_id = 0 STUDENT or COURSEMANAGER
      * @return array
      */
-    public static function get_user_list_from_course_code($course_code = null, $session_id = 0, $limit = null, $order_by = null, $filter_by_status = null, $return_count = null, $add_reports = false) {
+    public static function get_user_list_from_course_code($course_code = null, $session_id = 0, $limit = null, $order_by = null, $filter_by_status = null, $return_count = null, $add_reports = false, $resumed_report = false, $extra_field = null) {
         // variable initialisation
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
@@ -1190,23 +1190,33 @@ class CourseManager {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
+        if ($add_reports && $resumed_report) {
+            /*$extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';*/
+            $limit = null;
+        }
+
         $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
 
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
+
         $sql .= ' '.$order_by.' '.$limit;
-        //echo $sql;
+
         $rs = Database::query($sql);
         $users = array();
 
         if ($add_reports) {
             $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         }
-
-        if (Database::num_rows($rs)) {
+        $counter = 1;
+        $count_rows = Database::num_rows($rs);
+        if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
+                $report_info = array();
+
                 if ($return_count) {
                     return $user['count'];
                 }
@@ -1226,37 +1236,74 @@ class CourseManager {
 
                 if ($add_reports) {
                     $course_code = $user['code'];
-                    $report_info['course'] = $user['title'];
-                    $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
-                    $report_info['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0));
+                    if ($resumed_report) {
 
-                    $category = Category :: load (null, null, $course_code);
-                    $report_info['certificate'] = Display::label(get_lang('No'));
-                    if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
-                        $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
-                    }
+                        foreach ($extra_fields as $extra) {
+                            if ($extra['1'] == $extra_field) {
+                                $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
+                                break;
+                            }
+                        }
 
-                    $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
-                    $report_info['progress'] = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), 0)."%";
-                    
-                    foreach ($extra_fields as $extra) {
-                        $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
-                        $report_info[$extra['1']] = $user_data[$extra['1']];
+                        if (empty($user_data[$extra['1']])) {
+                            $row_key = '-1';
+                            $name = '-';
+                        } else {
+                            $row_key = $user_data[$extra['1']];
+                            $name = $user_data[$extra['1']];
+                        }
+
+                        $users[$row_key]['extra_'.$extra['1']] = $name;
+                        $users[$row_key]['training_hours'] =+ Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0);
+                        $users[$row_key]['count_users'] += $counter;
+                        $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
+
+                        $category = Category :: load (null, null, $course_code);
+                        if (!isset($users[$row_key]['count_certificates'])) {
+                            $users[$row_key]['count_certificates'] = 0;
+                        }
+                        if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
+                            $users[$row_key]['count_certificates']++;
+                        }
+                    } else {
+                        $report_info['course'] = $user['title'];
+                        $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
+                        $report_info['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0));
+
+                        $category = Category :: load (null, null, $course_code);
+                        $report_info['certificate'] = Display::label(get_lang('No'));
+                        if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
+                            $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
+                        }
+
+                        $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
+                        $report_info['progress'] = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), 0)."%";
+
+                        foreach ($extra_fields as $extra) {
+                            $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
+                            $report_info[$extra['1']] = $user_data[$extra['1']];
+                        }
+                        $users[] = $report_info;
                     }
-                    //var_dump($report_info);
-                    $users[] = $report_info;
                 } else {
                     $users[$user['user_id']] = $user_info;
                 }
             }
+            $counter++;
         }
+
+        if ($add_reports) {
+            if ($resumed_report) {
+                //var_dump($counter);
+            }
+        }
+        //var_dump($users);
         return $users;
     }
 
-    static function get_count_user_list_from_course_code() {
-        return self::get_user_list_from_course_code(null, 0, null, null, null, true);
+    static function get_count_user_list_from_course_code($resumed_report = false) {
+        return self::get_user_list_from_course_code(null, 0, null, null, null, true, $resumed_report);
     }
-
 
     /**
      * Gets subscribed users in a course or in a course/session

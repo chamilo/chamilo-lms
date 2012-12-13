@@ -107,7 +107,6 @@ if ($_REQUEST['_search'] == 'true') {
         $where_condition .= ' ) ';
     }
 }
-//var_dump($where_condition);
 
 // get index row - i.e. user click to sort $sord = $_GET['sord'];
 // get the direction
@@ -117,8 +116,11 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_user_course_report_resumed':
+        $count = CourseManager::get_count_user_list_from_course_code(null, 0, null, null, null, true, true, 'ruc');
+        break;
     case 'get_user_course_report':
-        $count = CourseManager::get_count_user_list_from_course_code();
+        $count = CourseManager::get_count_user_list_from_course_code(null, 0, null, null, null, true, false);
         break;
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();
@@ -240,6 +242,20 @@ switch ($action) {
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
+        break;
+    case 'get_user_course_report_resumed':
+        $columns = array('extra_ruc', 'training_hours', 'count_users', 'average_hours_per_user', 'count_certificates');
+        $column_names = array(get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscribedUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates'));
+        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true, true, 'ruc');
+        $new_result = array();
+        if (!empty($result)) {
+            foreach ($result as $row) {
+                $row['training_hours'] = api_time_to_hms($row['training_hours']);
+                $row['average_hours_per_user'] = api_time_to_hms($row['average_hours_per_user']);
+                $new_result[] = $row;
+            }
+            $result = $new_result;
+        }
         break;
     case 'get_user_course_report':
         $columns = array('course', 'user', 'time', 'certificate', 'score', 'progress');
@@ -522,7 +538,6 @@ switch ($action) {
     default:
         exit;
 }
-//var_dump($result);
 
 $allowed_actions = array('get_careers',
                          'get_promotions',
@@ -540,7 +555,8 @@ $allowed_actions = array('get_careers',
                          //'get_extra_fields',
                          //'get_extra_field_options',
                          //'get_course_exercise_medias',
-                         'get_user_course_report'
+                         'get_user_course_report',
+                         'get_user_course_report_resumed'
 );
 
 //5. Creating an obj to return a json

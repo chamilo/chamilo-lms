@@ -4346,6 +4346,4 @@ class TrackingUserLogCSV {
 		}
 		return array($title_line, $line);
 	}
-
-
 }

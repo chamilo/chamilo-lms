@@ -1307,7 +1307,7 @@ class CourseRestorer
                     }
                 } else {
                     $new_options = array();
-                    if ($question->question_options) {
+                    if (isset($question->question_options)) {
                         foreach($question->question_options as $obj) {
 
                             $item = array();

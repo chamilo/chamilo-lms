@@ -1245,8 +1245,8 @@ abstract class Question
             $form->addElement('select', 'questionCategory', get_lang('Category'), $tabCat);
 
             //Medias
-            $course_medias = Question::prepare_course_media_select(api_get_course_int_id());
-            $form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+            //$course_medias = Question::prepare_course_media_select(api_get_course_int_id());
+            //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
 
             $form->addElement('html','</div>');
         }
@@ -1534,6 +1534,7 @@ abstract class Question
 			eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
 			return array($img, $explanation);
     }
+
     /**
      * Get course medias
      * @param int course id

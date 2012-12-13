@@ -1098,9 +1098,10 @@ class CourseRestorer
                     $quiz = $quiz->obj;
                 } else {
                     //For backward compatibility
-                    $quiz = $quiz->obj;
+                    //$quiz = $quiz->obj;
+                    $quiz->obj = $quiz;
                 }
-                
+
 				$doc = '';
 				if (strlen($quiz->sound) > 0) {
 					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
@@ -1157,7 +1158,6 @@ class CourseRestorer
                             $params['session_id'] = $session_id;
     				    }
                     }
-
                     $new_id = Database::insert($table_qui, $params);
 				} else {
 					// $id = -1 identifies the fictionary test for collecting orphan questions. We do not store it in the database.
@@ -1165,6 +1165,7 @@ class CourseRestorer
 				}
 
 				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+
 				$order = 0;
 
 				foreach ($quiz->question_ids as $index => $question_id) {

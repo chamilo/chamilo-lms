@@ -48,13 +48,13 @@ $time_control = false;
 $clock_expired_time = get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
-	$time_control = true;    
+	$time_control = true;
 }
 
 if ($time_control) {
     // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time,'UTC') - time();
-    
+
 	$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
@@ -174,7 +174,7 @@ if (!empty($attempts)) {
 		case EXERCISE_FEEDBACK_TYPE_EXAM:
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
 			break;
-	}	
+	}
 	$column = 0;
 	foreach ($header_names as $item) {
 		$table->setHeaderContents(0, $column, $item);
@@ -185,7 +185,6 @@ if (!empty($attempts)) {
 		foreach ($my_attempt_array as $data) {
 			$column = 0;
 			$table->setCellContents($row, $column, $data);
-			//$table->setRowAttributes($row, 'style="text-align:center"');
 			$class = 'class="row_odd"';
 			if($row % 2) {
 				$class = 'class="row_even"';
@@ -215,7 +214,7 @@ if ($objExercise->selectAttempts()) {
 	//$options.= $attempt_message; //Display::div($attempt_message, array('class'=>"offset2 span2"));
 }
 
-if ($time_control) {	
+if ($time_control) {
     $html.= $objExercise->return_time_left_div();
 }
 

@@ -23,15 +23,16 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns        = array(get_lang('Course'), get_lang('User'), get_lang('TimeSpentInTheCourse'), get_lang('Certificate'), get_lang('Score'));
+$columns        = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('Approved'), get_lang('Score'), get_lang('NotesObtained'));
 
 //Column config
 $column_model   = array(
-                        array('name'=>'course',         'index'=>'title',   'width'=>'200', 'align'=>'left'),
-                        array('name'=>'user',           'index'=>'user',    'width'=>'120', 'align'=>'left','sortable'=>'false'),
-                        array('name'=>'time',           'index'=>'time',    'width'=>'50',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'certificate',    'index'=>'certificate',  'width'=>'50',  'align'=>'left','sortable'=>'false'),
-                        array('name'=>'score',          'index'=>'score',   'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                    array('name'=>'course',         'index'=>'title',       'width'=>'180', 'align'=>'left'),
+                    array('name'=>'user',           'index'=>'user',        'width'=>'100', 'align'=>'left','sortable'=>'false'),
+                    array('name'=>'time',           'index'=>'time',        'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                    array('name'=>'certificate',    'index'=>'certificate', 'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                    array('name'=>'score',          'index'=>'score',       'width'=>'50',  'align'=>'left','sortable'=>'false'),
+                    array('name'=>'progress',       'index'=>'progress',    'width'=>'50',  'align'=>'left','sortable'=>'false'),
 );
 
 if (!empty($extra_fields)) {

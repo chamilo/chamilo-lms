@@ -1230,14 +1230,15 @@ class CourseManager {
                     $report_info['user'] = api_get_person_name($user['firstname'], $user['lastname']);
                     $report_info['time'] = api_time_to_hms(Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0));
 
-
                     $category = Category :: load (null, null, $course_code);
                     $report_info['certificate'] = Display::label(get_lang('No'));
                     if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
                         $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
                     }
-                    $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
 
+                    $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
+                    $report_info['progress'] = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), 0)."%";
+                    
                     foreach ($extra_fields as $extra) {
                         $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
                         $report_info[$extra['1']] = $user_data[$extra['1']];

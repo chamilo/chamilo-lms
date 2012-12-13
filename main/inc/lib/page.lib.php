@@ -765,8 +765,8 @@ class PageController {
                                 //Default session name
                                 $session_link = $session['session_name'];
                                 $params['link'] = null;
-
-                                if (api_get_setting('session_page_enabled' == 'true') && !api_is_drh()) {
+                                
+                                if (api_get_setting('session_page_enabled') == 'true' && !api_is_drh()) {
                                     //session name with link
                                     $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                     $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
@@ -823,7 +823,7 @@ class PageController {
                             $session_link = $session['session_name'];
                             $params['link'] = null;
 
-                            if (api_get_setting('session_page_enabled' == 'true') && !api_is_drh()) {
+                            if (api_get_setting('session_page_enabled') == 'true' && !api_is_drh()) {
                                 //session name with link
                                 $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;

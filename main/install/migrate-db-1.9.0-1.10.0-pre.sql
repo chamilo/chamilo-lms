@@ -110,5 +110,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_page_enabled', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_page_enabled', 'false', 'No');
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0);
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20766' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20771' WHERE variable = 'chamilo_database_version';

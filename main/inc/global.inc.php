@@ -330,8 +330,8 @@ Database::query("SET NAMES 'utf8';");
 // Start session after the internationalization library has been initialized.
 Chamilo::session()->start($already_installed);
 
-$settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_date_refresh'));
-$settings_date_refresh = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+$settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+$settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
 $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
 $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
@@ -339,8 +339,10 @@ $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
 if (!isset($_setting)) {
     api_set_settings_and_plugins();
 } else {
-    if (isset($_setting['settings_date_refresh']) && $_setting['settings_date_refresh'] != $settings_date_refresh) {
+    if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
         api_set_settings_and_plugins();
+        $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+        $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
     }
 }
 

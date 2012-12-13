@@ -119,8 +119,7 @@ function search_users($needle, $type) {
                 break;
 		}
 
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
+		if (api_is_multiple_url_enabled()) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -238,7 +237,7 @@ $UserList=$SessionList=array();
 $sessions = array();
 $noPHP_SELF = true;
 
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent             = $_POST['form_sent'];
     $firstLetterUser       = $_POST['firstLetterUser'];
     $firstLetterSession    = $_POST['firstLetterSession'];

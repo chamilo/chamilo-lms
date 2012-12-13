@@ -2262,7 +2262,7 @@ class learnpath {
         }
     }
 
-    public function get_preview_image_path($size = null) {
+    public function get_preview_image_path($size = null, $path_type = 'web') {
         $preview_image = $this->get_preview_image();
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
@@ -2271,10 +2271,18 @@ class learnpath {
                 $info = pathinfo($preview_image);
                 $image_custom_size = $info['filename'].'.'.$size.'.'.$info['extension'];
                 if (file_exists($image_sys_path.$image_custom_size)) {
-                    return $image_path.$image_custom_size;
+                    if ($path_type == 'web') {
+                        return $image_path.$image_custom_size;
+                    } else {
+                        return $image_sys_path.$image_custom_size;
+                    }
                 }
             } else {
-                return $image_path.$preview_image;
+                if ($path_type == 'web') {
+                    return $image_path.$preview_image;
+                } else {
+                    return $image_sys_path.$preview_image;
+                }
             }
         }
         return false;
@@ -9050,12 +9058,17 @@ EOD;
     public function delete_lp_image() {
         $img = $this->get_preview_image();
         if ($img != '') {
-            $del_file = api_get_path(SYS_COURSE_PATH) . api_get_course_path() . '/upload/learning_path/images/' . $img;
-            $this->set_preview_image('');
-            return @unlink($del_file);
-        } else {
-            return false;
+            $del_file = $this->get_preview_image_path(null, 'sys');
+            if (isset($del_file) && file_exists($del_file)) {
+                $del_file_2 = $this->get_preview_image_path(64, 'sys');
+                if (file_exists($del_file_2)) {
+                    unlink($del_file_2);
+                }
+                $this->set_preview_image('');
+                return @unlink($del_file);
+            }
         }
+        return false;
     }
 
     /**

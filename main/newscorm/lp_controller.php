@@ -319,8 +319,8 @@ switch ($action) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - add_lp action triggered', 0);
-        $_REQUEST['lp_name'] = trim($_REQUEST['lp_name']);
-        if (!empty($_REQUEST['lp_name'])) {
+        if (isset($_REQUEST['lp_name']) && !empty($_REQUEST['lp_name'])) {
+            $_REQUEST['lp_name'] = trim($_REQUEST['lp_name']);
             $_SESSION['refresh'] = 1;
 
             if (isset($_SESSION['post_time']) && $_SESSION['post_time'] == $_REQUEST['post_time']) {

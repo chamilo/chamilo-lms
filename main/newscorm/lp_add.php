@@ -8,10 +8,10 @@
  * @author Roan Embrechts, refactoring and code cleaning
  * @author Yannick Warnier <ywarnier@beeznest.org> - cleaning and update for new SCORM tool
  * @author Julio Montoya <gugli100@gmail.com> Adding formvalidator support
- * 
+ *
  * @package chamilo.learnpath
  */
-/** 
+/**
  * Code
  */
 $this_section = SECTION_COURSES;
@@ -62,15 +62,15 @@ function activate_end_date() {
     } else {
         document.getElementById(\'end_date_div\').style.display = \'none\';
     }
-}     
+}
 </script>';
 
 /* Constants and variables */
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
-$learnpath_id   = (int) $_REQUEST['lp_id'];
+$isStudentView  = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] : null;
+$learnpath_id   = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
 /* MAIN CODE */
 
@@ -138,7 +138,7 @@ $form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), ar
 $form->addElement('html','</div>');
 
 //End date
-$form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));    
+$form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'lp_add'), 5);
 $form->addElement('html','</div>');
@@ -150,7 +150,7 @@ $defaults['activate_start_date_check']  = 1;
 $defaults['publicated_on']  = date('Y-m-d 08:00:00');
 $defaults['expired_on']     = date('Y-m-d 08:00:00',time()+84600);
 
-$form->setDefaults($defaults);                  
+$form->setDefaults($defaults);
 $form->addElement('style_submit_button', 'Submit',get_lang('CreateLearningPath'),'class="save"');
 
 

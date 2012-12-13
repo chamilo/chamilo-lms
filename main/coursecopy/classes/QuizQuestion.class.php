@@ -96,6 +96,10 @@ class QuizQuestion extends Resource
         $this->answers[] = $answer;
     }
 
+    function add_option($option_obj) {
+        $this->question_options[$option_obj->obj->id] = $option_obj;
+    }
+
     /**
      * Show this question
      */

@@ -1167,13 +1167,14 @@ class CourseRestorer
 				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
 
 				$order = 0;
-
-				foreach ($quiz->question_ids as $index => $question_id) {
-					$qid = $this->restore_quiz_question($question_id);
-					$question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
-					$sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
-					Database::query($sql);
-				}
+                if (!empty($quiz->question_ids)) {
+                    foreach ($quiz->question_ids as $index => $question_id) {
+                        $qid = $this->restore_quiz_question($question_id);
+                        $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
+                        $sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
+                        Database::query($sql);
+                    }
+                }
 			}
 		}
 	}
@@ -1198,8 +1199,6 @@ class CourseRestorer
 
 			// check resources inside html from fckeditor tool and copy correct urls into recipient course
 			$question->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($question->description, $this->course->code, $this->course->destination_path);
-
-
 
 			$sql = "INSERT INTO ".$table_que." SET
                     c_id = ".$this->destination_course_id." ,
@@ -1241,6 +1240,7 @@ class CourseRestorer
                 foreach ($question->answers as $index => $answer) {
                     $temp[$answer['position']] = $answer;
                 }
+
                 foreach ($temp as $index => $answer) {
                     $sql = "INSERT INTO ".$table_ans." SET
                             c_id = ".$this->destination_course_id." ,
@@ -1256,7 +1256,7 @@ class CourseRestorer
 					Database::query($sql);
 				}
 			} else {
-
+                $correct_answers = array();
 				foreach ($question->answers as $index => $answer) {
 
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
@@ -1275,6 +1275,7 @@ class CourseRestorer
                                 hotspot_coordinates = '".$answer['hotspot_coordinates']."',
                                 hotspot_type = '".$answer['hotspot_type']."'";
 					Database::query($sql);
+                    $correct_answers[$index + 1] = $answer['correct'];
 				}
 			}
 
@@ -1284,20 +1285,48 @@ class CourseRestorer
             //Moving quiz_question_options
             if ($question->quiz_type == MULTIPLE_ANSWER_TRUE_FALSE) {
                 $question_option_list = Question::readQuestionOption($id, $course_id);
-                $old_option_ids = array();
-                foreach ($question_option_list  as $item) {
-                    $old_id = $item['id'];
-                    unset($item['id']);
-                    $item['question_id'] = $new_id;
-                    $item['c_id'] = $this->destination_course_id;
-                    $question_option_id = Database::insert($table_options, $item);
-                    $old_option_ids[$old_id] = $question_option_id;
-                }
-                $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=> array($new_id, $this->destination_course_id))));
-                foreach ($new_answers as $answer_item) {
-                    $params = array();
-                    $params['correct'] = $old_option_ids[$answer_item['correct']];
-                    $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? AND question_id = ? '=> array($answer_item['id'], $this->destination_course_id, $new_id)), false);
+
+                //Question copied from the current platform
+                if ($question_option_list) {
+                    $old_option_ids = array();
+                    foreach ($question_option_list  as $item) {
+                        $old_id = $item['id'];
+                        unset($item['id']);
+                        $item['question_id'] = $new_id;
+                        $item['c_id'] = $this->destination_course_id;
+                        $question_option_id = Database::insert($table_options, $item);
+                        $old_option_ids[$old_id] = $question_option_id;
+                    }
+                    if ($old_option_ids) {
+                        $new_answers = Database::select('id, correct', $table_ans, array('WHERE' => array('question_id = ? AND c_id = ? '=> array($new_id, $this->destination_course_id))));
+                        foreach ($new_answers as $answer_item) {
+                            $params = array();
+                            $params['correct'] = $old_option_ids[$answer_item['correct']];
+                            $question_option_id = Database::update($table_ans, $params, array('id = ? AND c_id = ? AND question_id = ? '=> array($answer_item['id'], $this->destination_course_id, $new_id)), false);
+                        }
+                    }
+                } else {
+                    $new_options = array();
+                    if ($question->question_options) {
+                        foreach($question->question_options as $obj) {
+
+                            $item = array();
+                            $item['question_id'] = $new_id;
+                            $item['c_id'] = $this->destination_course_id;
+                            $item['name'] = $obj->obj->name;
+                            $item['position'] = $obj->obj->position;
+
+                            $question_option_id = Database::insert($table_options, $item);
+                            $new_options[$obj->obj->id] = $question_option_id;
+                        }
+                        //var_dump($new_options, $correct_answers);
+                        foreach($correct_answers as $answer_id => $correct_answer) {
+                            $params = array();
+                            $params['correct'] = $new_options[$correct_answer];
+                            Database::update($table_ans, $params, array('id = ? AND c_id = ? AND question_id = ? '=> array($answer_id, $this->destination_course_id, $new_id)), false);
+                        }
+                    }
+
                 }
             }
 			$this->course->resources[RESOURCE_QUIZQUESTION][$id]->destination_id = $new_id;

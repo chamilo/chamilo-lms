@@ -2,7 +2,7 @@
 
 /**
  * Autoload Chamilo classes
- * 
+ *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
@@ -12,7 +12,7 @@ class Autoload
     static private $is_registered = false;
 
     /**
-     * Register the Chamilo autoloader on the stack. 
+     * Register the Chamilo autoloader on the stack.
      * Will only do it once so this method is repeatable.
      */
     static public function register()
@@ -43,14 +43,14 @@ class Autoload
         $root = dirname(__FILE__) . '/../../';
         /**
          * WARNING
-         * 
+         *
          * This map is autogeneated by AutoloadClassFinder. It may be ovewrite
          * by future run.
-         * 
-         * If you need to manually add mappings do it at the end and clearly 
-         * identifies that as manually added or better ensure your class is 
-         * captured by the finder. 
-         * 
+         *
+         * If you need to manually add mappings do it at the end and clearly
+         * identifies that as manually added or better ensure your class is
+         * captured by the finder.
+         *
          * If it comes from a different package you may want to add another autoload
          * function on the stack.
          */
@@ -73,7 +73,7 @@ class Autoload
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
         $result['AjaxController'] = '/main/inc/lib/ajax_controller.class.php';
         $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
-        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';        
+        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';
@@ -585,7 +585,7 @@ class Autoload
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
-        $result['Testcategory'] = '/main/exercice/testcategory.class.php';        
+        $result['Testcategory'] = '/main/exercice/testcategory.class.php';
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
         $result['FileManager'] = '/main/inc/lib/fileManage.lib.php';
@@ -789,6 +789,7 @@ class Autoload
         $result['QuickformForm'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
         $result['Quiz'] = '/main/coursecopy/classes/Quiz.class.php';
         $result['QuizQuestion'] = '/main/coursecopy/classes/QuizQuestion.class.php';
+        $result['QuizQuestionOption'] = '/main/coursecopy/classes/QuizQuestionOption.class.php';
         $result['Redirect'] = '/main/inc/lib/redirect.class.php';
         $result['Request'] = '/main/inc/lib/system/web/request.class.php';
         $result['RequestServer'] = '/main/inc/lib/system/web/request_server.class.php';
@@ -999,10 +1000,10 @@ class Autoload
 }
 
 /**
- * Scan directorie for class declarations and returns an array made of 
- * 
+ * Scan directorie for class declarations and returns an array made of
+ *
  *  classname => relative path
- * 
+ *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
@@ -1092,12 +1093,12 @@ class AutoloadClassFinder
 
     /**
      * Synchronize the autoloader map with the current file structure.
-     * 
+     *
      * Searches all files and sub directories for class declarations.
      * Creates a map of class name to (relative) file path.
      * Update the autoloader with the map declaration if $update equals true.
      * Returns a map of class name to file path.
-     * 
+     *
      * @param string $current_dir   The current directory in which we search for class declarations
      */
     protected function synch($current_dir = null)
@@ -1109,7 +1110,7 @@ class AutoloadClassFinder
         $current_dir = $current_dir ? $current_dir : $root_dir;
         $current_dir = realpath($current_dir);
 
-        //plugins are not handled by the autoloader. 
+        //plugins are not handled by the autoloader.
         if (basename($current_dir) == 'plugin') {
             return $result;
         }
@@ -1128,7 +1129,7 @@ class AutoloadClassFinder
 
                 foreach ($classes as $class) {
                     /* a few classes have the same namespace and class name
-                     * in this case we let the latest win as this may 
+                     * in this case we let the latest win as this may
                      * relates to different autoloader.
                      */
                     $rel_path = realpath($path);

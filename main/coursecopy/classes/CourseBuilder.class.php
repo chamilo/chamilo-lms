@@ -482,6 +482,15 @@ class CourseBuilder {
             $db_result2 = Database::query($sql);
             while ($obj2 = Database::fetch_object($db_result2)) {
                 $question->add_answer($obj2->id, $obj2->answer, $obj2->correct, $obj2->comment, $obj2->ponderation, $obj2->position, $obj2->hotspot_coordinates, $obj2->hotspot_type);
+                if ($obj->type == MULTIPLE_ANSWER_TRUE_FALSE) {
+                    $table_options	= Database::get_course_table(TABLE_QUIZ_QUESTION_OPTION);
+                    $sql = 'SELECT * FROM '.$table_options.' WHERE c_id = '.$course_id.' AND question_id = '.$obj->id;
+                    $db_result3 = Database::query($sql);
+                    while ($obj3 = Database::fetch_object($db_result3)) {
+                        $question_option = new QuizQuestionOption($obj3);
+                        $question->add_option($question_option);
+                    }
+                }
             }
             $this->course->add_resource($question);
         }

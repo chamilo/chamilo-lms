@@ -2848,6 +2848,8 @@ class learnpath {
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
             if ($item['type'] == 'quiz') {
+                error_log("1-->>>>>>>>>>>>>>>>");
+                error_log($item['status']);
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 } else {

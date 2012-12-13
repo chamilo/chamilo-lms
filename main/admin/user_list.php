@@ -22,7 +22,7 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
         
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
@@ -205,7 +205,6 @@ function login_user($user_id) {
 
 		$sql_result = Database::query($sql_query);
 
-
 		if (Database::num_rows($sql_result) > 0) {
 			// Extracting the user data
 
@@ -253,82 +252,14 @@ function login_user($user_id) {
 		}
 	}
 }
+
 /**
  * Get the total number of users on the platform
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users() {
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
-
-	// adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-    }
-
-    if (isset($_GET['keyword_extra_data'])) {
-        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
-        if (!empty($keyword_extra_data)) {
-            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-            $field_id = $extra_info['id'];
-            $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
-        }
-    }
-
-	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%'  OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
-	} elseif (isset ($_GET['keyword_firstname'])) {
-		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
-		$keyword_email = Database::escape_string($_GET['keyword_email']);
-		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
-		$keyword_username = Database::escape_string($_GET['keyword_username']);
-		$keyword_status = Database::escape_string($_GET['keyword_status']);
-		$query_admin_table = '';
-		$keyword_admin = '';
-		if ($keyword_status == SESSIONADMIN) {
-			$keyword_status = '%';
-			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
-		}
-
-        $keyword_extra_value = '';
-        if (isset($_GET['keyword_extra_data'])) {
-            if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
-                $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-            }
-        }
-
-		$keyword_active = isset($_GET['keyword_active']);
-		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table .
-				" WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'" .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-		if($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
-		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
-		}
-		$sql .= " ) ";
-	}
-
-    // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-    }
-
-	$res = Database::query($sql);
-	$obj = Database::fetch_object($res);
-	return $obj->total_number_of_items;
+	$total_rows = get_user_data(null, null, null, null, true);    
+    return $total_rows;    
 }
 
 /**
@@ -339,12 +270,13 @@ function get_number_of_users() {
  * @param   string  Order (ASC,DESC)
  * @see SortableTable#get_table_data($from)
  */
-function get_user_data($from, $number_of_items, $column, $direction) {
+function get_user_data($from, $number_of_items, $column, $direction, $get_count = false) {
 	global $origin;
 
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-	$sql = "SELECT
+    
+	$select = "SELECT
                  u.user_id				AS col0,
                  u.official_code		AS col2,
 				 ".(api_is_western_name_order()
@@ -358,9 +290,14 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                  u.active				AS col8,
                  u.user_id				AS col9,
                  u.registration_date    AS col10 ".
-                 ", u.expiration_date   AS exp ".
-            " FROM $user_table u ";
-
+                 ", u.expiration_date   AS exp            ";
+    
+    if ($get_count) {
+        $select = "SELECT count(user_id) as total_rows";
+    }
+    
+     $sql = "$select FROM $user_table u ";
+    
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
     	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -388,38 +325,53 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 
 		$query_admin_table = '';
-		$keyword_admin = '';
+		        
+        $and_conditions = array();
 
 		if ($keyword_status == SESSIONADMIN) {
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
+			$and_conditions[] = ' a.user_id = u.user_id ';
 		}
-
-		$keyword_extra_value = '';
 		
         if (isset($_GET['keyword_extra_data'])) {
         	if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
             	$keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+                $and_conditions[] = " ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
 			}
 		}
 
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-
+		$sql .= $query_admin_table." WHERE ( ";
+        
+        if (!empty($keyword_firstname)) {
+            $and_conditions[] = "u.firstname LIKE '%".$keyword_firstname."%' "; 
+        }
+        if (!empty($keyword_lastname)) {
+            $and_conditions[] = "u.lastname LIKE '%".$keyword_lastname."%' ";
+        }
+        if (!empty($keyword_username)) {
+            $and_conditions[] = "u.username LIKE '%".$keyword_username."%'  ";
+        }
+        if (!empty($keyword_email)) {
+            $and_conditions[] = "u.email LIKE '%".$keyword_email."%' ";
+        }
+        if (!empty($keyword_officialcode)) {
+             $and_conditions[] = "u.official_code LIKE '%".$keyword_officialcode."%' ";
+        }
+        if (!empty($keyword_status)) {
+             $and_conditions[] = "u.status LIKE '".$keyword_status."' ";
+        }
+      
 		if ($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
+			$and_conditions[] =  "  u.active='1' ";
 		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
+			$and_conditions[] = "  u.active='0' ";
 		}
+        if (!empty($and_conditions)) {
+            $sql .= implode(' AND ', $and_conditions);
+        }
 		$sql .= " ) ";
 	}
 
@@ -431,14 +383,21 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
+    
     $column = intval($column);
     $from 	= intval($from);
-    $number_of_items = intval($number_of_items);
-
-	$sql .= " ORDER BY col$column $direction ";
+    $number_of_items = intval($number_of_items);    
+	
+    //Returns counts and exits function
+    if ($get_count) {
+        $res = Database::query($sql);
+        $user = Database::fetch_array($res);        
+        return $user['total_rows'];
+    }
+    
+    $sql .= " ORDER BY col$column $direction ";
 	$sql .= " LIMIT $from,$number_of_items";
-
-	$res = Database::query($sql);
+    $res = Database::query($sql);
 
 	$users = array ();
     $t = time();
@@ -733,7 +692,7 @@ if (api_is_platform_admin()) {
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
-$actions .=$form->return_form();
+$actions .= $form->return_form();
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -747,6 +706,7 @@ if (isset ($_GET['keyword'])) {
 	$parameters['keyword_active'] 		= Security::remove_XSS($_GET['keyword_active']);
 	$parameters['keyword_inactive'] 	= Security::remove_XSS($_GET['keyword_inactive']);
 }
+
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
 

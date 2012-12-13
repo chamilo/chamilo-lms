@@ -67,7 +67,7 @@ if (empty($session_id)) {
         header('Location: '.$url);
     }
     
-    $user_session_status = SessionManager::get_user_status_in_session($user_id, $course_code, $session_id);
+    $user_session_status = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
     
     if (isset($user_session_status) || api_check_user_access_to_legal($course_info['visibility'])) {        
         $user_accepted_legal = CourseManager::is_user_accepted_legal($user_id, $course_code, $session_id);        

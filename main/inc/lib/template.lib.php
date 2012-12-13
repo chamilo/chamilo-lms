@@ -3,43 +3,50 @@
 /* For licensing terms, see /license.txt */
 /**
  *  @author Julio Montoya <gugli100@gmail.com>
- *  @todo better organization of the class, methods and variables 
- * 
+ *  @todo better organization of the class, methods and variables
+ *
  * */
-
-require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
+use \ChamiloSession as Session;
 
 class Template {
 
-    var $style = 'default'; //see the template folder 
-    var $preview_theme = null;
-    var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
-    var $title = null;
-    var $show_header;
-    var $show_footer;
-    var $help;
-    var $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
-    var $show_learnpath = false; // This is a learnpath section or not?
-    var $plugin = null;
-    var $course_id = null;
-    var $user_is_logged_in = false;
-    var $twig = null;
+    public $style = 'default'; //see the template folder
+    public $preview_theme = null;
+    public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
+    public $title = null;
+    public $show_header;
+    public $show_footer;
+    public $help;
+    public $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
+    public $show_learnpath = false; // This is a learnpath section or not?
+    public $plugin = null;
+    public $course_id = null;
+    public $user_is_logged_in = false;
+    public $twig = null;
+    public $jquery_ui_theme;
+    public $load_plugins = false; /* Loads chamilo plugins */
+    public $force_plugin_load = true;
+    public $app;
 
-    /* Loads chamilo plugins */
-    var $load_plugins = false;
-    var $params = array();
-    var $force_plugin_load = false;
+    function __construct($title = null, $app = null) {
+        if (empty($app)) {
+            global $app;
+            $this->app = $app;
+        } else {
+            //ugly fix just for now
+            $this->app = $app;
+        }
 
-    function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
+        $this->app['template_style'] = 'default';
+        $this->app['default_layout'] = 'layout_1_col.tpl';
 
-        //Page title
-        $this->title = $title;
-        $this->show_learnpath = $show_learnpath;
-        $this->hide_global_chat = $hide_global_chat;
-        $this->load_plugins = $load_plugins;
+        $show_header        = $app['template.show_header'];
+        $show_footer        = $app['template.show_footer'];
+        $show_learnpath     = $app['template.show_learnpath'];
+        $hide_global_chat   = $app['template.hide_global_chat'];
+        $load_plugins       = $app['template.load_plugins'];
 
-        //Twig settings        
+        //Twig settings
         Twig_Autoloader::register();
 
         $template_paths = array(
@@ -89,23 +96,25 @@ class Template {
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
 
+        $this->app['twig'] = $this->twig;
 
-        /*
-          $lexer = new Twig_Lexer($this->twig, array(
-          //'tag_comment'  => array('{*', '*}'),
-          //'tag_comment'  => array('{#', '#}'),
-          //'tag_block'    => array('{', '}'),
-          //'tag_variable' => array('{$', '}'),
-          ));
-          $this->twig->setLexer($lexer); */
+
+        //Page title
+        $this->title        = $title;
+        $this->show_learnpath = $show_learnpath;
+        $this->hide_global_chat = $hide_global_chat;
+        $this->load_plugins = $load_plugins;
+
+         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        $this->jquery_ui_theme = 'smoothness';
 
         //Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables 
+        //Setting user variables
         $this->set_user_parameters();
 
-        //Setting course variables 
+        //Setting course variables
         $this->set_course_parameters();
 
         //header and footer are showed by default
@@ -137,8 +146,9 @@ class Template {
                 }
             }
         }
-    }    
-    
+
+    }
+
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
         return Display:: return_icon($image, '', array(), $size, false, true);
     }
@@ -146,12 +156,12 @@ class Template {
     public static function format_date($timestamp, $format = null) {
         return api_format_date($timestamp, $format);
     }
-        
+
     /**
      * Return the item's url key:
-     * 
+     *
      *      c_id=xx&id=xx
-     * 
+     *
      * @param object $item
      * @return string
      */
@@ -196,7 +206,6 @@ class Template {
      * Use template system to parse the actions menu
      * @todo finish it!
      * */
-
     function set_actions($actions) {
         $action_string = '';
         if (!empty($actions)) {
@@ -239,8 +248,8 @@ class Template {
         $this->display($tpl);
     }
 
-    /** 	  
-     * Sets the footer visibility 
+    /**
+     * Sets the footer visibility
      * @param bool true if we show the footer
      */
     function set_footer($status) {
@@ -256,7 +265,7 @@ class Template {
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
-        //Toolbar                
+        //Toolbar
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
         $show_toolbar = 0;
 
@@ -279,7 +288,7 @@ class Template {
         }
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available        
+        //Only if course is available
         $show_course_shortcut = null;
         $show_course_navigation_menu = null;
 
@@ -298,7 +307,7 @@ class Template {
     }
 
     function get_template($name) {
-        return $this->style . '/' . $name;
+        return $this->app['template_style'] . '/' . $name;
     }
 
     /** Set course parameters */
@@ -314,7 +323,7 @@ class Template {
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
         if (api_user_is_login()) {
-            $user_info = api_get_user_info(api_get_user_id());
+            $user_info = api_get_user_info();
             $user_info['logged'] = 1;
 
             $user_info['is_admin'] = 0;
@@ -325,7 +334,7 @@ class Template {
             $user_info['messages_count'] = MessageManager::get_new_messages();
             $this->user_is_logged_in = true;
         }
-        //Setting the $_u array that could be use in any template 
+        //Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 
@@ -360,8 +369,7 @@ class Template {
     function set_css_files() {
         global $disable_js_and_css_files;
         $css = array();
-        
-        //$platform_theme = api_get_setting('stylesheets');
+
         $this->theme = api_get_visual_theme();
 
         if (!empty($this->preview_theme)) {
@@ -370,16 +378,18 @@ class Template {
 
         //Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
+        //Compressed version of default + all CSS files
+        //$css[] = api_get_cdn_path(api_get_path(WEB_PATH).'web/css/'.$this->theme.'/style.css');
 
         //Default theme CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-        
+
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
-            
+
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
             $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
@@ -388,61 +398,64 @@ class Template {
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
-               
+
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+
         $css_file_to_string = null;
         foreach ($css as $file) {
-            $css_file_to_string .= api_get_css($file);
-        }    
-        
+           $css_file_to_string .= api_get_css($file);
+        }
+
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
-            $css_file_to_string .= '<style>                
+            $css_file_to_string .= '<style>
                 .td_actions a {
                     float:left;
                     width:100%;
-                }                
+                }
                 .forum_message_left a {
                     float:left;
                     width:100%;
                 }
                 </style>';
         }
-        
+
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
             $css_file_to_string .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
         }
-        
+
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
-            
+
             $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
-        
+
         // Logo
-        $logo = return_logo($this->theme);
+        $logo = $this->return_logo($this->theme);
         $this->assign('logo', $logo);
     }
-    
+
     function set_js_files() {
         global $disable_js_and_css_files, $htmlHeadXtra;
-        
-        //JS files        
+        //JS files
         $js_files = array(
-            'modernizr.js',
+          'modernizr.js',
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
-            'thickbox.js',            
+            'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
+            'thickbox.js',
             'bootstrap/bootstrap.js',
         );
-        
-        if (api_is_global_chat_enabled()) {           
+
+        if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-            }            
+            }
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
@@ -451,26 +464,25 @@ class Template {
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $js_files[] = 'asciimath/ASCIIMathML.js';
-        }       
-        
+        }
+
         $js_file_to_string = null;
-        
+
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
-        
+
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');            
+            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
         }
-        
-        if (!$disable_js_and_css_files) {       
-            $this->assign('js_file_to_string', $js_file_to_string);
-            
-            //Adding jquery ui by default
-            $extra_headers = api_get_jquery_ui_js();
 
-            //$extra_headers = '';		
+        //$js_file_to_string = api_get_js_simple(api_get_path(WEB_PATH).'web/js/script.js').$js_file_to_string;
+
+        if (!$disable_js_and_css_files) {
+            $this->assign('js_file_to_string', $js_file_to_string);
+
+            $extra_headers = null;
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {
                     $extra_headers .= $this_html_head . "\n";
@@ -483,25 +495,23 @@ class Template {
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {        
-        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
-        $help = $this->help;
+    private function set_header_parameters() {
+        global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $nameTools = $this->title;
-        $navigation = return_navigation_array();
+        $navigation = $this->return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
 
         if (isset($httpHeadXtra) && $httpHeadXtra) {
             foreach ($httpHeadXtra as & $thisHttpHead) {
-                header($thisHttpHead);
+                //header($thisHttpHead);
             }
         }
 
         $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
         $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
-
-        // Get language iso-code for this page - ignore errors				
+        // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
 
         $course_title = $_course['name'];
@@ -517,7 +527,7 @@ class Template {
         if ($nameTools != '') {
             $title_list[] = $nameTools;
         }
-        
+
         $title_string = '';
         for ($i = 0; $i < count($title_list); $i++) {
             $title_string .=$title_list[$i];
@@ -529,12 +539,12 @@ class Template {
         }
 
         $this->assign('title_string', $title_string);
-               
+
         //Setting the theme and CSS files
         $this->set_css_files();
         $this->set_js_files();
-        
-        // Implementation of prefetch. 
+
+        // Implementation of prefetch.
         // See http://cdn.chamilo.org/main/img/online.png for details
         $prefetch = '';
         if (!empty($_configuration['cdn_enable'])) {
@@ -543,7 +553,7 @@ class Template {
                 $prefetch .= '<link rel="dns-prefetch" href="' . $host . '">';
             }
         }
-        
+
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-' . $this_section);
@@ -580,70 +590,43 @@ class Template {
 		        						<img src="' . api_get_path(WEB_IMG_PATH) . 'bug.large.png" style="vertical-align: middle;" alt="' . get_lang('ReportABug') . '" title="' . get_lang('ReportABug') . '"/></a>
 		    						  </li>';
         }
-
         $this->assign('bug_notification_link', $bug_notification_link);
 
-        $notification = return_notification_menu();
-        $this->assign('notification_menu', $notification);        
-        
+        $notification = $this->return_notification_menu();
+        $this->assign('notification_menu', $notification);
+
         //Preparing values for the menu
-        
+
         //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());        
-        
+        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&uid='.api_get_user_id());
+
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
         } else {
-            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';            
-            $profile_link = Display::url(get_lang('Profile'), $profile_url);
+            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
         }
         $this->assign('profile_link', $profile_link);
-        $this->assign('profile_url', $profile_url);
-        
+
         //Message link
         $message_link = null;
         if (api_get_setting('allow_message_tool') == 'true') {
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
         }
         $this->assign('message_link', $message_link);
-        
+
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
-        
-        $this->assign('portal_name', $portal_name);
-        
-        //Menu
-        $menu = return_menu();
-        $this->assign('menu', $menu);
-        
-        //Setting notifications
-        
-           
-        $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool')=='true') {
-            // get count unread message and total invitations
-            $count_unread_message = MessageManager::get_number_of_messages(true);
-        }
 
-        $total_invitations = 0;
-        if (api_get_setting('allow_social_tool')=='true') {
-            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-            $group_pending_invitations = 0;
-            if (!empty($group_pending_invitations )) {
-                $group_pending_invitations = count($group_pending_invitations);
-            }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        }        
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);    
-                
-        $this->assign('user_notifications', $total_invitations);
-        
-        
-        //Breadcrumb        
-        $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
+        $this->assign('portal_name', $portal_name);
+
+        //Menu
+        $menu = $this->return_menu();
+
+        $this->assign('menu', $menu);
+
+        //Breadcrumb
+        $breadcrumb = $this->return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
         //Extra content
@@ -652,10 +635,10 @@ class Template {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
-        
+
         if ($this->show_header == 1) {
-            header('Content-Type: text/html; charset=' . api_get_system_encoding());
-            header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));
+            //header('Content-Type: text/html; charset=' . api_get_system_encoding());
+            //header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));
         }
     }
 
@@ -731,7 +714,7 @@ class Template {
                 $this->assign('teachers', $teacher_data);
             }
         }
-        /* $stats = '';	
+        /* $stats = '';
           $this->assign('execution_stats', $stats); */
     }
 
@@ -759,15 +742,636 @@ class Template {
     }
 
     public function fetch($template = null) {
-        $template = $this->twig->loadTemplate($template);
-        return $template->render($this->params);
+        $template = $this->app['twig']->loadTemplate($template);
+        return $template->render(array());
     }
 
-    public function assign($tpl_var, $value = null) {
-        $this->params[$tpl_var] = $value;
+    public function assign($key, $value = null) {
+        $this->app['twig']->addGlobal($key, $value);
     }
 
     public function display($template) {
-        echo $this->twig->render($template, $this->params);
+        echo $this->app['twig']->render($template);
+    }
+
+    function show_page_loaded_info() {
+        //@todo will be removed before a stable release
+        $mtime = microtime();
+        $mtime = explode(" ",$mtime);
+        $mtime = $mtime[1] + $mtime[0];
+        error_log('--------------------------------------------------------');
+        error_log("Page loaded in:".($mtime-START));
+        error_log("memory_get_usage: ".format_file_size(memory_get_usage(true)));
+        error_log("memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true)));
+    }
+
+    function return_menu() {
+        $navigation         = $this->return_navigation_array();
+        $navigation         = $navigation['navigation'];
+
+        // Displaying the tabs
+
+        $lang = ''; //el for "Edit Language"
+        //$user_language_choice = Session::get('user_language_choice');
+        $user_language_choice = isset($_SESSION['user_language_choice']) ? $_SESSION['user_language_choice'] : null;
+        $user_info = api_get_user_id() ? api_get_user_info() : null;
+
+        if (!empty($user_language_choice)) {
+            $lang = $user_language_choice;
+        } elseif (!empty($user_info['language'])) {
+            $lang = $user_info['language'];
+        } else {
+            $lang = api_get_setting('platformLanguage');
+        }
+
+        //Preparing home folder for multiple urls
+
+        if (api_get_multiple_access_url()) {
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                $url_info = api_get_access_url($access_url_id);
+                $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+                $clean_url = replace_dangerous_char($url);
+                $clean_url = str_replace('/', '-', $clean_url);
+                $clean_url .= '/';
+                $homep     = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
+                //we create the new dir for the new sites
+                if (!is_dir($homep)) {
+                    mkdir($homep, api_get_permissions_for_new_directories());
+                }
+            }
+        } else {
+            $homep = api_get_path(SYS_PATH).'home/';
+        }
+
+        $ext      = '.html';
+        $menutabs = 'home_tabs';
+        $home_top = '';
+
+        if (is_file($homep.$menutabs.'_'.$lang.$ext) && is_readable($homep.$menutabs.'_'.$lang.$ext)) {
+            $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
+        } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
+            $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
+        } else {
+            //$errorMsg = get_lang('HomePageFilesNotReadable');
+        }
+
+        $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
+
+        $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
+        $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+
+        $lis = '';
+
+        if (!empty($open)) {
+            if (strpos($open, 'show_menu') === false) {
+                if (api_is_anonymous()) {
+                    $navigation[SECTION_CAMPUS]  = null;
+                }
+            } else {
+                //$lis .= Display::tag('li', $open);
+                $lis .= $open;
+            }
+        }
+
+        if (count($navigation) > 0 || !empty($lis)) {
+            $pre_lis = '';
+            foreach ($navigation as $section => $navigation_info) {
+                if (isset($GLOBALS['this_section'])) {
+                    $current = $section == $GLOBALS['this_section'] ? ' id="current" class="active" ' : '';
+                } else {
+                    $current = '';
+                }
+                if (!empty($navigation_info['title'])) {
+                    $pre_lis .= '<li'.$current.' ><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
+                }
+            }
+            $lis = $pre_lis.$lis;
+        }
+
+        $menu = null;
+        if (!empty($lis)) {
+             $menu .= $lis;
+        }
+        return $menu;
+    }
+
+    function return_navigation_links() {
+		$html = '';
+
+		// Deleting the myprofile link.
+		if (api_get_setting('allow_social_tool') == 'true') {
+			unset($this->menu_navigation['myprofile']);
+		}
+
+		// Main navigation section.
+		// Tabs that are deactivated are added here.
+		if (!empty($this->menu_navigation)) {
+			$content = '<ul class="nav nav-list">';
+			foreach ($this->menu_navigation as $section => $navigation_info) {
+				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+				$content .= '<li'.$current.'>';
+				$content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+				$content .= '</li>';
+			}
+			$content .= '</ul>';
+			$html = PageController::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
+		}
+		return $html;
+	}
+
+    function render_layout($layout = null) {
+        if (empty($layout)) {
+            $layout = $this->app['default_layout'];
+        }
+        return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
+    }
+
+    function render_template($template) {
+        return $this->app['twig']->render($this->app['template_style'].'/'.$template);
+    }
+
+
+    /**
+     * Determines the possible tabs (=sections) that are available.
+     * This function is used when creating the tabs in the third header line and
+     * all the sections that do not appear there (as determined by the
+     * platform admin on the Dokeos configuration settings page)
+     * will appear in the right hand menu that appears on several other pages
+     * @return array containing all the possible tabs
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     */
+    function get_tabs() {
+        global $_course;
+
+        $navigation = array();
+
+        // Campus Homepage
+        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
+        $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
+
+        // My Courses
+
+        if(api_is_allowed_to_create_course()) {
+            // Link to my courses for teachers
+            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
+            $navigation['mycourses']['title'] = get_lang('MyCourses');
+        } else {
+            // Link to my courses for students
+            $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
+            $navigation['mycourses']['title'] = get_lang('MyCourses');
+        }
+
+        // My Profile
+        $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+        $navigation['myprofile']['title'] = get_lang('ModifyProfile');
+
+        // Link to my agenda
+        $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
+        $navigation['myagenda']['title'] = get_lang('MyAgenda');
+
+        // Gradebook
+        if (api_get_setting('gradebook_enable') == 'true') {
+            $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+            $navigation['mygradebook']['title'] = get_lang('MyGradebook');
+        }
+
+        // Reporting
+        if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+            // Link to my space
+            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/';
+            $navigation['session_my_space']['title'] = get_lang('MySpace');
+        } else {
+            // Link to my progress
+            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
+            $navigation['session_my_progress']['title'] = get_lang('MyProgress');
+        }
+
+        // Social
+        if (api_get_setting('allow_social_tool')=='true') {
+            $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+
+            // get count unread message and total invitations
+            $count_unread_message = MessageManager::get_number_of_messages(true);
+
+            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
+            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
+            $group_pending_invitations = 0;
+            if (!empty($group_pending_invitations )) {
+                $group_pending_invitations = count($group_pending_invitations);
+            }
+            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
+            $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
+
+            $navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
+        }
+
+        // Dashboard
+        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+            $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
+            $navigation['dashboard']['title'] = get_lang('Dashboard');
+        }
+
+        // Reports
+        /*
+        if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+            $navigation['reports']['url'] = api_get_path(WEB_CODE_PATH).'reports/index.php';
+            $navigation['reports']['title'] = get_lang('Reports');
+        }*/
+
+        // Custom tabs
+        for ($i = 1; $i<=3; $i++)
+            if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
+                $navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
+                $navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
+            }
+
+        // Platform administration
+        if (api_is_platform_admin(true)) {
+            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+            $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
+        }
+        return $navigation;
+    }
+
+    function return_logo($theme) {
+        $_course = api_get_course_info();
+        $html = '';
+        $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';
+
+        $site_name = api_get_setting('siteName');
+        if (file_exists($logo)) {
+            $site_name = api_get_setting('Institution').' - '.$site_name;
+            $html .= '<div id="logo">';
+                $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';
+                $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
+                $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
+            $html .= '</div>';
+        } else {
+            $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';
+            $iurl  = api_get_setting('InstitutionUrl');
+            $iname = api_get_setting('Institution');
+
+            if (!empty($iname)) {
+                $html .= '-&nbsp;<a href="'.$iurl.'" target="_top">'.$iname.'</a>';
+            }
+            // External link section a.k.a Department - Department URL
+            if (isset($_course['extLink']) && $_course['extLink']['name'] != '') {
+                $html .= '<span class="extLinkSeparator"> - </span>';
+                if ($_course['extLink']['url'] != '') {
+                    $html .= '<a class="extLink" href="'.$_course['extLink']['url'].'" target="_top">';
+                    $html .= $_course['extLink']['name'];
+                    $html .= '</a>';
+                } else {
+                    $html .= $_course['extLink']['name'];
+                }
+            }
+        }
+
+       /* //  Course title section
+        if (!empty($_cid) and $_cid != -1 and isset($_course)) {
+            //Put the name of the course in the header
+            $html .= '<div id="my_courses">';
+            $html .= '</div>';
+        } elseif (isset($nameTools) && $language_file != 'course_home') {
+            //Put the name of the user-tools in the header
+            if (!isset($user_id)) {
+                //echo '<div id="my_courses"></div>';
+            } elseif (!$noPHP_SELF) {
+                $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
+            } else {
+                $html .= '<div id="my_courses">'.$nameTools.'</div>';
+            }
+        }*/
+        return $html;
+    }
+
+    function return_notification_menu() {
+
+        $_course    = api_get_course_info();
+        $course_id  = api_get_course_id();
+        $user_id    = api_get_user_id();
+
+        $html = '';
+
+        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+            $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+
+            $number_online_in_course = 0;
+            if(!empty($_course['id'])) {
+                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+            }
+
+            // Display the who's online of the platform
+            if ($number) {
+                if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
+                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" >'.
+                                Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
+                }
+            }
+
+            // Display the who's online for the course
+            if ($number_online_in_course) {
+                if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
+                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
+                            Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
+                }
+            }
+
+            // Display the who's online for the session
+            if (isset($user_id) && api_get_session_id() != 0) {
+                if (api_is_allowed_to_edit()) {
+                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?session_id='.api_get_session_id().'&id_coach='.$user_id.'" >'.
+                        Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+                }
+            }
+        }
+
+        if (api_get_setting('accessibility_font_resize') == 'true') {
+            $html .= '<li class="resize_font">';
+            $html .= '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
+            $html .= '</li>';
+        }
+        return $html;
+    }
+
+    function return_navigation_array() {
+
+        $navigation         = array();
+        $menu_navigation    = array();
+        $possible_tabs      = $this->get_tabs();
+
+        // Campus Homepage
+        if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
+            $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
+        } else {
+            $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
+        }
+
+        if (api_get_user_id() && !api_is_anonymous()) {
+
+            // My Courses
+            if (api_get_setting('show_tabs', 'my_courses') == 'true') {
+                $navigation['mycourses'] = $possible_tabs['mycourses'];
+            } else {
+                $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
+            }
+
+            // My Profile
+            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
+                $navigation['myprofile'] = $possible_tabs['myprofile'];
+            } else {
+                $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
+            }
+
+            // My Agenda
+            if (api_get_setting('show_tabs', 'my_agenda') == 'true') {
+                $navigation['myagenda'] = $possible_tabs['myagenda'];
+            } else {
+                $menu_navigation['myagenda'] = $possible_tabs['myagenda'];
+            }
+
+            // Gradebook
+            if (api_get_setting('gradebook_enable') == 'true') {
+                if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
+                    $navigation['mygradebook'] = $possible_tabs['mygradebook'];
+                } else{
+                    $menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
+                }
+            }
+
+            // Reporting
+            if (api_get_setting('show_tabs', 'reporting') == 'true') {
+                if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+                    $navigation['session_my_space'] = $possible_tabs['session_my_space'];
+                } else {
+                    $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
+                }
+            } else {
+                if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
+                    $menu_navigation['session_my_space'] = $possible_tabs['session_my_space'];
+                } else {
+                    $menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
+                }
+            }
+
+            // Social Networking
+            if (api_get_setting('show_tabs', 'social') == 'true') {
+                if (api_get_setting('allow_social_tool') == 'true') {
+                    $navigation['social'] = $possible_tabs['social'];
+                }
+            } else{
+                $menu_navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
+            }
+
+            // Dashboard
+            if (api_get_setting('show_tabs', 'dashboard') == 'true') {
+                if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
+                    $navigation['dashboard'] = $possible_tabs['dashboard'];
+                }
+            } else{
+                $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
+            }
+
+            // Administration
+            if (api_is_platform_admin(true)) {
+                if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
+                    $navigation['platform_admin'] = $possible_tabs['platform_admin'];
+                } else {
+                    $menu_navigation['platform_admin'] = $possible_tabs['platform_admin'];
+                }
+            }
+
+            // Reports
+            if (!empty($possible_tabs['reports'])) {
+                if (api_get_setting('show_tabs', 'reports') == 'true') {
+                    if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
+                        $navigation['reports'] = $possible_tabs['reports'];
+                    }
+                } else {
+                    $menu_navigation['reports'] = $possible_tabs['reports'];
+                }
+            }
+
+            // Custom tabs
+            for ($i=1;$i<=3;$i++)
+                if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
+                    $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+                } else {
+                    if (isset($possible_tabs['custom_tab_'.$i])) {
+                        $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+                    }
+                }
+        }
+        $return = array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
+        return $return;
+    }
+
+
+    function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
+
+        $session_id     = api_get_session_id();
+        $session_name   = api_get_session_name($session_id);
+        $_course        = api_get_course_info();
+        $user_id        = api_get_user_id();
+        $course_id      = api_get_course_id();
+
+
+        /*  Plugins for banner section */
+        $web_course_path = api_get_path(WEB_COURSE_PATH);
+
+        /* If the user is a coach he can see the users who are logged in its session */
+        $navigation = array();
+
+        // part 1: Course Homepage. If we are in a course then the first breadcrumb is a link to the course homepage
+        // hide_course_breadcrumb the parameter has been added to hide the name of the course, that appeared in the default $interbreadcrumb
+        $session_name = cut($session_name, MAX_LENGTH_BREADCRUMB);
+        $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
+
+        if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
+
+            $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+            $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
+
+            switch (api_get_setting('breadcrumbs_course_homepage')) {
+                case 'get_lang':
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
+                    break;
+                case 'course_code':
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
+                    break;
+                case 'session_name_and_course_title':
+                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                    break;
+                default:
+                    if (api_get_session_id() != -1 ) {
+                        $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                    } else {
+                        $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;
+                    }
+                    break;
+            }
+            /**
+             * @todo could be useful adding the My courses in the breadcrumb
+            $navigation_item_my_courses['title'] = get_lang('MyCourses');
+            $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
+            $navigation[] = $navigation_item_my_courses;
+            */
+            $navigation[] = $navigation_item;
+        }
+
+        // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
+        if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
+            foreach ($interbreadcrumb as $breadcrumb_step) {
+                if ($breadcrumb_step['url'] != '#') {
+                    $sep = (strrchr($breadcrumb_step['url'], '?') ? '&amp;' : '?');
+                    $navigation_item['url'] = $breadcrumb_step['url'].$sep.api_get_cidreq();
+                } else {
+                    $navigation_item['url'] = '#';
+                }
+                $navigation_item['title'] = $breadcrumb_step['name'];
+                // titles for shared folders
+                if ($breadcrumb_step['name'] == 'shared_folder') {
+                    $navigation_item['title'] = get_lang('UserFolders');
+                } elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
+                    $navigation_item['title'] = get_lang('UserFolders');
+                } elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {
+                    $userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
+                    $navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                } elseif($breadcrumb_step['name'] == 'chat_files') {
+                    $navigation_item['title'] = get_lang('ChatFiles');
+                } elseif($breadcrumb_step['name'] == 'images') {
+                    $navigation_item['title'] = get_lang('Images');
+                } elseif($breadcrumb_step['name'] == 'video') {
+                    $navigation_item['title'] = get_lang('Video');
+                } elseif($breadcrumb_step['name'] == 'audio') {
+                    $navigation_item['title'] = get_lang('Audio');
+                } elseif($breadcrumb_step['name'] == 'flash') {
+                    $navigation_item['title'] = get_lang('Flash');
+                } elseif($breadcrumb_step['name'] == 'gallery') {
+                    $navigation_item['title'] = get_lang('Gallery');
+                }
+                //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
+
+                $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
+                $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
+                $navigation[] = $navigation_item;
+            }
+        }
+
+
+        // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
+        // is the same as the first part of the breadcrumbs (see part 1)
+        if (isset($nameTools) && $language_file != 'course_home') { // TODO: This condition $language_file != 'course_home' might bring surprises.
+            $navigation_item['url'] = '#';
+            $navigation_item['title'] = $nameTools;
+            $navigation[] = $navigation_item;
+        }
+
+        $final_navigation = array();
+        $counter = 0;
+
+        foreach ($navigation as $index => $navigation_info) {
+            if (!empty($navigation_info['title'])) {
+
+                if ($navigation_info['url'] == '#') {
+                    $final_navigation[$index] = $navigation_info['title'];
+                } else {
+                    $final_navigation[$index] = '<a href="'.$navigation_info['url'].'" class="" target="_top">'.$navigation_info['title'].'</a>';
+                }
+                $counter++;
+            }
+        }
+
+        $html = '';
+
+        /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
+        $view_as_student_link = null;
+        if ($user_id && isset($course_id)) {
+            if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+                $view_as_student_link = api_display_tool_view_option();
+            }
+        }
+
+        if (!empty($final_navigation)) {
+            $lis = '';
+            $i = 0;
+            //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
+            //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));
+            $final_navigation_count = count($final_navigation);
+
+            if (!empty($final_navigation)) {
+                // $home_link.= '<span class="divider">/</span>';
+
+                if (!empty($home_link)) {
+                    $lis.= Display::tag('li', $home_link);
+                }
+
+                foreach ($final_navigation as $bread) {
+                    $bread_check = trim(strip_tags($bread));
+                    if (!empty($bread_check)) {
+                        if ($final_navigation_count-1 > $i) {
+                            $bread .= '<span class="divider">/</span>';
+                        }
+                        $lis.= Display::tag('li', $bread);
+                        $i++;
+                    }
+                }
+            } else {
+                if (!empty($home_link)) {
+                    $lis.= Display::tag('li', $home_link);
+                }
+            }
+
+            // View as student/teacher link
+            if (!empty($view_as_student_link)) {
+                $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+            }
+
+            if (!empty($lis)) {
+                $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
+            }
+        }
+        return $html ;
     }
 }

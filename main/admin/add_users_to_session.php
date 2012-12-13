@@ -12,7 +12,6 @@ $cidReset = true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 
 $xajax -> registerFunction ('search_users');
@@ -48,7 +47,7 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 //checking for extra field with filter on
 
-$extra_field_list= UserManager::get_extra_fields();
+$extra_field_list = UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {
 	foreach ($extra_field_list as $extra_field) {
@@ -119,7 +118,9 @@ function search_users($needle, $type) {
                         $order_clause;
                 break;
 		}
-		if (api_is_multiple_url_enabled()) {
+
+		global $_configuration;
+		if ($_configuration['multiple_access_urls']) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
@@ -165,7 +166,6 @@ function search_users($needle, $type) {
 	            	$return .= '...<br />';
 	            }
 			}
-
 			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
 		} else {
 			global $nosessionUsersList;
@@ -185,7 +185,7 @@ $xajax -> processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
-<script type="text/javascript">
+<script>
 function add_user_to_session (code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -212,9 +212,9 @@ function remove_item(origin) {
 }
 
 function validate_filter() {
-		document.formulaire.add_type.value = \''.$add_type.'\';
-		document.formulaire.form_sent.value=0;
-		document.formulaire.submit();
+    document.formulaire.add_type.value = \''.$add_type.'\';
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 
 function checked_in_no_session(checked) {
@@ -235,10 +235,10 @@ function change_select(val) {
 $form_sent=0;
 $errorMsg=$firstLetterUser=$firstLetterSession='';
 $UserList=$SessionList=array();
-$sessions=array();
-$noPHP_SELF=true;
+$sessions = array();
+$noPHP_SELF = true;
 
-if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+if ($_POST['form_sent']) {
     $form_sent             = $_POST['form_sent'];
     $firstLetterUser       = $_POST['firstLetterUser'];
     $firstLetterSession    = $_POST['firstLetterSession'];
@@ -270,7 +270,11 @@ if ($ajax_search) {
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-                WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+                WHERE u.status<>".DRH." AND 
+                    u.status<>6 AND
+                    $tbl_session_rel_user.moved_to = 0 AND
+                    $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."                        
+                $order_clause";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -282,7 +286,11 @@ if ($ajax_search) {
                 ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 AND $tbl_session_rel_user.id_session = ".intval($id_session)."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                WHERE   access_url_id = $access_url_id AND 
+                        u.status<>".DRH." AND 
+                        u.status<>6 AND 
+                        $tbl_session_rel_user.moved_to = 0 AND
+                        $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION."
                 $order_clause";
         }
     }
@@ -297,7 +305,7 @@ if ($ajax_search) {
     $use_extra_fields = false;
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0 ) {
-            $result_list=array();
+            $result_list = array();
             foreach ($new_field_list as $new_field) {
                 $varname = 'field_'.$new_field['variable'];
                 if (UserManager::is_extra_field_available($new_field['variable'])) {
@@ -344,16 +352,23 @@ if ($ajax_search) {
         $sql = "SELECT  user_id, lastname, firstname, username, id_session
                FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                    ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    $where_filter AND u.status<>".DRH." AND u.status<>6
+                    ON  $tbl_session_rel_user.id_user = u.user_id AND 
+                        $tbl_session_rel_user.id_session = '$id_session' AND 
+                        $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                    $where_filter AND 
+                    u.status<>".DRH." AND 
+                    u.status<>6                    
                     $order_clause";
 
     } else {
         $sql = "SELECT  user_id, lastname, firstname, username, id_session
                 FROM $tbl_user u
                 LEFT JOIN $tbl_session_rel_user
-                ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                WHERE u.status<>".DRH." AND u.status<>6
+                ON  $tbl_session_rel_user.id_user = u.user_id AND 
+                    $tbl_session_rel_user.id_session = '$id_session' AND 
+                    $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                WHERE   u.status<>".DRH." AND 
+                        u.status<>6                         
                 $order_clause";
     }
     if (api_is_multiple_url_enabled()) {
@@ -363,30 +378,40 @@ if ($ajax_search) {
             $sql = "SELECT  u.user_id, lastname, firstname, username, id_session
                     FROM $tbl_user u
                     LEFT JOIN $tbl_session_rel_user
-                        ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                    INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                    WHERE access_url_id = $access_url_id  $where_filter AND u.status<>".DRH." AND u.status<>6
+                        ON  $tbl_session_rel_user.id_user = u.user_id AND 
+                            $tbl_session_rel_user.id_session = '$id_session' AND 
+                            $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+                        INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                    WHERE   access_url_id = $access_url_id  $where_filter AND 
+                            u.status<>".DRH." AND 
+                            u.status<>6                            
                     $order_clause";
         }
     }
 
     $result   = Database::query($sql);
     $users    = Database::store_result($result,'ASSOC');
-
+    
     foreach ($users as $uid => $user) {
         if ($user['id_session'] != $id_session) {
             $nosessionUsersList[$user['user_id']] = array('fn'=>$user['firstname'],'ln'=>$user['lastname'],'un'=>$user['username']) ;
             unset($users[$uid]);
-	}
+        }
     }
     unset($users); //clean to free memory
 
-    //filling the correct users in list
-    $sql="SELECT  user_id, lastname, firstname, username, id_session
+    //Filling the correct users in list
+    $sql = "SELECT  user_id, lastname, firstname, username, id_session
           FROM $tbl_user u
           LEFT JOIN $tbl_session_rel_user
-          ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-          WHERE u.status<>".DRH." AND u.status<>6 $order_clause";
+          ON    $tbl_session_rel_user.id_user = u.user_id AND 
+                $tbl_session_rel_user.id_session = '$id_session' AND 
+                $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
+          WHERE u.status <> ".DRH." AND 
+                u.status <> 6 AND 
+                $tbl_session_rel_user.moved_to = 0 AND
+                $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." 
+          $order_clause";
 
     if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -397,12 +422,18 @@ if ($ajax_search) {
                 LEFT JOIN $tbl_session_rel_user
                     ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.id_session = '$id_session' AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
                 INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-                WHERE access_url_id = $access_url_id AND u.status<>".DRH." AND u.status<>6
+                WHERE   access_url_id = $access_url_id AND 
+                        u.status<>".DRH." AND 
+                        u.status<>6 AND 
+                        $tbl_session_rel_user.moved_to = 0 AND
+                        $tbl_session_rel_user.moved_status <> ".SessionManager::SESSION_CHANGE_USER_REASON_ENROLLMENT_ANNULATION." 
+                                                
                 $order_clause";
         }
     }
-    $result=Database::query($sql);
-    $users=Database::store_result($result,'ASSOC');
+    
+    $result = Database::query($sql);
+    $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['id_session'] == $id_session) {
             $sessionUsersList[$user['user_id']] = $user;
@@ -414,6 +445,7 @@ if ($ajax_search) {
     }
     unset($users); //clean to free memory
 }
+
 
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
@@ -561,7 +593,6 @@ unset($sessionUsersList);
         } else {
             //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
 			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
-
         }
 		?>
 	</td>
@@ -569,11 +600,10 @@ unset($sessionUsersList);
 </table>
 </form>
 
-<script type="text/javascript">
+<script>
 <!--
 function moveItem(origin , destination){
-
-	for(var i = 0 ; i<origin.options.length ; i++) {
+	for (var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
 			origin.options[i]=null;
@@ -586,7 +616,6 @@ function moveItem(origin , destination){
 }
 
 function sortOptions(options) {
-
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
 		newOptions[i] = options[i];
@@ -617,9 +646,7 @@ function valide(){
 
 
 function loadUsersInSelect(select){
-
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -631,7 +658,6 @@ function loadUsersInSelect(select){
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
 
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
 
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
@@ -647,8 +673,7 @@ function loadUsersInSelect(select){
 	}
 }
 
-function makepost(select){
-
+function makepost(select) {
 	var options = select.options;
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)

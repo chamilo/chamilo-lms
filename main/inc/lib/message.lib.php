@@ -206,6 +206,10 @@ class MessageManager
         $edit_message_id    = intval($edit_message_id);
         $topic_id   		= intval($topic_id);
 
+        //Capturing the original sender id
+        $original_sender_id = $user_sender_id;
+
+        //Saving the user id for the chamilo inbox, if the sender is null we asume that the current user is the one that sent the message
         if (empty($sender_id)) {
             $user_sender_id     = api_get_user_id();
         } else {
@@ -283,9 +287,14 @@ class MessageManager
 
 			//Load user settings
 			$notification = new Notification();
-			$sender_info = api_get_user_info($user_sender_id);
 
 		    if (empty($group_id)) {
+
+                $sender_info = array();
+                if (!empty($original_sender_id)) {
+                    $sender_info = api_get_user_info($original_sender_id);
+                }
+
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);
@@ -775,7 +784,7 @@ class MessageManager
 		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
 		        <div style="padding: 15px 0px 5px 0px">';
 		    $social_link = '';
-		    if (isset($_GET['f']) && $_GET['f'] == 'social') {
+		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
 		    }
 		    if ($source == 'outbox') {
@@ -1271,7 +1280,7 @@ class MessageManager
         $table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
         $table->set_header(3,$action,false,array ('style' => 'width:70px;'));
 
-        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
+        if ($_REQUEST['f']=='social') {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }
@@ -1282,14 +1291,16 @@ class MessageManager
 
 
     static function outbox_display() {
+        $request=api_is_xml_http_request();
         global $charset;
+
         $social_link = false;
-        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
+        if ($_REQUEST['f']=='social') {
             $social_link ='f=social';
         }
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
-        if (isset($_REQUEST['action'])) {
+        if (isset ($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1322,11 +1333,26 @@ class MessageManager
         $table->set_header(2, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:160px;'));
         $table->set_header(3,$action, false,array ('style' => 'width:70px;'));
 
-        $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-        $html .= $table->return_table();
+
+        if ($request===true) {
+            $html .=  '<form name="form_send_out" id="form_send_out" action="" method="post">';
+            $html .=  '<input type="hidden" name="action" value="delete" />';
+            $html .= $table->return_table();
+            $html .=  '</form>';
+            if (get_number_of_messages_send_mask() > 0) {
+                $html .=  '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+                $html .=  '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
+                $html .=  '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
+            }
+        } else {
+            $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+            $html .= $table->return_table();
+        }
         return $html;
     }
 }
+
+
 
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();

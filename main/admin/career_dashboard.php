@@ -6,8 +6,6 @@ $language_file = array('courses', 'index', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'career.lib.php';
-require_once $libpath.'promotion.lib.php';
 
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';

@@ -13,8 +13,6 @@ RewriteCond %{QUERY_STRING} ^id=(.*)$
 RewriteRule ^certificates/$ certificates/index.php?id=%1 [L]
 RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
 
-
-
 # This will transform
-# http://my.chamilo.net/certificates/?id=123     to  http://my.chamilo.net/certificates/index.php?id=123 
-# http://my.chamilo.net/juliomontoya		to		 http://my.chamilo.net/user.php?juliomontoya 
+# http://my.chamilo.net/certificates/index.php?id=123 to http://my.chamilo.net/certificates/123
+# http://my.chamilo.net/user.php?jmontoya  to http://my.chamilo.net/jmontoya

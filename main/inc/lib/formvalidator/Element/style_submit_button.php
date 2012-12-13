@@ -58,7 +58,7 @@ class HTML_QuickForm_stylesubmitbutton extends HTML_QuickForm_stylebutton
         
         if (!isset($attributes['class'])) {
             if (is_array($attributes)) {
-                $attributes['class'] = 'btn';
+                $attributes['class'] = 'btn btn-primary';
             }            
         }
         HTML_QuickForm_stylebutton::HTML_QuickForm_stylebutton($elementName, null, $attributes, $value, $img);

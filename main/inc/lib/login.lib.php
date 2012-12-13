@@ -259,7 +259,7 @@ class Login
                     $_user['status'] = $uData['status'];
 
                     $is_platformAdmin = (bool) (!is_null($uData['is_admin']));
-                    $is_allowedCreateCourse = (bool) (($uData ['status'] == 1) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == 4));
+                    $is_allowedCreateCourse = (bool) (($uData['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
                     ConditionalLogin::check_conditions($uData);
 
                     Session::write('_user', $_user);

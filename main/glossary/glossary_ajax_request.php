@@ -7,7 +7,6 @@
 require_once '../inc/global.inc.php';
 
 // Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'glossary.lib.php';
 
 /*
  * Search a term and return description from a glossary.

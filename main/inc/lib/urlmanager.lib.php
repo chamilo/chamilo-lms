@@ -20,19 +20,49 @@ class UrlManager
  	  * @param	string  The description of the site
  	  * @param	int		is active or not
 	  * @param  int     the user_id of the owner
+          * @param int The type of URL (1=multiple-access-url, 2=sincro-server, 3=sincro-client)
+          * @param array If the type is different than 1, then there might be extra URL parameters to take into account
 	  * @return boolean if success
 	  */
-	public static function add($url, $description, $active)
-	{
+	public static function add($url, $description, $active, $type=1, $extra_params) {
 		$tms = time();
+                $type = intval($type);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "INSERT INTO $table_access_url
-                SET url 	= '".Database::escape_string($url)."',
-                description = '".Database::escape_string($description)."',
-                active 		= '".Database::escape_string($active)."',
-                created_by 	= '".api_get_user_id()."',
-                tms = FROM_UNIXTIME(".$tms.")";
-		$result = Database::query($sql);
+                $u = api_get_user_id();
+                if ($u == 0) {
+                    $u = api_get_anonymous_id();
+                }
+                if ($type > 1) {
+                  $active = 0;
+                }
+		$sql = "INSERT INTO $table_access_url ".
+                " SET url 	= '".Database::escape_string($url)."', ".
+                " description = '".Database::escape_string($description)."', ".
+                " active 		= $active, ".
+                " created_by 	= $u, ".
+                " url_type        = $type, ".
+                " tms = FROM_UNIXTIME(".$tms.")";
+                $result = Database::query($sql);
+                $id = Database::insert_id();
+                if ($result !== false && $type == 3 && count($extra_params)>0) {
+                    // Register extra parameters in the branch_sync table
+                    $t = Database::get_main_table(TABLE_BRANCH_SYNC);
+                    $sql = "INSERT INTO $t SET ".
+                           " access_url_id = $id ".
+                           (!empty($extra_params['ip'])?", branch_ip = '".Database::escape_string($extra_params['ip'])."'":"") .
+                           (!empty($extra_params['name'])?", branch_name = '".Database::escape_string($extra_params['name'])."'":"") .
+                           (!empty($extra_params['last_sync'])?", last_sync_trans_id = '".Database::escape_string($extra_params['last_sync'])."'":"") .
+                           (!empty($extra_params['dwn_speed'])?", dwn_speed = '".Database::escape_string($extra_params['dwn_speed'])."'":"") .
+                           (!empty($extra_params['up_speed'])?", up_speed = '".Database::escape_string($extra_params['up_speed'])."'":"") .
+                           (!empty($extra_params['delay'])?", delay = '".Database::escape_string($extra_params['delay'])."'":"") .
+                           (!empty($extra_params['admin_mail'])?", admin_mail = '".Database::escape_string($extra_params['admin_mail'])."'":"") .
+                           (!empty($extra_params['admin_name'])?", admin_name = '".Database::escape_string($extra_params['admin_name'])."'":"") .
+                           (!empty($extra_params['admin_phone'])?", admin_phone = '".Database::escape_string($extra_params['admin_phone'])."'":"") .
+                           (!empty($extra_params['latitude'])?", latitude = '".Database::escape_string($extra_params['latitude'])."'":"") .
+                           (!empty($extra_params['longitude'])?", longitude = '".Database::escape_string($extra_params['longitude'])."'":"") .
+			   ", last_sync_trans_date = '".api_get_utc_datetime()."'"; 
+                    $result = $result && Database::query($sql);
+                }
 		return $result;
 	}
 
@@ -44,10 +74,11 @@ class UrlManager
 	* @param	string  The description of the site
 	* @param	int		is active or not
 	* @param	int     the user_id of the owner
+        * @param	int	The URL type
+        * @param	array	Extra parameters for type > 1
 	* @return 	boolean if success
 	*/
-	public static function udpate($url_id, $url, $description, $active)
-	{
+	public static function udpate($url_id, $url, $description, $active, $type, $extra_params) {
 		$url_id = intval($url_id);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
 		$tms = time();
@@ -72,8 +103,17 @@ class UrlManager
 	public static function delete($id)
 	{
 		$id = intval($id);
+		$table_bs  = Database :: get_main_table(TABLE_BRANCH_SYNC);
+		$table_bsl = Database :: get_main_table(TABLE_BRANCH_SYNC_LOG);
+		$table_bt  = Database :: get_main_table(TABLE_BRANCH_TRANSACTION);
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql= "DELETE FROM $table_access_url WHERE id = ".$id;
+                $sql = "DELETE FROM $table_bt WHERE branch_id = ".$id;
+		$result = Database::query($sql);
+                $sql = "DELETE FROM $table_bsl WHERE branch_sync_id = ".$id;
+		$result = Database::query($sql);
+                $sql = "DELETE FROM $table_bs WHERE access_url_id = ".$id;
+		$result = Database::query($sql);
+		$sql = "DELETE FROM $table_access_url WHERE id = ".$id;
 		$result = Database::query($sql);
 		return $result;
 	}
@@ -125,10 +165,17 @@ class UrlManager
 	public static function get_url_data()
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id, url, description, active FROM $table_access_url ORDER BY id";
+		$table_branch_sync = Database :: get_main_table(TABLE_BRANCH_SYNC);
+		$sql = "SELECT id, url, description, active, url_type FROM $table_access_url ORDER BY id";
 		$res = Database::query($sql);
 		$urls = array ();
-		while ($url = Database::fetch_array($res)) {
+		while ($url = Database::fetch_assoc($res)) {
+                        if ($url['url_type'] > 1) {
+				$sql2 = "SELECT branch_name, branch_ip, latitude, longitude, dwn_speed, up_speed, delay, admin_mail, admin_name, admin_phone, last_sync_trans_id, last_sync_trans_date, last_sync_type FROM $table_branch_sync WHERE access_url_id = ".$url['id'];
+				$res2 = Database::query($sql2);
+				$url2 = Database::fetch_assoc($res2);
+				$url = array_merge($url, $url2);
+			}
 			$urls[] = $url;
 		}
 		return $urls;
@@ -142,9 +189,15 @@ class UrlManager
 	public static function get_url_data_from_id($url_id)
 	{
 		$table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
-		$sql = "SELECT id, url, description, active FROM $table_access_url WHERE id = ".Database::escape_string($url_id);
+		$sql = "SELECT id, url, description, active, url_type FROM $table_access_url WHERE id = ".Database::escape_string($url_id);
 		$res = Database::query($sql);
 		$row = Database::fetch_array($res);
+                if ($row['url_type'] > 1) {
+			$sql2 = "SELECT * FROM $table_branch_sync WHERE access_url_id = ".$url['id'];
+			$res2 = Database::query($sql);
+			$row2 = Database::fetch_array($res2);
+			$row = array_merge($row,$row2);	
+		}
 		return $row;
 	}
 
@@ -413,11 +466,12 @@ class UrlManager
 		return $result;
 	}
 
-	public static function add_course_to_url($course_code, $url_id=1)
+	public static function add_course_to_url($course_code, $url_id = 1)
 	{
 		$table_url_rel_course= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 		if (empty($url_id)) $url_id=1;
-		$count = UrlManager::relation_url_course_exist($course_code,$url_id);
+		$count = UrlManager::relation_url_course_exist($course_code, $url_id);
+        $result = false;
 		if (empty($count)) {
 			$sql = "INSERT INTO $table_url_rel_course
            			SET course_code = '".Database::escape_string($course_code)."', access_url_id = ".Database::escape_string($url_id);

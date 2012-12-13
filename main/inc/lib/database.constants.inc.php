@@ -50,12 +50,15 @@ define('TABLE_MAIN_COURSE_REQUEST',         'course_request');
 // Gradebook
 define('TABLE_MAIN_GRADEBOOK_CATEGORY',     'gradebook_category');
 define('TABLE_MAIN_GRADEBOOK_EVALUATION',   'gradebook_evaluation');
+define('TABLE_MAIN_GRADEBOOK_EVALUATION_TYPE',   'gradebook_evaluation_type');
 define('TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG', 'gradebook_linkeval_log');
 define('TABLE_MAIN_GRADEBOOK_RESULT',       'gradebook_result');
 define('TABLE_MAIN_GRADEBOOK_RESULT_LOG',   'gradebook_result_log');
 define('TABLE_MAIN_GRADEBOOK_LINK',         'gradebook_link');
 define('TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY','gradebook_score_display');
 define('TABLE_MAIN_GRADEBOOK_CERTIFICATE',  'gradebook_certificate');
+
+
 
 //Profiling
 define('TABLE_MAIN_USER_FIELD',         'user_field');
@@ -99,9 +102,14 @@ define('TABLE_MAIN_USER_FRIEND_RELATION_TYPE', 'user_friend_relation_type');
 
 // Web services
 define('TABLE_MAIN_USER_API_KEY',           'user_api_key');
+
+//Extra fields
 define('TABLE_MAIN_COURSE_FIELD',           'course_field');
+define('TABLE_MAIN_COURSE_FIELD_OPTIONS',   'course_field_options');
 define('TABLE_MAIN_COURSE_FIELD_VALUES',    'course_field_values');
+
 define('TABLE_MAIN_SESSION_FIELD',          'session_field');
+define('TABLE_MAIN_SESSION_FIELD_OPTIONS',  'session_field_options');
 define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 
 // Message
@@ -333,3 +341,8 @@ define('TABLE_TIMELINE',                    'timeline');
 //Gradebook model
 define('TABLE_GRADE_MODEL',                  'grade_model');
 define('TABLE_GRADE_MODEL_COMPONENTS',       'grade_components');
+
+define('TABLE_BRANCH_SYNC',                  'branch_sync');
+define('TABLE_BRANCH_SYNC_LOG',              'branch_sync_log');
+define('TABLE_BRANCH_TRANSACTION',           'branch_transaction');
+define('TABLE_BRANCH_TRANSACTION_STATUS',    'branch_transaction_status');

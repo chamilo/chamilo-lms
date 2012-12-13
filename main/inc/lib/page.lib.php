@@ -762,10 +762,12 @@ class PageController {
                                 $params = array();
                                 $params['icon'] =  Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
 
-                                if (api_is_drh()) {
-                                    $session_link = $session['session_name'];
-                                    $params['link'] = null;
-                                } else {
+                                //Default session name
+                                $session_link = $session['session_name'];
+                                $params['link'] = null;
+
+                                if (api_get_setting('session_page_enabled' == 'true') && !api_is_drh()) {
+                                    //session name with link
                                     $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                     $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                                 }
@@ -817,13 +819,16 @@ class PageController {
                         if ($count > 0) {
                             $params['icon'] = Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
 
-                            if (api_is_drh()) {
-                                $session_link = $session['session_name'];
-                                $params['link'] = null;
-                            } else {
-                                $session_link   = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
-                                $params['link'] =  api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
+                            //Default session name
+                            $session_link = $session['session_name'];
+                            $params['link'] = null;
+
+                            if (api_get_setting('session_page_enabled' == 'true') && !api_is_drh()) {
+                                //session name with link
+                                $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
+
 
                             $params['title'] .=  $session_link;
 

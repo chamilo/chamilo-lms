@@ -915,6 +915,7 @@ VALUES
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
 ('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
 ('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
+('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -1261,7 +1262,10 @@ VALUES
 ('session_tutor_reports_visibility', 'true', 'Yes'),
 ('session_tutor_reports_visibility', 'false', 'No'),
 ('gradebook_show_percentage_in_reports', 'true', 'Yes'),
-('gradebook_show_percentage_in_reports', 'false', 'No');
+('gradebook_show_percentage_in_reports', 'false', 'No'),
+('session_page_enabled', 'true', 'Yes'),
+('session_page_enabled', 'false', 'No');
+
 
 UNLOCK TABLES;
 
@@ -3143,4 +3147,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20672' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20766' WHERE variable = 'chamilo_database_version';

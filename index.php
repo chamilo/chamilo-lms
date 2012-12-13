@@ -85,7 +85,6 @@ class IndexController
 
         $this->set_login_form($app);
 
-        //@todo move this inside the IndexManager
         if (!api_is_anonymous()) {
             $app['template']->assign('profile_block', PageController::return_profile_block());
             $app['template']->assign('user_image_block', PageController::return_user_image_block());

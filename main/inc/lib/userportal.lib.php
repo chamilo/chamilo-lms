@@ -3,6 +3,9 @@
 
 use \ChamiloSession as Session;
 
+/**
+ * @deprecated  use PageController class main/inc/page.lib.php
+ */
 class IndexManager {
 	var $tpl 	= false; //An instance of the template engine
 	var $name 	= '';

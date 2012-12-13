@@ -106,5 +106,9 @@ ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, 
 
 CREATE TABLE c_quiz_order( id int unsigned NOT NULL auto_increment, c_id int unsigned NOT NULL, session_id int unsigned NOT NULL, exercise_id int NOT NULL, exercise_order INT NOT NULL, PRIMARY KEY (id));
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('session_page_enabled', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('session_page_enabled', 'false', 'No');
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20672' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20766' WHERE variable = 'chamilo_database_version';

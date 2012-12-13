@@ -4,7 +4,6 @@ namespace Shibboleth;
 
 use \Redirect;
 use \Display;
-use IndexManager;
 
 /**
  * Controller for the Shibboleth authentication system.

@@ -2499,8 +2499,11 @@ class SessionManager {
         $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $sql = "SELECT id_session, moved_status, moved_at FROM $tbl_session_rel_user WHERE id_user = $user_id AND moved_to = $session_id LIMIT 1";
         $result = Database::query($sql);
-        $result = Database::store_result($result,'ASSOC');
-        return $result[0];
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($result,'ASSOC');
+            return $result[0];
+        }
+        return false;
     }
 
     static function get_coaches_by_keyword($tag) {
@@ -2546,7 +2549,7 @@ class SessionManager {
         //This will clean the variables if 0000-00-00 00:00:00 the variable will be empty
         $start_date = api_get_local_time($session_info['display_start_date'], null, null, true);
         $end_date = api_get_local_time($session_info['display_end_date'], null, null, true);
-
+        $msg_date = null;
         if (!empty($start_date) && !empty($end_date)) {
             //$msg_date = get_lang('From').' '.$start_date.' '.get_lang('To').' '.$end_date;
             $msg_date =  sprintf(get_lang('FromDateXToDateY'), $start_date, $end_date);

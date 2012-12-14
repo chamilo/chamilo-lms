@@ -765,7 +765,7 @@ class PageController {
                                 //Default session name
                                 $session_link = $session['session_name'];
                                 $params['link'] = null;
-                                
+
                                 if (api_get_setting('session_page_enabled') == 'true' && !api_is_drh()) {
                                     //session name with link
                                     $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
@@ -885,7 +885,6 @@ class PageController {
      */
     static function return_welcome_to_course_block($tpl) {
         $count_courses = CourseManager::count_courses();
-        $tpl = $tpl->get_template('layout/welcome_to_course.tpl');
 
         $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
         $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
@@ -895,8 +894,7 @@ class PageController {
         $tpl->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
         $tpl->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
         $tpl->assign('count_courses', $count_courses);
-
-        return $tpl->fetch($tpl);
+        $tpl->assign('welcome_to_course_block', 1);
     }
 
     /*function run() {

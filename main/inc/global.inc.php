@@ -188,7 +188,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
             array(
                 "type" => "annotation",
                 "namespace" => "Entity",
-                "path" => api_get_path(INCLUDE_PATH).'',
+                "path" => api_get_path(INCLUDE_PATH).'Entity',
             )
             // Using PSR-0 namespaceish embedded resources
             // (requires registering a PSR-0 Resource Locator
@@ -259,16 +259,21 @@ $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         //return;
     }
-    switch ($code) {
-         case 404:
-            $message = 'The requested page could not be found.';
-            break;
-        default:
-            //$message = 'We are sorry, but something went terribly wrong.';
-            $message = $e->getMessage();
+    if (isset($code)) {
+        switch ($code) {
+             case 404:
+                $message = 'The requested page could not be found.';
+                break;
+            default:
+                //$message = 'We are sorry, but something went terribly wrong.';
+                $message = $e->getMessage();
+        }
+    } else {
+        $code = null;
+        $message = null;
     }
     //$code = ($e instanceof HttpException) ? $e->getStatusCode() : 500;
-    $app['template']->assign('code', $code);
+    $app['template']->assign('error_code', $code);
     $app['template']->assign('error_message', $message);
     $response = $app['template']->render_layout('error.tpl');
     return new Response($response);

@@ -153,7 +153,7 @@ class UserPortalController
 
         //Show the chamilo mascot
         if (empty($courses_and_sessions) && !isset($_GET['history'])) {
-            $app['template']->assign('welcome_to_course_block', self::return_welcome_to_course_block($app));
+            PageController::return_welcome_to_course_block($app['template']);
         }
 
         $app['template']->assign('content', $courses_and_sessions);
@@ -197,22 +197,6 @@ class UserPortalController
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, private'));
         return new Response($response, 200, array());
-    }
-
-    function return_welcome_to_course_block(Application $app) {
-        $count_courses = CourseManager::count_courses();
-        $tpl = $app['template']->get_template('layout/welcome_to_course.tpl');
-
-        $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-        $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
-
-        $app['template']->assign('course_catalog_url', $course_catalog_url);
-        $app['template']->assign('course_list_url', $course_list_url);
-        $app['template']->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
-        $app['template']->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
-        $app['template']->assign('count_courses', $count_courses);
-
-        return $app['template']->fetch($tpl);
     }
 
 

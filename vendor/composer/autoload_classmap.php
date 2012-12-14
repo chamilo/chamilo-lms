@@ -716,6 +716,7 @@ return array(
     'QuickformForm' => $baseDir . '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php',
     'Quiz' => $baseDir . '/main/coursecopy/classes/Quiz.class.php',
     'QuizQuestion' => $baseDir . '/main/coursecopy/classes/QuizQuestion.class.php',
+    'QuizQuestionOption' => $baseDir . '/main/coursecopy/classes/QuizQuestionOption.class.php',
     'RSSCache' => $baseDir . '/main/inc/lib/magpierss/rss_cache.inc',
     'Redirect' => $baseDir . '/main/inc/lib/redirect.class.php',
     'Renderer' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/renderer.cls.php',

@@ -1,5 +1,5 @@
 {
-    "hash": "590156b85b47c211fe81355d1cc68419",
+    "hash": "1f8e275856536ef2a59030e65ab74fc1",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -278,12 +278,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog",
-                "reference": "b67085dc769de26348f08ad21f43220a156161dc"
+                "reference": "0df12342ef6c5efc748b27bb9ef92e1c95631058"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/monolog/archive/b67085dc769de26348f08ad21f43220a156161dc.zip",
-                "reference": "b67085dc769de26348f08ad21f43220a156161dc",
+                "url": "https://github.com/Seldaek/monolog/archive/0df12342ef6c5efc748b27bb9ef92e1c95631058.zip",
+                "reference": "0df12342ef6c5efc748b27bb9ef92e1c95631058",
                 "shasum": ""
             },
             "require": {
@@ -297,7 +297,7 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server"
             },
-            "time": "2012-12-13 21:14:03",
+            "time": "2012-12-14 11:27:44",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -506,18 +506,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "4dc07777f5d1247d805a42efbdb4f664c965df26"
+                "reference": "92cd0e84022f31287337ab17842bbfff47d2fc79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/4dc07777f5d1247d805a42efbdb4f664c965df26.zip",
-                "reference": "4dc07777f5d1247d805a42efbdb4f664c965df26",
+                "url": "https://github.com/symfony/Console/archive/92cd0e84022f31287337ab17842bbfff47d2fc79.zip",
+                "reference": "92cd0e84022f31287337ab17842bbfff47d2fc79",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-13 18:25:06",
+            "time": "2012-12-14 09:43:16",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -729,12 +729,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing",
-                "reference": "e98510a5459fcaa686523b854a816aa569f2687f"
+                "reference": "9391ec1744dda220802bbfc406edf20c711f8b36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Routing/archive/e98510a5459fcaa686523b854a816aa569f2687f.zip",
-                "reference": "e98510a5459fcaa686523b854a816aa569f2687f",
+                "url": "https://github.com/symfony/Routing/archive/9391ec1744dda220802bbfc406edf20c711f8b36.zip",
+                "reference": "9391ec1744dda220802bbfc406edf20c711f8b36",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +751,7 @@
                 "symfony/config": "2.2.*",
                 "symfony/yaml": "2.2.*"
             },
-            "time": "2012-12-11 17:46:52",
+            "time": "2012-12-14 10:40:56",
             "type": "library",
             "extra": {
                 "branch-alias": {

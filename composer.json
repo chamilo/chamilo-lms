@@ -1,6 +1,9 @@
 {
     "autoload": {
-        "psr-0": { "Chamilo": "src/" },
+        "psr-0": {
+            "Chamilo": "src/",
+            "Entity" : "main/inc/"
+        },
         "classmap": [
             "main/auth",
             "main/admin",

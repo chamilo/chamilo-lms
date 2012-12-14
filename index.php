@@ -41,6 +41,7 @@ $htmlHeadXtra[] ='
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Entity\EntityCourse;
 
 class IndexController
 {
@@ -54,10 +55,21 @@ class IndexController
         if (!empty($logout)) {
             $this->logout();
         }
-
+        //$article = $app['orm.em']->getRepository('Entity\EntityCourse');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
-        /*
+
+        //$a = new EntityCourse();
+//require_once '/var/www/chamilo11/main/inc/Entity/EntityCourse.php';
+        //$article = $app['orm.em']->getRepository('EntityCourse');
+        //var_dump($article);
+/*
+        $courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
+        //var_dump($courses_query);
         $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
+        $c = count($paginator);
+        var_dump($c);
+        /*
+
         $c = count($paginator);
 
         foreach ($paginator as $course) {

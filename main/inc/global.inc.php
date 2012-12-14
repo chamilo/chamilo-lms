@@ -105,7 +105,7 @@ define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 
 //Composer autoloader
-require_once __DIR__.'../../../vendor/autoload.php';
+$loader = require_once __DIR__.'../../../vendor/autoload.php';
 
 //Start Silex
 use Silex\Application;
@@ -188,7 +188,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
             array(
                 "type" => "annotation",
                 "namespace" => "Entity",
-                "path" => $lib_path."Entity",
+                "path" => api_get_path(INCLUDE_PATH).'',
             )
             // Using PSR-0 namespaceish embedded resources
             // (requires registering a PSR-0 Resource Locator

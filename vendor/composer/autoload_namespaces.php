@@ -17,6 +17,7 @@ return array(
     'Silex' => $vendorDir . '/silex/silex/src/',
     'Pimple' => $vendorDir . '/pimple/pimple/lib/',
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
+    'Entity' => $baseDir . '/main/inc/',
     'Doctrine\\ORM\\' => $vendorDir . '/doctrine/orm/lib/',
     'Doctrine\\DBAL\\' => $vendorDir . '/doctrine/dbal/lib/',
     'Doctrine\\Common\\' => $vendorDir . '/doctrine/common/lib/',

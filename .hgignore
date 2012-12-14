@@ -124,3 +124,7 @@ syntax: regexp
 nbproject/*
 
 .git
+tests/doctrine_console/
+main/inc/Entity/
+
+

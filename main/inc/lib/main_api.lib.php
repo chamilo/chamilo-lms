@@ -2220,7 +2220,7 @@ function api_is_platform_admin($allow_sessions_admins = false) {
         return true;
     }
     global $_user;
-    return $allow_sessions_admins && $_user['status'] == SESSIONADMIN;
+    return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
 /**

@@ -186,13 +186,7 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
     $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
     $tpl->assign('visible_to', $select);
 }
-
-//Loading Agenda template
-//$content .= gettext('Hello');
-//$content .= gettext('Admin');
 $content = $tpl->fetch('default/agenda/month.tpl');
-
 $tpl->assign('content', $content);
-
 //Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

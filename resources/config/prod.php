@@ -65,3 +65,6 @@ if (!is_dir($app['assetic.path_to_web'].'/css')) {
 if (!is_dir($app['assetic.path_to_web'].'/js')) {
     //mkdir($app['assetic.path_to_web'].'/js', api_get_permissions_for_new_directories());
 }
+if (!is_dir($app['db.orm.proxies_dir'])) {
+    mkdir($app['db.orm.proxies_dir'], api_get_permissions_for_new_directories());
+}

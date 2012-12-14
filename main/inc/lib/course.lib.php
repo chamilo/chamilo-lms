@@ -2925,6 +2925,9 @@ class CourseManager {
         if ($is_sub_content) {
             $class = "course_item";
         }
+        if (!empty($params['is_session'])) {
+            $class .= " session-item";
+        }
         $html .= '<div class="'.$class.'">';
             $html .= '<div class="row">';
             $html .= '<div class="span7">';
@@ -2942,7 +2945,12 @@ class CourseManager {
 
                     $html .= '</div>';
                     $notifications = isset($params['notifications']) ? $params['notifications'] : null;
-                    $param_class = isset($params['class']) ? $params['class'] : null;
+                    $param_class = isset($params['class']) ? $params['class'] : '';
+                    if (!empty($params['is_session'])) {
+                        $param_class .= ' session-box-text';
+                    } else {
+                        $param_class .= ' course-box-text';
+                    }
 
                     $html .= '<div class="span6 '.$param_class.'">';
                         $html .='<h3>'.$params['title'].$notifications.'</h3> ';

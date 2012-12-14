@@ -313,8 +313,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         $category = $_GET['category'];
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
-        //Saving latest refresh
-        api_set_setting('settings_latest_update', api_get_utc_datetime());
+        api_set_setting_last_update();
 
         // Add event configuration settings variable to the system log.
         if (is_array($keys) && count($keys) > 0) {

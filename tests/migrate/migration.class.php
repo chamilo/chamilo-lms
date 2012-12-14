@@ -997,7 +997,7 @@ class Migration {
         $extra_field_obj = null;
         $extra_field_value_obj = null;
         if (!empty($table['dest_table'])) {
-            $extra_field_obj = new Extrafield($table['dest_table']);
+            $extra_field_obj = new ExtraField($table['dest_table']);
             $extra_field_value_obj = new ExtraFieldValue($table['dest_table']);
         }
         $extra_fields_to_insert = array();

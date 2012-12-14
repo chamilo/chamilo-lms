@@ -504,22 +504,27 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function update_survey_answered($survey_id, $user, $survey_code) {
+	static function update_survey_answered($survey_data, $user, $survey_code) {
 		// Database table definitions
 		$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
 
+        $survey_id = $survey_data['survey_id'];
+        $course_id = $survey_data['c_id'];
+        $session_id = $survey_data['session_id'];
+
 		// Getting a list with all the people who have filled the survey
-		$people_filled = survey_manager::get_people_who_filled_survey($survey_id);
+		$people_filled = survey_manager::get_people_who_filled_survey($survey_id, false, $course_id);
+
 		$number = intval(count($people_filled));
-        $course_id = api_get_course_int_id();
 
 		// Storing this value in the survey table
 		$sql = "UPDATE $table_survey SET answered = $number WHERE c_id = $course_id AND survey_id = ".Database::escape_string($survey_id);
 		Database::query($sql);
 
 		// Storing that the user has finished the survey.
-		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE c_id = $course_id AND session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
+		$sql = "UPDATE $table_survey_invitation SET answered='1'
+                WHERE c_id = $course_id AND session_id='".$session_id."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
 		Database::query($sql);
 	}
 
@@ -1221,8 +1226,9 @@ class survey_manager {
 
 		// Getting the survey information
 		$survey_data	= survey_manager::get_survey($survey_id);
+
 		if (empty($course_id)) {
-		      $course_id 		= api_get_course_int_id();
+            $course_id  = api_get_course_int_id();
         } else {
             $course_id = intval($course_id);
         }
@@ -1248,7 +1254,6 @@ class survey_manager {
 				$return[] = $row['user'];
 			}
 		}
-
 		return $return;
 	}
 }
@@ -2218,8 +2223,8 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	static function remove_answer($user, $survey_id, $question_id) {
-        $course_id = api_get_course_int_id();
+	static function remove_answer($user, $survey_id, $question_id, $course_id) {
+        $course_id = intval($course_id);
 		// table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$sql = "DELETE FROM $table_survey_answer
@@ -2244,8 +2249,6 @@ class SurveyUtil {
 	 * @version January 2007
 	 */
 	static function store_answer($user, $survey_id, $question_id, $option_id, $option_value, $survey_data) {
-		global $_course, $types;
-
 		// Table definition
 		$table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 
@@ -2258,7 +2261,7 @@ class SurveyUtil {
 				$user = $_SESSION['surveyuser'];
 			}
 		}
-		$course_id = api_get_course_int_id();
+		$course_id = $survey_data['c_id'];
 
 		$sql = "INSERT INTO $table_survey_answer (c_id, user, survey_id, question_id, option_id, value) VALUES (
 				$course_id,
@@ -4282,7 +4285,7 @@ class SurveyUtil {
 
 		$course_id = api_get_course_int_id();
 
-		//IF(is_shared<>0,'V','-')	 					AS col6,
+
 		$sql = "SELECT
 					survey.survey_id							AS col0,
 					CONCAT('<a href=\"survey.php?survey_id=',survey.survey_id,'\">',survey.title,'</a>')		AS col1,
@@ -4295,14 +4298,16 @@ class SurveyUtil {
 					survey.anonymous							AS col8,
 					survey.survey_id							AS col9,
 					survey.session_id							AS session_id
-				 FROM $table_survey survey LEFT JOIN $table_survey_question survey_question
-				 ON survey.survey_id = survey_question.survey_id, $table_user user
-				 WHERE survey.author = user.user_id AND survey.c_id = $course_id
+				 FROM $table_survey survey
+                    LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
+                    INNER JOIN $table_user user ON (survey.author = user.user_id)
+				 WHERE  survey.c_id = $course_id AND survey_question.c_id = $course_id
 				 $search_restriction
 				 $condition_session ";
 		$sql .= " GROUP BY survey.survey_id";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
+
 		$res = Database::query($sql);
 		$surveys = array();
 		$array = array();
@@ -4313,7 +4318,6 @@ class SurveyUtil {
 			// Validation when belonging to a session
 			$session_img = api_get_session_image($survey['session_id'], $_user['status']);
 			$array[2] = $survey[2] . $session_img;
-
 			$array[3] = $survey[3];
 			$array[4] = $survey[4];
 			$array[5] = $survey[5];
@@ -4322,7 +4326,6 @@ class SurveyUtil {
 			$array[8] = $survey[8];
 			$array[9] = $survey[9];
 			//$array[10] = $survey[10];
-
 			$surveys[] = $array;
 		}
 		return $surveys;
@@ -4352,8 +4355,6 @@ class SurveyUtil {
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
-
-
 
 		$course_id = api_get_course_int_id();
 

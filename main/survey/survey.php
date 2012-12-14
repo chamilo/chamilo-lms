@@ -76,7 +76,7 @@ $is_survey_type_1 = $survey_data['survey_type'] == 1;
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$tool_name .= '...';
 }
-$course_id = api_get_course_int_id();
+
 if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'deletegroup') {
 	$_POST['name'] = trim($_POST['name']);
 

@@ -170,7 +170,7 @@ if (count($_POST) > 0) {
                 // remark: when it is a multiple response then the value of the array is the option_id
                 //            when it is a scoring question then the key of the array is the option_id and the value is the value
                 if (is_array($value)) {
-                    SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
+                    SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $course_id);
                     foreach ($value as $answer_key => & $answer_value) {
                         if ($types[$survey_question_id] == 'score') {
                             $option_id = $answer_key;
@@ -198,9 +198,8 @@ if (count($_POST) > 0) {
                     }
 
                     $survey_question_answer = $value;
-                    SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
+                    SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $course_id);
                     SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
-                    //SurveyUtil::store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);
                 }
             }
         }
@@ -227,14 +226,14 @@ if (count($_POST) > 0) {
                 // Finding the question id by removing 'question'
                 $survey_question_id = str_replace('question', '', $key);
                 // We select the correct answer and the puntuacion
-                $sql = "SELECT value FROM $table_survey_question_option WHERE c_id = $course_id AND question_option_id='".Database::escape_string($value)."'";
+                echo $sql = "SELECT value FROM $table_survey_question_option WHERE c_id = $course_id AND question_option_id='".Database::escape_string($value)."'";
                 $result = Database::query($sql);
                 $row = Database::fetch_array($result, 'ASSOC');
                 $option_value = $row['value'];
                 //$option_value = 0;
                 $survey_question_answer = $value;
                 // We save the answer after making sure that a possible previous attempt is deleted
-                SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id);
+                SurveyUtil::remove_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $course_id);
                 SurveyUtil::store_answer($survey_invitation['user'], $survey_invitation['survey_id'], $survey_question_id, $value, $option_value, $survey_data);
                 //SurveyUtil::store_answer($user,$survey_id,$question_id, $option_id, $option_value, $survey_data);
             }
@@ -443,7 +442,7 @@ if (isset($_POST['finish_survey'])) {
     Display::display_confirmation_message(get_lang('SurveyFinished'));
     echo $survey_data['survey_thanks'];
 
-    survey_manager::update_survey_answered($survey_data['survey_id'], $survey_invitation['user'], $survey_invitation['survey_code']);
+    survey_manager::update_survey_answered($survey_data, $survey_invitation['user'], $survey_invitation['survey_code']);
     unset($_SESSION['paged_questions']);
     unset($_SESSION['page_questions_sec']);
     Display :: display_footer();

@@ -659,7 +659,9 @@ function api_get_local_time($time = null, $to_timezone = null, $from_timezone = 
  */
 function api_strtotime($time, $timezone = null) {
     $system_timezone = date_default_timezone_get();
-    date_default_timezone_set($timezone);
+    if (!empty($timezone)) {
+        date_default_timezone_set($timezone);
+    }
     $timestamp = strtotime($time);
     date_default_timezone_set($system_timezone);
     return $timestamp;

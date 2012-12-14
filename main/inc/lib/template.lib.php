@@ -371,7 +371,7 @@ class Template {
         $css = array();
 
         $this->theme = api_get_visual_theme();
-
+        
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
         }

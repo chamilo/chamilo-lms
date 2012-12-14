@@ -3602,9 +3602,10 @@ function api_get_language_info($language_id) {
  */
 function api_get_visual_theme() {
     static $visual_theme;
-    if (!isset($visual_theme)) {
 
+    if (!isset($visual_theme)) {
         $platform_theme = api_get_setting('stylesheets');   // Plataform's theme.
+        
         $visual_theme = $platform_theme;
 
         if (api_get_setting('user_selected_theme') == 'true') {
@@ -6527,4 +6528,9 @@ function api_set_settings_and_plugins() {
     //global $app;
     $_SESSION['_setting'] = $_setting;
     $_SESSION['_plugins'] = $_plugins;
+}
+
+function api_set_setting_last_update() {
+    //Saving latest refresh
+    api_set_setting('settings_latest_update', api_get_utc_datetime());
 }

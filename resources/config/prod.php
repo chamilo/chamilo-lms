@@ -1,7 +1,7 @@
 <?php
 
 $app['debug'] = false;
-$app['app.theme'] = api_get_visual_theme();
+
 $app['app.title'] = '';
 $app['jquery_ui_theme'] = 'smoothness';
 
@@ -15,6 +15,7 @@ $app['http_cache.cache_dir'] = $app['cache.path'].'http';
 $app['db.orm.proxies_dir'] = $app['cache.path'].'proxies_dir';
 
 // Assetic
+/*
 $app['assetic.path_to_cache']   = $app['cache.path'] . DIRECTORY_SEPARATOR . 'assetic' ;
 $app['assetic.path_to_web']     = api_get_path(SYS_PATH) . 'web'; //Location where to dump all generated files
 $app['assetic.input.path_to_assets'] = $app['assetic.path_to_web'].$app['app.theme'];
@@ -53,6 +54,7 @@ $app['assetic.input.path_to_js'] = array(
 $app['assetic.output.path_to_js'] = 'js/script.js';
 $app['assetic.filter.yui_compressor.path'] = '/usr/share/yui-compressor/yui-compressor.jar';
 
+
 //Create directories?
 if (!is_dir($app['assetic.path_to_web'])) {
     //mkdir($app['assetic.path_to_web'], api_get_permissions_for_new_directories());
@@ -65,6 +67,8 @@ if (!is_dir($app['assetic.path_to_web'].'/css')) {
 if (!is_dir($app['assetic.path_to_web'].'/js')) {
     //mkdir($app['assetic.path_to_web'].'/js', api_get_permissions_for_new_directories());
 }
+ *
+ */
 if (!is_dir($app['db.orm.proxies_dir'])) {
     mkdir($app['db.orm.proxies_dir'], api_get_permissions_for_new_directories());
 }

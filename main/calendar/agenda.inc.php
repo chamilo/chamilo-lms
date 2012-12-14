@@ -1539,17 +1539,9 @@ function display_courseadmin_links() {
 	} else {
 		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
 	}
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'',ICON_SIZE_MEDIUM)."</a>";
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical&amp;view=".(($_SESSION['view']=='month')?"list":Security::remove_XSS($_SESSION['view'])."&amp;origin=".Security::remove_XSS($_GET['origin']))."'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'',ICON_SIZE_MEDIUM)."</a>";
-
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'',ICON_SIZE_MEDIUM)."</a>";
+	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'',ICON_SIZE_MEDIUM)."</a>";
 	return $actions;
-	/*
-	if (empty ($_SESSION['toolgroup'])) {
-		echo get_lang('SentTo');
-		echo "&nbsp;&nbsp;<form name=\"filter\" style=\"display:inline;\">";
-		show_user_group_filter_form();
-		echo "</form> ";
-	}*/
 }
 
 
@@ -4335,12 +4327,14 @@ function agenda_add_repeat_item($course_info, $orig_id, $type, $end, $orig_dest,
  */
 function agenda_import_ical($course_info,$file) {
 	require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
+
    	$charset = api_get_system_encoding();
     $filepath = api_get_path(SYS_ARCHIVE_PATH).$file['name'];
     if (!@move_uploaded_file($file['tmp_name'],$filepath)) {
     	error_log('Problem moving uploaded file: '.$file['error'].' in '.__FILE__.' line '.__LINE__);
     	return false;
     }
+
     require_once api_get_path(LIBRARY_PATH).'icalcreator/iCalcreator.class.php';
 
     $ical = new vcalendar();
@@ -4401,29 +4395,54 @@ function agenda_import_ical($course_info,$file) {
             $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$_POST['selectedform']);
         }*/
     $eventcount = 0;
-    while (true) {
-    	//we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name),
+    $message = array();
+    $agenda_obj = new Agenda();
 
-    	$ve = $ical->getComponent(VEVENT, $eventcount);
-    	if (!$ve)
-    	break;
+    while (true) {
+    	//we need to recover: summary, description, dtstart, dtend, organizer, attendee, location (=course name)
+    	$ve = $ical->getComponent('VEVENT', $eventcount);
+
+    	if (!$ve) {
+            break;
+        }
 
     	$ttitle	= $ve->getProperty('summary');
-    	$title	= api_convert_encoding($ttitle,$charset,'UTF-8');
+    	$title	= api_convert_encoding($ttitle, $charset, 'UTF-8');
 
     	$tdesc	= $ve->getProperty('description');
     	$desc	= api_convert_encoding($tdesc,$charset,'UTF-8');
 
-    	$start_date	= $ve->getProperty('dtstart');
-    	$start_date_string = $start_date['year'].'-'.$start_date['month'].'-'.$start_date['day'].' '.$start_date['hour'].':'.$start_date['min'].':'.$start_date['sec'];
+    	$start_date	= $ve->getProperty('dtstart', false, true);
 
+        if (isset($start_date['params']['VALUE'])) {
+            $start_date_value = $start_date['value'];
+            if ($start_date['params']['VALUE'] == 'DATE') {
+                $start_date_string = $start_date_value['year'].'-'.$start_date_value['month'].'-'.$start_date_value['day'].'';
+            } else {
+                $start_date_string = $start_date_value['year'].'-'.$start_date_value['month'].'-'.$start_date_value['day'].' '.$start_date_value['hour'].':'.$start_date_value['min'].':'.$start_date_value['sec'];
+            }
+        } else {
+            continue;
+        }
 
-    	$ts 	 = $ve->getProperty('dtend');
+    	$ts = $ve->getProperty('dtend');
+
     	if ($ts) {
-    		$end_date_string = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+            $end_date = $ve->getProperty('dtend', false, true);
+            if (isset($end_date['params']['VALUE'])) {
+                $end_date_value = $end_date['value'];
+                if ($end_date['params']['VALUE'] == 'DATE') {
+                    $end_date_string = $end_date_value['year'].'-'.$end_date_value['month'].'-'.$end_date_value['day'].'';
+                } else {
+                    $end_date_string = $end_date_value['year'].'-'.$end_date_value['month'].'-'.$end_date_value['day'].' '.$end_date_value['hour'].':'.$end_date_value['min'].':'.$end_date_value['sec'];
+                }
+            } else {
+                //Default behaviour
+                $end_date_string = $ts['year'].'-'.$ts['month'].'-'.$ts['day'].' '.$ts['hour'].':'.$ts['min'].':'.$ts['sec'];
+            }
     	} else {
     		//Check duration if dtend does not exist
-    		$duration 	  = $ve->getProperty('duration');
+    		$duration = $ve->getProperty('duration');
     		if ($duration) {
     			$duration = $ve->getProperty('duration');
     			$duration_string = $duration['year'].'-'.$duration['month'].'-'.$duration['day'].' '.$duration['hour'].':'.$duration['min'].':'.$duration['sec'];
@@ -4432,7 +4451,7 @@ function agenda_import_ical($course_info,$file) {
     			//echo date('d-m-Y - h:i:s', $start_date_tms);
 
     			$end_date_string = mktime(intval($start_date['hour']) +$duration['hour'], intval($start_date['min']) + $duration['min'], intval($start_date['sec']) + $duration['sec'], intval($start_date['month']) + $duration['month'], intval($start_date['day'])+$duration['day'], intval($start_date['year']) + $duration['year']);
-    			$end_date_string = date('Y-m-d H:i:s', $end_date_string);
+    			$end_date_string = api_get_utc_datetime($end_date_string);
     			//echo date('d-m-Y - h:i:s', $end_date_string);
     		}
     	}
@@ -4441,17 +4460,39 @@ function agenda_import_ical($course_info,$file) {
     	$organizer	 = $ve->getProperty('organizer');
     	$attendee 	 = $ve->getProperty('attendee');
     	$course_name = $ve->getProperty('location');
+
     	//insert the event in our database
-    	//var_dump($title,$desc,$start_date,$end_date);
-    	$id = agenda_add_item($course_info,$title,$desc,$start_date_string,$end_date_string,$attendee);
+        $agenda_obj->type = 'course';
+
+        $all_day = 'false';
+
+        if ($start_date_string == $end_date_string) {
+            $all_day = 'true';
+        }
+        $date = new DateTime($start_date_string);
+        $date->add(new DateInterval('P1D'));
+
+        if ($start_date_string == $date->format('Y-m-d h:i:s')) {
+            $all_day = 'true';
+        }
+
+        //var_dump($start_date_string, $end_date_string, $all_day);
+        $id = $agenda_obj->add_event($start_date_string, $end_date_string, $all_day, null, $title, $desc, array('everyone'));
+
+        $message[] = " $title - " .$start_date_string." - ".$end_date_string;
 
     	$repeat = $ve->getProperty('rrule');
-    	if(is_array($repeat) && !empty($repeat['FREQ'])) {
-		    $trans = array('DAILY'=>'daily','WEEKLY'=>'weekly','MONTHLY'=>'monthlyByDate','YEARLY'=>'yearly');
+    	if (is_array($repeat) && !empty($repeat['FREQ'])) {
+		    $trans = array(
+                'DAILY'=>'daily',
+                'WEEKLY'=>'weekly',
+                'MONTHLY'=>'monthlyByDate',
+                'YEARLY'=>'yearly'
+            );
 			$freq = $trans[$repeat['FREQ']];
 	    	$interval = $repeat['INTERVAL'];
 	    	if (isset($repeat['UNTIL']) && is_array($repeat['UNTIL'])) {
-	    		$until = mktime(23,59,59,$repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
+	    		$until = mktime(23,59,59, $repeat['UNTIL']['month'],$repeat['UNTIL']['day'],$repeat['UNTIL']['year']);
 	    		                $res = agenda_add_repeat_item($course_info,$id,$freq,$until,$attendee);
 	    	}
 
@@ -4463,7 +4504,10 @@ function agenda_import_ical($course_info,$file) {
 	    }
 		$eventcount++;
     }
-    return true;
+    if (!empty($message)) {
+        $message = implode('<br /> ', $message);
+    }
+    return $message;
 }
 
 /**
@@ -4591,21 +4635,10 @@ function get_global_agenda_items($agendaitems, $day = "", $month = "", $year = "
 }
 
 function display_ical_import_form() {
-	echo '<form enctype="multipart/form-data"  action="'.api_get_self().'?origin='.Security::remove_XSS($_GET['origin']).'&action='.Security::remove_XSS($_GET['action']).'" method="post" name="frm_import_ical">';
-    echo '<legend>'.get_lang('ICalFileImport').'</legend>';
-	echo '<div class="row">
-				<div class="label">
-					<span class="form_required">*</span> '.get_lang('ICalFileImport').'
-				</div>
-				<div class="controls"><input type="file" name="ical_import"/>
-				</div>
-			</div>';
-	echo '<div class="row">
-				<div class="label">
-				</div>
-				<div class="controls">
-					<button class="save" type="submit" name="ical_submit" value="'.get_lang('Import').'">'.get_lang('Import').'</button>
-				</div>
-			</div>';
-	echo '</form>';
+    $form = new FormValidator('frm_import_ical', 'post', api_get_self().'?action='.Security::remove_XSS($_GET['action']), array('enctype' => 'multipart/form-data'));
+    $form->addElement('header', get_lang('ICalFileImport'));
+    $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
+    $form->addRule('ical_import', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('button', 'ical_submit', get_lang('Import'));
+    $form->display();
 }

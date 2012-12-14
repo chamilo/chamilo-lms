@@ -83,21 +83,19 @@ class Agenda {
                     $group_id = api_get_group_id();
 
                     if ((!is_null($users_to_send)) or (!empty($group_id))) {
-
                         $send_to = self::separate_users_groups($users_to_send);
-
                         if (isset($send_to['everyone']) && $send_to['everyone']) {
-                            api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id,"AgendaAdded", api_get_user_id(), $group_id ,'', $start, $end);
+                            api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group_id ,'', $start, $end);
                         } else {
                             // storing the selected groups
-                            if (is_array($send_to['groups'])) {
+                            if (isset($send_to['groups']) && is_array($send_to['groups'])) {
                                 foreach ($send_to['groups'] as $group) {
                                     api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group,0, $start, $end);
                                 }
                             }
 
                             // storing the selected users
-                            if (is_array($send_to['users'])) {
+                            if (isset($send_to['groups']) && is_array($send_to['users'])) {
                                 foreach ($send_to['users'] as $to_user_id) {
                                     api_item_property_update($this->course, TOOL_CALENDAR_EVENT, $id, "AgendaAdded", api_get_user_id(), $group_id, $to_user_id, $start, $end);
                                 }
@@ -693,7 +691,6 @@ class Agenda {
         return date('c', api_strtotime(api_get_local_time($utc_time)));
 	}
 
-
     /**
     * this function shows the form with the user that were not selected
     * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -797,20 +794,21 @@ class Agenda {
         $userlist  = array();
         $send_to = null;
 
-        $send_to['everyone']= false;
+        $send_to['everyone'] = false;
         if (is_array($to) && count($to)>0) {
-            foreach($to as $to_item) {
+            foreach ($to as $to_item) {
                 if ($to_item == 'everyone') {
-                    $send_to['everyone']= true;
-                }
-                list($type, $id) = explode(':', $to_item);
-                switch($type) {
-                    case 'GROUP':
-                        $grouplist[] =$id;
-                    break;
-                    case 'USER':
-                        $userlist[] =$id;
-                    break;
+                    $send_to['everyone'] = true;
+                } else {
+                    list($type, $id) = explode(':', $to_item);
+                    switch ($type) {
+                        case 'GROUP':
+                            $grouplist[] =$id;
+                        break;
+                        case 'USER':
+                            $userlist[] =$id;
+                        break;
+                    }
                 }
             }
             $send_to['groups']=$grouplist;

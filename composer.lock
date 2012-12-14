@@ -382,12 +382,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Silex.git",
-                "reference": "c2fc658327addb94f9032c45b851a0176c3ee850"
+                "reference": "c2dff3ca9e8ee4e5c9652a366c39eb3b3c91ca53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Silex/archive/c2fc658327addb94f9032c45b851a0176c3ee850.zip",
-                "reference": "c2fc658327addb94f9032c45b851a0176c3ee850",
+                "url": "https://github.com/fabpot/Silex/archive/c2dff3ca9e8ee4e5c9652a366c39eb3b3c91ca53.zip",
+                "reference": "c2dff3ca9e8ee4e5c9652a366c39eb3b3c91ca53",
                 "shasum": ""
             },
             "require": {
@@ -422,7 +422,7 @@
                 "symfony/css-selector": ">=2.1,<2.3-dev",
                 "symfony/dom-crawler": ">=2.1,<2.3-dev"
             },
-            "time": "2012-12-12 21:20:27",
+            "time": "2012-12-14 13:15:04",
             "type": "library",
             "extra": {
                 "branch-alias": {

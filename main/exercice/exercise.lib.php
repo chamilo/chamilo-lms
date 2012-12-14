@@ -2121,7 +2121,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     }
 
     $question_list_answers = array();
-
+    $media_list = array();
     $category_list = array();
 
     // Loop over all question to show results for each of them, one by one
@@ -2201,6 +2201,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $question_content = '<div class="question_row">';
 
             if ($show_results) {
+                $show_media = false;
+                /*if ($objQuestionTmp->parent_id != 0 && !in_array($objQuestionTmp->parent_id, $media_list)) {
+                    $show_media = true;
+                    $media_list[] = $objQuestionTmp->parent_id;
+                }*/
                 //Shows question title an description
                 $question_content .= $objQuestionTmp->return_header(null, $counter, $score);
             }

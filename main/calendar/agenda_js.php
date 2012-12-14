@@ -57,7 +57,7 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$tpl	= new Template(get_lang('Agenda'));
+$tpl = new Template(get_lang('Agenda'));
 
 $tpl->assign('use_google_calendar', 0);
 
@@ -186,7 +186,4 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
     $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
     $tpl->assign('visible_to', $select);
 }
-$content = $tpl->fetch('default/agenda/month.tpl');
-$tpl->assign('content', $content);
-//Loading main Chamilo 1 col template
-$tpl->display_one_col_template();
+$tpl->display('default/agenda/month.tpl');

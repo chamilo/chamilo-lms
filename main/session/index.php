@@ -26,7 +26,7 @@ $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 if (empty($_GET['session_id'])) {
-	api_not_allowed();
+	api_not_allowed(true);
 }
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']): null;
@@ -40,7 +40,7 @@ if (isset ($_SESSION['objExercise'])) {
 }
 
 $session_info   = SessionManager::fetch($session_id);
-$session_list   = SessionManager::get_sessions_by_coach(api_get_user_id());
+$session_list   = SessionManager::get_sessions_by_general_coach(api_get_user_id());
 $course_list    = SessionManager::get_course_list_by_session_id($session_id);
 
 //Getting all sessions where I'm subscribed
@@ -56,12 +56,14 @@ $final_array     = array();
 
 if (!empty($new_session_list)) {
     foreach ($new_session_list as $item) {
-        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;    
+        $my_session_id = isset($item['id_session']) ? $item['id_session'] : null;  
+         
         if (isset($my_session_id) && !in_array($my_session_id, $my_session_list) && $session_id == $my_session_id) {
         	$final_array[$my_session_id]['name'] = $item['session_name'];
             
             //Get all courses by session where I'm subscribed
             $my_course_list = UserManager::get_courses_list_by_session(api_get_user_id(), $my_session_id);
+           
                                
             foreach ($my_course_list as $my_course) {
                 $course = array();
@@ -98,6 +100,8 @@ if (!empty($new_session_list)) {
 if (!empty($course_list)) {    
     foreach ($course_list as $course_data) {
         if (in_array($course_data['code'], $user_course_list)) {
+            $course_data['only_title'] = $course_data['title'];
+            $course_data['link'] = api_get_course_url($course_data['code'], $session_id);
             $course_data['title'] = Display::url($course_data['title'], api_get_course_url($course_data['code'], $session_id));            
         } else {
             continue;
@@ -141,9 +145,13 @@ if (!empty($course_list)) {
       //                           'recent_lps' => $icons,
                                    //'max_mutation_date' => substr(api_get_local_time($max_mutation_date),0,10),
                                    'exercise_count' => $exercise_count,
-                                   'lp_count'       => $lp_count);
+                                   'lp_count'       => $lp_count,
+                                    'only_title'       => $course_data['only_title'],
+                                    'link' => $course_data['link']
+        );
     }
 }
+
 
 //If the requested session does not exist in my list we stop the script
 if (!api_is_platform_admin()) {
@@ -181,7 +189,8 @@ if (empty($session_id)) {
 }
 
 //Final data to be show
-$my_real_array = $new_exercises = array();
+$my_real_array = array();
+$new_exercises = array();
 $now = time();
 foreach($final_array as $session_data) {
     $my_course_list = isset($session_data['data']) ? $session_data['data']: array();    
@@ -272,25 +281,25 @@ if (!empty($course_id)) {
     //$back_url = Display::url(Display::return_icon('back.png',get_lang('back.png')), api_get_path(WEB_CODE_PATH).'session/?session_id='.$session_id);
 }
 
-$start = $end = $start_only = $end_only ='';
+$dates = SessionManager::parse_session_dates($session_info);
+echo Display::page_header($back_url.' '.$session_info['name']." <small>$dates<small>");
 
-if (!empty($session_info['date_start']) && $session_info['date_start'] != '0000-00-00') {
-    $start = api_convert_and_format_date($session_info['date_start'], DATE_FORMAT_SHORT);    
-    $start_only = get_lang('From').' '.$session_info['date_start'];
-}
-if (!empty($session_info['date_start']) && $session_info['date_end'] != '0000-00-00') {
-    $end = api_convert_and_format_date($session_info['date_end'], DATE_FORMAT_SHORT);
-    $end_only = get_lang('Until').' '.$session_info['date_end'];       
+if (!empty($new_course_list)) {
+    echo '<div id="session_course_list" class="row">';
+    foreach ($new_course_list as $course_item) {
+        echo '<div class="span3">';
+        echo '<div class="big_icon">';
+        echo Display::url(Display::return_icon('course.png', $course_item['only_title'], array(), ICON_SIZE_BIG), $course_item['link']);
+        echo '</div>';
+        echo '<div class="content">';
+        echo $course_item['title'];
+        echo '</div>';    
+        echo '</div>';
+    }
+    echo '</div>';
+        
 }
 
-if (!empty($start) && !empty($end)) {
-    $dates = Display::tag('i', sprintf(get_lang('FromDateXToDateY'),$start, $end));
-} else {
-    $dates = Display::tag('i', $start_only.' '.$end_only);
-}
-
-echo Display::tag('h1', $back_url.' '.$session_info['name']);
-echo $dates.'<br />';
 
 //All Learnpaths grid settings (First tab, first subtab)
 
@@ -318,7 +327,7 @@ $extra_params_courses['pgbuttons'] = false;*/
 //$extra_params_courses['autowidth'] = 'true'; 
                         
 $url            = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
-$columns        = array(get_lang('PublicationDate'),get_lang('Course'), get_lang('LearningPaths'));
+$columns        = array(get_lang('PublicationDate'), get_lang('Course'), get_lang('LearningPaths'));
 $column_model   = array(array('name'=>'date',   'index'=>'date',   'width'=>'120', 'align'=>'left', 'sortable'=>'true'),
                         array('name'=>'course', 'index'=>'course', 'width'=>'300', 'align'=>'left', 'sortable'=>'true', 'wrap_cell' => 'true'),
                         array('name'=>'lp',     'index'=>'lp',     'width'=>'440', 'align'=>'left', 'sortable'=>'true'));
@@ -347,7 +356,7 @@ $extra_params_course = array();
 $extra_params_course['grouping'] = 'true';
 $extra_params_course['groupingView'] = array('groupCollapse'    => false,
 											 'groupField'       => array('course'),
-                                             'groupColumnShow'  => array('false'),
+                                             'groupColumnShow'  => array(false),
                                              'groupText'        => array('<b>'.get_lang('Course').' {0}</b>'));
 $extra_params_course['autowidth'] = 'true'; //use the width of the parent                                 
 $extra_params_course['height'] = "100%";
@@ -368,7 +377,7 @@ $extra_params_week['groupingView'] = array('groupCollapse'     => false,
 										   'groupDataSorted'   => false,
 										   'groupField'        => array('week'),
                                            'groupOrder'        => array('desc'),
-                                           'groupColumnShow'   => 'false',
+                                           'groupColumnShow'   => false,
                                            'groupText'         => array('<b>'.get_lang('PeriodWeek').' {0}</b>'));
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%'; 
@@ -426,7 +435,7 @@ $(function() {
          
 <?php
      //Displays js code to use a jqgrid
-     echo Display::grid_js('courses',       '',             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
+     echo Display::grid_js('courses',       false,             $columns_courses, $column_model_courses, $extra_params_courses, $new_course_list);
      echo Display::grid_js('list_default',  $url,           $columns,         $column_model,$extra_params,array(), '');
      echo Display::grid_js('list_course',   $url_by_course, $columns,         $column_model,$extra_params_course,array(),'');
      echo Display::grid_js('list_week',     $url_week,      $column_week,     $column_week_model, $extra_params_week,array(),'');     

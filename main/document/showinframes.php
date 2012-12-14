@@ -143,6 +143,7 @@ $frameheight = 135;
 if ($is_courseAdmin) {
     $frameheight = 165;
 }
+
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
     $js_glossary_in_documents = '	//	    $(document).ready(function() {
@@ -151,8 +152,6 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       }, "top.mainFrame",
                                       { load: [
                                                 {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
-                                                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"}, 
                                                 {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                                 {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
@@ -176,7 +175,6 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                       );
                                 //   });';
 }
-
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
@@ -234,6 +232,7 @@ if ($jplayer_supported) {
 if ($show_web_odf) {      
     $execute_iframe = false;
 }
+
 
 $is_freemind_available = $pathinfo['extension']=='mm' && api_get_setting('enable_freemind') == 'true';
 if ($is_freemind_available){
@@ -298,7 +297,8 @@ if ($jplayer_supported) {
     echo '</div>';     
 }
 
-if ($is_freemind_available) { 
+
+if ($is_freemind_available) {
 	?>	
 	<script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
 	<style type="text/css">
@@ -306,12 +306,12 @@ if ($is_freemind_available) {
 			height: 500px;
 			padding-top:10px;
 		}
-	</style>		
+	</style>
 	<div id="flashcontent" onmouseover="giveFocus();">
 		 Flash plugin or Javascript are turned off.
 		 Activate both  and reload to view the mindmap
 	</div>		
-	<script>
+	<script>        
         function giveFocus() { 
 		  document.visorFreeMind.focus();  
 		}
@@ -362,7 +362,6 @@ if ($is_freemind_available) {
 	</script>	
 	<?php
 }
-
 
 if ($is_nanogong_available) {
 
@@ -416,8 +415,12 @@ if ($is_nanogong_available) {
 		$_SESSION['temp_audio_nanogong']=$to_sys;      
     echo '</div>';    
 }
-
 if ($execute_iframe) {
     echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'" height="500"></iframe>';
 }
+
+if (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
+    echo '<div id="glossary_popup"></div>';
+}
+
 Display::display_footer();

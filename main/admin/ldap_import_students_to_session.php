@@ -87,18 +87,10 @@ elseif(!empty($annee) && empty($id_session))
 	echo Display::return_icon('course.gif', get_lang('SelectSessionToImportUsersTo')).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
 	echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
 	echo '<select name="id_session">';
-
-	$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-	$sql = "SELECT id,name,nbr_courses,date_start,date_end " .
-		" FROM $tbl_session ".
-		" ORDER BY name";
-	$result = Database::query($sql);
-
-	$sessions=Database::store_result($result);
-	$nbr_results=count($sessions);
-	foreach($sessions as $row)
-	{
-		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name'], ENT_COMPAT, api_get_system_encoding()).' ('.$row['date_start'].' - '.$row['date_end'].')</option>';
+    
+    $sessions = SessionManager::get_sessions_list();	
+	foreach ($sessions as $row) {
+		echo '<option value="'.$row['id'].'">'.api_htmlentities($row['name'], ENT_COMPAT, api_get_system_encoding()).' ('.api_get_local_time($row['access_start_date']).' - '.api_get_local_time($row['access_end_date']).')</option>';
 	}
 	echo '</select>';
 	echo '<input type="submit" value="'.get_lang('Submit').'">';

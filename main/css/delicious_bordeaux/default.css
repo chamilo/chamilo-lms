@@ -304,20 +304,6 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	margin-bottom: 5px;
 	height: 30px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-	font-size:135%;
-}
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-     font-size:80%; 
-}
-
 /*****************************************************
  *  HEADER STYLES                                    *
  *****************************************************/
@@ -326,20 +312,7 @@ input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
 	padding: 0;
 	margin: 0;
 }
-/********************************************************
- *  HEADER 1: Title, portal, organisation, course title	*
- ********************************************************/
-#header1 {
-	padding: 4px;
-	color: #975b5b;
-}
-#header1 a {
-	color: #636363;
-	text-decoration: none;
-}
-#header1 a:hover {
-	text-decoration: underline;
-}
+
 #sitename {
 	margin: 0;
 	font-weight: bold;

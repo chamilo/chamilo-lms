@@ -124,8 +124,8 @@ $region_value = api_get_language_isocode();
 if ($region_value == 'en') {
     $region_value = 'en-GB';
 }
-$tpl->assign('region_value', 	$region_value);
 
+$tpl->assign('region_value', 	$region_value);
 
 $export_icon = '../img/export.png';
 $export_icon_low = '../img/export_low_fade.png';
@@ -170,7 +170,7 @@ $course_code  = api_get_course_id();
 
 if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
     $order = 'lastname';
-    if (api_is_western_name_order()) {
+    if (api_is_western_name_order) {
         $order = 'firstname';
     }
     if (!empty($group_id)) {
@@ -186,11 +186,7 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
     $select = $agenda->construct_not_selected_select_form($group_list, $user_list);
     $tpl->assign('visible_to', $select);
 }
-
-//Loading Agenda template
 $content = $tpl->fetch('default/agenda/month.tpl');
-
 $tpl->assign('content', $content);
-
 //Loading main Chamilo 1 col template
 $tpl->display_one_col_template();

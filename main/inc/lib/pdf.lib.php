@@ -6,9 +6,6 @@
 /**
  * Code
  */
-define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
-require_once _MPDF_PATH.'mpdf.php';
-
 class PDF {
     
     public $pdf;    
@@ -116,7 +113,6 @@ class PDF {
         }
         
         $course_data = array();
-        
         if (!empty($course_code)) {
         	$course_data = api_get_course_info($course_code);
         } else {
@@ -126,7 +122,7 @@ class PDF {
         //clean styles and javascript document
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
-            '@<style[^>]*?>.*?</style>@si'                    
+            '@<style[^>]*?>.*?</style>@si'
             );
             
         //Formatting the pdf
@@ -187,14 +183,15 @@ class PDF {
                 }
                 
                 $document_html = @file_get_contents($file);
-                $document_html = preg_replace($clean_search, '', $document_html);                  
-                                
+                $document_html = preg_replace($clean_search, '', $document_html);   
+                
                 //absolute path for frames.css //TODO: necessary?
                 $absolute_css_path = api_get_path(WEB_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css';
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
- 
+                
+                
                 if (!empty($course_data['path'])) {
-                    $document_html= str_replace('../','',$document_html);                    
+                    $document_html= str_replace('../','',$document_html);            
                     $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';
                                
                     $doc = new DOMDocument();           
@@ -204,15 +201,16 @@ class PDF {
                     $elements = $doc->getElementsByTagName('img');                    
                     if (!empty($elements)) {
                         foreach ($elements as $item) {                    
-                            $old_src = $item->getAttribute('src');                                                        
+                            $old_src = $item->getAttribute('src');
+                            
                             if (strpos($old_src, 'http') === false) {
-                                if (strpos($old_src, '/main/default_course_document') === false) {
+                                if (strpos($old_src, '/main/default_course_document') === false) {   
                                     if (api_get_path(REL_PATH) != '/') {
                                         $old_src = str_replace(api_get_path(REL_PATH), '', $old_src);    
                                     }
-                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);                                                                     
-                                    $new_path = $document_path.$old_src_fixed;
-                                    $document_html= str_replace($old_src, $new_path, $document_html);
+                                    $old_src_fixed = str_replace('courses/'.$course_data['path'].'/document/', '', $old_src);
+                                    $new_path = $document_path.$old_src_fixed;                                    
+                                    $document_html= str_replace($old_src, $new_path, $document_html);                            
                                 }                                                       	
                             } else {
                                 //Check if this is a complete URL
@@ -223,7 +221,7 @@ class PDF {
                                     $new_path = $document_path.$old_src_fixed;
                                     $document_html= str_replace($old_src, $new_path, $document_html);
                                 }*/
-                            }                        
+                            }                                    
                         }
                     }
                 }
@@ -231,11 +229,12 @@ class PDF {
                 api_set_encoding_html($document_html, 'UTF-8'); // The library mPDF expects UTF-8 encoded input data.        
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');  // TODO: Maybe it is better idea the title to be passed through
                                                                                 // $_GET[] too, as it is done with file name.
-                                                                         // At the moment the title is retrieved from the html document itself.
+                                                                              // At the moment the title is retrieved from the html document itself.
                 //echo $document_html;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
-                }                
+                }
+                
                 if (!empty($document_html)) {                	
                     $this->pdf->WriteHTML($document_html.$page_break, 2);
                 }

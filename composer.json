@@ -1,0 +1,28 @@
+{
+    "autoload": {
+        "psr-0": { "Chamilo": "src/" },
+        "classmap": [
+            "main/auth",
+            "main/admin",
+            "main/cron/lang",
+            "main/coursecopy",
+            "main/exercice",
+            "main/gradebook/lib",
+            "main/newscorm",
+            "main/inc/lib",
+            "main/install",
+            "main/inc/lib/getid3",
+            "main/survey"
+        ]
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "silex/silex"           : "1.0.*",
+        "twig/twig"             : ">=1.8,<2.0-dev",
+        "monolog/monolog"       : ">=1.0.0",
+        "symfony/config"        : "2.1.*",
+        "symfony/yaml"          : "2.1.*",
+        "dflydev/doctrine-orm-service-provider": "1.0.*@dev"
+    },
+    "minimum-stability": "dev"
+}

@@ -97,7 +97,11 @@ if (count($sessions) > 0) {
             $row = array ();
             $row[] = $my_course['code'];
             $row[] = $course_info['title'];
-            $row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            //$row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            
+            $roles = api_detect_user_roles($user['user_id'], $my_course['code'], $id_session);
+            $row[] = api_get_roles_to_string($roles);
+        
             
             $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                     '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
@@ -112,7 +116,7 @@ if (count($sessions) > 0) {
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }
 } else {
-    echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
+    Display::display_warning_message(get_lang('NoSessionsForThisUser'));
 }
 
 
@@ -129,12 +133,15 @@ if (Database::num_rows($res) > 0) {
     $header[] = array (get_lang('Title'), true);
     $header[] = array (get_lang('Status'), true);
     $header[] = array ('', false);
-    $data = array ();
+    $data = array();
     while ($course = Database::fetch_object($res)) {
         $row = array ();
         $row[] = $course->code;
         $row[] = $course->title;
-        $row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
+        
+        //$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
+        $roles = api_detect_user_roles($user['user_id'], $course->code);
+        $row[] = api_get_roles_to_string($roles);
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                 '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
                 '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -148,7 +155,7 @@ if (Database::num_rows($res) > 0) {
     echo Display::page_subheader(get_lang('Courses'));
     Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));    
 } else {
-    echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';
+    Display::display_warning_message(get_lang('NoCoursesForThisUser'));
 }
 
 /**
@@ -174,8 +181,8 @@ if (Database::num_rows($res) > 0) {
     echo '<blockquote>';
     Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
     echo '</blockquote>';
-} else {
-    echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
+} else {    
+    Display::display_warning_message(get_lang('NoClassesForThisUser'));
 }
 
 /**

@@ -84,6 +84,9 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
     $param_filter = '&filter='.Security::remove_XSS($default_filter);
     
     if (count($users_in_course) > 0) {
+        foreach ($attendance_states as $id => $state) {
+            echo $attendance_obj->get_attendance_state_button($id, true).'&nbsp;';
+        }
         
     ?>
     <script>
@@ -200,8 +203,8 @@ if (api_is_allowed_to_edit(null, true) || api_is_coach(api_get_session_id(), api
                         <td><span title="<?php echo $username ?>"><?php echo $data['lastname'] ?></span></td>
                         <td><?php echo $data['firstname'] ?></td>
                         <td>
-                            <div class="attendance-faults-bar" style="background-color:<?php echo (!empty($data['result_color_bar'])?$data['result_color_bar']:'none') ?>">
-                                <?php echo $data['attendance_result'] ?>
+                            <div class="attendance-faults-bar">                                
+                                <?php echo Display::label($data['attendance_result'], $data['result_color_bar']); ?>
                             </div>                        
                         </td>
                     </tr>

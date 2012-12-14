@@ -28,7 +28,8 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 
-$tpl = new Template(null, false, false);
+//$tpl = new Template(null, false, false);
+$tpl = new Template();
 
 $load_user = api_get_user_id();
 

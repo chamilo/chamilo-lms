@@ -2,7 +2,7 @@
 
 /**
  * Autoload Chamilo classes
- *
+ * 
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
@@ -12,7 +12,7 @@ class Autoload
     static private $is_registered = false;
 
     /**
-     * Register the Chamilo autoloader on the stack.
+     * Register the Chamilo autoloader on the stack. 
      * Will only do it once so this method is repeatable.
      */
     static public function register()
@@ -43,14 +43,14 @@ class Autoload
         $root = dirname(__FILE__) . '/../../';
         /**
          * WARNING
-         *
+         * 
          * This map is autogeneated by AutoloadClassFinder. It may be ovewrite
          * by future run.
-         *
-         * If you need to manually add mappings do it at the end and clearly
-         * identifies that as manually added or better ensure your class is
-         * captured by the finder.
-         *
+         * 
+         * If you need to manually add mappings do it at the end and clearly 
+         * identifies that as manually added or better ensure your class is 
+         * captured by the finder. 
+         * 
          * If it comes from a different package you may want to add another autoload
          * function on the stack.
          */
@@ -73,7 +73,7 @@ class Autoload
         $result['Agenda'] = '/main/calendar/agenda.lib.php';
         $result['AjaxController'] = '/main/inc/lib/ajax_controller.class.php';
         $result['Announcement'] = '/main/coursecopy/classes/Announcement.class.php';
-        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';
+        $result['AnnouncementManager'] = '/main/announcements/announcements.inc.php';        
         $result['AnnouncementEmail'] = '/main/announcements/announcement_email.class.php';
         $result['Answer'] = '/main/exercice/answer.class.php';
         $result['AppPlugin'] = '/main/inc/lib/plugin.lib.php';
@@ -493,7 +493,7 @@ class Autoload
         $result['Entity\SearchEngineRef'] = '/main/inc/entity/search_engine_ref.class.php';
         $result['Entity\Session'] = '/main/inc/entity/session.class.php';
         $result['Entity\SessionCategory'] = '/main/inc/entity/session_category.class.php';
-        $result['Entity\SessionField'] = '/main/inc/entity/session_field.class.php';
+        $result['Entity\SessionField'] = '/main/inc/entity/session_field.class.php';        
         $result['Entity\SessionFieldValues'] = '/main/inc/entity/session_field_values.class.php';
         $result['Entity\SessionRelCourse'] = '/main/inc/entity/session_rel_course.class.php';
         $result['Entity\SessionRelCourseRelUser'] = '/main/inc/entity/session_rel_course_rel_user.class.php';
@@ -585,7 +585,12 @@ class Autoload
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
-        $result['Testcategory'] = '/main/exercice/testcategory.class.php';
+        
+        $result['ExtraField'] = '/main/inc/lib/extra_field.lib.php';
+        $result['ExtraFieldOption'] = '/main/inc/lib/extra_field_option.lib.php';
+        $result['ExtraFieldValue'] = '/main/inc/lib/extra_field_value.lib.php';
+        
+        $result['Testcategory'] = '/main/exercice/testcategory.class.php';        
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
         $result['FileManager'] = '/main/inc/lib/fileManage.lib.php';
@@ -721,8 +726,9 @@ class Autoload
         $result['Log'] = '/main/inc/lib/log.class.php';
         $result['Login'] = '/main/inc/lib/login.lib.php';
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
-        $result['Matching'] = '/main/exercice/matching.class.php';
+        $result['Matching'] = '/main/exercice/matching.class.php';        
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
+        $result['MediaQuestion'] = '/main/exercice/media_question.class.php';
         $result['Model'] = '/main/inc/lib/model.lib.php';
         $result['Model\Course'] = '/main/inc/lib/course.class.php';
         $result['Model\Document'] = '/main/inc/lib/document.class.php';
@@ -789,7 +795,6 @@ class Autoload
         $result['QuickformForm'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
         $result['Quiz'] = '/main/coursecopy/classes/Quiz.class.php';
         $result['QuizQuestion'] = '/main/coursecopy/classes/QuizQuestion.class.php';
-        $result['QuizQuestionOption'] = '/main/coursecopy/classes/QuizQuestionOption.class.php';
         $result['Redirect'] = '/main/inc/lib/redirect.class.php';
         $result['Request'] = '/main/inc/lib/system/web/request.class.php';
         $result['RequestServer'] = '/main/inc/lib/system/web/request_server.class.php';
@@ -806,6 +811,11 @@ class Autoload
         $result['Security'] = '/main/inc/lib/security.lib.php';
         $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
+        $result['SessionModel'] = '/main/inc/lib/session_model.lib.php';
+        
+        $result['SessionField'] = '/main/inc/lib/session_field.lib.php';
+        $result['SessionFieldValue'] = '/main/inc/lib/session_field_value.lib.php';
+        $result['SessionFieldOption'] = '/main/inc/lib/session_field_option.lib.php';        
         $result['Shibboleth\Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\Model'] = '/main/auth/shibboleth/lib/model.class.php';
@@ -971,8 +981,9 @@ class Autoload
         $result['vtimezone'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
-
-
+        
+        $result['xajax'] = '/main/inc/lib/xajax/xajax.inc.php';
+        $result['xajaxResponse'] = '/main/inc/lib/xajax/xajaxResponse.inc.php';
         return $result;
     }
 
@@ -1000,10 +1011,10 @@ class Autoload
 }
 
 /**
- * Scan directorie for class declarations and returns an array made of
- *
+ * Scan directorie for class declarations and returns an array made of 
+ * 
  *  classname => relative path
- *
+ * 
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
@@ -1093,12 +1104,12 @@ class AutoloadClassFinder
 
     /**
      * Synchronize the autoloader map with the current file structure.
-     *
+     * 
      * Searches all files and sub directories for class declarations.
      * Creates a map of class name to (relative) file path.
      * Update the autoloader with the map declaration if $update equals true.
      * Returns a map of class name to file path.
-     *
+     * 
      * @param string $current_dir   The current directory in which we search for class declarations
      */
     protected function synch($current_dir = null)
@@ -1110,7 +1121,7 @@ class AutoloadClassFinder
         $current_dir = $current_dir ? $current_dir : $root_dir;
         $current_dir = realpath($current_dir);
 
-        //plugins are not handled by the autoloader.
+        //plugins are not handled by the autoloader. 
         if (basename($current_dir) == 'plugin') {
             return $result;
         }
@@ -1129,7 +1140,7 @@ class AutoloadClassFinder
 
                 foreach ($classes as $class) {
                     /* a few classes have the same namespace and class name
-                     * in this case we let the latest win as this may
+                     * in this case we let the latest win as this may 
                      * relates to different autoloader.
                      */
                     $rel_path = realpath($path);

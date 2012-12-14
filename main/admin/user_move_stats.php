@@ -105,7 +105,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 if (empty($result) || !in_array($user_id, array_keys($result))) {
                     if ($debug) echo 'User added to the session'; 
                     //Registering user to the new session
-                    SessionManager::suscribe_users_to_session($new_session_id,array($user_id),false);                    
+                    SessionManager::suscribe_users_to_session($new_session_id, array($user_id), false);                    
                 }            
                            
                 //Begin with the import process

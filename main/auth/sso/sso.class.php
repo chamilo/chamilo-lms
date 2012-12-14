@@ -39,7 +39,6 @@ class sso {
         $this->master_url = $this->protocol.$this->domain.$this->auth_uri;
         $this->target     = api_get_path(WEB_PATH);
     }
-    
     /**
      * Unlogs the user from the remote server 
      */
@@ -47,7 +46,7 @@ class sso {
         header('Location: '.$this->deauth_url);
         exit;
     }
-    
+
     /**
      * Sends the user to the master URL for a check of active connection
      */
@@ -59,6 +58,16 @@ class sso {
             $params = "&$params";
         }
         header('Location: '.$this->master_url.$params);
+        exit;
+    }
+    
+    function redirect_to($sso, $user_id, $logged_in) {           
+        if (isset($sso['target']) && !empty($sso['target'])) {
+            header('Location: '. $sso['target']);    
+        } else {
+            //Use this handy function to deal with platform settings
+            Redirect::session_request_uri($logged_in, $user_id);                                            
+        }                                            
         exit;
     }
     
@@ -105,7 +114,6 @@ class sso {
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
                         if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {                            
-                            
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
                                 //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
@@ -120,63 +128,64 @@ class sso {
                             }
                             
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);
-                            
-                            if ($my_user_is_admin === false) {
-                                if (is_array($my_url_list) && count($my_url_list) > 0 ) {
-                                    if (in_array($current_access_url_id, $my_url_list)) {
-                                        // the user has permission to enter at this site
-                                        $_user['user_id'] = $uData['user_id'];
+                                if ($my_user_is_admin === false) {
+                                    if (is_array($my_url_list) && count($my_url_list)>0 ) {
+                                        if (in_array($current_access_url_id, $my_url_list)) {
+                                            // the user has permission to enter at this site
+                                            $_user['user_id'] = $uData['user_id'];                                            
                                         $_user = api_get_user_info($_user['user_id']);
-                                        Session::write('_user', $_user);
-                                        event_login();
-                                        // Redirect to homepage
-                                        $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
-                                        header('Location: '. $sso_target);
-                                        exit;
+                                            Session::write('_user',$_user);
+                                            event_login();                                            
+                                            // Redirect to homepage
+                                            $sso_target = isset($sso['target']) ? $sso['target'] : api_get_path(WEB_PATH) .'.index.php';
+                                            header('Location: '. $sso_target);
+                                            exit;
+                                        } else {
+                                            // user does not have permission for this site
+                                            $loginFailed = true;
+                                            Session::erase('_uid');
+                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                                            exit;
+                                        }
                                     } else {
-                                        // user does not have permission for this site
+                                        // there is no URL in the multiple 
+                                        // urls list for this user
                                         $loginFailed = true;
                                         Session::erase('_uid');
                                         header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
                                         exit;
                                     }
-                                } else {
-                                    // there is no URL in the multiple 
-                                    // urls list for this user
-                                    $loginFailed = true;
-                                    Session::erase('_uid');
-                                    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                    exit;
-                                }
-                            } else {
-                                //Only admins of the "main" (first) Chamilo
-                                // portal can login wherever they want
-                                if (in_array(1, $my_url_list)) { 
-                                    //Check if this admin is admin on the  
-                                    // principal portal
-                                    $_user['user_id'] = $uData['user_id'];
+                                } else { 
+                                    //Only admins of the "main" (first) Chamilo
+                                    // portal can login wherever they want
+                                    if (in_array(1, $my_url_list)) { 
+                                        //Check if this admin is admin on the  
+                                        // principal portal
+                                        $_user['user_id'] = $uData['user_id'];
                                     $_user = api_get_user_info($_user['user_id']);
                                     $is_platformAdmin = $uData['status'] == COURSEMANAGER;
                                     Session::write('is_platformAdmin', $is_platformAdmin);
-                                    Session::write('_user', $_user);
-                                    event_login();
-                                } else {
-                                    //Secondary URL admin wants to login 
-                                    // so we check as a normal user
-                                    if (in_array($current_access_url_id, $my_url_list)) {
-                                        $_user['user_id'] = $uData['user_id'];
-                                        $_user = api_get_user_info($_user['user_id']);
                                         Session::write('_user',$_user);
                                         event_login();
+                                        self::redirect_to($sso, $_user['user_id'], true);
                                     } else {
-                                        $loginFailed = true;
-                                        Session::erase('_uid');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                        exit;
+                                        //Secondary URL admin wants to login 
+                                        // so we check as a normal user
+                                        if (in_array($current_access_url_id, $my_url_list)) {
+                                            $_user['user_id'] = $uData['user_id'];
+                                        $_user = api_get_user_info($_user['user_id']);
+                                            Session::write('_user',$_user);
+                                            event_login();
+                                            self::redirect_to($sso, $_user['user_id'], true);
+                                        } else {
+                                            $loginFailed = true;
+                                            Session::erase('_uid');
+                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                                            exit;
+                                        }
                                     }
                                 }
-                            }                       
-                        } else {
+                            } else {
                             // user account expired
                             $loginFailed = true;
                             Session::erase('_uid');
@@ -213,7 +222,6 @@ class sso {
         }
         return $loginFailed;
     }
-    
     /**
      * Decode the cookie (this function may vary depending on the
      * Single Sign On implementation

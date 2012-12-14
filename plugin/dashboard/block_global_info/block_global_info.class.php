@@ -10,8 +10,6 @@
 /**
  * required files for getting data
  */
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
-
 /**
  * This class is used like controller for this global info block plugin
  * the class name must be registered inside path.info file 

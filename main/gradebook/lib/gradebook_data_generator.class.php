@@ -189,8 +189,8 @@ class GradebookDataGenerator
 
     //  Other functions
 	private function build_result_column($item, $ignore_score_color) {
-		$scoredisplay = ScoreDisplay :: instance();        
-		$score 	     = $item->calc_score(api_get_user_id());
+		$scoredisplay = ScoreDisplay::instance();        
+		$score 	      = $item->calc_score(api_get_user_id());
 		
         if (!empty($score)) {        	
     		switch ($item->get_item_type()) {

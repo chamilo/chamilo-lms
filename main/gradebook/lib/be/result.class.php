@@ -172,7 +172,7 @@ class Result
 			if (isset($this->score)) {
 			 $sql .= ", ".$this->get_score();
 			}
-			$sql .= ")";
+			$sql .= ")";            
 			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');

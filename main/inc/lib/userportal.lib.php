@@ -3,6 +3,9 @@
 
 use \ChamiloSession as Session;
 
+/**
+ * @deprecated  use PageController class main/inc/page.lib.php
+ */
 class IndexManager {
 	var $tpl 	= false; //An instance of the template engine
 	var $name 	= '';
@@ -11,7 +14,8 @@ class IndexManager {
 	var $default_home 	= 'home/';
 
 	function __construct($title) {
-		$this->tpl = new Template($title);
+        global $app;
+		$this->tpl = new Template($title, $app);
 		$this->home     = api_get_home_path();
 		$this->user_id  = api_get_user_id();
 		$this->load_directories_preview = false;
@@ -712,7 +716,6 @@ class IndexManager {
     function return_user_image_block() {
 		$img_array = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'web', true, true);
 		$img_array = UserManager::get_picture_user(api_get_user_id(), $img_array['file'], 50, USER_IMAGE_SIZE_MEDIUM, ' width="90" height="90" ');
-        $profile_content = null;
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_content .='<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php"><img src="'.$img_array['file'].'"  '.$img_array['style'].' ></a>';
         } else {
@@ -723,13 +726,14 @@ class IndexManager {
     }
 
 	function return_profile_block() {
+		$html = '';
 		$user_id = api_get_user_id();
 
 		if (empty($user_id)) {
 			return;
 		}
 
-		$profile_content = '<ul class="nav nav-list">';
+		$profile_content .= '<ul class="nav nav-list">';
 
 		//  @todo Add a platform setting to add the user image.
 		if (api_get_setting('allow_message_tool') == 'true') {
@@ -801,7 +805,6 @@ class IndexManager {
             $display_add_course_link = true;
         }
         //$display_add_course_link = api_is_allowed_to_create_course() && ($_SESSION['studentview'] != 'studentenview');
-
 		if ($display_add_course_link) {
 			$show_create_link = true;
 		}
@@ -866,9 +869,7 @@ class IndexManager {
 		}
 
         $html = '';
-
         //Showing history title
-
 		if ($load_history) {
 			$html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
 			if (empty($session_categories)) {
@@ -897,139 +898,101 @@ class IndexManager {
                 if ($session_category_id == 0) {
 
                     // Independent sessions
-                    foreach ($session_category['sessions'] as $session) {
-                        $session_id = $session['session_id'];
+                    if (isset($session_category['sessions'])) {
+                        foreach ($session_category['sessions'] as $session) {
 
-                        // Don't show empty sessions.
-                        if (count($session['courses']) < 1) {
-                            continue;
-                        }
+                            $session_id = $session['session_id'];
 
-                        // Courses inside the current session.
-                        $date_session_start = $session['date_start'];
-                        $days_access_before_beginning  = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end  = $session['nb_days_access_after_end'];
-                        $date_session_end = $session['date_end'];
-                        $session_now = time();
-                        $html_courses_session = '';
-                        $count_courses_session = 0;
-
-                        foreach ($session['courses'] as $course) {
-                            $is_coach_course = api_is_coach($session_id, $course['code']);
-                            $allowed_time = 0;
-                            $dif_time_after = 0;
-                            if ($date_session_start != '0000-00-00') {
-                                if ($is_coach_course) {
-                                    $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
-                                    if ($session_now > $date_session_end) {
-                                        $dif_time_after = $session_now - api_strtotime($date_session_end);
-                                        $dif_time_after = round($dif_time_after/86400);
-                                    }
-                                } else {
-                                    $allowed_time = api_strtotime($date_session_start);
-                                }
+                            // Don't show empty sessions.
+                            if (count($session['courses']) < 1) {
+                                continue;
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
+
+                            $html_courses_session = '';
+                            $count_courses_session = 0;
+
+                            foreach ($session['courses'] as $course) {
                                 //read only and accesible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
-                                    $html_courses_session .= $c[1];
+                                    $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id, $this->load_directories_preview);
                                 }
                                 $count_courses_session++;
                             }
-                        }
 
-                        if ($count_courses_session > 0) {
-                            $params = array();
+                            if ($count_courses_session > 0) {
+                                $params = array();
+                                $params['icon'] =  Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
 
-                            $session_box = Display :: get_session_title_box($session_id);
+                                if (api_is_drh()) {
+                                    $session_link = $session['session_name'];
+                                    $params['link'] = null;
+                                } else {
+                                    $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                    $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
+                                }
 
-                            $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
-                            $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
-                            $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
+                                $params['title'] = $session_link;
 
-                            if (api_is_drh()) {
-                                $session_link = $session_box['title'];
-                                $params['link'] = null;
-                            } else {
-                                $session_link = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
-                                $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
+                                $moved_status = SessionManager::get_session_change_user_reason($session['moved_status']);
+                                $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
+
+                                $params['subtitle'] = isset($session['coach_info']) ? $session['coach_info']['complete_name'] : null.$moved_status;
+                                $params['dates'] = $session['date_message'];
+
+                                $params['right_actions'] = '';
+                                if (api_is_platform_admin()) {
+                                    $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">';
+                                    $params['right_actions'] .= Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
+                                }
+
+                                if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                //	$params['extra'] .=  $html_courses_session;
+                                }
+                                $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                             }
-
-                            $params['title'] = $session_link;
-                            $params['subtitle'] = $extra_info;
-
-                            $params['right_actions'] = '';
-                            if (api_is_platform_admin()) {
-                                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">';
-                                $params['right_actions'] .= Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
-                            }
-
-                            if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                            //	$params['extra'] .=  $html_courses_session;
-                            }
-                            $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                         }
                     }
+
 				} else {
 					// All sessions included in
                     $count_courses_session = 0;
                     $html_sessions = '';
                     foreach ($session_category['sessions'] as $session) {
                         $session_id = $session['session_id'];
-                        //var_dump($session);var_dump($session_category);
                         // Don't show empty sessions.
                         if (count($session['courses']) < 1) {
                             continue;
                         }
-                        $date_session_start             = $session['date_start'];
-                        //api_get_session_visibility($session_id);
-                        $days_access_before_beginning   = $session['nb_days_access_before_beginning'];
-                        $days_access_after_end  = $session['nb_days_access_after_end'];
-                        $date_session_end = $session['date_end'];
-                        $session_now = time();
+
                         $html_courses_session = '';
                         $count = 0;
-
                         foreach ($session['courses'] as $course) {
-                            $is_coach_course = api_is_coach($session_id, $course['code']);
-                            $dif_time_after = 0;
-                            if ($is_coach_course) {
-                                $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
-                                if ($session_now > $date_session_end) {
-                                        $dif_time_after = $session_now - api_strtotime($date_session_end);
-                                        $dif_time_after = round($dif_time_after/86400);
-                                }
-                            } else {
-                                $allowed_time = api_strtotime($date_session_start);
+                            if (api_get_setting('hide_courses_in_sessions') == 'false') {
+                                $html_courses_session .= CourseManager :: get_logged_user_course_html($course, $session_id);
                             }
-                            if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
-                                if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager :: get_logged_user_course_html($course, $session_id, 'session_course_item');
-                                    $html_courses_session .= $c[1];
-                                }
-                                $count_courses_session++;
-                                $count++;
-                            }
+                            $count_courses_session++;
+                            $count++;
                         }
 
                         $params = array();
-
                         if ($count > 0) {
-                            $session_box = Display :: get_session_title_box($session_id);
-                            $params['icon'] = Display::return_icon('window_list.png', $session_box['title'], array('width' => '48px', 'align' => 'absmiddle', 'id' => 'session_img_'.$session_id)) . ' ';
+                            $params['icon'] = Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
 
                             if (api_is_drh()) {
-                                $session_link = $session_box['title'];
+                                $session_link = $session['session_name'];
                                 $params['link'] = null;
                             } else {
-                                $session_link   = Display::tag('a', $session_box['title'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $session_link   = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                 $params['link'] =  api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
                             $params['title'] .=  $session_link;
 
-                            $params['subtitle'] =  (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
+                            $moved_status = SessionManager::get_session_change_user_reason($session['moved_status']);
+                            $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
+
+                            $params['subtitle'] = isset($session['coach_info']) ? $session['coach_info']['complete_name'] : null.$moved_status;
+                            $params['dates'] = $session['date_message'];
 
                             if (api_is_platform_admin()) {
                                 $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
@@ -1067,7 +1030,6 @@ class IndexManager {
                         }
                         $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
                     }
-
 				}
 			}
 		}

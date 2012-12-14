@@ -229,6 +229,17 @@ CREATE TABLE IF NOT EXISTS course_field (
 -- Table structure for table course_field_values
 --
 
+DROP TABLE IF EXISTS course_field_options;
+CREATE TABLE IF NOT EXISTS course_field_options (
+    id	int NOT NULL auto_increment,
+    field_id int NOT NULL,
+    option_value text,
+    option_display_text varchar(255),
+    option_order int,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY (id)
+);
+
 DROP TABLE IF EXISTS course_field_values;
 CREATE TABLE IF NOT EXISTS course_field_values(
     id  int NOT NULL auto_increment,
@@ -447,7 +458,7 @@ CREATE TABLE IF NOT EXISTS php_session (
   session_time int NOT NULL default '0',
   session_start int NOT NULL default '0',
   session_value mediumtext NOT NULL,
-  PRIMARY KEY  (session_id)
+  PRIMARY KEY (session_id)
 );
 
 --
@@ -455,24 +466,28 @@ CREATE TABLE IF NOT EXISTS php_session (
 --
 DROP TABLE IF EXISTS session;
 CREATE TABLE IF NOT EXISTS session (
-  id smallint unsigned NOT NULL auto_increment,
+  id MEDIUMINT unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
-  name char(50) NOT NULL default '',
+  name char(150) NOT NULL default '',
   nbr_courses smallint unsigned NOT NULL default '0',
   nbr_users mediumint unsigned NOT NULL default '0',
   nbr_classes mediumint unsigned NOT NULL default '0',
-  date_start date NOT NULL default '0000-00-00',
-  date_end date NOT NULL default '0000-00-00',
-  nb_days_access_before_beginning TINYINT UNSIGNED NULL default '0',
-  nb_days_access_after_end TINYINT UNSIGNED NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
   promotion_id INT NOT NULL,
-  PRIMARY KEY  (id),
-  INDEX (session_admin_id),
+  display_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  display_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  coach_access_start_date datetime NOT NULL default '0000-00-00 00:00:00',
+  coach_access_end_date datetime NOT NULL default '0000-00-00 00:00:00',
+  PRIMARY KEY (id),
   UNIQUE KEY name (name)
 );
+
+ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
+ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
 -- --------------------------------------------------------
 
@@ -481,12 +496,13 @@ CREATE TABLE IF NOT EXISTS session (
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
-  id_session smallint unsigned NOT NULL default '0',
-  course_code char(40) NOT NULL default '',
+  id_session MEDIUMINT unsigned NOT NULL default '0',
+  course_id INT NOT NULL default '0',
   nbr_users smallint unsigned NOT NULL default '0',
-  PRIMARY KEY  (id_session,course_code),
-  KEY course_code (course_code)
+  PRIMARY KEY  (id_session, course_id)
 );
+
+ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
 
 -- --------------------------------------------------------
 
@@ -495,16 +511,18 @@ CREATE TABLE IF NOT EXISTS session_rel_course (
 --
 DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
-  id_session smallint unsigned NOT NULL default '0',
-  course_code char(40) NOT NULL default '',
+  id_session MEDIUMINT unsigned NOT NULL default '0',
+  course_id INT NOT NULL default '0',
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY  (id_session,course_code,id_user),
-  KEY id_user (id_user),
-  KEY course_code (course_code)
+  PRIMARY KEY (id_session, course_id, id_user)
 );
+
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_category_code (category_code);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
+ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
 
 -- --------------------------------------------------------
 
@@ -514,11 +532,13 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
 DROP TABLE IF EXISTS session_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_user (
   id_session mediumint unsigned NOT NULL default '0',
-  id_user mediumint unsigned NOT NULL default '0',
+  id_user int unsigned NOT NULL default '0',
   relation_type int default 0,
+  moved_to int default 0,
+  moved_status int default 0,
+  moved_at datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY (id_session, id_user, relation_type)
 );
-
 
 DROP TABLE IF EXISTS session_field;
 CREATE TABLE IF NOT EXISTS session_field (
@@ -535,6 +555,17 @@ CREATE TABLE IF NOT EXISTS session_field (
     PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS session_field_options;
+CREATE TABLE IF NOT EXISTS session_field_options (
+    id	int NOT NULL auto_increment,
+    field_id int NOT NULL,
+    option_value text,
+    option_display_text varchar(255),
+    option_order int,
+    tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
+    PRIMARY KEY (id)
+);
+
 DROP TABLE IF EXISTS session_field_values;
 CREATE TABLE IF NOT EXISTS session_field_values(
     id  int NOT NULL auto_increment,
@@ -544,6 +575,10 @@ CREATE TABLE IF NOT EXISTS session_field_values(
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
+ALTER TABLE session_field_options ADD INDEX idx_session_field_options_field_id(field_id);
+ALTER TABLE session_field_values ADD INDEX idx_session_field_values_session_id(session_id);
+ALTER TABLE session_field_values ADD INDEX idx_session_field_values_field_id(field_id);
 
 --
 -- Table structure for table settings_current
@@ -569,6 +604,7 @@ CREATE TABLE IF NOT EXISTS settings_current (
 );
 
 ALTER TABLE settings_current ADD UNIQUE unique_setting (variable(110), subkey(110), category(110), access_url);
+ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
 
 --
 -- Dumping data for table settings_current
@@ -877,7 +913,12 @@ VALUES
 ('tool_visible_by_default_at_creation','forums','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Forums', 1),
 ('tool_visible_by_default_at_creation','quiz','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Quiz', 1),
 ('tool_visible_by_default_at_creation','gradebook','checkbox','Tools','true','ToolVisibleByDefaultAtCreationTitle','ToolVisibleByDefaultAtCreationComment',NULL,'Gradebook', 1),
-('chamilo_database_version', NULL, 'textfield',NULL, '1.9.0.18715','DatabaseVersion','', NULL, NULL, 0);
+('session_tutor_reports_visibility', NULL, 'radio', 'Session', 'true', 'SessionTutorsCanSeeExpiredSessionsResultsTitle', 'SessionTutorsCanSeeExpiredSessionsResultsComment', NULL, NULL, 1),
+('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
+('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1),
+('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
+('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
+
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
 
@@ -1219,7 +1260,14 @@ VALUES
 ('show_hot_courses', 'true', 'Yes'),
 ('show_hot_courses', 'false', 'No'),
 ('enable_webcam_clip', 'true', 'Yes'),
-('enable_webcam_clip', 'false', 'No');
+('enable_webcam_clip', 'false', 'No'),
+('session_tutor_reports_visibility', 'true', 'Yes'),
+('session_tutor_reports_visibility', 'false', 'No'),
+('gradebook_show_percentage_in_reports', 'true', 'Yes'),
+('gradebook_show_percentage_in_reports', 'false', 'No'),
+('session_page_enabled', 'true', 'Yes'),
+('session_page_enabled', 'false', 'No');
+
 
 UNLOCK TABLES;
 
@@ -1365,6 +1413,7 @@ CREATE TABLE IF NOT EXISTS gradebook_category (
     default_lowest_eval_exclude TINYINT default null,
   PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_evaluation;
 CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     id int unsigned NOT NULL auto_increment,
@@ -1379,22 +1428,26 @@ CREATE TABLE IF NOT EXISTS gradebook_evaluation (
     visible int NOT NULL,
     type varchar(40) NOT NULL default 'evaluation',
     locked int NOT NULL DEFAULT 0,
+    evaluation_type_id INT NOT NULL DEFAULT 0,
     PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_link;
 CREATE TABLE IF NOT EXISTS gradebook_link (
-  id int NOT NULL auto_increment,
-  type int NOT NULL,
-  ref_id int NOT NULL,
-  user_id int NOT NULL,
-  course_code varchar(40) NOT NULL,
-  category_id int NOT NULL,
-  created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
-  weight float NOT NULL,
-  visible int NOT NULL,
-  locked int NOT NULL DEFAULT 0,
-  PRIMARY KEY  (id)
+    id int NOT NULL auto_increment,
+    type int NOT NULL,
+    ref_id int NOT NULL,
+    user_id int NOT NULL,
+    course_code varchar(40) NOT NULL,
+    category_id int NOT NULL,
+    created_at DATETIME NOT NULL default '0000-00-00 00:00:00',
+    weight float NOT NULL,
+    visible int NOT NULL,
+    locked int NOT NULL DEFAULT 0,
+    evaluation_type_id INT NOT NULL DEFAULT 0,
+    PRIMARY KEY(id)
 );
+
 DROP TABLE IF EXISTS gradebook_result;
 CREATE TABLE IF NOT EXISTS gradebook_result (
   id int NOT NULL auto_increment,
@@ -1404,6 +1457,7 @@ CREATE TABLE IF NOT EXISTS gradebook_result (
   score float unsigned default NULL,
   PRIMARY KEY  (id)
 );
+
 DROP TABLE IF EXISTS gradebook_score_display;
 CREATE TABLE IF NOT EXISTS gradebook_score_display (
   id int NOT NULL auto_increment,
@@ -1413,7 +1467,15 @@ CREATE TABLE IF NOT EXISTS gradebook_score_display (
   score_color_percent float unsigned NOT NULL default 0,
   PRIMARY KEY (id)
 );
+
 ALTER TABLE gradebook_score_display ADD INDEX(category_id);
+
+DROP TABLE IF EXISTS gradebook_evaluation_type;
+CREATE TABLE IF NOT EXISTS gradebook_evaluation_type (
+    id  INT unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    name varchar(255),
+    external_id INT unsigned NOT NULL DEFAULT 0
+);
 
 DROP TABLE IF EXISTS user_field;
 CREATE TABLE IF NOT EXISTS user_field (
@@ -1429,6 +1491,7 @@ CREATE TABLE IF NOT EXISTS user_field (
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY(id)
 );
+
 DROP TABLE IF EXISTS user_field_options;
 CREATE TABLE IF NOT EXISTS user_field_options (
     id	int NOT NULL auto_increment,
@@ -1439,6 +1502,7 @@ CREATE TABLE IF NOT EXISTS user_field_options (
     tms	DATETIME NOT NULL default '0000-00-00 00:00:00',
     PRIMARY KEY (id)
 );
+
 DROP TABLE IF EXISTS user_field_values;
 CREATE TABLE IF NOT EXISTS user_field_values(
     id	bigint	NOT NULL auto_increment,
@@ -1519,6 +1583,7 @@ CREATE TABLE IF NOT EXISTS access_url(
     active	int unsigned not null default 0,
     created_by	int	not null,
     tms DATETIME NOT NULL default '0000-00-00 00:00:00',
+    url_type tinyint unsigned default 1,
     PRIMARY KEY (id)
 );
 
@@ -2826,6 +2891,7 @@ CREATE TABLE IF NOT EXISTS notification (
 	dest_user_id INT NOT NULL,
  	dest_mail 	CHAR(255),
  	title 		CHAR(255),
+    sender_id   INT NOT NULL DEFAULT 0,
  	content 	CHAR(255),
  	send_freq 	SMALLINT DEFAULT 1,
  	created_at 	DATETIME NOT NULL,
@@ -2995,9 +3061,13 @@ DROP TABLE IF EXISTS grade_components;
 CREATE TABLE grade_components (
     id INTEGER NOT NULL AUTO_INCREMENT,
     percentage VARCHAR(255)  NOT NULL,
-    title VARCHAR(255)  NOT NULL,
-    acronym VARCHAR(255)  NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    acronym VARCHAR(255) NOT NULL,
     grade_model_id INTEGER NOT NULL,
+    prefix VARCHAR(255) DEFAULT NULL,
+    count_elements INT DEFAULT 0,
+    exclusions INT DEFAULT 0,
+    grade_model_id INT NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -3006,9 +3076,9 @@ ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 DROP TABLE IF EXISTS course_type;
 CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
-    name varchar(50) not null, 
-    translation_var char(40) default 'UndefinedCourseTypeLabel', 
-    description TEXT default '', 
+    name varchar(50) not null,
+    translation_var char(40) default 'UndefinedCourseTypeLabel',
+    description TEXT default '',
     props text default ''
 );
 
@@ -3025,3 +3095,58 @@ CREATE TABLE usergroup_rel_question (
     usergroup_id int unsigned not null,
     coefficient float(6,2)
 );
+
+DROP TABLE IF EXISTS branch_sync;
+CREATE TABLE branch_sync(
+  id int unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  access_url_id int unsigned not null,
+  branch_name varchar(250) default '',
+  branch_ip varchar(40) default '',
+  latitude decimal(15,7),
+  longitude decimal(15,7),
+  dwn_speed int unsigned default null,
+  up_speed int unsigned default null,
+  delay int unsigned default null,
+  admin_mail varchar(250) default '',
+  admin_name varchar(250) default '',
+  admin_phone varchar(250) default '',
+  last_sync_trans_id bigint unsigned default 0,
+  last_sync_trans_date datetime,
+  last_sync_type char(20) default 'full'
+);
+
+DROP TABLE IF EXISTS branch_sync_log;
+CREATE TABLE branch_sync_log(
+  id bigint unsigned not null AUTO_INCREMENT PRIMARY KEY,
+  branch_sync_id int unsigned not null,
+  sync_trans_id bigint unsigned default 0,
+  sync_trans_date datetime,
+  sync_type char(20)
+);
+
+
+DROP TABLE IF EXISTS branch_transaction_status;
+CREATE TABLE branch_transaction_status (
+    id tinyint not null PRIMARY KEY AUTO_INCREMENT,
+    title char(20)
+);
+
+INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
+
+DROP TABLE IF EXISTS branch_transaction;
+CREATE TABLE branch_transaction (
+    id bigint unsigned not null AUTO_INCREMENT,
+    transaction_id bigint unsigned,
+    branch_id int not null default 0,
+    action char(20),
+    item_id char(36),
+    orig_id char(36),
+    dest_id char(36),
+    status_id tinyint not null default 0,
+    time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+    PRIMARY KEY (id, transaction_id, branch_id)
+);
+
+-- Do not move this
+UPDATE settings_current SET selected_value = '1.10.0.20771' WHERE variable = 'chamilo_database_version';

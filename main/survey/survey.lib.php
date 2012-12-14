@@ -504,7 +504,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function update_survey_answered($survey_id, $user, $survey_code) {
+	static function update_survey_answered($survey_id, $user, $survey_code) {
 		// Database table definitions
 		$table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_invitation 	= Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -516,11 +516,11 @@ class survey_manager {
 
 		// Storing this value in the survey table
 		$sql = "UPDATE $table_survey SET answered = $number WHERE c_id = $course_id AND survey_id = ".Database::escape_string($survey_id);
-		$res = Database::query($sql);
+		Database::query($sql);
 
 		// Storing that the user has finished the survey.
 		$sql = "UPDATE $table_survey_invitation SET answered='1' WHERE c_id = $course_id AND session_id='".api_get_session_id()."' AND user='".Database::escape_string($user)."' AND survey_code='".Database::escape_string($survey_code)."'";
-		$res = Database::query($sql);
+		Database::query($sql);
 	}
 
 	/**
@@ -1210,7 +1210,7 @@ class survey_manager {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {
+	static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null) {
 
 		// Database table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
@@ -2412,7 +2412,7 @@ class SurveyUtil {
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	function display_user_report() {
+	static function display_user_report() {
 	    $course_id = api_get_course_int_id();
 
 		global $people_filled, $survey_data;
@@ -2701,8 +2701,7 @@ class SurveyUtil {
 			$result = Database::query($sql);
 			while ($row = Database::fetch_array($result)) {
 			    $user_info = api_get_user_info($row['user']);
-                $user_info = $user_info['complete_name'];
-				echo '<a href="reporting.php?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$row['user'].'">'.$user_info.'</a><br />';
+				echo '<a href="reporting.php?action=userreport&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.$row['user'].'">'.$user_info['complete_name'].'</a><br />';
 			}
 		}
 	}
@@ -4065,7 +4064,7 @@ class SurveyUtil {
 	static function display_survey_list() {
 		$parameters = array();
 		$parameters['cidReq'] = api_get_course_id();
-		if ($_GET['do_search']) {
+		if (isset($_GET['do_search']) && $_GET['do_search']) {
 			$message = get_lang('DisplaySearchResults').'<br />';
 			$message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
 			Display::display_normal_message($message, false);

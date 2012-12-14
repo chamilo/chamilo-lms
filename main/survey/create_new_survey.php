@@ -50,7 +50,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
 $table_user 				= Database :: get_main_table(TABLE_MAIN_USER);
 $table_course 				= Database :: get_main_table(TABLE_MAIN_COURSE);
-$table_course_survey_rel 	= Database :: get_main_table(TABLE_MAIN_COURSE_SURVEY);
 $table_gradebook_link 		= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/

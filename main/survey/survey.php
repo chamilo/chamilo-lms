@@ -40,7 +40,6 @@ $table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUEST
 $table_survey_question_group    = Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP);
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 $survey_id = intval($_GET['survey_id']);
 
@@ -53,7 +52,7 @@ $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('Surv
 if (isset($_GET['survey_id'])) {
 	$course_code = api_get_course_id();
 	if ($course_code!=-1) {
-		$survey_data = survey_manager::get_survey($survey_id);		
+		$survey_data = survey_manager::get_survey($survey_id);
 	} else {
 		Display :: display_header(get_lang('ToolSurvey'));
 		Display :: display_error_message(get_lang('NotAllowed'), false);
@@ -64,12 +63,12 @@ if (isset($_GET['survey_id'])) {
 
 $tool_name = strip_tags($survey_data['title']);
 
-/* 
+/*
 if (api_substr($survey_data['title'], 0, 3) != '<p>') {
-	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));    
-} else {    
+	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
+} else {
 	$tool_name = strip_tags(api_substr(api_html_entity_decode(api_substr($survey_data['title'], 3, -4), ENT_QUOTES), 0, 40));
-    
+
 }*/
 
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
@@ -83,7 +82,7 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 
 	if (($_GET['action'] == 'addgroup')) {
 		if (!empty($_POST['group_id'])) {
-			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\' 
+			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
 			                 WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
 			$sendmsg = 'GroupUpdatedSuccessfully';
 		} elseif(!empty($_POST['name'])) {
@@ -195,11 +194,11 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
 			FROM $table_survey_question survey_question
 			LEFT JOIN $table_survey_question_option survey_question_option
 			ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
-			WHERE    survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND 
+			WHERE    survey_question.survey_id 	= '".Database::escape_string($survey_id)."' AND
 			         survey_question.c_id 		= $course_id
 			GROUP BY survey_question.question_id
 			ORDER BY survey_question.sort ASC";
-			
+
 $result = Database::query($sql);
 $question_counter_max = Database::num_rows($result);
 while ($row = Database::fetch_array($result, 'ASSOC')) {
@@ -217,7 +216,7 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
 	} else if ($row['type'] == 'multiplechoice') {
 		$tool_name = get_lang('UniqueSelect');
 	} else {
-		$tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));        
+		$tool_name = get_lang(api_ucfirst(Security::remove_XSS($row['type'])));
 	}
 
 	echo '</td>';

@@ -78,7 +78,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
 	if (is_numeric($survey_data['survey_share'])) {
 		survey_manager::delete_survey($survey_data['survey_share'], true);
 	}
-    
+
 	$return = survey_manager :: delete_survey($_GET['survey_id']);
 	if ($return) {
 		Display :: display_confirmation_message(get_lang('SurveyDeleted'), false);
@@ -110,7 +110,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'empty') {
 }
 
 // Action handling: performing the same action on multiple surveys
-if ($_POST['action']) {
+if (isset($_POST['action']) && $_POST['action']) {
 	if (is_array($_POST['id'])) {
 		foreach ($_POST['id'] as $key => & $value) {
 			// getting the information of the survey (used for when the survey is shared)
@@ -127,7 +127,6 @@ if ($_POST['action']) {
 		Display :: display_error_message(get_lang('NoSurveysSelected'), false);
 	}
 }
-echo $extended_rights_for_coachs;
 
 echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {

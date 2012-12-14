@@ -24,7 +24,7 @@ $survey_id = intval($_GET['survey_id']);
 /**
  * @todo use export_table_csv($data, $filename = 'export')
  */
-if ($_POST['export_report']) {
+if (isset($_POST['export_report']) && $_POST['export_report']) {
 	switch($_POST['export_format']) {
 		case 'xls':
 			$survey_data = survey_manager::get_survey($survey_id);
@@ -36,7 +36,7 @@ if ($_POST['export_report']) {
 		default:
 			$survey_data = survey_manager::get_survey($survey_id);
 			$data = SurveyUtil::export_complete_report($_GET['user_id']);
-			
+
 			//$filename = 'fileexport.csv';
 			$filename = 'survey_results_'.$survey_id.'.csv';
 
@@ -75,7 +75,6 @@ if (!api_is_allowed_to_edit(false, true)) {
 // Database table definitions
 $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
-$user_info 						= Database :: get_main_table(TABLE_MAIN_SURVEY_REMINDER); // TODO: To be checked. TABLE_MAIN_SURVEY_REMINDER has not been defined.
 
 // Getting the survey information
 

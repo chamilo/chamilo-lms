@@ -853,10 +853,16 @@ class IndexManager {
 	}
 
 	/**
-	 * The most important function here, prints the session and course list (user_portal.php)
-	 *
-	 * */
+	 * The most important function here, prints the sessions and courses 
+         * list for use in user_portal.php for one given user
+	 * @param int User ID
+         * @return string HTML list of session categories, sessions and courses
+         * @assert (null) === false
+	 */
 	function return_courses_and_sessions($user_id) {
+            if (!isset($user_id)) {
+                return false;
+            }
         $session_categories = array();
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 

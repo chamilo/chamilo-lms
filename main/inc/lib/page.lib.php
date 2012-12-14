@@ -761,7 +761,7 @@ class PageController {
                             if ($count_courses_session > 0) {
                                 $params = array();
                                 $params['icon'] =  Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
-
+                                $params['is_session'] = true;
                                 //Default session name
                                 $session_link = $session['session_name'];
                                 $params['link'] = null;

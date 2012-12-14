@@ -351,11 +351,12 @@ class MigrationCustom {
             'weight'    => '20',
             'max'       => '20'
         );*/
-        
-        //Here the $data variable has $data['course_code'] that will be added when creating the session
+
+        self::fix_access_dates($data);
+        // Here the $data variable has $data['course_code'] that will be added 
+        //   when creating the session
         // If session already exists, it will return the existing session id
         $session_id = SessionManager::add($data, true);
-        //error_log('create_session');        
         if (!$session_id) {
             error_log('Error: Failed to create_session '.$data['name']);
         } else{
@@ -1067,6 +1068,8 @@ class MigrationCustom {
         
         if ($session_info['error'] == false) {
             unset($session_info['error']);
+            // check dates (only do this at session creation)
+            self::fix_access_dates($session_info);
             $session_id = SessionManager::add($session_info);
             $session_info = api_get_session_info($session_id, true);
             if ($session_id) {
@@ -1245,6 +1248,10 @@ class MigrationCustom {
         $data = Migration::soap_call($web_service_details, $function_name, array('intIdSede'=> $original_data['branch_id'], "uidid".$extra_field_variable => $original_data['item_id']));
 
         if ($data['error'] == false) {
+            // Exceptional treatment for specific fields
+            if ($extra_field_variable == 'aula') {
+                $data['name'] = $original_data['branch_id'].' - '.$data['name'];
+            }
             $extra_field = new ExtraField($type);
             $extra_field_info = $extra_field->get_handler_field_info_by_field_variable($extra_field_variable);
             if ($extra_field_info) {
@@ -1308,6 +1315,10 @@ class MigrationCustom {
         $data = Migration::soap_call($web_service_details, $function_name, $params);          
         if ($data['error'] == false) {
             
+            // Exceptional treatment for specific fields
+            if ($extra_field_variable == 'aula') {
+                $data['name'] = $original_data['branch_id'].' - '.$data['name'];
+            }
             //Update 1 item
             if (!empty($extra_field_option_info)) {
                 
@@ -1948,5 +1959,83 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         unset($result['start']);
         unset($result['end']);
         return $result;
+    }
+    /**
+     * Review the dates given in the session details array and make sure we
+     * define them in the best possible way
+     * @param array Array of session data passed by reference (modified in-place)
+     * @return bool Always returns true
+     */
+    static function fix_access_dates(&$data) {
+        // Check the $data array for access_start_date, access_end_date, 
+        //  coach_access_start_date and coach_access_end_date. If any is not
+        //  defined, reuse the period or other dates to fill it
+        $nt = '0000-00-00 00:00:00'; //declar a "null time"
+        $period = (!empty($data['extra_field_periodo'])?$data['extra_field_periodo']:'000000');
+        $asd = (!empty($data['access_start_date'])?$data['access_start_date']:$nt);
+        $aed = (!empty($data['access_end_date'])?$data['access_end_date']:$nt);
+        $casd = (!empty($data['coach_access_start_date'])?$data['coach_access_start_date']:$nt);
+        $caed = (!empty($data['coach_access_end_date'])?$data['coach_access_end_date']:$nt);
+        $vstart = $vend = $nt;
+        $matches = array();
+        $match = preg_match('/-\s(\d{4})(\d{2})\s-/',$row['name'],$matches);
+        $now = new DateTime(null);
+        $cy = $now->format('Y');
+        $cm = $now->format('m');
+        if (!empty($match)) {
+            $ny = $y = $matches[1];
+            $nm = 1 + $m = $matches[2];
+            //ignore current month
+            if ($y == $cy && $m == $cm) { break; }
+            if ($m == 12) {
+                $ny = $y+1;
+                $nm = 1;
+            }
+            $start = new DateTime();
+            $end = new DateTime();
+            $start->setDate($y, $m, 1);
+            $end->setDate($ny, $nm, 1);
+            $end->modify('-1 day');
+            $vstart = $start->format('Y-m-d H:i:s');
+            $vend = $end->format('Y-m-d H:i:s');
+        }
+        // Now assess the situation
+        if ($period != '000000') {
+            if ($asd != $nt && $aed != $nt && $casd != $nt && $caed != $nt) {
+                //everything is defined, perfect, nothing to do
+                break;
+            }
+            if ($asd == $nt) {
+                //if access_start_date is undefined, re-use the period's date
+                $asd = $vstart;
+            }
+            if ($casd == $nt) {
+                //access_start_date is defined but not coach_access_start_date,
+                // so re-use access_start_date
+                $casd = $asd;
+            }
+            if ($aed == $nt) {
+                //if access_end_date is undefined, re-use the period's date
+                $aed = $vend;
+            }
+            if ($caed == $nt) {
+                //access_end_date is defined but not coach_access_end_date,
+                // so re-use access_end_date
+                $caed = $aed;
+            }
+        } else {
+            // if the period is not defined
+            if ($asd != $nt && $casd == $nt) {
+                $casd = $asd;
+            }
+            if ($aed != $nt && $caed == $nt) {
+                $caed = $aed;
+            }
+        }
+        $params['access_start_date'] = $asd;
+        $params['access_end_date'] = $aed;
+        $params['coach_access_start_date'] = $casd;
+        $params['coach_access_end_date'] = $caed;
+        return true; 
     }
 }

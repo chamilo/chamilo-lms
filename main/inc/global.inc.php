@@ -65,7 +65,7 @@ if (empty($_configuration['system_version'])) {
 // For backward compatibility.
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
-$userPasswordCrypted                = $_configuration['password_encryption'];
+$userPasswordCrypted                    = $_configuration['password_encryption'];
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
@@ -110,11 +110,10 @@ require_once __DIR__.'../../../vendor/autoload.php';
 //Start Silex
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 
 $app = new Application();
 $app['configuration_file'] = $main_configuration_file_path;
-
-//$app['include_path'] = $includePath;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -156,6 +155,82 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
     return $twig;
 }));
+
+
+//Setting Doctrine service provider
+//Gathering default info of the current installation from the $_configuration array
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver'    => 'pdo_mysql',
+        'dbname'    => $_configuration['main_database'],
+        'user'      => $_configuration['db_user'],
+        'password'  => $_configuration['db_password'],
+        'host'      => $_configuration['db_host'],
+    )
+));
+
+$app->register(new DoctrineOrmServiceProvider, array(
+    "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+    "orm.em.options" => array(
+        "mappings" => array(
+            // Using actual filesystem paths
+            /*array(
+                "type" => "annotation",
+                "namespace" => "Foo\Entities",
+                "path" => __DIR__."/src/Foo/Entities",
+            ),*/
+            /*array(
+                "type" => "xml",
+                "namespace" => "Bat\Entities",
+                "path" => __DIR__."/src/Bat/Resources/mappings",
+            ),*/
+            array(
+                "type" => "annotation",
+                "namespace" => "Entity",
+                "path" => $lib_path."Entity",
+            )
+            // Using PSR-0 namespaceish embedded resources
+            // (requires registering a PSR-0 Resource Locator
+            // Service Provider)
+            /*array(
+                "type" => "annotations",
+                "namespace" => "Baz\Entities",
+                "resources_namespace" => "Baz\Entities",
+            ),
+            array(
+                "type" => "xml",
+                "namespace" => "Bar\Entities",
+                "resources_namespace" => "Bar\Resources\mappings",
+            ),*/
+        ),
+    ),
+));
+
+
+/*
+// Register Doctrine ORM
+$app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
+    'db.orm.proxies_dir'           => $app['db.orm.proxies_dir'],
+    'db.orm.proxies_namespace'     => 'DoctrineProxy',
+    'db.orm.cache'                 =>
+        !$app['debug'] && extension_loaded('apc') ? new ApcCache() : new ArrayCache(),
+    'db.orm.auto_generate_proxies' => true,
+    'db.orm.entities'              => array(array(
+        'type'      => 'annotation',       // entity definition
+        'path'      => api_get_path(INCLUDE_PATH).'Entity',
+        'namespace' => 'Entity', // your classes namespace
+    )),
+));*/
+
+//URL generator provider
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+//Monolog
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
+    'monolog.name'    => 'chamilo',
+));
 
 //Creating Chamilo service provider
 use Silex\ServiceProviderInterface;
@@ -209,7 +284,6 @@ $app->before(function() use ($app) {
     if (!file_exists($app['configuration_file'])) {
         $app->abort(500, "Chamilo has not been installed"); //error 2
     }
-
 });
 
 $app->after(function() {
@@ -293,7 +367,7 @@ if (!Database::select_db($_configuration['main_database'], $database_connection)
 }
 
 /*   Initialization of the default encodings */
-/*
+
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
 $result = Database::query($sql);
@@ -302,9 +376,7 @@ while ($row = @Database::fetch_array($result)) {
 }
 if (empty($charset)) {
     $charset = 'UTF-8';
-}*/
-
-$charset = 'UTF-8';
+}
 
 // Preserving the value of the global variable $charset.
 $charset_initial_value = $charset;
@@ -318,13 +390,12 @@ api_set_internationalization_default_encoding($charset);
 Database::query("SET SESSION character_set_server='utf8';");
 Database::query("SET SESSION collation_server='utf8_general_ci';");
 
-/*
 if (api_is_utf8($charset)) {
     // See Bug #1802: For UTF-8 systems we prefer to use "SET NAMES 'utf8'" statement in order to avoid a bizarre problem with Chinese language.
     Database::query("SET NAMES 'utf8';");
 } else {
     Database::query("SET CHARACTER SET '" . Database::to_db_encoding($charset) . "';");
-}*/
+}
 Database::query("SET NAMES 'utf8';");
 
 // Start session after the internationalization library has been initialized.
@@ -365,6 +436,7 @@ $administrator['email'] = isset($administrator['email']) ? $administrator['email
 $administrator['name']  = isset($administrator['name']) ? $administrator['name'] : 'Admin';
 
 $mail_conf = api_get_path(CONFIGURATION_PATH).'mail.conf.php';
+
 if (file_exists($mail_conf)) {
 	require_once $mail_conf;
 }
@@ -376,7 +448,6 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
-// ===== end "who is logged in?" module section =====
 //error_reporting(-1);
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);

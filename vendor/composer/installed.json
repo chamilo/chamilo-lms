@@ -56,18 +56,386 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "symfony/yaml",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Yaml",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Yaml",
+            "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Yaml/archive/4fdae9fa28b7abd1135afc5227a4e59af4b64e5a.zip",
+            "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-06 10:00:55",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "doctrine/common",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/common",
+            "reference": "d514e3920656921ba1148f16a4089222c58bc83a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/common/archive/d514e3920656921ba1148f16a4089222c58bc83a.zip",
+            "reference": "d514e3920656921ba1148f16a4089222c58bc83a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2012-12-05 12:03:39",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "http://jmsyst.com",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Common Library for Doctrine projects",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "collections",
+            "spl",
+            "eventmanager",
+            "annotations",
+            "persistence"
+        ]
+    },
+    {
+        "name": "doctrine/dbal",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/dbal",
+            "reference": "74c7616132ad82420320e76fa49781ee2f6af532"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/dbal/archive/74c7616132ad82420320e76fa49781ee2f6af532.zip",
+            "reference": "74c7616132ad82420320e76fa49781ee2f6af532",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine/common": ">=2.3-dev,<2.5-dev"
+        },
+        "time": "2012-12-11 16:41:50",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Database Abstraction Layer",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "persistence",
+            "dbal",
+            "queryobject"
+        ]
+    },
+    {
+        "name": "symfony/console",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Console",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Console",
+            "reference": "4dc07777f5d1247d805a42efbdb4f664c965df26"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Console/archive/4dc07777f5d1247d805a42efbdb4f664c965df26.zip",
+            "reference": "4dc07777f5d1247d805a42efbdb4f664c965df26",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-13 18:25:06",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Console\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "doctrine/orm",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/doctrine/doctrine2.git",
+            "reference": "df1336dd262faf40d5a343c1d21cbbc4aa8192d9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/doctrine2/archive/df1336dd262faf40d5a343c1d21cbbc4aa8192d9.zip",
+            "reference": "df1336dd262faf40d5a343c1d21cbbc4aa8192d9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "ext-pdo": "*",
+            "symfony/console": "2.*",
+            "doctrine/dbal": ">=2.3-dev,<2.5-dev"
+        },
+        "suggest": {
+            "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+        },
+        "time": "2012-12-04 12:29:01",
+        "bin": [
+            "bin/doctrine",
+            "bin/doctrine.php"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\ORM\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Object-Relational-Mapper for PHP",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "orm"
+        ]
+    },
+    {
+        "name": "dflydev/doctrine-orm-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider",
+            "reference": "12956355cc7aff283f833e2b17fb6521ed9e17d8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider/archive/12956355cc7aff283f833e2b17fb6521ed9e17d8.zip",
+            "reference": "12956355cc7aff283f833e2b17fb6521ed9e17d8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "doctrine/orm": ">=2.3,<3.0",
+            "pimple/pimple": "1.*@dev"
+        },
+        "require-dev": {
+            "cilex/cilex": "1.*@dev",
+            "silex/silex": "1.*@dev"
+        },
+        "suggest": {
+            "dflydev/psr0-resource-locator-service-provider": "1.0.*@dev"
+        },
+        "time": "2012-11-20 17:11:41",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Dflydev\\Cilex\\Provider\\DoctrineOrm": "src",
+                "Dflydev\\Pimple\\Provider\\DoctrineOrm": "src",
+                "Dflydev\\Silex\\Provider\\DoctrineOrm": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Dragonfly Development Inc.",
+                "email": "info@dflydev.com",
+                "homepage": "http://dflydev.com"
+            },
+            {
+                "name": "Beau Simensen",
+                "email": "beau@dflydev.com",
+                "homepage": "http://beausimensen.com"
+            }
+        ],
+        "description": "Doctrine ORM Service Provider",
+        "keywords": [
+            "silex",
+            "orm",
+            "doctrine",
+            "pimple",
+            "cilex"
+        ]
+    },
+    {
         "name": "pimple/pimple",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "git://github.com/fabpot/Pimple.git",
-            "reference": "86df0604a10c5faf20b466ae6a0b762cc6ed0a35"
+            "reference": "v1.0.1"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/fabpot/Pimple/archive/86df0604a10c5faf20b466ae6a0b762cc6ed0a35.zip",
-            "reference": "86df0604a10c5faf20b466ae6a0b762cc6ed0a35",
+            "url": "https://github.com/fabpot/Pimple/archive/v1.0.1.zip",
+            "reference": "v1.0.1",
             "shasum": ""
         },
         "require": {
@@ -110,12 +478,12 @@
         "source": {
             "type": "git",
             "url": "git://github.com/fabpot/Silex.git",
-            "reference": "7e5862934aa831ededc9ca188a56816dc46e70b4"
+            "reference": "c2fc658327addb94f9032c45b851a0176c3ee850"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/fabpot/Silex/archive/7e5862934aa831ededc9ca188a56816dc46e70b4.zip",
-            "reference": "7e5862934aa831ededc9ca188a56816dc46e70b4",
+            "url": "https://github.com/fabpot/Silex/archive/c2fc658327addb94f9032c45b851a0176c3ee850.zip",
+            "reference": "c2fc658327addb94f9032c45b851a0176c3ee850",
             "shasum": ""
         },
         "require": {
@@ -150,7 +518,7 @@
             "symfony/css-selector": ">=2.1,<2.3-dev",
             "symfony/dom-crawler": ">=2.1,<2.3-dev"
         },
-        "time": "2012-12-02 18:04:58",
+        "time": "2012-12-12 21:20:27",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -191,12 +559,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Seldaek/monolog",
-            "reference": "546225bed27bea7d00b836e0f7d8954272e0cf42"
+            "reference": "b67085dc769de26348f08ad21f43220a156161dc"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/Seldaek/monolog/archive/546225bed27bea7d00b836e0f7d8954272e0cf42.zip",
-            "reference": "546225bed27bea7d00b836e0f7d8954272e0cf42",
+            "url": "https://github.com/Seldaek/monolog/archive/b67085dc769de26348f08ad21f43220a156161dc.zip",
+            "reference": "b67085dc769de26348f08ad21f43220a156161dc",
             "shasum": ""
         },
         "require": {
@@ -210,7 +578,7 @@
             "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
             "ext-mongo": "Allow sending log messages to a MongoDB server"
         },
-        "time": "2012-12-04 11:59:29",
+        "time": "2012-12-13 21:14:03",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -249,18 +617,18 @@
         "source": {
             "type": "git",
             "url": "git://github.com/fabpot/Twig.git",
-            "reference": "de5aaf2c1d43baafde255a042f5c7cf6122ea3ce"
+            "reference": "2757f482c679aa00bb8c7fdfcb337f2bb922fa5a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/fabpot/Twig/archive/de5aaf2c1d43baafde255a042f5c7cf6122ea3ce.zip",
-            "reference": "de5aaf2c1d43baafde255a042f5c7cf6122ea3ce",
+            "url": "https://github.com/fabpot/Twig/archive/2757f482c679aa00bb8c7fdfcb337f2bb922fa5a.zip",
+            "reference": "2757f482c679aa00bb8c7fdfcb337f2bb922fa5a",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2.4"
         },
-        "time": "2012-12-10 14:12:12",
+        "time": "2012-12-11 14:30:16",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -301,12 +669,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Routing",
-            "reference": "d5ecbda302b4704e374cea1e733967897675ee2c"
+            "reference": "e98510a5459fcaa686523b854a816aa569f2687f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/symfony/Routing/archive/d5ecbda302b4704e374cea1e733967897675ee2c.zip",
-            "reference": "d5ecbda302b4704e374cea1e733967897675ee2c",
+            "url": "https://github.com/symfony/Routing/archive/e98510a5459fcaa686523b854a816aa569f2687f.zip",
+            "reference": "e98510a5459fcaa686523b854a816aa569f2687f",
             "shasum": ""
         },
         "require": {
@@ -323,7 +691,7 @@
             "symfony/config": "2.2.*",
             "symfony/yaml": "2.2.*"
         },
-        "time": "2012-12-07 21:24:45",
+        "time": "2012-12-11 17:46:52",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -361,18 +729,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/HttpFoundation",
-            "reference": "0acee754b149537dd90ae1e97508e8767802811b"
+            "reference": "414c0c41b2b32b118761ec8a3deab594ae0189d6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/symfony/HttpFoundation/archive/0acee754b149537dd90ae1e97508e8767802811b.zip",
-            "reference": "0acee754b149537dd90ae1e97508e8767802811b",
+            "url": "https://github.com/symfony/HttpFoundation/archive/414c0c41b2b32b118761ec8a3deab594ae0189d6.zip",
+            "reference": "414c0c41b2b32b118761ec8a3deab594ae0189d6",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2012-12-07 09:33:24",
+        "time": "2012-12-11 10:49:22",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -413,12 +781,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/HttpKernel",
-            "reference": "323b8c877fdf1f47ce23ac5b882092dce0beeb9a"
+            "reference": "830b4db41b91617774561a82fff5aec87b5568c4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/symfony/HttpKernel/archive/323b8c877fdf1f47ce23ac5b882092dce0beeb9a.zip",
-            "reference": "323b8c877fdf1f47ce23ac5b882092dce0beeb9a",
+            "url": "https://github.com/symfony/HttpKernel/archive/830b4db41b91617774561a82fff5aec87b5568c4.zip",
+            "reference": "830b4db41b91617774561a82fff5aec87b5568c4",
             "shasum": ""
         },
         "require": {
@@ -445,7 +813,7 @@
             "symfony/dependency-injection": "2.2.*",
             "symfony/finder": "2.2.*"
         },
-        "time": "2012-12-07 10:04:59",
+        "time": "2012-12-13 17:31:33",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -483,18 +851,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/Config",
-            "reference": "160ce63c9e75a94b9da126967fcb6d15e4cb878e"
+            "reference": "bd0f27e64df413a34bc3f68f8585fa8dce7fdb88"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/symfony/Config/archive/160ce63c9e75a94b9da126967fcb6d15e4cb878e.zip",
-            "reference": "160ce63c9e75a94b9da126967fcb6d15e4cb878e",
+            "url": "https://github.com/symfony/Config/archive/bd0f27e64df413a34bc3f68f8585fa8dce7fdb88.zip",
+            "reference": "bd0f27e64df413a34bc3f68f8585fa8dce7fdb88",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2012-12-06 10:00:55",
+        "time": "2012-12-11 10:40:22",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -517,50 +885,6 @@
             }
         ],
         "description": "Symfony Config Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "symfony/yaml",
-        "version": "2.1.x-dev",
-        "version_normalized": "2.1.9999999.9999999-dev",
-        "target-dir": "Symfony/Component/Yaml",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Yaml",
-            "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/symfony/Yaml/archive/4fdae9fa28b7abd1135afc5227a4e59af4b64e5a.zip",
-            "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2012-12-06 10:00:55",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Yaml": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Yaml Component",
         "homepage": "http://symfony.com"
     }
 ]

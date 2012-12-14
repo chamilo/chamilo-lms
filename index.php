@@ -47,12 +47,26 @@ class IndexController
     public function indexAction(Application $app)
     {
         $request = $app['request'];
+
         //Actions
         $logout = $request->get('logout');
 
         if (!empty($logout)) {
             $this->logout();
         }
+
+        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
+        /*
+        $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
+        $c = count($paginator);
+
+        foreach ($paginator as $course) {
+            echo $course->getCode() . "\n";
+        }*/
+
+        //$app['orm.em']->find('EntityCourse', 1);
+        //var_dump($app['orm.ems']['mysql']);
+
 
         // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
         //$_setting['display_courses_to_anonymous_users'] = 'true';

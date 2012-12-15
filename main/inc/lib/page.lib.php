@@ -773,7 +773,7 @@ class PageController {
 
     /**
      * The most important function here, prints the session and course 
-       list (user_portal.php)
+     * list (user_portal.php)
      * @param int User ID
      * @return string HTML list of sessions and courses 
      * @assert () === false

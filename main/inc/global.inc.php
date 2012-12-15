@@ -49,6 +49,14 @@ if (file_exists($main_configuration_file_path)) {
     $_configuration = array();
 }
 
+//Redirects to the main/install/ page
+if (!$already_installed) {
+    $global_error_code = 2;
+    // The system has not been installed yet.
+    require $includePath.'/global_error_message.inc.php';
+    die();
+}
+
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
 if (!isset($GLOBALS['_configuration'])) {
@@ -57,15 +65,15 @@ if (!isset($GLOBALS['_configuration'])) {
 
 // Code for trnasitional purposes, it can be removed right before the 1.8.7 release.
 if (empty($_configuration['system_version'])) {
-    $_configuration['system_version']   = $_configuration['dokeos_version'];
-    $_configuration['system_stable']    = $_configuration['dokeos_stable'];
+    $_configuration['system_version']   = (!empty($_configuration['dokeos_version'])?$_configuration['dokeos_version']:'');
+    $_configuration['system_stable']    = (!empty($_configuration['dokeos_stable'])?$_configuration['dokeos_stable']:'');
     $_configuration['software_url']     = 'http://www.chamilo.org/';
 }
 
 // For backward compatibility.
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
-$userPasswordCrypted                    = $_configuration['password_encryption'];
+$userPasswordCrypted                    = (!empty($_configuration['password_encryption'])?$_configuration['password_encryption']:'sha1');
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';

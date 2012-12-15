@@ -2197,6 +2197,10 @@ class UserManager {
 
         // Get the list of sessions per user
         $condition_date_end = null;
+        $order = ' ORDER BY session_category_name, name ';
+        if ($reverse_order) {
+            $order = ' ORDER BY session_category_name DESC, name DESC ';
+        }
 
         if ($is_time_over) {
             $condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
@@ -2241,8 +2245,7 @@ class UserManager {
                       LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
                 WHERE (
                          scu.id_user = $user_id OR session.id_coach = $user_id
-                      )  $condition_date_end
-                ORDER BY session_category_name, name";
+                      )  $condition_date_end $order";
 
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {

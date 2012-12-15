@@ -787,7 +787,7 @@ class PageController {
 
         if ($load_history) {
             //Load sessions in category in *history*
-            $session_categories = UserManager::get_sessions_by_category($user_id, true);
+            $session_categories = UserManager::get_sessions_by_category($user_id, true, false, true);
         } else {
             //Load sessions in category
             $session_categories = UserManager::get_sessions_by_category($user_id, false);

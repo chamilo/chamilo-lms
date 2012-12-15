@@ -1,14 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt*/
-
 /**
  * This is the course library for Chamilo.
- *
  * All main course functions should be placed here.
  *
  * Many functions of this library deal with providing support for
- * virtual/linked/combined courses (this was already used in several universities
- * but not available in standard Chamilo).
+ * virtual/linked/combined courses (this was already used in several 
+ * universities but not available in standard Chamilo).
  *
  * The implementation changed, initially a course was a real course
  * if target_course_code was 0 , this was changed to NULL.
@@ -16,51 +14,6 @@
  *
  * @package chamilo.library
  */
-
-/**
-    DOCUMENTATION
-    (list not up to date, you can auto generate documentation with phpDocumentor)
-
-    CourseManager::get_real_course_code_select_html($element_name, $has_size=true, $only_current_user_courses=true)
-    CourseManager::check_parameter($parameter, $error_message)
-    CourseManager::check_parameter_or_fail($parameter, $error_message)
-    CourseManager::course_code_exists($wanted_course_code)
-    CourseManager::get_real_course_list()
-    CourseManager::get_virtual_course_list()
-
-    GENERAL COURSE FUNCTIONS
-    CourseManager::get_access_settings($course_code)
-    CourseManager::set_course_tool_visibility($tool_table_id, $visibility)
-    CourseManager::get_user_in_course_status($user_id, $course_code)
-    CourseManager::add_user_to_course($user_id, $course_code)
-    CourseManager::get_virtual_course_info($real_course_code)
-    CourseManager::is_virtual_course_from_visual_code($visual_code)
-    CourseManager::is_virtual_course_from_system_code($system_code)
-    CourseManager::get_virtual_courses_linked_to_real_course($real_course_code)
-    CourseManager::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)
-    CourseManager::has_virtual_courses_from_code($real_course_code, $user_id)
-    CourseManager::get_target_of_linked_course($virtual_course_code)
-
-    TITLE AND CODE FUNCTIONS
-    CourseManager::create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list)
-    CourseManager::create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list)
-
-    USER FUNCTIONS
-    CourseManager::get_real_course_list_of_user_as_course_admin($user_id)
-    CourseManager::get_course_list_of_user_as_course_admin($user_id)
-
-    CourseManager::is_user_subscribed_in_course($user_id, $course_code)
-    CourseManager::is_user_subscribed_in_real_or_linked_course($user_id, $course_code)
-    CourseManager::get_user_list_from_course_code($course_code)
-    CourseManager::get_real_and_linked_user_list($course_code);
-
-    GROUP FUNCTIONS
-    CourseManager::get_group_list_of_course($course_code)
-
-    CREATION FUNCTIONS
-    CourseManager::attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category)
-*/
-
 /**
  *    CourseManager Class
  *    @package chamilo.library
@@ -80,6 +33,8 @@ class CourseManager {
      * Creates a course
      * @param   array   with the columns in the main.course table
      * @param   mixed   false if the course was not created, array with the course info
+     * @return mixed False on error, or an array with course attributes on success
+     * @assert () === false
      */
     static function create_course($params) {
         global $_configuration;
@@ -170,8 +125,14 @@ class CourseManager {
         }
         return false;
     }
-
+    /**
+     * Updates a course with the given array of attributes
+     * @param array Array of attributes
+     * @return array Array of course attributes
+     * @assert () === false
+     */
     static function update($params) {
+        if (!is_array($params) or count($params)<1) { return false; }
         $course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
 
@@ -268,10 +229,11 @@ class CourseManager {
     }
 
     /**
-     * Returns all the information of a given coursecode
+     * Returns all the information of a given coursecode from the course table
      * @param string $course_code, the course code
      * @return an array with all the fields of the course table
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @assert (array(1,2,3)) === false
      */
     public static function get_course_information($course_code) {
         return Database::fetch_array(Database::query(
@@ -281,15 +243,15 @@ class CourseManager {
     }
 
     /**
-     * Returns all the information of a given coursecode
+     * Returns all the information of a given coursecode from the course 
+     * table by it integer ID
      * @param   int     the course id
      * @return an array with all the fields of the course table
-
+     * @assert (-1) === false
      */
     public static function get_course_information_by_id($course_id) {
         return Database::select('*, id as real_id', Database::get_main_table(TABLE_MAIN_COURSE), array('where'=>array('id = ?' =>intval($course_id))),'first');
     }
-
 
     /**
      * Returns a list of courses. Should work with quickform syntax
@@ -299,6 +261,8 @@ class CourseManager {
      * @param    string    The direction of the order (ASC or DESC). Optional, defaults to ASC.
      * @param    string    The visibility of the course, or all by default.
      * @param    string    If defined, only return results for which the course *title* begins with this string
+     * @return mixed Array of courses details, or false on error
+     * @assert (array(1,2,3)) === false
      */
     public static function get_courses_list($from = 0, $howmany = 0, $orderby = 1, $orderdirection = 'ASC', $visibility = -1, $startwith = '') {
 
@@ -350,6 +314,7 @@ class CourseManager {
      * @param string $course_code, the course code
      * @todo for more consistency: use course_info call from database API
      * @return an array with int fields "visibility", "subscribe", "unsubscribe"
+     * @assert () === false
      */
     public static function get_access_settings($course_code) {
         return Database::fetch_array(Database::query(
@@ -359,10 +324,12 @@ class CourseManager {
     }
 
     /**
-     * Returns the status of a user in a course, which is COURSEMANAGER or STUDENT.
+     * Returns the status of a user in a course, which is COURSEMANAGER 
+     * or STUDENT.
      * @param   int      User ID
      * @param   string   Course code
      * @return int the status of the user in that course
+     * @assert () === false
      */
     public static function get_user_in_course_status($user_id, $course_code) {
         $result = Database::fetch_array(Database::query(
@@ -371,7 +338,13 @@ class CourseManager {
         );
         return $result['status'];
     }
-
+    /**
+     * Gets the ID of a course tutor for a user, given the user and the course
+     * @param int User ID
+     * @param string Course code
+     * @return mixed The tutor ID
+     * @assert () === false
+     */
     public static function get_tutor_in_course_status($user_id, $course_code) {
         $result = Database::fetch_array(Database::query(
                 "SELECT tutor_id FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
@@ -383,19 +356,19 @@ class CourseManager {
 
     /**
      * Unsubscribe one or more users from a course
-     *
      * @param   mixed   user_id or an array with user ids
      * @param   int     session id
      * @param   string  course code
-     *
+     * @return  mixed   False on user ID not found, void otherwise
+     * @assert () === false
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0) {
-
+        if (!isset($user_id)) { return false; }
         if (!is_array($user_id)) {
             $user_id = array($user_id);
         }
         if (count($user_id) == 0) {
-            return;
+            return false;
         }
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 

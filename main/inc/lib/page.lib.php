@@ -1,13 +1,23 @@
 <?php
-
 /**
- *
+ * Controller for pages presentation in general
  * @license see /license.txt
+ * @package chamilo.page.controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-
+/**
+ * Page controller
+ */
 class PageController {
-
+    /**
+     * Returns an HTML block with the user picture (as a link in a <div>)
+     * @param int User ID (if not provided, will use the user ID from session)
+     * @return string HTML div with a link to the user's profile
+     * @uses UserManager::get_user_pictur_path_by_id() to get the image path
+     * @uses UserManager::get_picture_user() to get the details of the image in a specific format
+     * @uses PageController::show_right_block() to include the image in a larger user block
+     * @assert (-1) === false
+     */
     static function return_user_image_block($user_id = null) {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
@@ -33,7 +43,12 @@ class PageController {
         $html = self::show_right_block(null, $profile_content, 'user_image_block', array('style' => 'text-align:center;'));
         return $html;
     }
-
+    /**
+     * Return a block with course-related links. The resulting HTML block's
+     * contents are only based on the user defined by the active session.
+     * @return string HTML <div> with links
+     * @assert () != ''
+     */
     static function return_course_block() {
         $html = '';
 
@@ -93,7 +108,12 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns the profile block, showing links to the messaging and social
+     * network tools. The user ID is taken from the active session
+     * @return string HTML <div> block
+     * @assert () != ''
+     */
     static function return_profile_block() {
         $user_id = api_get_user_id();
 
@@ -135,11 +155,22 @@ class PageController {
         $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
         return $html;
     }
-
+    /**
+     * Returns a list of the most popular courses of the moment (also called
+     * "hot courses").
+     * @uses CourseManager::return_hot_courses() in fact, the current method is only a bypass to this method
+     * @return string HTML <div> with the most popular courses
+     * @assert () != ''
+     */
     static function return_hot_courses() {
         return CourseManager::return_hot_courses();
     }
-
+    /**
+     * Returns an online help block read from the home/home_menu_[lang].html
+     * file
+     * @return string HTML block
+     * @assert () != ''
+     */
     static function return_help() {
         $home = api_get_home_path();
         $user_selected_language = api_get_interface_language();
@@ -163,7 +194,11 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns an HTML block with links to the skills tools
+     * @return string HTML <div> block
+     * @assert () != ''
+     */
     static function return_skills_links() {
         $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
@@ -179,7 +214,12 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns an HTML block with the notice, as found in the 
+     * home/home_notice_[lang].html file
+     * @return string HTML <div> block
+     * @assert () != ''
+     */
     static function return_notice() {
         $sys_path               = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
@@ -201,6 +241,14 @@ class PageController {
     }
 
     /**
+     * Returns the received content packaged in <div> block, with the title as
+     * <h4>
+     * @param string Title to include as h4
+     * @param string Longer content to show (usually a <ul> list)
+     * @param string ID to be added to the HTML attributes for the block
+     * @param array Array of attributes to add to the HTML block
+     * @return string HTML <div> block
+     * @assert ('a','') != ''
      * @todo use the template system
      */
     static function show_right_block($title, $content, $id = null, $params = null) {
@@ -219,6 +267,8 @@ class PageController {
 
     /**
      * Adds a form to let users login
+     * @return string An HTML string with the user login form
+     * @assert () != ''
      * @version 1.1
      */
     static function display_login_form() {
@@ -236,7 +286,13 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns a content search form in an HTML <div>, pointing at the 
+     * main/search/ directory. If search_enabled is not set, then it returns
+     * an empty string
+     * @return string HTML <div> block showing the search form, or an empty string if search not enabled
+     * @assert () !== false
+     */
     static function return_search_block() {
         $html = '';
         if (api_get_setting('search_enabled') == 'true') {
@@ -251,7 +307,14 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns a list of announcements
+     * @param int User ID
+     * @param bool True: show the announcements as a slider. False: show them as a vertical list
+     * @return string HTML list of announcements
+     * @assert () != ''
+     * @assert (1) != ''
+     */
     static function return_announcements($user_id = null, $show_slide = true) {
         // Display System announcements
         $announcement = isset($_GET['announcement']) ? intval($_GET['announcement']) : null;
@@ -272,7 +335,11 @@ class PageController {
         }
         return $announcements;
     }
-
+    /**
+     * Return the homepage, including announcements
+     * @return string The portal's homepage as an HTML string
+     * @assert () != ''
+     */
     static function return_home_page() {
         // Including the page for the news
         $html = null;
@@ -317,9 +384,11 @@ class PageController {
         }
         return $html;
     }
-
-
-
+    /**
+     * Returns the reservation block (if the reservation tool is enabled)
+     * @return string HTML block, or empty string if reservation tool is disabled
+     * @assert () == ''
+     */
     static function return_reservation_block() {
         $html = '';
         if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
@@ -330,7 +399,11 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Returns an HTML block with classes (if show_groups_to_users is true)
+     * @return string A list of links to users classes tools, or an empty string if show_groups_to_users is disabled
+     * @assert  () == ''
+     */
     static function return_classes_block() {
         $html = '';
         if (api_get_setting('show_groups_to_users') == 'true') {
@@ -355,7 +428,12 @@ class PageController {
         }
         return $html;
     }
-
+    /**
+     * Prepares a block with all the pending exercises in all courses
+     * @param array Array of courses (arrays) of the user
+     * @return void Doesn't return anything but prepares and HTML block for use in templates
+     * @assert () !== 1
+     */
     static function return_exercise_block($personal_course_list) {
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_list = array();
@@ -372,7 +450,7 @@ class PageController {
                     $exercise_item['tms']     = api_strtotime($exercise_item['end_time'], 'UTC');
 
                     $exercise_list[] = $exercise_item;
-                }
+                 }
             }
             if (!empty($exercise_list)) {
                 $exercise_list = msort($exercise_list, 'tms');
@@ -383,7 +461,12 @@ class PageController {
             }
         }
     }
-
+    /**
+     * Returns links to teachers tools (create course, etc) based on the user
+     * in the active session
+     * @return string HTML <div> block
+     * @assert () == ''
+     */
     static function return_teacher_link() {
         $html = '';
         $user_id = api_get_user_id();
@@ -443,6 +526,7 @@ class PageController {
      * @version 1.1
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University - refactoring and code cleaning
      * @author Julio Montoya <gugli100@gmail.com>, Beeznest template modifs
+     * @assert () !== 0
      */
     static function return_courses_in_categories() {
         $result = '';
@@ -688,10 +772,16 @@ class PageController {
     }
 
     /**
-     * The most important function here, prints the session and course list (user_portal.php)
-     *
-     * */
+     * The most important function here, prints the session and course 
+       list (user_portal.php)
+     * @param int User ID
+     * @return string HTML list of sessions and courses 
+     * @assert () === false
+     */
     static function return_courses_and_sessions($user_id) {
+        if (empty($user_id)) {
+            return false;
+        }
         $session_categories = array();
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
@@ -881,9 +971,14 @@ class PageController {
     }
 
     /**
-     * Shows a welcome message when the user doesn't have any content in the course list
+     * Shows a welcome message when the user doesn't have any content in 
+     * the course list
+     * @param object A Template object used to declare variables usable in the given template
+     * @return void
+     * @assert () === false
      */
     static function return_welcome_to_course_block($tpl) {
+        if (empty($tpl)) { return false; }
         $count_courses = CourseManager::count_courses();
 
         $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';

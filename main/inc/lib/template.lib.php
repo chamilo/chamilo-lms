@@ -46,58 +46,11 @@ class Template {
         $hide_global_chat   = $app['template.hide_global_chat'];
         $load_plugins       = $app['template.load_plugins'];
 
-        //Twig settings
-        Twig_Autoloader::register();
-
-        $template_paths = array(
-            api_get_path(SYS_CODE_PATH) . 'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH)           //plugin folder
-        );
-
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH) . 'twig';
 
         if (!is_dir($cache_folder)) {
             mkdir($cache_folder, api_get_permissions_for_new_directories());
         }
-
-        $loader = new Twig_Loader_Filesystem($template_paths);
-
-        //Setting Twig options depending on the server see http://twig.sensiolabs.org/doc/api.html#environment-options
-        if (api_get_setting('server_type') == 'test') {
-            $options = array(
-                //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-                'autoescape' => false,
-                'debug' => true,
-                'auto_reload' => true,
-                'optimizations' => 0, // turn on optimizations with -1
-                'strict_variables' => false, //If set to false, Twig will silently ignore invalid variables
-            );
-        } else {
-            $options = array(
-                'cache' => $cache_folder, //path to the cache folder
-                'autoescape' => false,
-                'debug' => false,
-                'auto_reload' => false,
-                'optimizations' => -1, // turn on optimizations with -1
-                'strict_variables' => false //If set to false, Twig will silently ignore invalid variables
-            );
-        }
-
-        $this->twig = new Twig_Environment($loader, $options);
-
-        $this->twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-        $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-        $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-        $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-
-        $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
-        $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-        $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
-        $this->app['twig'] = $this->twig;
-
 
         //Page title
         $this->title        = $title;
@@ -371,7 +324,7 @@ class Template {
         $css = array();
 
         $this->theme = api_get_visual_theme();
-        
+
         if (!empty($this->preview_theme)) {
             $this->theme = $this->preview_theme;
         }

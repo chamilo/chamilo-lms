@@ -40,30 +40,52 @@ $helpers = array(
     'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
 );
 
-//To generate entities:
 /*
- *
- * cd /var/www/chamilo11
- * Delete old mapping
- * sudo rm -R tests/doctrine_console/mapping tests/doctrine_console/generated/
- * First creating the mapping from the DB
- * cd /var/www/chamilo11
- * php5 tests/doctrine_console/doctrine.php orm:convert-mapping --from-database annotation tests/doctrine_console/mapping --namespace "Entity"
- * Generate entities
- * php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   tests/doctrine_console/generated
- *
- * mkdir main/inc/Entity
- *
- * sudo cp -R tests/doctrine_console/generated/* main/inc/Entity
- *
- * For tests
- * php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   main/inc/Entity
- *
- * Then autoload classes with composer
- * sudo php5 composer.phar update or sudo composer.phar update
- *
- *
+To generate doctrine2 entities you must:
+
+cd /var/www/chamilo11
+
+
+Delete old mappings
+
+sudo rm -R tests/doctrine_console/mapping tests/doctrine_console/generated/
+
+First creating the mapping from the DB
+
+sudo mkdir tests/doctrine_console/mapping
+
+You can add a Namespace if you want to with: --namespace "Entity"
+sudo php5 tests/doctrine_console/doctrine.php orm:convert-mapping --from-database annotation tests/doctrine_console/mapping  --namespace "Entity"
+
+Generate entities
+
+mkdir tests/doctrine_console/generated
+
+sudo php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   tests/doctrine_console/generated
+
+Move generated files in a chamilo folder:
+
+sudo rm -R main/inc/Entity/*
+mkdir main/inc/Entity
+
+cp -R tests/doctrine_console/generated/* main/inc/Entity
+
+fixes \ORM bug see http://redgreenrefactor.blogsite.org/php/code-first-approaching-php-with-doctrine-2-2-1-and-composer/
+cd main/inc/Entity
+
+sed -i 's/@ORM\\/@/g' *.php
+
+
+
+For tests
+php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   main/inc/Entity
+
+Then autoload classes with composer
+sudo php5 composer.phar update or sudo composer.phar update
+
+
 */
+
 
 /*
 $reader = new AnnotationReader();

@@ -25,7 +25,8 @@
         "monolog/monolog"       : ">=1.0.0",
         "symfony/config"        : "2.1.*",
         "symfony/yaml"          : "2.1.*",
-        "dflydev/doctrine-orm-service-provider": "1.0.*@dev"
+        "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
+        "doctrine/migrations": "dev-master"
     },
     "minimum-stability": "dev"
 }

@@ -1,5 +1,5 @@
 {
-    "hash": "1f8e275856536ef2a59030e65ab74fc1",
+    "hash": "fa6b9b89b9b75ed12795e0878f6e2daa",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -199,6 +199,61 @@
                 "persistence",
                 "dbal",
                 "queryobject"
+            ]
+        },
+        {
+            "name": "doctrine/migrations",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/migrations",
+                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/migrations/archive/c1d875ce7d092dd1bc7508c3867b5c6b97431e43.zip",
+                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "doctrine/dbal": ">=2.0,<2.5.x-dev"
+            },
+            "require-dev": {
+                "symfony/console": "2.*",
+                "symfony/yaml": "2.*"
+            },
+            "suggest": {
+                "symfony/console": "to run the migration from the console"
+            },
+            "time": "2012-10-19 10:37:24",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\DBAL\\Migrations": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                }
+            ],
+            "description": "Database Schema migrations using Doctrine DBAL",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "migrations"
             ]
         },
         {
@@ -609,18 +664,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "414c0c41b2b32b118761ec8a3deab594ae0189d6"
+                "reference": "a18fd6c453fd9b3b4d6c78dd37e78268539474a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/414c0c41b2b32b118761ec8a3deab594ae0189d6.zip",
-                "reference": "414c0c41b2b32b118761ec8a3deab594ae0189d6",
+                "url": "https://github.com/symfony/HttpFoundation/archive/a18fd6c453fd9b3b4d6c78dd37e78268539474a0.zip",
+                "reference": "a18fd6c453fd9b3b4d6c78dd37e78268539474a0",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-12-11 10:49:22",
+            "time": "2012-12-15 16:49:38",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -660,12 +715,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel",
-                "reference": "830b4db41b91617774561a82fff5aec87b5568c4"
+                "reference": "db8522c33e1eb01cbf992ad00f3cd0eb2d2e4784"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpKernel/archive/830b4db41b91617774561a82fff5aec87b5568c4.zip",
-                "reference": "830b4db41b91617774561a82fff5aec87b5568c4",
+                "url": "https://github.com/symfony/HttpKernel/archive/db8522c33e1eb01cbf992ad00f3cd0eb2d2e4784.zip",
+                "reference": "db8522c33e1eb01cbf992ad00f3cd0eb2d2e4784",
                 "shasum": ""
             },
             "require": {
@@ -692,7 +747,7 @@
                 "symfony/dependency-injection": "2.2.*",
                 "symfony/finder": "2.2.*"
             },
-            "time": "2012-12-13 17:31:33",
+            "time": "2012-12-15 16:49:38",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -729,12 +784,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing",
-                "reference": "9391ec1744dda220802bbfc406edf20c711f8b36"
+                "reference": "c259a67cf029b106048c91cd74a7a1284c321e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Routing/archive/9391ec1744dda220802bbfc406edf20c711f8b36.zip",
-                "reference": "9391ec1744dda220802bbfc406edf20c711f8b36",
+                "url": "https://github.com/symfony/Routing/archive/c259a67cf029b106048c91cd74a7a1284c321e65.zip",
+                "reference": "c259a67cf029b106048c91cd74a7a1284c321e65",
                 "shasum": ""
             },
             "require": {
@@ -751,7 +806,7 @@
                 "symfony/config": "2.2.*",
                 "symfony/yaml": "2.2.*"
             },
-            "time": "2012-12-14 10:40:56",
+            "time": "2012-12-14 22:50:21",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -881,6 +936,7 @@
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "dflydev/doctrine-orm-service-provider": 20
+        "dflydev/doctrine-orm-service-provider": 20,
+        "doctrine/migrations": 20
     }
 }

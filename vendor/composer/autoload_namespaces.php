@@ -19,6 +19,7 @@ return array(
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
     'Entity' => $baseDir . '/main/inc/',
     'Doctrine\\ORM\\' => $vendorDir . '/doctrine/orm/lib/',
+    'Doctrine\\DBAL\\Migrations' => $vendorDir . '/doctrine/migrations/lib',
     'Doctrine\\DBAL\\' => $vendorDir . '/doctrine/dbal/lib/',
     'Doctrine\\Common\\' => $vendorDir . '/doctrine/common/lib/',
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',

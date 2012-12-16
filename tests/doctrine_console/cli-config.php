@@ -4,9 +4,6 @@ require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
-//$driverImpl = $config->newDefaultAnnotationDriver(array("/var/www/chamilo10/chamilo10/tests/doctrine_console/mapping"));
-//$config->setMetadataDriverImpl($driverImpl);
-//AnnotationRegistry::registerFile("Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
@@ -16,7 +13,6 @@ $reader = new AnnotationReader();
 
 $driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array(api_get_path(SYS_PATH)."tests/doctrine_console/mapping"));
 $config->setMetadataDriverImpl($driverImpl);
-
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 

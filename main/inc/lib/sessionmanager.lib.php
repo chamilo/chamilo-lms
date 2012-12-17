@@ -208,8 +208,22 @@ class SessionManager {
             if (!empty($extra_fields)) {
                 $extra_present = true;
                 $counter = 1;
-                foreach ($extra_fields as $extra) {
-                    $inject_extra_fields .= " fvo$counter.option_display_text as {$extra['field']}, ";
+                foreach ($extra_fields as &$extra) {
+                    $extra_field_obj= new ExtraField('session');
+                    $extra_field_info = $extra_field_obj->get($extra['id']);
+                    $extra['extra_field_info'] = $extra_field_info;
+
+                    if (in_array($extra_field_info['field_type'], array(
+                        ExtraField::FIELD_TYPE_SELECT,
+                        ExtraField::FIELD_TYPE_SELECT,
+                        ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        ))
+                    ) {
+                        $inject_extra_fields .= " fvo$counter.option_display_text as {$extra['field']}, ";
+                    } else {
+                        $inject_extra_fields .= " fv$counter.field_value as {$extra['field']}, ";
+                    }
+
                     if (isset($extra_fields_info[$extra['id']])) {
                         $info = $extra_fields_info[$extra['id']];
                     } else {
@@ -223,6 +237,7 @@ class SessionManager {
                 }
             }
         }
+
 
         $options_by_double = array();
         foreach ($double_fields as $double) {
@@ -256,11 +271,26 @@ class SessionManager {
                 $options['where'] = str_replace(' 1 = 1  AND', '', $options['where']);
                 //Always OR
                 $counter = 1;
-                foreach ($options['extra'] as $extra) {
-                    $options['where'] = str_replace($extra['field'], 'fv'.$counter.'.field_id = '.$extra['id'].' AND fvo'.$counter.'.option_value', $options['where']);
-                    $inject_joins .= " INNER JOIN $tbl_session_field_values fv$counter ON (s.id = fv$counter.session_id) INNER JOIN $tbl_session_field_options fvo$counter ".
+                foreach ($extra_fields as $extra_info) {
+                    $extra_field_info = $extra_info['extra_field_info'];
+
+                    $inject_joins .= " INNER JOIN $tbl_session_field_values fv$counter ON (s.id = fv$counter.session_id) ";
+
+                    //Add options
+                    if (in_array($extra_field_info['field_type'], array(
+                        ExtraField::FIELD_TYPE_SELECT,
+                        ExtraField::FIELD_TYPE_SELECT,
+                        ExtraField::FIELD_TYPE_DOUBLE_SELECT
+                        ))
+                    ) {
+                        $options['where'] = str_replace($extra_info['field'], 'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fvo'.$counter.'.option_value', $options['where']);
+                        $inject_joins .= " INNER JOIN $tbl_session_field_options fvo$counter ".
                                      " ON (fv$counter.field_id = fvo$counter.field_id AND fv$counter.field_value = fvo$counter.option_value) ";
-                    //$inject_where .= " AND s.id = fv$counter.session_id ";
+                    } else {
+                        //text, textarea, etc
+                        $options['where'] = str_replace($extra_info['field'], 'fv'.$counter.'.field_id = '.$extra_info['id'].' AND fv'.$counter.'.field_value', $options['where']);
+                    }
+
                     $field_value_to_join[] = " fv$counter.session_id ";
                     $counter++;
                 }

@@ -113,6 +113,8 @@ class learnpath {
             }
         }
 
+        $this->set_course_int_id($course_id);
+
         // Check learnpath ID.
         if (empty($lp_id)) {
             $this->error = 'Learnpath ID is empty';
@@ -3606,7 +3608,6 @@ class learnpath {
                 $prereq_string = $this->items[$item]->get_prereq_string();
             }
 
-
             if (empty($prereq_string)) {
                 return true;
             }
@@ -4232,7 +4233,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview requisite : ' . $this->requisite, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -5306,6 +5307,18 @@ class learnpath {
         $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;action=admin_view&amp;lp_id=' . $_SESSION['oLP']->lp_id . '&amp;updateaudio=true">' . Display :: return_icon('upload_audio.png', get_lang('UpdateAllAudioFragments'),'',ICON_SIZE_MEDIUM).'</a>';
 
         $return .= '<a href="lp_controller.php?'.api_get_cidreq().'&amp;action=edit&amp;lp_id=' . $_SESSION['oLP']->lp_id . '">' . Display :: return_icon('settings.png', get_lang('CourseSettings'),'',ICON_SIZE_MEDIUM).'</a>';
+
+        $buttons = array(
+            array(
+                'title' => get_lang('SetPrerequisiteFoEachItem'),
+                'href' => 'lp_controller.php?'.api_get_cidreq().'&amp;action=set_previous_step_as_prerequisite&amp;lp_id=' . $_SESSION['oLP']->lp_id,
+            ),
+            array(
+                'title' => get_lang('Clear all prerequisites'),
+                'href' => 'lp_controller.php?'.api_get_cidreq().'&amp;action=clear_prerequisites&amp;lp_id=' . $_SESSION['oLP']->lp_id,
+            ),
+        );
+        $return .= Display::group_button(get_lang('PrerequisitesOptions'), $buttons);
         $return .= '</div>';
         echo $return;
     }
@@ -9217,6 +9230,50 @@ EOD;
             return true;
         } else{
             return false;
+        }
+    }
+
+    function clear_prerequisites() {
+        $course_id = $this->get_course_int_id();
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::clear_prerequisites()', 0);
+        }
+        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_id = $this->get_id();
+        //Cleaning prerequisites
+        $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
+                WHERE c_id = ".$course_id." AND lp_id = '$lp_id'";
+        Database::query($sql);
+        
+        //Cleaning mastery score for exercises
+        $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
+                WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND item_type = 'quiz'";
+        Database::query($sql);
+    }
+
+    function set_previous_step_as_prerequisite_for_all_items() {
+        $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
+        $course_id = $this->get_course_int_id();
+        $lp_id = $this->get_id();
+
+        if (!empty($this->items)) {
+            $old_id = null;
+            $old_max = 0;
+            $old_type = null;
+            foreach ($this->items as $item) {
+                if (!empty($old_id)) {
+                    $current_item_id = $item->get_id();
+                    if ($old_type == 'quiz') {
+                        $sql = "UPDATE $tbl_lp_item SET mastery_score = '$old_max' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$old_id'";
+                        Database::query($sql);
+                    }
+                    $sql = "UPDATE $tbl_lp_item SET prerequisite = '$old_id' WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND id = '$current_item_id'";
+                    Database::query($sql);
+                }
+                $old_id = $item->get_id();
+                $old_max = $item->get_max();
+                $old_type = $item->get_type();
+            }
         }
     }
 }

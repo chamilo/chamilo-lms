@@ -135,7 +135,6 @@ if (isset($_SESSION['lpobject'])) {
     }
 }
 
-
 $course_id = api_get_course_int_id();
 
 if ($debug>0) error_log('New LP - Passed data remains check', 0);
@@ -971,6 +970,16 @@ switch ($action) {
             }
             require 'lp_impress.php';
         }
+        break;
+    case 'set_previous_step_as_prerequisite':
+        $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+        header('Location: '.$url);
+        break;
+    case 'clear_prerequisites':
+        $_SESSION['oLP']->clear_prerequisites();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
+        header('Location: '.$url);
         break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);

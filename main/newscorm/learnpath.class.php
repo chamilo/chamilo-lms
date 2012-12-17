@@ -7784,10 +7784,9 @@ class learnpath {
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
 
-        $return .= '<div class="sectioncomment">';
         $return .= '<form method="POST">';
 
-        $return .= '<table class="data_table" style="width:650px">';
+        $return .= '<table class="data_table">';
         $return .= '<tr>';
         $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
         $return .= '<th width="70" height="24">' . get_lang('Minimum') . '</th>';
@@ -7835,6 +7834,9 @@ class learnpath {
                 break;
             $return .= '<tr>';
             $return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
+
+            $return .= '<label for="id' . $arrLP[$i]['id'] . '">';
+
             $return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
@@ -7845,8 +7847,9 @@ class learnpath {
                 } else {
                     $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
                 }
-            $return .= '<label for="id' . $arrLP[$i]['id'] . '">' . $arrLP[$i]['title'] . '</label>';
+            $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
+
             //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
@@ -7872,10 +7875,8 @@ class learnpath {
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
         $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
-        $return .= '</div>';
-        $return .= '</form>';
-       // $return .= '</div>';
 
+        $return .= '</form>';
         return $return;
     }
 

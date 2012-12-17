@@ -45,40 +45,6 @@ class MessageManager
 	}
 
 	/**
-	* Displays info stating that the message is sent successfully.
-	*/
-	public static function display_success_message($uid) {
-			global $charset;
-		if ($_SESSION['social_exist']===true) {
-			$redirect="#remote-tab-2";
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}
-		} else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-		}
-		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-	}
-
-	/**
-	* Displays the wysiwyg html editor.
-	*/
-	public static function display_html_editor_area($name, $resp) {
-		api_disp_html_area($name, get_lang('TypeYourMessage'), '', '', null, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
-	}
-
-	/**
 	* Get the new messages for the current user from the database.
 	*/
 	public static function get_new_messages() {

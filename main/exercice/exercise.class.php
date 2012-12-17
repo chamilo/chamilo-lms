@@ -2276,7 +2276,7 @@ class Exercise {
 							$str = str_replace('\r\n', '', $str);
 							$choice = $arr[1];
 
-							$tmp = api_strrpos($choice[$j],' / ');
+                            $tmp = api_strrpos($choice[$j],' / ');
 							$choice[$j] = api_substr($choice[$j],0,$tmp);
 							$choice[$j] = trim($choice[$j]);
 
@@ -3439,6 +3439,7 @@ class Exercise {
 	 public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0, $filter_by_admin = true) {
 		//1. By default the exercise is visible
 		$is_visible = true;
+        $message = null;
 
 		//1.1 Admins and teachers can access to the exercise
         if ($filter_by_admin) {

@@ -203,6 +203,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
             $comment         = $objAnswerTmp->selectComment($answerId);
 
+            $attributes = array();
+
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
 				$input_id = 'choice-'.$questionId.'-'.$answerId;

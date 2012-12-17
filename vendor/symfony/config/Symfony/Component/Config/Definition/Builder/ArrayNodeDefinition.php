@@ -34,6 +34,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
     protected $addDefaults;
     protected $addDefaultChildren;
     protected $nodeBuilder;
+    protected $normalizeKeys;
 
     /**
      * {@inheritDoc}
@@ -51,6 +52,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
         $this->performDeepMerging = true;
         $this->nullEquivalent = array();
         $this->trueEquivalent = array();
+        $this->normalizeKeys = true;
     }
 
     /**
@@ -211,6 +213,48 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
     }
 
     /**
+     * Adds an "enabled" boolean to enable the current section.
+     *
+     * By default, the section is disabled.
+     *
+     * @return ArrayNodeDefinition
+     */
+    public function canBeEnabled()
+    {
+        $this
+            ->treatFalseLike(array('enabled' => false))
+            ->treatTrueLike(array('enabled' => true))
+            ->treatNullLike(array('enabled' => true))
+            ->children()
+                ->booleanNode('enabled')
+                    ->defaultFalse()
+        ;
+
+        return $this;
+    }
+
+    /**
+     * Adds an "enabled" boolean to enable the current section.
+     *
+     * By default, the section is enabled.
+     *
+     * @return ArrayNodeDefinition
+     */
+    public function canBeDisabled()
+    {
+        $this
+            ->treatFalseLike(array('enabled' => false))
+            ->treatTrueLike(array('enabled' => true))
+            ->treatNullLike(array('enabled' => true))
+            ->children()
+                ->booleanNode('enabled')
+                    ->defaultTrue()
+        ;
+
+        return $this;
+    }
+
+    /**
      * Disables the deep merging of the node.
      *
      * @return ArrayNodeDefinition
@@ -235,6 +279,20 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
     public function ignoreExtraKeys()
     {
         $this->ignoreExtraKeys = true;
+
+        return $this;
+    }
+
+    /**
+     * Sets key normalization.
+     *
+     * @param Boolean $bool Whether to enable key normalization
+     *
+     * @return ArrayNodeDefinition
+     */
+    public function normalizeKeys($bool)
+    {
+        $this->normalizeKeys = (Boolean) $bool;
 
         return $this;
     }
@@ -326,6 +384,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
         $node->setPerformDeepMerging($this->performDeepMerging);
         $node->setRequired($this->required);
         $node->setIgnoreExtraKeys($this->ignoreExtraKeys);
+        $node->setNormalizeKeys($this->normalizeKeys);
 
         if (null !== $this->normalization) {
             $node->setNormalizationClosures($this->normalization->before);

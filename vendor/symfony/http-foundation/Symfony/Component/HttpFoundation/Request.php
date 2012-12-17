@@ -53,8 +53,6 @@ class Request
         self::HEADER_CLIENT_PORT  => 'X_FORWARDED_PORT',
     );
 
-    protected static $httpMethodParameterOverride = false;
-
     /**
      * @var \Symfony\Component\HttpFoundation\ParameterBag
      *
@@ -563,19 +561,6 @@ class Request
     }
 
     /**
-     * Enables support for the _method request parameter to determine the intended HTTP method.
-     *
-     * Be warned that enabling this feature might lead to CSRF issues in your code.
-     * Check that you are using CSRF tokens when required.
-     *
-     * The HTTP method can only be overriden when the real HTTP method is POST.
-     */
-    public static function enableHttpMethodParameterOverride()
-    {
-        self::$httpMethodParameterOverride = true;
-    }
-
-    /**
      * Gets a "parameter" value.
      *
      * This method is mainly useful for libraries that want to provide some flexibility.
@@ -1032,49 +1017,24 @@ class Request
     }
 
     /**
-     * Gets the request "intended" method.
-     *
-     * If the X-HTTP-Method-Override header is set, and if the method is a POST,
-     * then it is used to determine the "real" intended HTTP method.
-     *
-     * The _method request parameter can also be used to determine the HTTP method,
-     * but only if enableHttpMethodParameterOverride() has been called.
+     * Gets the request method.
      *
      * The method is always an uppercased string.
      *
      * @return string The request method
      *
      * @api
-     *
-     * @see getRealMethod
      */
     public function getMethod()
     {
         if (null === $this->method) {
             $this->method = strtoupper($this->server->get('REQUEST_METHOD', 'GET'));
-
             if ('POST' === $this->method) {
-                if ($method = $this->headers->get('X-HTTP-METHOD-OVERRIDE')) {
-                    $this->method = strtoupper($method);
-                } elseif (self::$httpMethodParameterOverride) {
-                    $this->method = strtoupper($this->request->get('_method', $this->query->get('_method', 'POST')));
-                }
+                $this->method = strtoupper($this->headers->get('X-HTTP-METHOD-OVERRIDE', $this->request->get('_method', $this->query->get('_method', 'POST'))));
             }
         }
 
         return $this->method;
-    }
-
-    /**
-     * Gets the "real" request method.
-     *
-     * @return string The request method
-     *
-     * @see getMethod
-     */
-    public function getRealMethod()
-    {
-        return strtoupper($this->server->get('REQUEST_METHOD', 'GET'));
     }
 
     /**
@@ -1333,9 +1293,9 @@ class Request
             return $this->languages;
         }
 
-        $languages = AcceptHeader::fromString($this->headers->get('Accept-Language'))->all();
+        $languages = $this->splitHttpAcceptHeader($this->headers->get('Accept-Language'));
         $this->languages = array();
-        foreach (array_keys($languages) as $lang) {
+        foreach ($languages as $lang => $q) {
             if (strstr($lang, '-')) {
                 $codes = explode('-', $lang);
                 if ($codes[0] == 'i') {
@@ -1375,7 +1335,7 @@ class Request
             return $this->charsets;
         }
 
-        return $this->charsets = array_keys(AcceptHeader::fromString($this->headers->get('Accept-Charset'))->all());
+        return $this->charsets = array_keys($this->splitHttpAcceptHeader($this->headers->get('Accept-Charset')));
     }
 
     /**
@@ -1391,7 +1351,7 @@ class Request
             return $this->acceptableContentTypes;
         }
 
-        return $this->acceptableContentTypes = array_keys(AcceptHeader::fromString($this->headers->get('Accept'))->all());
+        return $this->acceptableContentTypes = array_keys($this->splitHttpAcceptHeader($this->headers->get('Accept')));
     }
 
     /**
@@ -1415,21 +1375,40 @@ class Request
      * @param string $header Header to split
      *
      * @return array Array indexed by the values of the Accept-* header in preferred order
-     *
-     * @deprecated Deprecated since version 2.2, to be removed in 2.3.
      */
     public function splitHttpAcceptHeader($header)
     {
-        $headers = array();
-        foreach (AcceptHeader::fromString($header)->all() as $item) {
-            $key = $item->getValue();
-            foreach ($item->getAttributes() as $name => $value) {
-                $key .= sprintf(';%s=%s', $name, $value);
-            }
-            $headers[$key] = $item->getQuality();
+        if (!$header) {
+            return array();
         }
 
-        return $headers;
+        $values = array();
+        $groups = array();
+        foreach (array_filter(explode(',', $header)) as $value) {
+            // Cut off any q-value that might come after a semi-colon
+            if (preg_match('/;\s*(q=.*$)/', $value, $match)) {
+                $q     = substr(trim($match[1]), 2);
+                $value = trim(substr($value, 0, -strlen($match[0])));
+            } else {
+                $q = 1;
+            }
+
+            $groups[$q][] = $value;
+        }
+
+        krsort($groups);
+
+        foreach ($groups as $q => $items) {
+            $q = (float) $q;
+
+            if (0 < $q) {
+                foreach ($items as $value) {
+                    $values[trim($value)] = $q;
+                }
+            }
+        }
+
+        return $values;
     }
 
     /*

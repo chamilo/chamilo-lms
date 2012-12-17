@@ -36,20 +36,18 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     /**
      * Constructor.
      *
-     * List of available options:
-     *  * database: The name of the database [required]
-     *  * collection: The name of the collection [required]
-     *  * id_field: The field name for storing the session id [default: _id]
-     *  * data_field: The field name for storing the session data [default: data]
-     *  * time_field: The field name for storing the timestamp [default: time]
+     * @param \Mongo|\MongoClient $mongo   A MongoClient or Mongo instance
+     * @param array               $options An associative array of field options
      *
-     * @param \Mongo $mongo   A "Mongo" instance
-     * @param array  $options An associative array of field options
-     *
+     * @throws \InvalidArgumentException When MongoClient or Mongo instance not provided
      * @throws \InvalidArgumentException When "database" or "collection" not provided
      */
-    public function __construct(\Mongo $mongo, array $options)
+    public function __construct($mongo, array $options)
     {
+        if (!($mongo instanceof \MongoClient || $mongo instanceof \Mongo)) {
+            throw new \InvalidArgumentException('MongoClient or Mongo instance required');
+        }
+
         if (!isset($options['database']) || !isset($options['collection'])) {
             throw new \InvalidArgumentException('You must provide the "database" and "collection" option for MongoDBSessionHandler');
         }
@@ -57,9 +55,9 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
         $this->mongo = $mongo;
 
         $this->options = array_merge(array(
-            'id_field'   => '_id',
-            'data_field' => 'data',
-            'time_field' => 'time',
+            'id_field'   => 'sess_id',
+            'data_field' => 'sess_data',
+            'time_field' => 'sess_time',
         ), $options);
     }
 
@@ -84,9 +82,10 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      */
     public function destroy($sessionId)
     {
-        $this->getCollection()->remove(array(
-            $this->options['id_field'] => $sessionId
-        ));
+        $this->getCollection()->remove(
+            array($this->options['id_field'] => $sessionId),
+            array('justOne' => true)
+        );
 
         return true;
     }
@@ -96,21 +95,11 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      */
     public function gc($lifetime)
     {
-        /* Note: MongoDB 2.2+ supports TTL collections, which may be used in
-         * place of this method by indexing the "time_field" field with an
-         * "expireAfterSeconds" option. Regardless of whether TTL collections
-         * are used, consider indexing this field to make the remove query more
-         * efficient.
-         *
-         * See: http://docs.mongodb.org/manual/tutorial/expire-data/
-         */
-        $time = new \MongoDate(time() - $lifetime);
+        $time = new \MongoTimestamp(time() - $lifetime);
 
         $this->getCollection()->remove(array(
             $this->options['time_field'] => array('$lt' => $time),
         ));
-
-        return true;
     }
 
     /**
@@ -118,13 +107,16 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
+        $data = array(
+            $this->options['id_field']   => $sessionId,
+            $this->options['data_field'] => new \MongoBinData($data, \MongoBinData::BYTE_ARRAY),
+            $this->options['time_field'] => new \MongoTimestamp()
+        );
+
         $this->getCollection()->update(
             array($this->options['id_field'] => $sessionId),
-            array('$set' => array(
-                $this->options['data_field'] => new \MongoBinData($data, \MongoBinData::BYTE_ARRAY),
-                $this->options['time_field'] => new \MongoDate(),
-            )),
-            array('upsert' => true, 'multiple' => false)
+            array('$set' => $data),
+            array('upsert' => true)
         );
 
         return true;
@@ -150,7 +142,7 @@ class MongoDbSessionHandler implements \SessionHandlerInterface
     private function getCollection()
     {
         if (null === $this->collection) {
-            $this->collection = $this->mongo->selectDB($this->options['database'])->selectCollection($this->options['collection']);
+            $this->collection = $this->mongo->selectCollection($this->options['database'], $this->options['collection']);
         }
 
         return $this->collection;

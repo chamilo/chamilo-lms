@@ -27,17 +27,17 @@ class NativeSessionStorage implements SessionStorageInterface
     /**
      * Array of SessionBagInterface
      *
-     * @var SessionBagInterface[]
+     * @var array
      */
     protected $bags;
 
     /**
-     * @var Boolean
+     * @var boolean
      */
     protected $started = false;
 
     /**
-     * @var Boolean
+     * @var boolean
      */
     protected $closed = false;
 

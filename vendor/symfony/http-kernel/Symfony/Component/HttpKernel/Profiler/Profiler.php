@@ -24,25 +24,10 @@ use Symfony\Component\HttpKernel\Log\LoggerInterface;
  */
 class Profiler
 {
-    /**
-     * @var ProfilerStorageInterface
-     */
     private $storage;
-
-    /**
-     * @var DataCollectorInterface[]
-     */
-    private $collectors = array();
-
-    /**
-     * @var LoggerInterface
-     */
+    private $collectors;
     private $logger;
-
-    /**
-     * @var Boolean
-     */
-    private $enabled = true;
+    private $enabled;
 
     /**
      * Constructor.
@@ -54,6 +39,8 @@ class Profiler
     {
         $this->storage = $storage;
         $this->logger = $logger;
+        $this->collectors = array();
+        $this->enabled = true;
     }
 
     /**
@@ -62,14 +49,6 @@ class Profiler
     public function disable()
     {
         $this->enabled = false;
-    }
-
-    /**
-     * Enables the profiler.
-     */
-    public function enable()
-    {
-        $this->enabled = true;
     }
 
     /**
@@ -217,7 +196,7 @@ class Profiler
     /**
      * Sets the Collectors associated with this profiler.
      *
-     * @param DataCollectorInterface[] $collectors An array of collectors
+     * @param array $collectors An array of collectors
      */
     public function set(array $collectors = array())
     {

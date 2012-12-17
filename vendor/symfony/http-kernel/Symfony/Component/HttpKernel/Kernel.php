@@ -46,11 +46,7 @@ use Symfony\Component\ClassLoader\DebugClassLoader;
  */
 abstract class Kernel implements KernelInterface, TerminableInterface
 {
-    /**
-     * @var BundleInterface[]
-     */
     protected $bundles;
-
     protected $bundleMap;
     protected $container;
     protected $rootDir;
@@ -62,11 +58,11 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     protected $classes;
     protected $errorReportingLevel;
 
-    const VERSION         = '2.2.0-DEV';
-    const VERSION_ID      = '20100';
+    const VERSION         = '2.1.5-DEV';
+    const VERSION_ID      = '20105';
     const MAJOR_VERSION   = '2';
-    const MINOR_VERSION   = '2';
-    const RELEASE_VERSION = '0';
+    const MINOR_VERSION   = '1';
+    const RELEASE_VERSION = '5';
     const EXTRA_VERSION   = 'DEV';
 
     /**
@@ -95,18 +91,17 @@ abstract class Kernel implements KernelInterface, TerminableInterface
 
     public function init()
     {
-        ini_set('display_errors', 0);
-
         if ($this->debug) {
+            ini_set('display_errors', 1);
             error_reporting(-1);
 
             DebugClassLoader::enable();
             ErrorHandler::register($this->errorReportingLevel);
             if ('cli' !== php_sapi_name()) {
                 ExceptionHandler::register();
-            } else {
-                ini_set('display_errors', 1);
             }
+        } else {
+            ini_set('display_errors', 0);
         }
     }
 
@@ -162,7 +157,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Shutdowns the kernel.
+     *
+     * This method is mainly useful when doing functional testing.
      *
      * @api
      */
@@ -207,7 +204,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the registered bundle instances.
+     *
+     * @return array An array of registered bundle instances
      *
      * @api
      */
@@ -217,7 +216,11 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if a given class name belongs to an active bundle.
+     *
+     * @param string $class A class name
+     *
+     * @return Boolean true if the class belongs to an active bundle, false otherwise
      *
      * @api
      */
@@ -233,7 +236,14 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Returns a bundle and optionally its descendants by its name.
+     *
+     * @param string  $name  Bundle name
+     * @param Boolean $first Whether to return the first bundle only or together with its descendants
+     *
+     * @return BundleInterface|Array A BundleInterface instance or an array of BundleInterface instances if $first is false
+     *
+     * @throws \InvalidArgumentException when the bundle is not enabled
      *
      * @api
      */
@@ -336,7 +346,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the name of the kernel
+     *
+     * @return string The kernel name
      *
      * @api
      */
@@ -350,7 +362,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the environment.
+     *
+     * @return string The current environment
      *
      * @api
      */
@@ -360,7 +374,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Checks if debug mode is enabled.
+     *
+     * @return Boolean true if debug mode is enabled, false otherwise
      *
      * @api
      */
@@ -370,7 +386,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the application root dir.
+     *
+     * @return string The application root dir
      *
      * @api
      */
@@ -385,7 +403,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the current container.
+     *
+     * @return ContainerInterface A ContainerInterface instance
      *
      * @api
      */
@@ -416,7 +436,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the request start time (not available if debug is disabled).
+     *
+     * @return integer The request start timestamp
      *
      * @api
      */
@@ -426,7 +448,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the cache directory.
+     *
+     * @return string The cache directory
      *
      * @api
      */
@@ -436,7 +460,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the log directory.
+     *
+     * @return string The log directory
      *
      * @api
      */
@@ -446,7 +472,9 @@ abstract class Kernel implements KernelInterface, TerminableInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Gets the charset of the application.
+     *
+     * @return string The charset
      *
      * @api
      */
@@ -730,26 +758,17 @@ abstract class Kernel implements KernelInterface, TerminableInterface
             return $source;
         }
 
-        $rawChunk = '';
         $output = '';
-        $tokens = token_get_all($source);
-        for (reset($tokens); false !== $token = current($tokens); next($tokens)) {
+        foreach (token_get_all($source) as $token) {
             if (is_string($token)) {
-                $rawChunk .= $token;
-            } elseif (T_START_HEREDOC === $token[0]) {
-                $output .= preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $rawChunk) . $token[1];
-                do {
-                    $token = next($tokens);
-                    $output .= $token[1];
-                } while ($token[0] !== T_END_HEREDOC);
-                $rawChunk = '';
+                $output .= $token;
             } elseif (!in_array($token[0], array(T_COMMENT, T_DOC_COMMENT))) {
-                $rawChunk .= $token[1];
+                $output .= $token[1];
             }
         }
 
         // replace multiple new lines with a single newline
-        $output .= preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $rawChunk);
+        $output = preg_replace(array('/\s+$/Sm', '/\n+/S'), "\n", $output);
 
         return $output;
     }

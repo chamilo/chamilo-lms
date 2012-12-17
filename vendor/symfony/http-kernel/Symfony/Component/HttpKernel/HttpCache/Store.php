@@ -71,13 +71,7 @@ class Store implements StoreInterface
      */
     public function lock(Request $request)
     {
-        $path = $this->getPath($this->getCacheKey($request).'.lck');
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
-            return false;
-        }
-
-        $lock = @fopen($path, 'x');
-        if (false !== $lock) {
+        if (false !== $lock = @fopen($path = $this->getPath($this->getCacheKey($request).'.lck'), 'x')) {
             fclose($lock);
 
             $this->locks[] = $path;
@@ -85,7 +79,7 @@ class Store implements StoreInterface
             return true;
         }
 
-        return !file_exists($path) ?: $path;
+        return $path;
     }
 
     /**
@@ -100,11 +94,6 @@ class Store implements StoreInterface
         $file = $this->getPath($this->getCacheKey($request).'.lck');
 
         return is_file($file) ? @unlink($file) : false;
-    }
-
-    public function isLocked(Request $request)
-    {
-        return is_file($this->getPath($this->getCacheKey($request).'.lck'));
     }
 
     /**

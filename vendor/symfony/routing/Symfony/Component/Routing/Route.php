@@ -140,6 +140,8 @@ class Route implements \Serializable
      * Sets the hostname pattern.
      *
      * @param string $pattern The pattern
+     *
+     * @return Route The current Route instance
      */
     public function setHostnamePattern($pattern)
     {
@@ -387,7 +389,7 @@ class Route implements \Serializable
     /**
      * Checks if a requirement is set for the given key.
      *
-     * @param string $name A variable name
+     * @param string $key A variable name
      *
      * @return Boolean true if a requirement is specified, false otherwise
      */

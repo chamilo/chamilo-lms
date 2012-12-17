@@ -45,55 +45,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $request->headers->get('FOO'), '->initialize() takes an array of HTTP headers as its fourth argument');
     }
 
-    public function testGetLocale()
-    {
-        $request = new Request();
-        $request->setLocale('pl');
-        $locale = $request->getLocale();
-        $this->assertEquals('pl', $locale);
-    }
-
-    public function testGetUser()
-    {
-        $request = Request::create('http://user_test:password_test@test.com/');
-        $user = $request->getUser();
-
-        $this->assertEquals('user_test', $user);
-    }
-
-    public function testGetPassword()
-    {
-        $request = Request::create('http://user_test:password_test@test.com/');
-        $password = $request->getPassword();
-
-        $this->assertEquals('password_test', $password);
-    }
-
-    public function testIsNoCache()
-    {
-        $request = new Request();
-        $isNoCache = $request->isNoCache();
-
-        $this->assertFalse($isNoCache);
-    }
-
-    public function testGetContentType()
-    {
-        $request = new Request();
-        $contentType = $request->getContentType();
-
-        $this->assertNull($contentType);
-    }
-
-    public function testSetDefaultLocale()
-    {
-        $request = new Request();
-        $request->setDefaultLocale('pl');
-        $locale = $request->getLocale();
-
-        $this->assertEquals('pl', $locale);
-    }
-
     /**
      * @covers Symfony\Component\HttpFoundation\Request::create
      */
@@ -663,28 +614,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
         $request->setMethod('POST');
         $request->request->set('_method', 'purge');
-        $this->assertEquals('POST', $request->getMethod(), '->getMethod() does not return the method from _method if defined and POST but support not enabled');
-
-        $request = new Request();
-        $request->setMethod('POST');
-        $request->request->set('_method', 'purge');
-        Request::enableHttpMethodParameterOverride();
         $this->assertEquals('PURGE', $request->getMethod(), '->getMethod() returns the method from _method if defined and POST');
-        $this->disableHttpMethodParameterOverride();
 
-        $request = new Request();
         $request->setMethod('POST');
+        $request->request->remove('_method');
         $request->query->set('_method', 'purge');
-        $this->assertEquals('POST', $request->getMethod(), '->getMethod() does not return the method from _method if defined and POST but support not enabled');
-
-        $request = new Request();
-        $request->setMethod('POST');
-        $request->query->set('_method', 'purge');
-        Request::enableHttpMethodParameterOverride();
         $this->assertEquals('PURGE', $request->getMethod(), '->getMethod() returns the method from _method if defined and POST');
-        $this->disableHttpMethodParameterOverride();
 
-        $request = new Request();
         $request->setMethod('POST');
         $request->headers->set('X-HTTP-METHOD-OVERRIDE', 'delete');
         $this->assertEquals('DELETE', $request->getMethod(), '->getMethod() returns the method from X-HTTP-Method-Override even though _method is set if defined and POST');
@@ -777,10 +713,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             array('PUT'),
             array('DELETE'),
             array('PATCH'),
-            array('put'),
-            array('delete'),
-            array('patch'),
-
         );
     }
 
@@ -789,8 +721,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateFromGlobals($method)
     {
-        $normalizedMethod = strtoupper($method);
-
         $_GET['foo1']    = 'bar1';
         $_POST['foo2']   = 'bar2';
         $_COOKIE['foo3'] = 'bar3';
@@ -809,23 +739,19 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $_SERVER['REQUEST_METHOD'] = $method;
         $_SERVER['CONTENT_TYPE'] = 'application/x-www-form-urlencoded';
         $request = RequestContentProxy::createFromGlobals();
-        $this->assertEquals($normalizedMethod, $request->getMethod());
+        $this->assertEquals($method, $request->getMethod());
         $this->assertEquals('mycontent', $request->request->get('content'));
 
         unset($_SERVER['REQUEST_METHOD'], $_SERVER['CONTENT_TYPE']);
 
-        Request::createFromGlobals();
-        Request::enableHttpMethodParameterOverride();
         $_POST['_method']   = $method;
         $_POST['foo6']      = 'bar6';
-        $_SERVER['REQUEST_METHOD'] = 'PoSt';
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         $request = Request::createFromGlobals();
-        $this->assertEquals($normalizedMethod, $request->getMethod());
-        $this->assertEquals('POST', $request->getRealMethod());
+        $this->assertEquals($method, $request->getMethod());
         $this->assertEquals('bar6', $request->request->get('foo6'));
 
         unset($_POST['_method'], $_POST['foo6'], $_SERVER['REQUEST_METHOD']);
-        $this->disableHttpMethodParameterOverride();
     }
 
     public function testOverrideGlobals()
@@ -1067,19 +993,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($request->hasSession());
     }
 
-    public function testGetSession()
-    {
-        $request = new Request();
-
-        $request->setSession(new Session(new MockArraySessionStorage()));
-        $this->assertTrue($request->hasSession());
-
-        $session = $request->getSession();
-        $this->assertObjectHasAttribute('storage', $session);
-        $this->assertObjectHasAttribute('flashName', $session);
-        $this->assertObjectHasAttribute('attributeName', $session);
-    }
-
     public function testHasPreviousSession()
     {
         $request = new Request();
@@ -1117,10 +1030,10 @@ class RequestTest extends \PHPUnit_Framework_TestCase
             array('text/html;q=0.8', array('text/html' => 0.8)),
             array('text/html;foo=bar;q=0.8 ', array('text/html;foo=bar' => 0.8)),
             array('text/html;charset=utf-8; q=0.8', array('text/html;charset=utf-8' => 0.8)),
-            array('text/html,application/xml;q=0.9,*/*;charset=utf-8; q=0.8', array('text/html' => 1.0, 'application/xml' => 0.9, '*/*;charset=utf-8' => 0.8)),
-            array('text/html,application/xhtml+xml;q=0.9,*/*;q=0.8; foo=bar', array('text/html' => 1.0, 'application/xhtml+xml' => 0.9, '*/*;foo=bar' => 0.8)),
-            array('text/html,application/xhtml+xml;charset=utf-8;q=0.9; foo=bar,*/*', array('text/html' => 1.0, '*/*' => 1.0, 'application/xhtml+xml;charset=utf-8;foo=bar' => 0.9)),
-            array('text/html,application/xhtml+xml', array('text/html' => 1.0, 'application/xhtml+xml' => 1.0)),
+            array('text/html,application/xml;q=0.9,*/*;charset=utf-8; q=0.8', array('text/html' => 1, 'application/xml' => 0.9, '*/*;charset=utf-8' => 0.8)),
+            array('text/html,application/xhtml+xml;q=0.9,*/*;q=0.8; foo=bar', array('text/html' => 1, 'application/xhtml+xml' => 0.9, '*/*' => 0.8)),
+            array('text/html,application/xhtml+xml;charset=utf-8;q=0.9; foo=bar,*/*', array('text/html' => 1, '*/*' => 1, 'application/xhtml+xml;charset=utf-8' => 0.9)),
+            array('text/html,application/xhtml+xml', array('application/xhtml+xml' => 1, 'text/html' => 1)),
         );
     }
 
@@ -1243,14 +1156,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $class = new \ReflectionClass('Symfony\\Component\\HttpFoundation\\Request');
         $property = $class->getProperty('trustProxy');
-        $property->setAccessible(true);
-        $property->setValue(false);
-    }
-
-    private function disableHttpMethodParameterOverride()
-    {
-        $class = new \ReflectionClass('Symfony\\Component\\HttpFoundation\\Request');
-        $property = $class->getProperty('httpMethodParameterOverride');
         $property->setAccessible(true);
         $property->setValue(false);
     }

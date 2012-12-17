@@ -21,26 +21,13 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 class Profile
 {
     private $token;
-
-    /**
-     * @var DataCollectorInterface[]
-     */
-    private $collectors = array();
-
+    private $collectors;
     private $ip;
     private $method;
     private $url;
     private $time;
-
-    /**
-     * @var Profile
-     */
     private $parent;
-
-    /**
-     * @var Profile[]
-     */
-    private $children = array();
+    private $children;
 
     /**
      * Constructor.
@@ -50,6 +37,8 @@ class Profile
     public function __construct($token)
     {
         $this->token = $token;
+        $this->collectors = array();
+        $this->children = array();
     }
 
     /**
@@ -112,11 +101,6 @@ class Profile
         return $this->ip;
     }
 
-    /**
-     * Sets the IP.
-     *
-     * @param string $ip
-     */
     public function setIp($ip)
     {
         $this->ip = $ip;
@@ -170,18 +154,13 @@ class Profile
     /**
      * Finds children profilers.
      *
-     * @return Profile[] An array of Profile
+     * @return array An array of Profile
      */
     public function getChildren()
     {
         return $this->children;
     }
 
-    /**
-     * Sets children profiler.
-     *
-     * @param Profile[] $children An array of Profile
-     */
     public function setChildren(array $children)
     {
         $this->children = array();
@@ -201,15 +180,6 @@ class Profile
         $child->setParent($this);
     }
 
-    /**
-     * Gets a Collector by name.
-     *
-     * @param string $name A collector name
-     *
-     * @return DataCollectorInterface A DataCollectorInterface instance
-     *
-     * @throws \InvalidArgumentException if the collector does not exist
-     */
     public function getCollector($name)
     {
         if (!isset($this->collectors[$name])) {
@@ -219,21 +189,11 @@ class Profile
         return $this->collectors[$name];
     }
 
-    /**
-     * Gets the Collectors associated with this profile.
-     *
-     * @return DataCollectorInterface[]
-     */
     public function getCollectors()
     {
         return $this->collectors;
     }
 
-    /**
-     * Sets the Collectors associated with this profile.
-     *
-     * @param DataCollectorInterface[] $collectors
-     */
     public function setCollectors(array $collectors)
     {
         $this->collectors = array();
@@ -242,23 +202,11 @@ class Profile
         }
     }
 
-    /**
-     * Adds a Collector.
-     *
-     * @param DataCollectorInterface $collector A DataCollectorInterface instance
-     */
     public function addCollector(DataCollectorInterface $collector)
     {
         $this->collectors[$collector->getName()] = $collector;
     }
 
-    /**
-     * Returns true if a Collector for the given name exists.
-     *
-     * @param string $name A collector name
-     *
-     * @return Boolean
-     */
     public function hasCollector($name)
     {
         return isset($this->collectors[$name]);

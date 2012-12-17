@@ -54,29 +54,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEquals('', $this->session->getId());
     }
 
-    public function testIsStarted()
-    {
-        $this->assertFalse($this->session->isStarted());
-        $this->session->start();
-        $this->assertTrue($this->session->isStarted());
-    }
-
-    public function testSetId()
-    {
-        $this->assertEquals('', $this->session->getId());
-        $this->session->setId('0123456789abcdef');
-        $this->session->start();
-        $this->assertEquals('0123456789abcdef', $this->session->getId());
-    }
-
-    public function testSetName()
-    {
-        $this->assertEquals('MOCKSESSID', $this->session->getName());
-        $this->session->setName('session.test.com');
-        $this->session->start();
-        $this->assertEquals('session.test.com', $this->session->getName());
-    }
-
     public function testGet()
     {
         // tests defaults
@@ -174,6 +151,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testSave()
     {
+        $this->session->start();
         $this->session->save();
     }
 

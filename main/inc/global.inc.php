@@ -73,10 +73,11 @@ if (empty($_configuration['system_version'])) {
 // For backward compatibility.
 $_configuration['dokeos_version']       = $_configuration['system_version'];
 $_configuration['dokeos_stable']        = $_configuration['system_stable'];
-$userPasswordCrypted                    = (!empty($_configuration['password_encryption'])?$_configuration['password_encryption']:'sha1');
+$userPasswordCrypted                    = (!empty($_configuration['password_encryption']) ? $_configuration['password_encryption'] : 'sha1');
 
 // Include the main Chamilo platform library file.
 require_once $includePath.'/lib/main_api.lib.php';
+
 
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
@@ -113,11 +114,10 @@ define("_MPDF_TEMP_PATH", api_get_path(SYS_ARCHIVE_PATH));
 define('_MPDF_PATH', api_get_path(LIBRARY_PATH).'mpdf/');
 
 //Composer autoloader
-$loader = require_once __DIR__.'../../../vendor/autoload.php';
+require_once __DIR__.'../../../vendor/autoload.php';
 
 //Start Silex
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Response;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 
 $app = new Application();
@@ -133,6 +133,37 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));
 */
 
+
+
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
+
+
+//URL generator provider
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+$app->register(new Silex\Provider\TranslationServiceProvider(),array(
+    'locale_fallback' => 'en'
+));
+
+//Form provider
+$app->register(new Silex\Provider\FormServiceProvider());
+
+//Monolog
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
+    'monolog.name'    => 'chamilo',
+));
+
+/*
+//Monolog examples
+$app['monolog']->addDebug('Testing the Monolog logging.');
+$app['monolog']->addInfo('Testing the Monolog logging.');
+$app['monolog']->addError('Testing the Monolog logging.');
+*/
+
+$app['translator.messages'] = array();
+
 //Setting the Twig service provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => array(
@@ -140,7 +171,7 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
         api_get_path(SYS_PLUGIN_PATH)             //plugin folder
     ),
     'twig.options'          => array(
-        //'twig.form.templates' => array('form_div_layout.html.twig', 'common/form_div_layout.html.twig'),
+        'twig.form.templates' => array('form_div_layout.html.twig'),
         'debug'             => $app['debug'],
         'charset'           => 'utf-8',
         'strict_variables'  => false,
@@ -150,6 +181,9 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     )
 ));
 
+
+
+//$app['twig']->addExtension(new Twig_Extension_Debug());
 //Setting Twig options
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
@@ -164,7 +198,6 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 
-
 //Setting Doctrine service provider
 //Gathering default info of the current installation from the $_configuration array
 
@@ -177,6 +210,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
         'host'      => $_configuration['db_host'],
     )
 ));
+
+$app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
 $app->register(new DoctrineOrmServiceProvider, array(
     "orm.proxies_dir" => $app['db.orm.proxies_dir'],
@@ -215,7 +250,6 @@ $app->register(new DoctrineOrmServiceProvider, array(
     ),
 ));
 
-
 /*
 // Register Doctrine ORM
 $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
@@ -231,14 +265,6 @@ $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
     )),
 ));*/
 
-//URL generator provider
-$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
-
-//Monolog
-$app->register(new Silex\Provider\MonologServiceProvider(), array(
-    'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
-    'monolog.name'    => 'chamilo',
-));
 
 //Creating Chamilo service provider
 use Silex\ServiceProviderInterface;
@@ -263,6 +289,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
 $app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
+/*
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         //return;
@@ -285,7 +312,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
     $app['template']->assign('error_message', $message);
     $response = $app['template']->render_layout('error.tpl');
     return new Response($response);
-});
+});*/
 
 //Filters
 $app->before(function() use ($app) {
@@ -302,7 +329,18 @@ $app->before(function() use ($app) {
 $app->after(function() {
 });
 
-$app->finish(function() {
+$app->finish(function() use ($app) {
+    //@todo will be removed before a stable release
+    $mtime = microtime();
+    $mtime = explode(" ",$mtime);
+    $mtime = $mtime[1] + $mtime[0];
+
+    $message = "Page loaded in:".($mtime-START);
+    $app['monolog']->addInfo($message);
+    $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
+    $app['monolog']->addInfo($message);
+    $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
+    $app['monolog']->addInfo($message);
 });
 
 $app['template.show_header']        = true;
@@ -319,16 +357,15 @@ $app['default_layout'] = 'layout_1_col.tpl';
 //Database constants
 require_once $lib_path.'database.constants.inc.php';
 
-//Removing support for this files:
-//require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-//require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-
+//@todo use swift mail
 require_once $lib_path.'mail.lib.inc.php';
+
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'online.inc.php';
+
 
 /*  DATABASE CONNECTION  */
 
@@ -383,6 +420,7 @@ if (!Database::select_db($_configuration['main_database'], $database_connection)
 
 // The platform's character set must be retrieved at this early moment.
 $sql = "SELECT selected_value FROM settings_current WHERE variable = 'platform_charset';";
+
 $result = Database::query($sql);
 while ($row = @Database::fetch_array($result)) {
     $charset = $row[0];

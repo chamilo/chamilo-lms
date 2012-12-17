@@ -1,14 +1,18 @@
 <?php
+
 /**
  * Controller for pages presentation in general
  * @license see /license.txt
  * @package chamilo.page.controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
+
 /**
  * Page controller
  */
-class PageController {
+class PageController
+{
+
     /**
      * Returns an HTML block with the user picture (as a link in a <div>)
      * @param int User ID (if not provided, will use the user ID from session)
@@ -40,9 +44,10 @@ class PageController {
                 $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
             }
         }
-        $html = self::show_right_block(null, $profile_content, 'user_image_block', array('style' => 'text-align:center;'));
-        return $html;
+
+        self::show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
     }
+
     /**
      * Return a block with course-related links. The resulting HTML block's
      * contents are only based on the user defined by the active session.
@@ -50,8 +55,6 @@ class PageController {
      * @assert () != ''
      */
     static function return_course_block() {
-        $html = '';
-
         $show_create_link = false;
         $show_course_link = false;
 
@@ -75,39 +78,33 @@ class PageController {
         }
 
         // My account section
-        $my_account_content = '<ul class="nav nav-list">';
+        $my_account_content = array();
 
         if ($show_create_link) {
-            $my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+            $my_account_content[] = array('href' => 'main/create_course/add_course.php', 'title' => api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate'));
         }
 
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        $my_account_content[] = array('href' => $url, 'title' => get_lang('SortMyCourses'));
 
         //Course management
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';
+                $my_account_content[] = array('href' => 'main/auth/courses.php', 'title' => get_lang('CourseCatalog'));
 
                 if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-                    $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+                    $my_account_content [] = array('href' => 'user_portal.php', 'title' => get_lang('DisplayTrainingList'));
                 } else {
-                    $my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
+                    $my_account_content [] = array('href' => 'user_portal.php?history=1', 'title' => get_lang('HistoryTrainingSessions'));
                 }
-
             } else {
-                $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                $my_account_content .= array('href' => 'main/dashboard/index.php', 'title' => get_lang('Dashboard'));
             }
         }
-
-        $my_account_content .= '</ul>';
-
-        if (!empty($my_account_content)) {
-            $html =  self::show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
-        }
-        return $html;
+        self::show_right_block(get_lang('Courses'), $my_account_content, 'course_block');
     }
+
     /**
      * Returns the profile block, showing links to the messaging and social
      * network tools. The user ID is taken from the active session
@@ -120,8 +117,7 @@ class PageController {
         if (empty($user_id)) {
             return;
         }
-
-        $profile_content = '<ul class="nav nav-list">';
+        $profile_content = array();
 
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
@@ -130,7 +126,7 @@ class PageController {
             $number_of_new_messages = MessageManager::get_new_messages();
 
             // New contact invitations.
-            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id($user_id);
+            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id($user_id);
 
             // New group invitations sent by a moderator.
             $group_pending_invitations = GroupPortalManager::get_groups_by_user_count($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION, false);
@@ -142,19 +138,18 @@ class PageController {
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';
+            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/messages/inbox.php'.$link, 'title' => get_lang('Inbox').$cant_msg);
+            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/messages/new_message.php'.$link, 'title' => get_lang('Compose'));
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
-                $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
+                $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/social/invitations.php', 'title' => get_lang('PendingInvitations').$total_invitations);
             }
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
+            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/auth/profile.php', 'title' => get_lang('PendingInvitations').$total_invitations);
         }
-        $profile_content .= '</ul>';
-        $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
-        return $html;
+        self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
     }
+
     /**
      * Returns a list of the most popular courses of the moment (also called
      * "hot courses").
@@ -165,6 +160,7 @@ class PageController {
     static function return_hot_courses() {
         return CourseManager::return_hot_courses();
     }
+
     /**
      * Returns an online help block read from the home/home_menu_[lang].html
      * file
@@ -174,70 +170,61 @@ class PageController {
     static function return_help() {
         $home = api_get_home_path();
         $user_selected_language = api_get_interface_language();
-        $sys_path               = api_get_path(SYS_PATH);
-        $platformLanguage       = api_get_setting('platformLanguage');
-
-        // Help section.
-        /* Hide right menu "general" and other parts on anonymous right menu. */
+        $sys_path = api_get_path(SYS_PATH);
+        $platformLanguage = api_get_setting('platformLanguage');
 
         if (!isset($user_selected_language)) {
             $user_selected_language = $platformLanguage;
         }
 
         $html = null;
-        $home_menu = @(string)file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
+        $home_menu = @(string) file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
-            $home_menu_content = '<ul class="nav nav-list">';
-            $home_menu_content .= api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
-            $home_menu_content .= '</ul>';
-            $html .= self::show_right_block(get_lang('MenuGeneral'), $home_menu_content, 'help_block');
+            $home_menu_content = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
+            self::show_right_block(get_lang('MenuGeneral'), null, 'help_block', array('content' => $home_menu_content));
         }
-        return $html;
     }
+
     /**
      * Returns an HTML block with links to the skills tools
      * @return string HTML <div> block
      * @assert () != ''
      */
     static function return_skills_links() {
-        $html = '';
         if (api_get_setting('allow_skills_tool') == 'true') {
-            $content = '<ul class="nav nav-list">';
-
-            $content .= Display::tag('li', Display::url(get_lang('MySkills'), api_get_path(WEB_CODE_PATH).'social/skills_wheel.php'));
+            $content = array();
+            $content[]= array('title' => get_lang('MySkills'), 'href' => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php');
 
             if (api_get_setting('allow_hr_skills_management') == 'true' || api_is_platform_admin()) {
-                $content .= Display::tag('li', Display::url(get_lang('ManageSkills'), api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php'));
+                $content[]= array('title' => get_lang('ManageSkills'), 'href' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php');
             }
-            $content .= '</ul>';
-            $html = self::show_right_block(get_lang("Skills"), $content, 'skill_block');
+            self::show_right_block(get_lang("Skills"), $content, 'skill_block');
         }
-        return $html;
     }
+
     /**
-     * Returns an HTML block with the notice, as found in the 
+     * Returns an HTML block with the notice, as found in the
      * home/home_notice_[lang].html file
      * @return string HTML <div> block
      * @assert () != ''
      */
     static function return_notice() {
-        $sys_path               = api_get_path(SYS_PATH);
+        $sys_path = api_get_path(SYS_PATH);
         $user_selected_language = api_get_interface_language();
         $home = api_get_home_path();
 
         $html = '';
         // Notice
-        $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
+        $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
-            $home_notice = @(string)file_get_contents($sys_path.$home.'home_notice.html');
+            $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice.html');
         }
 
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
-            $home_notice = Display::div($home_notice, array('class'  => 'homepage_notice'));
-            $html = self::show_right_block(get_lang('Notice'), $home_notice, 'notice_block');
+            $home_notice = Display::div($home_notice, array('class' => 'homepage_notice'));
+            self::show_right_block(get_lang('Notice'), null, 'notice_block', array('content' => $home_notice));
         }
-        return $html;
     }
 
     /**
@@ -251,18 +238,19 @@ class PageController {
      * @assert ('a','') != ''
      * @todo use the template system
      */
-    static function show_right_block($title, $content, $id = null, $params = null) {
+    static function show_right_block($title, $content, $id, $params = null) {
+        //@todo do not use global
+        global $app;
         if (!empty($id)) {
             $params['id'] = $id;
         }
-        $params['class'] = 'well sidebar-nav';
-        $html = null;
-        if (!empty($title)) {
-            $html.= '<h4>'.$title.'</h4>';
-        }
-        $html.= $content;
-        $html = Display::div($html, $params);
-        return $html;
+        $block_menu = array(
+            'id' => $params['id'],
+            'title' => $title,
+            'elements' => $content,
+            'content' => isset($params['content']) ? $params['content'] : null
+        );
+        $app['template']->assign($id, $block_menu);
     }
 
     /**
@@ -272,13 +260,13 @@ class PageController {
      * @version 1.1
      */
     static function display_login_form() {
-        $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
+        $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
         // 'placeholder'=>get_lang('UserName')
         //'autocomplete'=>"off",
 
         $form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
         $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
-        $form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
         if (api_get_setting('openid_authentication') == 'true') {
             include_once 'main/auth/openid/login.php';
@@ -286,8 +274,9 @@ class PageController {
         }
         return $html;
     }
+
     /**
-     * Returns a content search form in an HTML <div>, pointing at the 
+     * Returns a content search form in an HTML <div>, pointing at the
      * main/search/ directory. If search_enabled is not set, then it returns
      * an empty string
      * @return string HTML <div> block showing the search form, or an empty string if search not enabled
@@ -307,6 +296,7 @@ class PageController {
         }
         return $html;
     }
+
     /**
      * Returns a list of announcements
      * @param int User ID
@@ -335,6 +325,7 @@ class PageController {
         }
         return $announcements;
     }
+
     /**
      * Return the homepage, including announcements
      * @return string The portal's homepage as an HTML string
@@ -347,7 +338,7 @@ class PageController {
         $home_top_temp = null;
 
         if (!empty($_GET['include']) && preg_match('/^[a-zA-Z0-9_-]*\.html$/', $_GET['include'])) {
-            $open = @(string)file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
+            $open = @(string) file_get_contents(api_get_path(SYS_PATH).$home.$_GET['include']);
             $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
         } else {
             if (!empty($_SESSION['user_language_choice'])) {
@@ -384,6 +375,7 @@ class PageController {
         }
         return $html;
     }
+
     /**
      * Returns the reservation block (if the reservation tool is enabled)
      * @return string HTML block, or empty string if reservation tool is disabled
@@ -399,6 +391,7 @@ class PageController {
         }
         return $html;
     }
+
     /**
      * Returns an HTML block with classes (if show_groups_to_users is true)
      * @return string A list of links to users classes tools, or an empty string if show_groups_to_users is disabled
@@ -412,22 +405,23 @@ class PageController {
             $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
             $classes = '';
             if (!empty($usergroup_list)) {
-                foreach($usergroup_list as $group_id) {
+                foreach ($usergroup_list as $group_id) {
                     $data = $usergroup->get($group_id);
                     $data['name'] = Display::url($data['name'], api_get_path(WEB_CODE_PATH).'user/classes.php?id='.$data['id']);
                     $classes .= Display::tag('li', $data['name']);
                 }
             }
             if (api_is_platform_admin()) {
-                $classes .= Display::tag('li',  Display::url(get_lang('AddClasses') ,api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
+                $classes .= Display::tag('li', Display::url(get_lang('AddClasses'), api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'));
             }
             if (!empty($classes)) {
-                $classes = Display::tag('ul', $classes, array('class'=>'nav nav-list'));
+                $classes = Display::tag('ul', $classes, array('class' => 'nav nav-list'));
                 $html .= self::show_right_block(get_lang('Classes'), $classes, 'classes_block');
             }
         }
         return $html;
     }
+
     /**
      * Prepares a block with all the pending exercises in all courses
      * @param array Array of courses (arrays) of the user
@@ -438,19 +432,19 @@ class PageController {
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_list = array();
         if (!empty($personal_course_list)) {
-            foreach($personal_course_list as  $course_item) {
-                $course_code     = $course_item['c'];
-                $session_id     = $course_item['id_session'];
+            foreach ($personal_course_list as $course_item) {
+                $course_code = $course_item['c'];
+                $session_id = $course_item['id_session'];
 
                 $exercises = get_exercises_to_be_taken($course_code, $session_id);
 
-                foreach($exercises as $exercise_item) {
-                    $exercise_item['course_code']     = $course_code;
-                    $exercise_item['session_id']     = $session_id;
-                    $exercise_item['tms']     = api_strtotime($exercise_item['end_time'], 'UTC');
+                foreach ($exercises as $exercise_item) {
+                    $exercise_item['course_code'] = $course_code;
+                    $exercise_item['session_id'] = $session_id;
+                    $exercise_item['tms'] = api_strtotime($exercise_item['end_time'], 'UTC');
 
                     $exercise_list[] = $exercise_item;
-                 }
+                }
             }
             if (!empty($exercise_list)) {
                 $exercise_list = msort($exercise_list, 'tms');
@@ -461,6 +455,7 @@ class PageController {
             }
         }
     }
+
     /**
      * Returns links to teachers tools (create course, etc) based on the user
      * in the active session
@@ -496,27 +491,21 @@ class PageController {
         }
 
         // My Account section
-
+        $elements = array();
         if ($show_menu) {
-            $html .= '<ul class="nav nav-list">';
             if ($show_create_link) {
-                $html .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+                $elements[] = array('href' => 'main/create_course/add_course.php', 'title' => (api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')));
             }
 
             if ($show_course_link) {
                 if (!api_is_drh() && !api_is_session_admin()) {
-                    $html .=  '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';
+                    $elements[] = array('href' => 'main/auth/courses.php', 'title' => get_lang('CourseCatalog'));
                 } else {
-                    $html .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
+                    $elements[] = array('href' => 'main/dashboard/index.php', 'title' => get_lang('Dashboard'));
                 }
             }
-            $html .= '</ul>';
         }
-
-        if (!empty($html)) {
-            $html = self::show_right_block(get_lang('Courses'), $html, 'teacher_block');
-        }
-        return $html;
+        self::show_right_block(get_lang('Courses'), $elements, 'teacher_block');
     }
 
     /**
@@ -539,8 +528,8 @@ class PageController {
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
 
         // Database table definitions.
-        $main_course_table      = Database :: get_main_table(TABLE_MAIN_COURSE);
-        $main_category_table    = Database :: get_main_table(TABLE_MAIN_CATEGORY);
+        $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $main_category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
         $sql_get_course_list = "SELECT * FROM $main_course_table cours
@@ -586,7 +575,7 @@ class PageController {
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
-                    WHERE t1.parent_id ". (empty ($category) ? "IS NULL" : "='$category'")."
+                    WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 
 
@@ -631,8 +620,7 @@ class PageController {
                         $htmlListCat .= "</li>";
                         $thereIsSubCat = true;
                     }
-                    /* End changed code to eliminate the (0 courses) after empty categories. */
-                    elseif (api_get_setting('show_empty_course_categories') == 'true') {
+                    /* End changed code to eliminate the (0 courses) after empty categories. */ elseif (api_get_setting('show_empty_course_categories') == 'true') {
                         $htmlListCat .= '<li>';
                         $htmlListCat .= $catLine['name'];
                         $htmlListCat .= "</li>";
@@ -658,10 +646,10 @@ class PageController {
         }
         $result .= $htmlTitre;
         if ($thereIsSubCat) {
-            $result .=  $htmlListCat;
+            $result .= $htmlListCat;
         }
         while ($categoryName = Database::fetch_array($resCats)) {
-            $result .= '<h3>' . $categoryName['name'] . "</h3>\n";
+            $result .= '<h3>'.$categoryName['name']."</h3>\n";
         }
         $numrows = Database::num_rows($sql_result_courses);
         $courses_list_string = '';
@@ -681,7 +669,7 @@ class PageController {
                     // If we do not show the closed courses
                     // we only show the courses that are open to the world (to everybody)
                     // and the courses that are open to the platform (if the current user is a registered user.
-                    if( ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
+                    if (($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM) || ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD)) {
                         $courses_shown++;
                         $courses_list_string .= "<li>\n";
                         $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">'.$course['title'].'</a><br />';
@@ -714,13 +702,13 @@ class PageController {
                         || ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
-                            $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
-                        }
-                        $courses_list_string .= $course['title'];
+                        $courses_list_string .= '<a href="'.$web_course_path.$course['directory'].'/">';
+                    }
+                    $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
                         || ($user_identified && key_exists($course['code'], $courses_of_user) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
-                            || $courses_of_user[$course['code']]['status'] == '1'
+                        || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
                         $courses_list_string .= '</a><br />';
                     }
@@ -747,9 +735,9 @@ class PageController {
                     // 2.
                     if ($user_identified && !key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
-                        $courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
-                        $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
-                        $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
+                            $courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS($_GET['category']).'" method="post">';
+                            $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
+                            $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
                             $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'</form>';
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
@@ -762,20 +750,20 @@ class PageController {
         }
         if ($courses_shown > 0) {
             // Only display the list of courses and categories if there was more than
-                    // 0 courses visible to the world (we're in the anonymous list here).
-            $result .=  $courses_list_string;
+            // 0 courses visible to the world (we're in the anonymous list here).
+            $result .= $courses_list_string;
         }
         if ($category != '') {
-            $result .=  '<p><a href="'.api_get_self().'"> ' . Display :: return_icon('back.png', get_lang('BackToHomePage')) . get_lang('BackToHomePage') . '</a></p>';
+            $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon('back.png', get_lang('BackToHomePage')).get_lang('BackToHomePage').'</a></p>';
         }
         return $result;
     }
 
     /**
-     * The most important function here, prints the session and course 
+     * The most important function here, prints the session and course
      * list (user_portal.php)
      * @param int User ID
-     * @return string HTML list of sessions and courses 
+     * @return string HTML list of sessions and courses
      * @assert () === false
      */
     static function return_courses_and_sessions($user_id) {
@@ -798,7 +786,7 @@ class PageController {
         if ($load_history) {
             $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
             if (empty($session_categories)) {
-                $html .=  get_lang('YouDoNotHaveAnySessionInItsHistory');
+                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
             }
         }
 
@@ -850,7 +838,7 @@ class PageController {
 
                             if ($count_courses_session > 0) {
                                 $params = array();
-                                $params['icon'] =  Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
+                                $params['icon'] = Display::return_icon('window_list.png', $session['session_name'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
                                 $params['is_session'] = true;
                                 //Default session name
                                 $session_link = $session['session_name'];
@@ -858,7 +846,7 @@ class PageController {
 
                                 if (api_get_setting('session_page_enabled') == 'true' && !api_is_drh()) {
                                     //session name with link
-                                    $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                    $session_link = Display::tag('a', $session['session_name'], array('href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                     $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                                 }
 
@@ -877,13 +865,12 @@ class PageController {
                                 }
 
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                //    $params['extra'] .=  $html_courses_session;
+                                    //    $params['extra'] .=  $html_courses_session;
                                 }
                                 $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
                             }
                         }
                     }
-
                 } else {
                     // All sessions included in
                     $count_courses_session = 0;
@@ -915,12 +902,12 @@ class PageController {
 
                             if (api_get_setting('session_page_enabled') == 'true' && !api_is_drh()) {
                                 //session name with link
-                                $session_link = Display::tag('a', $session['session_name'], array('href'=>api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
+                                $session_link = Display::tag('a', $session['session_name'], array('href' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id));
                                 $params['link'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
 
-                            $params['title'] .=  $session_link;
+                            $params['title'] .= $session_link;
 
                             $moved_status = SessionManager::get_session_change_user_reason($session['moved_status']);
                             $moved_status = isset($moved_status) && !empty($moved_status) ? ' ('.$moved_status.')' : null;
@@ -929,7 +916,7 @@ class PageController {
                             $params['dates'] = $session['date_message'];
 
                             if (api_is_platform_admin()) {
-                                $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
+                                $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
                             }
                             $html_sessions .= CourseManager::course_item_html($params, true).$html_courses_session;
                         }
@@ -946,17 +933,17 @@ class PageController {
                         $params['title'] .= $session_category['session_category']['name'];
 
                         if (api_is_platform_admin()) {
-                            $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'];
+                            $params['link'] = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'];
                         }
 
                         $session_category_start_date = $session_category['session_category']['date_start'];
                         $session_category_end_date = $session_category['session_category']['date_end'];
 
-                        if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00' ) {
+                        if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
                             $params['subtitle'] = sprintf(get_lang('FromDateXToDateY'), $session_category['session_category']['date_start'], $session_category['session_category']['date_end']);
                         } else {
                             if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00') {
-                                 $params['subtitle'] = get_lang('From').' '.$session_category_start_date;
+                                $params['subtitle'] = get_lang('From').' '.$session_category_start_date;
                             }
                             if (!empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
@@ -971,14 +958,16 @@ class PageController {
     }
 
     /**
-     * Shows a welcome message when the user doesn't have any content in 
+     * Shows a welcome message when the user doesn't have any content in
      * the course list
      * @param object A Template object used to declare variables usable in the given template
      * @return void
      * @assert () === false
      */
     static function return_welcome_to_course_block($tpl) {
-        if (empty($tpl)) { return false; }
+        if (empty($tpl)) {
+            return false;
+        }
         $count_courses = CourseManager::count_courses();
 
         $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
@@ -992,17 +981,17 @@ class PageController {
         $tpl->assign('welcome_to_course_block', 1);
     }
 
-    /*function run() {
-        $app = $this->app;
-        $app->get('/', function() use ($app) {
-            $data = $this->app['twig']->render($app['template_style'].'/'.$app['default_template']);
-            return new Response($data, 200, array('cache-control' => 's-maxage=3600, public'));
-        });
-        if ($app['debug'] == true) {
-            $this->app->run();
-        } else {
-            //Using http cache
-           $app['http_cache']->run();
-        }
-    }*/
+    /* function run() {
+      $app = $this->app;
+      $app->get('/', function() use ($app) {
+      $data = $this->app['twig']->render($app['template_style'].'/'.$app['default_template']);
+      return new Response($data, 200, array('cache-control' => 's-maxage=3600, public'));
+      });
+      if ($app['debug'] == true) {
+      $this->app->run();
+      } else {
+      //Using http cache
+      $app['http_cache']->run();
+      }
+      } */
 }

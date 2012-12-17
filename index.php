@@ -41,7 +41,6 @@ $htmlHeadXtra[] ='
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use Entity\EntityCourse;
 
 class IndexController
 {
@@ -55,6 +54,7 @@ class IndexController
         if (!empty($logout)) {
             $this->logout();
         }
+
         //$article = $app['orm.em']->getRepository('Entity\EntityCourse');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
 
@@ -62,19 +62,15 @@ class IndexController
 //require_once '/var/www/chamilo11/main/inc/Entity/EntityCourse.php';
         //$article = $app['orm.em']->getRepository('EntityCourse');
         //var_dump($article);
+
+        //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
 /*
-        $courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
-        //var_dump($courses_query);
         $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
         $c = count($paginator);
-        var_dump($c);
-        /*
-
-        $c = count($paginator);
-
         foreach ($paginator as $course) {
             echo $course->getCode() . "\n";
-        }*/
+        }
+        exit;*/
 
         //$app['orm.em']->find('EntityCourse', 1);
         //var_dump($app['orm.ems']['mysql']);
@@ -112,13 +108,14 @@ class IndexController
         $this->set_login_form($app);
 
         if (!api_is_anonymous()) {
-            $app['template']->assign('profile_block', PageController::return_profile_block());
-            $app['template']->assign('user_image_block', PageController::return_user_image_block());
+            PageController::return_profile_block();
+
+            PageController::return_user_image_block();
 
             if (api_is_platform_admin()) {
-                $app['template']->assign('course_block', PageController::return_course_block());
+                PageController::return_course_block();
             } else {
-                $app['template']->assign('teacher_block',  PageController::return_teacher_link());
+                PageController::return_teacher_link();
             }
         }
 
@@ -133,7 +130,7 @@ class IndexController
             $announcements_block = PageController::return_announcements();
         }
 
-        $app['template']->assign('hot_courses',             $hot_courses);
+        $app['template']->assign('hot_courses',              $hot_courses);
         $app['template']->assign('announcements_block', 	 $announcements_block);
         $app['template']->assign('home_page_block', 		 PageController::return_home_page());
 
@@ -141,15 +138,16 @@ class IndexController
         $app['template']->assign('navigation_course_links',  $nav_links);
         $app['template']->assign('main_navigation_block',	 $nav_links);
 
-        $app['template']->assign('notice_block',			PageController::return_notice());
-        $app['template']->assign('help_block',              PageController::return_help());
+        PageController::return_notice();
+        PageController::return_help();
 
         if (api_is_platform_admin() || api_is_drh()) {
-            $app['template']->assign('skills_block',            PageController::return_skills_links());
+            PageController::return_skills_links();
         }
         $response = $app['template']->render_layout('layout_2_col.tpl');
-        return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-        //return new Response($response, 200, array());
+
+        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        return new Response($response, 200, array());
     }
 
     function check_last_login() {
@@ -192,14 +190,15 @@ class IndexController
     }
 
     function set_login_form(Application $app) {
-		$login_form = '';
         $user_id = api_get_user_id();
-
-        if (!($user_id) || api_is_anonymous($user_id)) {
+        $login_form = null;
+        if (!$user_id || api_is_anonymous($user_id)) {
 
 			// Only display if the user isn't logged in.
 			$app['template']->assign('login_language_form', api_display_language_form(true));
-			$app['template']->assign('login_form',  self::display_login_form());
+            //self::display_login_form($app);
+
+			$app['template']->assign('login_form',  self::display_login_form($app));
 
 			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
 				$login_form .= '<ul class="nav nav-list">';
@@ -220,7 +219,19 @@ class IndexController
         online_logout($user_id, true);
 	}
 
-    function display_login_form() {
+    function display_login_form(Application $app) {
+         /*{{ form_widget(form) }}
+         $form = $app['form.factory']->createBuilder('form')
+        ->add('name')
+        ->add('email')
+        ->add('gender', 'choice', array(
+            'choices' => array(1 => 'male', 2 => 'female'),
+            'expanded' => true,
+        ))
+        ->getForm();
+        return $app['template']->assign('form', $form->createView());
+*/
+
 		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
         $form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
 		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));

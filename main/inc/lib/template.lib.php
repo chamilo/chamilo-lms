@@ -285,6 +285,7 @@ class Template {
             }
 
             $user_info['messages_count'] = MessageManager::get_new_messages();
+
             $this->user_is_logged_in = true;
         }
         //Setting the $_u array that could be use in any template
@@ -843,7 +844,6 @@ class Template {
     function render_template($template) {
         return $this->app['twig']->render($this->app['template_style'].'/'.$template);
     }
-
 
     /**
      * Determines the possible tabs (=sections) that are available.

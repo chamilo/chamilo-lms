@@ -181,14 +181,14 @@ class UserPortalController
             }
         }*/
 
-        $app['template']->assign('profile_block', 				PageController::return_profile_block());
-        $app['template']->assign('user_image_block',            PageController::return_user_image_block());
-        $app['template']->assign('course_block',				PageController::return_course_block());
+        PageController::return_profile_block();
+        PageController::return_user_image_block();
+        PageController::return_course_block();
         $app['template']->assign('navigation_course_links', 	$app['template']->return_navigation_links());
-        $app['template']->assign('reservation_block', 			PageController::return_reservation_block());
+        PageController::return_reservation_block();
         $app['template']->assign('search_block', 				PageController::return_search_block());
         $app['template']->assign('classes_block', 				PageController::return_classes_block());
-        $app['template']->assign('skills_block',                PageController::return_skills_links());
+        PageController::return_skills_links();
 
         // Deleting the session_id.
         Session::erase('session_id');

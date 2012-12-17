@@ -3485,7 +3485,7 @@ function api_display_language_form($hide_if_no_choice = false) {
     $original_languages = $language_list['name'];
     $folder = $language_list['folder']; // This line is probably no longer needed.
 	$html = '
-    <script type="text/javascript">
+    <script>
     <!--
     function jumpMenu(targ,selObj,restore){ // v3.0
         eval(targ+".location=\'"+selObj.options[selObj.selectedIndex].value+"\'");
@@ -3503,7 +3503,6 @@ function api_display_language_form($hide_if_no_choice = false) {
             $option_end = '>';
         }
         $html .=  '<option value="'.api_get_self().'?language='.$folder[$key].'"'.$option_end;
-        //echo substr($value, 0, 16); // Cut string to keep 800x600 aspect.
         $html .=  $value.'</option>';
     }
     $html .=  '</select>';
@@ -3605,7 +3604,7 @@ function api_get_visual_theme() {
 
     if (!isset($visual_theme)) {
         $platform_theme = api_get_setting('stylesheets');   // Plataform's theme.
-        
+
         $visual_theme = $platform_theme;
 
         if (api_get_setting('user_selected_theme') == 'true') {

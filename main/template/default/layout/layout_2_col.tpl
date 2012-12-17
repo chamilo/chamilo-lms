@@ -17,22 +17,22 @@
 		{% endif %}
 
 		{#  User picture  #}
-        {{ user_image_block }}
+        {% include "default/index/user_image_block.tpl" %}
 
         {#  User Profile links #}
-		{{ profile_block }}
+        {% include "default/index/profile_block.tpl" %}
 
         {#  Course block - admin #}
-		{{ course_block }}
+        {% include "default/index/course_block.tpl" %}
 
         {#  Course block - teacher #}
-		{{ teacher_block }}
+        {% include "default/index/teacher_block.tpl" %}
 
 		{#  Notice  #}
-		{{ notice_block }}
+        {% include "default/index/notice_block.tpl" %}
 
         {#  Help #}
-		{{ help_block }}
+		{% include "default/index/help_block.tpl" %}
 
 		{#  Links that are not added in the tabs #}
 		{{ navigation_course_links }}
@@ -47,7 +47,7 @@
 		{{ classes_block }}
 
 		{#  Skills #}
-		{{ skills_block }}
+        {% include "default/index/skills_block.tpl" %}
 
 		{#  Plugin courses sidebar  #}
         {#  Plugins for footer section  #}
@@ -84,7 +84,7 @@
         {% include "default/layout/page_body.tpl" %}
 
         {#  Welcome to course block  #}
-        {% if welcome_to_course_block %}      
+        {% if welcome_to_course_block %}
             <section id="welcome_to_course">
             {% include "default/layout/welcome_to_course.tpl" %}
             </section>

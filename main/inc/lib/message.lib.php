@@ -86,8 +86,7 @@ class MessageManager
 		if (!api_get_user_id()) {
 			return false;
 		}
-		$i=0;
-		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
+		$query = "SELECT * FROM $table_message WHERE user_receiver_id = ".api_get_user_id()." AND msg_status = ".MESSAGE_STATUS_UNREAD;
 		$result = Database::query($query);
 		$i = Database::num_rows($result);
 		return $i;

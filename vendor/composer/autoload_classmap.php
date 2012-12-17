@@ -751,7 +751,6 @@ return array(
     'SessionFieldOption' => $baseDir . '/main/inc/lib/session_field_option.lib.php',
     'SessionFieldValue' => $baseDir . '/main/inc/lib/session_field_value.lib.php',
     'SessionHandler' => $baseDir . '/main/inc/lib/session_handler.class.php',
-    'SessionHandlerInterface' => $baseDir . '/vendor/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs/SessionHandlerInterface.php',
     'SessionManager' => $baseDir . '/main/inc/lib/sessionmanager.lib.php',
     'SessionModel' => $baseDir . '/main/inc/lib/session_model.lib.php',
     'Shibboleth\\Admin' => $baseDir . '/main/auth/shibboleth/app/model/admin.class.php',

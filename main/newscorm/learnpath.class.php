@@ -5313,7 +5313,7 @@ class learnpath {
                 'href' => 'lp_controller.php?'.api_get_cidreq().'&amp;action=set_previous_step_as_prerequisite&amp;lp_id=' . $_SESSION['oLP']->lp_id,
             ),
             array(
-                'title' => get_lang('Clear all prerequisites'),
+                'title' => get_lang('ClearAllPrerequisites'),
                 'href' => 'lp_controller.php?'.api_get_cidreq().'&amp;action=clear_prerequisites&amp;lp_id=' . $_SESSION['oLP']->lp_id,
             ),
         );

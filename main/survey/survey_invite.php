@@ -94,14 +94,14 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 }
 
 // Building the form for publishing the survey
-$form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id);
+$form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq());
 
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
+$complete_user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
 $possible_users = array();
-foreach ($complete_user_list as $index => & $user) {
+foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
@@ -213,7 +213,7 @@ if ($form->validate()) {
     	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
     	Display::display_normal_message($message, false);
-    	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+    	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
     }
 } else {
 	// Getting the invited users

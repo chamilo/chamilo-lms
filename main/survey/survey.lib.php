@@ -3816,7 +3816,8 @@ class SurveyUtil {
 			}
 			$new_user = false; // User not already invited
 			// Store the invitation if user_id not in $already_invited['course_users'] OR email is not in $already_invited['additional_users']
-			$addit_users_array = explode(';', $already_invited['additional_users']);
+			$addit_users_array = isset($already_invited['additional_users']) && !empty($already_invited['additional_users']) ? explode(';', $already_invited['additional_users']) : array();
+
 			$my_alredy_invited = ($already_invited['course_users'] == null) ? array() : $already_invited['course_users'];
 			if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) || (!is_numeric($value) && !in_array($value, $addit_users_array))) {
 				$new_user = true;
@@ -3943,12 +3944,16 @@ class SurveyUtil {
      * @author Julio Montoya, adding c_id fixes - Dec 2012
 	 * @version January 2007
 	 */
-	static function get_invited_users($survey_code, $course_code = '') {
+	static function get_invited_users($survey_code, $course_code = '', $session_id = 0) {
 	    if (!empty($course_code)) {
             $course_info = api_get_course_info($course_code);
             $course_id = $course_info['real_id'];
         } else {
             $course_id = api_get_course_int_id();
+        }
+
+        if (empty($session_id)) {
+            $session_id = api_get_session_id();
         }
 
 	    $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
@@ -3958,21 +3963,24 @@ class SurveyUtil {
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 		$sql = "SELECT user
 				FROM $table_survey_invitation as table_invitation
-				WHERE table_invitation.c_id = $course_id AND survey_code='".Database::escape_string($survey_code)."'";
+				WHERE   table_invitation.c_id = $course_id AND
+                        survey_code='".Database::escape_string($survey_code)."' AND
+                        session_id = $session_id
+
+                ";
 
 		$defaults = array();
 		$defaults['course_users'] = array();
-		$defaults['additional_users'] = '';
+		$defaults['additional_users'] = array();
+
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if (is_numeric($row['user'])) {
 				$defaults['course_users'][] = $row['user'];
 			} else {
-				if (empty($defaults['additional_users'])) {
-					$defaults['additional_users'] = $row['user'];
-				} else {
-					$defaults['additional_users'] .= ';'.$row['user'];
-				}
+                if (!empty($row['user'])) {
+                    $defaults['additional_users'][] = $row['user'];
+                }
 			}
 		}
 
@@ -3987,6 +3995,10 @@ class SurveyUtil {
             $defaults['course_users'] = $fixed_users;
         }
 
+        if (!empty($defaults['additional_users'])) {
+            $defaults['additional_users'] = implode(';', $defaults['additional_users']);
+        }
+        error_log(print_r($defaults, 1));
 		return $defaults;
 	}
 

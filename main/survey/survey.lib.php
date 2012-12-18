@@ -3823,7 +3823,7 @@ class SurveyUtil {
 				if (!array_key_exists($value, $survey_invitations)) {
 					$sql = "INSERT INTO $table_survey_invitation (c_id, user, survey_code, invitation_code, invitation_date) VALUES
 					($course_id,  '".Database::escape_string($value)."','".Database::escape_string($survey_data['code'])."','".Database::escape_string($invitation_code)."','".Database::escape_string(date('Y-m-d H:i:s'))."')";
-					$result = Database::query($sql);
+					Database::query($sql);
 				}
 			}
 			// Send the email if checkboxed
@@ -3927,7 +3927,7 @@ class SurveyUtil {
 
 		// Updating the field in the survey table
 		$sql = "UPDATE $table_survey SET invited = '".Database::escape_string($total_invited)."' WHERE c_id = $course_id AND code = '".Database::escape_string($survey_code)."'";
-		$result = Database::query($sql);
+		Database::query($sql);
 	}
 
 	/**
@@ -3940,6 +3940,7 @@ class SurveyUtil {
 	 * @todo consider making $defaults['additional_users'] also an array
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @author Julio Montoya, adding c_id fixes - Dec 2012
 	 * @version January 2007
 	 */
 	static function get_invited_users($survey_code, $course_code = '') {
@@ -3951,15 +3952,13 @@ class SurveyUtil {
         }
 
 	    $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-	 	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 		// Selecting all the invitations of this survey AND the additional emailaddresses (the left join)
 		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 		$sql = "SELECT user
 				FROM $table_survey_invitation as table_invitation
-				LEFT JOIN $table_user as table_user
-						ON table_invitation.user = table_user.user_id AND table_invitation.c_id = $course_id
-				WHERE survey_code='".Database::escape_string($survey_code)."'".$order_clause;
+				WHERE table_invitation.c_id = $course_id AND survey_code='".Database::escape_string($survey_code)."'";
 
 		$defaults = array();
 		$defaults['course_users'] = array();
@@ -3976,6 +3975,18 @@ class SurveyUtil {
 				}
 			}
 		}
+
+        if (!empty($defaults['course_users'])) {
+            $user_ids = implode("','", $defaults['course_users']);
+            $sql = "SELECT user_id FROM $table_user WHERE user_id IN ('$user_ids') $order_clause";
+            $result = Database::query($sql);
+            $fixed_users = array();
+            while ($row = Database::fetch_array($result)) {
+                $fixed_users[] = $row['user_id'];
+            }
+            $defaults['course_users'] = $fixed_users;
+        }
+
 		return $defaults;
 	}
 
@@ -4299,9 +4310,9 @@ class SurveyUtil {
 					survey.survey_id							AS col9,
 					survey.session_id							AS session_id
 				 FROM $table_survey survey
-                    LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id
+                    LEFT JOIN $table_survey_question survey_question ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
                     INNER JOIN $table_user user ON (survey.author = user.user_id)
-				 WHERE  survey.c_id = $course_id AND survey_question.c_id = $course_id
+				 WHERE survey.c_id = $course_id
 				 $search_restriction
 				 $condition_session ";
 		$sql .= " GROUP BY survey.survey_id";

@@ -248,10 +248,14 @@ echo '<div id="lp_sidebar" class="span4">';
 
 echo $_SESSION['oLP']->return_new_tree(null, true);
 
+$message = isset($_REQUEST['message']) ? $_REQUEST['message'] : null;
+
 // Show the template list.
 if ($type == 'document' && !isset($_GET['file'])) {
     // Show the template list.
-    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';}
+    echo '<div id="frmModel" style="display:block; height:890px;width:100px; position:relative;"></div>';
+}
+
 echo '</div>';
 
 //hide bar div
@@ -260,6 +264,11 @@ if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
 }
 
 echo '<div id="doc_form" class="span8">';
+
+//@todo use session flash messages
+if (in_array($message, array('ItemUpdated'))) {
+    echo Display::return_message(get_lang($message));
+}
 
 if (isset($new_item_id) && is_numeric($new_item_id)) {
     switch ($type) {

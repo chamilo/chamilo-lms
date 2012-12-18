@@ -4042,7 +4042,6 @@ class learnpath {
         } else {
             return false;
         }
-
     }
 
     /**
@@ -4367,7 +4366,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new expired_on : ' . $this->modified_on, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -5310,7 +5309,7 @@ class learnpath {
 
         $buttons = array(
             array(
-                'title' => get_lang('SetPrerequisiteFoEachItem'),
+                'title' => get_lang('SetPrerequisiteForEachItem'),
                 'href' => 'lp_controller.php?'.api_get_cidreq().'&amp;action=set_previous_step_as_prerequisite&amp;lp_id=' . $_SESSION['oLP']->lp_id,
             ),
             array(
@@ -9244,7 +9243,7 @@ EOD;
         $sql = "UPDATE $tbl_lp_item SET prerequisite = ''
                 WHERE c_id = ".$course_id." AND lp_id = '$lp_id'";
         Database::query($sql);
-        
+
         //Cleaning mastery score for exercises
         $sql = "UPDATE $tbl_lp_item SET mastery_score = ''
                 WHERE c_id = ".$course_id." AND lp_id = '$lp_id' AND item_type = 'quiz'";

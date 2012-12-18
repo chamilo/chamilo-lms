@@ -3998,7 +3998,7 @@ class SurveyUtil {
         if (!empty($defaults['additional_users'])) {
             $defaults['additional_users'] = implode(';', $defaults['additional_users']);
         }
-        error_log(print_r($defaults, 1));
+        //error_log(print_r($defaults, 1));
 		return $defaults;
 	}
 

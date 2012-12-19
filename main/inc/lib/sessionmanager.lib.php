@@ -1906,25 +1906,36 @@ class SessionManager {
 
         $id = intval($id);
 
+        /*
+         * sessions are not shared between urls
         if (api_is_multiple_url_enabled()) {
+            $tbl_session_rel_url  = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
             $url_id = api_get_current_access_url_id();
             $sql = "SELECT u.user_id, lastname, firstname, username, access_url_id, moved_to, moved_status, moved_at
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
                 ON u.user_id = su.id_user AND su.relation_type<>".SESSION_RELATION_TYPE_RRHH."
-                LEFT OUTER JOIN $tbl_session_rel_user uu ON (uu.user_id = u.user_id)
+                INNER JOIN $tbl_session_rel_url s ON (s.session_id = su.id_session)
+                LEFT OUTER JOIN $tbl_session_rel_user uu ON (uu.user_id = u.user_id AND s.session_id = uu.id_session)
                 WHERE su.id_session = $id AND (access_url_id = $url_id OR access_url_id is null )";
         } else {
             $sql = "SELECT u.user_id, lastname, firstname, username, moved_to, moved_status, moved_at
                     FROM $tbl_user u INNER JOIN $tbl_session_rel_user su
                     ON  u.user_id = su.id_user  AND
                         su.id_session = $id
+                    WHERE 1 = 1
                     ";
-        }
+        }*/
+        $sql = "SELECT u.user_id, lastname, firstname, username, moved_to, moved_status, moved_at
+                    FROM $tbl_user u INNER JOIN $tbl_session_rel_user su
+                    ON  u.user_id = su.id_user  AND
+                        su.id_session = $id
+                    WHERE 1 = 1
+                    ";
 
         if (isset($with_status) && $with_status != '') {
             $with_status = intval($with_status);
-            $sql .= " WHERE relation_type = $with_status ";
+            $sql .= " AND relation_type = $with_status ";
         }
 
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';

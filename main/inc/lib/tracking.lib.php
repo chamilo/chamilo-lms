@@ -2643,8 +2643,7 @@ class Tracking {
                                 $weighting      = $exercise_stat['exe_weighting'];
                                 $exe_id         = $exercise_stat['exe_id'];
 
-                                //$latest_attempt_url .= '<a href="../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id.'"> '.Display::return_icon('quiz.gif', get_lang('Quiz')).' </a>';
-                                $latest_attempt_url .= '../exercice/exercise_show.php?origin=myprogress&id='.$exe_id.'&cidReq='.$course_info['code'].'&id_session='.$session_id;
+                                $latest_attempt_url .= api_get_path(WEB_CODE_PATH).'exercice/result.php?id='.$exe_id.'&cidReq='.$course_info['code'].'&show_headers=1&id_session='.$session_id;
                                 $percentage_score_result = Display::url(show_score($score, $weighting), $latest_attempt_url);
                                 $my_score = 0;
                                 if (!empty($weighting) && intval($weighting) != 0) {

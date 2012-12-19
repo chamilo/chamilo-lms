@@ -146,7 +146,10 @@ class Notification extends Model {
                         if (!empty($user_info['mail'])) {
                             $name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
                             if (!empty($sender_info['complete_name']) && !empty($sender_info['email'])) {
-                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email']);
+                                $extra_headers = array();
+                                $extra_headers['reply_to']['mail'] = $sender_info['email'];
+                                $extra_headers['reply_to']['name'] = $name;
+                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->admin_name, $this->admin_email, $extra_headers);
                             } else {
                                 api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $this->admin_name, $this->admin_email);
                             }

@@ -3239,6 +3239,7 @@ class Exercise {
 		if ($propagate_neg == 0 && $questionScore < 0) {
 			$questionScore = 0;
 		}
+        
 		if ($saved_results) {
 			$stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;

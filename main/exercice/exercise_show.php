@@ -96,26 +96,12 @@ if (empty($objExercise)) {
 }
 $feedback_type = $objExercise->feedback_type;
 
-if ($objExercise->exercise_was_added_in_lp && $learnpath_id != 0) {
-    //Display::display_normal_message(get_lang('ThisExerciseWasResolvedInsideALP'));
-}
-
-//If is not valid
-$session_control_key = get_session_time_control_key($exercise_id, $learnpath_id, $learnpath_item_id);
-if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id) && !in_array($action, array('qualify','edit'))) {
-    $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position=0 WHERE exe_id = $id ";
-    Database::query($sql_fraud);
-}
-
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
     	api_not_allowed(true);
     }
 }
-
-//Unset session for clock time
-exercise_time_control_delete($exercise_id, $learnpath_id, $learnpath_item_id);
 
 if (isset($_SESSION['gradebook'])) {
 	$gradebook=	Security::remove_XSS($_SESSION['gradebook']);

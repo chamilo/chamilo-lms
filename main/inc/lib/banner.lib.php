@@ -25,7 +25,7 @@ function get_tabs() {
 	$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
 	// My Courses
-	
+
     if(api_is_allowed_to_create_course()) {
         // Link to my courses for teachers
         $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
@@ -35,7 +35,7 @@ function get_tabs() {
         $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php';
         $navigation['mycourses']['title'] = get_lang('MyCourses');
     }
-	
+
 	// My Profile
 	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
@@ -60,8 +60,8 @@ function get_tabs() {
 		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
 		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
 	}
-    
-    
+
+
     // Social
     /*
 	if (api_get_setting('allow_social_tool')=='true') {
@@ -82,13 +82,13 @@ function get_tabs() {
 		$navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
 	}
     */
-    
+
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {
 		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
 		$navigation['social']['title'] = get_lang('SocialNetwork');
-	} 
-   
+	}
+
 	// Dashboard
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
 		$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
@@ -262,8 +262,8 @@ function return_navigation_array() {
         }
 
         // Reporting
-        if (api_get_setting('show_tabs', 'reporting') == 'true') {            
-            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {                
+        if (api_get_setting('show_tabs', 'reporting') == 'true') {
+            if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
                 $navigation['session_my_space'] = $possible_tabs['session_my_space'];
             } else {
                 $navigation['session_my_space'] = $possible_tabs['session_my_progress'];
@@ -332,7 +332,7 @@ function return_navigation_array() {
 function return_menu() {
     $navigation         = return_navigation_array();
     $navigation         = $navigation['navigation'];
-    
+
     // Displaying the tabs
 
     $lang = ''; //el for "Edit Language"
@@ -383,7 +383,7 @@ function return_menu() {
     $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
     $lis = '';
-    
+
     if (!empty($open)) {
         if (strpos($open, 'show_menu') === false) {
             if (api_is_anonymous()) {
@@ -392,7 +392,7 @@ function return_menu() {
         } else {
             //$lis .= Display::tag('li', $open);
             $lis .= $open;
-        }        
+        }
     }
 
     if (count($navigation) > 0 || !empty($lis)) {
@@ -407,17 +407,18 @@ function return_menu() {
                 $pre_lis .= '<li'.$current.' ><a  href="'.$navigation_info['url'].'" target="_top">'.$navigation_info['title'].'</a></li>';
             }
         }
-        $lis = $pre_lis.$lis;        
+        $lis = $pre_lis.$lis;
     }
 
-    $menu = null;        
-    if (!empty($lis)) {            
-         $menu .= $lis;            
-    }    
+    $menu = null;
+    if (!empty($lis)) {
+         $menu .= $lis;
+    }
     return $menu;
 }
 
 function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
+    global $cidReset;
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
     $_course        = api_get_course_info();
@@ -509,9 +510,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             $navigation[] = $navigation_item;
         }
     }
-    
+
     $navigation_right = array();
-    
+
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
             if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {
@@ -527,7 +528,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             }
         }
     }
-
 
     // part 3: The tool itself. If we are on the course homepage we do not want to display the title of the course because this
     // is the same as the first part of the breadcrumbs (see part 1)
@@ -595,14 +595,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         if (!empty($view_as_student_link)) {
             $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
         }
-        
-        if (!empty($navigation_right)) {            
+
+        if (!empty($navigation_right)) {
             foreach($navigation_right as $item){
                 $extra_class = isset($item['class']) ? $item['class'] : null;
-                $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));    
+                $lis.= Display::tag('li', $item['title'], array('class' => $extra_class.' pull-right'));
             }
         }
-        
+
         if (!empty($lis)) {
             $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
         }

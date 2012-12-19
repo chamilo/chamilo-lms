@@ -1252,10 +1252,14 @@ function api_get_anonymous_id() {
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
      $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
      if ($add_session_id) {
-        $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
+         if (!empty($url)) {
+            $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
+         }
      }
      if ($add_group_id) {
-        $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+         if (!empty($url)) {
+            $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+         }
      }
      return $url;
 }

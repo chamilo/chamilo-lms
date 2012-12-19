@@ -55,7 +55,6 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js'); //highlight
 }
 
-
 //This library is necessary for the time control feature
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
@@ -342,7 +341,6 @@ if ($time_control) { //Sends the exercice form when the expired time is finished
 // if the user has submitted the form
 
 $exercise_title			= $objExercise->selectTitle();
-$exercise_description  	= $objExercise->selectDescription();
 $exercise_sound 		= $objExercise->selectSound();
 
 //in LP's is enabled the "remember question" feature?
@@ -657,8 +655,20 @@ if ($time_control) {
 	echo '<div style="display:none" class="warning-message" id="expired-message-id">'.get_lang('ExerciceExpiredTimeMessage').'</div>';
 }
 
+
 if (!empty($objExercise->description)) {
-    echo Display::generate_accordion(array( array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => $objExercise->description)));
+    echo "<script>
+        $(function() {
+            $('#description_content').accordion({
+                changestart: function(event, ui) {
+                    //var clicked = $(this).find('.ui-state-active').attr('id');
+                    //$('#'+clicked).load('/widgets/'+clicked);
+                    $('#collapse1').html('".addslashes($objExercise->description)."');
+                }
+            });
+         });
+        </script>";
+    echo Display::generate_accordion(array(array('title' => get_lang('ExerciseDescriptionLabel'), 'content' => null)), 'jquery', 'description_content');
 }
 
 if ($origin != 'learnpath') {

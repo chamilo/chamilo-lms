@@ -23,7 +23,7 @@ $interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('Platf
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui-i18n'));
 
 $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
@@ -38,14 +38,14 @@ if (isset($_GET['id'])) {
 $add_coach = null;
 
 if ($id) {
-    $tool_name = get_lang('EditSession');    
-    SessionManager::protect_session_edit($id);    
-    $session_info = api_get_session_info($id);    
+    $tool_name = get_lang('EditSession');
+    SessionManager::protect_session_edit($id);
+    $session_info = api_get_session_info($id);
     if (!empty($session_info['id_coach'])) {
-        $user_info = api_get_user_info($session_info['id_coach']);        
+        $user_info = api_get_user_info($session_info['id_coach']);
         $add_coach = '$("#coach_id").trigger("addItem", [{"title": "'.$user_info['complete_name'].'", "value": "'.$session_info['id_coach'].'"}]);';
     }
-    $button = get_lang('Update');    
+    $button = get_lang('Update');
 } else {
     $tool_name = get_lang('AddSession');
     $button = get_lang('Add');
@@ -58,26 +58,26 @@ $htmlHeadXtra[] ='
 function check() {
     $("#coach_id option:selected").each(function() {
         var id = $(this).val();
-        var name = $(this).text();        
+        var name = $(this).text();
         if (id != "" ) {
-            $.ajax({ 
+            $.ajax({
                 async: false,
-                url: "'.$url.'&a=user_exists", 
+                url: "'.$url.'&a=user_exists",
                 data: "id="+id,
-                success: function(return_value) {                    
-                    if (return_value == 0 ) {                        
-                        alert("'.get_lang('UserDoesNotExist').'");                        
+                success: function(return_value) {
+                    if (return_value == 0 ) {
+                        alert("'.get_lang('UserDoesNotExist').'");
                         //Deleting select option tag
                         $("#coach_id").find("option").remove();
-                        
+
                         $(".holder li").each(function () {
                             if ($(this).attr("rel") == id) {
                                 $(this).remove();
                             }
                         });
                     }
-                },            
-            });                
+                },
+            });
         }
     });
 }
@@ -91,106 +91,106 @@ $(function() {
         input_min_size: 1,
         cache: false,
         complete_text:"'.get_lang('StartToType').'",
-        firstselected: false,        
+        firstselected: false,
         onselect: check,
         filter_selected: true,
-        newel: true           
+        newel: true
     });
-    
-    '.$add_coach.'        
+
+    '.$add_coach.'
 
     $("#display_end_date").datetimepicker({
         dateFormat: "yy-mm-dd",
-        hour: 9,        
+        hour: 9,
         onSelect: function(selectedDateTime) {
             var start = $(this).datetimepicker("getDate");
-            
+
             if (!$("#access_end_date").val()) {
                 $("#access_end_date").val(selectedDateTime);
             }
-            
+
             if (!$("#coach_access_end_date").val()) {
                 $("#coach_access_end_date").val(selectedDateTime);
             }
         }
     });
-    
+
     $("#display_start_date").datetimepicker({
         dateFormat: "yy-mm-dd",
-        hour: 9,        
+        hour: 9,
         onSelect: function(selectedDateTime) {
             var start = $(this).datetimepicker("getDate");
-            
+
             if (!$("#access_start_date").val()) {
                 $("#access_start_date").val(selectedDateTime);
             }
-            
+
             if (!$("#coach_access_start_date").val()) {
                 $("#coach_access_start_date").val(selectedDateTime);
             }
         }
     });
-    
+
     $("#access_start_date").datetimepicker({
         dateFormat: "yy-mm-dd",
         hour: 9,
         onSelect: function(selectedDateTime) {
-            var start = $(this).datetimepicker("getDate");        
-            //$("#access_end_date").val(selectedDateTime);                    
+            var start = $(this).datetimepicker("getDate");
+            //$("#access_end_date").val(selectedDateTime);
         }
     });
-    
+
     access_start_date_content = $("#access_end_date").val();
-    
+
     if (access_start_date_content.length > 0) {
         $("#visibility_container").show();
     } else {
         $("#visibility_container").hide();
     }
-    
+
     $("#access_end_date").datetimepicker({
         dateFormat: "yy-mm-dd",
-        onSelect: function(selectedDateTime) {            
+        onSelect: function(selectedDateTime) {
             $("#visibility_container").show();
         }
     });
-    
-    $("#access_end_date").on("change", function() {        
+
+    $("#access_end_date").on("change", function() {
         content = $(this).val();
         if (content.length > 0) {
             $("#visibility_container").show();
         } else {
             $("#visibility_container").hide();
         }
-        
+
     });
-    
+
     $("#coach_access_start_date").datetimepicker({
         dateFormat: "yy-mm-dd",
         hour: 9,
         onSelect: function(selectedDateTime) {
-            var start = $(this).datetimepicker("getDate");        
+            var start = $(this).datetimepicker("getDate");
             //$("#coach_access_end_date").val(selectedDateTime);
         }
     });
-    
+
     $("#coach_access_end_date").datetimepicker({
         dateFormat: "yy-mm-dd"
     });
 
     var value = 1;
-    $("#advanced_parameters").on("click", function() {    
-        $("#options").toggle(function() {        
+    $("#advanced_parameters").on("click", function() {
+        $("#options").toggle(function() {
             if (value == 1) {
-                $("#advanced_parameters").addClass("btn-hide");        
+                $("#advanced_parameters").addClass("btn-hide");
                 value = 0;
             } else {
-                $("#advanced_parameters").removeClass("btn-hide");      
+                $("#advanced_parameters").removeClass("btn-hide");
                 value = 1;
             }
         });
     });
-    
+
 });
 </script>';
 
@@ -201,7 +201,7 @@ $form->addElement('header', $tool_name);
 $form->addElement('text', 'name', get_lang('SessionName'), array('class' => 'span6'));
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-if (empty($id)) {    
+if (empty($id)) {
     $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
 } else {
     $form->addElement('hidden', 'id', $id);
@@ -218,7 +218,7 @@ $form->addElement('html','<div id="options" style="display:none">');
 $form->addElement('text', 'display_start_date', array(get_lang('SessionDisplayStartDate'), get_lang('SessionDisplayStartDateComment')), array('id' => 'display_start_date'));
 $form->addElement('text', 'display_end_date', array(get_lang('SessionDisplayEndDate'), get_lang('SessionDisplayEndDateComment')), array('id' => 'display_end_date'));
 $form->addRule(array('display_start_date', 'display_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
-     
+
 $form->addElement('text', 'access_start_date', array(get_lang('SessionStartDate'), get_lang('SessionStartDateComment')), array('id' => 'access_start_date'));
 $form->addElement('text', 'access_end_date', array(get_lang('SessionEndDate'), get_lang('SessionEndDateComment')), array('id' => 'access_end_date'));
 $form->addRule(array('access_start_date', 'access_end_date'), get_lang('StartDateMustBeBeforeTheEndDate'), 'compare_datetime_text', '< allow_empty');
@@ -261,7 +261,7 @@ $(function() {
 </script>';
 
 $form->addElement('html','</div>');
-      
+
 $form->addElement('button', 'submit', $button);
 
 if (!empty($session_info)) {
@@ -270,7 +270,7 @@ if (!empty($session_info)) {
     $session_info['access_start_date'] = api_get_local_time($session_info['access_start_date'], null, null, true);
     $session_info['access_end_date'] = api_get_local_time($session_info['access_end_date'], null, null, true);
     $session_info['coach_access_start_date'] = api_get_local_time($session_info['coach_access_start_date'], null, null, true);
-    $session_info['coach_access_end_date'] = api_get_local_time($session_info['coach_access_end_date'], null, null, true);    
+    $session_info['coach_access_end_date'] = api_get_local_time($session_info['coach_access_end_date'], null, null, true);
     $form->setDefaults($session_info);
 }
 
@@ -281,7 +281,7 @@ if ($form->validate()) {
         header('Location: resume_session.php?id_session='.$params['id']);
 		exit;
     } else {
-        $session_id = SessionManager::add($params);        
+        $session_id = SessionManager::add($params);
         if ($session_id) {
             // integer => no error on session creation
             header('Location: add_courses_to_session.php?id_session='.$session_id.'&add=true&msg=');
@@ -290,8 +290,8 @@ if ($form->validate()) {
     }
 }
 
-function check_session_name($name) {    
-    $session = SessionManager::get_session_by_name($name);    
+function check_session_name($name) {
+    $session = SessionManager::get_session_by_name($name);
     return empty($session) ? true : false;
 }
 

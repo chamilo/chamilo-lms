@@ -80,6 +80,10 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
         $mail->AddReplyTo($sender_email, $sender_name);
     }
 
+    if (isset($extra_headers['reply_to'])) {
+        $mail->AddReplyTo($extra_headers['reply_to']['mail'], $extra_headers['reply_to']['name']);
+    }
+
     // Attachments
     // $mail->AddAttachment($path);
     // $mail->AddAttachment($path, $filename);

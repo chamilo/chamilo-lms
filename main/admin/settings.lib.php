@@ -143,7 +143,6 @@ function handle_plugins() {
             } else {
                 echo '<tr>';
             }
-            //echo '<tr>';
             echo '<td>';
             //Checkbox
             if (in_array($plugin, $installed_plugins)) {
@@ -197,20 +196,21 @@ function handle_stylesheets() {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
-            echo '<div class="actions" id="stylesheetuploadlink">';
+            /*echo '<div class="actions" id="stylesheetuploadlink">';
             	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
             	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-            echo '</div>';
+            echo '</div>';*/
         }
     } else {
         $is_style_changeable = true;
-        echo '<div class="actions" id="stylesheetuploadlink">';
+        /*echo '<div class="actions" id="stylesheetuploadlink">';
 			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
         	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-        echo '</div>';
+        echo '</div>';*/
     }
 
-    $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets&showuploadform=true');
+    $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets#tabs-2');
+    //$form->addElement('header', get_lang('UploadNewStylesheet'));
     $form->addElement('text', 'name_stylesheet', get_lang('NameStylesheet'), array('size' => '40', 'maxlength' => '40'));
     $form->addRule('name_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('file', 'new_stylesheet', get_lang('UploadNewStylesheet'));
@@ -218,8 +218,27 @@ function handle_stylesheets() {
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Ok'), array('class'=>'save'));
-    if ($form->validate() && is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
+    $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
+
+    $show_upload_form = false;
+
+    if (!is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
+        Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
+    } else {
+        // Uploading a new stylesheet.
+        if ($_configuration['access_url'] == 1) {
+            //$form->display();
+            $show_upload_form = true;
+        } else {
+            if ($is_style_changeable) {
+                //$form->display();
+                $show_upload_form = true;
+            }
+        }
+    }
+
+    if (isset($_POST['stylesheet_upload'])) {
+        if ($form->validate()) {
         $values = $form->exportValues();
         $picture_element = $form->getElement('new_stylesheet');
         $picture = $picture_element->getValue();
@@ -233,39 +252,15 @@ function handle_stylesheets() {
         if ($result) {
             Display::display_confirmation_message(get_lang('StylesheetAdded'));
         }
-    } else {
-        if (!is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
-            Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
-        } else {
-            if (!empty($_GET['showuploadform']) && $_GET['showuploadform'] == 'true') {
-                echo '<div id="newstylesheetform">';
-            } else {
-                echo '<div id="newstylesheetform" style="display: none;">';
-            }
-            // Uploading a new stylesheet.
-            if ($_configuration['access_url'] == 1) {
-                $form->display();
-            } else {
-                if ($is_style_changeable) {
-                    $form->display();
-                }
-            }
-            echo '</div>';
         }
     }
 
-?>
-    <script type="text/javascript">
-    function load_preview(){
-        $('#stylesheets_id').submit();
-    }
-    </script>
-<?php
-    echo '<form id="stylesheets_id" name="stylesheets" class="form-search" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
-    echo '<br /><select name="style" onchange="load_preview(this)" >';
+    $form_change = new FormValidator('stylesheet_upload', 'post', api_get_self().'?category=Stylesheets', null, array('id' => 'stylesheets_id'));
+    //$form_change->addElement('header', get_lang('ChangeStylesheet'));
 
     $list_of_styles = array();
     $list_of_names  = array();
+    $selected = null;
 
     if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
         $counter = 1;
@@ -277,11 +272,11 @@ function handle_stylesheets() {
 
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
-                    if (isset($_POST['style']) && $_POST['style'] == $style_dir) {
-                        $selected = 'selected="true"';
+                    if (isset($_POST['style']) && 'preview' && isset($_POST['style']) && $_POST['style'] == $style_dir) {
+                        $selected = $style_dir;
                     } else {
                         if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
-                            $selected = 'selected="true"';
+                            $selected = $style_dir;
                         } else {
                             $selected = '';
                         }
@@ -294,9 +289,8 @@ function handle_stylesheets() {
                         //echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
                         //echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
                     } else {
-                        echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
+                        //echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
                     }
-                    echo '<br />';
                     $counter++;
                 }
             }
@@ -306,14 +300,38 @@ function handle_stylesheets() {
 
     //Sort styles in alphabetical order
     asort($list_of_names);
+    $select_list = array();
     foreach($list_of_names as $style_dir=>$item) {
-        echo $list_of_styles[$style_dir];
+        $select_list[$style_dir] = strip_tags($list_of_styles[$style_dir]);
     }
 
-    //echo '</select><br />';
-    echo '</select>&nbsp;&nbsp;';
+    $form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
+    $form_change->setDefaults('style', $selected);
+
+    if ($form_change->validate()) {
+        // Submit stylesheets.
+        if (isset($_POST['save'])) {
+            store_stylesheets();
+            echo Display::display_normal_message(get_lang('Saved'));
+        }
+    }
     if ($is_style_changeable){
-        echo '<button class="btn save" type="submit" name="submit_stylesheets"> '.get_lang('SaveSettings').' </button></form>';
+        $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'), array('class' => 'btn btn-primary'));
+        $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'), array('class' => 'btn'));
+        $form_change->addGroup($group);
+
+        if ($show_upload_form) {
+            echo '<script>
+            $(function() {
+                $( "#tabs" ).tabs();
+            });
+            </script>';
+            echo Display::tabs(array(get_lang('Update'), get_lang('UploadNewStylesheet')), array($form_change->return_form(), $form->return_form()));
+        } else {
+            $form_change->display();
+        }
+    } else {
+        $form_change->freeze();
     }
 }
 

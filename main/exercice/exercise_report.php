@@ -78,7 +78,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
-        
+
         require_once 'exercise_result.class.php';
         switch ($_GET['export_format']) {
             case 'xls' :
@@ -99,8 +99,8 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 }
 
 //Send student email @todo move this code in a class, library
-if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid']== strval(intval($_GET['exeid']))) {
-    $id         = intval($_GET['exeid']); //filtered by post-condition
+if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
+    $id = intval($_GET['exeid']); //filtered by post-condition
     $track_exercise_info = get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
         api_not_allowed();
@@ -111,14 +111,13 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     $lp_id             = $track_exercise_info['orig_lp_id'];
     //$lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
-    
+
     $course_info = api_get_course_info();
 
     // Teacher data
-    $teacher_info      = api_get_user_info(api_get_user_id());    
+    $teacher_info      = api_get_user_info(api_get_user_id());
     $from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-
-    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&id_session='.$session_id.'&exerciseId='.$exercise_id;
+    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info      = array();
     $post_content_id   = array();
@@ -132,16 +131,17 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         }
     }
 
-    $loop_in_track=($comments_exist===true) ? (count($_POST)/2) : count($_POST);
+    $loop_in_track = ($comments_exist===true) ? (count($_POST)/2) : count($_POST);
 
-    $array_content_id_exe=array();
-    if ($comments_exist===true) {
-        $array_content_id_exe = array_slice($post_content_id,$loop_in_track);
+    $array_content_id_exe = array();
+
+    if ($comments_exist === true) {
+        $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
     } else {
         $array_content_id_exe = $post_content_id;
     }
 
-    for ($i=0;$i<$loop_in_track;$i++) {
+    for ($i=0; $i < $loop_in_track; $i++) {
         $my_marks           = Database::escape_string($_POST['marks_'.$array_content_id_exe[$i]]);
         $contain_comments   = Database::escape_string($_POST['comments_'.$array_content_id_exe[$i]]);
         if (isset($contain_comments)) {
@@ -151,6 +151,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         }
         $my_questionid = intval($array_content_id_exe[$i]);
         $sql = "SELECT question from $TBL_QUESTIONS WHERE c_id = $course_id AND id = '$my_questionid'";
+
         $result =Database::query($sql);
         Database::result($result,0,"question");
 
@@ -172,7 +173,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
 
     $totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
     Database::query($totquery);
-    
+
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
@@ -192,7 +193,6 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         $message = str_replace("#url#", $url, $message);
         MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
     }
-    
 
     //Updating LP score here
     if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {
@@ -322,16 +322,16 @@ if (!empty($group_parameters)) {
 if ($is_allowedToEdit || $is_tutor) {
 
 	//The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('FirstName'), 
-                            get_lang('LastName'), 
+	$columns        = array(get_lang('FirstName'),
+                            get_lang('LastName'),
                             get_lang('LoginName'),
-                            get_lang('Group'), 
-                            get_lang('Duration').' ('.get_lang('MinMinute').')', 
-                            get_lang('StartDate'),  
-                            get_lang('EndDate'), 
-                            get_lang('Score'), 
-                            get_lang('Status'), 
-                            get_lang('ToolLearnpath'), 
+                            get_lang('Group'),
+                            get_lang('Duration').' ('.get_lang('MinMinute').')',
+                            get_lang('StartDate'),
+                            get_lang('EndDate'),
+                            get_lang('Score'),
+                            get_lang('Status'),
+                            get_lang('ToolLearnpath'),
                             get_lang('Actions')
     );
 

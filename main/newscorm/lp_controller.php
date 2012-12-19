@@ -100,6 +100,7 @@ $lpfound = false;
 
 $myrefresh = 0;
 $myrefresh_id = 0;
+
 if (!empty($_SESSION['refresh']) && $_SESSION['refresh'] == 1) {
     // Check if we should do a refresh of the oLP object (for example after editing the LP).
     // If refresh is set, we regenerate the oLP object from the database (kind of flush).
@@ -134,7 +135,6 @@ if (isset($_SESSION['lpobject'])) {
         }
     }
 }
-
 
 $course_id = api_get_course_int_id();
 
@@ -223,8 +223,6 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         }
     }
 }
-
-
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 
@@ -966,15 +964,24 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             if ($debug > 0) {error_log('New LP - Trying to impress this LP item to ' . $_REQUEST['item_id'], 0); }
-            if ( !empty($_REQUEST['item_id']) ) {
+            if (!empty($_REQUEST['item_id']) ) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }
             require 'lp_impress.php';
         }
         break;
+    case 'set_previous_step_as_prerequisite':
+        $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
+        header('Location: '.$url);
+        break;
+    case 'clear_prerequisites':
+        $_SESSION['oLP']->clear_prerequisites();
+        $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&message=ItemUpdated";
+        header('Location: '.$url);
+        break;
     default:
         if ($debug > 0) error_log('New LP - default action triggered', 0);
-        //$_SESSION['refresh'] = 1;
         require 'lp_list.php';
         break;
 }

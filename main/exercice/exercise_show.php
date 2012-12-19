@@ -95,12 +95,6 @@ if (empty($objExercise)) {
 }
 $feedback_type = $objExercise->feedback_type;
 
-//If is not valid
-$session_control_key = get_session_time_control_key($exercise_id, $learnpath_id, $learnpath_item_id);
-if (isset($session_control_key) && !exercise_time_control_is_valid($exercise_id, $learnpath_id, $learnpath_item_id) && !in_array($action, array('qualify','edit'))) {
-    $sql_fraud = "UPDATE $TBL_TRACK_ATTEMPT SET answer = 0, marks=0, position = 0 WHERE exe_id = $id ";
-    Database::query($sql_fraud);
-}
 
 //Only users can see their own results 
 if (!$is_allowedToEdit) {
@@ -109,8 +103,6 @@ if (!$is_allowedToEdit) {
     }
 }
 
-//Unset session for clock time
-exercise_time_control_delete($exercise_id, $learnpath_id, $learnpath_item_id);
 
 if (isset($_SESSION['gradebook'])) {
 	$gradebook=	Security::remove_XSS($_SESSION['gradebook']);
@@ -237,7 +229,6 @@ $query = "SELECT attempts.question_id, answer FROM ".$TBL_TRACK_ATTEMPT." as att
 				    AND questions.c_id = ".api_get_course_int_id()."
 		  WHERE attempts.exe_id='".Database::escape_string($id)."' $user_restriction
 		  GROUP BY quizz_rel_questions.question_order, attempts.question_id";
-          //GROUP BY questions.position, attempts.question_id";
 
 $result = Database::query($query);
 $question_list_from_database = array();
@@ -260,9 +251,6 @@ if (!empty($track_exercise_info['data_tracking'])) {
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
-	/*if (is_array($temp_question_list) && count($temp_question_list) == count($question_list_from_database)) {
-		$questionList = $tempquestionList;			
-	}*/
 } else {
     $questionList = $question_list_from_database;
 }

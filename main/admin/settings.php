@@ -46,13 +46,6 @@ $settings_to_avoid = array(
 
 $convert_byte_to_mega_list = array('dropbox_max_filesize', 'message_max_upload_filesize', 'default_document_quotum', 'default_group_quotum');
 
-// Submit stylesheets.
-if (isset($_POST['submit_stylesheets'])) {
-    $message = store_stylesheets();
-    header("Location: ".api_get_self()."?category=Stylesheets");
-    exit;
-}
-
 if (isset($_POST['style'])) {
     Display::$preview_style = $_POST['style'];
 }

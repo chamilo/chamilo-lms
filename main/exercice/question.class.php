@@ -1458,7 +1458,7 @@ abstract class Question
 
         // display question category, if any
         $header = Testcategory::returnCategoryAndTitle($this->id);
-
+        $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();
         }

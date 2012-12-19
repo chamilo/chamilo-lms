@@ -203,6 +203,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);            
             $comment         = $objAnswerTmp->selectComment($answerId);
 
+            $attributes = array();
 			// Unique answer
 			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {								
 				$input_id = 'choice-'.$questionId.'-'.$answerId;
@@ -2073,6 +2074,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     //Getting attempt info
     $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
     
+    //Getting question list
     $question_list = array();
     if (!empty($exercise_stat_info['data_tracking'])) {
         $question_list		= explode(',', $exercise_stat_info['data_tracking']);
@@ -2135,7 +2137,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             ob_start();
             
             // We're inside *one* question. Go through each possible answer for this question        
-            $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null ,'exercise_result', array(), false, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+            $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null , 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
    
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];

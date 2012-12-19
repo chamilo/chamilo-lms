@@ -1453,12 +1453,17 @@ class Display {
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
-    public static function generate_accordion($items) {
+    public static function generate_accordion($items, $type = 'jquery', $id = null) {
         $html = null;
         if (!empty($items)) {
+            if (empty($id)) {
             $id = api_get_unique_id();
-            //$html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
+            }
+            if ($type == 'jquery') {
             $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
+            } else {
+                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
+            }
 
             $count = 1;
             foreach ($items as $item) {
@@ -1480,6 +1485,21 @@ class Display {
             }
             $html .= '</div>';
         }
+        return $html;
+    }
+    /**
+     * @todo use twig
+     */
+    static function group_button($title, $elements) {
+        $html = '<div class="btn-toolbar">
+            <div class="btn-group">
+            <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>
+            <ul class="dropdown-menu">';
+        foreach ($elements as $item) {
+            $html .= Display::tag('li', Display::url($item['title'], $item['href']));
+        }
+        $html .= '</ul>
+            </div> </div>';
         return $html;
     }
 } //end class Display

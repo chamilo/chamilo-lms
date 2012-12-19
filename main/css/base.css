@@ -415,10 +415,16 @@ footer .container .row {
     vertical-align:middle;
 }
 .actions a {
-    display:inline-block;
+    display: block;
+    float: left;
     margin-right: 10px;
     vertical-align:middle;
 }
+
+.actions .btn-toolbar {
+    margin : 0px;
+}
+
 .actions span {
     margin-right: 10px;
     vertical-align:middle;

@@ -94,14 +94,14 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
 }
 
 // Building the form for publishing the survey
-$form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id);
+$form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq());
 
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager :: get_user_list_from_course_code($_course['id'], $_SESSION['id_session'], '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
+$complete_user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
 $possible_users = array();
-foreach ($complete_user_list as $index => & $user) {
+foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
 $users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
@@ -119,15 +119,16 @@ $users->setElementTemplate('
 ');
 $users->setButtonAttributes('add', array('class' => 'btn arrowr'));
 $users->setButtonAttributes('remove', array('class' => 'btn arrowl'));
-// Additional users
-$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 2));
 
-//$form->addElement('html', '<div> <h3>'.Display::return_icon('course.png', Security::remove_XSS(get_lang('SendMail')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('SendMail')).'</h3><div>');
+// Additional users
+$form->addElement('textarea', 'additional_users', array(get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')), array('class' => 'span6', 'rows' => 5));
+
 $form->addElement('html', '<div id="check_mail">');
 $form->addElement('checkbox', 'send_mail','', get_lang('SendMail'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div id="mail_text">');
+
 // The title of the mail
 $form->addElement('text', 'mail_title', get_lang('MailTitle'), array('class' => 'span6'));
 // The text of the mail
@@ -169,6 +170,7 @@ if ($form->validate()) {
             Display :: display_error_message(get_lang('FormHasErrorsPleaseComplete'));
             // Getting the invited users
         	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
+
         	// Getting the survey mail text
         	if (!empty($survey_data['reminder_mail'])) {
         		$defaults['mail_text'] = $survey_data['reminder_mail'];
@@ -211,11 +213,12 @@ if ($form->validate()) {
     	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
     	Display::display_normal_message($message, false);
-    	Display :: display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
+    	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));
     }
 } else {
 	// Getting the invited users
 	$defaults = SurveyUtil::get_invited_users($survey_data['code']);
+
 	// Getting the survey mail text
 	if (!empty($survey_data['reminder_mail'])) {
 		$defaults['mail_text'] = $survey_data['reminder_mail'];
@@ -224,6 +227,7 @@ if ($form->validate()) {
 	}
 	$defaults['mail_title'] = $survey_data['mail_subject'];
 	$defaults['send_mail'] = 1;
+
 	$form->setDefaults($defaults);
     $form->display();
 }

@@ -366,12 +366,15 @@ class UserManager {
     }
 
     /**
-     * Can user be deleted?
-     * This functions checks if there's a course in which the given user is the
+     * Can user be deleted? This function checks whether there's a course
+         * in which the given user is the
      * only course administrator. If that is the case, the user can't be
      * deleted because the course would remain without a course admin.
      * @param int $user_id The user id
      * @return boolean true if user can be deleted
+         * @assert (null) === false
+         * @assert (-1) === false
+         * @assert ('abc') === false
      */
     public static function can_delete_user($user_id) {
             global $_configuration;
@@ -394,9 +397,14 @@ class UserManager {
     }
 
     /**
-     * Delete a user from the platform
-     * @param int $user_id The user id
+     * Delete a user from the platform, and all its belongings. This is a
+     * very dangerous function that should only be accessible by 
+     * super-admins. Other roles should only be able to disable a user,
+     * which removes access to the platform but doesn't delete anything.
+     * @param int The ID of th user to be deleted
      * @return boolean true if user is succesfully deleted, false otherwise
+     * @assert (null) === false
+     * @assert ('abc') === false
      */
     public static function delete_user($user_id) {
 
@@ -513,14 +521,16 @@ class UserManager {
     }
 
     /**
-     * Deactivate users. Can be called either as:
-     *
-     * - UserManager :: delete_users(1, 2, 3);
+     * Deletes users completely. Can be called either as:
+     * - UserManager :: delete_users(1, 2, 3); or
      * - UserManager :: delete_users(array(1, 2, 3));
-     *
      * @param array|int $ids
      * @return boolean  True if at least one user was successfuly deleted. False otherwise.
      * @author Laurent Opprecht
+     * @uses UserManager::delete_user() to actually delete each user
+     * @assert (null) === false
+     * @assert (-1) === false
+     * @assert (array(-1)) === false
      */
     static function delete_users($ids = array()) {
         $result = false;
@@ -534,14 +544,14 @@ class UserManager {
     }
 
     /**
-     * Deactivate users. Can be called either as:
-     *
+     * Disable users. Can be called either as:
      * - UserManager :: deactivate_users(1, 2, 3);
      * - UserManager :: deactivate_users(array(1, 2, 3));
-     *
      * @param array|int $ids
      * @return boolean
      * @author Laurent Opprecht
+     * @assert (null) === false
+     * @assert (array(-1)) === false
      */
     static function deactivate_users($ids = array()) {
         if (empty($ids)) {
@@ -557,14 +567,14 @@ class UserManager {
     }
 
     /**
-     * Activate users. Can be called either as:
-     *
+     * Enable users. Can be called either as:
      * - UserManager :: activate_users(1, 2, 3);
      * - UserManager :: activate_users(array(1, 2, 3));
-     *
-     * @param array|int $ids
+     * @param array|int IDs of the users to enable
      * @return boolean
      * @author Laurent Opprecht
+     * @assert (null) === false
+     * @assert (array(-1)) === false
      */
     static function activate_users($ids = array()) {
         if (empty($ids)) {
@@ -583,6 +593,8 @@ class UserManager {
      * @param int $user_id
      * @param string $openid
      * @return boolean true if the user information was updated
+     * @assert (false,'') === false
+     * @assert (-1,'') === false
      */
     public static function update_openid($user_id, $openid) {
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
@@ -594,22 +606,23 @@ class UserManager {
     }
 
     /**
-     * Update user information
-     * @param int $user_id
-     * @param string $firstname
-     * @param string $lastname
-     * @param string $username
-     * @param string $password
-     * @param string $auth_source
-     * @param string $email
-     * @param int $status
-     * @param string $official_code
-     * @param string $phone
-     * @param string $picture_uri
+     * Update user information with all the parameters passed to this function
+     * @param int The ID of the user to be updated
+     * @param string The user's firstname
+     * @param string The user's lastname
+     * @param string The user's username (login)
+     * @param string The user's password
+     * @param string The authentication source (default: "platform")
+     * @param string The user's e-mail address
+     * @param int The user's status
+     * @param string The user's official code (usually just an internal institutional code)
+     * @param string The user's phone number
+     * @param string The user's picture URL (internal to the Chamilo directory)
      * @param int The user ID of the person who registered this user (optional, defaults to null)
      * @param int The department of HR in which the user is registered (optional, defaults to 0)
      * @param    array    A series of additional fields to add to this user as extra fields (optional, defaults to null)
      * @return boolean true if the user information was updated
+     * @assert (false) === false
      */
     public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0) {
         global $_configuration;
@@ -721,6 +734,9 @@ class UserManager {
      *
      * @param int user_id
      * @param int Enable or disable
+     * @return void
+     * @assert (-1,0) === false
+     * @assert (1,1) === true
      */
     public static function change_active_state($user_id, $active, $send_email_if_activated = false) {
         $user_id = intval($user_id);
@@ -760,6 +776,8 @@ class UserManager {
      * Disables a user
      *
      * @param int User id
+     * @uses UserManager::change_active_state() to actually disable the user
+     * @assert (0) === false
      */
     public static function disable($user_id) {
         self::change_active_state($user_id, 0);
@@ -769,17 +787,21 @@ class UserManager {
      * Enable a user
      *
      * @param int User id
+     * @uses UserManager::change_active_state() to actually disable the user
+     * @assert (0) === false
      */
     public static function enable($user_id) {
         self::change_active_state($user_id, 1);
     }
 
     /**
-     * Returns the user's id based on the original id and field name in the extra fields. Returns 0 if no user was found
-     *
+     * Returns the user's id based on the original id and field name in 
+     * the extra fields. Returns 0 if no user was found. This function is
+     * mostly useful in the context of a web services-based sinchronization
      * @param string Original user id
      * @param string Original field name
      * @return int User id
+     * @assert ('0','---') === 0
      */
     public static function get_user_id_from_original_id($original_user_id_value, $original_user_id_name) {
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
@@ -798,8 +820,11 @@ class UserManager {
      * Check if a username is available
      * @param string the wanted username
      * @return boolean true if the wanted username is available
+     * @assert ('') === false
+     * @assert ('xyzxyzxyz') === true
      */
     public static function is_username_available($username) {
+        if (empty($username)) { return false; }
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = "SELECT username FROM $table_user WHERE username = '".Database::escape_string($username)."'";
         $res = Database::query($sql);
@@ -815,6 +840,8 @@ class UserManager {
      * @return string                        Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
      * @author Julio Montoya Armas
      * @author Ivan Tcholakov, 2009 - rework about internationalization.
+     * @assert ('','') === false
+     * @assert ('a','b') === 'ab'
      */
     public static function create_username($firstname, $lastname, $language = null, $encoding = null) {
         if (is_null($encoding)) {

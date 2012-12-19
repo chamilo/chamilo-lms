@@ -17,7 +17,6 @@
 $language_file= array('messages','userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 
@@ -25,13 +24,8 @@ if (api_get_setting('allow_message_tool') !='true') {
 	api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-$nameTools = api_xml_http_response_encode(get_lang('Messages'));
-/*	Constants and variables */
-
 $htmlHeadXtra[]='
-<script language="javascript">
+<script>
 function validate(form,list) {
 	if(list.selectedIndex<0) {
     	alert("Please select someone to send the message to.")
@@ -45,16 +39,18 @@ function validate(form,list) {
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-$htmlHeadXtra[] = '<script type="text/javascript">
+
+$htmlHeadXtra[] = '<script>
+
 $(document).ready(function () {
     $("#users").fcbkcomplete({
         json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
+        addontab: false,
         cache: false,
         filter_case: false,
         filter_hide: true,
         complete_text:"'.get_lang('StartToType').'",
     	firstselected: true,
-        //onremove: "testme",
     	onselect:"check_users",
         filter_selected: true,
         newel: true
@@ -299,7 +295,7 @@ if ($group_id != 0) {
 
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_left_content = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="span9">';
+    $social_right_content = '<div class="span9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .=  '</div>';
@@ -356,7 +352,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
 $tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_content', $social_left_content);
-    $tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

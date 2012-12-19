@@ -323,6 +323,40 @@ define('SHOW_TEXT_NEAR_ICONS', false);
 define ('EVENT_EMAIL_TEMPLATE_ACTIVE',  1);
 define ('EVENT_EMAIL_TEMPLATE_INACTIVE',0);
 
+// Group permissions
+define('GROUP_PERMISSION_OPEN'	, '1');
+define('GROUP_PERMISSION_CLOSED', '2');
+
+// Group user permissions
+define('GROUP_USER_PERMISSION_ADMIN'	,                               '1'); // the admin of a group
+define('GROUP_USER_PERMISSION_READER',                              '2'); // a normal user
+define('GROUP_USER_PERMISSION_PENDING_INVITATION',                  '3'); // When an admin/moderator invites a user
+define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER',     '4'); // an user joins a group
+define('GROUP_USER_PERMISSION_MODERATOR',                           '5'); // a moderator
+define('GROUP_USER_PERMISSION_ANONYMOUS'	,                           '6'); // an anonymous user
+define('GROUP_USER_PERMISSION_HRM',                                 '7'); // a human resources manager
+
+define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
+define('GROUP_IMAGE_SIZE_BIG', 		2);
+define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
+define('GROUP_IMAGE_SIZE_SMALL', 	4);
+
+define('GROUP_TITLE_LENGTH',       50);
+
+
+// Messages
+/*
+ * @todo use constants!
+ */
+define('MESSAGE_STATUS_NEW',                    '0');
+define('MESSAGE_STATUS_UNREAD',                 '1');
+//2 ??
+define('MESSAGE_STATUS_DELETED',                '3');
+define('MESSAGE_STATUS_OUTBOX',                 '4');
+define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
+define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
+define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
+
 
 /**
  * Inclusion of internationalization libraries
@@ -2917,7 +2951,6 @@ function api_not_found($print_headers = false) {
     if ((!headers_sent() || $print_headers) && $origin != 'learnpath') {
         $show_headers = 1;
     }
-    //$tpl = new Template(null, $show_headers, $show_headers);
     $app['template.show_header'] = $show_headers;
     $app['template.show_footer'] = $show_headers;
 

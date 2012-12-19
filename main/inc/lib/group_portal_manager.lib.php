@@ -9,25 +9,6 @@
 /**
  * Code
  */
-// Group permissions
-define('GROUP_PERMISSION_OPEN'	, '1');
-define('GROUP_PERMISSION_CLOSED', '2');
-
-// Group user permissions
-define('GROUP_USER_PERMISSION_ADMIN'	,                               '1'); // the admin of a group
-define('GROUP_USER_PERMISSION_READER',                              '2'); // a normal user
-define('GROUP_USER_PERMISSION_PENDING_INVITATION',                  '3'); // When an admin/moderator invites a user
-define('GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER',     '4'); // an user joins a group
-define('GROUP_USER_PERMISSION_MODERATOR',                           '5'); // a moderator
-define('GROUP_USER_PERMISSION_ANONYMOUS'	,                           '6'); // an anonymous user
-define('GROUP_USER_PERMISSION_HRM',                                 '7'); // a human resources manager
-
-define('GROUP_IMAGE_SIZE_ORIGINAL',	1);
-define('GROUP_IMAGE_SIZE_BIG', 		2);
-define('GROUP_IMAGE_SIZE_MEDIUM', 	3);
-define('GROUP_IMAGE_SIZE_SMALL', 	4);
-
-define('GROUP_TITLE_LENGTH',       50);
 
 /**
  * Class
@@ -1097,7 +1078,7 @@ class GroupPortalManager
         $sql = "UPDATE $table_message SET msg_status=3 WHERE group_id = $group_id AND (id = '$topic_id' OR parent_id = $topic_id) ";
         Database::query($sql);
     }
-    
+
     public static function get_groups_by_user_count($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
         $table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);

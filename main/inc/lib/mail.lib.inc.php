@@ -203,5 +203,15 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
 
     // Clear all the addresses.
     $mail->ClearAddresses();
+
+    /*
+    $body = $message;
+    $message = \Swift_Message::newInstance()
+        ->setSubject('[YourSite] Feedback')
+        ->setFrom(array($sender_email , $sender_name))
+        ->setTo(array($recipient_email => $recipient_name))
+        ->setBody($body);
+    global $app;
+    $app['mailer']->send($message);*/
     return 1;
 }

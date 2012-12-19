@@ -46,12 +46,6 @@ class Template {
         $hide_global_chat   = $app['template.hide_global_chat'];
         $load_plugins       = $app['template.load_plugins'];
 
-        $cache_folder = api_get_path(SYS_ARCHIVE_PATH) . 'twig';
-
-        if (!is_dir($cache_folder)) {
-            mkdir($cache_folder, api_get_permissions_for_new_directories());
-        }
-
         //Page title
         $this->title        = $title;
         $this->show_learnpath = $show_learnpath;
@@ -284,10 +278,10 @@ class Template {
             if (api_is_platform_admin()) {
                 $user_info['is_admin'] = 1;
             }
-
-            $user_info['messages_count'] = MessageManager::get_new_messages();
-            $user_info['messages_invitations_count'] = GroupPortalManager::get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
-
+            $new_messages = MessageManager::get_new_messages();
+            $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
+            $messages_invitations_count = GroupPortalManager::get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
+            $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label($messages_invitations_count, 'warning') : null;
             $this->user_is_logged_in = true;
         }
         //Setting the $_u array that could be use in any template
@@ -299,7 +293,8 @@ class Template {
         global $_configuration;
 
         //Setting app paths/URLs
-        $_p = array('web' => api_get_path(WEB_PATH),
+        $_p = array(
+            'web' => api_get_path(WEB_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
             'web_css' => api_get_path(WEB_CSS_PATH),
@@ -455,18 +450,14 @@ class Template {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $nameTools = $this->title;
         $navigation = $this->return_navigation_array();
+
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
 
-        if (isset($httpHeadXtra) && $httpHeadXtra) {
-            foreach ($httpHeadXtra as & $thisHttpHead) {
-                //header($thisHttpHead);
-            }
-        }
+        $this->assign('online_button', Display::return_icon('online.png'));
+        $this->assign('offline_button', Display::return_icon('offline.png'));
 
-        $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
-        $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
 
@@ -591,11 +582,6 @@ class Template {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
-
-        if ($this->show_header == 1) {
-            //header('Content-Type: text/html; charset=' . api_get_system_encoding());
-            //header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));
-        }
     }
 
     /**
@@ -865,6 +851,7 @@ class Template {
         $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
+
         // My Courses
 
         if(api_is_allowed_to_create_course()) {
@@ -902,23 +889,24 @@ class Template {
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         }
 
+
+
         // Social
         if (api_get_setting('allow_social_tool')=='true') {
             $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
-
+            /*
             // get count unread message and total invitations
             $count_unread_message = MessageManager::get_number_of_messages(true);
 
             $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
             $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-            $group_pending_invitations = 0;
             if (!empty($group_pending_invitations )) {
                 $group_pending_invitations = count($group_pending_invitations);
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-            $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');
+            $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) :'');*/
 
-            $navigation['social']['title'] = get_lang('SocialNetwork'). $total_invitations;
+            $navigation['social']['title'] = get_lang('SocialNetwork');
         }
 
         // Dashboard
@@ -1161,7 +1149,6 @@ class Template {
         $return = array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
         return $return;
     }
-
 
     function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 

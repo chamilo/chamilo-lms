@@ -9,22 +9,8 @@
 /**
  * Code
  */
-require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-/*
- * @todo use constants!
- */
-define('MESSAGE_STATUS_NEW',                    '0');
-define('MESSAGE_STATUS_UNREAD',                 '1');
-//2 ??
-define('MESSAGE_STATUS_DELETED',                '3');
-define('MESSAGE_STATUS_OUTBOX',                 '4');
-define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
-define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
 
 /**
  * Class
@@ -52,10 +38,13 @@ class MessageManager
 		if (!api_get_user_id()) {
 			return false;
 		}
-		$query = "SELECT * FROM $table_message WHERE user_receiver_id = ".api_get_user_id()." AND msg_status = ".MESSAGE_STATUS_UNREAD;
+		$query = "SELECT count(id) as count FROM $table_message WHERE user_receiver_id = ".api_get_user_id()." AND msg_status = ".MESSAGE_STATUS_UNREAD;
 		$result = Database::query($query);
-		$i = Database::num_rows($result);
-		return $i;
+		if (Database::num_rows($result)) {
+            $result = Database::fetch_array($result);
+            return $result['count'];
+        };
+		return 0;
 	}
 
 	/**
@@ -74,7 +63,7 @@ class MessageManager
 	/**
 	 * Gets the total number of messages, used for the inbox sortable table
 	 */
-	public static function get_number_of_messages ($unread = false) {
+	public static function get_number_of_messages($unread = false) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 
 		$condition_msg_status = '';
@@ -1216,11 +1205,10 @@ class MessageManager
     //@todo this functions should be in the message class
 
     static function inbox_display() {
-        global $charset;
         $success = get_lang('SelectedMessagesDeleted');
         $html = '';
 
-        if (isset ($_REQUEST['action'])) {
+        if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1239,13 +1227,12 @@ class MessageManager
         // display sortable table with messages of the current user
         $table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
         $table->set_header(0, '', false,array ('style' => 'width:15px;'));
-        $title=api_xml_http_response_encode(get_lang('Title'));
-        $action=api_xml_http_response_encode(get_lang('Modify'));
-        $table->set_header(1,api_xml_http_response_encode(get_lang('Messages')),false);
-        $table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
-        $table->set_header(3,$action,false,array ('style' => 'width:70px;'));
 
-        if ($_REQUEST['f']=='social') {
+        $table->set_header(1,get_lang('Messages'),false);
+        $table->set_header(2,get_lang('Date'),true, array('style' => 'width:180px;'));
+        $table->set_header(3,get_lang('Modify'),false,array ('style' => 'width:70px;'));
+
+        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $parameters['f'] = 'social';
             $table->set_additional_parameters($parameters);
         }

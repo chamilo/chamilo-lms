@@ -62,11 +62,12 @@ function action_click(element, table_id) {
 }
 
 /* Global chat variables */
+
 var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
-var online_button   = '{{ online_button }}';
-var offline_button  = '{{ offline_button }}';
-var connect_lang    = '{{ "ChatConnected"|get_lang }}';
-var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';
+var online_button   = '{{ online_button |e('js') }}';
+var offline_button  = '{{ offline_button |e('js') }}';
+var connect_lang    = '{{ "ChatConnected"|get_lang |e('js') }}';
+var disconnect_lang = '{{ "ChatDisconnected"|get_lang |e('js') }}';
 
 function get_url_params(q, attribute) {
     var vars;

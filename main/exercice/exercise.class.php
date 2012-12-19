@@ -2365,6 +2365,9 @@ class Exercise {
 						} else {
 							$totalScore+= $questionScore;
 						}
+                        if ($questionScore == '') {
+                            $questionScore = 0;
+                        }
 						$arrques = $questionName;
 						$arrans  = $choice;
 					} else {

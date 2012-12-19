@@ -4750,3 +4750,8 @@ i.size-32.icon-new-work{
 .xdebug-error {
     margin-top: 20px;
 }
+
+.multiple_select_header {
+    height: 35px;
+    margin-bottom: 15px;
+}

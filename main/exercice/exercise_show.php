@@ -251,9 +251,6 @@ if (!empty($track_exercise_info['data_tracking'])) {
     if (empty($questionList)) {
         $questionList = $question_list_from_database;
     }
-	/*if (is_array($temp_question_list) && count($temp_question_list) == count($question_list_from_database)) {
-		$questionList = $tempquestionList;
-	}*/
 } else {
     $questionList = $question_list_from_database;
 }
@@ -287,7 +284,6 @@ foreach ($questionList as $questionId) {
 	$objQuestionTmp 	= Question::read($questionId);
 	$questionWeighting	= $objQuestionTmp->selectWeighting();
 	$answerType			= $objQuestionTmp->selectType();
-
 
 	// Start buffer
     ob_start();
@@ -455,7 +451,7 @@ foreach ($questionList as $questionId) {
 
             echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
             if ($answerType == HOT_SPOT_DELINEATION) {
-                if ($organs_at_risk_hit>0) {
+                if ($organs_at_risk_hit > 0) {
                     $message='<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
                     $message.='<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
                 } else {

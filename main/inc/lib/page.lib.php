@@ -44,7 +44,6 @@ class PageController
                 $profile_content .='<a style="text-align:center"  href="'.api_get_path(WEB_PATH).'main/auth/profile.php"><img title="'.get_lang('EditProfile').'" src="'.$img_array['file'].'" '.$img_array['style'].'></a>';
             }
         }
-
         self::show_right_block(null, null, 'user_image_block', array('content' => $profile_content));
     }
 
@@ -144,8 +143,9 @@ class PageController
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
                 $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/social/invitations.php', 'title' => get_lang('PendingInvitations').$total_invitations);
+            } else {
+                $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/auth/profile.php', 'title' => get_lang('PendingInvitations').$total_invitations);
             }
-            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/auth/profile.php', 'title' => get_lang('PendingInvitations').$total_invitations);
         }
         self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
     }

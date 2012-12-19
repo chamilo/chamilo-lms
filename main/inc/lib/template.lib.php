@@ -275,6 +275,7 @@ class Template {
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
+
         if (api_user_is_login()) {
             $user_info = api_get_user_info();
             $user_info['logged'] = 1;
@@ -285,6 +286,7 @@ class Template {
             }
 
             $user_info['messages_count'] = MessageManager::get_new_messages();
+            $user_info['messages_invitations_count'] = GroupPortalManager::get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
 
             $this->user_is_logged_in = true;
         }

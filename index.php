@@ -86,15 +86,15 @@ class IndexController
 
         //If we are not logged in and customapages activated
         if (!api_get_user_id() && CustomPages::enabled()) {
-            $loggedout = $request->get('loggedout');
-            if ($loggedout) {
+            $logged_out = $request->get('loggedout');
+            if ($logged_out) {
                 CustomPages::display(CustomPages::LOGGED_OUT);
             } else {
                 CustomPages::display(CustomPages::INDEX_UNLOGGED);
             }
         }
 
-        $this->check_last_login();
+        //$this->check_last_login();
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             $app['template']->assign('course_category_block', PageController::return_courses_in_categories());
@@ -135,6 +135,7 @@ class IndexController
         $app['template']->assign('home_page_block', 		 PageController::return_home_page());
 
         $nav_links = $app['template']->return_navigation_links();
+
         $app['template']->assign('navigation_course_links',  $nav_links);
         $app['template']->assign('main_navigation_block',	 $nav_links);
 
@@ -144,20 +145,22 @@ class IndexController
         if (api_is_platform_admin() || api_is_drh()) {
             PageController::return_skills_links();
         }
+
         $response = $app['template']->render_layout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
         return new Response($response, 200, array());
     }
 
+    /**
+     *
+    * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
+    * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
+    *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
+    *       on api_get_setting('page_after_login').
+     * @deprecated
+    */
     function check_last_login() {
-//
-//         * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
-//         * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
-//         *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
-//         *       on api_get_setting('page_after_login').
-//
-
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {

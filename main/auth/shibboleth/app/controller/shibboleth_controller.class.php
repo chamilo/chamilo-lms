@@ -91,7 +91,6 @@ class ShibbolethController
             $message = get_lang('already_logged_in');
             Shibboleth::display()->message_page($message, $title);
         }
-        //$index_manager = new IndexManager('');
         $html = PageController::display_login_form();
         Shibboleth::display()->page($html, $title);
     }

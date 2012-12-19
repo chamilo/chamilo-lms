@@ -132,7 +132,6 @@ class MessageManager
 	 * @param string $direction
 	 */
 	public static function get_message_data($from, $number_of_items, $column, $direction) {
-		global $charset;
 		$from = intval($from);
 		$number_of_items = intval($number_of_items);
 
@@ -1242,11 +1241,10 @@ class MessageManager
     //@todo this functions should be in the message class
 
     static function inbox_display() {
-        global $charset;
         $success = get_lang('SelectedMessagesDeleted');
         $html = '';
 
-        if (isset ($_REQUEST['action'])) {
+        if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1263,13 +1261,11 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
+        $table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'), 3, 20, 'DESC');
         $table->set_header(0, '', false,array ('style' => 'width:15px;'));
-        $title=api_xml_http_response_encode(get_lang('Title'));
-        $action=api_xml_http_response_encode(get_lang('Modify'));
-        $table->set_header(1,api_xml_http_response_encode(get_lang('Messages')),false);
-        $table->set_header(2,api_xml_http_response_encode(get_lang('Date')),true, array('style' => 'width:180px;'));
-        $table->set_header(3,$action,false,array ('style' => 'width:70px;'));
+        $table->set_header(1, get_lang('Messages'),false);
+        $table->set_header(2, get_lang('Date'),true, array('style' => 'width:180px;'));
+        $table->set_header(3, get_lang('Modify'), false,array ('style' => 'width:70px;'));
 
         if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $parameters['f'] = 'social';
@@ -1282,7 +1278,6 @@ class MessageManager
 
 
     static function outbox_display() {
-        global $charset;
         $social_link = false;
         if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $social_link ='f=social';
@@ -1309,18 +1304,15 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
+        $table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'), 3, 20,'DESC');
 
         $parameters['f'] = Security::remove_XSS($_GET['f']);
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false,array ('style' => 'width:15px;'));
-        $title = api_xml_http_response_encode(get_lang('Title'));
-        $action= api_xml_http_response_encode(get_lang('Modify'));
 
-        $table->set_header(1, api_xml_http_response_encode(get_lang('Messages')),false);
-        //$table->set_header(2, $title,true);
-        $table->set_header(2, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:160px;'));
-        $table->set_header(3,$action, false,array ('style' => 'width:70px;'));
+        $table->set_header(1, get_lang('Messages'),false);
+        $table->set_header(2, get_lang('Date'),true,array ('style' => 'width:160px;'));
+        $table->set_header(3, get_lang('Modify'), false,array ('style' => 'width:70px;'));
 
         $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
         $html .= $table->return_table();

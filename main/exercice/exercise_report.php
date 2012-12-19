@@ -80,7 +80,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
-        
+
         require_once 'exercise_result.class.php';
         switch ($_GET['export_format']) {
             case 'xls' :
@@ -113,14 +113,14 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     $lp_id             = $track_exercise_info['orig_lp_id'];
     //$lp_item_id        = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id   = $track_exercise_info['orig_lp_item_view_id'];
-    
+
     $course_info = api_get_course_info();
 
     // Teacher data
-    $teacher_info      = api_get_user_info(api_get_user_id());    
+    $teacher_info      = api_get_user_info(api_get_user_id());
     $from_name         = api_get_person_name($teacher_info['firstname'], $teacher_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
 
-    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/exercise_report.php?' . api_get_cidreq() . '&id_session='.$session_id.'&exerciseId='.$exercise_id;
+    $url               = api_get_path(WEB_CODE_PATH) . 'exercice/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
 
     $my_post_info      = array();
     $post_content_id   = array();
@@ -174,7 +174,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
 
     $totquery = "UPDATE $TBL_TRACK_EXERCICES SET exe_result = '".floatval($tot)."' WHERE exe_id = ".$id;
     Database::query($totquery);
-    
+
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
         $subject = get_lang('ExamSheetVCC');
@@ -194,7 +194,7 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
         $message = str_replace("#url#", $url, $message);
         MessageManager::send_message_simple($student_id, $subject, $message, api_get_user_id());
     }
-    
+
 
     //Updating LP score here
     if (in_array($origin, array ('tracking_course','user_course','correct_exercise_in_lp'))) {
@@ -324,16 +324,16 @@ if (!empty($group_parameters)) {
 if ($is_allowedToEdit || $is_tutor) {
 
 	//The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('FirstName'), 
-                            get_lang('LastName'), 
+	$columns        = array(get_lang('FirstName'),
+                            get_lang('LastName'),
                             get_lang('LoginName'),
-                            get_lang('Group'), 
-                            get_lang('Duration').' ('.get_lang('MinMinute').')', 
-                            get_lang('StartDate'),  
-                            get_lang('EndDate'), 
-                            get_lang('Score'), 
-                            get_lang('Status'), 
-                            get_lang('ToolLearnpath'), 
+                            get_lang('Group'),
+                            get_lang('Duration').' ('.get_lang('MinMinute').')',
+                            get_lang('StartDate'),
+                            get_lang('EndDate'),
+                            get_lang('Score'),
+                            get_lang('Status'),
+                            get_lang('ToolLearnpath'),
                             get_lang('Actions')
     );
 

@@ -1511,17 +1511,21 @@ class Display {
         return self::span($text, array('class' => 'boot-tooltip', 'title' => strip_tags($tip)));
     }
 
-    public static function generate_accordion($items) {
+    public static function generate_accordion($items, $type = 'jquery', $id = null) {
         $html = null;
         if (!empty($items)) {
-            $id = api_get_unique_id();
-            //$html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
-            $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
+            if (empty($id)) {
+                $id = api_get_unique_id();
+            }
+            if ($type == 'jquery') {
+                $html = '<div class="accordion_jquery" id="'.$id.'">'; //using jquery
+            } else {
+                $html = '<div class="accordion" id="'.$id.'">'; //using bootstrap
+            }
 
             $count = 1;
             foreach ($items as $item) {
                 $html .= '<div class="accordion-my-group">';
-
                 $html .= '<div class="accordion-heading">
                                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#'.$id.'" href="#collapse'.$count.'">
                                 '.$item['title'].'

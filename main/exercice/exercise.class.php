@@ -2744,7 +2744,7 @@ class Exercise {
 				} else {
 					if ($debug) error_log('Showing questions $from '.$from);
 
-					switch($answerType) {
+					switch ($answerType) {
 						case UNIQUE_ANSWER :
 						case UNIQUE_ANSWER_NO_OPTION:
 						case MULTIPLE_ANSWER :

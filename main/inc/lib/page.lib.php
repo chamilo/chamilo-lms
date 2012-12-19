@@ -111,43 +111,14 @@ class PageController
      * @assert () != ''
      */
     static function return_profile_block() {
-        $user_id = api_get_user_id();
-
-        if (empty($user_id)) {
-            return;
-        }
-        $profile_content = array();
-
         //  @todo Add a platform setting to add the user image.
         if (api_get_setting('allow_message_tool') == 'true') {
-
-            // New messages.
-            $number_of_new_messages = MessageManager::get_new_messages();
-
-            // New contact invitations.
-            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id($user_id);
-
-            // New group invitations sent by a moderator.
-            $group_pending_invitations = GroupPortalManager::get_groups_by_user_count($user_id, GROUP_USER_PERMISSION_PENDING_INVITATION, false);
-
-            $total_invitations = $number_of_new_messages_of_friend + $group_pending_invitations;
-            $cant_msg = Display::badge($number_of_new_messages);
-
-            $link = '';
             if (api_get_setting('allow_social_tool') == 'true') {
-                $link = '?f=social';
-            }
-            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/messages/inbox.php'.$link, 'title' => get_lang('Inbox').$cant_msg);
-            $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/messages/new_message.php'.$link, 'title' => get_lang('Compose'));
-
-            if (api_get_setting('allow_social_tool') == 'true') {
-                $total_invitations = Display::badge($total_invitations);
-                $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/social/invitations.php', 'title' => get_lang('PendingInvitations').$total_invitations);
+                self::show_right_block(get_lang('Profile'), array(), 'profile_social_block');
             } else {
-                $profile_content[] = array('href' => api_get_path(WEB_PATH).'main/auth/profile.php', 'title' => get_lang('PendingInvitations').$total_invitations);
+                self::show_right_block(get_lang('Profile'), array(), 'profile_block');
             }
         }
-        self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
     }
 
     /**
@@ -176,8 +147,6 @@ class PageController
         if (!isset($user_selected_language)) {
             $user_selected_language = $platformLanguage;
         }
-
-        $html = null;
         $home_menu = @(string) file_get_contents($sys_path.$home.'home_menu_'.$user_selected_language.'.html');
         if (!empty($home_menu)) {
             $home_menu_content = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
@@ -213,7 +182,6 @@ class PageController
         $user_selected_language = api_get_interface_language();
         $home = api_get_home_path();
 
-        $html = '';
         // Notice
         $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice_'.$user_selected_language.'.html');
         if (empty($home_notice)) {
@@ -981,17 +949,17 @@ class PageController
         $tpl->assign('welcome_to_course_block', 1);
     }
 
-    /* function run() {
-      $app = $this->app;
-      $app->get('/', function() use ($app) {
-      $data = $this->app['twig']->render($app['template_style'].'/'.$app['default_template']);
-      return new Response($data, 200, array('cache-control' => 's-maxage=3600, public'));
-      });
-      if ($app['debug'] == true) {
-      $this->app->run();
-      } else {
-      //Using http cache
-      $app['http_cache']->run();
-      }
-      } */
+    static function return_debug() {
+        global $app;
+        $mtime = microtime();
+        $mtime = explode(" ",$mtime);
+        $mtime = $mtime[1] + $mtime[0];
+
+        $message = "22---Page loaded in:".($mtime-START);
+        $app['monolog']->addInfo($message);
+        $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
+        $app['monolog']->addInfo($message);
+        $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
+        $app['monolog']->addInfo($message);
+    }
 }

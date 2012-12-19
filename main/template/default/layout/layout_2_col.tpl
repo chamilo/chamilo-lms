@@ -22,6 +22,8 @@
         {#  User Profile links #}
         {% include "default/index/profile_block.tpl" %}
 
+        {% include "default/index/profile_social_block.tpl" %}
+
         {#  Course block - admin #}
         {% include "default/index/course_block.tpl" %}
 

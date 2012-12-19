@@ -72,3 +72,7 @@ if (!is_dir($app['assetic.path_to_web'].'/js')) {
 if (!is_dir($app['db.orm.proxies_dir'])) {
     mkdir($app['db.orm.proxies_dir'], api_get_permissions_for_new_directories());
 }
+
+if (!is_dir($app['cache.path'].'twig')) {
+    mkdir($app['cache.path'].'twig', api_get_permissions_for_new_directories());
+}

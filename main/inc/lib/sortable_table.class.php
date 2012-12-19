@@ -130,9 +130,12 @@ class SortableTable extends HTML_Table {
 		$this->column  = isset ($_SESSION[$this->param_prefix.'column'])  ? intval($_SESSION[$this->param_prefix.'column']) : $default_column;
 		$this->column  = isset ($_GET[$this->param_prefix.'column']) 	  ? intval($_GET[$this->param_prefix.'column']) : $this->column;
 
-		//$this->direction = isset ($_SESSION[$this->param_prefix.'direction']) ? $_SESSION[$this->param_prefix.'direction'] : $default_order_direction;
+        //Default direction
 
-
+        if (in_array(strtoupper($default_order_direction), array('ASC', 'DESC'))) {
+            $this->direction = $default_order_direction;
+        }
+        
 		if (isset($_SESSION[$this->param_prefix.'direction'])) {
 			$my_session_direction = $_SESSION[$this->param_prefix.'direction'];
         	if (!in_array($my_session_direction, array('ASC', 'DESC'))) {
@@ -158,6 +161,7 @@ class SortableTable extends HTML_Table {
 				}
 			}
 		}
+
 
 		// Allow to change paginate in multiples tabs
 		unset($_SESSION[$this->param_prefix.'per_page']);

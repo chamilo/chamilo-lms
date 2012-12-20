@@ -464,15 +464,20 @@ if (file_exists($mail_conf)) {
 	require_once $mail_conf;
 }
 
-$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
-     'swiftmailer.options' => array(
+$mail_settings = array();
+
+if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
+    $mail_settings = array(
         'host' => $platform_email['SMTP_HOST'],
         'port' => $platform_email['SMTP_PORT'],
         'username' => $platform_email['SMTP_USER'],
         'password' => $platform_email['SMTP_PASS'],
         'encryption' => null,
         'auth_mode' => null
-    ),
+    );
+}
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
+     'swiftmailer.options' => $mail_settings
 ));
 
 // check and modify the date of user in the track.e.online table

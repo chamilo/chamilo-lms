@@ -878,9 +878,9 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 } else {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 }
-
-$folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
-
+if (GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()) || UserManager::is_admin(api_get_user_id())) {
+    $folders = DocumentManager::get_all_document_folders($_course, $to_group_id, $is_allowed_to_edit || $group_member_with_upload_rights);
+}
 if ($folders === false) {
     $folders = array();
 }
@@ -1010,96 +1010,98 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    // Create a sortable table with our data
-    $sortable_data = array();
+    if (GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()) || UserManager::is_admin(api_get_user_id())) {
+        // Create a sortable table with our data
+        $sortable_data = array();
 
-    $count = 1;
-    foreach ($docs_and_folders as $key => $document_data) {
-        $row = array();
-        $row['id'] = $document_data['id'];
-        $row['type'] = $document_data['filetype'];
+        $count = 1;
+        foreach ($docs_and_folders as $key => $document_data) {
+            $row = array();
+            $row['id'] = $document_data['id'];
+            $row['type'] = $document_data['filetype'];
 
-        // If the item is invisible, wrap it in a span with class invisible
+            // If the item is invisible, wrap it in a span with class invisible
 
-        $is_visible = DocumentManager::is_visible_by_id($document_data['id'], $course_info, api_get_session_id(), api_get_user_id(), false);
+            $is_visible = DocumentManager::is_visible_by_id($document_data['id'], $course_info, api_get_session_id(), api_get_user_id(), false);
 
-        $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
-        $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
+            $invisibility_span_open = ($is_visible == 0) ? '<span class="muted">' : '';
+            $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
 
-        // Size (or total size of a directory)
-        $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
+            // Size (or total size of a directory)
+            $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
 
-        // Get the title or the basename depending on what we're using
-        if ($document_data['title'] != '') {
-            $document_name = $document_data['title'];
-        } else {
-            $document_name = basename($document_data['path']);
-        }
-        $row['name'] = $document_name;
-        // Data for checkbox
-        if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-            $row[] = $document_data['path'];
-        }
-
-        if (DocumentManager::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
-            continue;
-        }
-
-        // Show the owner of the file only in groups
-        $user_link = '';
-
-        if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
-            if (!empty($document_data['insert_user_id'])) {
-                $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
-                $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
-                $user_link = '<div class="document_owner">' . get_lang('Owner') . ': ' . display_user_link_document($document_data['insert_user_id'], $user_name) . '</div>';
-            }
-        }
-
-        // Icons (clickable)
-        $row[] = create_document_link($document_data, true, $count, $is_visible);
-
-        $path_info = pathinfo($document_data['path']);
-
-        if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))) {
-            $count++;
-        }
-
-        // Validacion when belongs to a session
-        $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
-
-        // Document title with link
-        $row[] = create_document_link($document_data, false, null, $is_visible) . $session_img . '<br />' . $invisibility_span_open . '<i>' . nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)) . '</i>' . $invisibility_span_close . $user_link;
-
-        // Comments => display comment under the document name
-        $display_size = format_file_size($size);
-        $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
-
-        // Last edit date
-
-        $last_edit_date = api_get_local_time($document_data['lastedit_date']);
-        $display_date = date_to_str_ago($last_edit_date).' <div class="muted"><small>'.$last_edit_date."</small></div>";
-        $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
-        // Admins get an edit column
-
-        if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
-            $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
-            // If readonly, check if it the owner of the file or if the user is an admin
-            if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, 0, $is_visible);
+            // Get the title or the basename depending on what we're using
+            if ($document_data['title'] != '') {
+                $document_name = $document_data['title'];
             } else {
-                $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly'], $is_visible);
+                $document_name = basename($document_data['path']);
             }
-            $row[] = $edit_icons;
-        }
-        $row[] = $last_edit_date;
-        $row[] = $size;
-        $row[] = $document_name;
+            $row['name'] = $document_name;
+            // Data for checkbox
+            if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
+                $row[] = $document_data['path'];
+            }
 
-        $total_size = $total_size + $size;
+            if (DocumentManager::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
+                continue;
+            }
 
-        if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
-            $sortable_data[] = $row;
+            // Show the owner of the file only in groups
+            $user_link = '';
+
+            if (isset($_SESSION['_gid']) && $_SESSION['_gid'] != '') {
+                if (!empty($document_data['insert_user_id'])) {
+                    $user_info = UserManager::get_user_info_by_id($document_data['insert_user_id']);
+                    $user_name = api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                    $user_link = '<div class="document_owner">' . get_lang('Owner') . ': ' . display_user_link_document($document_data['insert_user_id'], $user_name) . '</div>';
+                }
+            }
+
+            // Icons (clickable)
+            $row[] = create_document_link($document_data, true, $count, $is_visible);
+
+            $path_info = pathinfo($document_data['path']);
+
+            if (isset($path_info['extension']) && in_array($path_info['extension'], array('ogg', 'mp3', 'wav'))) {
+                $count++;
+            }
+
+            // Validacion when belongs to a session
+            $session_img = api_get_session_image($document_data['session_id'], $_user['status']);
+
+            // Document title with link
+            $row[] = create_document_link($document_data, false, null, $is_visible) . $session_img . '<br />' . $invisibility_span_open . '<i>' . nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, $charset)) . '</i>' . $invisibility_span_close . $user_link;
+
+            // Comments => display comment under the document name
+            $display_size = format_file_size($size);
+            $row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
+
+            // Last edit date
+
+            $last_edit_date = api_get_local_time($document_data['lastedit_date']);
+            $display_date = date_to_str_ago($last_edit_date).' <div class="muted"><small>'.$last_edit_date."</small></div>";
+            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+            // Admins get an edit column
+
+            if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
+                $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
+                // If readonly, check if it the owner of the file or if the user is an admin
+                if ($document_data['insert_user_id'] == api_get_user_id() || api_is_platform_admin()) {
+                    $edit_icons = build_edit_icons($document_data, $key, $is_template, 0, $is_visible);
+                } else {
+                    $edit_icons = build_edit_icons($document_data, $key, $is_template, $document_data['readonly'], $is_visible);
+                }
+                $row[] = $edit_icons;
+            }
+            $row[] = $last_edit_date;
+            $row[] = $size;
+            $row[] = $document_name;
+
+            $total_size = $total_size + $size;
+
+            if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+                $sortable_data[] = $row;
+            }
         }
     }
 } else {

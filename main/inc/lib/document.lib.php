@@ -623,13 +623,24 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
-            $sql = "SELECT DISTINCT docs.id, path
+            if ($to_group_id <> 0) {
+               $sql = "SELECT DISTINCT docs.id, path
                     FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
                     ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
 					WHERE
 							docs.filetype 		= 'folder' AND
 							last.to_group_id	= " . $to_group_id . " AND
+                            docs.path           NOT LIKE '%shared_folder%' AND
             				last.visibility 	<> 2 $condition_session ";
+            } else {
+                $sql = "SELECT DISTINCT docs.id, path
+                        FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
+                        WHERE
+                                docs.filetype 		= 'folder' AND
+                                last.to_group_id	= " . $to_group_id . " AND
+                                last.visibility 	<> 2 $condition_session ";
+                }
 
             $result = Database::query($sql);
 

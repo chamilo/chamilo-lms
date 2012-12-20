@@ -6569,8 +6569,6 @@ function api_set_setting_last_update() {
     api_set_setting('settings_latest_update', api_get_utc_datetime());
 }
 
-
-
 /**
  * Sends email using the phpmailer class
  * Sender name and email can be specified, if not specified
@@ -6614,27 +6612,31 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
 function api_mail_html($recipient_name, $recipient_email, $subject, $body, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
     global $app;
 
+    $reply_to_mail = $sender_email;
+    $reply_to_name = $sender_name;
 
-    if (($sender_email != '') && ($sender_name != '')) {
-        //$mail->AddReplyTo($sender_email, $sender_name);
-    }
-    $reply_to_mail = null;
-    $reply_to_name = null;
     if (isset($extra_headers['reply_to'])) {
         $reply_to_mail = $extra_headers['reply_to']['mail'];
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
+    try {
+        $message = \Swift_Message::newInstance()
+            ->setSubject($subject)
+            ->setFrom(array($sender_email => $sender_name))
+            ->setTo(array($recipient_email => $recipient_name))
+            ->setReplyTo(array($reply_to_mail => $reply_to_name))
+            ->setBody($body);
 
-    $message = \Swift_Message::newInstance()
-        ->setSubject($subject)
-        ->setFrom(array($sender_email => $sender_name))
-        ->setTo(array($recipient_email => $recipient_name))
-        ->setReplyTo(array($reply_to_mail => $reply_to_name))
-        ->setBody($body);
-    $status = $app['mailer']->send($message);
-    return $status;
-
-
+        if (!empty($data_file)) {
+            // Attach it to the message
+            $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
+        }
+        return $app['mailer']->send($message);
+          // Your code to send the email
+    } catch (Swift_RfcComplianceException $e) {
+        $app['monolog']->addError('Email address not valid:' . $e->getMessage());
+    }
+    return false;
 
     $mail = new PHPMailer();
     $mail->Mailer  = $platform_email['SMTP_MAILER'];

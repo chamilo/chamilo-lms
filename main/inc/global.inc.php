@@ -289,6 +289,11 @@ $app->error(function (\Exception $e, $code) use ($app) {
     return new Response($response);
 });*/
 
+/*
+use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+ErrorHandler::register();
+ */
+
 //Filters
 $app->before(function() use ($app) {
     //Check the PHP version
@@ -331,9 +336,6 @@ $app['default_layout'] = 'layout_1_col.tpl';
 
 //Database constants
 require_once $lib_path.'database.constants.inc.php';
-
-//@todo use swift mail
-//require_once $lib_path.'mail.lib.inc.php';
 
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'text.lib.php';

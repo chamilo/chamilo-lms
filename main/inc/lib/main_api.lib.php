@@ -6619,7 +6619,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_mail = $extra_headers['reply_to']['mail'];
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
-
+    //var_dump(array($reply_to_mail => $reply_to_name));
     try {
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
@@ -6627,13 +6627,12 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             ->setTo(array($recipient_email => $recipient_name))
             ->setReplyTo(array($reply_to_mail => $reply_to_name))
             ->setBody($body);
-
         if (!empty($data_file)) {
             // Attach it to the message
             $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
         }
-        $result = $app['mailer']->send($message);
         $app['monolog']->addDebug($message);
+        $result = $app['mailer']->send($message);
         return $result;
     } catch (Exception $e) {
         $app['monolog']->addDebug('Email address not valid:' . $e->getMessage());

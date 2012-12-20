@@ -466,19 +466,22 @@ if (file_exists($mail_conf)) {
 
 $mail_settings = array();
 
-if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
-    $mail_settings = array(
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
+     'swiftmailer.options' =>  array(
         'host' => $platform_email['SMTP_HOST'],
         'port' => $platform_email['SMTP_PORT'],
         'username' => $platform_email['SMTP_USER'],
         'password' => $platform_email['SMTP_PASS'],
         'encryption' => null,
         'auth_mode' => null
-    );
-}
-$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
-     'swiftmailer.options' => $mail_settings
+    )
 ));
+
+//if (isset($platform_email['SMTP_MAILER']) && $platform_email['SMTP_MAILER'] == 'smtp') {
+$app['mailer'] = $app->share(function ($app) {
+    return new \Swift_Mailer($app['swiftmailer.transport']);
+});
+
 
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {

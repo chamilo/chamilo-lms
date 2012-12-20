@@ -6631,6 +6631,9 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             // Attach it to the message
             $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
         }
+
+        $message->setContentType('text=html');
+        
         $app['monolog']->addDebug($message);
         $result = $app['mailer']->send($message);
         return $result;

@@ -63,7 +63,7 @@ switch ($action) {
 		}
 		$sql .=' LIMIT 20';
 		$result=Database::query($sql);
-
+        $return = array();
 		if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result,'ASSOC')) {
 				$return[] = array('key'=>$row['id'], 'value' => $row['name']);

@@ -47,10 +47,10 @@ $(document).ready(function () {
         addontab: false,
         cache: false,
         filter_case: false,
-        filter_hide: true,
+        filter_hide: false,
         complete_text:"'.get_lang('StartToType').'",
-    	firstselected: true,
-    	onselect:"check_users",
+    	firstselected: false,
+    	onselect: check_users,
         filter_selected: true,
         newel: true
     });

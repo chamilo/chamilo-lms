@@ -26,6 +26,7 @@ $nameTools = get_lang('PlatformAdmin');
 // Displaying the header
 $message = '';
 
+
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
         $message = Display::return_message(get_lang('InstallDirAccessibleSecurityThreat'),'warning');
@@ -223,8 +224,7 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-		$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-
+    $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
 	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
 
 	$blocks['settings']['items'] = $items;
@@ -232,20 +232,7 @@ if (api_is_platform_admin()) {
 
     $blocks['settings']['search_form'] = null;
 
-	/* Extensions */
-	/*
-	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
-	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
 
-	$items = array();
-	$items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
-	$items[] = array('url'=>'configure_extensions.php?display=ppt2lp', 	'label' => get_lang('Ppt2lp'));
-	//$items[] = array('url'=>'configure_extensions.php?display=ephorus', 	'label' => get_lang('EphorusPlagiarismPrevention'));
-	$items[] = array('url'=>'configure_extensions.php?display=search', 	'label' => get_lang('SearchEngine'));
-	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
-	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));
-	$blocks['extensions']['items'] = $items;
-    */
 
     //Skills
     if (api_get_setting('allow_skills_tool') == 'true') {
@@ -298,7 +285,9 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['items'] = null;
 }
 
+
 $tpl = new Template();
+
 $tpl->assign('blocks', $blocks);
 $tpl->display('default/admin/settings_index.tpl');
 
@@ -326,7 +315,7 @@ function version_check() {
         $return .= '</form>';
         check_system_version();
     } else {
-        // site not registered. Call anyway
+        // Site registered. Call anyway
         $return .= check_system_version();
     }
     return $return;

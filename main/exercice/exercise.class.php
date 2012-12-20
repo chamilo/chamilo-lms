@@ -3210,9 +3210,11 @@ class Exercise {
 					exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
 				}
 			} elseif ($answerType == MATCHING) {
-				foreach ($matching as $j => $val) {
-					exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
-				}
+                if (isset($matching)) {
+                    foreach ($matching as $j => $val) {
+                        exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                    }
+                }
 			} elseif ($answerType == FREE_ANSWER) {
 				$answer = $choice;
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
@@ -3239,7 +3241,7 @@ class Exercise {
 		if ($propagate_neg == 0 && $questionScore < 0) {
 			$questionScore = 0;
 		}
-        
+
 		if ($saved_results) {
 			$stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;

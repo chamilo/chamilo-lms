@@ -537,7 +537,7 @@ class Twig_ExpressionParser
     protected function getFunctionNodeClass($name, $line)
     {
         $env = $this->parser->getEnvironment();
-        //var_dump($function = $env->getFunction($name),$name);exit;
+
         if (false === $function = $env->getFunction($name)) {
             $message = sprintf('The function "%s" does not exist', $name);
             if ($alternatives = $env->computeAlternatives($name, array_keys($env->getFunctions()))) {

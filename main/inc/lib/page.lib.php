@@ -187,10 +187,11 @@ class PageController
         if (empty($home_notice)) {
             $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice.html');
         }
-
+//var_dump($sys_path.$home.'home_notice_'.$user_selected_language.'.html');exit;
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
             $home_notice = Display::div($home_notice, array('class' => 'homepage_notice'));
+
             self::show_right_block(get_lang('Notice'), null, 'notice_block', array('content' => $home_notice));
         }
     }

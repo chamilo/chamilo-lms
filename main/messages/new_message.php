@@ -27,14 +27,13 @@ if (api_get_setting('allow_message_tool') !='true') {
 $htmlHeadXtra[]='
 <script>
 function validate(form,list) {
-	if(list.selectedIndex<0) {
+	if (list.selectedIndex<0) {
     	alert("Please select someone to send the message to.")
     	return false
 	} else {
     	return true
     }
 }
-
 </script>';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
@@ -134,6 +133,7 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 	$query = "SELECT user_sender_id FROM $table_message WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result,'ASSOC');
+    $html = null;
 	if (!isset($row['user_sender_id'])) {
 		$html = get_lang('InvalidMessageId');
 		return $html;

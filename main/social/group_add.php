@@ -22,19 +22,16 @@ if (api_get_setting('allow_students_to_create_groups_in_social') == 'false' && !
 	api_not_allowed();
 }
 
-global $charset;
-//jquery already called from main/inc/header.inc.php
-
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 textarea = "";
 num_characters_permited = 255;
 function text_longitud(){
-   num_characters = document.forms[0].description.value.length;
-  if (num_characters > num_characters_permited){
-      document.forms[0].description.value = textarea;
-   }else{
-      textarea = document.forms[0].description.value;
-   }
+    num_characters = document.forms[0].description.value.length;
+    if (num_characters > num_characters_permited){
+       document.forms[0].description.value = textarea;
+    } else {
+       textarea = document.forms[0].description.value;
+    }
 }
 </script>';
 
@@ -105,13 +102,14 @@ $interbreadcrumb[]= array ('url' =>'#','name' => $nameTools);
 
 $social_left_content = SocialManager::show_social_menu('group_add');
 
-$social_right_content = $form->return_form();
+$social_right_content = '<div class="span9">';
+$social_right_content .= $form->return_form();
+$social_right_content .= '</div>';
 
 $tpl = new Template();
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
-//$tpl->assign('actions', $actions);
-//$tpl->assign('message', $show_message);
+
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

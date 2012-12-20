@@ -713,7 +713,6 @@ class MessageManager
             $message_content .= $user_image.' ';
         }
 
-        $message_content .='<tr>';
     	if (api_get_setting('allow_social_tool') == 'true') {
     		if ($source == 'outbox') {
     			$message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
@@ -727,20 +726,23 @@ class MessageManager
     			$message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
     		}
     	}
-		 $message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']).'
-		        <br />
-		        <hr style="color:#ddd" />
-		        <table height="209px" width="100%">
-		            <tr>
-		              <td valign=top class="view-message-content">'.str_replace("\\","",$content).'</td>
-		            </tr>
-		        </table>
-		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
-		        <div style="padding: 15px 0px 5px 0px">';
+
+		$message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']);
+
+        $message_content .= '<br />';
+        $message_content .= '<br />';
+
+        $message_content .= str_replace("\\","",$content);
+        $message_content .= '<br />';
+
+        $message_content .= '<div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
+		        ';
 		    $social_link = '';
 		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
 		    }
+
+
 		    if ($source == 'outbox') {
 		    	$message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).'</a> &nbsp';
 		    } else {
@@ -749,10 +751,7 @@ class MessageManager
 		    }
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>&nbsp';
 
-			$message_content .='</div></td>
-		      <td width=10></td>
-		    </tr>
-		</table>';
+
 		return $message_content;
 	}
 
@@ -761,7 +760,7 @@ class MessageManager
 	 * display message box sent showing it into outbox
 	 * @return void
 	 */
-	public static function show_message_box_sent () {
+	public static function show_message_box_sent() {
 		global $charset;
 
 		$table_message = Database::get_main_table(TABLE_MESSAGE);

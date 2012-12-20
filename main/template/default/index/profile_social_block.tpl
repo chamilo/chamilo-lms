@@ -6,5 +6,6 @@
         <li><a href="{{ _p.web}}main/messages/inbox.php?f=social">{{ 'Inbox' | get_lang}} {{ _u.messages_count}}</a></li>
         <li><a href="{{ _p.web}}main/messages/new_message.php?f=social"> {{ 'Compose' | get_lang}}</a></li>
         <li><a href="{{ _p.web}}main/social/invitations.php"> {{ 'PendingInvitations' | get_lang }} {{ _u.messages_invitations_count}}</a></li>
+        <li><a href="{{ _p.web }}main/auth/profile.php">{{ 'EditProfile' | get_lang }}</a></li>
     </ul>
 {% endblock %}

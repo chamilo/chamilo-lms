@@ -6075,8 +6075,10 @@ function api_get_home_path() {
 		$clean_url     = str_replace('/', '-', $clean_url);
 		$clean_url     .= '/';
 		// if $clean_url ==  "localhost/" means that the multiple URL was not well configured we don't rename the $home variable
-		if ($clean_url != 'localhost/')
-			$home          = 'home/'.$clean_url;
+		if ($clean_url != 'localhost/') {
+			//$home          = 'home/'.$clean_url;
+        }
+        $home          = 'home/'.$clean_url;
 	}
 	return $home;
 }

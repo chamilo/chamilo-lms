@@ -44,8 +44,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController
 {
-    public function indexAction(Application $app)
-    {
+    public function indexAction(Application $app) {
         $request = $app['request'];
 
         //Actions

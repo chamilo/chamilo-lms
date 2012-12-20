@@ -58,16 +58,16 @@ function generate_open_id_form() {
 		 $("#div_api_key").html(datos);
 		}
 	});
-}  
-           
+}
+
 function hide_icon_edit(element_html)  {
     ident="#edit_image";
     $(ident).hide();
-}      
-function show_icon_edit(element_html) {    
+}
+function show_icon_edit(element_html) {
     ident="#edit_image";
     $(ident).show();
-}       
+}
 </script>';
 
 //$interbreadcrumb[] = array('url' => '../auth/profile.php', 'name' => get_lang('ModifyProfile'));
@@ -171,11 +171,11 @@ if (api_get_setting('profile', 'email') !== 'true') {
 	$form->freeze('email');
 }
 
-if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {        
+if (api_get_setting('registration', 'email') == 'true' &&  api_get_setting('profile', 'email') == 'true') {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
     $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('email', get_lang('EmailWrong'), 'email');    
+    $form->addRule('email', get_lang('EmailWrong'), 'email');
 }
 
 // OPENID URL
@@ -254,7 +254,7 @@ if (api_get_setting('extended_profile') == 'true') {
 
 //	PASSWORD, if auth_source is platform
 if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
-	$form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));	
+	$form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
 	$form->addElement('password', 'password1', get_lang('NewPass'), array('size' => 40));
 	$form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
 	//	user must enter identical password twice so we can prevent some user errors
@@ -297,7 +297,7 @@ $form->setDefaults($user_data);
 
 /**
  * Is user auth_source is platform ?
- * 
+ *
  * @return  boolean if auth_source is platform
  */
 function is_platform_authentication() {
@@ -407,7 +407,7 @@ if ($form->validate()) {
 	$wrong_current_password = false;
 //	$user_data = $form->exportValues();
 	$user_data = $form->getSubmitValues();
-	
+
 	// set password if a new one was provided
 	if (!empty($user_data['password0'])) {
 		if (check_user_password($user_data['password0'])) {
@@ -428,15 +428,15 @@ if ($form->validate()) {
     if (is_platform_authentication() && api_get_setting('allow_users_to_change_email_with_no_password') == 'false') {
         $allow_users_to_change_email_with_no_password = false;
     }
-       
-    //If user sending the email to be changed (input available and not frozen )
-    if (api_get_setting('profile', 'email') == 'true') {        
 
-        if ($allow_users_to_change_email_with_no_password) {            
+    //If user sending the email to be changed (input available and not frozen )
+    if (api_get_setting('profile', 'email') == 'true') {
+
+        if ($allow_users_to_change_email_with_no_password) {
             if (!check_user_email($user_data['email'])) {
                 $changeemail = $user_data['email'];
                 //$_SESSION['change_email'] = 'success';
-            }        
+            }
         } else {
             //Normal behaviour
             if (!check_user_email($user_data['email']) && !empty($user_data['password0']) && !$wrong_current_password) {
@@ -445,34 +445,34 @@ if ($form->validate()) {
 
             if (!check_user_email($user_data['email']) && empty($user_data['password0'])){
                 $_SESSION['change_email'] = 'success';
-            }        
+            }
         }
     }
 
 
 	// Upload picture if a new one is provided
-	if ($_FILES['picture']['size']) {	 
+	if ($_FILES['picture']['size']) {
 		if ($new_picture = UserManager::update_user_picture(api_get_user_id(), $_FILES['picture']['name'], $_FILES['picture']['tmp_name'])) {
 			$user_data['picture_uri'] = $new_picture;
-			$_SESSION['image_uploaded'] = 'success';			
+			$_SESSION['image_uploaded'] = 'success';
 		}
 	} elseif (!empty($user_data['remove_picture'])) {
 	    // remove existing picture if asked
 		UserManager::delete_user_picture(api_get_user_id());
 		$user_data['picture_uri'] = '';
 	}
-	
-	//Remove production	
+
+	//Remove production
 	if (is_array($user_data['remove_production'])) {
 		foreach (array_keys($user_data['remove_production']) as $production) {
 			UserManager::remove_user_production(api_get_user_id(), urldecode($production));
 		}
-		if ($production_list = UserManager::build_production_list(api_get_user_id(), true, true)) {			
+		if ($production_list = UserManager::build_production_list(api_get_user_id(), true, true)) {
 			$form->insertElementBefore($form->createElement('static', null, null, $production_list), 'productions_list');
 		}
 		$form->removeElement('productions_list');
 		$file_deleted = true;
-	}	
+	}
 
 	// upload production if a new one is provided
 	if ($_FILES['production']['size']) {
@@ -497,19 +497,19 @@ if ($form->validate()) {
 		$user_data['openid'] = 'http://'.$my_user_openid;
 	}
 	$extras = array();
-	
+
 	//Checking the user language
-	$languages = api_get_languages();   
+	$languages = api_get_languages();
     if (!in_array($user_data['language'], $languages['folder'])) {
         $user_data['language'] = api_get_setting('platformLanguage');
     }
-    
+
 	//Only update values that are request by the "profile" setting
 	$profile_list = api_get_setting('profile');
-	//Adding missing variables		
-	
+	//Adding missing variables
+
 	$available_values_to_modify = array();
-	foreach($profile_list as $key => $status) {	    
+	foreach($profile_list as $key => $status) {
 	    if ($status == 'true') {
             switch($key) {
                 case 'login':
@@ -517,7 +517,7 @@ if ($form->validate()) {
                     break;
                 case 'name':
                     $available_values_to_modify[] = 'firstname';
-                    $available_values_to_modify[] = 'lastname'; 
+                    $available_values_to_modify[] = 'lastname';
                     break;
                 case 'picture':
                     $available_values_to_modify[] = 'picture_uri';
@@ -525,13 +525,13 @@ if ($form->validate()) {
                 default:
                     $available_values_to_modify[] = $key;
                     break;
-            }            
+            }
 	    }
 	}
-    
-	//Fixing missing variables    
+
+	//Fixing missing variables
     $available_values_to_modify = array_merge($available_values_to_modify, array('competences', 'diplomas', 'openarea', 'teach', 'openid'));
-    
+
 	// build SQL query
 	$sql = "UPDATE $table_user SET";
 	unset($user_data['api_key_generate']);
@@ -553,24 +553,24 @@ if ($form->validate()) {
 				$extras[$new_key] = $value;
 			}
 		} else {
-		    if (in_array($key, $available_values_to_modify)) {	
+		    if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
-		    }		    
+		    }
 		}
 	}
 
 	//change email
-	if ($allow_users_to_change_email_with_no_password) {	    
+	if ($allow_users_to_change_email_with_no_password) {
         if (isset($changeemail) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
         }
         if (isset($password) && in_array('password', $available_values_to_modify)) {
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
-        } else {            
+        } else {
             // remove trailing , from the query we have so far
             $sql = rtrim($sql, ',');
-        }	    
+        }
     } else {
         //normal behaviour
         if(empty($changeemail) && isset($password)) {
@@ -578,7 +578,7 @@ if ($form->validate()) {
         }
         if (isset($changeemail) && !isset($password) && in_array('email', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."'";
-        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {            
+        } elseif (isset($password) && isset($changeemail) && in_array('email', $available_values_to_modify) && in_array('password', $available_values_to_modify)) {
             $sql .= " email = '".Database::escape_string($changeemail)."',";
             $password = api_get_encrypted_password($password);
             $sql .= " password = '".Database::escape_string($password)."'";
@@ -588,19 +588,19 @@ if ($form->validate()) {
         } else {
             // remove trailing , from the query we have so far
             $sql = rtrim($sql, ',');
-        }        
+        }
     }
     if (api_get_setting('profile', 'officialcode') == 'true' && isset($user_data['official_code'])) {
         $sql .= ", official_code = '".Database::escape_string($user_data['official_code'])."'";
     }
 	$sql .= " WHERE user_id  = '".api_get_user_id()."'";
 	Database::query($sql);
-    
+
 
 	// User tag process
 	//1. Deleting all user tags
 	$list_extra_field_type_tag = UserManager::get_all_extra_field_by_type(ExtraField::FIELD_TYPE_TAG);
-    
+
 	if (is_array($list_extra_field_type_tag) && count($list_extra_field_type_tag)>0) {
 		foreach ($list_extra_field_type_tag as $id) {
 			UserManager::delete_user_tags(api_get_user_id(), $id);
@@ -608,19 +608,19 @@ if ($form->validate()) {
 	}
 
 	//2. Update the extra fields and user tags if available
-    
+
 	if (is_array($extras) && count($extras)> 0) {
 		foreach ($extras as $key => $value) {
 			//3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
 			UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
 		}
 	}
-    
+
     // re-init the system to take new settings into account
     $_SESSION['_user']['uidReset'] = true;
     $_SESSION['noredirection'] = true;
     $_SESSION['profile_update'] = 'success';
-    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');    
+    $url = api_get_self()."?{$_SERVER['QUERY_STRING']}".($filtered_extension && strpos($_SERVER['QUERY_STRING'], '&fe=1') === false ? '&fe=1' : '');
     header("Location: ".$url);
     exit;
 }
@@ -692,10 +692,11 @@ $image_file = $image_dir.$image;
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
 	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
 	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; margin-top:0px;padding:5px;" ';
+/*
 if ($image_size['width'] > 300) {
 	//limit display width to 300px
 	$img_attributes .= 'width="300" ';
-}
+}*/
 
 // get the path,width and height from original picture
 $big_image = $image_dir.'big_'.$image;
@@ -707,13 +708,13 @@ $url_big_image      = $big_image.'?rnd='.time();
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
-if (api_get_setting('allow_social_tool') == 'true') {    
+if (api_get_setting('allow_social_tool') == 'true') {
 	echo '<div class="row-fluid">';
 		echo '<div class="span3">';
 		echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
 		echo '</div>';
 		echo '<div class="span9">';
-        $form->display();			
+        $form->display();
 	echo '</div>';
 } else {
 	// Style position:absolute has been removed for Opera-compatibility.

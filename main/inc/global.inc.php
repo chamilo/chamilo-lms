@@ -133,11 +133,7 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));
 */
 
-
-
-
 $app->register(new Silex\Provider\ValidatorServiceProvider());
-
 
 //URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());

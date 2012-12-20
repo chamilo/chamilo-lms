@@ -240,7 +240,6 @@ class MessageManager
 			$notification = new Notification();
 
 		    if (empty($group_id)) {
-
                 $sender_info = array();
                 if (!empty($user_sender_id)) {
                     $sender_info = api_get_user_info($user_sender_id);

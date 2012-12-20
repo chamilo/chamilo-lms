@@ -6633,15 +6633,13 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
         }
         $result = $app['mailer']->send($message);
-        error_log($result);
+        $app['monolog']->addDebug($message);
         return $result;
-
-          // Your code to send the email
-    } catch (Swift_RfcComplianceException $e) {
-        error_log('Email address not valid:' . $e->getMessage());
+    } catch (Exception $e) {
+        $app['monolog']->addDebug('Email address not valid:' . $e->getMessage());
     }
     return false;
-    
+
 
     $mail = new PHPMailer();
     $mail->Mailer  = $platform_email['SMTP_MAILER'];

@@ -108,7 +108,7 @@ class Notification extends Model {
                 $this->sender_email = $sender_user_info['email'];
                 $this->sender_name  = $sender_user_info['complete_name'];
             } else {
-                $this->extra_headers = array('reply-to' => $sender_user_info);
+                $this->extra_headers = array('reply_to' => array('name' => $sender_user_info['complete_name'], 'email' => $sender_user_info['email']));
             }
         }
     }

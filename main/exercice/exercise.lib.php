@@ -2112,15 +2112,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
     }
 
-    if ($save_user_result) {
-        // Display text when test is finished #4074
-        // Don't display the text when finished message if we are from a LP #4227
-        // but display it from page exercice_show.php
-        $end_of_message = $objExercise->selectTextWhenFinished();
-        if (!empty($end_of_message) && ($origin != 'learnpath')) {
-            Display::display_normal_message($end_of_message, false);
-            echo "<div class='clear'>&nbsp;</div>";
-        }
+    // Display text when test is finished #4074 and for LP #4227
+    $end_of_message = $objExercise->selectTextWhenFinished();
+    if (!empty($end_of_message)) {
+        Display::display_normal_message($end_of_message, false);
+        echo "<div class='clear'>&nbsp;</div>";
     }
 
     $question_list_answers = array();

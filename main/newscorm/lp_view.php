@@ -248,11 +248,11 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
             Database::query($update_query);
         }
     }
-
     if (intval($_GET['fb_type']) > 0) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercice/result.php?origin=learnpath&id='.$safe_exe_id;
+
         if ($debug) error_log('Calling URL: '.$src);
     }
     $autostart = 'false';

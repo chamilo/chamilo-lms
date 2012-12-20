@@ -46,7 +46,6 @@ require_once 'aiccItem.class.php';
  */
 function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none') {
     $return = null;
-    $debug = 10;
 
     if ($debug > 0) {
         error_log('lp_ajax_save_item.php : save_item() params: ');

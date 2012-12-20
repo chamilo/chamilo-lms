@@ -211,41 +211,16 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     )
 ));
 
-$app->register(new Silex\Provider\SwiftmailerServiceProvider());
 
 $app->register(new DoctrineOrmServiceProvider, array(
     "orm.proxies_dir" => $app['db.orm.proxies_dir'],
     "orm.em.options" => array(
         "mappings" => array(
-            // Using actual filesystem paths
-            /*array(
-                "type" => "annotation",
-                "namespace" => "Foo\Entities",
-                "path" => __DIR__."/src/Foo/Entities",
-            ),*/
-            /*array(
-                "type" => "xml",
-                "namespace" => "Bat\Entities",
-                "path" => __DIR__."/src/Bat/Resources/mappings",
-            ),*/
             array(
                 "type" => "annotation",
                 "namespace" => "Entity",
                 "path" => api_get_path(INCLUDE_PATH).'Entity',
             )
-            // Using PSR-0 namespaceish embedded resources
-            // (requires registering a PSR-0 Resource Locator
-            // Service Provider)
-            /*array(
-                "type" => "annotations",
-                "namespace" => "Baz\Entities",
-                "resources_namespace" => "Baz\Entities",
-            ),
-            array(
-                "type" => "xml",
-                "namespace" => "Bar\Entities",
-                "resources_namespace" => "Bar\Resources\mappings",
-            ),*/
         ),
     ),
 ));
@@ -358,7 +333,7 @@ $app['default_layout'] = 'layout_1_col.tpl';
 require_once $lib_path.'database.constants.inc.php';
 
 //@todo use swift mail
-require_once $lib_path.'mail.lib.inc.php';
+//require_once $lib_path.'mail.lib.inc.php';
 
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'text.lib.php';
@@ -492,7 +467,16 @@ if (file_exists($mail_conf)) {
 	require_once $mail_conf;
 }
 
-// ===== "who is logged in?" module section =====
+$app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
+     'swiftmailer.options' => array(
+        'host' => $platform_email['SMTP_HOST'],
+        'port' => $platform_email['SMTP_PORT'],
+        'username' => $platform_email['SMTP_USER'],
+        'password' => $platform_email['SMTP_PASS'],
+        'encryption' => null,
+        'auth_mode' => null
+    ),
+));
 
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {

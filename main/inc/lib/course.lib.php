@@ -5,7 +5,7 @@
  * All main course functions should be placed here.
  *
  * Many functions of this library deal with providing support for
- * virtual/linked/combined courses (this was already used in several 
+ * virtual/linked/combined courses (this was already used in several
  * universities but not available in standard Chamilo).
  *
  * The implementation changed, initially a course was a real course
@@ -243,7 +243,7 @@ class CourseManager {
     }
 
     /**
-     * Returns all the information of a given coursecode from the course 
+     * Returns all the information of a given coursecode from the course
      * table by it integer ID
      * @param   int     the course id
      * @return an array with all the fields of the course table
@@ -324,7 +324,7 @@ class CourseManager {
     }
 
     /**
-     * Returns the status of a user in a course, which is COURSEMANAGER 
+     * Returns the status of a user in a course, which is COURSEMANAGER
      * or STUDENT.
      * @param   int      User ID
      * @param   string   Course code
@@ -2975,6 +2975,8 @@ class CourseManager {
             $with_special_courses = ' course.code IN ("'.implode('","',$special_course_list).'")';
         }
 
+        //$course_items = array();
+
         if (!empty($with_special_courses)) {
             $sql = "SELECT course.id, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
                            course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat, course_rel_user.user_id
@@ -3048,6 +3050,7 @@ class CourseManager {
                     }
 
                     $html .= self::course_item_html($params, false);
+                    //$course_items[] = $params;
                     $key++;
                 }
             }

@@ -187,7 +187,7 @@ class PageController
         if (empty($home_notice)) {
             $home_notice = @(string) file_get_contents($sys_path.$home.'home_notice.html');
         }
-//var_dump($sys_path.$home.'home_notice_'.$user_selected_language.'.html');exit;
+
         if (!empty($home_notice)) {
             $home_notice = api_to_system_encoding($home_notice, api_detect_encoding(strip_tags($home_notice)));
             $home_notice = Display::div($home_notice, array('class' => 'homepage_notice'));
@@ -739,6 +739,8 @@ class PageController
         if (empty($user_id)) {
             return false;
         }
+
+
         $session_categories = array();
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
@@ -767,7 +769,9 @@ class PageController
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             //Display special courses
+
             $special_courses = CourseManager::display_special_courses($user_id, $load_directories_preview);
+
             //Display courses
             $courses_html .= CourseManager::display_courses($user_id, $load_directories_preview);
         }

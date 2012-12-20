@@ -6619,6 +6619,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_mail = $extra_headers['reply_to']['mail'];
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
+
     try {
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)
@@ -6631,12 +6632,16 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
             // Attach it to the message
             $message->attach(Swift_Attachment::fromPath($data_file['path']))->setFilename($data_file['filename']);
         }
-        return $app['mailer']->send($message);
+        $result = $app['mailer']->send($message);
+        error_log($result);
+        return $result;
+
           // Your code to send the email
     } catch (Swift_RfcComplianceException $e) {
-        $app['monolog']->addError('Email address not valid:' . $e->getMessage());
+        error_log('Email address not valid:' . $e->getMessage());
     }
     return false;
+    
 
     $mail = new PHPMailer();
     $mail->Mailer  = $platform_email['SMTP_MAILER'];

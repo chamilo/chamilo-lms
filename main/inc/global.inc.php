@@ -336,7 +336,6 @@ $app['default_layout'] = 'layout_1_col.tpl';
 
 //Database constants
 require_once $lib_path.'database.constants.inc.php';
-
 require_once $lib_path.'fileManage.lib.php';
 require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';

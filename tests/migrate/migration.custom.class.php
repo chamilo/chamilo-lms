@@ -588,8 +588,8 @@ class MigrationCustom {
                             $eval->set_category_id($gradebook['id']);
 
                             //harcoded values
-                            $eval->set_weight(20);
-                            $eval->set_max(20);
+                            $eval->set_weight(100);
+                            $eval->set_max(100);
                             $eval->set_visible(1);
                             $eval->add();
                             error_log("Gradebook evaluation was created!!");

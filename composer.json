@@ -35,7 +35,8 @@
         "symfony/dependency-injection": "dev-master",
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
-        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev"
+        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+        "pagerfanta/pagerfanta": "dev-master"
     },
     "minimum-stability": "dev"
 }

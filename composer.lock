@@ -1,5 +1,5 @@
 {
-    "hash": "fffb4b8e2734e9dd377b96f88b38b78f",
+    "hash": "9caee355ab21187dbb6b5a29ba1f7052",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -382,6 +382,53 @@
             "keywords": [
                 "log",
                 "logging"
+            ]
+        },
+        {
+            "name": "pagerfanta/pagerfanta",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/whiteoctober/Pagerfanta.git",
+                "reference": "12f71d99457b018fb80746f84514dd5b495c5789"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/whiteoctober/Pagerfanta/archive/12f71d99457b018fb80746f84514dd5b495c5789.zip",
+                "reference": "12f71d99457b018fb80746f84514dd5b495c5789",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "suggest": {
+                "doctrine/orm": "2.*",
+                "doctrine/mongodb-odm": "2.*",
+                "solarium/solarium": "2.*"
+            },
+            "time": "2012-08-22 21:56:31",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Pagerfanta\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Pablo Díez",
+                    "email": "pablodip@gmail.com",
+                    "homepage": "http://github.com/pablodip"
+                }
+            ],
+            "description": "Pagination for PHP 5.3",
+            "keywords": [
+                "page",
+                "paging"
             ]
         },
         {
@@ -1415,6 +1462,7 @@
         "symfony/twig-bridge": 20,
         "symfony/dependency-injection": 20,
         "dflydev/doctrine-orm-service-provider": 20,
-        "doctrine/migrations": 20
+        "doctrine/migrations": 20,
+        "pagerfanta/pagerfanta": 20
     }
 }

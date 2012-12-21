@@ -166,8 +166,8 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
         api_get_path(SYS_CODE_PATH).'template', //template folder
         api_get_path(SYS_PLUGIN_PATH)             //plugin folder
     ),
+    'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
     'twig.options'          => array(
-        'twig.form.templates' => array('form_div_layout.html.twig'),
         'debug'             => $app['debug'],
         'charset'           => 'utf-8',
         'strict_variables'  => false,

@@ -25,6 +25,7 @@ return array(
     'Silex' => $vendorDir . '/silex/silex/src/',
     'SessionHandlerInterface' => $vendorDir . '/symfony/http-foundation/Symfony/Component/HttpFoundation/Resources/stubs',
     'Pimple' => $vendorDir . '/pimple/pimple/lib/',
+    'Pagerfanta\\' => $vendorDir . '/pagerfanta/pagerfanta/src/',
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
     'Entity' => $baseDir . '/main/inc/',
     'Doctrine\\ORM\\' => $vendorDir . '/doctrine/orm/lib/',

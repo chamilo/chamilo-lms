@@ -156,7 +156,7 @@ class Migration {
 
             //Stop here (only for tests)
             if ($table['orig_table'] == 'gradebook_evaluation_type') {
-                exit;
+                //exit;
             }
         }
     }

@@ -829,8 +829,8 @@ class Template {
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
-    function render_template($template) {
-        return $this->app['twig']->render($this->app['template_style'].'/'.$template);
+    function render_template($template, $elements = array()) {
+        return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 
     /**

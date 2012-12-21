@@ -1,6 +1,6 @@
 <?php
-
 require_once dirname(__FILE__).'/../../main/inc/global.inc.php';
+error_reporting(-1);
 
 $config = new \Doctrine\ORM\Configuration();
 $config->setMetadataCacheImpl(new \Doctrine\Common\Cache\ArrayCache);
@@ -39,25 +39,26 @@ $helpers = array(
 /*
 To generate doctrine2 entities you must:
 
-cd /var/www/chamilo11
+cd /var/www/chamilo11/tests/doctrine_console
 
+Delete old mappings/entities
 
-Delete old mappings
+sudo rm -R mapping generated repository
 
-sudo rm -R tests/doctrine_console/mapping tests/doctrine_console/generated/
+Creating the mapping from the DB
 
-First creating the mapping from the DB
-
-sudo mkdir tests/doctrine_console/mapping
+sudo mkdir mapping generated repository
 
 You can add a Namespace if you want to with: --namespace "Entity"
-sudo php5 tests/doctrine_console/doctrine.php orm:convert-mapping --from-database annotation tests/doctrine_console/mapping  --namespace "Entity"
+sudo php5 doctrine.php orm:convert-mapping --force --from-database --namespace "Entity" annotation mapping
 
-Generate entities
 
-mkdir tests/doctrine_console/generated
+1. Generate entities
 
-sudo php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   tests/doctrine_console/generated
+sudo php5 doctrine.php orm:generate-entities   --generate-annotations="true"   generated
+
+Validate schema
+sudo php5 doctrine.php orm:validate-schema -v
 
 Move generated files in a chamilo folder:
 
@@ -71,20 +72,34 @@ cd main/inc/Entity
 
 sed -i 's/@ORM\\/@/g' *.php
 
-
-
 For tests
 php5 tests/doctrine_console/doctrine.php orm:generate-entities   --generate-annotations="true"   main/inc/Entity
 
 Then autoload classes with composer
 sudo php5 composer.phar update or sudo composer.phar update
 
+2. Migrations
+
+a. Generate empty migration file
+cd /var/www/chamilo11/tests/doctrine_console
+
+php5 doctrine.php migrations:generate
+
+b. Check status
+
+php5 doctrine.php migrations:status
+
+c. Check sql
+php5 doctrine.php migrations:migrate --dry-run
+
+d. execute migration
+php5 doctrine.php migrations:migrate
+
+e. Revert migrations
+php5 doctrine.php  migrations:migrate 0
+
+
+http://docs.doctrine-project.org/projects/doctrine-migrations/en/latest/reference/managing_migrations.html
 
 */
 
-
-/*
-$reader = new AnnotationReader();
-$driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array($entity['path']));
-$config->setMetadataDriverImpl($driverImpl);
-*/

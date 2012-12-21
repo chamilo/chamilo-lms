@@ -24,8 +24,8 @@ class CourseHome {
                     $condition_display_tools = ' WHERE a.c_id = '.$course_id.' AND a.link=t.link AND (t.position="basic" OR a.name = "'.TOOL_TRACKING.'") ';
                 }
 
-                $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                        $condition_display_tools ORDER BY t.row, t.column";
+                $sql = "SELECT a.*, t.image img, t.row_module, t.column_module  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
+                        $condition_display_tools ORDER BY t.row_module, t.column_module";
                 break;
             case 'External' :
                 if (api_is_allowed_to_edit()) {
@@ -41,8 +41,8 @@ class CourseHome {
                 }
                 break;
             case 'courseAdmin' :
-                $sql = "SELECT a.*, t.image img, t.row, t.column  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
-                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link ORDER BY t.row, t.column";
+                $sql = "SELECT a.*, t.image img, t.row_module, t.column_module  FROM $TBL_ACCUEIL a, $TABLE_TOOLS t
+                        WHERE a.c_id = $course_id AND admin=1 AND a.link=t.link ORDER BY t.row_module, t.column_module";
                 break;
 
             case 'platformAdmin' :
@@ -837,10 +837,10 @@ class CourseHome {
         } else {
             $id_session = intval($id_session);
         }
-        
+
         $session_info = api_get_session_info($id_session);
         $session_category = SessionManager::get_session_category($session_info['session_category_id']);
-        
+
         $session_category_name = null;
         if (!empty($session_category)) {
             $session_category_name = $session_category['name'];
@@ -849,9 +849,9 @@ class CourseHome {
         $general_coach = null;
         if (!empty($user_info)) {
             $general_coach = $user_info['complete_name'].' ('.$user_info['username'].')';
-        }        
+        }
         $msg_date = SessionManager::parse_session_dates($session_info);
-        
+
         $output  = '';
         if (!empty($session_category)) {
             $output .= '<tr><td>'. get_lang('SessionCategory') . ': ' . '<b>' . $session_category_name .'</b></td></tr>';

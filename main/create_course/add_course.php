@@ -47,8 +47,8 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     }
     $(window).load(function () {
         setFocus();
-    });    
-    
+    });
+
     function advanced_parameters() {
         if(document.getElementById(\'options\').style.display == \'none\') {
             document.getElementById(\'options\').style.display = \'block\';
@@ -187,7 +187,7 @@ $form->setDefaults($values);
 // Validate the form.
 if ($form->validate()) {
     $course_values = $form->exportValues();
-    
+
     $wanted_code        = $course_values['wanted_code'];
     //$tutor_name         = $course_values['tutor_name'];
     $category_code      = $course_values['category_code'];
@@ -198,49 +198,49 @@ if ($form->validate()) {
     if ($course_validation_feature) {
         $description     = $course_values['description'];
         $objetives       = $course_values['objetives'];
-        $target_audience = $course_values['target_audience'];        
+        $target_audience = $course_values['target_audience'];
     }
 
     if ($wanted_code == '') {
         $wanted_code = CourseManager::generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
     }
-    
+
     // Check whether the requested course code has already been occupied.
     if (!$course_validation_feature) {
         $course_code_ok = !CourseManager::course_code_exists($wanted_code);
     } else {
         $course_code_ok = !CourseRequestManager::course_code_exists($wanted_code);
     }
-    
+
     if ($course_code_ok) {
-        if (!$course_validation_feature) {       
-              
-            $params = array();            
+        if (!$course_validation_feature) {
+
+            $params = array();
             $params['title']                = $title;
             $params['exemplary_content']    = $exemplary_content;
-            $params['wanted_code']          = $wanted_code;            
+            $params['wanted_code']          = $wanted_code;
             $params['category_code']        = $category_code;
             $params['course_language']      = $course_language;
-            $params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;            
-             
-            $course_info = CourseManager::create_course($params); 
-     
+            $params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
+
+            $course_info = CourseManager::create_course($params);
+
             if (!empty($course_info)) {
-                
-                $directory  = $course_info['directory'];          
-                $title      = $course_info['title'];  
+
+                $directory  = $course_info['directory'];
+                $title      = $course_info['title'];
 
                 // Preparing a confirmation message.
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
-             
-                $tpl->assign('course_url', $link);                
-                $tpl->assign('course_title', Display::url($title, $link));   
+
+                $tpl->assign('course_url', $link);
+                $tpl->assign('course_title', Display::url($title, $link));
                 $tpl->assign('course_id', $course_info['code']);
-                
+
                 $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
-                $message = $tpl->fetch($add_course_tpl);    
-                
-            } else {                
+                $message = $tpl->fetch($add_course_tpl);
+
+            } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.
                 $content = $form->return_form();
@@ -271,14 +271,11 @@ if ($form->validate()) {
 } else {
     if (!$course_validation_feature) {
         $message = Display :: return_message(get_lang('Explanation'));
-    }    
+    }
     // Display the form.
-    $content = $form->return_form();    
+    $content = $form->return_form();
 }
 
-      
-                
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $template = $tpl->get_template('layout/layout_1_col.tpl');

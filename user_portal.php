@@ -148,6 +148,8 @@ class UserPortalController
             $_SESSION['sniff_java_sun_ver']=Security::remove_XSS($_POST['sniff_navigator_java_sun_ver']);
         }*/
 
+
+
         // Main courses and session list
         $courses_and_sessions = PageController::return_courses_and_sessions(api_get_user_id());
 
@@ -184,6 +186,7 @@ class UserPortalController
         PageController::return_profile_block();
         PageController::return_user_image_block();
         PageController::return_course_block();
+        
         $app['template']->assign('navigation_course_links', 	$app['template']->return_navigation_links());
         PageController::return_reservation_block();
         $app['template']->assign('search_block', 				PageController::return_search_block());
@@ -193,7 +196,7 @@ class UserPortalController
         // Deleting the session_id.
         Session::erase('session_id');
 
-        $response = $app['template']->render_layout('layout_2_col.tpl');
+        $response = $app['template']->render_template('userportal/index.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, private'));
         return new Response($response, 200, array());

@@ -720,12 +720,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "df9bde91f8f6fa7fb40996edf30e632cfc606b4a"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/df9bde91f8f6fa7fb40996edf30e632cfc606b4a.zip",
-                "reference": "df9bde91f8f6fa7fb40996edf30e632cfc606b4a",
+                "url": "https://github.com/symfony/EventDispatcher/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -770,12 +770,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form",
-                "reference": "cb56bed2783774ff5d9bf61f4b456d5be9ce3b81"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Form/archive/cb56bed2783774ff5d9bf61f4b456d5be9ce3b81.zip",
-                "reference": "cb56bed2783774ff5d9bf61f4b456d5be9ce3b81",
+                "url": "https://github.com/symfony/Form/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -824,12 +824,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation",
-                "reference": "7572849520522cc1ac4b63357c39b6c2d5e5c2b2"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpFoundation/archive/7572849520522cc1ac4b63357c39b6c2d5e5c2b2.zip",
-                "reference": "7572849520522cc1ac4b63357c39b6c2d5e5c2b2",
+                "url": "https://github.com/symfony/HttpFoundation/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -868,12 +868,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel",
-                "reference": "0e93b5f2068ba9efe2c943681d1e39ab58207a35"
+                "reference": "e6b3249e06cabb643aa217f7c188bafe79f4b0b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpKernel/archive/0e93b5f2068ba9efe2c943681d1e39ab58207a35.zip",
-                "reference": "0e93b5f2068ba9efe2c943681d1e39ab58207a35",
+                "url": "https://github.com/symfony/HttpKernel/archive/e6b3249e06cabb643aa217f7c188bafe79f4b0b3.zip",
+                "reference": "e6b3249e06cabb643aa217f7c188bafe79f4b0b3",
                 "shasum": ""
             },
             "require": {
@@ -899,7 +899,7 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/finder": "2.1.*"
             },
-            "time": "2012-12-15 16:44:57",
+            "time": "2012-12-20 14:53:35",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -931,12 +931,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Locale",
-                "reference": "978d3798f02d2a6a9ed9e38db00680ff5319c6fc"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Locale/archive/978d3798f02d2a6a9ed9e38db00680ff5319c6fc.zip",
-                "reference": "978d3798f02d2a6a9ed9e38db00680ff5319c6fc",
+                "url": "https://github.com/symfony/Locale/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -977,12 +977,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/OptionsResolver",
-                "reference": "d8ef60e27b81b015815478a06a5653ae0654a188"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/OptionsResolver/archive/d8ef60e27b81b015815478a06a5653ae0654a188.zip",
-                "reference": "d8ef60e27b81b015815478a06a5653ae0654a188",
+                "url": "https://github.com/symfony/OptionsResolver/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -1084,12 +1084,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Security",
-                "reference": "78e25f39b81ccadc5ead77f2c1e1099492875a9c"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Security/archive/78e25f39b81ccadc5ead77f2c1e1099492875a9c.zip",
-                "reference": "78e25f39b81ccadc5ead77f2c1e1099492875a9c",
+                "url": "https://github.com/symfony/Security/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -1145,12 +1145,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Translation",
-                "reference": "64ab9706970fdde7d872f9713d023dd47c3136bc"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Translation/archive/64ab9706970fdde7d872f9713d023dd47c3136bc.zip",
-                "reference": "64ab9706970fdde7d872f9713d023dd47c3136bc",
+                "url": "https://github.com/symfony/Translation/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -1263,12 +1263,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator",
-                "reference": "935d8689a252ba615e211c3c52956423d09f8042"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Validator/archive/935d8689a252ba615e211c3c52956423d09f8042.zip",
-                "reference": "935d8689a252ba615e211c3c52956423d09f8042",
+                "url": "https://github.com/symfony/Validator/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {
@@ -1316,12 +1316,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml",
-                "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a"
+                "reference": "v2.1.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Yaml/archive/4fdae9fa28b7abd1135afc5227a4e59af4b64e5a.zip",
-                "reference": "4fdae9fa28b7abd1135afc5227a4e59af4b64e5a",
+                "url": "https://github.com/symfony/Yaml/archive/v2.1.5.zip",
+                "reference": "v2.1.5",
                 "shasum": ""
             },
             "require": {

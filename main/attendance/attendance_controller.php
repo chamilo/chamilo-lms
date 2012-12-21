@@ -265,10 +265,10 @@
 					if (isset($_POST['check_presence'][$cal_id])) {
 						$users_result = $_POST['check_presence'][$cal_id];
 					}
-
                     $user_final_results = array();
                     if (!empty($users_result)) {
                         foreach ($users_result as $result) {
+                            //Example: state_1_link_2_12_3  ==> state_[stateid]_YY_[userid]_calid
                             $user_status = explode('_', $result);
                             if (isset($user_status[0]) && $user_status[0] == 'state' && isset($user_status[4]) && isset($user_status[1])) {
                                $user_final_results[$user_status[4]] = $user_status[1];
@@ -277,7 +277,7 @@
                     }
 
                     if (!empty($user_final_results)) {
-                        $affected_rows = $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id);
+                        $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id);
                     }
 				}
 			}
@@ -496,7 +496,7 @@
         }
         $max_cols_per_page = 12; //10 dates + 2 name and number
         $max_dates_per_page = $max_dates_per_page_original = $max_cols_per_page - 2;//10
-        
+
         $rows = count($data_table);
 
         if ($cols > $max_cols_per_page) {

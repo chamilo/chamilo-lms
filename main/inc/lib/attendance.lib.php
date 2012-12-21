@@ -528,7 +528,7 @@ class Attendance
         if (isset($calendar_data['done_attendance']) && $calendar_data['done_attendance']) {
             $lastedit_type = self::UPDATED_ATTENDANCE_LOG_TYPE;
         }
-        //var_dump($user_results);exit;
+
         if (!empty($user_results)) {
             // Save users present in class
             foreach ($user_results as $uid => $presence) {
@@ -1421,12 +1421,17 @@ class Attendance
 
     public function get_attendance_states() {
         $attendance_states = array(
+            '4' => array('label' => get_lang('Default'), 'class' => 'btn') ,
             '1' => array('label' => get_lang('Present'), 'class' => 'btn-success') ,
             '0' => array('label' => get_lang('Absent'), 'class' => 'btn-danger') ,
             '3' => array('label' => get_lang('Late'), 'class' => 'btn-info') ,
             '2' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
         );
         return $attendance_states;
+    }
+
+    public function get_default_attendance_state() {
+        return 4;
     }
 
     public function get_attendance_state_button($state_id, $add_label = false, $extra_attributes = array()) {
@@ -1437,7 +1442,7 @@ class Attendance
                 $label = $state_list[$state_id]['label'];
             }
             $extra_attributes['class'] = $extra_attributes['class']." btn ".$state_list[$state_id]['class'];
-            return Display::url($label, '', $extra_attributes);
+            return Display::url($label.' '.$state_id, '', $extra_attributes);
         }
         return null;
     }

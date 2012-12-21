@@ -145,6 +145,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider(),array(
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
 
+
 //Monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
@@ -157,7 +158,6 @@ $app['monolog']->addDebug('Testing the Monolog logging.');
 $app['monolog']->addInfo('Testing the Monolog logging.');
 $app['monolog']->addError('Testing the Monolog logging.');
 */
-
 $app['translator.messages'] = array();
 
 //Setting the Twig service provider

@@ -261,8 +261,8 @@ CREATE TABLE IF NOT EXISTS course_module (
   name varchar(255) NOT NULL,
   link varchar(255) NOT NULL,
   image varchar(100) default NULL,
-  `row` int unsigned NOT NULL default '0',
-  `column` int unsigned NOT NULL default '0',
+  row_module int unsigned NOT NULL default '0',
+  column_module int unsigned NOT NULL default '0',
   position varchar(20) NOT NULL default 'basic',
   PRIMARY KEY  (id)
 );
@@ -3149,4 +3149,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20771' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20904' WHERE variable = 'chamilo_database_version';

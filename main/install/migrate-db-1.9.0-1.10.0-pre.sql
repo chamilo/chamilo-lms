@@ -89,7 +89,6 @@ ALTER TABLE gradebook_link ADD COLUMN evaluation_type_id INT NOT NULL DEFAULT 0;
 
 INSERT INTO settings_options(variable,value,display_text) VALUES ('last_transaction_id','0');
 
-
 ALTER TABLE access_url ADD COLUMN url_type tinyint unsigned default 1;
 
 CREATE TABLE branch_sync( id int unsigned not null AUTO_INCREMENT PRIMARY KEY, access_url_id int unsigned not null, branch_name varchar(250) default '', branch_ip varchar(40) default '', latitude decimal(15,7), longitude decimal(15,7), dwn_speed int unsigned default null, up_speed int unsigned default null, delay int unsigned default null, admin_mail varchar(250) default '', admin_name varchar(250) default '', admin_phone varchar(250) default '', last_sync_trans_id bigint unsigned default 0, last_sync_trans_date datetime, last_sync_type char(20) default 'full');
@@ -99,7 +98,7 @@ CREATE TABLE branch_sync_log( id bigint unsigned not null AUTO_INCREMENT PRIMARY
 CREATE TABLE branch_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
 INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
-CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', PRIMARY KEY (id, transaction_id, branch_id));
+CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', message VARCHAR(255) default '' , PRIMARY KEY (id, transaction_id, branch_id));
 
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
@@ -112,5 +111,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('session_pa
 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0);
 
+ALTER TABLE course_module change `row` row_module int unsigned NOT NULL default '0';
+ALTER TABLE course_module change `column` column_module int unsigned NOT NULL default '0';
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20771' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.20904' WHERE variable = 'chamilo_database_version';

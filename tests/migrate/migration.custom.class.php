@@ -483,9 +483,9 @@ class MigrationCustom {
             error_log("Missing data: session: $session_id - user_id: $user_id");
         }
     }
-    
+
     static function convert_attendance_status($status) {
-        if (!$in_array($status,array_keys(self::$attend_status))) { return null; }
+        if (!in_array($status,array_keys(self::$attend_status))) { return null; }
         return self::$attend_status[$status];
     }
 

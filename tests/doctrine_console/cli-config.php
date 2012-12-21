@@ -16,8 +16,6 @@ $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
-
-
 $connectionOptions = array(
     'driver'    => 'pdo_mysql',
     'dbname'    => $_configuration['main_database'],

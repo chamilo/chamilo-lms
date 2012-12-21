@@ -1160,7 +1160,7 @@ class CourseManager {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
                 if ($resumed_report) {
-                    $sql = " SELECT field_id ";
+                    $sql = " SELECT count(field_id) ";
                 }
             } else {
                 if (empty($course_code)) {
@@ -1219,9 +1219,15 @@ class CourseManager {
         }
         $counter = 1;
         $count_rows = Database::num_rows($rs);
+
         if ($return_count && $resumed_report) {
-            return $count_rows;
+            $result = 0;
+            while ($user = Database::fetch_array($rs)) {
+                $result += $user['count'];
+            }
+            return $result;
         }
+
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 $report_info = array();

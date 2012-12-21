@@ -616,10 +616,7 @@ class Attendance
 			$calendar_ids[] = $cal['id'];
 		}
         //See BT#5419
-        $status_that_score_point_to_users = array(
-            1, //presence
-            3, //late
-        );
+        $status_that_score_point_to_users = self::get_status_that_score_point_to_users();
         $status_that_score_point_to_users = "'".implode("','", $status_that_score_point_to_users)."'";
 
 		// Get count of presences by users inside current attendance and save like results
@@ -1049,7 +1046,7 @@ class Attendance
 	}
 
 
-        /**
+    /**
 	 * Get number of attendance calendar inside current attendance
 	 * @param	int	attendance id
 	 * @return	int     number of dates in attendance calendar
@@ -1428,6 +1425,13 @@ class Attendance
             '2' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
         );
         return $attendance_states;
+    }
+
+    public function get_status_that_score_point_to_users() {
+        return array(
+            1, //presence
+            3, //late
+        );
     }
 
     public function get_default_attendance_state() {

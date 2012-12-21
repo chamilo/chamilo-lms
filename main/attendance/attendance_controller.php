@@ -277,7 +277,7 @@
                     }
 
                     if (!empty($user_final_results)) {
-                        $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id);
+                        $attendance->attendance_sheet_add($cal_id, $user_final_results, $attendance_id, false, true);
                     }
 				}
 			}

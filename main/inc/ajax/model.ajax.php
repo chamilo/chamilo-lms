@@ -117,10 +117,10 @@ if (!$sidx) $sidx = 1;
 
 switch ($action) {
     case 'get_user_course_report_resumed':
-        $count = CourseManager::get_count_user_list_from_course_code(null, 0, null, null, null, true, true, 'ruc');
+        $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc');
         break;
     case 'get_user_course_report':
-        $count = CourseManager::get_count_user_list_from_course_code(null, 0, null, null, null, true, false);
+        $count = CourseManager::get_count_user_list_from_course_code(false);
         break;
     case 'get_course_exercise_medias':
         $course_id = api_get_course_int_id();

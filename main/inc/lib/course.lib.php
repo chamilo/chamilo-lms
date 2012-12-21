@@ -1159,6 +1159,9 @@ class CourseManager {
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
+                if ($resumed_report) {
+                    $sql = " SELECT field_id ";
+                }
             } else {
                 if (empty($course_code)) {
                     $sql = 'SELECT DISTINCT course.title, course.code, course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
@@ -1190,10 +1193,9 @@ class CourseManager {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
-        if ($add_reports && $resumed_report) {
-            /*$extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';*/
-            $limit = null;
+        if ($return_count && $resumed_report) {
+            $extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';
         }
 
         $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
@@ -1201,6 +1203,10 @@ class CourseManager {
         if ($multiple_access_url) {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
+        }
+
+        if ($return_count && $resumed_report) {
+            $sql .= ' GROUP BY field_id ';
         }
 
         $sql .= ' '.$order_by.' '.$limit;
@@ -1213,6 +1219,9 @@ class CourseManager {
         }
         $counter = 1;
         $count_rows = Database::num_rows($rs);
+        if ($return_count && $resumed_report) {
+            return $count_rows;
+        }
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 $report_info = array();
@@ -1237,7 +1246,6 @@ class CourseManager {
                 if ($add_reports) {
                     $course_code = $user['code'];
                     if ($resumed_report) {
-
                         foreach ($extra_fields as $extra) {
                             if ($extra['1'] == $extra_field) {
                                 $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);
@@ -1301,8 +1309,8 @@ class CourseManager {
         return $users;
     }
 
-    static function get_count_user_list_from_course_code($resumed_report = false) {
-        return self::get_user_list_from_course_code(null, 0, null, null, null, true, $resumed_report);
+    static function get_count_user_list_from_course_code($resumed_report = false, $extra_field = null) {
+        return self::get_user_list_from_course_code(null, 0, null, null, null, true, false, $resumed_report, $extra_field);
     }
 
     /**

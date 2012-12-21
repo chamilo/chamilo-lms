@@ -51,7 +51,7 @@ class MigrationCustom {
     const TRANSACTION_TYPE_DEL_FASE    = 29;
     const TRANSACTION_TYPE_EDIT_FASE   = 30;
 
-    public $attend_status = array(
+    public static $attend_status = array(
         'DEF' => null,
         'AUS' => 0,
         'PRE' => 1,

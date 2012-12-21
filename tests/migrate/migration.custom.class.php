@@ -470,7 +470,8 @@ class MigrationCustom {
                         }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id => $data['status']);
-                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false, false);
+
+                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false, true);
                         error_log("Adding calendar to user: $user_id to calendar: $cal_id");
                     } else {
                         error_log('No attendance_id created');

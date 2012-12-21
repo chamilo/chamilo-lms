@@ -2224,8 +2224,11 @@ class UserManager {
 
         // Get the list of sessions per user
         $condition_date_end = null;
+        // uncomment commented query lines to alter the query sorting
+        //$order = ' ORDER BY session_category_name, short_name ';
         $order = ' ORDER BY session_category_name, name ';
         if ($reverse_order) {
+            //$order = ' ORDER BY session_category_name DESC, short_name DESC ';
             $order = ' ORDER BY session_category_name DESC, name DESC ';
         }
 
@@ -2243,9 +2246,9 @@ class UserManager {
 
         $select = "SELECT DISTINCT
                     session.id,
-                    session.name,
-
-                    access_start_date,
+                    session.name, ".
+                    //SUBSTR(session.name,LOCATE('-',session.name)+1) as short_name,
+                   " access_start_date,
                     access_end_date,
                     coach_access_start_date,
                     coach_access_end_date,

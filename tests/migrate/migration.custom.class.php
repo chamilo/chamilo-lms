@@ -51,6 +51,14 @@ class MigrationCustom {
     const TRANSACTION_TYPE_DEL_FASE    = 29;
     const TRANSACTION_TYPE_EDIT_FASE   = 30;
 
+    public $attend_status = array(
+        'DEF' => null,
+        'AUS' => 0,
+        'PRE' => 1,
+        'TAR' => 3,
+        'T45' => 2,
+    );
+
     static function get_transaction_status_list() {
         $table = Database::get_main_table(TABLE_BRANCH_TRANSACTION_STATUS);
         return Database::select("*", $table);
@@ -461,7 +469,7 @@ class MigrationCustom {
                             error_log("Creating attendance calendar $cal_id");
                         }
                         //Adding presence for the user (by default everybody is present)
-                        $users_present = array($user_id);
+                        $users_present = array($user_id => $data['status']);
                         $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false, false);
                         error_log("Adding calendar to user: $user_id to calendar: $cal_id");
                     } else {
@@ -474,6 +482,11 @@ class MigrationCustom {
         } else {
             error_log("Missing data: session: $session_id - user_id: $user_id");
         }
+    }
+    
+    static function convert_attendance_status($status) {
+        if (!$in_array($status,array_keys(self::$attend_status))) { return null; }
+        return self::$attend_status[$status];
     }
 
     static function create_thematic($data) {

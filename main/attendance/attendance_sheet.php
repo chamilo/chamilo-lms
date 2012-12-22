@@ -299,7 +299,7 @@ $(document).ready(function() {
                 }
 
                 $result .= '<th width="800px" style="text-align:center">';
-                $result .= '<center><div style="width:65px;">'.$datetime.'&nbsp;';
+                $result .= '<center><div style="width:40px;">'.$datetime.'<br />';
 
                 if (api_is_allowed_to_edit(null, true)) {
                     $result .= '<span id="attendance_lock" style="cursor:pointer">'.(!$is_locked_attendance || api_is_platform_admin()?$img_lock:'').'</span>';

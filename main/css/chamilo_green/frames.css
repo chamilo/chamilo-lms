@@ -1030,3 +1030,9 @@ div.system_announcement_content {
 	border-left: 1px solid gray;
 	padding-left: 5px;
 }
+/* tips Abbr-plugin for FCKeditor */
+abbr {
+      border-bottom: 1px dotted rgb(102, 102, 102);
+      background-color:#F00;
+      cursor: help;
+}

@@ -73,9 +73,11 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
 				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
+                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
 				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
+                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
                 if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
                     $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
                     Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";

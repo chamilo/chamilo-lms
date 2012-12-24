@@ -3146,6 +3146,7 @@ class TrackingCourseLog {
     	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
     	$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
+    	$table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     	$session_id = intval($session_id);
 
@@ -3244,68 +3245,68 @@ class TrackingCourseLog {
     				$row[0] = api_ucfirst($row['col0']);
     			}
     			$row[1] = get_lang($row[1]);
-    			$row[5] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
-    			$row[4] = '';
+    			$row[6] = api_convert_and_format_date($row['col5'], null, date_default_timezone_get());
+    			$row[5] = '';
     			//@todo Improve this code please
     			switch ($table_name['table_name']) {
     				case 'document' :
     					$query_document = "SELECT tool.title as title FROM $table_tool tool WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->title;
+    					$row[5] = $obj_document->title;
 
     					break;
     				case 'announcement':
     					$query_document = "SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->title;
+    					$row[5] = $obj_document->title;
     					break;
     				case 'glossary':
     					$query_document = "SELECT name FROM $table_tool WHERE c_id = $course_id AND glossary_id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->name;
+    					$row[5] = $obj_document->name;
     					break;
     				case 'lp':
     					$query_document = "SELECT name FROM $table_tool WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->name;
+    					$row[5] = $obj_document->name;
     					break;
     				case 'quiz':
     					$query_document = "SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->title;
+    					$row[5] = $obj_document->title;
     					break;
 
     				case 'course_description':
     					$query_document = "SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref";
     					$rs_document = Database::query($query_document);
     					$obj_document = Database::fetch_object($rs_document);
-    					$row[4] = $obj_document->title;
+    					$row[5] = $obj_document->title;
     					break;
 
     				case 'thematic':
     					$rs = Database::query("SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[4] = $obj->title;
+    						$row[5] = $obj->title;
     					}
     					break;
     				case 'thematic_advance':
     					$rs = Database::query("SELECT content FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[4] = $obj->content;
+    						$row[5] = $obj->content;
     					}
     					break;
     				case 'thematic_plan':
     					$rs = Database::query("SELECT title FROM $table_tool WHERE c_id = $course_id AND id = $ref");
     					if (Database::num_rows($rs) > 0) {
     						$obj = Database::fetch_object($rs);
-    						$row[4] = $obj->title;
+    						$row[5] = $obj->title;
     					}
     					break;
 
@@ -3321,7 +3322,15 @@ class TrackingCourseLog {
                         if (!empty($row['col3'])) {
                             $row['col3'] = Display::url($row['col3'],api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&origin=tracking&uInfo='.$row['user_id']);
                             $row[3] = $row['col3'];
+                            $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = ".$row['user_id']." AND login_date < '".$row['col5']."' ORDER BY login_date DESC LIMIT 1";
+                            $row[4] = get_lang('Unknown');
+                            $res_ip = Database::query($sql_ip);
+                            if ($res_ip !== false && Database::num_rows($res_ip)>0) {
+                                $row_ip = Database::fetch_row($res_ip);
+                                $row[4] = Display::url($row_ip[1],'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+                            }
                         }
+                        
     			$resources[] = $row;
     		}
     	}

@@ -254,7 +254,7 @@ form .formw input {
 /* end chamilo forms fixes */
 
 #top_main_content .span3 {
-  float: right;
+  float: left;
 }
 #top_main_content .span9 {
   float: left;

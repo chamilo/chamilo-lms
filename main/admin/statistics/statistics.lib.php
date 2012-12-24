@@ -484,10 +484,10 @@ class Statistics {
         echo '<h4>'.get_lang('ImportantActivities').'</h4>';
 
         // Create a search-box
-        $form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php?action=activities','','width=200px',false);
+        $form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php','','width=200px',false);
         $renderer =& $form->defaultRenderer();
         $renderer->setElementTemplate('<span>{element}</span> ');
-        $form->addElement('hidden','action','activities');
+        $form->addElement('hidden','report','activities');
         $form->addElement('hidden','activities_direction','DESC');
         $form->addElement('hidden','activities_column','4');
         $form->addElement('text','keyword',get_lang('keyword'));
@@ -499,7 +499,7 @@ class Statistics {
         $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
         $parameters = array();
 
-        $parameters['action'] = 'activities';
+        $parameters['report'] = 'activities';
         if (isset($_GET['keyword'])) {
             $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
         }

@@ -27,35 +27,35 @@ require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
  * */
 function showQuestion($questionId, $only_questions = false, $origin = false, $current_item = '', $show_title = true, $freeze = false, $user_choice = array(), $show_comment = false, $exercise_feedback = null, $show_answers = false) {
 
-	// Text direction for the current language
-	$is_ltr_text_direction = api_get_text_direction() != 'rtl';
+    // Text direction for the current language
+    $is_ltr_text_direction = api_get_text_direction() != 'rtl';
 
-	// Change false to true in the following line to enable answer hinting
-	$debug_mark_answer = $show_answers; //api_is_allowed_to_edit() && false;
+    // Change false to true in the following line to enable answer hinting
+    $debug_mark_answer = $show_answers; //api_is_allowed_to_edit() && false;
 
-	// Reads question information
-	if (!$objQuestionTmp = Question::read($questionId)) {
-		// Question not found
-		return false;
-	}
+    // Reads question information
+    if (!$objQuestionTmp = Question::read($questionId)) {
+    	// Question not found
+    	return false;
+    }
 
     if ($exercise_feedback != EXERCISE_FEEDBACK_TYPE_END) {
         $show_comment = false;
     }
 
-	$answerType    = $objQuestionTmp->selectType();
-	$pictureName   = $objQuestionTmp->selectPicture();
+    $answerType    = $objQuestionTmp->selectType();
+    $pictureName   = $objQuestionTmp->selectPicture();
 
-	if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
-		// Question is not a hotspot
+    if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
+    	// Question is not a hotspot
 
-		if (!$only_questions) {
-			$questionDescription = $objQuestionTmp->selectDescription();
-			if ($show_title) {
-				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//
-				echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
-			}
-			if (!empty($questionDescription)) {
+    	if (!$only_questions) {
+    		$questionDescription = $objQuestionTmp->selectDescription();
+    		if ($show_title) {
+    			Testcategory::displayCategoryAndTitle($objQuestionTmp->id);	//
+    			echo Display::div($current_item.'. '.$objQuestionTmp->selectTitle(), array('class'=>'question_title'));
+    		}
+    		if (!empty($questionDescription)) {
                 echo Display::div($questionDescription, array('class'=>'question_description'));
             }
         }
@@ -67,104 +67,104 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         echo '<div class="question_options">';
 
-		$s = '';
+    	$s = '';
 
-		// construction of the Answer object (also gets all answers details)
-		$objAnswerTmp = new Answer($questionId);
+    	// construction of the Answer object (also gets all answers details)
+    	$objAnswerTmp = new Answer($questionId);
 
-		$nbrAnswers     = $objAnswerTmp->selectNbrAnswers();
+    	$nbrAnswers     = $objAnswerTmp->selectNbrAnswers();
         $course_id      = api_get_course_int_id();
         $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
-		// For "matching" type here, we need something a little bit special
-		// because the match between the suggestions and the answers cannot be
-		// done easily (suggestions and answers are in the same table), so we
-		// have to go through answers first (elems with "correct" value to 0).
-		$select_items = array();
-		//This will contain the number of answers on the left side. We call them
-		// suggestions here, for the sake of comprehensions, while the ones
-		// on the right side are called answers
-		$num_suggestions = 0;
+    	// For "matching" type here, we need something a little bit special
+    	// because the match between the suggestions and the answers cannot be
+    	// done easily (suggestions and answers are in the same table), so we
+    	// have to go through answers first (elems with "correct" value to 0).
+    	$select_items = array();
+    	//This will contain the number of answers on the left side. We call them
+    	// suggestions here, for the sake of comprehensions, while the ones
+    	// on the right side are called answers
+    	$num_suggestions = 0;
 
-		if ($answerType == MATCHING) {
+    	if ($answerType == MATCHING) {
             $s .= '<table class="data_table">';
 
-			$x = 1; //iterate through answers
-			$letter = 'A'; //mark letters for each answer
-			$answer_matching = $cpt1 = array();
+    		$x = 1; //iterate through answers
+    		$letter = 'A'; //mark letters for each answer
+    		$answer_matching = $cpt1 = array();
 
-			for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-				$answerCorrect = $objAnswerTmp->isCorrect($answerId);
-				$numAnswer = $objAnswerTmp->selectAutoId($answerId);
-				$answer=$objAnswerTmp->selectAnswer($answerId);
-				if ($answerCorrect==0) {
-					// options (A, B, C, ...) that will be put into the list-box
-					// have the "correct" field set to 0 because they are answer
-					$cpt1[$x] = $letter;
-					$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
-					$x++; $letter++;
-				}
-			}
-			$i = 1;
+    		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
+    			$answerCorrect = $objAnswerTmp->isCorrect($answerId);
+    			$numAnswer = $objAnswerTmp->selectAutoId($answerId);
+    			$answer=$objAnswerTmp->selectAnswer($answerId);
+    			if ($answerCorrect==0) {
+    				// options (A, B, C, ...) that will be put into the list-box
+    				// have the "correct" field set to 0 because they are answer
+    				$cpt1[$x] = $letter;
+    				$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
+    				$x++; $letter++;
+    			}
+    		}
+    		$i = 1;
 
-			$select_items[0]['id'] = 0;
-			$select_items[0]['letter'] = '--';
-			$select_items[0]['answer'] = '';
+    		$select_items[0]['id'] = 0;
+    		$select_items[0]['letter'] = '--';
+    		$select_items[0]['answer'] = '';
 
-			foreach ($answer_matching as $id => $value) {
-				$select_items[$i]['id'] 	= $value['id'];
-				$select_items[$i]['letter'] = $cpt1[$id];
-				$select_items[$i]['answer'] = $value['answer'];
-				$i ++;
-			}
-			$num_suggestions = ($nbrAnswers - $x) + 1;
+    		foreach ($answer_matching as $id => $value) {
+    			$select_items[$i]['id'] 	= $value['id'];
+    			$select_items[$i]['letter'] = $cpt1[$id];
+    			$select_items[$i]['answer'] = $value['answer'];
+    			$i ++;
+    		}
+    		$num_suggestions = ($nbrAnswers - $x) + 1;
 
-		} elseif ($answerType == FREE_ANSWER) {
-			$fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer']:null;
+    	} elseif ($answerType == FREE_ANSWER) {
+    		$fck_content = isset($user_choice[0]) && !empty($user_choice[0]['answer']) ? $user_choice[0]['answer']:null;
 
-			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+    		$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
 
-			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-			$oFCKeditor->Width      = '100%';
-			$oFCKeditor->Height     = '200';
-			$oFCKeditor->Value      = $fck_content;
+    		$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
+    		$oFCKeditor->Width      = '100%';
+    		$oFCKeditor->Height     = '200';
+    		$oFCKeditor->Value      = $fck_content;
             $s .= $oFCKeditor->CreateHtml();
-		} elseif ($answerType == ORAL_EXPRESSION) {
-			//Add nanog
-			if (api_get_setting('enable_nanogong') == 'true') {
-				require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
-				//@todo pass this as a parameter
-				global $exercise_stat_info, $exerciseId, $exe_id;
+    	} elseif ($answerType == ORAL_EXPRESSION) {
+    		//Add nanog
+    		if (api_get_setting('enable_nanogong') == 'true') {
+    			require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
+    			//@todo pass this as a parameter
+    			global $exercise_stat_info, $exerciseId, $exe_id;
 
-				if (!empty($exercise_stat_info)) {
-					$params = array(
-						'exercise_id' 	=> $exercise_stat_info['exe_exo_id'],
-						'exe_id' 		=> $exercise_stat_info['exe_id'],
-						'question_id'   => $questionId
-					);
-				} else {
-					$params = array(
-						'exercise_id' 	=> $exerciseId,
-						'exe_id' 		=> 'temp_exe',
-						'question_id'   => $questionId
-					);
-				}
-				$nano = new Nanogong($params);
-				echo $nano->show_button();
-			}
+    			if (!empty($exercise_stat_info)) {
+    				$params = array(
+    					'exercise_id' 	=> $exercise_stat_info['exe_exo_id'],
+    					'exe_id' 		=> $exercise_stat_info['exe_id'],
+    					'question_id'   => $questionId
+    				);
+    			} else {
+    				$params = array(
+    					'exercise_id' 	=> $exerciseId,
+    					'exe_id' 		=> 'temp_exe',
+    					'question_id'   => $questionId
+    				);
+    			}
+    			$nano = new Nanogong($params);
+    			echo $nano->show_button();
+    		}
 
-			$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
-			$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
-			$oFCKeditor->Width  = '100%';
-			$oFCKeditor->Height = '150';
-			$oFCKeditor->ToolbarStartExpanded = false;
-			$oFCKeditor->Value	= '' ;
-			$s .= $oFCKeditor->CreateHtml();
-		}
+    		$oFCKeditor = new FCKeditor("choice[".$questionId."]") ;
+    		$oFCKeditor->ToolbarSet = 'TestFreeAnswer';
+    		$oFCKeditor->Width  = '100%';
+    		$oFCKeditor->Height = '150';
+    		$oFCKeditor->ToolbarStartExpanded = false;
+    		$oFCKeditor->Value	= '' ;
+    		$s .= $oFCKeditor->CreateHtml();
+    	}
 
-		// Now navigate through the possible answers, using the max number of
-		// answers for the question as a limiter
-		$lines_count = 1; // a counter for matching-type answers
+    	// Now navigate through the possible answers, using the max number of
+    	// answers for the question as a limiter
+    	$lines_count = 1; // a counter for matching-type answers
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
             $header = Display::tag('th', get_lang('Options'));
@@ -197,38 +197,38 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         	}
         }
 
-		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-			$answer          = $objAnswerTmp->selectAnswer($answerId);
-			$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
-			$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
+    	for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
+    		$answer          = $objAnswerTmp->selectAnswer($answerId);
+    		$answerCorrect   = $objAnswerTmp->isCorrect($answerId);
+    		$numAnswer       = $objAnswerTmp->selectAutoId($answerId);
             $comment         = $objAnswerTmp->selectComment($answerId);
 
             $attributes = array();
 
-			// Unique answer
-			if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
-				$input_id = 'choice-'.$questionId.'-'.$answerId;
-				if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer ) {
-					$attributes = array('id' =>$input_id, 'checked'=>1, 'selected'=>1);
-				} else {
-					$attributes = array('id' =>$input_id);
-				}
+    		// Unique answer
+    		if ($answerType == UNIQUE_ANSWER || $answerType == UNIQUE_ANSWER_NO_OPTION) {
+    			$input_id = 'choice-'.$questionId.'-'.$answerId;
+    			if (isset($user_choice[0]['answer']) && $user_choice[0]['answer'] == $numAnswer ) {
+    				$attributes = array('id' =>$input_id, 'checked'=>1, 'selected'=>1);
+    			} else {
+    				$attributes = array('id' =>$input_id);
+    			}
 
                 if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$attributes['checked'] = 1;
+    				if ($answerCorrect) {
+    					$attributes['checked'] = 1;
                         $attributes['selected'] = 1;
-					}
-				}
+    				}
+    			}
 
-				$answer = Security::remove_XSS($answer, STUDENT);
+    			$answer = Security::remove_XSS($answer, STUDENT);
 
-				$s .= Display::input('hidden','choice2['.$questionId.']','0');
+    			$s .= Display::input('hidden','choice2['.$questionId.']','0');
 
-				$answer_input = '<label class="radio">';
-				$answer_input .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
-				$answer_input .= $answer;
-				$answer_input .= '</label>';
+    			$answer_input = '<label class="radio">';
+    			$answer_input .= Display::input('radio', 'choice['.$questionId.']', $numAnswer, $attributes);
+    			$answer_input .= $answer;
+    			$answer_input .= '</label>';
 
                 if ($show_comment) {
                     $s .= '<tr><td>';
@@ -242,22 +242,22 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s .= $answer_input;
                 }
 
-			} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
-				$input_id = 'choice-'.$questionId.'-'.$answerId;
-				$answer = Security::remove_XSS($answer, STUDENT);
+    		} elseif ($answerType == MULTIPLE_ANSWER || $answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType == GLOBAL_MULTIPLE_ANSWER) {
+    			$input_id = 'choice-'.$questionId.'-'.$answerId;
+    			$answer = Security::remove_XSS($answer, STUDENT);
 
-				if (in_array($numAnswer, $user_choice_array)) {
-					$attributes = array('id' =>$input_id, 'checked'=>1, 'selected'=>1);
-				} else {
-					$attributes = array('id' =>$input_id);
-				}
+    			if (in_array($numAnswer, $user_choice_array)) {
+    				$attributes = array('id' =>$input_id, 'checked'=>1, 'selected'=>1);
+    			} else {
+    				$attributes = array('id' =>$input_id);
+    			}
 
                 if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$attributes['checked'] = 1;
+    				if ($answerCorrect) {
+    					$attributes['checked'] = 1;
                         $attributes['selected'] = 1;
-					}
-				}
+    				}
+    			}
 
                 if ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                     $s .= '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
@@ -317,28 +317,28 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     }
                     $s.='</tr>';
                 }
-			} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
-				// multiple answers
-				$input_id = 'choice-'.$questionId.'-'.$answerId;
+    		} elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
+    			// multiple answers
+    			$input_id = 'choice-'.$questionId.'-'.$answerId;
 
-				if (in_array($numAnswer, $user_choice_array)) {
-				    $attributes = array('id'=>$input_id, 'checked'=>1, 'selected'=>1);
-				} else {
-				    $attributes = array('id'=>$input_id);
-				}
+    			if (in_array($numAnswer, $user_choice_array)) {
+    			    $attributes = array('id'=>$input_id, 'checked'=>1, 'selected'=>1);
+    			} else {
+    			    $attributes = array('id'=>$input_id);
+    			}
 
                 if ($debug_mark_answer) {
-					if ($answerCorrect) {
-						$attributes['checked'] = 1;
+    				if ($answerCorrect) {
+    					$attributes['checked'] = 1;
                         $attributes['selected'] = 1;
-					}
-				}
+    				}
+    			}
 
-				$answer = Security::remove_XSS($answer, STUDENT);
-				$answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
-				$answer_input .= '<label class="checkbox">';
-				$answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
-			    $answer_input .= $answer;
+    			$answer = Security::remove_XSS($answer, STUDENT);
+    			$answer_input = '<input type="hidden" name="choice2['.$questionId.']" value="0" />';
+    			$answer_input .= '<label class="checkbox">';
+    			$answer_input .= Display::input('checkbox', 'choice['.$questionId.']['.$numAnswer.']', 1, $attributes);
+    		    $answer_input .= $answer;
                 $answer_input .= '</label>';
 
                 if ($show_comment) {
@@ -391,113 +391,113 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }
             	$s.='</tr>';
 
-			} elseif ($answerType == FILL_IN_BLANKS) {
-				list($answer) = explode('::', $answer);
+    		} elseif ($answerType == FILL_IN_BLANKS) {
+    			list($answer) = explode('::', $answer);
 
                 //Correct answer
-				api_preg_match_all('/\[[^]]+\]/', $answer, $correct_answer_list);
+    			api_preg_match_all('/\[[^]]+\]/', $answer, $correct_answer_list);
 
                 //Student's answezr
-				if (isset($user_choice[0]['answer'])) {
-					api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
-					$student_answer_list = $student_answer_list[0];
-				}
+    			if (isset($user_choice[0]['answer'])) {
+    				api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
+    				$student_answer_list = $student_answer_list[0];
+    			}
 
                 //If debug
                 if ($debug_mark_answer) {
-					$student_answer_list = $correct_answer_list[0];
+    				$student_answer_list = $correct_answer_list[0];
                 }
 
-				if (!empty($correct_answer_list) && !empty($student_answer_list)) {
-				    $correct_answer_list = $correct_answer_list[0];
-				    $i = 0;
-				    foreach ($correct_answer_list as $correct_item) {
-				        $value = null;
-				        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
+    			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
+    			    $correct_answer_list = $correct_answer_list[0];
+    			    $i = 0;
+    			    foreach ($correct_answer_list as $correct_item) {
+    			        $value = null;
+    			        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
 
-				        	//Cleaning student answer list
-				            $value = strip_tags($student_answer_list[$i]);
-				            $value = api_substr($value, 1, api_strlen($value)-2);
-				            $value = explode('/', $value);
+    			        	//Cleaning student answer list
+    			            $value = strip_tags($student_answer_list[$i]);
+    			            $value = api_substr($value, 1, api_strlen($value)-2);
+    			            $value = explode('/', $value);
 
-				            if (!empty($value[0])) {
-				            	$value = str_replace('&nbsp;', '',  trim($value[0]));
-				            }
+    			            if (!empty($value[0])) {
+    			            	$value = str_replace('&nbsp;', '',  trim($value[0]));
+    			            }
                             $correct_item = preg_quote($correct_item);
                             $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
-				            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);
-				        }
-				        $i++;
-				    }
-				} else {
-					$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-				}
-				$s .= $answer;
+    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);
+    			        }
+    			        $i++;
+    			    }
+    			} else {
+    				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+    			}
+    			$s .= $answer;
             } elseif ($answerType == MATCHING) {
-				// matching type, showing suggestions and answers
-				// TODO: replace $answerId by $numAnswer
+    			// matching type, showing suggestions and answers
+    			// TODO: replace $answerId by $numAnswer
 
-				if ($answerCorrect != 0) {
-					// only show elements to be answered (not the contents of
-					// the select boxes, who are corrrect = 0)
-					$s .= '<tr><td width="45%" valign="top">';
-					$parsed_answer = $answer;
-					//left part questions
-					$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
-						 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
-					//middle part (matches selects)
+    			if ($answerCorrect != 0) {
+    				// only show elements to be answered (not the contents of
+    				// the select boxes, who are corrrect = 0)
+    				$s .= '<tr><td width="45%" valign="top">';
+    				$parsed_answer = $answer;
+    				//left part questions
+    				$s .= ' <span style="float:left; width:8%;"><b>'.$lines_count.'</b>.&nbsp;</span>
+    					 	<span style="float:left; width:92%;">'.$parsed_answer.'</span></td>';
+    				//middle part (matches selects)
 
-					$s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
-				            <select name="choice['.$questionId.']['.$numAnswer.']">';
+    				$s .= '<td width="10%" valign="top" align="center">&nbsp;&nbsp;
+    			            <select name="choice['.$questionId.']['.$numAnswer.']">';
 
-					// fills the list-box
-					foreach ($select_items as $key=>$val) {
-						// set $debug_mark_answer to true at function start to
-						// show the correct answer with a suffix '-x'
-						$selected = '';
-						if ($debug_mark_answer) {
-							if ($val['id'] == $answerCorrect) {
-								$selected = 'selected="selected"';
-							}
-						}
-						if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
-						    $selected = 'selected="selected"';
-						}
-						$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
+    				// fills the list-box
+    				foreach ($select_items as $key=>$val) {
+    					// set $debug_mark_answer to true at function start to
+    					// show the correct answer with a suffix '-x'
+    					$selected = '';
+    					if ($debug_mark_answer) {
+    						if ($val['id'] == $answerCorrect) {
+    							$selected = 'selected="selected"';
+    						}
+    					}
+    					if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+    					    $selected = 'selected="selected"';
+    					}
+    					$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
 
-					}  // end foreach()
+    				}  // end foreach()
 
-					$s .= '</select></td>';
-					//print_r($select_items);
-					//right part (answers)
-					$s.='<td width="45%" valign="top" >';
-					if (isset($select_items[$lines_count])) {
-						$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
-							 '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';
-					} else {
-						$s.='&nbsp;';
-					}
-					$s .= '</td>';
-					$s .= '</tr>';
-					$lines_count++;
-					//if the left side of the "matching" has been completely
-					// shown but the right side still has values to show...
-					if (($lines_count -1) == $num_suggestions) {
-						// if it remains answers to shown at the right side
-						while (isset($select_items[$lines_count])) {
-							$s .= '<tr>
-								  <td colspan="2"></td>
-								  <td valign="top">';
-							$s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
-							$s.="</td>
-							</tr>";
-							$lines_count++;
-						}	// end while()
-					}  // end if()
-					$matching_correct_answer++;
-				}
-			}
-		}	// end for()
+    				$s .= '</select></td>';
+    				//print_r($select_items);
+    				//right part (answers)
+    				$s.='<td width="45%" valign="top" >';
+    				if (isset($select_items[$lines_count])) {
+    					$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
+    						 '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';
+    				} else {
+    					$s.='&nbsp;';
+    				}
+    				$s .= '</td>';
+    				$s .= '</tr>';
+    				$lines_count++;
+    				//if the left side of the "matching" has been completely
+    				// shown but the right side still has values to show...
+    				if (($lines_count -1) == $num_suggestions) {
+    					// if it remains answers to shown at the right side
+    					while (isset($select_items[$lines_count])) {
+    						$s .= '<tr>
+    							  <td colspan="2"></td>
+    							  <td valign="top">';
+    						$s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+    						$s.="</td>
+    						</tr>";
+    						$lines_count++;
+    					}	// end while()
+    				}  // end if()
+    				$matching_correct_answer++;
+    			}
+    		}
+    	}	// end for()
 
         if ($show_comment) {
             $s .= '</table>';
@@ -510,21 +510,21 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
 
 
-		$s .= '</div>';
+    	$s .= '</div>';
 
-		// destruction of the Answer object
-		unset($objAnswerTmp);
+    	// destruction of the Answer object
+    	unset($objAnswerTmp);
 
-		// destruction of the Question object
-		unset($objQuestionTmp);
+    	// destruction of the Question object
+    	unset($objQuestionTmp);
 
-		if ($origin != 'export') {
-			echo $s;
-		} else {
-			return $s;
-		}
-	} elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-		// Question is a HOT_SPOT
+    	if ($origin != 'export') {
+    		echo $s;
+    	} else {
+    		return $s;
+    	}
+    } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
+    	// Question is a HOT_SPOT
         //checking document/images visibility
         if (api_is_platform_admin() || api_is_course_admin()) {
             require_once api_get_path(LIBRARY_PATH).'document.lib.php';
@@ -538,220 +538,220 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 }
             }
         }
-		$questionName         = $objQuestionTmp->selectTitle();
-		$questionDescription  = $objQuestionTmp->selectDescription();
+    	$questionName         = $objQuestionTmp->selectTitle();
+    	$questionDescription  = $objQuestionTmp->selectDescription();
 
         if ($freeze) {
             echo Display::img($objQuestionTmp->selectPicturePath());
             return;
         }
 
-		// Get the answers, make a list
-		$objAnswerTmp         = new Answer($questionId);
-		$nbrAnswers           = $objAnswerTmp->selectNbrAnswers();
+    	// Get the answers, make a list
+    	$objAnswerTmp         = new Answer($questionId);
+    	$nbrAnswers           = $objAnswerTmp->selectNbrAnswers();
 
-		// get answers of hotpost
-		$answers_hotspot = array();
-		for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
-			$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
-			$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);
-		}
+    	// get answers of hotpost
+    	$answers_hotspot = array();
+    	for ($answerId=1;$answerId <= $nbrAnswers;$answerId++) {
+    		$answers = $objAnswerTmp->selectAnswerByAutoId($objAnswerTmp->selectAutoId($answerId));
+    		$answers_hotspot[$answers['id']] = $objAnswerTmp->selectAnswer($answerId);
+    	}
 
-		// display answers of hotpost order by id
-		$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
-		if (!empty($answers_hotspot)) {
-			ksort($answers_hotspot);
-			foreach ($answers_hotspot as $key => $value) {
-				$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br />';
-			}
-		}
-		$answer_list .= '</dl></div>';
+    	// display answers of hotpost order by id
+    	$answer_list = '<div style="padding: 10px; margin-left: 0px; border: 1px solid #A4A4A4; height: 408px; width: 200px;"><b>'.get_lang('HotspotZones').'</b><dl>';
+    	if (!empty($answers_hotspot)) {
+    		ksort($answers_hotspot);
+    		foreach ($answers_hotspot as $key => $value) {
+    			$answer_list .= '<dt>'.$key.'.- '.$value.'</dt><br />';
+    		}
+    	}
+    	$answer_list .= '</dl></div>';
 
-		if ($answerType == HOT_SPOT_DELINEATION) {
-			$answer_list='';
-			$swf_file = 'hotspot_delineation_user';
-			$swf_height = 405;
-		} else {
-			$swf_file = 'hotspot_user';
-			$swf_height = 436;
-		}
+    	if ($answerType == HOT_SPOT_DELINEATION) {
+    		$answer_list='';
+    		$swf_file = 'hotspot_delineation_user';
+    		$swf_height = 405;
+    	} else {
+    		$swf_file = 'hotspot_user';
+    		$swf_height = 436;
+    	}
 
-		if (!$only_questions) {
+    	if (!$only_questions) {
             if ($show_title) {
-				Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
+    			Testcategory::displayCategoryAndTitle($objQuestionTmp->id);
                 echo '<div class="question_title">'.$current_item.'. '.$questionName.'</div>';
             }
-			//@todo I need to the get the feedback type
-			echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
-			echo '<table class="exercise_questions" >
-				  <tr>
-			  		<td valign="top" colspan="2">';
-			echo $questionDescription;
-			echo '</td></tr>';
-		}
-		$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
+    		//@todo I need to the get the feedback type
+    		echo '<input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />';
+    		echo '<table class="exercise_questions" >
+    			  <tr>
+    		  		<td valign="top" colspan="2">';
+    		echo $questionDescription;
+    		echo '</td></tr>';
+    	}
+    	$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
-		$s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
-						<script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
-						<script type="text/javascript">
-						<!--
-						// Globals
-						// Major version of Flash required
-						var requiredMajorVersion = 7;
-						// Minor version of Flash required
-						var requiredMinorVersion = 0;
-						// Minor version of Flash required
-						var requiredRevision = 0;
-						// the version of javascript supported
-						var jsVersion = 1.0;
-						// -->
-						</script>
-						<script language="VBScript" type="text/vbscript">
-						<!-- // Visual basic helper required to detect Flash Player ActiveX control version information
-						Function VBGetSwfVer(i)
-						  on error resume next
-						  Dim swControl, swVersion
-						  swVersion = 0
+    	$s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
+    					<script src="../plugin/hotspot/hotspot.js" type="text/javascript" ></script>
+    					<script type="text/javascript">
+    					<!--
+    					// Globals
+    					// Major version of Flash required
+    					var requiredMajorVersion = 7;
+    					// Minor version of Flash required
+    					var requiredMinorVersion = 0;
+    					// Minor version of Flash required
+    					var requiredRevision = 0;
+    					// the version of javascript supported
+    					var jsVersion = 1.0;
+    					// -->
+    					</script>
+    					<script language="VBScript" type="text/vbscript">
+    					<!-- // Visual basic helper required to detect Flash Player ActiveX control version information
+    					Function VBGetSwfVer(i)
+    					  on error resume next
+    					  Dim swControl, swVersion
+    					  swVersion = 0
 
-						  set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
-						  if (IsObject(swControl)) then
-						    swVersion = swControl.GetVariable("$version")
-						  end if
-						  VBGetSwfVer = swVersion
-						End Function
-						// -->
-						</script>
+    					  set swControl = CreateObject("ShockwaveFlash.ShockwaveFlash." + CStr(i))
+    					  if (IsObject(swControl)) then
+    					    swVersion = swControl.GetVariable("$version")
+    					  end if
+    					  VBGetSwfVer = swVersion
+    					End Function
+    					// -->
+    					</script>
 
-						<script language="JavaScript1.1" type="text/javascript">
-						<!-- // Detect Client Browser type
-						var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
-						var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
-						var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
-						jsVersion = 1.1;
-						// JavaScript helper required to detect Flash Player PlugIn version information
-						function JSGetSwfVer(i) {
-							// NS/Opera version >= 3 check for Flash plugin in plugin array
-							if (navigator.plugins != null && navigator.plugins.length > 0) {
-								if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
-									var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
-						      		var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
-									descArray = flashDescription.split(" ");
-									tempArrayMajor = descArray[2].split(".");
-									versionMajor = tempArrayMajor[0];
-									versionMinor = tempArrayMajor[1];
-									if ( descArray[3] != "" ) {
-										tempArrayMinor = descArray[3].split("r");
-									} else {
-										tempArrayMinor = descArray[4].split("r");
-									}
-						      		versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
-						            flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
-						      	} else {
-									flashVer = -1;
-								}
-							}
-							// MSN/WebTV 2.6 supports Flash 4
-							else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
-							// WebTV 2.5 supports Flash 3
-							else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
-							// older WebTV supports Flash 2
-							else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
-							// Can\'t detect in all other cases
-							else
-							{
-								flashVer = -1;
-							}
-							return flashVer;
-						}
-						// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
+    					<script language="JavaScript1.1" type="text/javascript">
+    					<!-- // Detect Client Browser type
+    					var isIE  = (navigator.appVersion.indexOf("MSIE") != -1) ? true : false;
+    					var isWin = (navigator.appVersion.toLowerCase().indexOf("win") != -1) ? true : false;
+    					var isOpera = (navigator.userAgent.indexOf("Opera") != -1) ? true : false;
+    					jsVersion = 1.1;
+    					// JavaScript helper required to detect Flash Player PlugIn version information
+    					function JSGetSwfVer(i) {
+    						// NS/Opera version >= 3 check for Flash plugin in plugin array
+    						if (navigator.plugins != null && navigator.plugins.length > 0) {
+    							if (navigator.plugins["Shockwave Flash 2.0"] || navigator.plugins["Shockwave Flash"]) {
+    								var swVer2 = navigator.plugins["Shockwave Flash 2.0"] ? " 2.0" : "";
+    					      		var flashDescription = navigator.plugins["Shockwave Flash" + swVer2].description;
+    								descArray = flashDescription.split(" ");
+    								tempArrayMajor = descArray[2].split(".");
+    								versionMajor = tempArrayMajor[0];
+    								versionMinor = tempArrayMajor[1];
+    								if ( descArray[3] != "" ) {
+    									tempArrayMinor = descArray[3].split("r");
+    								} else {
+    									tempArrayMinor = descArray[4].split("r");
+    								}
+    					      		versionRevision = tempArrayMinor[1] > 0 ? tempArrayMinor[1] : 0;
+    					            flashVer = versionMajor + "." + versionMinor + "." + versionRevision;
+    					      	} else {
+    								flashVer = -1;
+    							}
+    						}
+    						// MSN/WebTV 2.6 supports Flash 4
+    						else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.6") != -1) flashVer = 4;
+    						// WebTV 2.5 supports Flash 3
+    						else if (navigator.userAgent.toLowerCase().indexOf("webtv/2.5") != -1) flashVer = 3;
+    						// older WebTV supports Flash 2
+    						else if (navigator.userAgent.toLowerCase().indexOf("webtv") != -1) flashVer = 2;
+    						// Can\'t detect in all other cases
+    						else
+    						{
+    							flashVer = -1;
+    						}
+    						return flashVer;
+    					}
+    					// When called with reqMajorVer, reqMinorVer, reqRevision returns true if that version or greater is available
 
-						function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
-						 	reqVer = parseFloat(reqMajorVer + "." + reqRevision);
-						   	// loop backwards through the versions until we find the newest version
-							for (i=25;i>0;i--) {
-								if (isIE && isWin && !isOpera) {
-									versionStr = VBGetSwfVer(i);
-								} else {
-									versionStr = JSGetSwfVer(i);
-								}
-								if (versionStr == -1 ) {
-									return false;
-								} else if (versionStr != 0) {
-									if(isIE && isWin && !isOpera) {
-										tempArray         = versionStr.split(" ");
-										tempString        = tempArray[1];
-										versionArray      = tempString .split(",");
-									} else {
-										versionArray      = versionStr.split(".");
-									}
-									versionMajor      = versionArray[0];
-									versionMinor      = versionArray[1];
-									versionRevision   = versionArray[2];
+    					function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision) {
+    					 	reqVer = parseFloat(reqMajorVer + "." + reqRevision);
+    					   	// loop backwards through the versions until we find the newest version
+    						for (i=25;i>0;i--) {
+    							if (isIE && isWin && !isOpera) {
+    								versionStr = VBGetSwfVer(i);
+    							} else {
+    								versionStr = JSGetSwfVer(i);
+    							}
+    							if (versionStr == -1 ) {
+    								return false;
+    							} else if (versionStr != 0) {
+    								if(isIE && isWin && !isOpera) {
+    									tempArray         = versionStr.split(" ");
+    									tempString        = tempArray[1];
+    									versionArray      = tempString .split(",");
+    								} else {
+    									versionArray      = versionStr.split(".");
+    								}
+    								versionMajor      = versionArray[0];
+    								versionMinor      = versionArray[1];
+    								versionRevision   = versionArray[2];
 
-									versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
-									versionNum        = parseFloat(versionString);
-						        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
-									if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
-										return true;
-									} else {
-										return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
-									}
-								}
-							}
-						}
-						// -->
-						</script>';
-		$s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
-					<script>
-						<!--
-						// Version check based upon the values entered above in "Globals"
-						var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
+    								versionString     = versionMajor + "." + versionRevision;   // 7.0r24 == 7.24
+    								versionNum        = parseFloat(versionString);
+    					        	// is the major.revision >= requested major.revision AND the minor version >= requested minor
+    								if ( (versionMajor > reqMajorVer) && (versionNum >= reqVer) ) {
+    									return true;
+    								} else {
+    									return ((versionNum >= reqVer && versionMinor >= reqMinorVer) ? true : false );
+    								}
+    							}
+    						}
+    					}
+    					// -->
+    					</script>';
+    	$s .= '<tr><td valign="top" colspan="2" width="520"><table><tr><td width="520">
+    				<script>
+    					<!--
+    					// Version check based upon the values entered above in "Globals"
+    					var hasReqestedVersion = DetectFlashVer(requiredMajorVersion, requiredMinorVersion, requiredRevision);
 
-						// Check to see if the version meets the requirements for playback
-						if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
-						    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
-						    			+ \'<param name="wmode" value="transparent">\'
-										+ \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
-										+ \'<\/object>\';
-						    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
-						} else {  // flash is too old or we can\'t detect the plugin
-							var alternateContent = "Error<br \/>"
-								+ "Hotspots requires Macromedia Flash 7.<br \/>"
-								+ "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
-							document.write(alternateContent);  // insert non-flash content
-						}
-						// -->
-					</script>
-					</td>
-					<td valign="top" align="left">'.$answer_list.'</td></tr>
-					</table>
-		</td></tr>';
-		echo $s;
+    					// Check to see if the version meets the requirements for playback
+    					if (hasReqestedVersion) {  // if we\'ve detected an acceptable version
+    					    var oeTags = \'<object type="application/x-shockwave-flash" data="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" width="600" height="'.$swf_height.'">\'
+    					    			+ \'<param name="wmode" value="transparent">\'
+    									+ \'<param name="movie" value="../plugin/hotspot/'.$swf_file.'.swf?modifyAnswers='.$questionId.'&amp;canClick:'.$canClick.'" />\'
+    									+ \'<\/object>\';
+    					    document.write(oeTags);   // embed the Flash Content SWF when all tests are passed
+    					} else {  // flash is too old or we can\'t detect the plugin
+    						var alternateContent = "Error<br \/>"
+    							+ "Hotspots requires Macromedia Flash 7.<br \/>"
+    							+ "<a href=\"http://www.macromedia.com/go/getflash/\">Get Flash<\/a>";
+    						document.write(alternateContent);  // insert non-flash content
+    					}
+    					// -->
+    				</script>
+    				</td>
+    				<td valign="top" align="left">'.$answer_list.'</td></tr>
+    				</table>
+    	</td></tr>';
+    	echo $s;
         echo '</table>';
-	}
-	return $nbrAnswers;
+    }
+    return $nbrAnswers;
 }
 
 function get_exercise_track_exercise_info($exe_id) {
-	$TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
-	$TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
-	$exe_id = intval($exe_id);
+    $TBL_EXERCICES         	= Database::get_course_table(TABLE_QUIZ_TEST);
+    $TBL_TRACK_EXERCICES	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $TBL_COURSE             = Database::get_main_table(TABLE_MAIN_COURSE);
+    $exe_id = intval($exe_id);
     $result = array();
     if (!empty($exe_id)) {
-	   $sql_fb_type = "SELECT q.*, tee.*
-	                    FROM $TBL_EXERCICES as q
-	                    INNER JOIN $TBL_TRACK_EXERCICES as tee
-	                    ON q.id=tee.exe_exo_id
-	                    INNER JOIN $TBL_COURSE c
-	                    ON c.code = tee.exe_cours_id
-	                    WHERE tee.exe_id=$exe_id
-	                    AND q.c_id=c.id";
+       $sql_fb_type = "SELECT q.*, tee.*
+                        FROM $TBL_EXERCICES as q
+                        INNER JOIN $TBL_TRACK_EXERCICES as tee
+                        ON q.id=tee.exe_exo_id
+                        INNER JOIN $TBL_COURSE c
+                        ON c.code = tee.exe_cours_id
+                        WHERE tee.exe_id=$exe_id
+                        AND q.c_id=c.id";
 
-	   $res_fb_type = Database::query($sql_fb_type);
-	   $result      = Database::fetch_array($res_fb_type, 'ASSOC');
+       $res_fb_type = Database::query($sql_fb_type);
+       $result      = Database::fetch_array($res_fb_type, 'ASSOC');
     }
-	return $result;
+    return $result;
 }
 
 
@@ -760,47 +760,47 @@ function get_exercise_track_exercise_info($exe_id) {
  */
 function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id = 0) {
     $course_id = api_get_course_int_id();
-	$exercise_id = intval($exercise_id);
-	$TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
-	$sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
-	$result = Database::query($sql);
-	$row	= Database::fetch_array($result, 'ASSOC');
-	if (!empty($row['expired_time']) ) {
-		$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
-		if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
-	        $current_time = time();
-			$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
-			$total_time_allowed = $expired_time + 30;
-			//error_log('expired time converted + 30: '.$total_time_allowed);
-			//error_log('$current_time: '.$current_time);
-	        if ($total_time_allowed < $current_time) {
-	        	return false;
-	        }
-	        return true;
-		} else {
-			return false;
-		}
-	} else {
-		return true;
-	}
+    $exercise_id = intval($exercise_id);
+    $TBL_EXERCICES =  Database::get_course_table(TABLE_QUIZ_TEST);
+    $sql 	= "SELECT expired_time FROM $TBL_EXERCICES WHERE c_id = $course_id AND id = $exercise_id";
+    $result = Database::query($sql);
+    $row	= Database::fetch_array($result, 'ASSOC');
+    if (!empty($row['expired_time']) ) {
+    	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
+    	if (isset($_SESSION['expired_time'][$current_expired_time_key])) {
+            $current_time = time();
+    		$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
+    		$total_time_allowed = $expired_time + 30;
+    		//error_log('expired time converted + 30: '.$total_time_allowed);
+    		//error_log('$current_time: '.$current_time);
+            if ($total_time_allowed < $current_time) {
+            	return false;
+            }
+            return true;
+    	} else {
+    		return false;
+    	}
+    } else {
+    	return true;
+    }
 }
 
 /**
-	Deletes the time control token
+    Deletes the time control token
 */
 function exercise_time_control_delete($exercise_id,  $lp_id = 0 , $lp_item_id = 0) {
-	$current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
-	unset($_SESSION['expired_time'][$current_expired_time_key]);
+    $current_expired_time_key = get_time_control_key($exercise_id, $lp_id, $lp_item_id);
+    unset($_SESSION['expired_time'][$current_expired_time_key]);
 }
 
 /**
-	Generates the time control key
+    Generates the time control key
 */
 function get_time_control_key($exercise_id, $lp_id = 0, $lp_item_id = 0) {
-	$exercise_id = intval($exercise_id);
+    $exercise_id = intval($exercise_id);
     $lp_id = intval($lp_id);
     $lp_item_id = intval($lp_item_id);
-	return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id().'_'.$lp_id.'_'.$lp_item_id;
+    return api_get_course_int_id().'_'.api_get_session_id().'_'.$exercise_id.'_'.api_get_user_id().'_'.$lp_id.'_'.$lp_item_id;
 }
 
 /**
@@ -878,9 +878,9 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     //@todo replace all this globals
     global $documentPath, $filter;
 
-	if (empty($extra_where_conditions)) {
-		$extra_where_conditions = "1 = 1 ";
-	}
+    if (empty($extra_where_conditions)) {
+    	$extra_where_conditions = "1 = 1 ";
+    }
 
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
@@ -889,7 +889,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
-	$TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
+    $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
 
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
@@ -926,8 +926,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
             //$exercise_where_query = ' te.exe_exo_id = ce.id AND ';
         }
 
-		$sqlFromOption                      = "";
-		$sqlWhereOption                     = "";           // for hpsql
+    	$sqlFromOption                      = "";
+    	$sqlWhereOption                     = "";           // for hpsql
 
         //@todo fix to work with COURSE_RELATION_TYPE_RRHH in both queries
 
@@ -1048,7 +1048,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
-					AND $where_condition
+    				AND $where_condition
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
@@ -1206,16 +1206,16 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     }
 
                     if ($is_allowedToEdit) {
-						$results[$i]['status']  =  $revised;
-						$results[$i]['score']   =  $score;
+    					$results[$i]['status']  =  $revised;
+    					$results[$i]['score']   =  $score;
                         $results[$i]['lp']      =  $lp_name;
-						$results[$i]['actions'] =  $actions;
-						$list_info[] = $results[$i];
+    					$results[$i]['actions'] =  $actions;
+    					$list_info[] = $results[$i];
                     } else {
                         $results[$i]['status']  =  $revised;
-						$results[$i]['score']   =  $score;
+    					$results[$i]['score']   =  $score;
                         $results[$i]['actions'] =  $actions;
-						$list_info[] = $results[$i];
+    					$list_info[] = $results[$i];
                     }
                 }
             }
@@ -1383,8 +1383,8 @@ function convert_score($score, $weight) {
  * @return  array   array with exercise data
  */
 function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false) {
-	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-	$course_id = api_get_course_int_id();
+    $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+    $course_id = api_get_course_int_id();
 
     if (!empty($course_info) && !empty($course_info['real_id'])) {
     	$course_id = $course_info['real_id'];
@@ -1660,20 +1660,20 @@ function get_average_score_by_course($course_code, $session_id) {
 }
 
 function get_average_score_by_course_by_user($user_id, $course_code, $session_id) {
-	$user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id);
-	$avg_score = 0;
-	if (!empty($user_results)) {
-		foreach($user_results as $result) {
-			if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
-				$score = $result['exe_result']/$result['exe_weighting'];
-				$avg_score +=$score;
-			}
-		}
-		//We asume that all exe_weighting
-		//$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
-		$avg_score = ($avg_score / count($user_results));
-	}
-	return $avg_score;
+    $user_results = get_all_exercise_results_by_user($user_id, $course_code, $session_id);
+    $avg_score = 0;
+    if (!empty($user_results)) {
+    	foreach($user_results as $result) {
+    		if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
+    			$score = $result['exe_result']/$result['exe_weighting'];
+    			$avg_score +=$score;
+    		}
+    	}
+    	//We asume that all exe_weighting
+    	//$avg_score = show_score( $avg_score / count($user_results) , $result['exe_weighting']);
+    	$avg_score = ($avg_score / count($user_results));
+    }
+    return $avg_score;
 }
 
 
@@ -1707,16 +1707,16 @@ function get_best_average_score_by_exercise($exercise_id, $course_code, $session
 }
 
 function get_exercises_to_be_taken($course_code, $session_id) {
-	$course_info = api_get_course_info($course_code);
-	$exercises = get_all_exercises($course_info, $session_id);
-	$result = array();
-	$now = time() + 15*24*60*60;
-	foreach($exercises as $exercise_item) {
-		if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && $exercise_item['end_time'] != '0000-00-00 00:00:00' && api_strtotime($exercise_item['end_time'], 'UTC') < $now) {
-			$result[] = $exercise_item;
-		}
-	}
-	return $result;
+    $course_info = api_get_course_info($course_code);
+    $exercises = get_all_exercises($course_info, $session_id);
+    $result = array();
+    $now = time() + 15*24*60*60;
+    foreach($exercises as $exercise_item) {
+    	if (isset($exercise_item['end_time'])  && !empty($exercise_item['end_time']) && $exercise_item['end_time'] != '0000-00-00 00:00:00' && api_strtotime($exercise_item['end_time'], 'UTC') < $now) {
+    		$result[] = $exercise_item;
+    	}
+    }
+    return $result;
 }
 
 /**
@@ -1728,102 +1728,102 @@ function get_exercises_to_be_taken($course_code, $session_id) {
  *
  * */
 function get_student_stats_by_question($question_id,  $exercise_id, $course_code, $session_id) {
-	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-	$question_id 		= intval($question_id);
-	$exercise_id 		= intval($exercise_id);
-	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
+    $question_id 		= intval($question_id);
+    $exercise_id 		= intval($exercise_id);
+    $course_code 		= Database::escape_string($course_code);
+    $session_id 		= intval($session_id);
 
-	$sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
-			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
-					e.session_id 	= $session_id AND
-					question_id 	= $question_id AND status = '' LIMIT 1";
-	$result = Database::query($sql);
-	$return = array();
-	if ($result) {
-		$return = Database::fetch_array($result, 'ASSOC');
+    $sql = "SELECT MAX(marks) as max , MIN(marks) as min, AVG(marks) as average
+    		FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+    		WHERE 	exe_exo_id 		= $exercise_id AND
+    				course_code 	= '$course_code' AND
+    				e.session_id 	= $session_id AND
+    				question_id 	= $question_id AND status = '' LIMIT 1";
+    $result = Database::query($sql);
+    $return = array();
+    if ($result) {
+    	$return = Database::fetch_array($result, 'ASSOC');
 
-	}
-	return $return;
+    }
+    return $return;
 }
 
 function get_number_students_question_with_answer_count($question_id, $exercise_id, $course_code, $session_id) {
-	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-	$question_id 		= intval($question_id);
-	$exercise_id 		= intval($exercise_id);
-	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
+    $question_id 		= intval($question_id);
+    $exercise_id 		= intval($exercise_id);
+    $course_code 		= Database::escape_string($course_code);
+    $session_id 		= intval($session_id);
 
 
-	$sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
+    $sql = "SELECT DISTINCT exe_user_id
+    		FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
                 ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
-			WHERE 	exe_exo_id 		= $exercise_id AND
-					a.course_code 	= '$course_code' AND
-					e.session_id 	= $session_id AND
-					question_id 	= $question_id AND
+    		WHERE 	exe_exo_id 		= $exercise_id AND
+    				a.course_code 	= '$course_code' AND
+    				e.session_id 	= $session_id AND
+    				question_id 	= $question_id AND
                     answer          <> '0' AND
                     cu.status       = ".STUDENT." AND
                     relation_type  <> 2 AND
                     e.status        = ''";
-	$result = Database::query($sql);
-	$return = 0;
-	if ($result) {
-		$return = Database::num_rows($result);
-	}
-	return $return;
+    $result = Database::query($sql);
+    $return = 0;
+    if ($result) {
+    	$return = Database::num_rows($result);
+    }
+    return $return;
 }
 
 function get_number_students_answer_hotspot_count($answer_id, $question_id,  $exercise_id, $course_code, $session_id) {
-	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$track_hotspot		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_hotspot		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-	$question_id 		= intval($question_id);
+    $question_id 		= intval($question_id);
     $answer_id          = intval($answer_id);
-	$exercise_id 		= intval($exercise_id);
-	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
+    $exercise_id 		= intval($exercise_id);
+    $course_code 		= Database::escape_string($course_code);
+    $session_id 		= intval($session_id);
 
-	$sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_hotspot a ON (a.hotspot_exe_id = e.exe_id) INNER JOIN $course_user cu
+    $sql = "SELECT DISTINCT exe_user_id
+    		FROM $track_exercises e INNER JOIN $track_hotspot a ON (a.hotspot_exe_id = e.exe_id) INNER JOIN $course_user cu
                 ON cu.course_code = a.hotspot_course_code AND cu.user_id  = exe_user_id
-			WHERE 	exe_exo_id              = $exercise_id AND
-					a.hotspot_course_code 	= '$course_code' AND
-					e.session_id            = $session_id AND
+    		WHERE 	exe_exo_id              = $exercise_id AND
+    				a.hotspot_course_code 	= '$course_code' AND
+    				e.session_id            = $session_id AND
                     hotspot_answer_id       = $answer_id AND
-					hotspot_question_id     = $question_id AND
+    				hotspot_question_id     = $question_id AND
                     cu.status               = ".STUDENT." AND
                     hotspot_correct         =  1 AND
                     relation_type           <> 2 AND
                     e.status                = ''";
 
-	$result = Database::query($sql);
-	$return = 0;
-	if ($result) {
-		$return = Database::num_rows($result);
-	}
-	return $return;
+    $result = Database::query($sql);
+    $return = 0;
+    if ($result) {
+    	$return = Database::num_rows($result);
+    }
+    return $return;
 }
 
 
 function get_number_students_answer_count($answer_id, $question_id, $exercise_id, $course_code, $session_id, $question_type = null, $correct_answer = null, $current_answer = null) {
-	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-	$question_id 		= intval($question_id);
+    $question_id 		= intval($question_id);
     $answer_id          = intval($answer_id);
-	$exercise_id 		= intval($exercise_id);
-	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
+    $exercise_id 		= intval($exercise_id);
+    $course_code 		= Database::escape_string($course_code);
+    $session_id 		= intval($session_id);
 
     switch ($question_type) {
         case FILL_IN_BLANKS:
@@ -1836,21 +1836,21 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
             $select_condition = " DISTINCT exe_user_id ";
     }
 
-	$sql = "SELECT $select_condition
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
+    $sql = "SELECT $select_condition
+    		FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id) INNER JOIN $course_user cu
                 ON cu.course_code = a.course_code AND cu.user_id  = exe_user_id
-			WHERE 	exe_exo_id 		= $exercise_id AND
-					a.course_code 	= '$course_code' AND
-					e.session_id 	= $session_id AND
+    		WHERE 	exe_exo_id 		= $exercise_id AND
+    				a.course_code 	= '$course_code' AND
+    				e.session_id 	= $session_id AND
                     $answer_condition
-					question_id 	= $question_id AND
+    				question_id 	= $question_id AND
                     cu.status        = ".STUDENT." AND
                     relation_type <> 2 AND
                     e.status = ''";
     //var_dump($sql);
-	$result = Database::query($sql);
-	$return = 0;
-	if ($result) {
+    $result = Database::query($sql);
+    $return = 0;
+    if ($result) {
         $good_answers = 0;
         switch ($question_type) {
             case FILL_IN_BLANKS:
@@ -1866,8 +1866,8 @@ function get_number_students_answer_count($answer_id, $question_id, $exercise_id
             default:
                 $return = Database::num_rows($result);
         }
-	}
-	return $return;
+    }
+    return $return;
 }
 
 
@@ -1987,26 +1987,26 @@ function check_fill_in_blanks($answer, $user_answer) {
 
 
 function get_number_students_finish_exercise($exercise_id, $course_code, $session_id) {
-	$track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-	$track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+    $track_exercises	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+    $track_attempt		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
     $exercise_id 		= intval($exercise_id);
-	$course_code 		= Database::escape_string($course_code);
-	$session_id 		= intval($session_id);
+    $course_code 		= Database::escape_string($course_code);
+    $session_id 		= intval($session_id);
 
-	$sql = "SELECT DISTINCT exe_user_id
-			FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
-			WHERE 	exe_exo_id 		= $exercise_id AND
-					course_code 	= '$course_code' AND
-					e.session_id 	= $session_id AND
-					status = ''";
-	$result = Database::query($sql);
-	$return = 0;
-	if ($result) {
-		$return = Database::num_rows($result);
+    $sql = "SELECT DISTINCT exe_user_id
+    		FROM $track_exercises e INNER JOIN $track_attempt a ON (a.exe_id = e.exe_id)
+    		WHERE 	exe_exo_id 		= $exercise_id AND
+    				course_code 	= '$course_code' AND
+    				e.session_id 	= $session_id AND
+    				status = ''";
+    $result = Database::query($sql);
+    $return = 0;
+    if ($result) {
+    	$return = Database::num_rows($result);
 
-	}
-	return $return;
+    }
+    return $return;
 }
 
 

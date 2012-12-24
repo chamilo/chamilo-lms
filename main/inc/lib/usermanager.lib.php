@@ -270,6 +270,7 @@ class UserManager {
         $table_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $table_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $table_group                  = Database :: get_course_table(TABLE_GROUP_USER);
+        $table_work                   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id FROM $table_course c, $table_course_user cu
@@ -359,6 +360,10 @@ class UserManager {
             //Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
+        // Delete students works
+        $sqlw = "DELETE FROM $table_work WHERE user_id = $user_id";
+        $resw = Database::query($sqlw);
+        unset($sqlw);
         // Add event to system log
         $user_id_manager = api_get_user_id();
         event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);

@@ -351,8 +351,8 @@ if ($is_allowedToEdit || $is_tutor) {
                             'editoptions' => array('value' => $group_parameters)),
                         array('name'=>'duration',       'index'=>'exe_duration',	'width'=>'30',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'start_date',		'index'=>'start_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),
-						array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),
-						array('name'=>'score',			'index'=>'exe_result',	    'width'=>'50',   'align'=>'left', 'search' => 'true'),
+			array('name'=>'exe_date',		'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'true'),
+			array('name'=>'score',			'index'=>'exe_result',	    'width'=>'50',   'align'=>'left', 'search' => 'true'),
                         array('name'=>'status',         'index'=>'revised',			'width'=>'40',   'align'=>'left', 'search' => 'true', 'stype'=>'select',
                               //for the bottom bar
                               'searchoptions' => array(

@@ -4117,10 +4117,11 @@ class TrackingUserLog {
      * @param int User ID
      * @param string Datetime
      * @param bool Whether to return the IP as a link or just as an IP
+     * @param string If defined and return_as_link if true, will be used as the text to be shown as the link
      * @return string IP address (or false on error)
      * @assert (0,0) === false
      */
-    function get_ip_from_user_event($user_id, $event_date, $return_as_link = false) {
+    function get_ip_from_user_event($user_id, $event_date, $return_as_link = false, $body_replace = null) {
         if (empty($user_id) or empty($event_date)) {
             return false;
         }
@@ -4131,7 +4132,7 @@ class TrackingUserLog {
         if ($res_ip !== false && Database::num_rows($res_ip)>0) {
             $row_ip = Database::fetch_row($res_ip);
             if ($return_as_link) {
-                $ip = Display::url($row_ip[1], 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1], array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+                $ip = Display::url((empty($body_replace)?$row_ip[1]:$body_replace), 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1], array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
             } else {
                 $ip = $row_ip[1];
             }

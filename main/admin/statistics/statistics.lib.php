@@ -144,7 +144,6 @@ class Statistics {
         $track_e_default    		= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DEFAULT);
         $table_user 				= Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table	= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $current_url_id 			= api_get_current_access_url_id();
 
         $column          = intval($column);
@@ -208,12 +207,10 @@ class Statistics {
         	}
             if (!empty($row[4])) { //user ID
                 $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[5], array('title' => get_lang('UserInfo')));
-                $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = ".$row[4]." AND login_date < '".$row[5]."' ORDER BY login_date DESC LIMIT 1";
-                $row[4] = get_lang('Unknown');
-                $res_ip = Database::query($sql_ip);
-                if ($res_ip !== false && Database::num_rows($res_ip)>0) {
-                    $row_ip = Database::fetch_row($res_ip);
-                    $row[4] = Display::url($row_ip[1], 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1], array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+             
+                $row[4] = TrackingUserLog::get_ip_from_user_event($row[4],$row[5],true);
+                if (empty($row[4])) {
+                    $row[4] = get_lang('Unknown');
                 }
             }
             $activities[] = $row;

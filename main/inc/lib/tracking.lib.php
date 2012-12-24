@@ -3146,7 +3146,6 @@ class TrackingCourseLog {
     	$table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
     	$table_user = Database :: get_main_table(TABLE_MAIN_USER);
     	$table_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-    	$table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     	$session_id = intval($session_id);
 
@@ -3322,13 +3321,12 @@ class TrackingCourseLog {
                         if (!empty($row['col3'])) {
                             $row['col3'] = Display::url($row['col3'],api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&origin=tracking&uInfo='.$row['user_id']);
                             $row[3] = $row['col3'];
-                            $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = ".$row['user_id']." AND login_date < '".$row['col5']."' ORDER BY login_date DESC LIMIT 1";
-                            $row[4] = get_lang('Unknown');
-                            $res_ip = Database::query($sql_ip);
-                            if ($res_ip !== false && Database::num_rows($res_ip)>0) {
-                                $row_ip = Database::fetch_row($res_ip);
-                                $row[4] = Display::url($row_ip[1],'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+
+                            $ip = TrackingUserLog::get_ip_from_user_event($row['user_id'], $row['col5'], true);
+                            if (empty($ip)) {
+                                $ip = get_lang('Unknown');
                             }
+                            $row[4] = $ip;
                         }
                         
     			$resources[] = $row;
@@ -4113,6 +4111,32 @@ class TrackingUserLog {
                 </tr>
             ";
     	}
+    }
+    /**
+     * Gets the IP of a given user, using the last login before the given date
+     * @param int User ID
+     * @param string Datetime
+     * @param bool Whether to return the IP as a link or just as an IP
+     * @return string IP address (or false on error)
+     * @assert (0,0) === false
+     */
+    function get_ip_from_user_event($user_id, $event_date, $return_as_link = false) {
+        if (empty($user_id) or empty($event_date)) {
+            return false;
+        }
+        $table_login = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql_ip = "SELECT login_date, login_ip FROM $table_login WHERE login_user_id = $user_id AND login_date < '$event_date' ORDER BY login_date DESC LIMIT 1";
+        $ip = '';
+        $res_ip = Database::query($sql_ip);
+        if ($res_ip !== false && Database::num_rows($res_ip)>0) {
+            $row_ip = Database::fetch_row($res_ip);
+            if ($return_as_link) {
+                $ip = Display::url($row_ip[1], 'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1], array('title'=>get_lang('TraceIP'), 'target'=>'_blank'));
+            } else {
+                $ip = $row_ip[1];
+            }
+        }
+        return $ip;
     }
 }
 /**

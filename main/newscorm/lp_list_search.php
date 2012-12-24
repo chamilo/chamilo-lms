@@ -32,7 +32,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $interbreadcrumb[] = array('url' => './index.php', 'name' => get_lang(ucfirst(TOOL_SEARCH)));
-search_widget_prepare(&$htmlHeadXtra);
+search_widget_prepare($htmlHeadXtra);
 Display::display_header(null, 'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {

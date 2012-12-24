@@ -3155,7 +3155,8 @@ class TrackingCourseLog {
                     ref as ref,
                     user.username as col3,
                     insert_date as col5,
-                    visibility as col6
+                    visibility as col6,
+                    user.user_id as user_id
                 FROM $table_item_property track_resource, $table_user user
                 WHERE   track_resource.c_id = $course_id AND
                         track_resource.insert_user_id = user.user_id AND
@@ -3317,6 +3318,10 @@ class TrackingCourseLog {
     				$row2 .= '<br />'.get_lang('Coach').': '.$coach_name;
     			}
     			$row[2] = $row2;
+                        if (!empty($row['col3'])) {
+                            $row['col3'] = Display::url($row['col3'],api_get_path(WEB_CODE_PATH).'user/userInfo.php?'.api_get_cidreq().'&origin=tracking&uInfo='.$row['user_id']);
+                            $row[3] = $row['col3'];
+                        }
     			$resources[] = $row;
     		}
     	}

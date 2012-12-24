@@ -3315,10 +3315,11 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
 /**
  * Displays a combobox so the user can select his/her preferred language.
  * @param string The desired name= value for the select
+ * @param bool Whether we use the JQuery Chozen library or not (in some cases, like the indexing language picker, it can alter the presentation)
  * @return string
  */
 
-function api_get_languages_combo($name = 'language') {
+function api_get_languages_combo($name = 'language', $chozen=true) {
     $ret = '';
     $platformLanguage = api_get_setting('platformLanguage');
 
@@ -3339,7 +3340,7 @@ function api_get_languages_combo($name = 'language') {
     $languages  = $language_list['name'];
     $folder		= $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" class="chzn-select" >';
+    $ret .= '<select name="'.$name.'" id="language_chosen" '.($chozen?'class="chzn-select"':'').' >';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';

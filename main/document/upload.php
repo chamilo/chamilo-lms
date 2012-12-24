@@ -247,9 +247,9 @@ if (api_get_setting('search_enabled') == 'true') {
 	//TODO: include language file
 	$supported_formats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
 	$form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supported_formats.'</div>');
-	$form->addElement('html', '<br /><div class="row">');
+	$form->addElement('html', '<br /><div class="sub-form">');
 	$form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
-	$form->addElement('html', '<div class="formw">'.api_get_languages_combo().'</div>');
+	$form->addElement('html', '<div>'.api_get_languages_combo(null,false).'</div>');
 	$form->addElement('html', '</div><div class="sub-form">');
 	$specific_fields = get_specific_field_list();
 	foreach ($specific_fields as $specific_field) {

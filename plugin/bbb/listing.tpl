@@ -3,7 +3,6 @@
 {% if bbb_status == true %}
   {% if show_join_button == true %}
     <div class ="span12" style="text-align:center">
-        Hohoho
         <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
             {{ 'EnterConference'|get_lang }}
         </a>

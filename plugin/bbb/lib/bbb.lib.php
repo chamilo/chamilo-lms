@@ -231,7 +231,7 @@ class bbb {
 
     /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
-     * @return string
+     * @return array Array of current open meeting rooms
      */
     function get_course_meetings() {
         $pass = $this->get_user_meeting_password();
@@ -246,7 +246,7 @@ class bbb {
             $meeting_bbb['end_url'] = api_get_self().'?action=end&id='.$meeting_db['id'];
 
             if ((string)$meeting_bbb['returncode'] == 'FAILED') {
-                if ($meeting_db['status'] == 1) {
+                if ($meeting_db['status'] == 1 && $this->is_teacher()) {
                     $this->end_meeting($meeting_db['id']);
                 }
             } else {

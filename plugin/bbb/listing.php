@@ -15,7 +15,7 @@ $tpl = new Template($tool_name);
 $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
+$teacher = $bbb->is_teacher();
 
 api_protect_course_script(true);
 $message = null;
@@ -73,7 +73,7 @@ if (!empty($meetings)) {
 }
 $users_online   = $bbb->get_users_online_in_current_room();
 $status         = $bbb->is_server_running();
-$meeting_exists = $bbb->is_meeting_exist(api_get_course_id());
+$meeting_exists = $bbb->meeting_exists(api_get_course_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
     $show_join_button = true;

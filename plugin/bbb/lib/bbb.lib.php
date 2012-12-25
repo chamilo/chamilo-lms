@@ -11,7 +11,7 @@ class bbb {
     var $api;
     var $user_complete_name = null;
     var $protocol = 'http://';
-    var $debug = true;
+    var $debug = false;
     var $logout_url = null;
     var $plugin_enabled = false;
 

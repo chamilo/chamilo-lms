@@ -1,6 +1,7 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton API
+ * This script initiates a videoconference session, calling the BigBlueButton 
+ * API
  * @package chamilo.plugin.bigbluebutton
  */
 /**

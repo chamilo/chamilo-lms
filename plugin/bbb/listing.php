@@ -64,6 +64,8 @@ if ($teacher) {
         case 'unpublish':
             //$result = $bbb->unpublish_meeting($_GET['id']);
             break;
+        default:
+            break;
     }
 }
 

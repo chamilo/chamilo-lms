@@ -36,6 +36,10 @@ if ($bbb->plugin_enabled) {
                     $url = $bbb->create_meeting($meeting_params);
                     header('location: '.$url);
                     exit;
+                } else {
+                    $url = 'listing.php';
+                    header('location: '.$url);
+                    exit;
                 }
             }
         } else {

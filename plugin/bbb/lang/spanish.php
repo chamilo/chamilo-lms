@@ -6,6 +6,7 @@ $strings['plugin_comment']      = "Añade una sala de videoconferencia en los cu
 $strings['Videoconference']     = "Videoconferencia";
 $strings['MeetingOpened']       = "Sala abierta";
 $strings['MeetingClosed']       = "Sala cerrada";
+$strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.";
 $strings['CloseMeeting']        = "Cerrar sala";
 
 $strings['VideoConferenceXCourseX']             = "Videoconferencia #%s, curso %s";

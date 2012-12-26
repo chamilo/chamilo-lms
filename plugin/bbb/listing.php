@@ -56,7 +56,7 @@ if ($teacher) {
             break;
         case 'end':
             $bbb->end_meeting($_GET['id']);
-            $message = Display::return_message(get_lang('MeetingClosed'), 'success');
+            $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
             break;
         case 'publish':
             //$result = $bbb->publish_meeting($_GET['id']);

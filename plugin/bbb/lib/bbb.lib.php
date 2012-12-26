@@ -267,7 +267,7 @@ class bbb {
                     $count = 1;
                     if (isset($records['message']) && !empty($records['message'])) {
                         if ($records['messageKey'] == 'noRecordings') {
-                            //$record_array[] = get_lang('ThereAreNotRecordingsForTheMeetings');
+                            $record_array[] = get_lang('NoRecording');
                         } else {
                             //$record_array[] = $records['message'];
                         }

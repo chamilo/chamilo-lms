@@ -6,6 +6,7 @@ $strings['plugin_comment']      = "Ajoutez un espace de vidéoconférences aux c
 $strings['Videoconference']     = "Vidéoconférence";
 $strings['MeetingOpened']       = "Session ouverte";
 $strings['MeetingClosed']       = "Session fermée";
+$strings['MeetingClosedComment'] = "Si vous avez demandé l'enregistrement des sessions de conférence, cet enregistrement apparaîtra dans la liste ci-dessous dans quelques instants.";
 $strings['CloseMeeting']        = "Fermer la session";
 
 $strings['VideoConferenceXCourseX']             = "Vidéoconférence #%s, cours %s";

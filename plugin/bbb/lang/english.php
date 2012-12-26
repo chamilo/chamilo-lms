@@ -24,7 +24,7 @@ $strings['GoToTheVideoConference']   = "Go to the videoconference";
 $strings['Records']             = "Recording";
 $strings['Meeting']             = "Meeting";
 
-$strings['ViewRecord']          = "View record";
+$strings['ViewRecord']          = "View recording";
 $strings['CopyToLinkTool']      = "Copy to link tool";
 
 $strings['EnterConference']     = "Enter the videoconference";

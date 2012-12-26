@@ -39,8 +39,15 @@ $langLocalFile = "انتخاب فایل از رایانه من";
 $langServerFile = "انتخاب فایل از سرور";
 $langNoBackupsAvailable = "هیچ فایل پشتیبانی وجود ندارد";
 $langNoDestinationCoursesAvailable = "هیچ درس مقصدی وجود ندارد";
-$langBackup = "ضبط";
+$langBackup = "نسخه پشتیبان";
 $langImportBackupInfo = "وارد کردن یک درس : میتوانید یک فایل پشتیبانی را از رایانه خود به محیط آموزشی  وارد کنید. همچنین میتوانید یکی از فایل های موجود در روی سرور را به محیط آموزشی  وارد کنید";
 $langCreateBackupInfo = "ایجاد یک کپی پشتیبانی از این درس : میتوانید قسمت هایی از این درس را که میل دارید کپی کنید انتخاب نمایید";
 $ToolIntro = "مقدمه ابزار آموزشی";
+$UploadError = "آپلود با مشکل مواجه شد. لطفا حداکثر حجم آپلود و حقوق دسترسی پوشه را چک کنید.";
+$DocumentsWillBeAddedToo = "اسناد هم اضافه خواهد شد";
+$ToExportLearnpathWithQuizYouHaveToSelectQuiz = "اگر شما قصد صادر کردن یک درس حاوی آزمون را دارید، می بایست مطمئن شوید که  آزمون مربوطه بهنگام صدور انتخاب شده باشد، شما باید در فهرست آزمون ها موارد مورد نظر را نتخاب نمایید.";
+$ArchivesDirectoryNotWriteableContactAdmin = "پوشه آرشیو که توسط این ابزار مورد استفاده است، قابل نوشتن نیست. لطفا با مدیر سیستم تماس بگیرید.";
+$DestinationCourse = "درس مقصد";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "اگر مسیر آموزشی شما دارای فایل های صوتی می باشد، شما باید آنها را از اسناد انتخاب کنید";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "اگر منابع شما نیاز به فایل های چند رسانه ای دارد انتخاب آنها را فراموش نکنید";
 ?>

@@ -22,8 +22,6 @@
  */
 
  //@todo will be removed before a stable release
-//require '/var/www/chamilo11/tests/xhprof/header.php';
-
 $mtime = microtime();
 $mtime = explode(" ",$mtime);
 $mtime = $mtime[1] + $mtime[0];
@@ -130,8 +128,7 @@ require_once __DIR__.'/../../resources/config/dev.php';
 /*
 $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
-));
-*/
+));*/
 
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
@@ -290,7 +287,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
     $response = $app['template']->render_layout('error.tpl');
     return new Response($response);
 });
- * 
+ *
  */
 
 /*

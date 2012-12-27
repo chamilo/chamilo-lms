@@ -3253,8 +3253,11 @@ class Exercise {
                                 'weight'        => $questionWeighting,
                                 'extra'         => $extra_data,
                                 'open_question' => $arrques,
-                                'open_answer'   => $arrans
+                                'open_answer'   => $arrans,
+                                'answer_type'   => $answerType
         );
+
+
 		return $return_array;
 	} //End function
 
@@ -3295,10 +3298,11 @@ class Exercise {
                     </table>';
             $open_question_list = null;
 			foreach ($question_list_answers as $item) {
-                $question   = $item['question'];
-                $answer     = $item['answer'];
+                $question    = $item['question'];
+                $answer      = $item['answer'];
+                $answer_type = $item['answer_type'];
 
-                if (!empty($question) && !empty($answer)) {
+                if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER ) {
                     $open_question_list.='<tr>
                             <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
                             <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
@@ -3330,6 +3334,91 @@ class Exercise {
                 $msg1 = str_replace("#url#", $url_email, $msg);
                 $mail_content = $msg1;
                 $subject = get_lang('OpenQuestionsAttempted');
+
+                $teachers = array();
+                if (api_get_session_id()) {
+                    $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                } else {
+                    $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                }
+
+                if (!empty($teachers)) {
+                    foreach ($teachers as $user_id => $teacher_data) {
+                        MessageManager::send_message_simple($user_id, $subject, $mail_content);
+                    }
+                }
+            }
+	}
+
+    function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id) {
+		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
+			return null;
+		}
+		// Email configuration settings
+		$coursecode     = api_get_course_id();
+		$course_info    = api_get_course_info(api_get_course_id());
+
+		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
+
+		$msg = '<p>'.get_lang('OralQuestionsAttempted').' :</p>
+                    <p>'.get_lang('AttemptDetails').' : </p>
+                    <table class="data_table">
+                        <tr>
+                            <td><h3>'.get_lang('CourseName').'</h3></td>
+                            <td><h3>#course#</h3></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</span></td>
+                            <td>#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>#mail#</td>
+                        </tr>
+                    </table>';
+            $oral_question_list = null;
+			foreach ($question_list_answers as $item) {
+                $question    = $item['question'];
+                $answer      = $item['answer'];
+                $answer_type = $item['answer_type'];
+
+                if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+                    $oral_question_list.='<tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                        </tr>
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                        </tr>';
+                }
+			}
+
+            if (!empty($oral_question_list)) {
+                $msg .=  '<p><br />'.get_lang('OralQuestionsAttemptedAre').' :</p>
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+                $msg .= $oral_question_list;
+                $msg.='</table><br />';
+
+
+                $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+                $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
+                $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
+                $msg    = str_replace("#mail#",        $user_info['email'],$msg1);
+                $msg    = str_replace("#course#",      $course_info['name'],$msg1);
+
+                if ($origin != 'learnpath') {
+                    $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                            <a href="#url#">#url#</a>';
+                }
+                $msg1 = str_replace("#url#", $url_email, $msg);
+                $mail_content = $msg1;
+                $subject = get_lang('OralQuestionsAttempted');
 
                 $teachers = array();
                 if (api_get_session_id()) {

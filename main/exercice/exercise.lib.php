@@ -2144,8 +2144,10 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             $question_list_answers[] = array(
                 'question' => $result['open_question'],
-                'answer' => $result['open_answer']
+                'answer' => $result['open_answer'],
+                'answer_type' => $result['answer_type']
             );
+
 
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];
@@ -2255,6 +2257,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         // Send notification ..
         if (!api_is_allowed_to_edit(null,true)) {
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
+            $objExercise->send_notification_for_oral_questions($question_list_answers, $origin, $exe_id);
         }
     }
 }

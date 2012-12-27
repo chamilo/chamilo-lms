@@ -2,9 +2,10 @@
 
 require_once '../inc/global.inc.php';
 
+/*
 if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
-}
+}*/
 
 $survey_id = isset($_REQUEST['l']) ? intval($_REQUEST['l']) : null;
 

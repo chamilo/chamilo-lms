@@ -9,7 +9,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 
 $survey_id = isset($_REQUEST['survey_id']) ? intval($_REQUEST['survey_id']) : null;
 
-if (empty($survey_id)) {
+if (empty($suvrey_id)) {
     api_not_allowed(true);
 }
 $survey_data = survey_manager::get_survey($survey_id);
@@ -30,5 +30,10 @@ echo '<div class="row">';
     echo '</div>';
     echo '<div class="span12">';
     echo get_lang('GenerateSurveyLinkExplanation');
+
+    echo '<pre>';
+    echo  $link;
+    echo '</pre>';
+
     echo '</div>';
 echo '</div>';

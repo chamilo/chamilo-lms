@@ -106,7 +106,7 @@ foreach ($fileList as $file) {
     if ((!preg_match("/$deleted_by_Chamilo_file/", $file['name']) ||
         !preg_match("/$deleted_by_Chamilo_folder/", $file['path'])) ||
         preg_match("/$css_folder_Chamilo/", $file['path']) ||
-        preg_match("/$hotpotatoes_folder_Chamilo", $file['path']) ||
+        preg_match("/$hotpotatoes_folder_Chamilo/", $file['path']) ||
         preg_match("/$chat_files_Chamilo/", $file['path']) ||
         preg_match("/$certificates_Chamilo/", $file['path']) ||
         $hide_doc_group ||

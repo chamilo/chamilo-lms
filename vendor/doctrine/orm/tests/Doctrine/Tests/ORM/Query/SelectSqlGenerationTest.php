@@ -1261,6 +1261,29 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         );
     }
 
+    public function testIdentityFunctionWithCompositePrimaryKey()
+    {
+        $this->assertSqlGeneration(
+            "SELECT IDENTITY(p.poi, 'long') AS long FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
+            "SELECT n0_.poi_long AS sclr0 FROM navigation_photos n0_"
+        );
+
+        $this->assertSqlGeneration(
+            "SELECT IDENTITY(p.poi, 'lat') AS lat FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
+            "SELECT n0_.poi_lat AS sclr0 FROM navigation_photos n0_"
+        );
+
+        $this->assertSqlGeneration(
+            "SELECT IDENTITY(p.poi, 'long') AS long, IDENTITY(p.poi, 'lat') AS lat FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
+            "SELECT n0_.poi_long AS sclr0, n0_.poi_lat AS sclr1 FROM navigation_photos n0_"
+        );
+
+        $this->assertInvalidSqlGeneration(
+            "SELECT IDENTITY(p.poi, 'invalid') AS invalid FROM Doctrine\Tests\Models\Navigation\NavPhotos p",
+            "Doctrine\ORM\Query\QueryException"
+        );
+    }
+
     /**
      * @group DDC-1339
      */
@@ -1771,6 +1794,27 @@ class SelectSqlGenerationTest extends \Doctrine\Tests\OrmTestCase
         $this->assertSqlGeneration(
             'SELECT g, p FROM Doctrine\Tests\Models\Quote\Group g JOIN g.parent p',
             'SELECT q0_."group-id" AS groupid0, q0_."group-name" AS groupname1, q1_."group-id" AS groupid2, q1_."group-name" AS groupname3 FROM "quote-group" q0_ INNER JOIN "quote-group" q1_ ON q0_."parent-id" = q1_."group-id"'
+        );
+    }
+
+   /**
+    * @group DDC-2208
+    */
+    public function testCaseThenParameterArithmeticExpression()
+    {
+        $this->assertSqlGeneration(
+            'SELECT SUM(CASE WHEN e.salary <= :value THEN e.salary - :value WHEN e.salary >= :value THEN :value - e.salary ELSE 0 END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
+            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE 0 END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
+        );
+
+        $this->assertSqlGeneration(
+            'SELECT SUM(CASE WHEN e.salary <= :value THEN e.salary - :value WHEN e.salary >= :value THEN :value - e.salary ELSE e.salary + 0 END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
+            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE c0_.salary + 0 END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
+        );
+
+        $this->assertSqlGeneration(
+            'SELECT SUM(CASE WHEN e.salary <= :value THEN (e.salary - :value) WHEN e.salary >= :value THEN (:value - e.salary) ELSE (e.salary + :value) END) FROM Doctrine\Tests\Models\Company\CompanyEmployee e',
+            'SELECT SUM(CASE WHEN c0_.salary <= ? THEN c0_.salary - ? WHEN c0_.salary >= ? THEN ? - c0_.salary ELSE c0_.salary + ? END) AS sclr0 FROM company_employees c0_ INNER JOIN company_persons c1_ ON c0_.id = c1_.id'
         );
     }
 }

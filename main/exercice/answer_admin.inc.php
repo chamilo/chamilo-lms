@@ -254,7 +254,7 @@ if ($submitAnswers || $buttonBack) {
 
                 // we save the answer because it will be modified
                 //$temp=$reponse;
-                $temp = text_filter($reponse);
+                $temp = $reponse;
 
                 /* // Deprecated code.
                   // 1. find everything between the [tex] and [/tex] tags

@@ -76,11 +76,11 @@ class ScormQuestion extends Question
                 $this->answer->questionJSId = $this->js_id;
 				break;
             case HOT_SPOT_ORDER:
-				$this->answer = new ScormAnswerHotspot($this->id); 
+				$this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			case HOT_SPOT_DELINEATION:
-				$this->answer = new ScormAnswerHotspot($this->id); 
+				$this->answer = new ScormAnswerHotspot($this->id);
                 $this->answer->questionJSId = $this->js_id;
 				break;
 			default :
@@ -124,12 +124,12 @@ class ScormQuestion extends Question
 		$cols = 2;
 		$s='<tr>' .
 			'<td colspan="'.$cols.'" id="question_'.$this->id.'_title" valign="middle" style="background-color:#d6d6d6;">' . "\n" .
-		   	text_filter($title).
+		   	$title.
 		   	'</td>' . "\n" .
 		   	'</tr>' . "\n" .
 		   	'<tr>' . "\n" .
 		   	'<td valign="top" colspan="'.$cols.'">' . "\n" .
-		   	'<i>'.text_filter($description).'</i>' . "\n" .
+		   	'<i>'.$description.'</i>' . "\n" .
 		   	'</td>' . "\n" .
 		   	'</tr>' . "\n";
 		return $s;
@@ -442,12 +442,9 @@ class ScormAnswerMatching extends Answer
 				// options (A, B, C, ...) that will be put into the list-box
 				$Select[$answerId]['Lettre']=$cpt1;
 				// answers that will be shown at the right side
-				$answer = text_filter($answer);
-				$Select[$answerId]['Reponse']=$answer;
+				$Select[$answerId]['Reponse'] = $answer;
 				$cpt1++;
-			}
-			else
-			{
+			} else {
 				$s.='<tr>'."\n";
 				$s.='<td width="40%" valign="top">'."\n".'<b>'.$cpt2.'</b>.&nbsp;'.$answer."\n</td>\n";
 				$s.='<td width="20%" align="center">&nbsp;&nbsp;<select name="'.$identifier.$cpt2.'" id="'.$identifier.$cpt2.'">';

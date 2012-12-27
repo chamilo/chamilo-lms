@@ -2736,7 +2736,7 @@ class Exercise {
 						} elseif($answerType==MATCHING) {
 							if ($origin != 'learnpath') {
 								echo '<tr>';
-								echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
+								echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
 								echo '</tr>';
 							}
 						}

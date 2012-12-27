@@ -2660,7 +2660,7 @@ class CourseManager {
                 $data .= $description->title;
                 $data .= '</div>';
                 $data .= '<div class="sectioncomment">';
-                $data .= text_filter($description->content);
+                $data .= $description->content;
                 $data .= '</div>';
             }
         } else {

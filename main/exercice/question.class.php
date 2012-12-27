@@ -189,7 +189,6 @@ abstract class Question
 	 * @return - string - question title
 	 */
 	function selectTitle() {
-		$this->question=text_filter($this->question);
 		return $this->question;
 	}
 

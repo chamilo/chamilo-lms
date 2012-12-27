@@ -354,7 +354,7 @@ function display_monthcalendar($month, $year) {
 					foreach ($data[$curday] as $key=>$agenda_item) {
 						foreach ($agenda_item as $key=>$value) {
 						    $start_time = api_convert_and_format_date($value['start_date'], TIME_NO_SEC_FORMAT);
-                            $end_time   = api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT);                                                         
+                            $end_time   = api_convert_and_format_date($value['end_date'], TIME_NO_SEC_FORMAT);
 							$dayheader .= '<br /><b>'.$start_time.' - '.$end_time.'</b>';
 							$dayheader .= ' - ';
 							$dayheader .= $value['title'];
@@ -469,7 +469,7 @@ function display_student_links() {
 		} else {
 			//echo '<a href="'.api_get_self().'?sort=desc&amp;origin='.Security::remove_XSS($_GET['origin']).'"> '.Display::return_icon('calendar_inverse.png',get_lang('AgendaSortChronologicallyDown'),'',ICON_SIZE_MEDIUM).'</a>';
 		}
-	} else {		
+	} else {
 		echo '<a href="'.api_get_self().'?action=view&amp;view=list">'.Display::return_icon('week.png', get_lang('ListView'),'',ICON_SIZE_MEDIUM).'</a>';
 
 	}
@@ -545,10 +545,10 @@ function save_edit_agenda_item($id, $title, $content, $start_date, $end_date) {
 
 	$start_date = api_get_utc_datetime($start_date);
     $start_date = Database::escape_string($start_date);
-    
+
     $end_date  = api_get_utc_datetime($end_date);
     $end_date   = Database::escape_string($end_date);
-    
+
 
 	// store the modifications in the table calendar_event
 	$sql = "UPDATE ".$TABLEAGENDA."
@@ -706,7 +706,7 @@ function display_agenda_items() {
 	    echo '<table class="data_table">';
 
         $myrow["start_date"] = api_get_local_time($myrow["start_date"]);
-        
+
         if ($month_bar != api_format_date($myrow["start_date"], "%m%Y")) {
             $month_bar = api_format_date($myrow["start_date"], "%m%Y");
 			echo "<tr><td class=\"agenda_month_divider\" colspan=\"3\" valign=\"top\">".
@@ -768,7 +768,7 @@ function display_agenda_items() {
 
         // display: the title
     	echo "<tr class='row_odd'>";
-    	echo "<td>".get_lang("StartTimeWindow").": ";    	
+    	echo "<td>".get_lang("StartTimeWindow").": ";
     	echo api_format_date($myrow["start_date"], DATE_TIME_FORMAT_LONG);
     	echo "</td>";
     	echo "<td>";
@@ -778,7 +778,7 @@ function display_agenda_items() {
     		echo api_format_date($myrow["end_date"], DATE_TIME_FORMAT_LONG);
     	}
     	echo "</td>";
-    	
+
     	if (!$is_repeated && (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
     		if( ! (api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id'] ) ) )
 			{ // a coach can only delete an element belonging to his session
@@ -816,7 +816,6 @@ function display_agenda_items() {
          --------------------------------------------------*/
     	$content = $myrow['content'];
     	$content = make_clickable($content);
-    	$content = text_filter($content);
     	echo "<tr class='row_even'>";
     	echo "<td colspan='3'>";
 
@@ -1017,7 +1016,6 @@ function display_one_agenda_item($agenda_id)
 
 	$content = $myrow['content'];
 	$content = make_clickable($content);
-	$content = text_filter($content);
 	//echo "<tr><td class=\"".$text_style."\" colspan='2'>";
 	//echo $content;
 	//echo "</td></tr>";
@@ -1219,22 +1217,22 @@ function show_add_form($id = '') {
 
 
 	// if the id is set then we are editing an agenda item
-	
+
 	if (is_int($id)) {
 		//echo "before get_agenda_item".$_SESSION['allow_individual_calendar'];
 		$item_2_edit=get_agenda_item($id);
-        
+
 		$title	= $item_2_edit['title'];
 		$content= $item_2_edit['content'];
-		
+
 		// start date
         $item_2_edit['start_date'] = api_get_local_time($item_2_edit['start_date']);
-        
+
 		// start date
 		list($datepart, $timepart) = split(" ", $item_2_edit['start_date']);
 		list($year, $month, $day) = explode("-", $datepart);
 		list($hours, $minutes, $seconds) = explode(":", $timepart);
-		
+
 		// end date
         $item_2_edit['end_date'] = api_get_local_time($item_2_edit['end_date']);
 		list($datepart, $timepart) = split(" ", $item_2_edit['end_date']);
@@ -1249,7 +1247,7 @@ function show_add_form($id = '') {
 	$title=stripslashes($title);
 	// we start a completely new item, we do not come from the resource linker
 	if ($_GET['originalresource']!=="no" and $_GET['action']=="add") {
-		$_SESSION["formelements"]=null;		
+		$_SESSION["formelements"]=null;
 	}
 ?>
 
@@ -2800,12 +2798,12 @@ function agenda_add_item($title, $content, $db_start_date, $db_end_date) {
     // some filtering of the input data
     $title      = Database::escape_string($title); // no html allowed in the title
     $content    = Database::escape_string($content);
-    
+
     $db_start_date = api_get_utc_datetime($db_start_date);
     $start_date = Database::escape_string($db_start_date);
-    
+
     $db_end_date = api_get_utc_datetime($db_end_date);
-    $end_date   = Database::escape_string($db_end_date);       
+    $end_date   = Database::escape_string($db_end_date);
 
     // check if exists in calendar_event table
     $sql = "SELECT * FROM $t_agenda WHERE title='$title' AND content = '$content' AND start_date = '$start_date' AND end_date = '$end_date' ";

@@ -1,5 +1,7 @@
 <?php
 
+/* For licensing terms, see /license.txt */
+
 $language_file = 'survey';
 require_once '../inc/global.inc.php';
 

@@ -1626,10 +1626,10 @@ class Exercise {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
 					if ($this->review_answers) {
 						$label = get_lang('ReviewQuestions');
-						$class = 'btn btn-primary';
+						$class = 'btn btn-success';
 					} else {
 						$label = get_lang('EndTest');
-						$class = 'btn btn-success';
+						$class = 'btn btn-warning';
 					}
 				} else {
 					$label = get_lang('NextQuestion');
@@ -1654,10 +1654,10 @@ class Exercise {
 				} else {
 					if ($this->review_answers) {
 						$all_label = get_lang('ReviewQuestions');
-						$class = 'btn btn-primary';
+						$class = 'btn btn-success';
 					} else {
 						$all_label = get_lang('EndTest');
-						$class = 'btn btn-success';
+						$class = 'btn btn-warning';
 					}
 					$all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
 					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';

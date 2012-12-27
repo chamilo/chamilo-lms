@@ -245,7 +245,7 @@ class UserManager {
 
     /**
      * Delete a user from the platform, and all its belongings. This is a
-     * very dangerous function that should only be accessible by 
+     * very dangerous function that should only be accessible by
      * super-admins. Other roles should only be able to disable a user,
      * which removes access to the platform but doesn't delete anything.
      * @param int The ID of th user to be deleted
@@ -282,8 +282,9 @@ class UserManager {
         }
 
         // Unsubscribe user from all classes
-        $sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
-        Database::query($sql);
+        //Classes are not longer supported
+        /*$sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
+        Database::query($sql);*/
 
         // Unsubscribe user from usergroup_rel_user
         $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '".$user_id."'";
@@ -620,7 +621,7 @@ class UserManager {
     }
 
     /**
-     * Returns the user's id based on the original id and field name in 
+     * Returns the user's id based on the original id and field name in
      * the extra fields. Returns 0 if no user was found. This function is
      * mostly useful in the context of a web services-based sinchronization
      * @param string Original user id

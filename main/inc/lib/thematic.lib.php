@@ -1281,22 +1281,6 @@ class Thematic
 	 * @return	string	date and time e.g: '2010-02-10 12:30:00'
 	 */
 	public function build_datetime_from_array($array) {
-		$year	 = '0000';
-		$month = $day = $hours = $minutes = $seconds = '00';
-		if (isset($array['Y']) && isset($array['F']) && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
-			$year = $array['Y'];
-			$month = $array['F'];
-			if (intval($month) < 10 ) $month = '0'.$month;
-			$day = $array['d'];
-			if (intval($day) < 10 ) $day = '0'.$day;
-			$hours = $array['H'];
-			if (intval($hours) < 10 ) $hours = '0'.$hours;
-			$minutes = $array['i'];
-			if (intval($minutes) < 10 ) $minutes = '0'.$minutes;
-		}
-		if (checkdate($month,$day,$year)) {
-			$datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
-		}
-		return $datetime;
+        return return_datetime_from_array($array);
 	}
 }

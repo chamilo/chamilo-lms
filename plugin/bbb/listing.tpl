@@ -1,13 +1,14 @@
 <div class ="row">
 
 {% if bbb_status == true %}
-
+  {% if show_join_button == true %}
     <div class ="span12" style="text-align:center">
         <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
             {{ 'EnterConference'|get_lang }}
         </a>
         <span id="users_online" class="label label-warning">{{ 'XUsersOnLine'| get_lang | format(users_online) }} </span>
     </div>
+  {% endif %}
 
     <div class ="span12">
         <div class="page-header">

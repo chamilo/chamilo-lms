@@ -292,16 +292,20 @@ if ($expiration_date == '0000-00-00 00:00:00') {
 	$user_data['expiration_date']['Y'] = date('Y');
 } else {
 	$user_data['radio_expiration_date'] = 1;
+
 	$user_data['expiration_date'] = array();
 	$user_data['expiration_date']['d'] = substr($expiration_date, 8, 2);
 	$user_data['expiration_date']['F'] = substr($expiration_date, 5, 2);
 	$user_data['expiration_date']['Y'] = substr($expiration_date, 0, 4);
+
+    $user_data['expiration_date']['H'] = substr($expiration_date, 11, 2);
+    $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
 }
 $form->setDefaults($user_data);
 
 $error_drh = false;
 // Validate form
-if ( $form->validate()) {
+if ($form->validate()) {
 
 	$user = $form->getSubmitValues();
 	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
@@ -335,10 +339,11 @@ if ( $form->validate()) {
 		$hr_dept_id = intval($user['hr_dept_id']);
 		$language = $user['language'];
 		if ($user['radio_expiration_date'] == '1' && !$user_data['platform_admin']) {
-			$expiration_date=$user['expiration_date'];
+            $expiration_date = return_datetime_from_array($user['expiration_date']);
 		} else {
-			$expiration_date='0000-00-00 00:00:00';
+			$expiration_date = '0000-00-00 00:00:00';
 		}
+
 		$active = $user_data['platform_admin'] ? 1 : intval($user['active']);
 
         //If the user is set to admin the status will be overwrite by COURSEMANAGER = 1

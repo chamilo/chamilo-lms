@@ -750,3 +750,26 @@ function format_file_size($file_size) {
     }
     return $file_size;
 }
+
+
+function return_datetime_from_array($array) {
+    $year	 = '0000';
+    $month = $day = $hours = $minutes = $seconds = '00';
+
+    var_dump($array);
+    if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
+        $year = $array['Y'];
+        $month = isset($array['F'])?$array['F']:$array['M'];
+        if (intval($month) < 10 ) $month = '0'.$month;
+        $day = $array['d'];
+        if (intval($day) < 10 ) $day = '0'.$day;
+        $hours = $array['H'];
+        if (intval($hours) < 10 ) $hours = '0'.$hours;
+        $minutes = $array['i'];
+        if (intval($minutes) < 10 ) $minutes = '0'.$minutes;
+    }
+    if (checkdate($month,$day,$year)) {
+        $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
+    }
+    return $datetime;
+}

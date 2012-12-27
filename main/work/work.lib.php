@@ -73,9 +73,11 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
 				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
+                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
 				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
+                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
                 if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
                     $display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without&amp;action=send_mail&amp;sec_token='.$token.'">'.
                     Display::return_icon('mail_send.png', get_lang('ReminderMessage'),'',ICON_SIZE_MEDIUM)."</a>";
@@ -317,6 +319,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	// Database table names
 	$work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$iprop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $user_table      = Database::get_main_table(TABLE_MAIN_USER);
 	$work_assigment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     
 	$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
@@ -375,11 +378,11 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     	//Get list from database
     	if ($is_allowed_to_edit) {
     		$active_condition = ' active IN (0, 1)';		
-    		$sql_get_publications_list = "SELECT *  FROM  $work_table
-    									  WHERE c_id = $course_id $add_in_where_query $condition_session AND $active_condition AND 
-    									  	    ( parent_id = 0) 
-    									  		$contains_file_query                   				
-    									  		ORDER BY sent_date DESC";
+    		$sql_get_publications_list = "SELECT *  FROM  $work_table ".
+                    " WHERE c_id = $course_id $add_in_where_query $condition_session AND $active_condition AND ".
+                    "  ( parent_id = 0) ".
+                    " $contains_file_query ".
+                    " ORDER BY sent_date DESC";
     	} else {		
     		if (!empty($group_id)) {
     			$group_query = " WHERE c_id = $course_id AND post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
@@ -392,7 +395,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
     		$active_condition = ' AND active IN (1,0)';    
     		$sql_get_publications_list = "SELECT * FROM  $work_table $group_query $subdirs_query $add_in_where_query  $active_condition $condition_session ORDER BY title";    		
     	}
-        
+ 
         $work_parents = array();       
        
         $sql_result = Database::query($sql_get_publications_list);
@@ -437,21 +440,20 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 	
 	if (is_array($work_parents)) {	   
 		foreach ($work_parents as $work_parent) {	            
-			$sql_select_directory = "SELECT title, url, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment
-									 FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id  )
-									 WHERE active IN (0, 1) AND ";
+			$sql_select_directory = "SELECT title, url, prop.insert_date, prop.lastedit_date, work.id, author, has_properties, view_properties, description, qualification, weight, allow_text_assignment ".
+                  " FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id  ) ".
+                  " WHERE active IN (0, 1) AND ";
 			
 			if (!empty($group_id)) {
 				$sql_select_directory .= " work.post_group_id = '".$group_id."' "; // set to select only messages posted by the user's group
 			} else {
 				$sql_select_directory .= " work.post_group_id = '0' ";
 			}            
-			$sql_select_directory .= "  AND  
-			                             work.c_id = $course_id AND 
-			                             work.id  = ".$work_parent->id." AND 
-			                             work.filetype = 'folder' AND 
-			                             prop.tool='work' $condition_session";    
-            
+			$sql_select_directory .= "  AND  ".
+			                           "  work.c_id = $course_id AND ".
+			                           "  work.id  = ".$work_parent->id." AND ".
+			                           "  work.filetype = 'folder' AND ".
+			                           "  prop.tool='work' $condition_session";    
 			$result = Database::query($sql_select_directory);
 			$row    = Database::fetch_array($result, 'ASSOC');
 			
@@ -734,7 +736,7 @@ function display_student_publications_list($id, $link_target_parameter, $dateFor
 			$session_id = api_get_session_id();
 				
 			if (api_is_allowed_to_edit()) {
-				$sql_document = "SELECT count(*) FROM $work_table WHERE c_id = $course_id AND parent_id = ".$work_data['id']." AND active IN (0, 1) ";
+                            $sql_document = "SELECT count(*) FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id WHERE w.c_id = $course_id AND w.parent_id = ".$work_data['id']." AND w.active IN (0, 1)";
 			} else {
                 $user_filter = "user_id = ".api_get_user_id()." AND ";
                 if ($course_info['show_score'] == 0) {

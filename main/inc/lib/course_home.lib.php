@@ -743,7 +743,7 @@ class CourseHome {
 
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);
 
-                // Validacion when belongs to a session
+                // Validation when belongs to a session
                 $session_img = api_get_session_image($tool['session_id'], $_user['status']);
                 $item['url_params'] = $tool_link_params;
                 $item['icon']       = Display::url($icon, $tool_link_params['href'], $tool_link_params);
@@ -775,6 +775,9 @@ class CourseHome {
 
                         switch ($image) {
                             case 'scormbuilder.png':
+                                if (api_is_allowed_to_edit(null, true)) {
+                                    $item['url_params']['href'] .= '&isStudentView=true';
+                                }
                                 $image = $original_image;
                                 $lp_id = self::get_published_lp_id_from_link($item['link']);
                                 if ($lp_id) {

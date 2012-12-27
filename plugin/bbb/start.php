@@ -21,7 +21,7 @@ if ($bbb->plugin_enabled) {
             $meeting_params = array();
             $meeting_params['meeting_name'] = api_get_course_id();
 
-            if ($bbb->is_meeting_exist($meeting_params['meeting_name'])) {
+            if ($bbb->meeting_exists($meeting_params['meeting_name'])) {
                 $url = $bbb->join_meeting($meeting_params['meeting_name']);
                 if ($url) {
                     header('location: '.$url);
@@ -34,6 +34,10 @@ if ($bbb->plugin_enabled) {
             } else {
                 if ($bbb->is_teacher()) {
                     $url = $bbb->create_meeting($meeting_params);
+                    header('location: '.$url);
+                    exit;
+                } else {
+                    $url = 'listing.php';
                     header('location: '.$url);
                     exit;
                 }

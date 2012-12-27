@@ -627,13 +627,24 @@ class DocumentManager {
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
+            if ($to_group_id <> 0) {
             $sql = "SELECT DISTINCT docs.id, path 
                     FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
                     ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
 					WHERE 	
 							docs.filetype 		= 'folder' AND
 							last.to_group_id	= ".$to_group_id." AND
+                            docs.path           NOT LIKE '%shared_folder%' AND
             				last.visibility 	<> 2 $condition_session ";
+            } else {
+                $sql = "SELECT DISTINCT docs.id, path
+                        FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
+                        WHERE
+                                docs.filetype 		= 'folder' AND
+                                last.to_group_id	= " . $to_group_id . " AND
+                                last.visibility 	<> 2 $condition_session ";
+                }
 
             $result = Database::query($sql);
 
@@ -1564,6 +1575,7 @@ class DocumentManager {
         $max = 5;
         $attributes = array();
         $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars');
+        $explode_attributes = array('flashvars' => 'file');
         $abs_path = '';
 
         if ($recursivity > $max) {
@@ -1575,7 +1587,7 @@ class DocumentManager {
         }
 
         if (!$is_file) {
-            $attributes = self::parse_HTML_attributes($source_html, $wanted_attributes);
+            $attributes = self::parse_HTML_attributes($source_html, $wanted_attributes, $explode_attributes);
 
         } else {
             if (is_file($source_html)) {
@@ -1590,7 +1602,7 @@ class DocumentManager {
                     case 'css'	:
                         $file_content = file_get_contents($abs_path);
                         //get an array of attributes from the HTML source
-                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes);
+                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes, $explode_attributes);
                         break;
                     default		:
                         break;
@@ -1840,7 +1852,7 @@ class DocumentManager {
      * @return   array   An associative array of attributes
      * @author 	 Based on a function from the HTML_Common2 PEAR module
      */
-    static function parse_HTML_attributes($attrString, $wanted = array()) {
+    static function parse_HTML_attributes($attrString, $wanted = array(), $explode_variables = array()) {
         $attributes = array();
         $regs = array();
         $reduced = false;
@@ -1898,6 +1910,17 @@ class DocumentManager {
                             if ($value == 'API.LMSGetValue(name') {
                                 $value = 'API.LMSGetValue(name)';
                             }
+                            //Gets the xx.flv value from the string flashvars="width=320&height=240&autostart=false&file=xxx.flv&repeat=false"
+                            if (isset($explode_variables[$name])) {
+                                $value_modified = str_replace('&amp;', '&', $value);
+                                $value_array = explode('&', $value_modified);
+                                foreach ($value_array as $item) {
+                                    list($key, $item_value) = explode('=', $item);
+                                    if ($key == $explode_variables[$name]) {
+                                        $attributes[strtolower($name)][] = $item_value;
+                                    }
+                                }
+                            }
                             $attributes[strtolower($name)][] = $value;
                         }
                     }
@@ -1918,7 +1941,7 @@ class DocumentManager {
      */
     static function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-        if (!is_string($content_html)) {
+        if (empty($content_html)) {
             return false;
         }
 
@@ -2120,11 +2143,9 @@ class DocumentManager {
             $pre_remove .='..\/';
         }
 
-        //var_dump(' link to add '.$link_to_add.'  -- remove '.$pre_remove);
 
         $orig_source_html   = DocumentManager::get_resources_from_source_html($content_html);
 
-        //var_dump($orig_source_html);
 
         foreach ($orig_source_html as $source) {
 
@@ -2167,10 +2188,9 @@ class DocumentManager {
                             $destination_url = preg_replace("/".$pre_remove."/", '', $real_orig_url, 1);
                         }
                         if ($real_orig_url == $destination_url) {
-                            echo 'continue2';
+                            //echo 'continue2';
                             continue;
                         }
-                        var_dump($real_orig_url_temp.' - '.$destination_url);
                         $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                     }
                 } else {
@@ -3082,7 +3102,6 @@ class DocumentManager {
                           $di->addChunk($ic_slide);
                           // Index and return a new search engine document id
                           $did = $di->index();
-                          //var_dump($did);
                           if ($did) {
                             // update the search_did on db
                             $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);

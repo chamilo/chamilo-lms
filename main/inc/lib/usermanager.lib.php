@@ -398,7 +398,7 @@ class UserManager {
 
     /**
      * Delete a user from the platform, and all its belongings. This is a
-     * very dangerous function that should only be accessible by 
+     * very dangerous function that should only be accessible by
      * super-admins. Other roles should only be able to disable a user,
      * which removes access to the platform but doesn't delete anything.
      * @param int The ID of th user to be deleted
@@ -423,6 +423,7 @@ class UserManager {
         $table_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
         $table_session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $table_group                  = Database :: get_course_table(TABLE_GROUP_USER);
+        $table_work                   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id FROM $table_course c, $table_course_user cu
@@ -434,8 +435,9 @@ class UserManager {
         }
 
         // Unsubscribe user from all classes
-        $sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
-        Database::query($sql);
+        //Classes are not longer supported
+        /*$sql = "DELETE FROM $table_class_user WHERE user_id = '".$user_id."'";
+        Database::query($sql);*/
 
         // Unsubscribe user from usergroup_rel_user
         $sql = "DELETE FROM $usergroup_rel_user WHERE user_id = '".$user_id."'";
@@ -513,6 +515,10 @@ class UserManager {
             //Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
+        // Delete students works
+        $sqlw = "DELETE FROM $table_work WHERE user_id = $user_id";
+        $resw = Database::query($sqlw);
+        unset($sqlw);
         // Add event to system log
         $user_id_manager = api_get_user_id();
         event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
@@ -795,7 +801,7 @@ class UserManager {
     }
 
     /**
-     * Returns the user's id based on the original id and field name in 
+     * Returns the user's id based on the original id and field name in
      * the extra fields. Returns 0 if no user was found. This function is
      * mostly useful in the context of a web services-based sinchronization
      * @param string Original user id

@@ -41,8 +41,12 @@ class PDF {
         
         $this->pdf = new mPDF('UTF-8', $page_format, '', '', $params['left'], $params['right'], $params['top'], $params['bottom'], 8, 8, $orientation); 
     }
-    
-    function html_to_pdf_with_template($content)  {        
+    /**
+     * Export the given HTML to PDF, using a global template
+     * @param string the HTML content
+     * @uses export/table_pdf.tpl
+     */
+    function html_to_pdf_with_template($content)  {
         Display :: display_no_header();
         
         //Assignments
@@ -93,10 +97,12 @@ class PDF {
      * @param   mixed   could be an html file path or an array with paths example: /var/www/myfile.html or array('/myfile.html','myotherfile.html') or even an indexed array with both 'title' and 'path' indexes for each element like array(0=>array('title'=>'Hello','path'=>'file.html'),1=>array('title'=>'Bye','path'=>'file2.html'));
      * @param   string  pdf name   
      * @param   string  course code (if you are using html that are located in the document tool you must provide this) 
+     * @param bool Whether to print the header, footer and watermark (true) or just the content (false)
      * @return void
      */    
-    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false) {
+    public function html_to_pdf($html_file_array, $pdf_name = '', $course_code = null, $print_title = false, $complete_style = true) {
         
+if($complete_style === false) { error_log(__FUNCTION__.' with no style'); }
         if (empty($html_file_array)) {
         	return false;
         }  
@@ -126,7 +132,7 @@ class PDF {
             );
             
         //Formatting the pdf
-        self::format_pdf($course_data);
+        self::format_pdf($course_data, $complete_style);
         
         $counter = 1;
         
@@ -532,7 +538,14 @@ class PDF {
         $this->custom_footer = $footer;
     }
     
-    public function format_pdf($course_data) {
+    /**
+     * Pre-formats a PDF to the right size and, if not stated otherwise, with
+     * header, footer and watermark (if any)
+     * @param array General course information (to fill headers)
+     * @param bool Whether we want headers, footers and watermark or not
+     */
+    public function format_pdf($course_data, $complete = true) {
+if($complete === false) {error_log('Asked with no decoration');}
         $course_code = null;
         if (!empty( $course_data)) {    
             $course_code = $course_data['code'];   
@@ -547,46 +560,49 @@ class PDF {
         $this->pdf->useOnlyCoreFonts    = true;        
         $this->pdf->mirrorMargins       = 1;            // Use different Odd/Even headers and footers and mirror margins       
         
-        //Adding watermark
-        if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-            $watermark_file = self::get_watermark($course_code);      
-                  
-            if ($watermark_file) {                
-                //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark                
-                $this->pdf->SetWatermarkImage($watermark_file);
-                $this->pdf->showWatermarkImage = true;
-            } else {
-                $watermark_file = self::get_watermark(null);      
-                if ($watermark_file) {   
+        // Add decoration only if not stated otherwise
+        if ($complete) {
+            //Adding watermark
+            if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+                $watermark_file = self::get_watermark($course_code);      
+                      
+                if ($watermark_file) {                
+                    //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark                
                     $this->pdf->SetWatermarkImage($watermark_file);
                     $this->pdf->showWatermarkImage = true;
+                } else {
+                    $watermark_file = self::get_watermark(null);      
+                    if ($watermark_file) {   
+                        $this->pdf->SetWatermarkImage($watermark_file);
+                        $this->pdf->showWatermarkImage = true;
+                    }
                 }
-            }
-            if ($course_code) {
-                $watermark_text = api_get_course_setting('pdf_export_watermark_text');
-                if (empty($watermark_text)) {
-                    $watermark_text = api_get_setting('pdf_export_watermark_text');    
+                if ($course_code) {
+                    $watermark_text = api_get_course_setting('pdf_export_watermark_text');
+                    if (empty($watermark_text)) {
+                        $watermark_text = api_get_setting('pdf_export_watermark_text');    
+                    }
+                } else {
+                    $watermark_text = api_get_setting('pdf_export_watermark_text');
                 }
+                if (!empty($watermark_text)) {
+                    $this->pdf->SetWatermarkText(strcode2utf($watermark_text),0.1);
+                    $this->pdf->showWatermarkText = true;
+                }
+            }        
+            
+            if (empty($this->custom_header)) {
+                self::set_header($course_data);   
             } else {
-                $watermark_text = api_get_setting('pdf_export_watermark_text');
+                $this->pdf->SetHTMLHeader($this->custom_header,'E');
+                $this->pdf->SetHTMLHeader($this->custom_header,'O');
             }
-            if (!empty($watermark_text)) {
-                $this->pdf->SetWatermarkText(strcode2utf($watermark_text),0.1);
-                $this->pdf->showWatermarkText = true;
-            }
-        }        
-        
-        if (empty($this->custom_header)) {
-            self::set_header($course_data);   
-        } else {
-            $this->pdf->SetHTMLHeader($this->custom_header,'E');
-            $this->pdf->SetHTMLHeader($this->custom_header,'O');
+            
+            if (empty($this->custom_footer)) {
+                self::set_footer();    
+            } else {
+                $this->pdf->SetHTMLFooter($this->custom_footer);	
+            }        
         }
-        
-        if (empty($this->custom_footer)) {
-            self::set_footer();    
-        } else {
-            $this->pdf->SetHTMLFooter($this->custom_footer);	
-        }        
     }
 }

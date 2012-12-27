@@ -60,7 +60,9 @@ switch ($action) {
             }
         }
         if (!empty($certificate_path_list)) {
-            $pdf->html_to_pdf($certificate_path_list, get_lang('Certificates'));
+            // Print certificates (without the common header/footer/watermark 
+            //  stuff) and return as one multiple-pages PDF
+            $pdf->html_to_pdf($certificate_path_list, get_lang('Certificates'), null, false, false);
         }
         break;
     case 'generate_all_certificates':

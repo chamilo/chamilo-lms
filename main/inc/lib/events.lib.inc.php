@@ -484,17 +484,22 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
         $file = Database::escape_string(basename($nano->load_filename_if_exists(false)));
     }
 
+    $course_code = api_get_course_id();
+    $session_id = api_get_session_id();
 
     if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
 
         //Check if attempt exists
-        $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT WHERE exe_id = $exe_id AND user_id = $user_id AND question_id = $question_id";
+
+        $sql = "SELECT exe_id FROM $TBL_TRACK_ATTEMPT
+                WHERE course_code = '$course_code' AND session_id = $session_id AND exe_id = $exe_id AND user_id = $user_id AND question_id = $question_id AND position = $position";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
-            if ($debug) error_log("Attempt already exist: exe_id: $exe_id  - user_id:$user_id - question_id:$question_id");
+            if ($debug) error_log("Attempt already exist: exe_id: $exe_id - user_id:$user_id - question_id:$question_id");
             //The attempt already exist do not update use  update_event_exercice() instead
             return false;
         }
+
         $sql = "INSERT INTO $TBL_TRACK_ATTEMPT (exe_id, user_id, question_id, answer, marks, course_code, session_id, position, tms, filename)
                   VALUES (
                   ".$exe_id.",
@@ -502,8 +507,8 @@ function exercise_attempt($score, $answer, $question_id, $exe_id, $position, $ex
                    '".$question_id."',
                    '".$answer."',
                    '".$score."',
-                   '".api_get_course_id()."',
-                   '".api_get_session_id()."',
+                   '".$course_code."',
+                   '".$session_id."',
                    '".$position."',
                    '".$now."',
                    '".$file."'

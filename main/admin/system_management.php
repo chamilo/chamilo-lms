@@ -33,8 +33,6 @@ class SystemManagementPage extends AdminPage
 
     function url($params)
     {
-        $token = Security::get_token();
-        $params[self::PARAM_SECURITY_TOKEN] = $token;
         return Uri::here($params);
     }
 
@@ -43,9 +41,10 @@ class SystemManagementPage extends AdminPage
         $message = get_lang('RemoveOldDatabaseMessage');
         $message_table = get_lang('RemoveOldTables');
         
-        $message_table .= "<br />".implode(' , ', self::get_tables_to_delete());        
-        $url = $this->url(array(self::PARAM_ACTION => 'drop_old_databases'));
-        $url_table = $this->url(array(self::PARAM_ACTION => 'drop_old_tables'));
+        $message_table .= "<br />".implode(' , ', self::get_tables_to_delete());
+        $token = Security::get_token(); 
+        $url = $this->url(array(self::PARAM_ACTION => 'drop_old_databases', self::PARAM_SECURITY_TOKEN => $token));
+        $url_table = $this->url(array(self::PARAM_ACTION => 'drop_old_tables', self::PARAM_SECURITY_TOKEN => $token));
         
         $go = get_lang('Go');
         $access_url_id = api_get_current_access_url_id();

@@ -1187,6 +1187,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         
                         //Admin can always delete the attempt
                         if ($locked == false || api_is_platform_admin()) {
+                            $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], $results[$i]['exe_date'], false);
+                            $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
                             $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';                            
                             $actions .='&nbsp;';
                         }
@@ -2109,15 +2111,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
     }
     
-    if ($save_user_result) {    
-        // Display text when test is finished #4074
-        // Don't display the text when finished message if we are from a LP #4227
-        // but display it from page exercice_show.php
-        $end_of_message = $objExercise->selectTextWhenFinished();
-        if (!empty($end_of_message) && ($origin != 'learnpath')) {
-            Display::display_normal_message($end_of_message, false);
-            echo "<div class='clear'>&nbsp;</div>";
-        }
+    // Display text when test is finished #4074 and for LP #4227
+    $end_of_message = $objExercise->selectTextWhenFinished();
+    if (!empty($end_of_message)) {
+        Display::display_normal_message($end_of_message, false);
+        echo "<div class='clear'>&nbsp;</div>";
     }
     
     $question_list_answers = array();
@@ -2144,7 +2142,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             
             $question_list_answers[] = array(
                 'question' => $result['open_question'],
-                'answer' => $result['open_answer']
+                'answer' => $result['open_answer'],
+                'answer_type' => $result['answer_type']
             );
             
             $my_total_score  = $result['score'];
@@ -2263,6 +2262,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         // Send notification ..
         if (!api_is_allowed_to_edit(null,true)) {
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
+            $objExercise->send_notification_for_oral_questions($question_list_answers, $origin, $exe_id);
         }
     }    
 }

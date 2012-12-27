@@ -1334,10 +1334,14 @@ function api_get_anonymous_id() {
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
      $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
      if ($add_session_id) {
-        $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
-}
+         if (!empty($url)) {
+            $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
+        }
+     }
      if ($add_group_id) {
-        $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+        if (!empty($url)) {
+            $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+         }
      }
      return $url;
 }
@@ -3459,7 +3463,7 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
  * @return string
  */
 
-function api_get_languages_combo($name = 'language') {
+function api_get_languages_combo($name = 'language', $chozen=true) {
     $ret = '';
     $platformLanguage = api_get_setting('platformLanguage');
 
@@ -3480,7 +3484,7 @@ function api_get_languages_combo($name = 'language') {
     $languages  = $language_list['name'];
     $folder		= $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" class="chzn-select" >';
+    $ret .= '<select name="'.$name.'" id="language_chosen" '.($chozen?'class="chzn-select"':'').' >';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';

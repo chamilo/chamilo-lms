@@ -498,18 +498,12 @@ if(!empty($errorMsg)) {
 }
 ?>
 
-<table border="0" cellpadding="5" cellspacing="0" width="100%">
-<!-- Users -->
-<tr>
-  <td align="center"><b><?php echo get_lang('UserListInPlatform') ?> :</b>
-  </td>
-  <td></td>
-  <td align="center"><b><?php echo get_lang('UserListInSession') ?> :</b></td>
-</tr>
+<div class="row">
+    <div class="span5">
+        <div class="multiple_select_header">
+            <b><?php echo get_lang('UserListInPlatform') ?> :</b>
 
 <?php if ($add_type=='multiple') { ?>
-<tr>
-    <td align="center">
 
     <?php echo get_lang('FirstLetterUser'); ?> :
         <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
@@ -518,12 +512,8 @@ if(!empty($errorMsg)) {
             echo Display :: get_alphabet_options();
         ?>
         </select>
-    </td>
-    <td align="center">&nbsp;</td>
-</tr>
 <?php } ?>
-<tr>
-  <td align="center">
+        </div>
   <div id="content_source">
   	  <?php
   	  if (!($add_type=='multiple')) {
@@ -534,7 +524,7 @@ if(!empty($errorMsg)) {
   	  } else {
   	  ?>
   	  <div id="ajax_list_users_multiple">
-	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
+            <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" class="span5">
 		<?php
 		foreach ($nosessionUsersList as $uid => $enreg) {
 		?>
@@ -552,8 +542,10 @@ if(!empty($errorMsg)) {
   	 ?>
 
   </div>
-  </td>
-  <td width="10%" valign="middle" align="center">
+    </div>
+
+    <div class="span2">
+        <div style="padding-top:54px;width:auto;text-align: center;">
   <?php
   if ($ajax_search) {
   ?>
@@ -564,27 +556,13 @@ if(!empty($errorMsg)) {
   	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))"></button>
 	<br /><br />
 	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))"></button>
-	<?php
-  }
-  ?>
-	<br /><br /><br /><br /><br /><br />
-  </td>
-  <td align="center">
-  <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
 
-<?php
-foreach($sessionUsersList as $enreg) {
-?>
-	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
 <?php
 }
-unset($sessionUsersList);
 ?>
 
-  </select></td>
-</tr>
-<tr>
-	<td colspan="3" align="center">
+        </div>
+        <br />
 		<br />
 		<?php
 		if(isset($_GET['add'])) {
@@ -594,9 +572,24 @@ unset($sessionUsersList);
 			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
         }
 		?>
-	</td>
-</tr>
-</table>
+    </div>
+
+    <div class="span5">
+        <div class="multiple_select_header">
+            <b><?php echo get_lang('UserListInSession') ?> :</b>
+        </div>
+        <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
+        <?php
+        foreach($sessionUsersList as $enreg) {
+        ?>
+            <option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')'; ?></option>
+        <?php
+        }
+        unset($sessionUsersList);
+        ?>
+        </select>
+    </div>
+</div>
 </form>
 
 <script>

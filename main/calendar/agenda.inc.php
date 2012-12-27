@@ -2135,8 +2135,7 @@ function display_one_agenda_item($agenda_id) {
 	// Content
 	$content = $myrow['content'];
 	$content = make_clickable($content);
-	$content = text_filter($content);
-
+	
     echo '<tr class="row_even">';
     echo '<td '.(api_is_allowed_to_edit()?'colspan="3"':'colspan="2"'). '>';
     echo $content;

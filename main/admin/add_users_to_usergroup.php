@@ -265,15 +265,16 @@ if(!empty($errorMsg)) {
 
 <div class="row">
     <div class="span5">
-    <b><?php echo get_lang('UsersInPlatform') ?> :</b><br />
-
-    <?php echo get_lang('FirstLetterUser'); ?> :
-    <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
-        <option value = "%">--</option>
-        <?php
-        echo Display :: get_alphabet_options($first_letter_user);
-        ?>
-    </select>
+        <div class="multiple_select_header">
+        <b><?php echo get_lang('UsersInPlatform') ?> :</b>
+        <?php echo get_lang('FirstLetterUser'); ?> :
+        <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
+            <option value = "%">--</option>
+            <?php
+            echo Display :: get_alphabet_options($first_letter_user);
+            ?>
+        </select>
+        </div>
 
     <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
     <br />
@@ -290,9 +291,10 @@ if(!empty($errorMsg)) {
         </div>
     </div>
     <div class="span5">
-    <br /><br />
-    <b><?php echo get_lang('UsersInGroup') ?> :</b><br />
+        <div class="multiple_select_header">
 
+            <b><?php echo get_lang('UsersInGroup') ?> :</b>
+        </div>
     <?php
         echo Display::select('elements_in_name[]', $elements_in, '', array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
         unset($sessionUsersList);

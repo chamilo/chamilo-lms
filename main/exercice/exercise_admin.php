@@ -5,7 +5,7 @@
 * This script allows to manage an exercise. It is included from
 * the script admin.php
 * @package chamilo.exercise
-* @author Olivier Brouckaert
+* @author Olivier Brouckaert, Julio Montoya
 */
 /**
  * Code
@@ -215,7 +215,7 @@ if ($form->validate()) {
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';
-    
+
     if ($objExercise->id != 0 && $objExercise->edit_exercise_in_lp == false) {
         $form->freeze();
     }

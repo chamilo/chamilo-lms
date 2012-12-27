@@ -15,7 +15,7 @@ $tpl = new Template($tool_name);
 $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = api_is_course_admin() || api_is_coach() || api_is_platform_admin();
+$teacher = $bbb->is_teacher();
 
 api_protect_course_script(true);
 $message = null;
@@ -56,13 +56,15 @@ if ($teacher) {
             break;
         case 'end':
             $bbb->end_meeting($_GET['id']);
-            $message = Display::return_message(get_lang('MeetingClosed'), 'success');
+            $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
             break;
         case 'publish':
             //$result = $bbb->publish_meeting($_GET['id']);
             break;
         case 'unpublish':
             //$result = $bbb->unpublish_meeting($_GET['id']);
+            break;
+        default:
             break;
     }
 }
@@ -73,6 +75,11 @@ if (!empty($meetings)) {
 }
 $users_online   = $bbb->get_users_online_in_current_room();
 $status         = $bbb->is_server_running();
+$meeting_exists = $bbb->meeting_exists(api_get_course_id());
+$show_join_button = false;
+if ($meeting_exists || $teacher) {
+    $show_join_button = true;
+}
 
 $tpl->assign('allow_to_edit', $teacher);
 $tpl->assign('meetings', $meetings);
@@ -80,6 +87,7 @@ $conference_url = api_get_path(WEB_PLUGIN_PATH).'bbb/start.php?launch=1&'.api_ge
 $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
+$tpl->assign('show_join_button', $show_join_button);
 
 //$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

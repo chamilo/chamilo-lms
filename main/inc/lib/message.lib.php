@@ -1272,29 +1272,14 @@ class MessageManager
         $parameters['f'] = Security::remove_XSS($_GET['f']);
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false,array ('style' => 'width:15px;'));
-        $title = api_xml_http_response_encode(get_lang('Title'));
-        $action= api_xml_http_response_encode(get_lang('Modify'));
 
-        $table->set_header(1, api_xml_http_response_encode(get_lang('Messages')),false);
-        //$table->set_header(2, $title,true);
-        $table->set_header(2, api_xml_http_response_encode(get_lang('Date')),true,array ('style' => 'width:160px;'));
-        $table->set_header(3,$action, false,array ('style' => 'width:70px;'));
+        $table->set_header(1, get_lang('Messages'),false);
+        $table->set_header(2, get_lang('Date'),true,array ('style' => 'width:160px;'));
+        $table->set_header(3, get_lang('Modify'), false,array ('style' => 'width:70px;'));
 
 
-        if ($request===true) {
-            $html .=  '<form name="form_send_out" id="form_send_out" action="" method="post">';
-            $html .=  '<input type="hidden" name="action" value="delete" />';
-            $html .= $table->return_table();
-            $html .=  '</form>';
-            if (get_number_of_messages_send_mask() > 0) {
-                $html .=  '<a href="javascript:void(0)" onclick="selectall_cheks()">'.api_xml_http_response_encode(get_lang('SelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-                $html .=  '<a href="javascript:void(0)" onclick="unselectall_cheks()">'.api_xml_http_response_encode(get_lang('UnSelectAll')).'</a>&nbsp;&nbsp;&nbsp;';
-                $html .=  '<button class="save" name="delete" type="button" value="'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'" onclick="submit_form(\'outbox\')">'.api_xml_http_response_encode(get_lang('DeleteSelectedMessages')).'</button>';
-            }
-        } else {
             $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
             $html .= $table->return_table();
-        }
         return $html;
     }
 }

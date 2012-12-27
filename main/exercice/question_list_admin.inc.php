@@ -30,6 +30,7 @@ if ($deleteQuestion) {
 	// destruction of the Question object
 	unset($objQuestionTmp);
 }
+$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
 <style>
     .ui-state-highlight { height: 30px; line-height: 1.2em; }
@@ -154,7 +155,8 @@ if (!$inATest) {
 
     echo '<div id="question_list">';
 	if ($nbrQuestions) {
-        $questionList = $objExercise->selectQuestionList();                
+        //Always getting list from DB
+        $questionList = $objExercise->selectQuestionList(true);
 
         // Style for columns
 

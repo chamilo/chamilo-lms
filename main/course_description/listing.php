@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (view in MVC pattern) used for listing course descriptions  
+* Template (view in MVC pattern) used for listing course descriptions
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_description
 */
@@ -49,30 +49,30 @@ $user_info = api_get_user_info();
 if (isset($descriptions) && count($descriptions) > 0) {
 	foreach ($descriptions as $id => $description) {
 		echo '<div class="sectiontitle">';
-		
+
 		if (api_is_allowed_to_edit(null,true) && !$history) {
 			if (api_get_session_id() == $description['session_id']) {
                 $description['title'] = $description['title'].' '.api_get_session_image(api_get_session_id(), $user_info['status']);
-                
+
 				//delete
 				echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=delete&description_type='.$description['description_type'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">';
 				echo Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
 				echo '</a> ';
-                
+
                 //edit
                 echo '<a href="'.api_get_self().'?id='.$description['id'].'&cidReq='.api_get_course_id().'&id_session='.$description['session_id'].'&action=edit&description_type='.$description['description_type'].'">';
-                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);                	
+                echo Display::return_icon('edit.png', get_lang('Edit'), array('style' => 'vertical-align:middle;float:right; padding-right:4px;'),ICON_SIZE_SMALL);
                 echo '</a> ';
-			} else {                
+			} else {
                 echo Display::return_icon('edit_na.png', get_lang('EditionNotAvailableFromSession'), array('style' => 'vertical-align:middle;float:right;'),ICON_SIZE_SMALL);
-                
+
             }
 		}
-		
+
 		echo $description['title'];
 		echo '</div>';
 		echo '<div class="sectioncomment">';
-		echo text_filter($description['content']);
+		echo $description['content'];
 		echo '</div>';
 	}
 } else {

@@ -1,9 +1,12 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton API
+ * This script initiates a videoconference session, calling the BigBlueButton 
+ * API
  * @package chamilo.plugin.bigbluebutton
  */
-
+/**
+ * BigBlueButton-Chamilo connector class
+ */
 class bbb {
 
     var $url;
@@ -11,10 +14,14 @@ class bbb {
     var $api;
     var $user_complete_name = null;
     var $protocol = 'http://';
-    var $debug = true;
+    var $debug = false;
     var $logout_url = null;
     var $plugin_enabled = false;
 
+    /**
+     * Constructor (generates a connection to the API and the Chamilo settings
+     * required for the connection to the videoconference server)
+     */
     function __construct() {
 
         // initialize video server settings from global settings
@@ -48,7 +55,10 @@ class bbb {
             $this->plugin_enabled = true;
         }
     }
-
+    /**
+     * Checks whether a user is teacher in the current course
+     * @return bool True if the user can be considered a teacher in this course, false otherwise
+     */
     function is_teacher() {
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
@@ -134,11 +144,19 @@ class bbb {
             return $this->logout;
         }
     }
-
-    function is_meeting_exist($meeting_name) {
+    /**
+     * Tells whether the given meeting exists and is running 
+     * (using course code as name)
+     * @param string Meeting name (usually the course code)
+     * @return bool True if meeting exists, false otherwise
+     * @assert ('') === false
+     * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
+     */
+    function meeting_exists($meeting_name) {
+        if (empty($meeting_name)) { return false; }
         $course_id = api_get_course_int_id();
         $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND meeting_name = ? AND status = 1 ' => array($course_id, $meeting_name))), 'first');
-        if ($this->debug) error_log("is_meeting_exist ".print_r($meeting_data,1));
+        if ($this->debug) error_log("meeting_exists ".print_r($meeting_data,1));
         if (empty($meeting_data)) {
             return false;
         } else {
@@ -147,9 +165,15 @@ class bbb {
     }
 
     /**
+     * Returns a meeting "join" URL
+     * @param string The name of the meeting (usually the course code)
+     * @return mixed The URL to join the meeting, or false on error
      * @todo implement moderator pass
+     * @assert ('') === false
+     * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
     function join_meeting($meeting_name) {
+        if (empty($meeting_name)) { return false; }
         $pass = $this->get_user_meeting_password();
         $meeting_data = Database::select('*', $this->table, array('where' => array('meeting_name = ? AND status = 1 ' => $meeting_name)), 'first');
         if (empty($meeting_data)) {
@@ -186,7 +210,12 @@ class bbb {
         if ($this->debug) error_log("return url :".$url);
         return $url;
     }
-
+    /**
+     * Get information about the given meeting
+     * @param array ...?
+     * @return mixed Array of information on success, false on error
+     * @assert (array()) === false
+     */
     function get_meeting_info($params) {
         try {
             $result = $this->api->getMeetingInfoWithXmlResponseArray($params);
@@ -203,7 +232,7 @@ class bbb {
 
     /**
      * Gets all the course meetings saved in the plugin_bbb_meeting table
-     * @return string
+     * @return array Array of current open meeting rooms
      */
     function get_course_meetings() {
         $pass = $this->get_user_meeting_password();
@@ -218,7 +247,7 @@ class bbb {
             $meeting_bbb['end_url'] = api_get_self().'?action=end&id='.$meeting_db['id'];
 
             if ((string)$meeting_bbb['returncode'] == 'FAILED') {
-                if ($meeting_db['status'] == 1) {
+                if ($meeting_db['status'] == 1 && $this->is_teacher()) {
                     $this->end_meeting($meeting_db['id']);
                 }
             } else {
@@ -238,7 +267,7 @@ class bbb {
                     $count = 1;
                     if (isset($records['message']) && !empty($records['message'])) {
                         if ($records['messageKey'] == 'noRecordings') {
-                            //$record_array[] = get_lang('ThereAreNotRecordingsForTheMeetings');
+                            $record_array[] = get_lang('NoRecording');
                         } else {
                             //$record_array[] = $records['message'];
                         }
@@ -304,16 +333,27 @@ class bbb {
         }
         return $new_meeting_list;
     }
-
+    /**
+     * Function disabled
+     */
     function publish_meeting($id) {
         //return BigBlueButtonBN::setPublishRecordings($id, 'true', $this->url, $this->salt);
     }
-
+    /**
+     * Function disabled
+     */
     function unpublish_meeting($id) {
         //return BigBlueButtonBN::setPublishRecordings($id, 'false', $this->url, $this->salt);
     }
-
+    /**
+     * Closes a meeting (usually when the user click on the close button from
+     * the conferences listing.
+     * @param string The name of the meeting (usually the course code)
+     * @return void
+     * @assert (0) === false
+     */
     function end_meeting($id) {
+        if (empty($id)) { return false; }
         $pass = $this->get_user_meeting_password();
         $endParams = array(
             'meetingId' => $id, 			// REQUIRED - We have to know which meeting to end.
@@ -322,7 +362,10 @@ class bbb {
         $this->api->endMeetingWithXmlResponseArray($endParams);
         Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $id));
     }
-
+    /**
+     * Gets the password for a specific meeting for the current user
+     * @return string A moderator password if user is teacher, or the course code otherwise
+     */
     function get_user_meeting_password() {
         if ($this->is_teacher()) {
             return $this->get_mod_meeting_password();
@@ -330,13 +373,18 @@ class bbb {
             return api_get_course_id();
         }
     }
-
+    /**
+     * Generated a moderator password for the meeting
+     * @return string A password for the moderation of the videoconference
+     */
     function get_mod_meeting_password() {
         return api_get_course_id().'mod';
     }
 
     /**
      * Get users online in the current course room
+     * @return int The number of users currently connected to the videoconference
+     * @assert () > -1
      */
     function get_users_online_in_current_room() {
         $course_id = api_get_course_int_id();
@@ -353,12 +401,20 @@ class bbb {
         }
         return 0;
     }
-
+    /**
+     * Deletes a previous recording of a meeting
+     * @param int intergal ID of the recording
+     * @return array ?
+     * @assert () === false
+     * @todo Also delete links and agenda items created from this recording
+     */
     function delete_record($ids) {
+        if (empty($ids) or (is_array($ids) && count($ids)==0)) { return false; }
         $recordingParams = array(
-            /*
-            * NOTE: Set the recordId below to a valid id after you have created a recorded meeting,
-            * and received back a real recordID back from your BBB server using the
+           /*
+            * NOTE: Set the recordId below to a valid id after you have 
+            * created a recorded meeting, and received a real recordID 
+            * back from your BBB server using the
             * getRecordingsWithXmlResponseArray method.
             */
 
@@ -367,12 +423,24 @@ class bbb {
         );
         return $this->api->deleteRecordingsWithXmlResponseArray($recordingParams);
     }
-
+    /**
+     * Creates a link in the links tool from the given videoconference recording
+     * @param int ID of the item in the plugin_bbb_meeting table
+     * @param string Hash identifying the recording, as provided by the API
+     * @return mixed ID of the newly created link, or false on error
+     * @assert (null, null) === false
+     * @assert (1, null) === false
+     * @assert (null, 'abcdefabcdefabcdefabcdef') === false
+     */
     function copy_record_to_link_tool($id, $record_id) {
+        if (empty($id) or empty($record_id)) {
+            return false;
+        }
         require_once api_get_path(LIBRARY_PATH).'link.lib.php';
         $records =  BigBlueButtonBN::getRecordingsArray($id, $this->url, $this->salt);
         if (!empty($records)) {
             foreach ($records as $record) {
+error_log($record['recordID']);
                 if ($record['recordID'] == $record_id) {
                     if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
                         foreach ($record['playbacks'] as $item) {
@@ -389,7 +457,12 @@ class bbb {
         }
         return false;
     }
-
+    /**
+     * Checks if the videoconference server is running.
+     * Function currently disabled (always returns 1)
+     * @return bool True if server is running, false otherwise
+     * @assert () === false
+     */
     function is_server_running() {
         return true;
         //return BigBlueButtonBN::isServerRunning($this->protocol.$this->url);

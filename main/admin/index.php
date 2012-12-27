@@ -232,7 +232,20 @@ if (api_is_platform_admin()) {
 
     $blocks['settings']['search_form'] = null;
 
+	/* Extensions */
+	/*
+	$blocks['extensions']['icon']  = Display::return_icon('visio_meeting.gif', get_lang('ConfigureExtensions'), array(), ICON_SIZE_SMALL, false);
+	$blocks['extensions']['label'] = api_ucfirst(get_lang('ConfigureExtensions'));
 
+	$items = array();
+	$items[] = array('url'=>'configure_extensions.php?display=visio', 	'label' => get_lang('Visioconf'));
+	$items[] = array('url'=>'configure_extensions.php?display=ppt2lp', 	'label' => get_lang('Ppt2lp'));
+	//$items[] = array('url'=>'configure_extensions.php?display=ephorus', 	'label' => get_lang('EphorusPlagiarismPrevention'));
+	$items[] = array('url'=>'configure_extensions.php?display=search', 	'label' => get_lang('SearchEngine'));
+	$items[] = array('url'=>'configure_extensions.php?display=serverstats', 	'label' => get_lang('ServerStatistics'));
+	$items[] = array('url'=>'configure_extensions.php?display=bandwidthstats', 	'label' => get_lang('BandWidthStatistics'));
+	$blocks['extensions']['items'] = $items;
+    */
 
     //Skills
     if (api_get_setting('allow_skills_tool') == 'true') {

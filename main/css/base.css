@@ -2363,7 +2363,7 @@ div.admin_section h4 {
 }
 
 #question_list .header_operations {
-    height: 60px;
+    height:40px;
     margin-bottom:5px;
 }
 .question-list-description-block {
@@ -2634,6 +2634,8 @@ div.admin_section h4 {
     color: white;
     font-size: 16px;
     float:left;
+    line-height: 16px;
+    padding-top: 5px;
 }
 
 .ribbon .rib-total {
@@ -4734,4 +4736,8 @@ i.size-32.icon-new-work{
 
 .xdebug-error {
     margin-top: 20px;
+}
+.multiple_select_header {
+    height: 35px;
+    margin-bottom: 15px;
 }

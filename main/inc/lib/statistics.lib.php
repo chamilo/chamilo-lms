@@ -160,7 +160,8 @@ class Statistics {
                 "default_value_type    as col1, ".
                 "default_value        as col2, ".
                 "user.username         as col3, ".
-                "default_date         as col4 ".
+                "user.user_id         as col4, ".
+                "default_date         as col5 ".
                 "FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url ".
                 "WHERE track_default.default_user_id = user.user_id AND url.user_id=user.user_id AND access_url_id='".$current_url_id."'";
         } else {
@@ -169,7 +170,8 @@ class Statistics {
                    "default_value_type    as col1, ".
                    "default_value        as col2, ".
                    "user.username         as col3, ".
-                   "default_date         as col4 ".
+                   "user.user_id         as col4, ".
+                   "default_date         as col5 ".
                    "FROM $track_e_default track_default, $table_user user ".
                    "WHERE track_default.default_user_id = user.user_id ";
         }
@@ -182,7 +184,7 @@ class Statistics {
         if (!empty($column) && !empty($direction)) {
             $sql .= " ORDER BY col$column $direction";
         } else {
-            $sql .= " ORDER BY col4 DESC ";
+            $sql .= " ORDER BY col5 DESC ";
         }
         $sql .=    " LIMIT $from, $number_of_items ";
 
@@ -204,7 +206,14 @@ class Statistics {
         	} else {
         		$row['default_date'] = '-';
         	}
+            if (!empty($row[4])) { //user ID
+                $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[5], array('title' => get_lang('UserInfo')));
             
+                $row[4] = TrackingUserLog::get_ip_from_user_event($row[4],$row[5],true);
+                if (empty($row[4])) {
+                    $row[4] = get_lang('Unknown');
+                }
+            }
             $activities[] = $row;
         }
         
@@ -486,10 +495,10 @@ class Statistics {
         echo '<h4>'.get_lang('ImportantActivities').'</h4>';
 
         // Create a search-box
-        $form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php?action=activities','','width=200px',false);
+        $form = new FormValidator('search_simple','get',api_get_path(WEB_CODE_PATH).'admin/statistics/index.php','','width=200px',false);
         $renderer =& $form->defaultRenderer();
         $renderer->setElementTemplate('<span>{element}</span> ');
-        $form->addElement('hidden','action','activities');
+        $form->addElement('hidden','report','activities');
         $form->addElement('hidden','activities_direction','DESC');
         $form->addElement('hidden','activities_column','4');
         $form->addElement('text','keyword',get_lang('keyword'));
@@ -498,10 +507,10 @@ class Statistics {
         $form->display();
         echo '</div>';
         
-        $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),4,50,'DESC');
+        $table = new SortableTable('activities', array('Statistics','get_number_of_activities'), array('Statistics','get_activities_data'),5,50,'DESC');
         $parameters = array();
 
-        $parameters['action'] = 'activities';
+        $parameters['report'] = 'activities';
         if (isset($_GET['keyword'])) {
             $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
         }
@@ -511,7 +520,8 @@ class Statistics {
         $table->set_header(1, get_lang('DataType'));
         $table->set_header(2, get_lang('Value'));
         $table->set_header(3, get_lang('UserName'));
-        $table->set_header(4, get_lang('Date'));
+        $table->set_header(4, get_lang('IPAddress'));
+        $table->set_header(5, get_lang('Date'));
         $table->display();
     }
 

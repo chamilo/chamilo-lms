@@ -1620,10 +1620,10 @@ class Exercise {
 				if ($this->type == ALL_ON_ONE_PAGE || $nbrQuestions == $questionNum) {
 					if ($this->review_answers) {
 						$label = get_lang('ReviewQuestions');
-						$class = 'btn btn-primary';
+						$class = 'btn btn-success';
 					} else {
 						$label = get_lang('EndTest');
-						$class = 'btn btn-success';
+						$class = 'btn btn-warning';
 					}
 				} else {
 					$label = get_lang('NextQuestion');
@@ -1648,10 +1648,10 @@ class Exercise {
 				} else {
 					if ($this->review_answers) {
 						$all_label = get_lang('ReviewQuestions');
-						$class = 'btn btn-primary';
+						$class = 'btn btn-success';
 					} else {
 						$all_label = get_lang('EndTest');
-						$class = 'btn btn-success';
+						$class = 'btn btn-warning';
 					}
 					$all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
 					$all_button .= '&nbsp;<span id="save_all_reponse"></span>';
@@ -2730,7 +2730,7 @@ class Exercise {
 						} elseif($answerType==MATCHING) {
 							if ($origin != 'learnpath') {
 								echo '<tr>';
-								echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
+								echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
 								echo '</tr>';
 							}
 						}
@@ -3204,9 +3204,11 @@ class Exercise {
 					exercise_attempt($questionScore, 0, $quesId, $exeId, 0, $this->id);
 				}
 			} elseif ($answerType == MATCHING) {
-				foreach ($matching as $j => $val) {
-					exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
-				}
+                if (isset($matching)) {
+                    foreach ($matching as $j => $val) {
+                        exercise_attempt($questionScore, $val, $quesId, $exeId, $j, $this->id);
+                    }
+                }
 			} elseif ($answerType == FREE_ANSWER) {
 				$answer = $choice;
 				exercise_attempt($questionScore, $answer, $quesId, $exeId, 0, $this->id);
@@ -3233,6 +3235,7 @@ class Exercise {
 		if ($propagate_neg == 0 && $questionScore < 0) {
 			$questionScore = 0;
 		}
+
 		if ($saved_results) {
 			$stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 			$sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;
@@ -3244,8 +3247,11 @@ class Exercise {
                                 'weight'        => $questionWeighting,
                                 'extra'         => $extra_data,
                                 'open_question' => $arrques,
-                                'open_answer'   => $arrans
+                                'open_answer'   => $arrans,
+                                'answer_type'   => $answerType
         );
+
+
 		return $return_array;
 	} //End function
 
@@ -3286,10 +3292,11 @@ class Exercise {
                     </table>';
             $open_question_list = null;
 			foreach ($question_list_answers as $item) {
-                $question   = $item['question'];
-                $answer     = $item['answer'];
+                $question    = $item['question'];
+                $answer      = $item['answer'];
+                $answer_type = $item['answer_type'];
 
-                if (!empty($question) && !empty($answer)) {
+                if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER ) {
                     $open_question_list.='<tr>
                             <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
                             <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
@@ -3321,6 +3328,91 @@ class Exercise {
                 $msg1 = str_replace("#url#", $url_email, $msg);
                 $mail_content = $msg1;
                 $subject = get_lang('OpenQuestionsAttempted');
+
+                $teachers = array();
+                if (api_get_session_id()) {
+                    $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+                } else {
+                    $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+                }
+
+                if (!empty($teachers)) {
+                    foreach ($teachers as $user_id => $teacher_data) {
+                        MessageManager::send_message_simple($user_id, $subject, $mail_content);
+                    }
+                }
+            }
+	}
+
+    function send_notification_for_oral_questions($question_list_answers, $origin, $exe_id) {
+		if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
+			return null;
+		}
+		// Email configuration settings
+		$coursecode     = api_get_course_id();
+		$course_info    = api_get_course_info(api_get_course_id());
+
+		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
+
+		$msg = '<p>'.get_lang('OralQuestionsAttempted').' :</p>
+                    <p>'.get_lang('AttemptDetails').' : </p>
+                    <table class="data_table">
+                        <tr>
+                            <td><h3>'.get_lang('CourseName').'</h3></td>
+                            <td><h3>#course#</h3></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</span></td>
+                            <td>#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>#mail#</td>
+                        </tr>
+                    </table>';
+            $oral_question_list = null;
+			foreach ($question_list_answers as $item) {
+                $question    = $item['question'];
+                $answer      = $item['answer'];
+                $answer_type = $item['answer_type'];
+
+                if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+                    $oral_question_list.='<tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                        </tr>
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                        </tr>';
+                }
+			}
+
+            if (!empty($oral_question_list)) {
+                $msg .=  '<p><br />'.get_lang('OralQuestionsAttemptedAre').' :</p>
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+                $msg .= $oral_question_list;
+                $msg.='</table><br />';
+
+
+                $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+                $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
+                $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
+                $msg    = str_replace("#mail#",        $user_info['email'],$msg1);
+                $msg    = str_replace("#course#",      $course_info['name'],$msg1);
+
+                if ($origin != 'learnpath') {
+                    $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                            <a href="#url#">#url#</a>';
+                }
+                $msg1 = str_replace("#url#", $url_email, $msg);
+                $mail_content = $msg1;
+                $subject = get_lang('OralQuestionsAttempted');
 
                 $teachers = array();
                 if (api_get_session_id()) {

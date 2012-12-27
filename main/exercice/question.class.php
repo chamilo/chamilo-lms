@@ -189,7 +189,6 @@ abstract class Question
 	 * @return - string - question title
 	 */
 	function selectTitle() {
-		$this->question=text_filter($this->question);
 		return $this->question;
 	}
 
@@ -1445,7 +1444,7 @@ abstract class Question
             $class = 'success';
         }
 
-        if ($this->type == FREE_ANSWER) {
+        if ($this->type == FREE_ANSWER || $this->type == ORAL_EXPRESSION) {
             if ($score['revised'] == true) {
                 $score_label = get_lang('Revised');
                 $class = '';

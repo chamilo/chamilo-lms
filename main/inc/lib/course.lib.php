@@ -2,11 +2,12 @@
 /* For licensing terms, see /license.txt*/
 /**
  * This is the course library for Chamilo.
+ *
  * All main course functions should be placed here.
  *
  * Many functions of this library deal with providing support for
- * virtual/linked/combined courses (this was already used in several
- * universities but not available in standard Chamilo).
+ * virtual/linked/combined courses (this was already used in several universities
+ * but not available in standard Chamilo).
  *
  * The implementation changed, initially a course was a real course
  * if target_course_code was 0 , this was changed to NULL.
@@ -1101,8 +1102,10 @@ class CourseManager {
             $condition_course = ' AND course_code = "'.$course_code.'" ';
         }
 
-        $result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course "));
+        $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                WHERE user_id = $user_id AND relation_type<>".COURSE_RELATION_TYPE_RRHH." $condition_course ";
+
+        $result = Database::fetch_array(Database::query($sql));
 
         if (!empty($result)) {
             return true; // The user has been registered in this course.
@@ -1255,6 +1258,9 @@ class CourseManager {
         } else {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
+                if ($resumed_report) {
+                    $sql = " SELECT count(field_id) ";
+                }
             } else {
                 if (empty($course_code)) {
                     $sql = 'SELECT DISTINCT course.title, course.code, course_rel_user.status as status_rel, user.user_id, course_rel_user.role, course_rel_user.tutor_id, user.*  ';
@@ -1285,10 +1291,9 @@ class CourseManager {
             $sql  .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER).'  au ON (au.user_id = user.user_id) ';
         }
 
-        if ($add_reports && $resumed_report) {
-            /*$extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
-            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';*/
-            $limit = null;
+        if ($return_count && $resumed_report) {
+            $extra_field_info = UserManager::get_extra_field_information_by_name($extra_field);
+            $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES).' as ufv ON (user.user_id = ufv.user_id AND (field_id = '.$extra_field_info['id'].' OR field_id IS NULL ) )';
         }
         $sql .= ' WHERE '.$filter_by_status_condition.' '.implode(' OR ', $where);
 
@@ -1296,8 +1301,11 @@ class CourseManager {
             $current_access_url_id = api_get_current_access_url_id();
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
-        $sql .= ' '.$order_by.' '.$limit;
+        if ($return_count && $resumed_report) {
+            $sql .= ' GROUP BY field_id ';
+        }
 
+        $sql .= ' '.$order_by.' '.$limit;
 
         $rs = Database::query($sql);
         $users = array();
@@ -1306,6 +1314,13 @@ class CourseManager {
         }
         $counter = 1;
         $count_rows = Database::num_rows($rs);
+        if ($return_count && $resumed_report) {
+            $result = 0;
+            while ($user = Database::fetch_array($rs)) {
+                $result += $user['count'];
+            }
+            return $result;
+        }
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 $report_info = array();
@@ -1391,8 +1406,8 @@ class CourseManager {
         return $users;
     }
 
-    static function get_count_user_list_from_course_code($resumed_report = false) {
-        return self::get_user_list_from_course_code(null, 0, null, null, null, true, $resumed_report);
+    static function get_count_user_list_from_course_code($resumed_report = false, $extra_field = null) {
+        return self::get_user_list_from_course_code(null, 0, null, null, null, true, false, $resumed_report, $extra_field);
     }
     /**
      * Gets subscribed users in a course or in a course/session
@@ -2659,7 +2674,7 @@ class CourseManager {
                 $data .= $description->title;
                 $data .= '</div>';
                 $data .= '<div class="sectioncomment">';
-                $data .= text_filter($description->content);
+                $data .= $description->content;
                 $data .= '</div>';
             }
         } else {

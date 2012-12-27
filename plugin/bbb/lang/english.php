@@ -13,6 +13,7 @@ $strings['plugin_comment']      = "Add a videoconference room in a Chamilo cours
 $strings['Videoconference']     = "Videoconference";
 $strings['MeetingOpened']       = "Meeting opened";
 $strings['MeetingClosed']       = "Meeting closed";
+$strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
 $strings['CloseMeeting']        = "Close meeting";
 
 $strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
@@ -21,14 +22,14 @@ $strings['VideoConferenceAddedToTheLinkTool']   = "Videoconference added to the 
 
 $strings['GoToTheVideoConference']   = "Go to the videoconference";
 
-$strings['Records']             = "Records";
+$strings['Records']             = "Recording";
 $strings['Meeting']             = "Meeting";
 
-$strings['ViewRecord']          = "View record";
+$strings['ViewRecord']          = "View recording";
 $strings['CopyToLinkTool']      = "Copy to link tool";
 
-$strings['EnterConference']     = "Enter to the videoconference";
-$strings['RecordList']          = "Record list";
+$strings['EnterConference']     = "Enter the videoconference";
+$strings['RecordList']          = "Recording list";
 $strings['ServerIsNotRunning']  = "Videoconference server is not running";
 $strings['ServerIsNotConfigured']  = "Videoconference server is not configured";
 
@@ -49,6 +50,6 @@ $strings['big_blue_button_record_and_store'] = 'Record and store sessions';
 
 $strings['plugin_tool_bbb'] = 'Video';
 
-$strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recordings for the meetings';
-
+$strings['ThereAreNotRecordingsForTheMeetings'] = 'There are not recording for the meeting sessions';
+$strings['NoRecording'] = 'No recording';
 

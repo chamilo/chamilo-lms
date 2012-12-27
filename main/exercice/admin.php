@@ -271,10 +271,10 @@ if (isset($_SESSION['gradebook'])){
 }
 
 if (!empty($gradebook) && $gradebook=='view') {
-	$interbreadcrumb[]= array (
-			'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-			'name' => get_lang('ToolGradebook')
-		);
+	$interbreadcrumb[]= array(
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 $interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
@@ -434,9 +434,7 @@ if ($objExercise->exercise_was_added_in_lp) {
     if ($objExercise->force_edit_exercise_in_lp == true) {
         Display::display_warning_message(get_lang('ForceEditingExerciseInLPWarning'));
     } else {
-        //if ($objExercise->edit_exercise_in_lp) {
-            Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
-        //}
+        Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
     }
 }
 

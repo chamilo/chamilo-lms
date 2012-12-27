@@ -34,9 +34,10 @@ require_once 'survey.lib.php';
 if (!empty($_user)) {
     $interbreadcrumb[] = array('url' => 'survey_list.php?cidReq='.Security::remove_XSS($_GET['course']), 'name' => get_lang('SurveyList'));
 }
-
-// Header
-Display :: display_header(get_lang('ToolSurvey'));
+if (($_GET['invitationcode'] == 'auto' && isset($_GET['scode'])) && ((!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)))) {
+    // anonymous users not allowed
+    api_not_allowed();
+}
 
 // getting all the course information
 if (isset($_GET['course'])) {
@@ -50,6 +51,9 @@ if (empty($course_info)) {
 }
 
 $course_id = $course_info['real_id'];
+
+// Header
+Display :: display_header(get_lang('ToolSurvey'));
 
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -72,10 +76,6 @@ $invitationcode = $_GET['invitationcode'];
 
 // Start auto-invitation feature FS#3403 (all-users-can-do-the-survey-URL handling)
 if ($invitationcode == 'auto' && isset($_GET['scode'])) {
-    // Not intended for anonymous users
-    if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
-        api_not_allowed();
-    }
     $userid = $_user['user_id'];
 
     $scode = Database::escape_string($_GET['scode']); // Survey_code of the survey

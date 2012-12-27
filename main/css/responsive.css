@@ -26,9 +26,6 @@ The more frequent ones have been marked with *
     .navbar {
       margin-top: 0em;
     }
-    .navbar .brand {
-         font-size: 14px;
-    }
     #main_content .span3 #login_block {
         width: 160px;
         float: left;
@@ -47,6 +44,7 @@ The more frequent ones have been marked with *
     /* Smaller brand */
     .navbar .brand {
          font-size: 14px;
+         text-shadow: 0px;
     }
 
     /* In order to avoid clicking in the main title instead of the expand button */
@@ -149,7 +147,8 @@ The more frequent ones have been marked with *
 
     /* Brand fix */
     .navbar .brand {
-         font-size: 14px;
+        font-size: 14px;
+        text-shadow: 0px;
     }
 
     .subnav .dropdown-toggle {

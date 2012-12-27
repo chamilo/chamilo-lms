@@ -2139,11 +2139,7 @@ class DocumentManager {
             $pre_remove .='..\/';
         }
 
-        //var_dump(' link to add '.$link_to_add.'  -- remove '.$pre_remove);
-
         $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
-
-        //var_dump($orig_source_html);
 
         foreach ($orig_source_html as $source) {
 
@@ -2184,10 +2180,9 @@ class DocumentManager {
                             $destination_url = preg_replace("/" . $pre_remove . "/", '', $real_orig_url, 1);
                         }
                         if ($real_orig_url == $destination_url) {
-                            echo 'continue2';
+                            //echo 'continue2';
                             continue;
                         }
-                        var_dump($real_orig_url_temp . ' - ' . $destination_url);
                         $content_html = str_replace($real_orig_url, $destination_url, $content_html);
                     }
                 } else {
@@ -3092,7 +3087,7 @@ class DocumentManager {
                             $di->addChunk($ic_slide);
                             // Index and return a new search engine document id
                             $did = $di->index();
-                            //var_dump($did);
+
                             if ($did) {
                                 // update the search_did on db
                                 $tbl_se_ref = Database::get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);

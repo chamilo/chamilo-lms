@@ -3328,7 +3328,7 @@ class TrackingCourseLog {
                             }
                             $row[4] = $ip;
                         }
-                        
+
     			$resources[] = $row;
     		}
     	}
@@ -4053,7 +4053,7 @@ class TrackingUserLog {
      * @param    int        Session id (optional, default = 0)
      * @return     void
      */
-    function display_document_tracking_info($view, $user_id, $course_id, $session_id = 0) {
+    static function display_document_tracking_info($view, $user_id, $course_id, $session_id = 0) {
 
     	// protect data
     	$user_id     = intval($user_id);
@@ -4112,6 +4112,7 @@ class TrackingUserLog {
             ";
     	}
     }
+
     /**
      * Gets the IP of a given user, using the last login before the given date
      * @param int User ID
@@ -4121,7 +4122,7 @@ class TrackingUserLog {
      * @return string IP address (or false on error)
      * @assert (0,0) === false
      */
-    function get_ip_from_user_event($user_id, $event_date, $return_as_link = false, $body_replace = null) {
+    static function get_ip_from_user_event($user_id, $event_date, $return_as_link = false, $body_replace = null) {
         if (empty($user_id) or empty($event_date)) {
             return false;
         }
@@ -4140,6 +4141,7 @@ class TrackingUserLog {
         return $ip;
     }
 }
+
 /**
  * @package chamilo.tracking
  */

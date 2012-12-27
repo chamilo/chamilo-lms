@@ -1,9 +1,7 @@
 {
     "autoload": {
         "psr-0": {
-            "Chamilo": "src/",
             "Entity" : "main/inc/"
-
         },
         "classmap": [
             "main/auth",
@@ -36,7 +34,8 @@
         "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
         "doctrine/migrations": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
-        "pagerfanta/pagerfanta": "dev-master"
+        "pagerfanta/pagerfanta": "dev-master",
+        "knplabs/knp-menu": "2.0.*@dev"
     },
     "minimum-stability": "dev"
 }

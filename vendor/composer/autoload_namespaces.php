@@ -27,6 +27,7 @@ return array(
     'Pimple' => $vendorDir . '/pimple/pimple/lib/',
     'Pagerfanta\\' => $vendorDir . '/pagerfanta/pagerfanta/src/',
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
+    'Knp\\Menu\\' => $vendorDir . '/knplabs/knp-menu/src/',
     'Entity' => $baseDir . '/main/inc/',
     'Doctrine\\ORM\\' => $vendorDir . '/doctrine/orm/lib/',
     'Doctrine\\DBAL\\Migrations' => $vendorDir . '/doctrine/migrations/lib',
@@ -35,5 +36,4 @@ return array(
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Pimple\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Cilex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
-    'Chamilo' => $baseDir . '/src/',
 );

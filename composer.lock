@@ -143,19 +143,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal",
-                "reference": "6ace93c92ebfa2411b7c763607057baf069fb0d6"
+                "reference": "63b7ef12a51fab0df4588dbd21bd1a3613bc0362"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/dbal/archive/6ace93c92ebfa2411b7c763607057baf069fb0d6.zip",
-                "reference": "6ace93c92ebfa2411b7c763607057baf069fb0d6",
+                "url": "https://github.com/doctrine/dbal/archive/63b7ef12a51fab0df4588dbd21bd1a3613bc0362.zip",
+                "reference": "63b7ef12a51fab0df4588dbd21bd1a3613bc0362",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "doctrine/common": ">=2.3-dev,<2.5-dev"
             },
-            "time": "2012-12-17 11:53:37",
+            "time": "2012-12-23 21:25:15",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -207,12 +207,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/migrations",
-                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43"
+                "reference": "6e916d8e39b4963d6fd52622fd9ac797dce82837"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/migrations/archive/c1d875ce7d092dd1bc7508c3867b5c6b97431e43.zip",
-                "reference": "c1d875ce7d092dd1bc7508c3867b5c6b97431e43",
+                "url": "https://github.com/doctrine/migrations/archive/6e916d8e39b4963d6fd52622fd9ac797dce82837.zip",
+                "reference": "6e916d8e39b4963d6fd52622fd9ac797dce82837",
                 "shasum": ""
             },
             "require": {
@@ -226,7 +226,7 @@
             "suggest": {
                 "symfony/console": "to run the migration from the console"
             },
-            "time": "2012-10-19 10:37:24",
+            "time": "2012-12-26 14:01:23",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -262,12 +262,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/doctrine/doctrine2.git",
-                "reference": "8b5e4a9a52670992b85e7223d255b98cf77a35a3"
+                "reference": "90b6d5e293147a0268ca005362ff50343bc6dc0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/doctrine2/archive/8b5e4a9a52670992b85e7223d255b98cf77a35a3.zip",
-                "reference": "8b5e4a9a52670992b85e7223d255b98cf77a35a3",
+                "url": "https://github.com/doctrine/doctrine2/archive/90b6d5e293147a0268ca005362ff50343bc6dc0f.zip",
+                "reference": "90b6d5e293147a0268ca005362ff50343bc6dc0f",
                 "shasum": ""
             },
             "require": {
@@ -279,7 +279,7 @@
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
             },
-            "time": "2012-12-21 11:45:07",
+            "time": "2012-12-24 09:40:52",
             "bin": [
                 "bin/doctrine",
                 "bin/doctrine.php"
@@ -767,12 +767,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/EventDispatcher",
-                "reference": "v2.1.6"
+                "reference": "0e9d69646306e11d03dde4a29e79cd09d9567cb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/EventDispatcher/archive/v2.1.6.zip",
-                "reference": "v2.1.6",
+                "url": "https://github.com/symfony/EventDispatcher/archive/0e9d69646306e11d03dde4a29e79cd09d9567cb9.zip",
+                "reference": "0e9d69646306e11d03dde4a29e79cd09d9567cb9",
                 "shasum": ""
             },
             "require": {
@@ -785,7 +785,7 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/http-kernel": "2.1.*"
             },
-            "time": "2012-12-06 10:00:55",
+            "time": "2012-12-27 08:21:49",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -817,12 +817,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form",
-                "reference": "v2.1.6"
+                "reference": "2cc2a32b6567e974d63f5ac6514db33b1b265dde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Form/archive/v2.1.6.zip",
-                "reference": "v2.1.6",
+                "url": "https://github.com/symfony/Form/archive/2cc2a32b6567e974d63f5ac6514db33b1b265dde.zip",
+                "reference": "2cc2a32b6567e974d63f5ac6514db33b1b265dde",
                 "shasum": ""
             },
             "require": {
@@ -839,7 +839,7 @@
                 "symfony/validator": "2.1.*",
                 "symfony/http-foundation": "2.1.*"
             },
-            "time": "2012-12-15 17:20:34",
+            "time": "2012-12-20 17:52:51",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -1243,12 +1243,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge",
-                "reference": "8e744c833f1fdee779a9e747a2feb795a655d869"
+                "reference": "5f83b3f000eedc25e5fa538bd2ff928e21e2327c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/TwigBridge/archive/8e744c833f1fdee779a9e747a2feb795a655d869.zip",
-                "reference": "8e744c833f1fdee779a9e747a2feb795a655d869",
+                "url": "https://github.com/symfony/TwigBridge/archive/5f83b3f000eedc25e5fa538bd2ff928e21e2327c.zip",
+                "reference": "5f83b3f000eedc25e5fa538bd2ff928e21e2327c",
                 "shasum": ""
             },
             "require": {
@@ -1273,7 +1273,7 @@
                 "symfony/security": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "2012-12-20 07:31:14",
+            "time": "2012-12-22 14:51:06",
             "type": "symfony-bridge",
             "extra": {
                 "branch-alias": {
@@ -1405,18 +1405,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "f095f3a1777431412954e478f92e8a10cb7b6495"
+                "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/f095f3a1777431412954e478f92e8a10cb7b6495.zip",
-                "reference": "f095f3a1777431412954e478f92e8a10cb7b6495",
+                "url": "https://github.com/fabpot/Twig/archive/a65e7e4e2e5726a42a29e609fad008f8a9600594.zip",
+                "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-12-18 10:01:32",
+            "time": "2012-12-25 10:06:30",
             "type": "library",
             "extra": {
                 "branch-alias": {

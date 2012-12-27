@@ -145,7 +145,6 @@ $app->register(new Silex\Provider\TranslationServiceProvider(),array(
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
 
-
 //Monolog
 $app->register(new Silex\Provider\MonologServiceProvider(), array(
     'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
@@ -177,9 +176,6 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
     )
 ));
 
-
-
-//$app['twig']->addExtension(new Twig_Extension_Debug());
 //Setting Twig options
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
@@ -194,9 +190,8 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
     return $twig;
 }));
 
-//Setting Doctrine service provider
+//Setting Doctrine service provider (DBAL)
 //Gathering default info of the current installation from the $_configuration array
-
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'    => 'pdo_mysql',
@@ -208,6 +203,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 ));
 
 
+
+//Setting Doctrine ORM
 $app->register(new DoctrineOrmServiceProvider, array(
     "orm.proxies_dir" => $app['db.orm.proxies_dir'],
     "orm.em.options" => array(
@@ -221,6 +218,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
     ),
 ));
 
+//Testing with another silex service provider
 /*
 // Register Doctrine ORM
 $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
@@ -239,6 +237,7 @@ $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
 
 //Creating Chamilo service provider
 use Silex\ServiceProviderInterface;
+//use Sonata\AdminBundle\Controller\CRUDController;
 
 class ChamiloServiceProvider implements ServiceProviderInterface {
     public function register(Application $app) {
@@ -246,6 +245,13 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
         $app['template'] = $app->share(function() use($app){
             return new Template(null, $app);
         });
+
+        /*$app['sonata.crud_controller'] = $app->share(function() use ($app) {
+            $controller = new CRUDController();
+            $controller->setContainer($app);
+            $controller->configure();
+            return $controller;
+        });*/
 
         //Formvalidator
         $app['form_validator'] = $app->share(function() use($app){
@@ -283,7 +289,9 @@ $app->error(function (\Exception $e, $code) use ($app) {
     $app['template']->assign('error_message', $message);
     $response = $app['template']->render_layout('error.tpl');
     return new Response($response);
-});*/
+});
+ * 
+ */
 
 /*
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;

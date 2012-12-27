@@ -576,17 +576,17 @@ function cut($text, $maxchar, $embed = false) {
  * @return mixed    An integer or a float depends on the parameter
  */
 function float_format($number, $flag = 1) {
-    if (is_numeric($number)) {    	
+    if (is_numeric($number)) {
         if (!$number) {
             $result = ($flag == 2 ? '0.'.str_repeat('0', EXERCISE_NUMBER_OF_DECIMALS) : '0');
         } else {
-            
+
             if (floor($number) == $number) {
                 $result = number_format($number, ($flag == 2 ? EXERCISE_NUMBER_OF_DECIMALS : 0));
             } else {
                 $result = number_format(round($number, 2), ($flag == 0 ? 0 : EXERCISE_NUMBER_OF_DECIMALS));
             }
-        }        
+        }
         return $result;
     }
 }
@@ -673,12 +673,12 @@ function _text_parse_texexplorer($textext) {
 }
 
 /**
- * This function splits the string into words and then joins them back together again one by one.  
- * Example: "Test example of a long string" 
- * 			substrwords(5) = Test ... *  
- * @param string 
+ * This function splits the string into words and then joins them back together again one by one.
+ * Example: "Test example of a long string"
+ * 			substrwords(5) = Test ... *
+ * @param string
  * @param int the max number of character
- * @param string how the string will be end 
+ * @param string how the string will be end
  * @return a reduce string
  */
 
@@ -711,7 +711,7 @@ function substrwords($text,$maxchar,$end='...')
 	return $output.$end;
 }
 
-function implode_with_key($glue, $array) {    
+function implode_with_key($glue, $array) {
     if (!empty($array)) {
         $string = '';
         foreach($array as $key => $value) {
@@ -722,7 +722,7 @@ function implode_with_key($glue, $array) {
         }
         return $string;
     }
-    return '';    
+    return '';
 }
 
 
@@ -744,4 +744,26 @@ function format_file_size($file_size) {
         $file_size = $file_size . 'B';
     }
     return $file_size;
+}
+
+function return_datetime_from_array($array) {
+    $year	 = '0000';
+    $month = $day = $hours = $minutes = $seconds = '00';
+
+    var_dump($array);
+    if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
+        $year = $array['Y'];
+        $month = isset($array['F'])?$array['F']:$array['M'];
+        if (intval($month) < 10 ) $month = '0'.$month;
+        $day = $array['d'];
+        if (intval($day) < 10 ) $day = '0'.$day;
+        $hours = $array['H'];
+        if (intval($hours) < 10 ) $hours = '0'.$hours;
+        $minutes = $array['i'];
+        if (intval($minutes) < 10 ) $minutes = '0'.$minutes;
+    }
+    if (checkdate($month,$day,$year)) {
+        $datetime = $year.'-'.$month.'-'.$day.' '.$hours.':'.$minutes.':'.$seconds;
+    }
+    return $datetime;
 }

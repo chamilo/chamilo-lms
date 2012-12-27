@@ -1418,11 +1418,11 @@ class Attendance
 
     public function get_attendance_states() {
         $attendance_states = array(
-            '4' => array('label' => get_lang('Default'), 'class' => 'btn') ,
             '1' => array('label' => get_lang('Present'), 'class' => 'btn-success') ,
-            '0' => array('label' => get_lang('Absent'), 'class' => 'btn-danger') ,
             '3' => array('label' => get_lang('Late'), 'class' => 'btn-info') ,
             '2' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
+            '0' => array('label' => get_lang('Absent'), 'class' => 'btn-danger') ,
+            '4' => array('label' => get_lang('Default'), 'class' => 'btn') ,
         );
         return $attendance_states;
     }

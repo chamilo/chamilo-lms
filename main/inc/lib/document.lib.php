@@ -1569,6 +1569,9 @@ class DocumentManager {
         $max = 5;
         $attributes = array();
         $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars');
+
+        $explode_attributes = array('flashvars' => 'file');
+
         $abs_path = '';
 
         if ($recursivity > $max) {
@@ -1580,7 +1583,7 @@ class DocumentManager {
         }
 
         if (!$is_file) {
-            $attributes = self::parse_HTML_attributes($source_html, $wanted_attributes);
+            $attributes = self::parse_HTML_attributes($source_html, $wanted_attributes, $explode_attributes);
         } else {
             if (is_file($source_html)) {
                 $abs_path = $source_html;
@@ -1594,7 +1597,7 @@ class DocumentManager {
                     case 'css' :
                         $file_content = file_get_contents($abs_path);
                         //get an array of attributes from the HTML source
-                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes);
+                        $attributes = self::parse_HTML_attributes($file_content, $wanted_attributes, $explode_attributes);
                         break;
                     default :
                         break;
@@ -1844,7 +1847,7 @@ class DocumentManager {
      * @return   array   An associative array of attributes
      * @author 	 Based on a function from the HTML_Common2 PEAR module
      */
-    static function parse_HTML_attributes($attrString, $wanted = array()) {
+    static function parse_HTML_attributes($attrString, $wanted = array(), $explode_variables = array()) {
         $attributes = array();
         $regs = array();
         $reduced = false;
@@ -1898,8 +1901,20 @@ class DocumentManager {
                             if (!empty($value) && ($value[0] == '\'' || $value[0] == '"')) {
                                 $value = substr($value, 1, -1);
                             }
+
                             if ($value == 'API.LMSGetValue(name') {
                                 $value = 'API.LMSGetValue(name)';
+                            }
+                            //Gets the xx.flv value from the string flashvars="width=320&height=240&autostart=false&file=xxx.flv&repeat=false"
+                            if (isset($explode_variables[$name])) {
+                                $value_modified = str_replace('&amp;', '&', $value);
+                                $value_array = explode('&', $value_modified);
+                                foreach ($value_array as $item) {
+                                    list($key, $item_value) = explode('=', $item);
+                                    if ($key == $explode_variables[$name]) {
+                                        $attributes[strtolower($name)][] = $item_value;
+                                    }
+                                }
                             }
                             $attributes[strtolower($name)][] = $value;
                         }
@@ -1921,13 +1936,15 @@ class DocumentManager {
      */
     static function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
         require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
-        if (!is_string($content_html)) {
+
+        if (empty($content_html)) {
             return false;
         }
 
         $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info = api_get_course_info($origin_course_code);
         $orig_course_path = api_get_path(SYS_PATH) . 'courses/' . $orig_course_info['path'] . '/';
+
         $destination_course_code = CourseManager::get_course_id_from_path($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path = api_get_path(SYS_COURSE_PATH) . $destination_course_directory . '/';
@@ -1935,6 +1952,7 @@ class DocumentManager {
         $user_id = api_get_user_id();
 
         if (!empty($orig_source_html)) {
+
             foreach ($orig_source_html as $source) {
 
                 // get information about source url
@@ -1961,8 +1979,9 @@ class DocumentManager {
                         $document_file = strstr($real_orig_path, 'document');
 
                         if (strpos($real_orig_path, $document_file) !== false) {
-                            $origin_filepath = $orig_course_path . $document_file;
-                            $destination_filepath = $dest_course_path . $document_file;
+
+                            $origin_filepath = $orig_course_path.$document_file;
+                            $destination_filepath = $dest_course_path.$document_file;
 
                             // copy origin file inside destination course
                             if (file_exists($origin_filepath)) {

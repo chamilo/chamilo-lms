@@ -158,12 +158,23 @@ switch ($action) {
         }
         break;
     case 'update_question_order':
+        $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
+        $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
+
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];
+
+        $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
+
+        if (empty($exercise_id)) {
+            return Display::display_error_message(get_lang('Error'));
+        }
         if (api_is_allowed_to_edit(null, true)) {
             $new_question_list = $_POST['question_id_list'];
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {
-                Database::update($TBL_QUESTIONS, array('question_order'=>$counter), array('question_id = ? AND c_id = ? '=>array(intval($new_order_id), $course_id)));
+                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)), true);
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));

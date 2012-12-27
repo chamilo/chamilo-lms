@@ -30,6 +30,7 @@ if ($deleteQuestion) {
 	// destruction of the Question object
 	unset($objQuestionTmp);
 }
+$ajax_url = api_get_path(WEB_AJAX_PATH)."exercise.ajax.php?".api_get_cidreq()."&exercise_id=".intval($exerciseId);
 ?>
 <style>
     .ui-state-highlight { height: 30px; line-height: 1.2em; }
@@ -114,7 +115,7 @@ $(function() {
         cursor: "move", // works?
         update: function(event, ui) {
             var order = $(this).sortable("serialize") + "&a=update_question_order";
-            $.post("<?php echo api_get_path(WEB_AJAX_PATH)?>exercise.ajax.php", order, function(reponse){
+            $.post("<?php echo $ajax_url ?>", order, function(reponse){
                 $("#message").html(reponse);
             });
         },
@@ -153,8 +154,9 @@ if (!$inATest) {
     echo "<div style='clear:both'>&nbsp;</div>";
 
     echo '<div id="question_list">';
-	if ($nbrQuestions) {        
-        $questionList = $objExercise->selectQuestionList();                
+	if ($nbrQuestions) {
+        //Always getting list from DB
+        $questionList = $objExercise->selectQuestionList(true);
 
         // Style for columns
         $styleQuestion = "width:50%; float:left;";
@@ -174,11 +176,11 @@ if (!$inATest) {
 
 				$clone_link = '<a href="'.api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'">'.Display::return_icon('cd.gif',get_lang('Copy'), array(), ICON_SIZE_SMALL).'</a>';
 				$edit_link  = '<a href="'.api_get_self().'?'.api_get_cidreq().'&type='.$objQuestionTmp->selectType().'&myid=1&editQuestion='.$id.'">'.Display::return_icon('edit.png',get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
-                
+
 				if ($objExercise->edit_exercise_in_lp == true) {
 				     $delete_link = '<a id="delete_'.$id.'" class="opener"  href="'.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId.'&deleteQuestion='.$id.'" >'.Display::return_icon('delete.png',get_lang('RemoveFromTest'), array(), ICON_SIZE_SMALL).'</a>';
 				}
-                
+
 				$edit_link   = Display::tag('div', $edit_link,   array('style'=>'float:left; padding:0px; margin:0px'));
 				$clone_link  = Display::tag('div', $clone_link,  array('style'=>'float:left; padding:0px; margin:0px'));
 				$delete_link = Display::tag('div', $delete_link, array('style'=>'float:left; padding:0px; margin:0px'));
@@ -235,7 +237,7 @@ if (!$inATest) {
 			}
 		}
 	}
-    
+
 	if (!$nbrQuestions) {
 	  	echo Display::display_warning_message(get_lang('NoQuestion'));
 	}

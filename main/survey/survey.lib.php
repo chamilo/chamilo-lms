@@ -1256,6 +1256,35 @@ class survey_manager {
 		}
 		return $return;
 	}
+
+    static function survey_generation_hash_available() {
+        if (extension_loaded('mcrypt')) {
+            return true;
+        }
+        return false;
+    }
+
+    static function generate_survey_hash($survey_id, $course_id, $session_id, $group_id) {
+        $hash = hash('sha512', api_get_security_key().'_'.$course_id.'_'.$session_id.'_'.$group_id.'_'.$survey_id);
+        return $hash;
+    }
+
+    static function validate_survey_hash($survey_id, $course_id, $session_id, $group_id, $hash) {
+        $survey_generated_hash = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
+        if ($survey_generated_hash == $hash) {
+            return true;
+        }
+        return false;
+    }
+
+    static function generate_survey_link($survey_id, $course_id, $session_id, $group_id) {
+        $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
+        return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&l='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
+    }
+
+    static function hash_is_valid($hash) {
+
+    }
 }
 
 
@@ -3767,7 +3796,7 @@ class SurveyUtil {
 
 		$sql = "UPDATE $table_survey SET mail_subject='".Database::escape_string($mail_subject)."', $mail_field = '".Database::escape_string($mailtext)."'
 		        WHERE c_id = $course_id AND survey_id = '".Database::escape_string($_GET['survey_id'])."'";
-		$result = Database::query($sql);
+		Database::query($sql);
 	}
 
 	/**
@@ -3780,6 +3809,7 @@ class SurveyUtil {
 	 * 				 The text has to contain a **link** string or this will automatically be added to the end
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @author Julio Montoya - Adding auto-generated link support
 	 * @version January 2007
 	 *
 	 */
@@ -3788,8 +3818,7 @@ class SurveyUtil {
 		if (!is_array($users_array)) return 0; // Should not happen
 		// Getting the survey information
 		$survey_data = survey_manager::get_survey($_GET['survey_id']);
-		// Database table to store the invitations data
-		$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+
 
 		$survey_invitations = SurveyUtil::get_invitations($survey_data['survey_code']);
 		$already_invited = SurveyUtil::get_invited_users($survey_data['code']);
@@ -3803,6 +3832,8 @@ class SurveyUtil {
 
 		$counter = 0;  // Nr of invitations "sent" (if sendmail option)
 		$course_id = api_get_course_int_id();
+
+        $session_id = api_get_session_id();
 
 		foreach ($users_array as $key=>$value) {
 			if (!isset($value) || $value == '') continue;
@@ -3822,9 +3853,15 @@ class SurveyUtil {
 			if ((is_numeric($value) && !in_array($value, $my_alredy_invited)) || (!is_numeric($value) && !in_array($value, $addit_users_array))) {
 				$new_user = true;
 				if (!array_key_exists($value, $survey_invitations)) {
-					$sql = "INSERT INTO $table_survey_invitation (c_id, user, survey_code, invitation_code, invitation_date) VALUES
-					($course_id,  '".Database::escape_string($value)."','".Database::escape_string($survey_data['code'])."','".Database::escape_string($invitation_code)."','".Database::escape_string(date('Y-m-d H:i:s'))."')";
-					Database::query($sql);
+                    $params = array(
+                        'c_id' => $course_id,
+                        'session_id' => $session_id,
+                        'user' => $value,
+                        'survey_code' => $survey_data['code'],
+                        'invitation_code' => $invitation_code,
+                        'invitation_date' => api_get_utc_datetime()
+                    );
+					self::save_invitation($params);
 				}
 			}
 			// Send the email if checkboxed
@@ -3841,6 +3878,16 @@ class SurveyUtil {
 		}
 		return $counter; // Number of invitations sent
 	}
+
+
+    static function save_invitation($params) {
+        // Database table to store the invitations data
+        $table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
+        if (!empty($params['c_id']) && !empty($params['user']) && !empty($params['survey_code'])) {
+            return Database::insert($table_survey_invitation, $params);
+        }
+        return false;
+    }
 
 	/**
 	 * Send the invitation by mail.
@@ -4163,7 +4210,11 @@ class SurveyUtil {
 		// Coach can see that only if the survey is in his session
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
 			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
-			$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+            if (survey_manager::survey_generation_hash_available()) {
+                $return .=  Display::url(Display::return_icon('new_link.png', get_lang('Newlink'),'',ICON_SIZE_SMALL), 'generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq());
+            }
+			$return .= ' <a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
+
 		}
 		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
 		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
@@ -4728,4 +4779,3 @@ class SurveyUtil {
 		}
 	}
 }
-

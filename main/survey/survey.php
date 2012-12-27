@@ -63,14 +63,6 @@ if (isset($_GET['survey_id'])) {
 
 $tool_name = strip_tags($survey_data['title']);
 
-/*
-if (api_substr($survey_data['title'], 0, 3) != '<p>') {
-	$tool_name = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-} else {
-	$tool_name = strip_tags(api_substr(api_html_entity_decode(api_substr($survey_data['title'], 3, -4), ENT_QUOTES), 0, 40));
-
-}*/
-
 $is_survey_type_1 = $survey_data['survey_type'] == 1;
 
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {

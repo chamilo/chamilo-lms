@@ -5067,7 +5067,6 @@ function api_get_encrypted_password($password, $salt = '') {
  * @return boolean - true if secret key is valid, false otherwise
  */
 function api_is_valid_secret_key($original_key_secret, $security_key) {
-    global $_configuration;
     return $original_key_secret == sha1($security_key);
 }
 
@@ -6175,4 +6174,10 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
                 break;
         }
     }
+}
+
+
+function api_get_security_key() {
+    global $_configuration;
+    return $_configuration['security_key'];
 }

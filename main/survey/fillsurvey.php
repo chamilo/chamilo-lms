@@ -77,6 +77,7 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
         api_not_allowed();
     }
     $userid = $_user['user_id'];
+
     $scode = Database::escape_string($_GET['scode']); // Survey_code of the survey
     $autoInvitationcode = "auto-$userid-$scode"; // New invitation code from userid
     // The survey code must exist in this course, or the URL is invalid
@@ -374,7 +375,7 @@ if ($survey_data['form_fields'] != '' && $survey_data['anonymous'] == 0 && is_ar
     }
 
     if ($list['language'] == 1) {
-        //    LANGUAGE
+        //LANGUAGE
         $form->addElement('select_language', 'language', get_lang('Language'));
         if (api_get_setting('profile', 'language') !== 'true') {
             $form->freeze('language');

@@ -1808,11 +1808,12 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             $res = new Result();
                             $check_result = Result :: load (null, $user_id, $eval_id);
 
-                            if (!empty($check_result)) {
+                            if (!empty($check_result) && isset($check_result[0])) {
+
                                 $res->set_evaluation_id($eval_id);
                                 $res->set_user_id($user_id);
                                 $res->set_score($score);
-                                $res->set_id($check_result->get_id());
+                                $res->set_id($check_result[0]->get_id());
                                 $res->save();
 
                                 $eval_result = Result :: load (null, $user_id, $eval_id);
@@ -1880,7 +1881,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['infoextra'];
+            $attendance_date = $data['date'];
             $attendance_user_status = $data['status']; // ??
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
@@ -1989,7 +1990,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['infoextra'];
+            $attendance_date = $data['date'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -2099,7 +2100,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['infoextra'];
+            $attendance_date = $data['date'];
             $attendance_user_status = $data['status']; // ???
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
@@ -2124,11 +2125,11 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time";
 
                     $attendance = new Attendance();
-
                     $course_info = api_get_course_info($course_data['code']);
                     $attendance->set_course_id($course_info['code']);
                     $attendance->set_course_int_id($course_info['real_id']);
@@ -2186,7 +2187,6 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             } else {
                 $message = "NO course found for session id: $session_id";
             }
-
             return array(
                 'message' => $message,
                 'status_id' => self::TRANSACTION_STATUS_FAILED
@@ -2651,6 +2651,20 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         if ($result['error'] == true) {
             return $result;
         }
+        $array = array(
+            'AUS' => 0,//(ausencia)
+            'TAR' => 2,//(tarde)
+            'DEF' => 4, //(default -> cuando todavía no se marcó nada)
+            'PRE' => 1,//(presente)
+            'T45' => 3,//(tarde de más de 45 minutos)
+        );
+
+        if (isset($result['name'])) {
+            $result['name'] = trim($result['name']);
+            $result['status']  = isset($array[$result['name']]) ? $array[$result['name']] : 4;
+        }
+        $result['date'] = trim($result['Fecha']);
+
         return $result;
     }
 

@@ -4445,7 +4445,7 @@ class SurveyUtil {
 					   "survey.anonymous							AS col8, ".
 					   "survey.survey_id							AS col9  ".
 				       "FROM $table_survey survey ".
-				       "LEFT JOIN $table_survey_question survey_question ON survey.survey_id = survey_question.survey_id ".
+				       "LEFT JOIN $table_survey_question survey_question ON (survey.survey_id = survey_question.survey_id AND survey.c_id = survey_question.c_id) ".
 				       ", $table_user user ".
 				       ",WHERE survey.author = user.user_id AND survey.c_id = $course_id $list_condition ";
 		$sql .= " GROUP BY survey.survey_id";

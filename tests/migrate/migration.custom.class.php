@@ -1629,7 +1629,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                $message = "Result already added ";
+                                $message = "Result already added user_id: $user_id - eval_id: $eval_id - gradebook_id: {$gradebook['id']}";
                             }
                         } else {
                             $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";
@@ -1821,7 +1821,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                $message = "Result not modified because does not exist";
+                                $message = "Result not modified because does not exist - user_id: $user_id - eval_id:$eval_id - gradebook_id: {$gradebook['id']}";
                             }
                         } else {
                             $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";

@@ -483,7 +483,11 @@ if (isset($_GET['show']) || isset($_POST['personality'])) {
             $paged_questions = $_SESSION['paged_questions'];
         }
 
+        // Redefinition of variables and session ids to fix issue of survey not
+        //  showing questions - see support.chamilo.org #5529
         $course_id = $survey_invitation['c_id'];
+        $_SESSION['_cid'] = $course_id;
+        $_SESSION['_real_cid'] = $course_id;
 
         if (key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {

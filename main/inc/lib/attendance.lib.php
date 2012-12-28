@@ -1457,7 +1457,8 @@ class Attendance
             if ($add_label) {
                 $label = $state_list[$state_id]['label'];
             }
-            $extra_attributes['class'] = $extra_attributes['class']." btn ".$state_list[$state_id]['class'];
+            $default_class = isset($extra_attributes['class']) ? $extra_attributes['class'] : null;
+            $extra_attributes['class'] = $default_class." btn ".$state_list[$state_id]['class'];
             return Display::url($label, '', $extra_attributes);
         }
         return null;

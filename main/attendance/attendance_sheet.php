@@ -183,7 +183,7 @@ $(document).ready(function() {
             state = 4;
             my_class = 'btn';
         }
-        
+
         var id = my_button.attr('id');
         $('#hidden_'+id).attr('value', 'state_'+state+'_'+id);
 
@@ -275,6 +275,7 @@ $(document).ready(function() {
         echo '<div class="divTableWithFloatingHeader attendance-calendar-table" style="margin:0px;padding:0px;float:left;width:55%;overflow:auto;overflow-y:hidden;">';
         echo '<table class="tableWithFloatingHeader data_table" width="100%">';
         echo '<thead>';
+        $result = null;
         if (count($attendant_calendar) > 0 ) {
             foreach ($attendant_calendar as $calendar) {
                 $date = $calendar['date'];

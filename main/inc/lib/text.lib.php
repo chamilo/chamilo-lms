@@ -749,8 +749,6 @@ function format_file_size($file_size) {
 function return_datetime_from_array($array) {
     $year	 = '0000';
     $month = $day = $hours = $minutes = $seconds = '00';
-
-    var_dump($array);
     if (isset($array['Y']) && (isset($array['F']) || isset($array['M']))  && isset($array['d']) && isset($array['H']) && isset($array['i'])) {
         $year = $array['Y'];
         $month = isset($array['F'])?$array['F']:$array['M'];

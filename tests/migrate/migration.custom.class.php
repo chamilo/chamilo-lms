@@ -1615,10 +1615,10 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                 $message = "Result already added ";
                             }
                         } else {
-                            $message = "Evaluation not found ";
+                            $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";
                         }
                     } else {
-                        $message = "Gradebook does not exists ";
+                        $message = "Gradebook does not exists in course: {$course_data['code']} - session_id: $session_id";
                     }
                 } else {
                     $message = "Something is wrong with the course ";
@@ -2165,7 +2165,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $count = 1;
             if (!empty($transactions)) {
                 foreach ($transactions as $transaction_info) {
-                   //Add transactions here
+                    //Add transactions here
                     error_log("Processing transaction: ".$count);
                     $result = self::process_transaction($transaction_info, $transaction_status_list);
                     $count++;

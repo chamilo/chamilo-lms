@@ -526,7 +526,7 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-            
+
             //Notas
             array(
                 //'action' => 'TRANSACTION_TYPE_ADD_NOTA',
@@ -1003,9 +1003,9 @@ class Migration {
                 return array(
                     'message' => $message,
                     'raw_reponse' =>
-                                    //Display::page_subheader2("Transactions:").
-                                     Display::page_subheader3("Chamilo transaction info:")."<pre>".print_r($transaction_chamilo_info, true)."</pre>".
-                                     Display::page_subheader3("Webservice transaction reponse:")."<pre>".print_r($result, true)."</pre>",
+                        //Display::page_subheader2("Transactions:").
+                         Display::page_subheader3("Chamilo transaction info:")."<pre>".print_r($transaction_chamilo_info, true)."</pre>".
+                         Display::page_subheader3("Webservice transaction reponse:")."<pre>".print_r($result, true)."</pre>",
                 );
             }
         }

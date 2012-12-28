@@ -1850,28 +1850,6 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         }
     }
 
-    static function get_horario_value($session_id) {
-         $extra_field_value = new ExtraFieldValue('session');
-        //Getting horario info
-        $extra_field = new ExtraField('session');
-        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');
-
-        $horario_info = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
-        $extra_field_option = new ExtraFieldOption('session');
-        $horario_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $horario_info['field_value']);
-
-        $time = "08:00";
-        if (isset($horario_info) && isset($horario_info[0])) {
-            $horario = $horario_info[0]['option_display_text'];
-            $horario_array = explode(' ', $horario);
-
-            if (isset($horario_array[0])) {
-                $time = $horario_array[0];
-            }
-        }
-        return $time;
-    }
-
     //        Asistencias
     //            añadir assist_agregar IID
     // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
@@ -1912,6 +1890,16 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+
+                    //Check if user exist in the session
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+
+                    if ($status != false) {
+                         return array(
+                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
 
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time";
@@ -2028,6 +2016,16 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
 
+                    //Check if user exist in the session
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+
+                    if ($status != false) {
+                         return array(
+                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time";
 
@@ -2139,6 +2137,17 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
 
+                    //Check if user exist in the session
+                    $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
+
+                    if ($status != false) {
+                         return array(
+                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+
+
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time";
 
@@ -2201,7 +2210,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                         );
                     }
                 } else {
-                    $message = "Something is wrong with the course";
+                    $message = "Course is not set";
                 }
             } else {
                 $message = "NO course found for session id: $session_id";
@@ -2764,5 +2773,28 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $params['coach_access_start_date'] = $casd;
         $params['coach_access_end_date'] = $caed;
         return true;
+    }
+
+
+    static function get_horario_value($session_id) {
+         $extra_field_value = new ExtraFieldValue('session');
+        //Getting horario info
+        $extra_field = new ExtraField('session');
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');
+
+        $horario_info = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
+        $extra_field_option = new ExtraFieldOption('session');
+        $horario_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $horario_info['field_value']);
+
+        $time = "08:00";
+        if (isset($horario_info) && isset($horario_info[0])) {
+            $horario = $horario_info[0]['option_display_text'];
+            $horario_array = explode(' ', $horario);
+
+            if (isset($horario_array[0])) {
+                $time = $horario_array[0];
+            }
+        }
+        return $time;
     }
 }

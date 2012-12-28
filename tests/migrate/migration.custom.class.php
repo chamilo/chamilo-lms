@@ -1894,9 +1894,9 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     //Check if user exist in the session
                     $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
 
-                    if ($status == false) {
+                    if ($status === false) {
                          return array(
-                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'message' => "User #$user_id is not registered in course code: {$course_data['code']} - session_id: $session_id",
                             'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }
@@ -2019,9 +2019,9 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     //Check if user exist in the session
                     $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
 
-                    if ($status == false) {
+                    if ($status === false) {
                          return array(
-                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'message' => "User #$user_id is not registered in course code: {$course_data['code']} - session_id: $session_id",
                             'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }
@@ -2140,9 +2140,9 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     //Check if user exist in the session
                     $status = SessionManager::get_user_status_in_course_session($user_id, $course_data['code'], $session_id);
 
-                    if ($status == false) {
+                    if ($status === false) {
                          return array(
-                            'message' => "User is not registered in course code: {$course_data['code']} - session_id: $session_id",
+                            'message' => "User #$user_id is not registered in course code: {$course_data['code']} - session_id: $session_id",
                             'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }

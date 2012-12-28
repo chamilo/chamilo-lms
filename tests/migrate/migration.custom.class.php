@@ -1701,13 +1701,13 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                $message = "Result does not exist";
+                                $message = "Result does not exist for user_id: $user_id and $eval_id ";
                             }
                         } else {
-                            $message = "Evaluation not found ";
+                            $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";
                         }
                     } else {
-                        $message = "Gradebook does not exists ";
+                        $message = "Gradebook does not exists in course: {$course_data['code']} - session_id: $session_id";
                     }
                 } else {
                     $message = "Something is wrong with the course ";
@@ -1794,10 +1794,10 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                 $message = "Result not modified because does not exist";
                             }
                         } else {
-                            $message = "Evaluation not found ";
+                            $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";
                         }
                     } else {
-                        $message = "Gradebook does not exists ";
+                        $message = "Gradebook does not exists in course: {$course_data['code']} - session_id: $session_id";
                     }
                 } else {
                     $message = "Something is wrong with the course ";

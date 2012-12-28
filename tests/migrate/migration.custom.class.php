@@ -1812,6 +1812,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                 $res->set_evaluation_id($eval_id);
                                 $res->set_user_id($user_id);
                                 $res->set_score($score);
+                                $res->set_id($check_result->get_id());
                                 $res->save();
 
                                 $eval_result = Result :: load (null, $user_id, $eval_id);
@@ -1824,7 +1825,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                $message = "Result not modified because does not exist - user_id: $user_id - eval_id:$eval_id - gradebook_id: {$gradebook['id']}";
+                                $message = "Result not modified because does not exist - user_id: $user_id - eval_id:$eval_id - gradebook_id: {$gradebook['id']} - course: {$course_data['code']} - session_id: $session_id ";
                             }
                         } else {
                             $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";

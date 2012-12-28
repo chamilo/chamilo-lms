@@ -8,20 +8,17 @@ if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }*/
 
-$survey_id = isset($_REQUEST['l']) ? intval($_REQUEST['l']) : null;
+$survey_id = isset($_REQUEST['i']) ? intval($_REQUEST['i']) : null;
 
 if (empty($survey_id)) {
     api_not_allowed(true);
 }
-
-//Display::display_header(get_lang('Survey'), 'Survey');
-
 if (!survey_manager::survey_generation_hash_available()) {
     api_not_allowed(true);
 }
 $course_info  = api_get_course_info_by_id($_REQUEST['c']);
 
-$hash_is_valid = survey_manager::validate_survey_hash($_REQUEST['l'], $_REQUEST['c'], $_REQUEST['s'], $_REQUEST['g'], $_REQUEST['h']);
+$hash_is_valid = survey_manager::validate_survey_hash($survey_id, $_REQUEST['c'], $_REQUEST['s'], $_REQUEST['g'], $_REQUEST['h']);
 if ($hash_is_valid && $course_info) {
     $survey_data = survey_manager::get_survey($survey_id, null, $course_info['code']);
 
@@ -41,11 +38,7 @@ if ($hash_is_valid && $course_info) {
         $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?invitationcode='.$invitation_code.'&course='.$course_info['code'];
         header('Location: '.$link);
         exit;
-        //echo Display::url(get_lang('Go'), $link, array('class' => 'btn btn-primary btn-large'));
-        //echo ' '.Display::url(get_lang('Regenerate'), $link, array('class' => 'btn btn-primary btn-large'));
-        //echo "<pre>$link</pre>";
     }
 } else {
     api_not_allowed(true);
-
 }

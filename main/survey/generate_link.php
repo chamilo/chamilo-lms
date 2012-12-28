@@ -11,9 +11,10 @@ if (!api_is_allowed_to_edit(false, true)) {
 
 $survey_id = isset($_REQUEST['survey_id']) ? intval($_REQUEST['survey_id']) : null;
 
-if (empty($suvrey_id)) {
+if (empty($survey_id)) {
     api_not_allowed(true);
 }
+
 $survey_data = survey_manager::get_survey($survey_id);
 
 $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));

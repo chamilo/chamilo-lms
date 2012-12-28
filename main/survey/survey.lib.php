@@ -1279,11 +1279,7 @@ class survey_manager {
 
     static function generate_survey_link($survey_id, $course_id, $session_id, $group_id) {
         $code = self::generate_survey_hash($survey_id, $course_id, $session_id, $group_id);
-        return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&l='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
-    }
-
-    static function hash_is_valid($hash) {
-
+        return api_get_path(WEB_CODE_PATH).'survey/link.php?h='.$code.'&i='.$survey_id.'&c='.intval($course_id).'&s='.intval($session_id).'&g='.$group_id;
     }
 }
 

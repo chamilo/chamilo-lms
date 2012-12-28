@@ -1585,10 +1585,23 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     $gradebook = new Gradebook();
                     $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
                     error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+
                     if (!empty($gradebook)) {
                         //Check if gradebook exists
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        //Try to create a gradebook evaluation
+                        if (empty($evals_found)) {
+                            $params = array(
+                                'session_id' => $session_id,
+                                'gradebook_description' =>  'Evaluación General',
+                                'gradebook_evaluation_type_id' => 0
+                            );
+                            self::create_gradebook_evaluation($params);
+                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
+                            $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+                        }
 
                         if (!empty($evals_found)) {
                             error_log("Gradebook exists: {$gradebook['id']}");
@@ -1640,7 +1653,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         }
     }
 
-    //            eliminar nota_eliminar IID
+    // eliminar nota_eliminar IID
     // const TRANSACTION_TYPE_DEL_NOTA  = 32;
     static function transaction_32($original_data, $web_service_details) {
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
@@ -1681,6 +1694,18 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                         //Check if gradebook exists
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        //Try to create a gradebook evaluation
+                        if (empty($evals_found)) {
+                            $params = array(
+                                'session_id' => $session_id,
+                                'gradebook_description' =>  'Evaluación General',
+                                'gradebook_evaluation_type_id' => 0
+                            );
+                            self::create_gradebook_evaluation($params);
+                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
+                            $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+                        }
 
                         if (!empty($evals_found)) {
                             error_log("Gradebook exists: {$gradebook['id']}");
@@ -1820,6 +1845,22 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         }
     }
 
+    static function get_horario_value($session_id) {
+         $extra_field_value = new ExtraFieldValue('session');
+        //Getting horario info
+        $extra_field = new ExtraField('session');
+        $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');
+
+        $horario_info = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
+        $horario = $horario_info['option_display_text'];
+        $horario_array = explode(' ', $horario);
+        $time = "08:00";
+        if (isset($horario_array[0])) {
+            $time = $horario_array[0];
+        }
+        return $time;
+    }
+
     //        Asistencias
     //            añadir assist_agregar IID
     // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
@@ -1860,6 +1901,10 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+
+                    $time = self::get_horario_value($session_id);
+                    $attendance_date .= " $time";
+
                     $attendance = new Attendance();
 
                     $course_info = api_get_course_info($course_data['code']);
@@ -1964,6 +2009,10 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+
+                    $time = self::get_horario_value($session_id);
+                    $attendance_date .= " $time";
+
                     $attendance = new Attendance();
 
                     $course_info = api_get_course_info($course_data['code']);
@@ -2071,6 +2120,9 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+                    $time = self::get_horario_value($session_id);
+                    $attendance_date .= " $time";
+
                     $attendance = new Attendance();
 
                     $course_info = api_get_course_info($course_data['code']);

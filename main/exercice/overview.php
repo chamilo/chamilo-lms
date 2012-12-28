@@ -150,11 +150,11 @@ if (!empty($attempts)) {
 				);
 		$attempt_link .= "&nbsp;&nbsp;&nbsp;".$teacher_revised;
 
-		if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_END || $objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_EXAM) {
+		if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS, RESULT_DISABLE_SHOW_SCORE_ONLY, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
 			$row['result'] = $score;
 		}
 
-		if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_END) {
+		if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
 			$row['attempt_link'] = $attempt_link;
 		}
 		$my_attempt_array[] = $row;
@@ -164,14 +164,15 @@ if (!empty($attempts)) {
 	$table = new HTML_Table(array('class' => 'data_table'));
 
 	//Hiding score and answer
-	switch($objExercise->results_disabled) {
-		case EXERCISE_FEEDBACK_TYPE_END:
+	switch ($objExercise->results_disabled) {
+		case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
+        case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
 			break;
-		case EXERCISE_FEEDBACK_TYPE_DIRECT:
+		case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'));
 			break;
-		case EXERCISE_FEEDBACK_TYPE_EXAM:
+		case RESULT_DISABLE_SHOW_SCORE_ONLY:
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
 			break;
 	}

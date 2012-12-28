@@ -2100,11 +2100,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     $show_results     = false;
     $show_only_score  = false;
 
-    if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_END) {
+    if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
         $show_results = true;
     }
 
-    if ($objExercise->results_disabled == EXERCISE_FEEDBACK_TYPE_EXAM) {
+    if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_ONLY, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
         $show_only_score = true;
     }
 
@@ -2147,7 +2147,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 'answer' => $result['open_answer'],
                 'answer_type' => $result['answer_type']
             );
-
 
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];

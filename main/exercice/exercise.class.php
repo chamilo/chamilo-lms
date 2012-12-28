@@ -17,6 +17,11 @@ define('EXERCISE_FEEDBACK_TYPE_END',        0); //Feedback 		 - show score and e
 define('EXERCISE_FEEDBACK_TYPE_DIRECT',     1); //DirectFeedback - Do not show score nor answers
 define('EXERCISE_FEEDBACK_TYPE_EXAM',       2); //NoFeedback 	 - Show score only
 
+define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS',        0); //show score and expected answers
+define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS',     1); //Do not show score nor answers
+define('RESULT_DISABLE_SHOW_SCORE_ONLY',       2); //Show score only
+define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES',       3); //Show final score only with categories
+
 define('EXERCISE_MAX_NAME_SIZE',            80);
 
 $debug = false; //All exercise scripts should depend in this debug variable
@@ -414,7 +419,7 @@ class Exercise {
 
 			$sql = "SELECT e.question_id, e.question_order
                     FROM $TBL_EXERCICE_QUESTION e INNER JOIN $TBL_QUESTIONS  q
-                        ON (e.question_id	= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
+                        ON (e.question_id= q.id AND e.c_id = ".$this->course_id." AND q.c_id = ".$this->course_id.")
 					WHERE e.exercice_id	= '".Database::escape_string($this->id)."'
 					ORDER BY question_order";
             $result = Database::query($sql);
@@ -943,7 +948,6 @@ class Exercise {
 				$radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
 				$form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
 
-				//$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
 				// test type
 				$radios = array();
 
@@ -955,7 +959,9 @@ class Exercise {
 				$radios_results_disabled = array();
 				$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
 				$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
-				$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
+				$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2', array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
+                //$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable'),  '3', array('id'=>'result_disabled_3','onclick' => 'check_results_disabled()'));
+
 				$form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
 
 			} else {
@@ -1006,7 +1012,7 @@ class Exercise {
 			}
 
             // number of random question
-			$option = array();
+
 			$max = ($this->id > 0) ? $this->selectNbrQuestions() : 10 ;
 			$option = range(0,$max);
 			$option[0] = get_lang('No');
@@ -1098,10 +1104,7 @@ class Exercise {
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
 
 				$form->addElement ('checkbox', 'index_document','', get_lang('SearchFeatureDoIndexDocument'));
-				//$form->addElement ('html', '<div class="label">'. get_lang('SearchFeatureDocumentLanguage') .'</div>');
-				//$form->addElement ('html', '<div class="formw">'. api_get_languages_combo() .'</div>');
                 $form->addElement ('select_language', 'language', get_lang('SearchFeatureDocumentLanguage'));
-				//$form->addElement ('html','</div><div class="sub-form">');
 
 				$specific_fields = get_specific_field_list();
 
@@ -1125,7 +1128,7 @@ class Exercise {
 		}
 
 		// submit
-		isset($_GET['exerciseId'])?$text=get_lang('ModifyExercise'):$text=get_lang('ProcedToQuestions');
+		$text = isset($_GET['exerciseId']) ? get_lang('ModifyExercise') : get_lang('ProcedToQuestions');
 
 		$form->addElement('style_submit_button', 'submitExercise', $text, 'class="save"');
 
@@ -1136,7 +1139,6 @@ class Exercise {
 			$form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
 			$form->addRule('start_time', get_lang('InvalidDate'), 'date');
 			$form->addRule('end_time', get_lang('InvalidDate'), 'date');
-			//$form->addRule(array ('start_time', 'end_time'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
 		}
 
 		// defaults

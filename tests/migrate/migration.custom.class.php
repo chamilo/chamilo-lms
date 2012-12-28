@@ -1810,7 +1810,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             $check_result = Result :: load (null, $user_id, $eval_id);
 
                             if (!empty($check_result) && isset($check_result[0])) {
-
+                                // Gradebook result found. Updating...
                                 $res->set_evaluation_id($eval_id);
                                 $res->set_user_id($user_id);
                                 $res->set_score($score);
@@ -1827,7 +1827,25 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                     'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                                 );
                             } else {
-                                $message = "Gradebook result not modified because does not exist - user_id: $user_id - eval_id: $eval_id - gradebook_id: {$gradebook['id']} - course: {$course_data['code']} - session_id: $session_id";
+                                // Gradebook result not found. Creating... 
+                                // @todo disable when moving to production
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+
+                                //if no scores are given, don't set the score
+                                $res->set_score($score);
+                                $res->add();
+
+                                $eval_result = Result :: load (null, $user_id, $eval_id);
+
+                                //$message = "Gradebook result not modified because gradebook result does not exist for user_id: $user_id - eval_id: $eval_id - gradebook_id: {$gradebook['id']} - course: {$course_data['code']} - session_id: $session_id";
+                                return array(
+                                    'entity' => 'gradebook_evaluation_result',
+                                    'before' => null,
+                                    'after'  => $eval_result,
+                                    'message' => "Gradebook result added because it did not exist for update",
+                                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                                );
                             }
                         } else {
                             $message = "Evaluation not found in gradebook: {$gradebook['id']} : in course: {$course_data['code']} - session_id: $session_id";

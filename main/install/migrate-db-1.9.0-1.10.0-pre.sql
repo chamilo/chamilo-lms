@@ -98,7 +98,7 @@ CREATE TABLE branch_sync_log( id bigint unsigned not null AUTO_INCREMENT PRIMARY
 CREATE TABLE branch_transaction_status (  id tinyint not null PRIMARY KEY AUTO_INCREMENT,  title char(20));
 INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
 
-CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', message VARCHAR(255) default '' , PRIMARY KEY (id, transaction_id, branch_id));
+CREATE TABLE branch_transaction (id bigint unsigned not null AUTO_INCREMENT,   transaction_id bigint unsigned, branch_id inti unsigned not null default 0,  action char(20),  item_id char(36),  orig_id char(36),  dest_id char(36),  info char(20), status_id tinyint not null default 0,  time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',  time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00', message VARCHAR(255) default '' , PRIMARY KEY (id, transaction_id, branch_id));
 
 ALTER TABLE c_quiz_answer ADD INDEX idx_quiz_answer_c_q (c_id, question_id);
 ALTER TABLE settings_current ADD INDEX idx_settings_current_au_cat (access_url, category(5));
@@ -115,4 +115,4 @@ ALTER TABLE course_module change `row` row_module int unsigned NOT NULL default 
 ALTER TABLE course_module change `column` column_module int unsigned NOT NULL default '0';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21000' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21010' WHERE variable = 'chamilo_database_version';

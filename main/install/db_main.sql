@@ -3143,6 +3143,7 @@ CREATE TABLE branch_transaction (
     item_id char(36),
     orig_id char(36),
     dest_id char(36),
+    info char(20),
     status_id tinyint not null default 0,
     time_insert datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
     time_update datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -3150,4 +3151,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21000' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21010' WHERE variable = 'chamilo_database_version';

@@ -1556,6 +1556,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         if ($data['error'] == false) {
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona  = $original_data['item_id'];
+            $score          = $data['infoextra'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -1599,7 +1600,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                 $res->set_user_id($user_id);
 
                                 //if no scores are given, don't set the score
-                                $res->set_score($data['informacionExtra']);
+                                $res->set_score($score);
                                 $res->add();
 
                                 $eval_result = Result :: load (null, $user_id, $eval_id);
@@ -1736,6 +1737,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         if ($data['error'] == false) {
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona  = $original_data['item_id'];
+            $score         = $data['infoextra'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -1778,7 +1780,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             if (!empty($check_result)) {
                                 $res->set_evaluation_id($eval_id);
                                 $res->set_user_id($user_id);
-                                $res->set_score($data['informacionExtra']);
+                                $res->set_score($score);
                                 $res->save();
 
                                 $eval_result = Result :: load (null, $user_id, $eval_id);
@@ -1829,8 +1831,9 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
             $uidIdPrograma = $data['orig_id'];
             $uidIdPersona = $data['item_id'];
-            $attendance_date = $data['fecha'];
-            $attendance_user_status = $data['status'];
+
+            $attendance_date = $data['infoextra'];
+            $attendance_user_status = $data['status']; // ??
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);

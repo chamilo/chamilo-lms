@@ -1148,7 +1148,7 @@ class Attendance
         // check if datetime already exists inside the table
 		$sql = "SELECT * FROM $tbl_attendance_calendar
 		        WHERE   c_id = $course_id AND
-                        date_time ='".Database::escape_string($date_time)."' AND
+                        date_time = '".Database::escape_string($date_time)."' AND
                         attendance_id = '$attendance_id'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

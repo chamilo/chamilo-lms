@@ -638,7 +638,7 @@ class DocumentManager {
                         ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
                         WHERE
                                 docs.filetype 		= 'folder' AND
-                                last.to_group_id	= " . $to_group_id . " AND
+                                last.to_group_id	= 0  AND
                                 last.visibility 	<> 2 $condition_session ";
                 }
 

@@ -785,6 +785,8 @@ class Migration {
         $result = self::soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));
         */
 
+        $result = self::soap_call($web_service_params, 'notaDetalles',  array('uididpersona' => 'FC30EE0F-5C6F-4934-884B-BE7B68F96164', 'uididprograma' => 'bc0bdf04-cc08-4817-97c7-72840ca1171c', 'intIdSede' => 3));
+
         if (empty($branch_id)) {
             $branches = self::get_branches();
         } else {
@@ -976,7 +978,6 @@ class Migration {
                     }
                 } else {
                     $message .= Display::return_message("Transaction NOT added to Chamilo. {$transaction_result['message']}", 'warning');
-                    //$transaction_chamilo_info = MigrationCustom::process_transaction($result, false);
                 }
 
                 if (!empty($transaction_chamilo_info)) {

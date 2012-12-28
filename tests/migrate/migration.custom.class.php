@@ -1558,7 +1558,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         if ($data['error'] == false) {
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona  = $original_data['item_id'];
-            $score          = $data['infoextra'];
+            $score         = $data['name'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -1592,13 +1592,13 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
                         //Try to create a gradebook evaluation
                         if (empty($evals_found)) {
+                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
                             $params = array(
                                 'session_id' => $session_id,
                                 'gradebook_description' =>  'Evaluación General',
                                 'gradebook_evaluation_type_id' => 0
                             );
                             self::create_gradebook_evaluation($params);
-                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
                             $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
                         }
 
@@ -1659,7 +1659,8 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
-            'intIdSede'    => $original_data['branch_id']));
+            'intIdSede'    => $original_data['branch_id']
+        ));
 
         if ($data['error'] == false) {
             $uidIdPrograma = $original_data['orig_id'];
@@ -1709,7 +1710,6 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                                 $res->delete();
 
                                 $eval_result = Result :: load (null, $user_id, $eval_id);
-
                                 return array(
                                     'entity' => 'gradebook_evaluation_result',
                                     'before' => $check_result,
@@ -1748,12 +1748,13 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
-            'intIdSede'    => $original_data['branch_id']));
+            'intIdSede'    => $original_data['branch_id']
+        ));
 
         if ($data['error'] == false) {
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona  = $original_data['item_id'];
-            $score         = $data['infoextra'];
+            $score         = $data['name'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -1786,20 +1787,22 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
                         //Try to create a gradebook evaluation
                         if (empty($evals_found)) {
+                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
+
                             $params = array(
                                 'session_id' => $session_id,
                                 'gradebook_description' =>  'Evaluación General',
                                 'gradebook_evaluation_type_id' => 0
                             );
                             self::create_gradebook_evaluation($params);
-                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
                             $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
                         }
 
                         if (!empty($evals_found)) {
-                            error_log("Gradebook exists: {$gradebook['id']}");
                             $evaluation = current($evals_found);
                             $eval_id = $evaluation->get_id();
+
+                            error_log("Gradebook exists: {$gradebook['id']} eval_id: $eval_id");
 
                             //Eval found
                             $res = new Result();

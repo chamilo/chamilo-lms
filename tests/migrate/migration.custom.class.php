@@ -1576,6 +1576,37 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     // const TRANSACTION_TYPE_EDIT_ASSIST = 36;
     static function transaction_36($data, $web_service_details) {
         //return self::transaction_extra_field_editar_generic('assist', $data, $web_service_details, 'course');
+        $uidIdPersona = $data['item_id'];
+        $uidIdPrograma = $data['orig_id'];
+        $fecha = $data['info']; // todo transformar esta fecha
+        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+        $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+        if (!empty($session_id) && !empty($user_id) && !empty($fecha)) {
+            $session_info = Migration::soap_call($web_service_details, 'asistenciaDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $data['item_id'], 'uididprograma' => $data['orig_id'], 'fecha' => $data['info']));
+            if ($session_info['error'] == false) {
+                $session_info['id'] = $session_id;
+                unset($session_info['error']);
+                $session_info_before = api_get_session_info($session_id, true);
+                //SessionManager::update($session_info);
+                //todo
+                //Attendance::update($session_info, $user_id, $fecha, $asistencia);
+                $session_info = api_get_session_info($session_id, true);
+                return array(
+                   'entity' => 'attendance',
+                   'before' => $session_info_before,
+                   'after'  => $session_info,
+                   'message' => "Attenance updated $uidIdPrograma with data: ".print_r($session_info, 1),
+                   'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                );
+            } else {
+                return $session_info;
+            }
+        } else {
+            return array(
+                   'message' => "Attendance does not exists $uidIdPrograma",
+                   'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        }
     }
 
     //custom class moved here
@@ -1672,6 +1703,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                    'orig_id'        => isset($transaction_info['orig']) ? $transaction_info['orig'] : null,
                    'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
                    'dest_id'        => isset($transaction_info['dest']) ? $transaction_info['dest'] : null,
+                   'info'           => isset($transaction_info['informacionextra']) ? $transaction_info['informacionextra'] : null,
                    'status_id'      => 0
             );
 

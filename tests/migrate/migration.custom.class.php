@@ -2411,7 +2411,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
         $result['status'] = $result['rol']  == 'profesor' ? COURSEMANAGER : STUDENT;
         $result['phone'] = (string)$result['phone'];
-        $result['active'] = (int)$result['bitvigencia'];
+        $result['active'] = (int)$result['active'];
         $result['extra_uidIdPersona'] = strtoupper($params['uididpersona']);
         unset($result['rol']);
         return $result;

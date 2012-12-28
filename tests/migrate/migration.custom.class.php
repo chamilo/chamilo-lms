@@ -50,6 +50,12 @@ class MigrationCustom {
     const TRANSACTION_TYPE_ADD_FASE    = 28;
     const TRANSACTION_TYPE_DEL_FASE    = 29;
     const TRANSACTION_TYPE_EDIT_FASE   = 30;
+    const TRANSACTION_TYPE_ADD_NOTA    = 31;
+    const TRANSACTION_TYPE_DEL_NOTA    = 32;
+    const TRANSACTION_TYPE_EDIT_NOTA   = 33;
+    const TRANSACTION_TYPE_ADD_ASSIST  = 34;
+    const TRANSACTION_TYPE_DEL_ASSIST  = 35;
+    const TRANSACTION_TYPE_EDIT_ASSIST = 36;
 
     public static $attend_status = array(
         'DEF' => null,
@@ -1534,6 +1540,42 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     // const TRANSACTION_TYPE_EDIT_FASE = 30;
     static function transaction_30($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details, 'course');
+    }
+    //        NOTA
+    //            añadir nota_agregar IID
+    // const TRANSACTION_TYPE_ADD_NOTA  = 31;
+    static function transaction_31($data, $web_service_details) {
+        //return self::transaction_extra_field_agregar_generic('nota', $data, $web_service_details, 'course');
+    }
+
+    //            eliminar nota_eliminar IID
+    // const TRANSACTION_TYPE_DEL_NOTA  = 32;
+    static function transaction_32($data, $web_service_details) {
+        //return self::transaction_extra_field_eliminar_generic('nota', $data, $web_service_details, 'course');
+    }
+
+    //            editar nota_editar IID
+    // const TRANSACTION_TYPE_EDIT_NOTA = 33;
+    static function transaction_33($data, $web_service_details) {
+        //return self::transaction_extra_field_editar_generic('nota', $data, $web_service_details, 'course');
+    }
+    //        Asistencias
+    //            añadir assist_agregar IID
+    // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
+    static function transaction_34($data, $web_service_details) {
+        //return self::transaction_extra_field_agregar_generic('assist', $data, $web_service_details, 'course');
+    }
+
+    //            eliminar assist_eliminar IID
+    // const TRANSACTION_TYPE_DEL_ASSIST  = 35;
+    static function transaction_35($data, $web_service_details) {
+        //return self::transaction_extra_field_eliminar_generic('assist', $data, $web_service_details, 'course');
+    }
+
+    //            editar assist_editar IID
+    // const TRANSACTION_TYPE_EDIT_ASSIST = 36;
+    static function transaction_36($data, $web_service_details) {
+        //return self::transaction_extra_field_editar_generic('assist', $data, $web_service_details, 'course');
     }
 
     //custom class moved here

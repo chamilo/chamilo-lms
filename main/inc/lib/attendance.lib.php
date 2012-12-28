@@ -501,6 +501,34 @@ class Attendance
 		return $a_users;
 	}
 
+    public function attendance_sheet_disable($calendar_id, $user_id) {
+        $tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+        $course_id = $this->get_course_int_id();
+        $user_id = intval($user_id);
+        $calendar_id = intval($calendar_id);
+
+        $sql = "UPDATE $tbl_attendance_sheet SET presence = ''
+                WHERE c_id = $course_id AND user_id ='$user_id' AND attendance_calendar_id = '$calendar_id'";
+        Database::query($sql);
+        return true;
+    }
+
+    public function attendance_sheet_get_info($calendar_id, $user_id) {
+        $tbl_attendance_sheet 	= Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+        $course_id = $this->get_course_int_id();
+        $user_id = intval($user_id);
+        $calendar_id = intval($calendar_id);
+
+        $sql = "SELECT *  FROM $tbl_attendance_sheet
+                WHERE c_id = $course_id AND user_id =  '$user_id' AND attendance_calendar_id = '$calendar_id'";
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result)) {
+            return Database::store_result($result, 'ASSOC');
+        }
+        return false;
+    }
+
 	/**
 	 * Add attendaces sheet inside table
 	 * @param 	int	   attendance calendar id

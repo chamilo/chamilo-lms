@@ -1820,17 +1820,17 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     //        Asistencias
     //            añadir assist_agregar IID
     // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
-    static function transaction_34($data, $web_service_details) {
+    static function transaction_34($original_data, $web_service_details) {
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
-            'uididpersona' => $data['item_id'],
-            'uididprograma'=> $data['orig_id'],
-            'intIdSede'    => $data['branch_id']
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']
         ));
 
         if ($data['error'] == false) {
 
-            $uidIdPrograma = $data['orig_id'];
-            $uidIdPersona = $data['item_id'];
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona = $original_data['item_id'];
 
             $attendance_date = $data['infoextra'];
             $attendance_user_status = $data['status']; // ??
@@ -1902,6 +1902,11 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             'message' => "Attendance sheet added with id: $result",
                             'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                         );
+                    } else {
+                        return array(
+                            'message' => "Attendance sheet can't added attendance_id: $attendance_id - cal_id: $cal_id - user_id: $user_id - course: {$course_info['code']} - session_id: $session_id ",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
                     }
                 } else {
                     $message = "Something is wrong with the course";
@@ -1920,18 +1925,19 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
     //            eliminar assist_eliminar IID
     // const TRANSACTION_TYPE_DEL_ASSIST  = 35;
-    static function transaction_35($data, $web_service_details) {
+    static function transaction_35($original_data, $web_service_details) {
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
-            'uididpersona' => $data['item_id'],
-            'uididprograma'=> $data['orig_id'],
-            'intIdSede'    => $data['branch_id']
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']
         ));
 
         if ($data['error'] == false) {
 
-            $uidIdPrograma = $data['orig_id'];
-            $uidIdPersona = $data['item_id'];
-            $attendance_date = $data['fecha'];
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona = $original_data['item_id'];
+
+            $attendance_date = $data['infoextra'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -2002,6 +2008,11 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             'message' => "Attendance sheet removed",
                             'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                         );
+                    } else {
+                        return array(
+                            'message' => "Attendance sheet can't be removed attendance_id: $attendance_id - cal_id: $cal_id - user_id: $user_id - course: {$course_info['code']} - session_id: $session_id ",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
                     }
                 } else {
                     $message = "Something is wrong with the course";
@@ -2020,20 +2031,20 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
     //            editar assist_editar IID
     // const TRANSACTION_TYPE_EDIT_ASSIST = 36;
-    static function transaction_36($data, $web_service_details) {
+    static function transaction_36($original_data, $web_service_details) {
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
-            'uididpersona' => $data['item_id'],
-            'uididprograma'=> $data['orig_id'],
-            'intIdSede'    => $data['branch_id']
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']
         ));
 
         if ($data['error'] == false) {
 
-            $uidIdPrograma = $data['orig_id'];
-            $uidIdPersona = $data['item_id'];
-            //
-            $attendance_date = $data['fecha'];
-            $attendance_user_status = $data['status'];
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona = $original_data['item_id'];
+
+            $attendance_date = $data['infoextra'];
+            $attendance_user_status = $data['status']; // ???
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -2101,8 +2112,13 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                             'entity' => 'attendance_sheet',
                             'before' => $attendance_sheet_before,
                             'after'  => $attendance_sheet_after,
-                            'message' => "Attendance sheet added with id: $result",
+                            'message' => "Attendance sheet edited with",
                             'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                        );
+                    } else {
+                        return array(
+                            'message' => "Attendance sheet can't be edited attendance_id: $attendance_id - cal_id: $cal_id - user_id: $user_id - course: {$course_info['code']} - session_id: $session_id ",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }
                 } else {

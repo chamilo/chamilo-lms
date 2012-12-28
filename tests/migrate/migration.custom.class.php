@@ -1857,11 +1857,17 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $extra_field_info = $extra_field->get_handler_field_info_by_field_variable('horario');
 
         $horario_info = $extra_field_value->get_values_by_handler_and_field_id($session_id, $extra_field_info['id']);
-        $horario = $horario_info['option_display_text'];
-        $horario_array = explode(' ', $horario);
+        $extra_field_option = new ExtraFieldOption('session');
+        $horario_info = $extra_field_option->get_field_option_by_field_and_option($extra_field_info['id'], $horario_info['field_value']);
+
         $time = "08:00";
-        if (isset($horario_array[0])) {
-            $time = $horario_array[0];
+        if (isset($horario_info) && isset($horario_info[0])) {
+            $horario = $horario_info[0]['option_display_text'];
+            $horario_array = explode(' ', $horario);
+
+            if (isset($horario_array[0])) {
+                $time = $horario_array[0];
+            }
         }
         return $time;
     }
@@ -1936,10 +1942,17 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     if ($cal_info && isset($cal_info['id'])) {
                         $cal_id = $cal_info['id'];
                     } else {
-                        return array(
+
+                        //Creating the attendance date
+                        $attendance->set_date_time($attendance_date);
+                        $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+
+                        error_log("Creating a new calendar item $cal_id");
+
+                        /*return array(
                             'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
                             'status_id' => self::TRANSACTION_STATUS_FAILED
-                        );
+                        );*/
                     }
 
                     $users_present = array($user_id => $attendance_user_status);
@@ -2154,10 +2167,16 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     if ($cal_info && isset($cal_info['id'])) {
                         $cal_id = $cal_info['id'];
                     } else {
+                         //Creating the attendance date
+
+                        $attendance->set_date_time($attendance_date);
+                        $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+                        error_log("Creating a new calendar item $cal_id");
+                        /*
                         return array(
                             'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
                             'status_id' => self::TRANSACTION_STATUS_FAILED
-                        );
+                        );*/
                     }
                     $users_present = array($user_id => $attendance_user_status);
 

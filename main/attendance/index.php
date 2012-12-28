@@ -184,6 +184,7 @@ if (isset($_SESSION['gradebook'])) {
     $param_gradebook = '&gradebook='.$gradebook;
 }
 $student_param = '';
+$student_id = null;
 if (api_is_drh() && isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
     $student_param = '&student_id='.$student_id;

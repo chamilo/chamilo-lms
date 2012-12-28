@@ -1695,18 +1695,6 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
 
-                        //Try to create a gradebook evaluation
-                        if (empty($evals_found)) {
-                            $params = array(
-                                'session_id' => $session_id,
-                                'gradebook_description' =>  'Evaluación General',
-                                'gradebook_evaluation_type_id' => 0
-                            );
-                            self::create_gradebook_evaluation($params);
-                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
-                            $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
-                        }
-
                         if (!empty($evals_found)) {
                             error_log("Gradebook exists: {$gradebook['id']}");
                             $evaluation = current($evals_found);
@@ -1795,6 +1783,18 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                         //Check if gradebook exists
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        //Try to create a gradebook evaluation
+                        if (empty($evals_found)) {
+                            $params = array(
+                                'session_id' => $session_id,
+                                'gradebook_description' =>  'Evaluación General',
+                                'gradebook_evaluation_type_id' => 0
+                            );
+                            self::create_gradebook_evaluation($params);
+                            error_log("Trying to create a new evaluation in course code:  {$course_data['code']} - session_id: $session_id");
+                            $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+                        }
 
                         if (!empty($evals_found)) {
                             error_log("Gradebook exists: {$gradebook['id']}");

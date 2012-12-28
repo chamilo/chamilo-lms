@@ -50,9 +50,12 @@ class MigrationCustom {
     const TRANSACTION_TYPE_ADD_FASE    = 28;
     const TRANSACTION_TYPE_DEL_FASE    = 29;
     const TRANSACTION_TYPE_EDIT_FASE   = 30;
+
+    //Notas
     const TRANSACTION_TYPE_ADD_NOTA    = 31;
     const TRANSACTION_TYPE_DEL_NOTA    = 32;
     const TRANSACTION_TYPE_EDIT_NOTA   = 33;
+    //Asis
     const TRANSACTION_TYPE_ADD_ASSIST  = 34;
     const TRANSACTION_TYPE_DEL_ASSIST  = 35;
     const TRANSACTION_TYPE_EDIT_ASSIST = 36;
@@ -476,7 +479,6 @@ class MigrationCustom {
                         }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id => $data['status']);
-
                         $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
                         error_log("Adding calendar to user: $user_id to calendar: $cal_id");
                     } else {
@@ -1541,76 +1543,582 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     static function transaction_30($data, $web_service_details) {
         return self::transaction_extra_field_editar_generic('fase', $data, $web_service_details, 'course');
     }
+
     //        NOTA
     //            añadir nota_agregar IID
     // const TRANSACTION_TYPE_ADD_NOTA  = 31;
-    static function transaction_31($data, $web_service_details) {
-        //return self::transaction_extra_field_agregar_generic('nota', $data, $web_service_details, 'course');
+    static function transaction_31($original_data, $web_service_details) {
+        $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']));
+
+        if ($data['error'] == false) {
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona  = $original_data['item_id'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                return array(
+                    'message' => "User does not exists in DB: $uidIdPersona",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists in DB: $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $gradebook = new Gradebook();
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                    if (!empty($gradebook)) {
+                        //Check if gradebook exists
+                        $eval = new Evaluation();
+                        $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        if (!empty($evals_found)) {
+                            error_log("Gradebook exists: {$gradebook['id']}");
+                            $evaluation = current($evals_found);
+                            $eval_id = $evaluation->get_id();
+
+                            //Eval found
+                            $res = new Result();
+                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            if (empty($check_result)) {
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+
+                                //if no scores are given, don't set the score
+                                $res->set_score($data['informacionExtra']);
+                                $res->add();
+
+                                $eval_result = Result :: load (null, $user_id, $eval_id);
+
+                                return array(
+                                    'entity' => 'gradebook_evaluation_result',
+                                    'before' => null,
+                                    'after'  => $eval_result,
+                                    'message' => "Gradebook result added ",
+                                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                                );
+                            } else {
+                                $message = "Result already added ";
+                            }
+                        } else {
+                            $message = "Evaluation not found ";
+                        }
+                    } else {
+                        $message = "Gradebook does not exists ";
+                    }
+                } else {
+                    $message = "Something is wrong with the course ";
+                }
+            } else {
+                $message = "NO course found for session id: $session_id";
+            }
+
+            return array(
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        } else {
+            return $data;
+        }
     }
 
     //            eliminar nota_eliminar IID
     // const TRANSACTION_TYPE_DEL_NOTA  = 32;
-    static function transaction_32($data, $web_service_details) {
-        //return self::transaction_extra_field_eliminar_generic('nota', $data, $web_service_details, 'course');
+    static function transaction_32($original_data, $web_service_details) {
+        $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']));
+
+        if ($data['error'] == false) {
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona  = $original_data['item_id'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                return array(
+                    'message' => "User does not exists in DB: $uidIdPersona",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists in DB: $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $gradebook = new Gradebook();
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                    if (!empty($gradebook)) {
+                        //Check if gradebook exists
+                        $eval = new Evaluation();
+                        $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        if (!empty($evals_found)) {
+                            error_log("Gradebook exists: {$gradebook['id']}");
+                            $evaluation = current($evals_found);
+                            $eval_id = $evaluation->get_id();
+
+                            //Eval found
+                            $res = new Result();
+                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            if (!empty($check_result)) {
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+                                $res->delete();
+
+                                $eval_result = Result :: load (null, $user_id, $eval_id);
+
+                                return array(
+                                    'entity' => 'gradebook_evaluation_result',
+                                    'before' => $check_result,
+                                    'after'  => $eval_result,
+                                    'message' => "Gradebook result deleted ",
+                                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                                );
+                            } else {
+                                $message = "Result does not exist";
+                            }
+                        } else {
+                            $message = "Evaluation not found ";
+                        }
+                    } else {
+                        $message = "Gradebook does not exists ";
+                    }
+                } else {
+                    $message = "Something is wrong with the course ";
+                }
+            } else {
+                $message = "NO course found for session id: $session_id";
+            }
+
+            return array(
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        } else {
+            return $data;
+        }
     }
 
     //            editar nota_editar IID
     // const TRANSACTION_TYPE_EDIT_NOTA = 33;
-    static function transaction_33($data, $web_service_details) {
-        //return self::transaction_extra_field_editar_generic('nota', $data, $web_service_details, 'course');
+    static function transaction_33($original_data, $web_service_details) {
+        $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
+            'uididpersona' => $original_data['item_id'],
+            'uididprograma'=> $original_data['orig_id'],
+            'intIdSede'    => $original_data['branch_id']));
+
+        if ($data['error'] == false) {
+            $uidIdPrograma = $original_data['orig_id'];
+            $uidIdPersona  = $original_data['item_id'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                return array(
+                    'message' => "User does not exists in DB: $uidIdPersona",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists in DB: $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $gradebook = new Gradebook();
+                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                    if (!empty($gradebook)) {
+                        //Check if gradebook exists
+                        $eval = new Evaluation();
+                        $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+
+                        if (!empty($evals_found)) {
+                            error_log("Gradebook exists: {$gradebook['id']}");
+                            $evaluation = current($evals_found);
+                            $eval_id = $evaluation->get_id();
+
+                            //Eval found
+                            $res = new Result();
+                            $check_result = Result :: load (null, $user_id, $eval_id);
+
+                            if (!empty($check_result)) {
+                                $res->set_evaluation_id($eval_id);
+                                $res->set_user_id($user_id);
+                                $res->set_score($data['informacionExtra']);
+                                $res->save();
+
+                                $eval_result = Result :: load (null, $user_id, $eval_id);
+
+                                return array(
+                                    'entity' => 'gradebook_evaluation_result',
+                                    'before' => $check_result,
+                                    'after'  => $eval_result,
+                                    'message' => "Gradebook result edited ",
+                                    'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                                );
+                            } else {
+                                $message = "Result not modified because does not exist";
+                            }
+                        } else {
+                            $message = "Evaluation not found ";
+                        }
+                    } else {
+                        $message = "Gradebook does not exists ";
+                    }
+                } else {
+                    $message = "Something is wrong with the course ";
+                }
+            } else {
+                $message = "NO course found for session id: $session_id";
+            }
+
+            return array(
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        } else {
+            return $data;
+        }
     }
+
     //        Asistencias
     //            añadir assist_agregar IID
     // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
     static function transaction_34($data, $web_service_details) {
-        //return self::transaction_extra_field_agregar_generic('assist', $data, $web_service_details, 'course');
+        $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
+            'uididpersona' => $data['item_id'],
+            'uididprograma'=> $data['orig_id'],
+            'intIdSede'    => $data['branch_id']
+        ));
+
+        if ($data['error'] == false) {
+
+            $uidIdPrograma = $data['orig_id'];
+            $uidIdPersona = $data['item_id'];
+            $attendance_date = $data['fecha'];
+            $attendance_user_status = $data['status'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                return array(
+                    'message' => "User does not exists in DB: $uidIdPersona",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $attendance = new Attendance();
+
+                    $course_info = api_get_course_info($course_data['code']);
+                    $attendance->set_course_id($course_info['code']);
+                    $attendance->set_course_int_id($course_info['real_id']);
+                    $attendance->set_session_id($session_id);
+
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+
+                    if (empty($attendance_list)) {
+                        return array(
+                            'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                        //only 1 course per session
+                    } else {
+                        $attendance_data = current($attendance_list);
+                        $attendance_id = $attendance_data['id'];
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                    }
+
+                    $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
+
+                    if ($cal_info && isset($cal_info['id'])) {
+                        $cal_id = $cal_info['id'];
+                    } else {
+                        return array(
+                            'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+
+                    $users_present = array($user_id => $attendance_user_status);
+                    $result = $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
+
+                    $attendance_sheet_after = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+                    if ($result) {
+                        return array(
+                            'entity' => 'attendance_sheet',
+                            'before' => null,
+                            'after'  => $attendance_sheet_after,
+                            'message' => "Attendance sheet added with id: $result",
+                            'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                        );
+                    }
+                } else {
+                    $message = "Something is wrong with the course";
+                }
+            } else {
+               $message = "NO course found for session id: $session_id";
+            }
+            return array(
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        } else {
+            return $data;
+        }
     }
 
     //            eliminar assist_eliminar IID
     // const TRANSACTION_TYPE_DEL_ASSIST  = 35;
     static function transaction_35($data, $web_service_details) {
-        //return self::transaction_extra_field_eliminar_generic('assist', $data, $web_service_details, 'course');
+        $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
+            'uididpersona' => $data['item_id'],
+            'uididprograma'=> $data['orig_id'],
+            'intIdSede'    => $data['branch_id']
+        ));
+
+        if ($data['error'] == false) {
+
+            $uidIdPrograma = $data['orig_id'];
+            $uidIdPersona = $data['item_id'];
+            $attendance_date = $data['fecha'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                return array(
+                    'message' => "User does not exists in DB: $uidIdPersona",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $attendance = new Attendance();
+
+                    $course_info = api_get_course_info($course_data['code']);
+                    $attendance->set_course_id($course_info['code']);
+                    $attendance->set_course_int_id($course_info['real_id']);
+                    $attendance->set_session_id($session_id);
+
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+
+                    if (empty($attendance_list)) {
+                        return array(
+                            'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                        //only 1 course per session
+                    } else {
+                        $attendance_data = current($attendance_list);
+                        $attendance_id = $attendance_data['id'];
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                    }
+
+                    $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
+
+                    if ($cal_info && isset($cal_info['id'])) {
+                        $cal_id = $cal_info['id'];
+                    } else {
+                        return array(
+                            'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+
+                    $attendance_sheet_before = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+                    $result = $attendance->attendance_sheet_disable($cal_id, $user_id);
+
+                    $attendance_sheet_after = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+
+                    if ($result) {
+                        return array(
+                            'entity' => 'attendance_sheet',
+                            'before' => $attendance_sheet_before,
+                            'after'  => $attendance_sheet_after,
+                            'message' => "Attendance sheet removed",
+                            'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                        );
+                    }
+                } else {
+                    $message = "Something is wrong with the course";
+                }
+            } else {
+                $message = "NO course found for session id: $session_id";
+            }
+            return array(
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
+            );
+        } else {
+            return $data;
+        }
     }
 
     //            editar assist_editar IID
     // const TRANSACTION_TYPE_EDIT_ASSIST = 36;
     static function transaction_36($data, $web_service_details) {
-        //return self::transaction_extra_field_editar_generic('assist', $data, $web_service_details, 'course');
-        $uidIdPersona = $data['item_id'];
-        $uidIdPrograma = $data['orig_id'];
-        $fecha = $data['info']; // todo transformar esta fecha
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-        $user_id = self::get_user_id_by_persona_id($uidIdPersona);
-        if (!empty($session_id) && !empty($user_id) && !empty($fecha)) {
-            $session_info = Migration::soap_call($web_service_details, 'asistenciaDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $data['item_id'], 'uididprograma' => $data['orig_id'], 'fecha' => $data['info']));
-            if ($session_info['error'] == false) {
-                $session_info['id'] = $session_id;
-                unset($session_info['error']);
-                $session_info_before = api_get_session_info($session_id, true);
-                //SessionManager::update($session_info);
-                //todo
-                //Attendance::update($session_info, $user_id, $fecha, $asistencia);
-                $session_info = api_get_session_info($session_id, true);
-                return array(
-                   'entity' => 'attendance',
-                   'before' => $session_info_before,
-                   'after'  => $session_info,
-                   'message' => "Attenance updated $uidIdPrograma with data: ".print_r($session_info, 1),
-                   'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
-                );
-            } else {
-                return $session_info;
+        $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
+            'uididpersona' => $data['item_id'],
+            'uididprograma'=> $data['orig_id'],
+            'intIdSede'    => $data['branch_id']
+        ));
+
+        if ($data['error'] == false) {
+
+            $uidIdPrograma = $data['orig_id'];
+            $uidIdPersona = $data['item_id'];
+            //
+            $attendance_date = $data['fecha'];
+            $attendance_user_status = $data['status'];
+
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+
+            if (empty($user_id)) {
+                  return array(
+                      'message' => "User does not exists in DB: $uidIdPersona",
+                      'status_id' => self::TRANSACTION_STATUS_FAILED
+                  );
             }
-        } else {
+
+            if (empty($session_id)) {
+                return array(
+                    'message' => "Session does not exists $uidIdPrograma",
+                    'status_id' => self::TRANSACTION_STATUS_FAILED
+                );
+            }
+
+            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+
+            if (!empty($course_list)) {
+                $course_data = current($course_list);
+                if (isset($course_data['code'])) {
+                    $attendance = new Attendance();
+
+                    $course_info = api_get_course_info($course_data['code']);
+                    $attendance->set_course_id($course_info['code']);
+                    $attendance->set_course_int_id($course_info['real_id']);
+                    $attendance->set_session_id($session_id);
+
+                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+
+                    if (empty($attendance_list)) {
+                        return array(
+                            'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                        //only 1 course per session
+                    } else {
+                        $attendance_data = current($attendance_list);
+                        $attendance_id = $attendance_data['id'];
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                    }
+
+                    $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
+
+                    if ($cal_info && isset($cal_info['id'])) {
+                        $cal_id = $cal_info['id'];
+                    } else {
+                        return array(
+                            'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+                    $users_present = array($user_id => $attendance_user_status);
+
+                    $attendance_sheet_before = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+                    $result = $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
+
+                    $attendance_sheet_after = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+                    if ($result) {
+                        return array(
+                            'entity' => 'attendance_sheet',
+                            'before' => $attendance_sheet_before,
+                            'after'  => $attendance_sheet_after,
+                            'message' => "Attendance sheet added with id: $result",
+                            'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                        );
+                    }
+                } else {
+                    $message = "Something is wrong with the course";
+                }
+            } else {
+                $message = "NO course found for session id: $session_id";
+            }
+
             return array(
-                   'message' => "Attendance does not exists $uidIdPrograma",
-                   'status_id' => self::TRANSACTION_STATUS_FAILED
+                'message' => $message,
+                'status_id' => self::TRANSACTION_STATUS_FAILED
             );
-        }
+       } else {
+           return $data;
+       }
     }
 
-    //custom class moved here
-
+    //Custom class moved here
     static function transacciones($data) {
         if ($data) {
             $xml = $data->transaccionesResult->any;
@@ -2011,12 +2519,13 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         }
         return $result;
     }
-    /*Calling sedeDetalles
+
+    /**
+     * Calling sedeDetalles
     array(1) {
       ["name"]=>
       string(23) "Sede Miraflores"
     }*/
-
     static function sedeDetalles($data, $params) {
         $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
@@ -2048,6 +2557,23 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         unset($result['end']);
         return $result;
     }
+
+    static function notaDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
+        if ($result['error'] == true) {
+            return $result;
+        }
+        return $result;
+    }
+
+    static function asistenciaDetalles($data, $params) {
+        $result = self::genericDetalles($data, __FUNCTION__, $params);
+        if ($result['error'] == true) {
+            return $result;
+        }
+        return $result;
+    }
+
     /**
      * Review the dates given in the session details array and make sure we
      * define them in the best possible way

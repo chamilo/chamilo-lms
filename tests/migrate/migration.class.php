@@ -224,7 +224,7 @@ class Migration {
             $this->clean_all_transactions();
         }
 
-        $transaction_harcoded = array(
+        $transaction_hardcoded = array(
             array(
                 //'action' => 'usuario_agregar',
                 'action' => 1,
@@ -295,7 +295,7 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-/*            array(
+            array(
                 //'action' => 'curso_matricula',
                 'item_id' =>  'E2334974-9D55-4BB4-8B57-FCEFBE2510DC', //course
                 'orig_id' => null,
@@ -303,7 +303,7 @@ class Migration {
                 'branch_id' => 1,
                 'status_id' => 0
             ),
-*/
+
             array(
                 //'action' => 'pa_agregar',
                 'transaction_id' => 1007,
@@ -334,8 +334,7 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-
-            /* seems not to be used
+            // seems not to be used
             array(
                 //'action' => 'pa_cambiar_aula',
                 'action' => 11,
@@ -344,7 +343,7 @@ class Migration {
                 'dest_id' => '',
                 'branch_id' => 1,
                 'status_id' => 0
-            ),*/
+            ),
             array(
                 'transaction_id' => 1010,
                 //'action' => 'pa_cambiar_horario',
@@ -355,7 +354,7 @@ class Migration {
                 'dest_id' => 'B4FE6E83-F33F-417B-8B3F-C24CB94264EA', //(02) 09:00 11:00
                 'status_id' => 0
             ),
-/*             array(
+           array(
                 //'action' => 'pa_cambiar_sede',
                 'action' => 'x',
                 'item_id' =>  'C3671999-095E-4018-9826-678BAFF595DF',//session id
@@ -380,7 +379,6 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-*/
             array(
                 //'action' => 'horario_agregar',
                 'transaction_id' => 1010,
@@ -401,17 +399,16 @@ class Migration {
                 'branch_id' => 1,
                 'status_id' => 0
             ),
-             array(
+            array(
                 //'action' => 'horario_eliminar',
                 'action' => 14,
-                 'transaction_id' => 1012,
+                'transaction_id' => 1012,
                 'item_id' =>  'E395895A-B480-456F-87F2-36B3A1EBB81C',
                 'orig_id' => '0',
                 'dest_id' => null,
                 'branch_id' => 1,
                 'status_id' => 0
             ),
-            /*
             array(
                 //'action' => 'aula_agregar',
                 'action' => 16,
@@ -421,7 +418,7 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-             array(
+            array(
                 //'action' => 'aula_eliminar',
                 'action' => 17,
                 'item_id' =>  '1',
@@ -439,7 +436,6 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-             * */
             array(
                 //'action' => 'sede_agregar',
                 'action' => 19,
@@ -520,9 +516,9 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
-             array(
+            array(
                 //'action' => 'intensidad_eliminar',
-                 'transaction_id' => 1021,
+                'transaction_id' => 1021,
                 'action' => 26,
                 'item_id' =>  '0091CD3C-F042-11D7-B338-0050DAB14015',
                 'orig_id' => '0',
@@ -530,11 +526,74 @@ class Migration {
                 'dest_id' => null,
                 'status_id' => 0
             ),
+            
+            //Notas
+            array(
+                //'action' => 'TRANSACTION_TYPE_ADD_NOTA',
+                'transaction_id' => 1031,
+                'action' => 31,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB', ///session_id
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                //'action' => 'TRANSACTION_TYPE_DEL_NOTA',
+                'transaction_id' => 1032,
+                'action' => 32,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                //'action' => 'TRANSACTION_TYPE_EDIT_NOTA',
+                'transaction_id' => 1033,
+                'action' => 33,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                //'action' => 'TRANSACTION_TYPE_ADD_ASSIST',
+                'transaction_id' => 1034,
+                'action' => 34,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                //'action' => 'TRANSACTION_TYPE_DEL_ASSIST',
+                'transaction_id' => 1035,
+                'action' => 35,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+            array(
+                //'action' => 'TRANSACTION_TYPE_EDIT_ASSIST',
+                'transaction_id' => 1036,
+                'action' => 36,
+                'item_id' =>  '2C901CB8-E0A2-412E-A754-3B18AE7F3C02',
+                'orig_id' => 'A33ADE80-F62B-4760-8C16-000B81E1C6AB',
+                'branch_id' => 1,
+                'dest_id' => null,
+                'status_id' => 0
+            ),
+
         );
 
-        foreach( $transaction_harcoded as  $transaction) {
+        foreach ($transaction_hardcoded as  $transaction) {
             $transaction['branch_id'] = 2;
-            if ($transaction['action'] != 21) {
+            if ($transaction['action'] < 31) {
                 continue;
             }
             self::add_transaction($transaction);
@@ -573,11 +632,11 @@ class Migration {
             return Database::store_result($result, 'ASSOC');
         }
         return array(
-          0=>array('branch_id' => 1),
-          1 => array('branch_id' => 2),
-          2=>array('branch_id' => 3),
-          3=>array('branch_id' => 4),
-          4=>array('branch_id' => 5),
+            0 => array('branch_id' => 1),
+            1 => array('branch_id' => 2),
+            2 => array('branch_id' => 3),
+            3 => array('branch_id' => 4),
+            4 => array('branch_id' => 5),
         );
     }
 

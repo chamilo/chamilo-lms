@@ -115,4 +115,4 @@ ALTER TABLE course_module change `row` row_module int unsigned NOT NULL default 
 ALTER TABLE course_module change `column` column_module int unsigned NOT NULL default '0';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20904' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21000' WHERE variable = 'chamilo_database_version';

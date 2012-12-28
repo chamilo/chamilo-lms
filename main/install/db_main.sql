@@ -513,6 +513,7 @@ DROP TABLE IF EXISTS session_rel_course_rel_user;
 CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
   id_session MEDIUMINT unsigned NOT NULL default '0',
   course_id INT NOT NULL default '0',
+  course_code char(40),
   id_user int unsigned NOT NULL default '0',
   visibility int NOT NULL default 1,
   status int NOT NULL default 0,
@@ -3149,4 +3150,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.20904' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21000' WHERE variable = 'chamilo_database_version';

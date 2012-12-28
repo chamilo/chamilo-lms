@@ -14,7 +14,6 @@ $cidReset = true;
 
 // Including some necessary chamilo files.
 require_once '../inc/global.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -26,6 +25,7 @@ $nameTools = get_lang('PlatformAdmin');
 
 // Displaying the header
 $message = '';
+
 
 if (api_is_platform_admin()) {
     if (is_dir(api_get_path(SYS_CODE_PATH).'install/') && is_readable(api_get_path(SYS_CODE_PATH).'install/index.php')) {
@@ -147,7 +147,7 @@ if (api_is_platform_admin()) {
     $items[] = array('url'=>'settings.php?category=Plugins','label' => get_lang('Plugins'));
     $items[] = array('url'=>'settings.php?category=Regions','label' => get_lang('Regions'));
     $items[] = array('url'=>'system_announcements.php', 	'label' => get_lang('SystemAnnouncements'));
-    $items[] = array('url'=> api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
+    $items[] = array('url'=>api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin', 'label' => get_lang('GlobalAgenda'));
     $items[] = array('url'=>'configure_homepage.php', 		'label' => get_lang('ConfigureHomePage'));
     $items[] = array('url'=>'configure_inscription.php', 	'label' => get_lang('ConfigureInscription'));
     $items[] = array('url'=>'statistics/index.php', 		'label' => get_lang('Statistics'));
@@ -160,9 +160,9 @@ if (api_is_platform_admin()) {
     }
 
     if (!empty($_configuration['multiple_access_urls'])) {
-		if (api_is_global_platform_admin()) {
+	if (api_is_global_platform_admin()) {
             	$items[] = array('url'=>'access_urls.php', 	'label' => get_lang('ConfigureMultipleAccessURLs'));
-            }
+        }
     }
 
     if (api_get_setting('allow_reservation') == 'true') {
@@ -203,6 +203,7 @@ if (api_is_platform_admin()) {
 }
 
 $items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+$items[] = array('url'=>'session_fields.php', 	'label' => get_lang('ManageSessionFields'));
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;
@@ -223,10 +224,8 @@ if (api_is_platform_admin()) {
 	if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
-	$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-        if (api_get_setting('server_type') === 'test') {
-            $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
-        }
+    $items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
+	$items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
 
 	$blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;
@@ -299,13 +298,11 @@ if (api_is_platform_admin()) {
     $blocks['version_check']['items'] = null;
 }
 
+
 $tpl = new Template();
+
 $tpl->assign('blocks', $blocks);
-$admin_template = $tpl->get_template('admin/settings_index.tpl');
-$content = $tpl->fetch($admin_template);
-$tpl->assign('content', $content);
-$tpl->assign('message', $message);
-$tpl->display_one_col_template();
+$tpl->display('default/admin/settings_index.tpl');
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -331,7 +328,7 @@ function version_check() {
         $return .= '</form>';
         check_system_version();
     } else {
-        // site not registered. Call anyway
+        // Site registered. Call anyway
         $return .= check_system_version();
     }
     return $return;
@@ -374,7 +371,7 @@ function check_system_version() {
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = statistics::count_courses();
+        $number_of_courses = Statistics::count_courses();
 
         // The number of users
         $number_of_users = statistics::count_users();

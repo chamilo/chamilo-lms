@@ -12,9 +12,6 @@ $language_file = array ('admin', 'registration');
 
 $cidReset = true;
 require '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 function validate_data($skills) {
     $errors = array();

@@ -20,32 +20,8 @@ class TestSessionManager extends UnitTestCase {
 		ob_end_clean();
 		//var_dump($res);
 	}
-
-	function testcreate_session() {
-		global $_user;
-		$sname='';
-		$syear_start='';
-		$smonth_start='';
-		$sday_start='';
-		$syear_end='';
-		$smonth_end='';
-		$sday_end='';
-		$snb_days_acess_before='';
-		$snb_days_acess_after='';
-		$nolimit='';
-		$coach_username='';
-		$id_session_category='';
-		$id_visibility='';
-		$id_session=Database::insert_id();
-		ob_start();
-		$res=SessionManager::create_session($sname,$syear_start,$smonth_start,$sday_start,$syear_end,$smonth_end,$sday_end,$snb_days_acess_before,$snb_days_acess_after,$nolimit,$coach_username,$id_session_category,$id_visibility);
-		$this->assertTrue(is_numeric($id_session));
-		$this->assertTrue(is_string($res));
-		ob_end_clean();
-		//var_dump($id_session);
-	}
-
-	function testcreate_session_extra_field() {
+    
+    function testcreate_session_extra_field() {
 		$fieldvarname='';
 		$fieldtype='';
 		$fieldtitle='';
@@ -71,27 +47,7 @@ class TestSessionManager extends UnitTestCase {
 	}
 	*/
 
-	function testedit_session() {
-		global $_user;
-		$id=1;
-		$name='';
-		$year_start='';
-		$month_start='';
-		$day_start='';
-		$year_end='';
-		$month_end='';
-		$day_end='';
-		$nb_days_acess_before='';
-		$nb_days_acess_after='';
-		$nolimit='';
-		$id_coach='';
-		$id_session_category='';
-		$id_visibility='';
-		$res=SessionManager::edit_session($id,$name,$year_start,$month_start,$day_start,$year_end,$month_end,$day_end,$nb_days_acess_before,$nb_days_acess_after,$nolimit,$id_coach, $id_session_category, $id_visibility);
-		$this->assertTrue(is_numeric($id));
-		$this->assertTrue(is_string($res));
-		//var_dump($id);
-	}
+
 
 	function testget_session_by_name() {
 		$session_name='';

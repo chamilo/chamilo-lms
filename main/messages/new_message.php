@@ -17,7 +17,6 @@
 $language_file= array('messages','userInfo', 'admin');
 $cidReset	= true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 api_block_anonymous_users();
 
@@ -25,37 +24,33 @@ if (api_get_setting('allow_message_tool') !='true') {
 	api_not_allowed();
 }
 
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-$nameTools = api_xml_http_response_encode(get_lang('Messages'));
-/*	Constants and variables */
-
 $htmlHeadXtra[]='
-<script language="javascript">
+<script>
 function validate(form,list) {
-	if(list.selectedIndex<0) {
+	if (list.selectedIndex<0) {
     	alert("Please select someone to send the message to.")
     	return false
 	} else {
     	return true
     }
 }
-
 </script>';
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-$htmlHeadXtra[] = '<script type="text/javascript">
+
+$htmlHeadXtra[] = '<script>
+
 $(document).ready(function () {
     $("#users").fcbkcomplete({
         json_url: "'.api_get_path(WEB_AJAX_PATH).'message.ajax.php?a=find_users",
+        addontab: false,
         cache: false,
         filter_case: false,
-        filter_hide: true,
+        filter_hide: false,
         complete_text:"'.get_lang('StartToType').'",
-    	firstselected: true,
-        //onremove: "testme",
-    	onselect:"check_users",
+    	firstselected: false,
+    	onselect: check_users,
         filter_selected: true,
         newel: true
     });
@@ -138,6 +133,7 @@ function show_compose_reply_to_message($message_id, $receiver_id) {
 	$query = "SELECT user_sender_id FROM $table_message WHERE user_receiver_id=".intval($receiver_id)." AND id='".intval($message_id)."';";
 	$result = Database::query($query);
 	$row = Database::fetch_array($result,'ASSOC');
+    $html = null;
 	if (!isset($row['user_sender_id'])) {
 		$html = get_lang('InvalidMessageId');
 		return $html;
@@ -231,17 +227,18 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 			$file_comments	= $_POST['legend'];
 			$title 			= $default['title'];
 			$content 		= $default['content'];
-			$group_id		= $default['group_id'];
+			$group_id		= isset($default['group_id']) ? $default['group_id'] : null;
 			$parent_id 		= $default['parent_id'];
 			if (is_array($user_list) && count($user_list)> 0) {
 				//all is well, send the message
 				foreach ($user_list as $user) {
-					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id);
+					$res = MessageManager::send_message($user, $title, $content, $_FILES, $file_comments, $group_id, $parent_id, null, null, api_get_user_id());
 					if ($res) {
 						if (is_string($res)) {
 							$html .= Display::return_message($res, 'error');
 						} else {
-							$html .= MessageManager::display_success_message($user);
+                            $user_info = api_get_user_info($user);
+							$html .= Display::return_message(get_lang('MessageSentTo')." &nbsp;<b>".$user_info['complete_name']."</b>", 'confirmation', false);
 						}
 					}
 				}
@@ -298,7 +295,7 @@ if ($group_id != 0) {
 
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_left_content = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="span9">';
+    $social_right_content = '<div class="span9">';
     $social_right_content .= '<div class="actions">';
     $social_right_content .=  '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
     $social_right_content .=  '</div>';
@@ -355,7 +352,6 @@ if (api_get_setting('allow_social_tool') == 'true') {
 $tpl = new Template(get_lang('ComposeMessage'));
 if (api_get_setting('allow_social_tool') == 'true') {
     $tpl->assign('social_left_content', $social_left_content);
-    $tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

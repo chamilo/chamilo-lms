@@ -2,17 +2,17 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
+* Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action
 * @author Christian Fasanando <christian1827@gmail.com>
 * @author Julio Montoya <gugli100@gmail.com> Bug fixing, sql improvements
-* 
+*
 * @package chamilo.attendance
 */
 
 // name of the language file that needs to be included
 $language_file = array ('course_description', 'course_info', 'userInfo', 'admin', 'agenda','tracking', 'gradebook');
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
@@ -32,16 +32,18 @@ api_protect_course_script(true);
 
 // get actions
 $actions = array(
-    'attendance_list', 
-    'attendance_sheet_list', 
-    'attendance_sheet_add', 
-    'attendance_add', 
-    'attendance_edit', 
-    'attendance_delete', 
-    'attendance_delete_select', 
+    'attendance_list',
+    'attendance_sheet_list',
+    'attendance_sheet_add',
+    'attendance_add',
+    'attendance_edit',
+    'attendance_delete',
+    'attendance_delete_select',
     'attendance_restore',
     'attendance_sheet_export_to_pdf',
-    'attendance_sheet_list_no_edit'
+    'attendance_sheet_list_no_edit',
+    'lock_attendance',
+    'unlock_attendance'
 );
 
 $actions_calendar = array('calendar_list', 'calendar_add', 'calendar_edit', 'calendar_delete', 'calendar_all_delete');
@@ -60,7 +62,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 }
 
 // get attendance id
-$attendance_id = 0; 
+$attendance_id = 0;
 if (isset($_GET['attendance_id'])) {
 	$attendance_id = intval($_GET['attendance_id']);
 }
@@ -83,91 +85,103 @@ if (!empty($attendance_id)) {
 	$attendance_data = $attendance->get_attendance_by_id($attendance_id);
 }
 
+$htmlHeadXtra[] = api_get_jqgrid_js();
+
 $htmlHeadXtra[] = '<script>
-		
-$(function() {											
-	$("table th img").click(function() {					
+
+$(function() {
+	$("table th img").click(function() {
 		var col_id = this.id;
-		var col_split = col_id.split("_");							
-		var calendar_id = col_split[2];					
+		var col_split = col_id.split("_");
+		var calendar_id = col_split[2];
 		var class_img = $(this).attr("class");
-							
+
 		if (class_img == "img_unlock") {
-			//lock 
-			$(".checkbox_head_"+calendar_id).attr("disabled", true);						
-			
+			//lock
+			$(".checkbox_head_"+calendar_id).attr("disabled", true);
+
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	 "border-left":"none","border-right":"none"});
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);							 						
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif"); 
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
+			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif");
 			$(this).attr("title","'.get_lang('DateUnLock').'");
 			$(this).attr("alt","'.get_lang('DateUnLock').'");
 			$(this).attr("class","img_lock");
 			$("#hidden_input_"+calendar_id).attr("value","");
 			$("#hidden_input_"+calendar_id).attr("disabled",true);
+
+            $(".checkboxes_col_"+calendar_id).find(".switch").each(function(index) {
+                $(this).addClass("disabled");
+            });
 			return false;
-			
+
 		} else {
 			//Unlock
 			$(".checkbox_head_"+calendar_id).attr("disabled", false);
 			$(".checkbox_head_"+calendar_id).removeAttr("disabled");
-			
+
+
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#dcdcdc", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#eee", "border-left":"1px #bbb solid", "border-right":"1px #bbb solid", "z-index":"1" });
-			
-			$(".checkboxes_col_"+calendar_id).mouseover(function() {	
-				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");		
+
+			$(".checkboxes_col_"+calendar_id).mouseover(function() {
+				//$(".checkbox_head_"+calendar_id).removeAttr("opacity");
 				//$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"red", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 				//$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 			});
-			
+
 			$(".checkboxes_col_"+calendar_id).mouseout(function() {
                 //	$("row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9", "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
-                //	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });			
+                //	$("row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	  "border-left":"1px #EEEE00 solid", "border-right":"1px #EEEE00 solid" , "border-bottom":"1px #ccc solid" });
 			});
-				
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);						
+
+			$(".checkboxes_col_"+calendar_id).find(".switch").each(function(index) {
+                $(this).removeClass("disabled");
+            });
+
+
 			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
 			$(this).attr("title","'.get_lang('DateLock').'");
 			$(this).attr("alt","'.get_lang('DateLock').'");
-			$(this).attr("class","img_unlock");												
+			$(this).attr("class","img_unlock");
 			$("#hidden_input_"+calendar_id).attr("disabled",false);
-			$("#hidden_input_"+calendar_id).attr("value",calendar_id);						
+
+			$("#hidden_input_"+calendar_id).attr("value",calendar_id);
 			return false;
-		}						
-	});				
-		
+		}
+	});
+
 	$("table th input:checkbox").click(function() {
 		var col_id = this.id;
-		var col_split = col_id.split("_");							
+		var col_split = col_id.split("_");
 		var calendar_id = col_split[2];
-		
+
 		if (this.checked) {
-			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);			
+			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",true);
 		} else {
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("checked",false);
 		}
 	});
-	
+
 	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseover(function() {
 		$(".row_odd").css({"background-color":"#F9F9F9"});
 		$(".row_even").css({"background-color":"#FFF"});
-	});	
+	});
 	$(".attendance-sheet-content .row_odd, .attendance-sheet-content .row_even").mouseout(function() {
 		$(".row_odd").css({"background-color":"#F9F9F9"});
 		$(".row_even").css({"background-color":"#FFF"});
-	});				
-								
-	$(".advanced_parameters").click(function() {				
+	});
+
+	$(".advanced_parameters").click(function() {
 		if ($("#id_qualify").css("display") == "none") {
 			$("#id_qualify").css("display","block");
 			$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
 		} else {
 			$("#id_qualify").css("display","none");
 			$("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\');
-		}	
-	});																							
-});		
+		}
+	});
+});
 
 </script>';
 
@@ -184,15 +198,15 @@ if (isset($_SESSION['gradebook'])) {
 	$param_gradebook = '&gradebook='.$gradebook;
 }
 $student_param = '';
-if (api_is_drh() && isset($_GET['student_id'])) {			
+if (api_is_drh() && isset($_GET['student_id'])) {
 	$student_id = intval($_GET['student_id']);
 	$student_param = '&student_id='.$student_id;
 	$student_info  = api_get_user_info($student_id);
 	$student_name  =  api_get_person_name($student_info['firstname'],$student_info['lastname']);
-	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);	
+	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$student_id, 'name' => $student_name);
 }
 if (!empty($gradebook)) {
-	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));	
+	$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php', 'name' => get_lang('ToolGradebook'));
 }
 $interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_list'.$param_gradebook.$student_param, 'name' => get_lang('ToolAttendance'));
 if ($action == 'attendance_add') {
@@ -206,11 +220,11 @@ if ($action == 'attendance_sheet_list' || $action == 'attendance_sheet_add') {
 }
 if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'calendar_delete' || $action == 'calendar_all_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AttendanceCalendar'));	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AttendanceCalendar'));
 }
 if ($action == 'calendar_add') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.$param_gradebook, 'name' => $attendance_data['name']);
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AddDateAndTime'));	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AddDateAndTime'));
 }
 
 // delete selected attendance
@@ -218,8 +232,8 @@ if (isset($_POST['action']) && $_POST['action'] == 'attendance_delete_select') {
 	$attendance_controller->attendance_delete($_POST['id']);
 }
 // distpacher actions to controller
-switch ($action) {	
-	case 'attendance_list':	
+switch ($action) {
+	case 'attendance_list':
         $attendance_controller->attendance_list();
 		break;
 	case 'attendance_add':
@@ -229,7 +243,7 @@ switch ($action) {
         	api_not_allowed();
         }
         break;
-	case 'attendance_edit'		:	
+	case 'attendance_edit'		:
         if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->attendance_edit($attendance_id);
         } else {
@@ -239,38 +253,39 @@ switch ($action) {
 	case 'attendance_delete'	:
     	if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->attendance_delete($attendance_id);
-        } else { 
-            api_not_allowed();            
+        } else {
+            api_not_allowed();
         }
-		 break;									
+		 break;
 	case 'attendance_restore':
     	if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->attendance_restore($attendance_id);
-        } else { 
-            api_not_allowed();            
+        } else {
+            api_not_allowed();
         }
-		 break;									
-	case 'attendance_sheet_list':    
-        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, true);
+		 break;
+	case 'attendance_sheet_list':
+        $edit_content = api_is_allowed_to_edit(null, true);
+        $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, $edit_content);
 		break;
     case 'attendance_sheet_list_no_edit':
         $attendance_controller->attendance_sheet($action, $attendance_id, $student_id, false);
-        break;        
+        break;
     case 'attendance_sheet_export_to_pdf':
         $attendance_controller->attendance_sheet_export_to_pdf($action, $attendance_id, $student_id, $course_id);
         break;
-	case 'attendance_sheet_add' 	:	
+	case 'attendance_sheet_add' 	:
         if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->attendance_sheet($action, $attendance_id);
-        } else { 
-            api_not_allowed();            
+        } else {
+            api_not_allowed();
         }
 		break;
     case 'lock_attendance'          :
     case 'unlock_attendance'        :
-        if (api_is_allowed_to_edit(null, true)) {       
+        if (api_is_allowed_to_edit(null, true)) {
             $attendance_controller->lock_attendance($action, $attendance_id);
-        } else { 
+        } else {
             api_not_allowed();
         }
         break;
@@ -280,10 +295,10 @@ switch ($action) {
 	case 'calendar_delete' 		:
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed();
-        }   
-    case 'calendar_list'        :    	
-        $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);        
+        }
+    case 'calendar_list'        :
+        $attendance_controller->attendance_calendar($action, $attendance_id, $calendar_id);
 		break;
-	default		  		:	
+	default		  		:
         $attendance_controller->attendance_list();
 }

@@ -75,7 +75,7 @@ if ($action == 'thematic_list') {
 	if (!empty($thematic_data)) {
 		
 		// display progress
-		echo '<div style="text-align:right;"><h2>'.get_lang('Progress').': <span id="div_result">'.$total_average_of_advances.'</span> %</h2></div>';
+		echo '<div style="text-align:right;"><h3>'.get_lang('Progress').': <span id="div_result">'.$total_average_of_advances.'</span> %</h3></div>';
 		
 		echo '<table width="100%" class="data_table">';	
 		echo '<tr><th width="33%">'.get_lang('Thematic').'</th><th>'.get_lang('ThematicPlan').'</th><th width="33%">'.get_lang('ThematicAdvance').'</th></tr>';

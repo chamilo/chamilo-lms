@@ -8,11 +8,6 @@
 /**
  * Code
  */
-require_once 'promotion.lib.php';
-require_once 'fckeditor/fckeditor.php';
-
-define ('CAREER_STATUS_ACTIVE',  1);
-define ('CAREER_STATUS_INACTIVE',0);
 
 /**
  * @package chamilo.library
@@ -171,8 +166,8 @@ class Career extends Model {
         return $cid;
     }    
     
-    public function save($params) {
-	    $id = parent::save($params);
+    public function save($params, $show_query = false) {
+	    $id = parent::save($params, $show_query);
 	    if (!empty($id)) {
 	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
    		}

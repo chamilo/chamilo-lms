@@ -1944,9 +1944,18 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     }
 
                     $users_present = array($user_id => $attendance_user_status);
-                    $result = $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
 
-                    $attendance_sheet_after = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+                    $attendance_sheet_info = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+
+                    if (empty($attendance_sheet_info)) {
+                        $result = $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
+                        $attendance_sheet_after = $attendance->attendance_sheet_get_info($cal_id, $user_id);
+                    } else {
+                        return array(
+                            'message' => "Attendance sheet can't be added, because it already exists - attendance_id: $attendance_id - cal_id: $cal_id - user_id: $user_id - course: {$course_info['code']} - session_id: $session_id ",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
 
                     if ($result) {
                         return array(

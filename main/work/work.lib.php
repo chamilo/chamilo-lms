@@ -73,7 +73,10 @@ function display_action_links($id, $cur_dir_path, $show_tool_options, $display_u
 			if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=without">'.
 				Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
-                                $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
+                                $count = get_count_work($id);
+                                if ($count > 0) {
+                                    $display_output .= '<a href="downloadfolder.inc.php?id='.$id.'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
+                                }
 			} else {
 				$display_output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='.$id.'&amp;curdirpath='.$cur_dir_path.'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;list=with">'.
 				Display::return_icon('exercice_check.png', get_lang('ViewUsersWithTask'),'',ICON_SIZE_MEDIUM)."</a>\n";
@@ -1523,12 +1526,13 @@ function get_count_work($work_id) {
     
     $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
-    $sql = "SELECT  count(*) as count
-            FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ON (prop.ref=work.id AND prop.c_id = $course_id AND prop.tool='work' AND work.active = 1 AND prop.visibility <> 2 AND work.c_id = $course_id ) 
-                    INNER JOIN $user_table u  ON (work.user_id = u.user_id)                         
-            WHERE $extra_conditions $where_condition $condition_session ";
-    
-        
+    $sql = "SELECT  count(*) as count ".
+           " FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ".
+           " ON (prop.ref=work.id AND prop.c_id = $course_id ".
+           " AND prop.tool='work' AND work.active = 1 ".
+           " AND prop.visibility <> 2 AND work.c_id = $course_id ) ".
+           "   INNER JOIN $user_table u  ON (work.user_id = u.user_id) ".
+           " WHERE $extra_conditions $where_condition $condition_session ";
     $result = Database::query($sql);
     
     $users_with_work = 0;    

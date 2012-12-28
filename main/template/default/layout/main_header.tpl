@@ -22,7 +22,7 @@
             {{ help_content }}
             {{ bug_notification_link }}
         </ul>
-            
+
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
 
@@ -75,7 +75,7 @@
                 {% endif %}
 
                 {# menu #}
-                {% include "default/layout/menu.tpl" %}                
+                {% include "default/layout/menu.tpl" %}
 
                 {# breadcrumb #}
                 {{ breadcrumb }}

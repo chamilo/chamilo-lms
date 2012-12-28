@@ -9,7 +9,7 @@
         <div class="span9">
             <div class="row">
                 <span id="message_ajax_reponse" class="span9"></span>
-                {{ social_right_content}}
+                {{ social_right_content }}
                 <div id="display_response_id" class="span9"></div>
             </div>
         </div>

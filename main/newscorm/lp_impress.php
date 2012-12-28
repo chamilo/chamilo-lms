@@ -20,8 +20,8 @@ $show_learnpath = true;
 
 api_protect_course_script();
 
-/* 
- * Only activate impress if you're the admin 
+/*
+ * Only activate impress if you're the admin
  */
 
 if (!api_is_platform_admin()) {
@@ -30,10 +30,10 @@ if (!api_is_platform_admin()) {
 
 $lp_id = intval($_GET['lp_id']);
 
-// Check if the learning path is visible for student - (LP requisites) 
+// Check if the learning path is visible for student - (LP requisites)
 if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($lp_id, api_get_user_id())) {
     api_not_allowed();
-}     
+}
 
 //Checking visibility (eye icon)
 $visibility = api_get_item_visibility(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id(), api_get_session_id());
@@ -65,17 +65,18 @@ foreach ($list as $toc) {
     //data-x="850" data-y="3000" data-rotate="90" data-scale="5"
     $html .= '<div id="step-'.$step.'" class="step slide" data-x="'.$x.'" data-y="-1500"  >';
     $html .= '<h2>'.$toc['title'].'</h2>';
-    
+
     $src = $_SESSION['oLP']->get_link('http', $toc['id']);
     //just showing the src in a iframe ...
     $html .= '<iframe border="0" frameborder="0" style="width:100%;height:600px" src="'.$src.'"></iframe>';
-    
+
     $html .= "</div>\n";
     $step ++;
 }
 
 //Setting the template
-$tpl = new Template($tool_name, false, false, true);
+//$tpl = new Template($tool_name, false, false, true);
+$tpl = new Template($tool_name);
 $tpl->assign('html', $html);
 $content = $tpl->fetch('default/learnpath/impress.tpl');
 $tpl->assign('content', $content);

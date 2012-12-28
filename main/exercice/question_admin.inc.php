@@ -12,9 +12,11 @@
  * Code
  */
 
+$course_id = api_get_course_int_id();
+
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
-	$objQuestion = Question::read ($_GET['editQuestion']);
+	$objQuestion = Question::read ($_GET['editQuestion']);    
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
@@ -23,8 +25,9 @@ if (isset($_GET['editQuestion'])) {
 
 if (is_object($objQuestion)) {
 	//FORM CREATION
-	$form = new FormValidator('question_admin_form','post', $action);    
-	if (isset($_GET['editQuestion'])) {
+	$form = new FormValidator('question_admin_form','post', $action);
+    
+	if(isset($_GET['editQuestion'])) {
 		$class="btn save";
 		$text=get_lang('ModifyQuestion');
 		$type = Security::remove_XSS($_GET['type']);
@@ -44,15 +47,15 @@ if (is_object($objQuestion)) {
 	$objQuestion->createForm($form);
 
 	// answer form elements
-    
 	$objQuestion->createAnswersForm($form);
 
-	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications    
+	// this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
 	if ($objExercise->edit_exercise_in_lp == false) {
 		$form->freeze();
 	}
-	
+
 	// FORM VALIDATION
+    
 	if (isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question
@@ -64,7 +67,7 @@ if (is_object($objQuestion)) {
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if ($objQuestion->type != HOT_SPOT && $objQuestion->type != HOT_SPOT_DELINEATION) {	    	
+	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {	    	
 	    	if(isset($_GET['editQuestion'])) {
 	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
 	    	} else {

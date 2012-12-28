@@ -4,10 +4,9 @@ namespace Shibboleth;
 
 use \Redirect;
 use \Display;
-use IndexManager;
 
 /**
- * Controller for the Shibboleth authentication system. 
+ * Controller for the Shibboleth authentication system.
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info>, Nicolas Rod for the University of Geneva
@@ -17,7 +16,7 @@ class ShibbolethController
 
     /**
      *
-     * @return ShibbolethController 
+     * @return ShibbolethController
      */
     public static function instance()
     {
@@ -30,7 +29,7 @@ class ShibbolethController
     }
 
     /**
-     * Log user in with Shibboleth authentication 
+     * Log user in with Shibboleth authentication
      */
     function login()
     {
@@ -92,13 +91,12 @@ class ShibbolethController
             $message = get_lang('already_logged_in');
             Shibboleth::display()->message_page($message, $title);
         }
-        $index_manager = new IndexManager('');
-        $html = $index_manager->display_login_form();
+        $html = PageController::display_login_form();
         Shibboleth::display()->page($html, $title);
     }
 
     /**
-     * Display the request new status page to administrator for new users. 
+     * Display the request new status page to administrator for new users.
      */
     public function request_status()
     {
@@ -115,7 +113,7 @@ class ShibbolethController
             //Maximum user right is reached.
             Shibboleth::redirect();
         }
-        
+
         $form = ShibbolethStatusRequestForm::instance();
 
         if ($form->cancelled())
@@ -131,7 +129,7 @@ class ShibbolethController
 
             $message = <<<EOT
 New status: $status
-            
+
 Reason:
 $reason
 EOT;

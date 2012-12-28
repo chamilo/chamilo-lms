@@ -180,6 +180,8 @@ if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
 }
 
 if (!api_is_drh()) {
-	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
+	echo "<form method='post' action='teachers.php'>
+        <input type='submit' class='btn' name='export' value='".get_lang('exportExcel')."'/>
+            <form>";
 }
 Display::display_footer();

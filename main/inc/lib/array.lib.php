@@ -115,3 +115,11 @@ function array_to_string($array, $separator = ',') {
     }
     return implode($separator.' ', $array);
 }
+
+function array_flatten(array $array) {
+    $flatten = array();
+    array_walk_recursive($array, function($value) use(&$flatten) {
+        $flatten[] = $value;
+    });
+    return $flatten;
+}

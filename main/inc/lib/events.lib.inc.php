@@ -37,7 +37,7 @@ function event_open() {
     // @getHostByAddr($_SERVER['REMOTE_ADDR']) : will provide host and country information
     // $_SERVER['HTTP_USER_AGENT'] :  will provide browser and os information
     // $_SERVER['HTTP_REFERER'] : provide information about refering url
-    if(isset($_SERVER['HTT_REFERER']))
+    if(isset($_SERVER['HTTP_REFERER']))
     {
         $referer = Database::escape_string($_SERVER['HTTP_REFERER']);
     } else {
@@ -322,7 +322,7 @@ function event_link($link_id) {
  * @author Julio Montoya Armas <gugli100@gmail.com> Reworked 2010
  * @desc Record result of user when an exercice was done
 */
-function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $question_list = array(), $status = '', $remind_list = array() , $end_date = null) {
+function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id, $learnpath_id = 0, $learnpath_item_id = 0, $learnpath_item_view_id = 0, $duration = 0, $status = '', $remind_list = array() , $end_date = null) {
     require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
     global $debug;
     if ($debug) error_log('Called to update_event_exercice');
@@ -341,10 +341,10 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         }
 
         $TABLETRACK_EXERCICES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-
+        /*
         if (!empty($question_list)) {
             $question_list = array_map('intval', $question_list);
-        }
+        }*/
 
         if (!empty($remind_list)) {
         	$remind_list = array_map('intval', $remind_list);
@@ -369,8 +369,7 @@ function update_event_exercice($exeid, $exo_id, $score, $weighting, $session_id,
         		   exe_duration 		= '".Database::escape_string($duration)."',
         		   exe_date				= '".$end_date."',
         		   status 				= '".$status."',
-        		   questions_to_check 	= '".$remind_list."',
-        		   data_tracking    	= '".implode(',', $question_list)."'
+        		   questions_to_check 	= '".$remind_list."'
         		 WHERE exe_id = '".Database::escape_string($exeid)."'";
         $res = Database::query($sql);
 
@@ -581,10 +580,13 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
     if ($event_value_type == LOG_USER_OBJECT) {
         if (is_array($event_value)) {
             unset($event_value['complete_name']);
+            unset($event_value['complete_name_with_username']);
             unset($event_value['firstName']);
             unset($event_value['lastName']);
             unset($event_value['avatar_small']);
+            unset($event_value['avatar_sys_path']);
             unset($event_value['avatar']);
+            unset($event_value['mail']);
             unset($event_value['password']);
             unset($event_value['lastLogin']);
             unset($event_value['picture_uri']);
@@ -1449,6 +1451,8 @@ function event_send_mail($event_name, $params) {
     EventsMail::send_mail($event_name, $params);
 }
 
+
+
 /**
  * Internal function checking if the mail was already sent from that user to that user
  * @param string $event_name
@@ -1502,6 +1506,8 @@ function portal_homepage_edited_event_send_mail_filter_func(&$values) {
     // proper logic for this filter
     return $res;
 }
+
+
 
 /**
  *

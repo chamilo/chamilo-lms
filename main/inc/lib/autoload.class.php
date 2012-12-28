@@ -585,6 +585,11 @@ class Autoload
         $result['EventsMail'] = '/main/inc/lib/events_email.class.php';
         $result['Exercise'] = '/main/exercice/exercise.class.php';
         $result['ExerciseLink'] = '/main/gradebook/lib/be/exerciselink.class.php';
+
+        $result['ExtraField'] = '/main/inc/lib/extra_field.lib.php';
+        $result['ExtraFieldOption'] = '/main/inc/lib/extra_field_option.lib.php';
+        $result['ExtraFieldValue'] = '/main/inc/lib/extra_field_value.lib.php';
+
         $result['Testcategory'] = '/main/exercice/testcategory.class.php';
         $result['ExerciseResult'] = '/main/exercice/exercise_result.class.php';
         $result['ExerciseShowFunctions'] = '/main/inc/lib/exercise_show_functions.lib.php';
@@ -696,7 +701,6 @@ class Autoload
         $result['ImageWrapper'] = '/main/inc/lib/image.lib.php';
         $result['ImagickWrapper'] = '/main/inc/lib/image.lib.php';
         $result['Import'] = '/main/inc/lib/import.lib.php';
-        $result['IndexManager'] = '/main/inc/lib/userportal.lib.php';
         $result['IndexableChunk'] = '/main/inc/lib/search/IndexableChunk.class.php';
         $result['Install'] = '/main/install/install.class.php';
         $result['Javascript'] = '/main/inc/lib/javascript.class.php';
@@ -723,6 +727,7 @@ class Autoload
         $result['LoginRedirection'] = '/main/inc/lib/login_redirection.class.php';
         $result['Matching'] = '/main/exercice/matching.class.php';
         $result['MessageManager'] = '/main/inc/lib/message.lib.php';
+        $result['MediaQuestion'] = '/main/exercice/media_question.class.php';
         $result['Model'] = '/main/inc/lib/model.lib.php';
         $result['Model\Course'] = '/main/inc/lib/course.class.php';
         $result['Model\Document'] = '/main/inc/lib/document.class.php';
@@ -789,7 +794,6 @@ class Autoload
         $result['QuickformForm'] = '/main/inc/lib/pear/HTML/QuickForm/Renderer/Object.php';
         $result['Quiz'] = '/main/coursecopy/classes/Quiz.class.php';
         $result['QuizQuestion'] = '/main/coursecopy/classes/QuizQuestion.class.php';
-        $result['QuizQuestionOption'] = '/main/coursecopy/classes/QuizQuestionOption.class.php';
         $result['Redirect'] = '/main/inc/lib/redirect.class.php';
         $result['Request'] = '/main/inc/lib/system/web/request.class.php';
         $result['RequestServer'] = '/main/inc/lib/system/web/request_server.class.php';
@@ -806,6 +810,11 @@ class Autoload
         $result['Security'] = '/main/inc/lib/security.lib.php';
         $result['SessionHandler'] = '/main/inc/lib/session_handler.class.php';
         $result['SessionManager'] = '/main/inc/lib/sessionmanager.lib.php';
+        $result['SessionModel'] = '/main/inc/lib/session_model.lib.php';
+
+        $result['SessionField'] = '/main/inc/lib/session_field.lib.php';
+        $result['SessionFieldValue'] = '/main/inc/lib/session_field_value.lib.php';
+        $result['SessionFieldOption'] = '/main/inc/lib/session_field_option.lib.php';
         $result['Shibboleth\Admin'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\AdminStore'] = '/main/auth/shibboleth/app/model/admin.class.php';
         $result['Shibboleth\Model'] = '/main/auth/shibboleth/lib/model.class.php';
@@ -972,7 +981,8 @@ class Autoload
         $result['vtodo'] = '/main/inc/lib/icalcreator/iCalcreator.class.php';
         $result['xhtdoc'] = '/main/inc/lib/xht.lib.php';
 
-
+        $result['xajax'] = '/main/inc/lib/xajax/xajax.inc.php';
+        $result['xajaxResponse'] = '/main/inc/lib/xajax/xajaxResponse.inc.php';
         return $result;
     }
 

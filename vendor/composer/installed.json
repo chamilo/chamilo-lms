@@ -1,0 +1,1542 @@
+[
+    {
+        "name": "twig/twig",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/fabpot/Twig.git",
+            "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/fabpot/Twig/archive/a65e7e4e2e5726a42a29e609fad008f8a9600594.zip",
+            "reference": "a65e7e4e2e5726a42a29e609fad008f8a9600594",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2012-12-25 10:06:30",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.12-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "symfony/routing",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Routing",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Routing",
+            "reference": "eecf36850760b137fcd4f5025c64014de722874c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Routing/archive/eecf36850760b137fcd4f5025c64014de722874c.zip",
+            "reference": "eecf36850760b137fcd4f5025c64014de722874c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.2,<2.4-dev",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/http-kernel": "2.2.*"
+        },
+        "suggest": {
+            "doctrine/common": ">=2.2,<2.4-dev",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*"
+        },
+        "time": "2012-12-20 07:41:17",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Routing\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Routing Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/http-foundation",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/HttpFoundation",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/HttpFoundation",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/HttpFoundation/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-14 21:03:29",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\HttpFoundation": "",
+                "SessionHandlerInterface": "Symfony/Component/HttpFoundation/Resources/stubs"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony HttpFoundation Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/event-dispatcher",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/EventDispatcher",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/EventDispatcher",
+            "reference": "0e9d69646306e11d03dde4a29e79cd09d9567cb9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/EventDispatcher/archive/0e9d69646306e11d03dde4a29e79cd09d9567cb9.zip",
+            "reference": "0e9d69646306e11d03dde4a29e79cd09d9567cb9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/dependency-injection": "2.1.*"
+        },
+        "suggest": {
+            "symfony/dependency-injection": "2.1.*",
+            "symfony/http-kernel": "2.1.*"
+        },
+        "time": "2012-12-27 08:21:49",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\EventDispatcher": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony EventDispatcher Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/http-kernel",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/HttpKernel",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/HttpKernel",
+            "reference": "17fb2aeb877649a144260681bc460a3dd258e344"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/HttpKernel/archive/17fb2aeb877649a144260681bc460a3dd258e344.zip",
+            "reference": "17fb2aeb877649a144260681bc460a3dd258e344",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/event-dispatcher": "2.1.*",
+            "symfony/http-foundation": "2.1.*"
+        },
+        "require-dev": {
+            "symfony/browser-kit": "2.1.*",
+            "symfony/class-loader": "2.1.*",
+            "symfony/config": "2.1.*",
+            "symfony/console": "2.1.*",
+            "symfony/dependency-injection": "2.1.*",
+            "symfony/finder": "2.1.*",
+            "symfony/process": "2.1.*",
+            "symfony/routing": "2.1.*"
+        },
+        "suggest": {
+            "symfony/browser-kit": "2.1.*",
+            "symfony/class-loader": "2.1.*",
+            "symfony/config": "2.1.*",
+            "symfony/console": "2.1.*",
+            "symfony/dependency-injection": "2.1.*",
+            "symfony/finder": "2.1.*"
+        },
+        "time": "2012-12-21 10:42:20",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\HttpKernel": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony HttpKernel Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "pimple/pimple",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/fabpot/Pimple.git",
+            "reference": "v1.0.1"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/fabpot/Pimple/archive/v1.0.1.zip",
+            "reference": "v1.0.1",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2012-11-11 08:32:34",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Pimple": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            }
+        ],
+        "description": "Pimple is a simple Dependency Injection Container for PHP 5.3",
+        "homepage": "http://pimple.sensiolabs.org",
+        "keywords": [
+            "dependency injection",
+            "container"
+        ]
+    },
+    {
+        "name": "silex/silex",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/fabpot/Silex.git",
+            "reference": "bd523d5970bb093d1d2c709e91a7f72b70c39108"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/fabpot/Silex/archive/bd523d5970bb093d1d2c709e91a7f72b70c39108.zip",
+            "reference": "bd523d5970bb093d1d2c709e91a7f72b70c39108",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "pimple/pimple": "1.*",
+            "symfony/event-dispatcher": ">=2.1,<2.3-dev",
+            "symfony/http-foundation": ">=2.1,<2.3-dev",
+            "symfony/http-kernel": ">=2.1,<2.3-dev",
+            "symfony/routing": ">=2.1,<2.3-dev"
+        },
+        "require-dev": {
+            "monolog/monolog": ">=1.0.0,<1.2-dev",
+            "twig/twig": ">=1.8.0,<2.0-dev",
+            "swiftmailer/swiftmailer": "4.2.*",
+            "doctrine/dbal": ">=2.2.0,<2.4.0-dev",
+            "symfony/security": ">=2.1,<2.3-dev",
+            "symfony/config": ">=2.1,<2.3-dev",
+            "symfony/locale": ">=2.1,<2.3-dev",
+            "symfony/form": ">=2.1,<2.3-dev",
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/finder": ">=2.1,<2.3-dev",
+            "symfony/monolog-bridge": ">=2.1,<2.3-dev",
+            "symfony/process": ">=2.1,<2.3-dev",
+            "symfony/translation": ">=2.1,<2.3-dev",
+            "symfony/twig-bridge": ">=2.1,<2.3-dev",
+            "symfony/validator": ">=2.1,<2.3-dev",
+            "symfony/serializer": ">=2.1,<2.3-dev"
+        },
+        "suggest": {
+            "symfony/browser-kit": ">=2.1,<2.3-dev",
+            "symfony/css-selector": ">=2.1,<2.3-dev",
+            "symfony/dom-crawler": ">=2.1,<2.3-dev"
+        },
+        "time": "2012-12-18 11:32:45",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Silex": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Igor Wiedler",
+                "email": "igor@wiedler.ch",
+                "homepage": "http://wiedler.ch/igor/"
+            }
+        ],
+        "description": "The PHP micro-framework based on the Symfony2 Components",
+        "homepage": "http://silex.sensiolabs.org",
+        "keywords": [
+            "microframework"
+        ]
+    },
+    {
+        "name": "doctrine/common",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/common",
+            "reference": "a890fe1b689ed65c52bf4a7e64333a27b3c400d6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/common/archive/a890fe1b689ed65c52bf4a7e64333a27b3c400d6.zip",
+            "reference": "a890fe1b689ed65c52bf4a7e64333a27b3c400d6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2012-12-18 00:45:03",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "https://github.com/schmittjoh",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Common Library for Doctrine projects",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "collections",
+            "spl",
+            "eventmanager",
+            "annotations",
+            "persistence"
+        ]
+    },
+    {
+        "name": "doctrine/dbal",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/dbal",
+            "reference": "63b7ef12a51fab0df4588dbd21bd1a3613bc0362"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/dbal/archive/63b7ef12a51fab0df4588dbd21bd1a3613bc0362.zip",
+            "reference": "63b7ef12a51fab0df4588dbd21bd1a3613bc0362",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine/common": ">=2.3-dev,<2.5-dev"
+        },
+        "time": "2012-12-23 21:25:15",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Database Abstraction Layer",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "persistence",
+            "dbal",
+            "queryobject"
+        ]
+    },
+    {
+        "name": "swiftmailer/swiftmailer",
+        "version": "v4.1.8",
+        "version_normalized": "4.1.8.0",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/swiftmailer/swiftmailer.git",
+            "reference": "v4.1.8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/swiftmailer/swiftmailer/zipball/v4.1.8",
+            "reference": "v4.1.8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2012-06-17 13:55:34",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "4.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "lib/swift_required.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Chris Corbyn"
+            }
+        ],
+        "description": "Swiftmailer, free feature-rich PHP mailer",
+        "homepage": "http://swiftmailer.org",
+        "keywords": [
+            "mail",
+            "mailer"
+        ]
+    },
+    {
+        "name": "symfony/console",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Console",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Console",
+            "reference": "388ea8dbc1b3e1f96721e2799eb2d037e411a281"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Console/archive/388ea8dbc1b3e1f96721e2799eb2d037e411a281.zip",
+            "reference": "388ea8dbc1b3e1f96721e2799eb2d037e411a281",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-19 07:09:49",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Console\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Console Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "doctrine/orm",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/doctrine/doctrine2.git",
+            "reference": "90b6d5e293147a0268ca005362ff50343bc6dc0f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/doctrine2/archive/90b6d5e293147a0268ca005362ff50343bc6dc0f.zip",
+            "reference": "90b6d5e293147a0268ca005362ff50343bc6dc0f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "ext-pdo": "*",
+            "symfony/console": "2.*",
+            "doctrine/dbal": ">=2.3-dev,<2.5-dev"
+        },
+        "suggest": {
+            "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+        },
+        "time": "2012-12-24 09:40:52",
+        "bin": [
+            "bin/doctrine",
+            "bin/doctrine.php"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\ORM\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Object-Relational-Mapper for PHP",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "orm"
+        ]
+    },
+    {
+        "name": "dflydev/doctrine-orm-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider",
+            "reference": "12956355cc7aff283f833e2b17fb6521ed9e17d8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/dflydev/dflydev-doctrine-orm-service-provider/archive/12956355cc7aff283f833e2b17fb6521ed9e17d8.zip",
+            "reference": "12956355cc7aff283f833e2b17fb6521ed9e17d8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "doctrine/orm": ">=2.3,<3.0",
+            "pimple/pimple": "1.*@dev"
+        },
+        "require-dev": {
+            "cilex/cilex": "1.*@dev",
+            "silex/silex": "1.*@dev"
+        },
+        "suggest": {
+            "dflydev/psr0-resource-locator-service-provider": "1.0.*@dev"
+        },
+        "time": "2012-11-20 17:11:41",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.0-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Dflydev\\Cilex\\Provider\\DoctrineOrm": "src",
+                "Dflydev\\Pimple\\Provider\\DoctrineOrm": "src",
+                "Dflydev\\Silex\\Provider\\DoctrineOrm": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Dragonfly Development Inc.",
+                "email": "info@dflydev.com",
+                "homepage": "http://dflydev.com"
+            },
+            {
+                "name": "Beau Simensen",
+                "email": "beau@dflydev.com",
+                "homepage": "http://beausimensen.com"
+            }
+        ],
+        "description": "Doctrine ORM Service Provider",
+        "keywords": [
+            "silex",
+            "orm",
+            "doctrine",
+            "pimple",
+            "cilex"
+        ]
+    },
+    {
+        "name": "doctrine/migrations",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/migrations",
+            "reference": "6e916d8e39b4963d6fd52622fd9ac797dce82837"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/migrations/archive/6e916d8e39b4963d6fd52622fd9ac797dce82837.zip",
+            "reference": "6e916d8e39b4963d6fd52622fd9ac797dce82837",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine/dbal": ">=2.0,<2.5.x-dev"
+        },
+        "require-dev": {
+            "symfony/console": "2.*",
+            "symfony/yaml": "2.*"
+        },
+        "suggest": {
+            "symfony/console": "to run the migration from the console"
+        },
+        "time": "2012-12-26 14:01:23",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\Migrations": "lib"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Database Schema migrations using Doctrine DBAL",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "migrations"
+        ]
+    },
+    {
+        "name": "pagerfanta/pagerfanta",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/whiteoctober/Pagerfanta.git",
+            "reference": "12f71d99457b018fb80746f84514dd5b495c5789"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/whiteoctober/Pagerfanta/archive/12f71d99457b018fb80746f84514dd5b495c5789.zip",
+            "reference": "12f71d99457b018fb80746f84514dd5b495c5789",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "suggest": {
+            "doctrine/orm": "2.*",
+            "doctrine/mongodb-odm": "2.*",
+            "solarium/solarium": "2.*"
+        },
+        "time": "2012-08-22 21:56:31",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Pagerfanta\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Pablo Díez",
+                "email": "pablodip@gmail.com",
+                "homepage": "http://github.com/pablodip"
+            }
+        ],
+        "description": "Pagination for PHP 5.3",
+        "keywords": [
+            "page",
+            "paging"
+        ]
+    },
+    {
+        "name": "symfony/config",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Config",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Config",
+            "reference": "ab422ad472259c7775d70831182f586f444c77a3"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Config/archive/ab422ad472259c7775d70831182f586f444c77a3.zip",
+            "reference": "ab422ad472259c7775d70831182f586f444c77a3",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-20 07:41:17",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Config\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Config Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/dependency-injection",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/DependencyInjection",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/DependencyInjection",
+            "reference": "32ad6cccb2c38d7ac87217fae459083438f05634"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/DependencyInjection/archive/32ad6cccb2c38d7ac87217fae459083438f05634.zip",
+            "reference": "32ad6cccb2c38d7ac87217fae459083438f05634",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/yaml": "2.2.*",
+            "symfony/config": "2.2.*"
+        },
+        "suggest": {
+            "symfony/yaml": "2.2.*",
+            "symfony/config": "2.2.*"
+        },
+        "time": "2012-12-19 07:09:49",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\DependencyInjection\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony DependencyInjection Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/twig-bridge",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Bridge/Twig",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/TwigBridge",
+            "reference": "5f83b3f000eedc25e5fa538bd2ff928e21e2327c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/TwigBridge/archive/5f83b3f000eedc25e5fa538bd2ff928e21e2327c.zip",
+            "reference": "5f83b3f000eedc25e5fa538bd2ff928e21e2327c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "twig/twig": ">=1.9.1,<2.0-dev"
+        },
+        "require-dev": {
+            "symfony/form": "2.2.*",
+            "symfony/routing": "2.2.*",
+            "symfony/templating": "2.2.*",
+            "symfony/translation": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/security": "2.2.*",
+            "symfony/http-kernel": "2.2.*"
+        },
+        "suggest": {
+            "symfony/form": "2.2.*",
+            "symfony/routing": "2.2.*",
+            "symfony/templating": "2.2.*",
+            "symfony/translation": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/security": "2.2.*",
+            "symfony/http-kernel": "2.2.*"
+        },
+        "time": "2012-12-22 14:51:06",
+        "type": "symfony-bridge",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Bridge\\Twig\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Twig Bridge",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/yaml",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Yaml",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Yaml",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Yaml/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-06 10:00:55",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Yaml": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Yaml Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/security",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Security",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Security",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Security/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/event-dispatcher": "2.1.*",
+            "symfony/http-foundation": "2.1.*",
+            "symfony/http-kernel": "2.1.*"
+        },
+        "require-dev": {
+            "symfony/form": "2.1.*",
+            "symfony/routing": "2.1.*",
+            "symfony/validator": "2.1.*",
+            "doctrine/common": ">=2.2,<2.4-dev",
+            "doctrine/dbal": ">=2.2,<2.4-dev"
+        },
+        "suggest": {
+            "doctrine/dbal": "to use the built-in ACL implementation",
+            "symfony/class-loader": "2.1.*",
+            "symfony/finder": "2.1.*",
+            "symfony/form": "2.1.*",
+            "symfony/validator": "2.1.*",
+            "symfony/routing": "2.1.*"
+        },
+        "time": "2012-12-11 10:40:22",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Security": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Security Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "monolog/monolog",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Seldaek/monolog",
+            "reference": "52b454f89041c41c548bc242482aaf9dc6fee5d8"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/Seldaek/monolog/archive/52b454f89041c41c548bc242482aaf9dc6fee5d8.zip",
+            "reference": "52b454f89041c41c548bc242482aaf9dc6fee5d8",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "mlehner/gelf-php": "1.0.*"
+        },
+        "suggest": {
+            "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+            "ext-mongo": "Allow sending log messages to a MongoDB server"
+        },
+        "time": "2012-12-21 09:35:52",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.3.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Monolog": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be",
+                "role": "Developer"
+            }
+        ],
+        "description": "Logging for PHP 5.3",
+        "homepage": "http://github.com/Seldaek/monolog",
+        "keywords": [
+            "log",
+            "logging"
+        ]
+    },
+    {
+        "name": "symfony/options-resolver",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/OptionsResolver",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/OptionsResolver",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/OptionsResolver/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2012-12-06 10:00:55",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\OptionsResolver": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony OptionsResolver Component",
+        "homepage": "http://symfony.com",
+        "keywords": [
+            "configuration",
+            "config",
+            "options"
+        ]
+    },
+    {
+        "name": "symfony/locale",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Locale",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Locale",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Locale/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "suggest": {
+            "ext-intl": ">=5.3.3"
+        },
+        "time": "2012-12-15 17:28:15",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Locale": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Locale Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/form",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Form",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Form",
+            "reference": "2cc2a32b6567e974d63f5ac6514db33b1b265dde"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Form/archive/2cc2a32b6567e974d63f5ac6514db33b1b265dde.zip",
+            "reference": "2cc2a32b6567e974d63f5ac6514db33b1b265dde",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "symfony/event-dispatcher": "2.1.*",
+            "symfony/locale": "2.1.*",
+            "symfony/options-resolver": "2.1.*"
+        },
+        "require-dev": {
+            "symfony/validator": "2.1.*",
+            "symfony/http-foundation": "2.1.*"
+        },
+        "suggest": {
+            "symfony/validator": "2.1.*",
+            "symfony/http-foundation": "2.1.*"
+        },
+        "time": "2012-12-20 17:52:51",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Form": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Form Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/validator",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Validator",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Validator",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Validator/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/http-foundation": "2.1.*",
+            "symfony/locale": "2.1.*",
+            "symfony/yaml": "2.1.*"
+        },
+        "suggest": {
+            "doctrine/common": ">=2.1,<2.4-dev",
+            "symfony/http-foundation": "2.1.*",
+            "symfony/yaml": "2.1.*"
+        },
+        "time": "2012-12-12 13:03:58",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Validator": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Validator Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/translation",
+        "version": "2.1.x-dev",
+        "version_normalized": "2.1.9999999.9999999-dev",
+        "target-dir": "Symfony/Component/Translation",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Translation",
+            "reference": "v2.1.6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Translation/archive/v2.1.6.zip",
+            "reference": "v2.1.6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "symfony/config": "2.1.*",
+            "symfony/yaml": "2.1.*"
+        },
+        "suggest": {
+            "symfony/config": "2.1.*",
+            "symfony/yaml": "2.1.*"
+        },
+        "time": "2012-12-06 10:00:55",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Translation": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Translation Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "knplabs/knp-menu",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "http://github.com/KnpLabs/KnpMenu.git",
+            "reference": "884131c2d8b14b8d6abf676d221439bfce7d73ab"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/KnpLabs/KnpMenu/archive/884131c2d8b14b8d6abf676d221439bfce7d73ab.zip",
+            "reference": "884131c2d8b14b8d6abf676d221439bfce7d73ab",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "silex/silex": "1.0.*",
+            "twig/twig": ">=1.2,<2.0-dev",
+            "pimple/pimple": "1.0.*"
+        },
+        "suggest": {
+            "pimple/pimple": "for the built-in implementations of the menu provider and renderer provider",
+            "silex/silex": "for the integration with your silex application",
+            "twig/twig": "for the TwigRenderer and the integration with your templates"
+        },
+        "time": "2012-12-11 22:43:19",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Knp\\Menu\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Christophe Coevoet",
+                "email": "stof@notk.org"
+            },
+            {
+                "name": "KnpLabs",
+                "homepage": "http://knplabs.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "https://github.com/KnpLabs/KnpMenu/contributors"
+            }
+        ],
+        "description": "An object oriented menu library",
+        "homepage": "http://knplabs.com",
+        "keywords": [
+            "menu",
+            "tree"
+        ]
+    }
+]

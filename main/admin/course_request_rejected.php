@@ -24,17 +24,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
-// Including a configuration file.
-require api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 // A check whether the course validation feature is enabled.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
 
@@ -48,9 +37,9 @@ $keyword = Database::escape_string(trim($_GET['keyword']));
 
 if ($course_validation_feature) {
 
-/**
- * Acceptance and creation of the requested course.
- */
+    /**
+     * Acceptance and creation of the requested course.
+     */
     if (!empty($accept_course_request)) {
         $course_request_code = CourseRequestManager::get_course_request_code($accept_course_request);
         $course_id = CourseRequestManager::accept_course_request($accept_course_request);

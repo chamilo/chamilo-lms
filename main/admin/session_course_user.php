@@ -93,7 +93,8 @@ if ($_POST['formSent']) {
 			}
 		}
 	}
-	foreach($existingCourses as $existingCourse) {
+    
+	foreach ($existingCourses as $existingCourse) {
 		//$sql_insert_rel_course= "INSERT INTO $tbl_session_rel_course(id_session,course_code, id_coach) VALUES('$id_session','$enreg_course','$id_coach')";
 		if(!in_array($existingCourse['code'], $CourseList)){
 			$existingCourse = Database::escape_string($existingCourse['code']);
@@ -121,6 +122,7 @@ if (!empty($_GET['msg'])) {
 // the form header
 $session_info = SessionManager::fetch($id_session);
 $user_info = api_get_user_info($id_user);
+
 echo '<legend>'.$tool_name.': '.$session_info['name'].' - '.$user_info['complete_name'].'</legend>';
 
 $nosessionCourses = $sessionCourses = array();

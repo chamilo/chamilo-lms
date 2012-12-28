@@ -30,7 +30,6 @@
 
 /* 		INIT SECTION		*/
 
-
 use \ChamiloSession as Session;
 
 // Name of the language file that needs to be included.
@@ -243,8 +242,6 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
-
 if ($show_autolunch_lp_warning) {
     $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');
 }
@@ -259,6 +256,7 @@ if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_
 }
 $content = '<div id="course_tools">'.$content.'</div>';
 $tpl = new Template(null);
+
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

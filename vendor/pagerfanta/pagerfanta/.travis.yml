@@ -1,0 +1,12 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+
+env:
+    - DOCTRINE_ORM_REV=origin/2.1.x DOCTRINE_COMMON_REV=origin/2.1.x DOCTRINE_DBAL_REV=origin/2.1.x
+    - DOCTRINE_ORM_REV=origin/2.2
+    - DOCTRINE_ORM_REV=origin/master
+
+before_script: php vendors.php

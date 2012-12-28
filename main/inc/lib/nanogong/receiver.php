@@ -57,6 +57,11 @@ if ($nano_user_id!= api_get_user_id() || api_get_user_id()==0 || $nano_user_id==
 
 //Do not use here check Fileinfo method because return: text/plain
 
+// Check if there is enough space in the course to save the file
+if (!DocumentManager::enough_space(filesize($_FILES['voicefile']['tmp_name']), DocumentManager::get_course_quota())) {
+	die(get_lang('UplNotEnoughSpace'));
+}
+
 if (!file_exists($documentPath)){
 	//add document to disk
 	move_uploaded_file($_FILES['voicefile']['tmp_name'], $documentPath);

@@ -110,6 +110,22 @@ if(strpos($current_mime, 'image')===false) {
 }
 
 
+//make a temporal file for get the file size
+$tmpfname = tempnam("/tmp", "CTF");
+$handle = fopen($tmpfname, "w");
+fwrite($handle, $contents);
+fclose($handle);
+
+// Check if there is enough space in the course to save the file
+if (!DocumentManager::enough_space(filesize($tmpfname), DocumentManager::get_course_quota())) {
+	unlink($tmpfname);
+	die(get_lang('UplNotEnoughSpace'));
+}
+
+//erase temporal file
+unlink($tmpfname);
+
+
 //path, file and title
 $paintFileName = $filename.'.'.$extension;
 $title = $title.'.'.$extension;

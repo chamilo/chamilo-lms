@@ -68,21 +68,6 @@ $tbl_session 				= Database::get_main_table(TABLE_MAIN_SESSION);
 
 $TABLECOURSE_GROUPSUSER 	= Database::get_course_table(TABLE_GROUP_USER);
 
-$sql = "SELECT 1
-        FROM $tbl_session_course_user AS session_course_user
-        INNER JOIN $tbl_session AS session
-            ON session_course_user.id_session = session.id
-            AND ((date_start<=NOW()
-            AND date_end>=NOW())
-            OR (date_start='0000-00-00' AND date_end='0000-00-00'))
-        WHERE id_session='".$_SESSION['id_session']."' AND course_code='$_cid'";
-//echo $sql;
-$result=Database::query($sql);
-if(!Database::num_rows($result)){
-    $disabled = true;
-}
-
-
 $tbl_learnpath_main = Database::get_course_table(TABLE_LP_MAIN);
 $tbl_learnpath_item = Database::get_course_table(TABLE_LP_ITEM);
 $tbl_learnpath_view = Database::get_course_table(TABLE_LP_VIEW);

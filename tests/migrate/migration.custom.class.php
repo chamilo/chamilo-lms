@@ -2634,6 +2634,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
     static function notaDetalles($data, $params) {
         $result = self::genericDetalles($data, __FUNCTION__, $params);
+        error_log(print_r($result, 1));
         if ($result['error'] == true) {
             return $result;
         }
@@ -2642,6 +2643,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
 
     static function asistenciaDetalles($data, $params) {
         $result = self::genericDetalles($data, __FUNCTION__, $params);
+        error_log(print_r($result, 1));
         if ($result['error'] == true) {
             return $result;
         }

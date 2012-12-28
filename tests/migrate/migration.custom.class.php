@@ -426,7 +426,7 @@ class MigrationCustom {
     }
 
     static function create_attendance($data) {
-        error_log('create_attendance');
+        //error_log('create_attendance');
         $session_id = $data['session_id'];
         $user_id    = $data['user_id'];
 
@@ -460,7 +460,7 @@ class MigrationCustom {
                     } else {
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
-                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course['code']} - session_id: $session_id");
+                        //error_log("Attendance found in attendance_id = $attendance_id - course code: {$course['code']} - session_id: $session_id");
                     }
 
                     if ($attendance_id) {
@@ -472,7 +472,7 @@ class MigrationCustom {
                             //Creating the attendance date
                             $attendance->set_date_time($data['fecha']);
                             $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
-                            error_log("Creating attendance calendar $cal_id");
+                            //error_log("Creating attendance calendar $cal_id");
                         }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id => $data['status']);

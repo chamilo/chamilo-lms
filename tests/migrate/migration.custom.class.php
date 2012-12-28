@@ -142,6 +142,7 @@ class MigrationCustom {
             }
         }
         $extra_field = new ExtraFieldValue('course');
+        $data = strtoupper($data);
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdCurso', $data);
         if ($values) {
             return $values['course_code'];
@@ -157,6 +158,7 @@ class MigrationCustom {
             }
         }
         $extra_field = new ExtraFieldValue('session');
+        $uidIdPrograma = strtoupper($uidIdPrograma);
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPrograma', $uidIdPrograma);
         if ($values) {
             return $values['session_id'];
@@ -174,6 +176,7 @@ class MigrationCustom {
         }
         //error_log('get_user_id_by_persona_id');
         $extra_field = new ExtraFieldValue('user');
+        $uidIdPersona = strtoupper($uidIdPersona);
         $values = $extra_field->get_item_id_from_field_variable_and_field_value('uidIdPersona', $uidIdPersona);
         if ($values) {
             return $values['user_id'];
@@ -2307,6 +2310,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         if (!empty($xml->NewDataSet)) {
             $item = (array)$xml->NewDataSet->Table;
             $item['error'] = false;
+
             if (isset($item['uididsede'])) {
                 $item['uididsede'] = strtoupper($item['uididsede']);
             }
@@ -2314,7 +2318,6 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             if (isset($item['uididhorario'])) {
                 $item['uididhorario'] = strtoupper($item['uididhorario']);
             }
-
             return $item;
         } else {
             return array(

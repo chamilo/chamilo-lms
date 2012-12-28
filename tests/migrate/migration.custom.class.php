@@ -573,7 +573,7 @@ class MigrationCustom {
     }
 
     static function create_gradebook_evaluation($data){
-        error_log('create_gradebook_evaluation');
+        error_log('create_gradebook_evaluation() function called');
         $session_id = isset($data['session_id']) ? $data['session_id'] : null;
 
         if (!empty($session_id)) {
@@ -586,7 +586,6 @@ class MigrationCustom {
                     $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
                     error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
                     if (!empty($gradebook)) {
-                        //error_log("Gradebook exists {$gradebook['id']}");
                         //Check if gradebook exists
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
@@ -1604,9 +1603,10 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                         }
 
                         if (!empty($evals_found)) {
-                            error_log("Gradebook exists: {$gradebook['id']}");
                             $evaluation = current($evals_found);
                             $eval_id = $evaluation->get_id();
+
+                            error_log("Evaluation found in gradebook: {$gradebook['id']}, eval_id: $eval_id");
 
                             //Eval found
                             $res = new Result();

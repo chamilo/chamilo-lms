@@ -1875,6 +1875,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
+            'sdtfecha'     => $original_data['info'],
             'intIdSede'    => $original_data['branch_id']
         ));
 
@@ -1883,8 +1884,8 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['date'];
-            $attendance_user_status = $data['status']; // ??
+            $attendance_date = $data['date_assist'];
+            $attendance_user_status = $data['status']; // modified in the asistenciaDetalles function
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -1920,7 +1921,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     }
 
                     $time = self::get_horario_value($session_id);
-                    $attendance_date .= " $time";
+                    $attendance_date .= " $time:00";
 
                     $attendance = new Attendance();
 
@@ -1940,7 +1941,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     } else {
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
-                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
                     }
 
                     $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
@@ -2010,6 +2011,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
+            'sdtfecha'     => $original_data['info'],
             'intIdSede'    => $original_data['branch_id']
         ));
 
@@ -2018,7 +2020,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['date'];
+            $attendance_date = $data['date_assist'];
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -2074,7 +2076,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     } else {
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
-                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
                     }
 
                     $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
@@ -2130,16 +2132,16 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
+	    'uididfecha'     => $original_data['info'],
             'intIdSede'    => $original_data['branch_id']
         ));
-
         if ($data['error'] == false) {
 
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona = $original_data['item_id'];
 
-            $attendance_date = $data['date'];
-            $attendance_user_status = $data['status']; // ???
+            $attendance_date = $data['date_assist'];
+            $attendance_user_status = $data['status']; // modified in the asistenciaDetalles function
 
             $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
             $user_id = self::get_user_id_by_persona_id($uidIdPersona);
@@ -2175,7 +2177,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     }
 
                     $time = self::get_horario_value($session_id);
-                    $attendance_date .= " $time";
+                    $attendance_date .= " $time:00";
 
                     $attendance = new Attendance();
                     $course_info = api_get_course_info($course_data['code']);
@@ -2194,7 +2196,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     } else {
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
-                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id");
+                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
                     }
 
                     $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
@@ -2343,7 +2345,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                    'orig_id'        => isset($transaction_info['orig']) ? $transaction_info['orig'] : null,
                    'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
                    'dest_id'        => isset($transaction_info['dest']) ? $transaction_info['dest'] : null,
-                   'info'           => isset($transaction_info['informacionextra']) ? $transaction_info['informacionextra'] : null,
+                   'info'           => isset($transaction_info['infoextra']) ? $transaction_info['infoextra'] : null,
                    'status_id'      => 0
             );
 
@@ -2407,7 +2409,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
     }
 
     static function genericDetalles($data, $result_name, $params = array()) {
-        error_log("Calling $result_name ");
+        error_log("Called $result_name");// with received data ".print_r($data,1));
         $original_webservice_name = $result_name;
 
         $result_name = $result_name.'Result';
@@ -2717,7 +2719,7 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             $result['name'] = trim($result['name']);
             $result['status']  = isset($array[$result['name']]) ? $array[$result['name']] : 4;
         }
-        $result['date'] = trim($result['Fecha']);
+        $result['date'] = trim($result['date_assist']);
 
         return $result;
     }

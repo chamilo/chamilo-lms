@@ -172,7 +172,7 @@ class Migration {
         // Create the client instance
         $url = $web_service_params['url'];
         try {
-            $client = new SoapClient($url);
+            $client = new SoapClient($url, array('cache_wsdl' => WSDL_CACHE_NONE));
         } catch (SoapFault $fault) {
             $error = 1;
             die('Error connecting');

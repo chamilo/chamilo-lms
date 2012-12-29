@@ -1431,8 +1431,8 @@ class Attendance
     public function get_attendance_states() {
         $attendance_states = array(
             '1' => array('label' => get_lang('Present'), 'class' => 'btn-success') ,
-            '3' => array('label' => get_lang('Late'), 'class' => 'btn-info') ,
-            '2' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
+            '2' => array('label' => get_lang('Late'), 'class' => 'btn-info') ,
+            '3' => array('label' => get_lang('VeryLate'), 'class' => 'btn-warning') ,
             '0' => array('label' => get_lang('Absent'), 'class' => 'btn-danger') ,
             '4' => array('label' => get_lang('Default'), 'class' => 'btn') ,
         );
@@ -1442,7 +1442,7 @@ class Attendance
     public function get_status_that_score_point_to_users() {
         return array(
             1, //presence
-            3, //late
+            2, //late
         );
     }
 

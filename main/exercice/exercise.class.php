@@ -3363,7 +3363,27 @@ class Exercise {
 		$url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
 		$user_info = UserManager::get_user_info_by_id(api_get_user_id());
 
-		$msg = '<p>'.get_lang('OralQuestionsAttempted').' :</p>
+
+            $oral_question_list = null;
+			foreach ($question_list_answers as $item) {
+                $question    = $item['question'];
+                $answer      = $item['answer'];
+                $answer_type = $item['answer_type'];
+
+                if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
+                    $oral_question_list.='<br /><table width="730" height="136" border="0" cellpadding="3" cellspacing="3"><tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                        </tr>
+                        <tr>
+                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
+                        </tr></table>';
+                }
+			}
+
+            if (!empty($oral_question_list)) {
+                 $msg = '<p>'.get_lang('OralQuestionsAttempted').' :</p>
                     <p>'.get_lang('AttemptDetails').' : </p>
                     <table class="data_table">
                         <tr>
@@ -3383,31 +3403,7 @@ class Exercise {
                             <td>#mail#</td>
                         </tr>
                     </table>';
-            $oral_question_list = null;
-			foreach ($question_list_answers as $item) {
-                $question    = $item['question'];
-                $answer      = $item['answer'];
-                $answer_type = $item['answer_type'];
-
-                if (!empty($question) && !empty($answer) && $answer_type == ORAL_EXPRESSION) {
-                    $oral_question_list.='<tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
-                            <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
-                        </tr>
-                        <tr>
-                            <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                            <td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>
-                        </tr>';
-                }
-			}
-
-            if (!empty($oral_question_list)) {
-                $msg .=  '<p><br />'.get_lang('OralQuestionsAttemptedAre').' :</p>
-                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-                $msg .= $oral_question_list;
-                $msg.='</table><br />';
-
-
+                $msg .=  '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'),$oral_question_list).'<br />';
                 $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
                 $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
                 $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);

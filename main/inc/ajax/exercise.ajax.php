@@ -174,7 +174,7 @@ switch ($action) {
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {
-                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)), true);
+                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)));
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));

@@ -64,7 +64,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             return '';
         }
 
-
         echo '<div class="question_options">';
 
     	$s = '';
@@ -411,6 +410,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
     			    $correct_answer_list = $correct_answer_list[0];
     			    $i = 0;
+
     			    foreach ($correct_answer_list as $correct_item) {
     			        $value = null;
     			        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
@@ -425,7 +425,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            }
                             $correct_item = preg_quote($correct_item);
                             $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
-    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer);
+    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer, 1);
     			        }
     			        $i++;
     			    }

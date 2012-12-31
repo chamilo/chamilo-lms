@@ -81,7 +81,7 @@ $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
 //From submit modal
-$current_question			= isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
+$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
 
 //Error message
 $error = '';
@@ -463,13 +463,6 @@ if ($formSent && isset($_POST)) {
                     	$sql_exe_result = ", exe_result = 0";
                         if ($debug) { error_log('exercise_time_control_is_valid is NOT valid then exe_result = 0 '); }
                     }
-                    /*
-                    //Clean incomplete - @todo why setting to blank the status?
-                    $stat_table   = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-                    $update_query = "UPDATE $stat_table SET  status = '', exe_date = '".api_get_utc_datetime() ."' , orig_lp_item_view_id = '$learnpath_item_view_id' $sql_exe_result  WHERE exe_id = ".$exe_id;
-
-                    if ($debug) { error_log('Updating track_e_exercises '.$update_query); }
-                    Database::query($update_query);*/
                 }
                 if ($debug) { error_log('10. Redirecting to exercise_show.php'); }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
@@ -519,10 +512,7 @@ if ($question_count != 0) {
 	                    exit;
 	                }
 	            }
-	            //header("Location: exercise_result.php?origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
-	            //exit;
 	        } else {
-
 	            //Time control is only enabled for ONE PER PAGE
 	            if (!empty($exe_id) && is_numeric($exe_id)) {
 	                //Verify if the current test is fraudulent
@@ -541,6 +531,7 @@ if ($question_count != 0) {
 	            	exit;
 	            } else {
                     header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&origin=$origin&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
+                    exit;
 	            }
 	        }
 	    } else {
@@ -676,7 +667,7 @@ if ($origin != 'learnpath') {
 }
 
 if ($reminder == 2)  {
-    if ($debug) { error_log('. $reminder == 2'); }
+    if ($debug) { error_log(' $reminder == 2'); }
 
     $data_tracking  = $exercise_stat_info['data_tracking'];
     $data_tracking  = explode(',', $data_tracking);
@@ -1015,7 +1006,7 @@ if (!empty($error)) {
 
         echo '<div id="question_div_'.$questionId.'" class="main_question '.$remind_highlight.'" >';
 
-	        // shows the question and its answers
+	        // Shows the question and its answers
 	        showQuestion($questionId, false, $origin, $i, true, false, $user_choice, false);
 
             //BUtton save and continue

@@ -33,7 +33,7 @@ $is_error = isset($user_file['error']) ? $user_file['error'] : false;
 if( Request::is_post() && $is_error){
     return api_failure::set_failure('upload_file_too_big');
     unset($_FILEs['user_file']);
-}else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
+} else if ($_SERVER['REQUEST_METHOD'] == 'POST' && count($_FILES) > 0 && !empty($_FILES['user_file']['name'])) {
 
     // A file upload has been detected, now deal with the file...
 
@@ -129,14 +129,14 @@ if( Request::is_post() && $is_error){
     $new_dir = replace_dangerous_char(trim($file_base_name), 'strict');
 
     require_once 'learnpath.class.php';
-    
+
     $result = learnpath::verify_document_size($s);
     if ($result == true) {
         return api_failure::set_failure('upload_file_too_big');
-         
+
     }
     $type = learnpath::get_package_type($s, basename($s));
-    
+
     switch ($type) {
         case 'scorm':
             require_once 'scorm.class.php';

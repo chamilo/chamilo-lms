@@ -4207,7 +4207,7 @@ class SurveyUtil {
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
 			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
             if (survey_manager::survey_generation_hash_available()) {
-                $return .=  Display::url(Display::return_icon('new_link.png', get_lang('Newlink'),'',ICON_SIZE_SMALL), 'generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq());
+                $return .=  Display::url(Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink'),'',ICON_SIZE_SMALL), 'generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq());
             }
 			$return .= ' <a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 

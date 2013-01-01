@@ -100,6 +100,6 @@ if ($origin == 'learnpath') {
     Display::display_header($nameTools,"Exercise");
 }
 $url = $document_web_path.$doc_url.$user_id.'.t.html?time='.Security::remove_XSS($time);
-echo '<iframe overflow:hidden id="hotpotatoe" width="100%" frameborder="0" src="'.$url.'"></iframe>';
+echo '<iframe style="overflow:hidden" id="hotpotatoe" width="100%" frameborder="0" src="'.$url.'"></iframe>';
 echo '</body></html>';
 exit;

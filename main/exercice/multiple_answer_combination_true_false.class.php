@@ -10,7 +10,7 @@
  * Code
  */
 if(class_exists('MultipleAnswerCombinationTrueFalse')) { return true; }
-require 'multiple_answer_combination.class.php';
+require_once 'multiple_answer_combination.class.php';
 /**
 	CLASS MultipleAnswer
  *

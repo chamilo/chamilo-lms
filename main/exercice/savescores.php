@@ -64,16 +64,14 @@ function save_scores($file, $score) {
         // anonymous
         $user_id = "NULL";
     }
-    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES ".
-        "(exe_name, exe_user_id, exe_date,exe_cours_id,exe_result,exe_weighting)".
-        "VALUES".
-        "(
+    $sql = "INSERT INTO $TABLETRACK_HOTPOTATOES (exe_name, exe_user_id, exe_date, exe_cours_id, exe_result, exe_weighting) VALUES (
 			'".Database::escape_string($file)."',
 			'".Database::escape_string($user_id)."',
 			'".Database::escape_string($date)."',
 			'".Database::escape_string($_cid)."',
 			'".Database::escape_string($score)."',
 			'".Database::escape_string($weighting)."')";
+
     Database::query($sql);
 
     if ($origin == 'learnpath') {
@@ -81,7 +79,15 @@ function save_scores($file, $score) {
         //table to get tracking in there as well
         global $jscript2run;
         //record the results in the learning path, using the SCORM interface (API)
-        $jscript2run .= "<script>window.parent.API.void_save_asset('$score', '$weighting', 0, 'completed');</script>";
+        $jscript2run .= "<script>
+            $(document).ready(function() {
+                //API_obj = window.frames.window.content.API;
+                //API_obj = $('content_id').context.defaultView.content.API; //works only in FF
+                //console.log(window.parent.frames.window.top.API);
+                API_obj = window.parent.frames.window.top.API;
+                API_obj.void_save_asset('$score', '$weighting', 0, 'completed');
+            });
+        </script>";
     }
 }
 
@@ -95,7 +101,7 @@ if ($origin != 'learnpath') {
     echo $jscript2run;
 } else {
     $htmlHeadXtra[] = $jscript2run;
-    Display::display_header();
-    echo get_lang('HotPotatoesFinished');
+    Display::display_reduced_header();
+    Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
     Display::display_footer();
 }

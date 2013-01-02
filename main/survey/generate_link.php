@@ -29,10 +29,10 @@ if (!survey_manager::survey_generation_hash_available()) {
 $link = survey_manager::generate_survey_link($survey_id, api_get_course_int_id(), api_get_session_id(), api_get_group_id());
 echo '<div class="row">';
     echo '<div class="span12" style="text-align:center">';
-    echo Display::url(get_lang('GenerateSurveyLink'), $link, array('class' => 'btn btn-primary btn-large'));
+    echo Display::url(get_lang('GenerateSurveyAccessLink'), $link, array('class' => 'btn btn-primary btn-large'));
     echo '</div>';
     echo '<div class="span12">';
-    echo get_lang('GenerateSurveyLinkExplanation');
+    echo get_lang('GenerateSurveyAccessLinkExplanation');
 
     echo '<pre>';
     echo  $link;

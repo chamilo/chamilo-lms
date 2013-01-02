@@ -1457,17 +1457,14 @@ abstract class Question
         $question_title = $this->question;
 
         // display question category, if any
-        $header = Testcategory::returnCategoryAndTitle($this->id);
+        //$header = Testcategory::returnCategoryAndTitle($this->id);
         $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();
         }
         $header .= Display::page_subheader2($counter_label.". ".$question_title);
-        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
 	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
 	    $header .= Display::div($this->description, array('id'=>'question_description'));
-
-
         return $header;
 	}
 

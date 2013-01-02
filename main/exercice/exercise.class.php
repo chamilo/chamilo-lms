@@ -2477,6 +2477,11 @@ class Exercise {
 							$query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
 							$resq = Database::query($query);
 							$studentChoice = Database::result($resq,0,"hotspot_correct");
+
+                            if ($studentChoice) {
+                                $questionScore  += $answerWeighting;
+                                $totalScore     += $answerWeighting;
+                            }
 						}
 					}  else {
 						$studentChoice = $choice[$answerId];
@@ -2950,12 +2955,12 @@ class Exercise {
 
         if ($debug) error_log('-- end answer loop --');
 
-		// destruction of Answer
+		/*
 		if (!$saved_results && $answerType == HOT_SPOT) {
 			$queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
 			$resfree        = Database::query($queryfree);
 			$questionScore  = Database::result($resfree,0,"marks");
-		}
+		}*/
 
 		$final_answer = true;
 		foreach ($real_answers as $my_answer) {

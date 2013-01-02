@@ -1,12 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	Statement (?) administration
 *	This script allows to manage the statements of questions.
 * 	It is included from the script admin.php
 *	@package chamilo.exercise
 * 	@author Olivier Brouckaert
-* 	@version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $
+*  @author Julio Montoya
 */
 /**
  * Code
@@ -16,7 +15,7 @@ $course_id = api_get_course_int_id();
 
 // INIT QUESTION
 if (isset($_GET['editQuestion'])) {
-	$objQuestion = Question::read ($_GET['editQuestion']);    
+	$objQuestion = Question::read ($_GET['editQuestion']);
 	$action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id;
 } else {
 	$objQuestion = Question :: getInstance($_REQUEST['answerType']);
@@ -26,7 +25,7 @@ if (isset($_GET['editQuestion'])) {
 if (is_object($objQuestion)) {
 	//FORM CREATION
 	$form = new FormValidator('question_admin_form','post', $action);
-    
+
 	if(isset($_GET['editQuestion'])) {
 		$class="btn save";
 		$text=get_lang('ModifyQuestion');
@@ -42,7 +41,7 @@ if (is_object($objQuestion)) {
 
 	// form title
 	$form->addElement('header', $text.': '.$form_title_extra);
-    
+
 	// question form elements
 	$objQuestion->createForm($form);
 
@@ -55,19 +54,19 @@ if (is_object($objQuestion)) {
 	}
 
 	// FORM VALIDATION
-    
+
 	if (isset($_POST['submitQuestion']) && $form->validate()) {
 
 		// question
 	    $objQuestion->processCreation($form, $objExercise);
-        
-	    // answers        
+
+	    // answers
 	    $objQuestion->processAnswersCreation($form, $nb_answers);
 
         // TODO: maybe here is the better place to index this tool, including answers text
 
 	    // redirect
-	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {	    	
+	    if ($objQuestion -> type != HOT_SPOT && $objQuestion -> type !=  HOT_SPOT_DELINEATION) {
 	    	if(isset($_GET['editQuestion'])) {
 	    		echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&message=ItemUpdated"</script>';
 	    	} else {
@@ -77,7 +76,7 @@ if (is_object($objQuestion)) {
 	    } else {
 	    	echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&hotspotadmin='.$objQuestion->id.'"</script>';
 	    }
-	} else {	 
+	} else {
 		echo '<h3>'.$questionName.'</h3>';
 		if(!empty($pictureName)){
 			echo '<img src="../document/download.php?doc_url=%2Fimages%2F'.$pictureName.'" border="0">';

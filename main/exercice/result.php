@@ -25,11 +25,6 @@ if (empty($origin)) {
     $origin = $_REQUEST['origin'];
 }
 
-if ($origin == 'learnpath')
-    api_protect_course_script();
-else
-	api_protect_course_script(true);
-
 $id 	       = isset($_REQUEST['id']) 	  ? intval($_GET['id']) : null; //exe id
 $show_headers  = isset($_REQUEST['show_headers']) ? intval($_REQUEST['show_headers']) : null; //exe id
 
@@ -37,8 +32,10 @@ if ($origin == 'learnpath') {
 	$show_headers = false;
 }
 
+api_protect_course_script($show_headers);
+
 if (empty($id)) {
-	api_not_allowed();
+	api_not_allowed($show_headers);
 }
 
 $is_allowedToEdit   = api_is_allowed_to_edit(null,true) || $is_courseTutor;
@@ -48,9 +45,10 @@ $track_exercise_info = get_exercise_track_exercise_info($id);
 
 //No track info
 if (empty($track_exercise_info)) {
-    api_not_allowed(false);
+    api_not_allowed($show_headers);
 }
-$exercise_id        = $track_exercise_info['id'];
+
+$exercise_id        = $track_exercise_info['exe_exo_id'];
 $student_id         = $track_exercise_info['exe_user_id'];
 $current_user_id    = api_get_user_id();
 
@@ -63,7 +61,7 @@ if (!empty($exercise_id)) {
 //Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $current_user_id) {
-    	api_not_allowed();
+    	api_not_allowed($show_headers);
     }
 }
 
@@ -75,6 +73,7 @@ if ($show_headers) {
 } else {
 	Display::display_reduced_header();
 }
+
 display_question_list_by_attempt($objExercise, $id, false);
 
 if ($show_headers) {

@@ -950,6 +950,7 @@ $SkillXWithCourseX = "%s via %s";
 $ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses = "Pour apprendre %s, vous devez suivre l'un des cours suivants:";
 $YourSkillRankingX = "Votre rang de compétence est de: %s";
 $ManageSkills = "Gérer les compétences";
+$Categories = "Catégories";
 $StartDateMustBeBeforeTheEndDate = "La date de début doit être antérieure à la date de fin";
 $SkillRoot = "Racine";
 $SkillInfo = "Infos compétence";

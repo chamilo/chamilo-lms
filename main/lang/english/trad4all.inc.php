@@ -950,6 +950,7 @@ $SkillXWithCourseX = "%s with %s";
 $ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses = "To get to learn %s you will need to take one of the following courses:";
 $YourSkillRankingX = "Your skill ranking: %s";
 $ManageSkills = "Manage skills";
+$Categories = "Categories";
 $StartDateMustBeBeforeTheEndDate = "Start date must be before the end date";
 $SkillRoot = "Root";
 $SkillInfo = "Skill info";

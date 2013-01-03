@@ -203,6 +203,10 @@ $UpdateInformation = "Update information";
 $PleaseFillSurvey = "Please fill survey";
 $ReportingOverview = "Reporting overview";
 $ThereAreNotQuestionsForthisSurvey = "There are not questions for this survey";
+$GenerateSurveyAccessLinkExplanation = "By copying the link below and pasting it in an e-mail or on a website, you will allow any anonymous person to enter and answer this survey.
+You can test this feature by clicking the link above and answering the survey.
+This is particularly useful if you want to allow anyone on a forum to answer you survey and you don't know their e-mail addresses.";
+$GenerateSurveyAccessLink = "Generate survey access link";
 $Multipleresponse = "Multiple answer";
 $ErrorSurveyTypeUnknown = "Survey type unknown";
 $SurveyUndetermined = "Survey undefined";

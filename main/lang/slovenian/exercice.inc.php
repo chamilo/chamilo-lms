@@ -369,6 +369,7 @@ $ReUseACopyInCurrentTest = "Ponovno uporabi kopijo znotraj trenutnega testa";
 $Copy = "Kopiraj";
 $ScoreAverageFromAllAttempts = "Povprečen rezultat iz vseh poizkusov";
 $DefaultContent = "Generiraj privzeto vsebino";
+$EditQuestions = "Uredi vprašanja";
 $ExerciseDescriptionLabel = "Opis";
 $ExerciseEditionNotAvailableInSession = "Iz seje testa iz tega tečaja ni mogoče urejati";
 $UniqueAnswerNoOption = "Večkratna izbira z ne-vem";

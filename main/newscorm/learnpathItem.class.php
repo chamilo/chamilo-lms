@@ -1118,21 +1118,24 @@ class learnpathItem {
 	 * @return	integer	Total time
 	 */
 	public function get_total_time() {
-		if (self::debug > 0) { error_log('learnpathItem::get_total_time()', 0); }
+		if (self::debug > 0) { error_log('learnpathItem::get_total_time() for item '.$this->db_id.' - Initially, current_start_time = '.$this->current_start_time.' and current_stop_time = '.$this->current_stop_time, 0); }
 		if ($this->current_start_time == 0) { // Shouldn't be necessary thanks to the open() method.
+			if (self::debug > 2) { error_log('learnpathItem::get_total_time() - Current start time was empty', 0); }
 			$this->current_start_time = time();
 		}
 		//$this->current_stop_time=time();
-		if (time() < $this->current_stop_time) {
+		if (time() < $this->current_stop_time or $this->current_stop_time == 0) {
+			if (self::debug > 2) { error_log('learnpathItem::get_total_time() - Current stop time was greater than the current time or was empty', 0); }
 			// If this case occurs, then we risk to write huge time data in db.
 			// In theory, stop time should be *always* updated here, but it might be used in some unknown goal.
 			$this->current_stop_time = time();
 		}
 		$time = $this->current_stop_time - $this->current_start_time;
 		if ($time < 0) {
+			if (self::debug > 2) { error_log('learnpathItem::get_total_time() - Time smaller than 0. Returning 0', 0); }
 			return 0;
 		} else {
-			if (self::debug > 2) { error_log('learnpathItem::get_total_time() - Current stop time = '.$this->current_stop_time.', current start time = '.$this->current_start_time.' Returning '.$time, 0); }
+			if (self::debug > 2) { error_log('learnpathItem::get_total_time() - Current start time = '.$this->current_start_time.', current stop time = '.$this->current_stop_time.' Returning '.$time."-----------\n", 0); }
 			return $time;
 		}
 	}

@@ -53,12 +53,41 @@
 
 <h3>New Features</h3>
 <ul>
-  <li></li>
+  <li>Gradebook: Allow teacher to print certificates for entire class (#3708)</li>
+  <li>Attendances: Warn about overlapping course attendances (#3716)</li>
+  <li>Reporting: Use links in statistics (#3731)</li>
+  <li>Admin: Class import/export (#3882)</li>
+  <li>Reporting: Show IP addresses in main/admin/statistics reports (#3987)</li>
+  <li>Documents: Show course documents volume proper to a session (#4483)</li>
+  <li>Skills: skills tree need a return link (#4492)</li>
+  <li>Classes: Enable class users import (#4518)</li>
+  <li>Assignments: tool work: add zip and download feature (#4616)</li>
+  <li>Feature #5283: Add a icon to see in page whoisonline.php if user is admin, teacher or student
+  <li>Classes: Add a searchbox and a way to display more than 20 items in classe table (#5381)</li>
+  <li>Learning paths: Enable LP result in exercice report (#5469)</li>
+  <li>Exercises: Enable exercise report by category (#5716)</li>
+  <li>Reporting: In the Course Tracking table, we don't have possibility to display more line in the result table (#5753)</li>
+  <li>Learning paths: Features lost since 1.9 (#5758)</li>
+  <li>Survey: Anonymous survey participation link auto-generator (#5851)</li>
+  <li>Translation: Add support for Tagalog native language and main translation (#5854)</li>
+  <li>Admin: Add stylesheet download button (#5862)</li>
+  <li>Internal/Development: Measure most frequent language terms (#4804)</li>
 </ul>
 <h3>Improvements</h3>
 <ul>
-  
-  <li></li>
+  <li>Forum: Cleant forum UI (#3376)</li>
+  <li>Wiki: Export to PDF in WIKI (#3471)</li>
+  <li>Global: Multi select boxes are too narrow. Find a way to enlarge it ? (#4062)</li>
+  <li>Exercises: Test "Learner score" page for teacher, keep filter active after correcting a test (#4697)</li>
+  <li>Classes: When you want to Subscribe classes to courses, you should see the course Visual Code (#5553)</li>
+  <li>Learning paths: Improve learning path ergonomy (#5593)</li>
+  <li>Classes: In a course, add a button to see which classes are registered in the course (#5619)</li>
+  <li>Learning paths: In Learning path editing mode, add item display when click on the item title on the left side (#5662)</li>
+  <li>Reporting: Change "X" icon for visibility eye icon (#5700)</li>
+  <li>Assignments: Hide "Contains a file" text in assignments submit paper form (#5781)</li>
+  <li>Exercises: description flashes when opening new question (#5831)</li>
+  <li>Exercises: Finish test button should be orange (#5832)</li>
+
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -95,6 +124,77 @@
   <li>Exercises: Cannot open HotPotatoes imported file if user is student and user id &gt; 9 (#5359)<li>
   <li>Exercises: HotPotatoes frame too high if Admin bar is on (#5363)</li>
   <li>Exercises: Cannot see HotPotatoes tests result (#5376)</li>
+  <li>Learning path: Fixed issues in upgrade from 1.8.8.4 to 1.9 (#5377)</li>
+  <li>Learning path: Fixed issues with progress of externally authored content (#5382)</li>
+  <li>Exercises: Fixed issue with Excel tests results export (#5385)</li>
+  <li>Exercises: Display of tests results - wrong alignment (#5414)</li>
+  <li>Dropbox: Teacher not able to download dropbox files (#5447)</li>
+  <li>Course: Problem accessing course protected with password (#5470)</li>
+  <li>Admin: Sessions list doesn't show up (#5494)</li>
+  <li>Admin: Problem generating admin page (#5504)</li>
+  <li>Social: Disabling social network generates display bug in messages menu (#5505)</li>
+  <li>Skills: Cannot get back to course from skills screen (#5532)</li>
+  <li>Agenda: Event created by a group user should be visible to all group users (#5533)</li>
+  <li>Users: Course assistant does not have access to course (#5542)</li>
+  <li>Documents: Group folders were visible to all (#5551)</li>
+  <li>Documents: Invisible folders appear in the location bar (#5555)</li>
+  <li>Social: Error when changing profile with e-mail not required (#5556)</li>
+  <li>Admin: Cannot change stylesheets (#5564)</li>
+  <li>Exercises: Fill in the blanks questions with dash (-) in the answer doesn't work (#5569)</li>
+  <li>Exercises: Long question titles hide results and spread below title box in exercise report (#5576)</li>
+  <li>Admin: Error clicking the admin tab (#5580)</li>
+  <li>Admin: Global setting "allow non admin to create course" has no effect (#5588)</li>
+  <li>Exercises: suivi des exercices passés via session (#5589)</li>
+  <li>Survey: Bug in the invited users list (#5591)</li>
+  <li>Plugins: Students can open rooms as presenters through BigBlueButton videoconference plugin (#5596)</li>
+  <li>Global: In course catalog, we see button "Go to the course" even if we do not have the right to go to the course (#5599)</li>
+  <li>Documents: no time info if document has been sent the day or the day before (#5606)</li>
+  <li>Social: Even if we don't use Social network tool, we still have the possibility to copy a document to our private file area (#5607)</li>
+  <li>Global: Missing german language file for many plugins of fckeditor (#5612)</li>
+  <li>Exercises: Hotpotatoes export result doesn't work (#5624)</li>
+  <li>Global: In course list courses without category are in last position, and there are in first position in the Sort course tool (#5630)</li>
+  <li>Course copy: When copying a course, Learning Path Web link items are empty (have no URL) (#5631)</li>
+  <li>Announcements: Adding a group to an annoucement, we don't see the number of users in the group (#5634)</li>
+  <li>Groups: In group document tool, if we add a file or create a directory in group doc, it is added in the root document path (#5648)</li>
+  <li>Tracking: "Foreach" Warning on mySpace/index.php page (#5654)</li>
+  <li>Dropbox: Impossible to delete documents received in dropbox (#5656)</li>
+  <li>Classes: import file csv to add users (#5659)</li>
+  <li>Groups: In some courses the group list is shown multiple times (#5661)</li>
+  <li>Global: Access to forbidden courses (#5664)</li>
+  <li>Groups: Error getting groups from course (#5666)</li>
+  <li>Exercises: Students don't see their previous tests answers anymore (#5667)</li>
+  <li>Classes: In 1.9.4, we don't have the possibility to create groups from classes (#5679)</li>
+  <li>Users: In Course > User interface, if I add a class to a course, it is unregistered from other Courses (#5684)</li>
+  <li>Admin: Login as show previous user in username (top left) (#5692)</li>
+  <li>Admin: In 1.9.2, cleaning databases doesn't work (sec_token is wrong) (#5693)</li>
+  <li>Learning paths: Can not change the name of a learnpath (#5695)</li>
+  <li>Exercises: Fill in the blanks - Identical answers (#5703)</li>
+  <li>Calendar: Events en course calendar dissapearing (#5720)</li>
+  <li>Documents: Moving files in document: path indicator not correct (#5727)</li>
+  <li>Webservices: Error in EditUser webservice (#5730)</li>
+  <li>Learning paths: Ghost LP link in course homepage if renaming a LP (#5731)</li>
+  <li>Calendar: Attachments in two different agenda events are the same (#5740)</li>
+  <li>Survey: Survey results not saved (#5748)</li>
+  <li>Global: Firefox 17 update breaks FCKeditor online WYSIWYG editor (#5752)</li>
+  <li>Exercises: No notification sent for oral questions type (#5756)</li>
+  <li>Documents: Suppresion en lot ne fonctionne plus (#5757)</li>
+  <li>Links: c_id field missing in query (#5768)</li>
+  <li>Assignments: Zip file of Assignements may contains files with the same name (#5770)</li>
+  <li>Exercises: Display of 'congratulations' message badly located - overwrites the score (#5771)</li>
+  <li>Survey: When publishing a Survey, we always have to fill MailSubject and MailBody fields (#5772)</li>
+  <li>Global: Error when modifying global group option "A user can be member of maximum X groups" (#5776)</li>
+  <li>Group: Cannot delete all group with menu in stable.chamilo.org (#5777)</li>
+  <li>Exercises: Error if you use an image from another course in a test (#5780)</li>
+  <li>Assignments: The deleted assignments are counted in the total number of documents (#5783)</li>
+  <li>Plugins: Teachers permissions in videoconference (#5802)</li>
+  <li>Plugins: Rooms not managed correctly in videoconference plugin (#5803)</li>
+  <li>Learning paths: Impossible to add prerequisites in chamilo-1.9.4-nightly-2012-12-06 (#5816)</li>
+  <li>Exercises: Fatal error in Question_pool page (#5817)</li>
+  <li>Survey: surveys not tracking (#5836)</li>
+  <li>Learning paths: Error with SCORM path with search engine enabled - ChamiloIndexer class (#5839)</li>
+  <li>Admin: User expiry date not working (#5846)</li>
+  <li>Global: No css at profile page (#5858)</li>
+  <li>Global: Chamilo 1.9.4 RC 1 - Posible bug en red social (#5861)</li>
 </ul>
 <h3>Third-Party Libraries additions/updates</h3>
 <ul>

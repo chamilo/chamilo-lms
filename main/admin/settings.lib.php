@@ -261,6 +261,8 @@ function handle_stylesheets() {
     $list_of_styles = array();
     $list_of_names  = array();
     $selected = null;
+    $dirpath = '';
+    $safe_style_dir = '';
 
     if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
         $counter = 1;
@@ -272,8 +274,9 @@ function handle_stylesheets() {
 
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
-                    if (isset($_POST['style']) && 'preview' && isset($_POST['style']) && $_POST['style'] == $style_dir) {
+                    if (isset($_POST['style']) && (isset($_POST['preview']) or isset($_POST['download'])) && $_POST['style'] == $style_dir) {
                         $selected = $style_dir;
+                        $safe_style_dir = $style_dir;
                     } else {
                         if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
                             $selected = $style_dir;
@@ -312,13 +315,25 @@ function handle_stylesheets() {
         // Submit stylesheets.
         if (isset($_POST['save'])) {
             store_stylesheets();
-            echo Display::display_normal_message(get_lang('Saved'));
+            Display::display_normal_message(get_lang('Saved'));
+        }
+        if (isset($_POST['download'])) {
+            $arch = api_get_path(SYS_ARCHIVE_PATH).$safe_style_dir.'.zip';
+            $dir = api_get_path(SYS_CODE_PATH).'css/'.$safe_style_dir;
+            if (is_dir($dir)) {
+                $zip = new PclZip($arch);
+                // Remove path prefix except the style name and put file on disk
+                $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir,0,-strlen($safe_style_dir)));
+            }
+            $str = '<a class="btn btn-primary btn-large" href="'.str_replace(api_get_path(SYS_ARCHIVE_PATH),api_get_path(WEB_ARCHIVE_PATH),$arch).'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+            Display::display_normal_message($str,false);
         }
     }
 
     if ($is_style_changeable) {
         $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'), array('class' => 'btn btn-primary'));
         $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'), array('class' => 'btn'));
+        $group[] = $form_change->createElement('button', 'download', get_lang('Download'), array('class' => 'btn'));
         $form_change->addGroup($group);
 
         if ($show_upload_form) {

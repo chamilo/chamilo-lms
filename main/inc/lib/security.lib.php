@@ -54,6 +54,13 @@ class Security {
         if ($found === 0) {
             return true;
         } else {
+            // Code specific to Windows and case-insensitive behaviour
+            if (api_is_windows_os()) {
+                $found = stripos($true_path.'/', $checker_path);
+                if ($found === 0) {
+                    return true;
+                }
+            }
             // Code specific to courses directory stored on other disk.
             $checker_path = str_replace(api_get_path(SYS_COURSE_PATH), $_configuration['symbolic_course_folder_abs'], $checker_path);
             $found = strpos($true_path.'/', $checker_path);

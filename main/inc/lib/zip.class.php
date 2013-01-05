@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Wrapper around pclzip. Makes a bit easier to use compression.
  * 
@@ -15,6 +14,9 @@
  *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
+ */
+/**
+ * Zip wrapper class
  */
 class Zip
 {

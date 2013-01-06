@@ -27,7 +27,7 @@ if (isset($_GET['export'])) {
 
 $tbl_stats_exercices     = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
-if (api_is_platform_admin() ) {
+if (api_is_platform_admin() && empty($_GET['cidReq'])) {
     $global = true;
 } else {
     $global = false;
@@ -105,11 +105,10 @@ if (!$export_to_xls) {
             }
         }
     } else {
-       echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
-             <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
-       echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
-        echo ' | '.get_lang('ExamTracking').'';
-         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a>';
+        echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&amp;studentlist=true');
+        echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&amp;studentlist=false');
+        echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq().'&amp;studentlist=resouces');
+        echo Display::url(Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), array(), 32), api_get_self().'?'.api_get_cidreq().'&amp;export=1&amp;score='.$filter_score.'&amp;exercise_id='.$exercise_id);
 
     }
     echo '</div>';
@@ -142,261 +141,269 @@ $table = Database::get_course_table(TABLE_TOOL_LIST);
 $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $export_array_global = $export_array =  array();
-if(!empty($course_list) && is_array($course_list))
-foreach ($course_list as $current_course) {
-    $global_row = $row_not_global = array();
-    $course_id = $current_course['real_id'];
-
-    $a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);
-    $total_students = count($a_students);
-
-    $sqlExercices        = "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = $course_id ";
-    $resultExercices     = Database::query($sqlExercices);
-    $data_exercises      = Database::store_result($resultExercices);
-    $exercise_count     = $data_exercises[0]['count'];
-    if ($global) {
-        if ($exercise_count == 0) {
-            $exercise_count = 2;
-        }
-        $html_result .= "<tr class='$s_css_class'>
-                            <td rowspan=$exercise_count>";
-        $html_result .= $current_course['title'];
-        $html_result .= "</td>";
-    }
-
-    $sql = "SELECT visibility FROM $table WHERE c_id = $course_id AND name='quiz'";
-    $resultVisibilityQuizz = Database::query($sql);
-
-    if (Database::result($resultVisibilityQuizz, 0 ,'visibility') == 1) {
-        $sqlExercices = "    SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' ORDER BY quiz.title ASC";
-        //Getting the exam list
-        if (!$global) {
-            if (!empty($exercise_id)) {
-                $sqlExercices = "    SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' AND id = $exercise_id ORDER BY quiz.title ASC";
+if(!empty($course_list) && is_array($course_list)) {
+    foreach ($course_list as $current_course) {
+        $global_row = $row_not_global = array();
+        $course_id = $current_course['real_id'];
+    
+        $a_students = CourseManager :: get_student_list_from_course_code($current_course['code'], false);
+        $total_students = count($a_students);
+    
+        $sqlExercices        = "SELECT count(id) as count FROM ".$t_quiz." AS quiz WHERE active='1' AND c_id = $course_id ";
+        $resultExercices     = Database::query($sqlExercices);
+        $data_exercises      = Database::store_result($resultExercices);
+        $exercise_count     = $data_exercises[0]['count'];
+        if ($global) {
+            if ($exercise_count == 0) {
+                $exercise_count = 2;
             }
+            $html_result .= "<tr class='$s_css_class'>
+                                <td rowspan=$exercise_count>";
+            $html_result .= $current_course['title'];
+            $html_result .= "</td>";
         }
-        $resultExercices = Database::query($sqlExercices);
-        $i = 0;
-        if (Database::num_rows($resultExercices) > 0) {
-            while($a_exercices = Database::fetch_array($resultExercices)) {
-                $global_row[]= $current_course['title'];
-                if (!$global) {
-                    $html_result .= "<tr class='$s_css_class'>";
+    
+        $sql = "SELECT visibility FROM $table WHERE c_id = $course_id AND name='quiz'";
+        $resultVisibilityQuizz = Database::query($sql);
+    
+        if (Database::result($resultVisibilityQuizz, 0 ,'visibility') == 1) {
+            $sqlExercices = "    SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' ORDER BY quiz.title ASC";
+            //Getting the exam list
+            if (!$global) {
+                if (!empty($exercise_id)) {
+                    $sqlExercices = "    SELECT quiz.title,id FROM ".$t_quiz." AS quiz WHERE c_id = $course_id  AND active='1' AND id = $exercise_id ORDER BY quiz.title ASC";
                 }
-                if (!$global) {
-                    $html_result .= '<td ROWSPAN="'.$total_students.'">';
-                } else {
-                    $html_result .= '<td>';
-                }
-
-                $html_result .= $a_exercices['title'];
-                $html_result .= '</td>';
-
-                $global_row[]=$a_exercices['title'];
-                $row_not_global['exercise']= $a_exercices['title'];
-
-                $taken = 0;
-                $total_with_parameter = 0;
-                $fail = 0;
-                $not_taken = 0;
-
-                $total_with_parameter_score = 0;
-                $total_with_parameter_porcentage = 0;
-
-                $student_result = array();
-
-                foreach ($a_students as $student ) {
-                    $current_student_id = $student['user_id'];
-                    $sqlEssais = "    SELECT COUNT(ex.exe_id) as essais
-                                    FROM $tbl_stats_exercices AS ex
-                                    WHERE  ex.exe_cours_id = '".$current_course['code']."'
-                                    AND ex.exe_exo_id = ".$a_exercices['id']."
-                                    AND exe_user_id='".$current_student_id."'";
-
-
-                    $resultEssais = Database::query($sqlEssais);
-                    $a_essais = Database::fetch_array($resultEssais);
-
-                    $sqlScore = "SELECT exe_id, exe_result,exe_weighting
-                             FROM $tbl_stats_exercices
-                             WHERE exe_user_id = ".$current_student_id."
-                             AND exe_cours_id = '".$current_course['code']."'
-                             AND exe_exo_id = ".$a_exercices['id']."
-                             ORDER BY exe_result DESC LIMIT 1"; // we take the higher value
-                             //ORDER BY exe_date DESC LIMIT 1";
-
-                    $resultScore = Database::query($sqlScore);
-                    $score = 0;
-
-                    while($a_score = Database::fetch_array($resultScore)) {
-                        $score = $score + $a_score['exe_result'];
-                        $weighting = $weighting + $a_score['exe_weighting'];
-                        $exe_id = $a_score['exe_id'];
-                    }
-
-                    $pourcentageScore = 0;
-                    if ($weighting!=0) {
-                        $pourcentageScore = round(($score*100)/$weighting);
-                    }
-
-                    $weighting = 0;
-
-                    if($i%2==0){
-                        $s_css_class="row_odd";
-                    } else {
-                        $s_css_class="row_even";
-                    }
-                    $i++;
-
-                    /*echo "    <td align='right'>
-                          ";
-                    echo         $current_student_id.' ';
-                    echo "    </td>";
-                    */
-
-                    //var_dump($pourcentageScore);
-            /*        echo "    <td align='right'>
-                          ";
-                    echo         $pourcentageScore.' %';
-                    echo "    </td>";
-
-                    echo "<td align='right'>
-                         ";
-                         /*
-                    echo         $a_essais['essais'];
-                    echo "    </td>
-                            <td align='center'>
-                         ";*/
-
-                    if ($a_essais['essais'] > 0 ) {
-                        $taken++;
-                    }
-
-                    if ($pourcentageScore >= $parameter_porcentage) {
-                        $total_with_parameter_porcentage++;
-                    }
-
-                    if ($pourcentageScore >= $filter_score) {
-                        $total_with_parameter_score++;
-                    }
-
+            }
+            $resultExercices = Database::query($sqlExercices);
+            $i = 0;
+            if (Database::num_rows($resultExercices) > 0) {
+                while($a_exercices = Database::fetch_array($resultExercices)) {
+                    $global_row[]= $current_course['title'];
                     if (!$global) {
-                        $user_info = api_get_user_info($current_student_id);
-
-                        //User
-                        $user_row = '<td >';
-                        $user_row .=         $user_info['firstName'].' '.$user_info['lastName'];
-                        $user_row .= '</td>';
-                        $user_info = $user_info['firstName'].' '.$user_info['lastName'];
-
-                        //Best result
-                        if (!empty($a_essais['essais'])) {
-                            $user_row .= '<td  >';
-                            $user_row .=         $pourcentageScore;
-                            $temp_array [] =         $pourcentageScore;
-                            $user_row .= '</td>';
-
-                            if ($pourcentageScore >= $filter_score ) {
-                                $user_row .= '<td  style="background-color:#DFFFA8">';
-                                $user_row .= get_lang('PassExam').'</td>';
-                                $temp_array [] =         get_lang('PassExam');
-                            } else {
-                                $user_row .= '<td  style="background-color:#FC9A9E"  >';
-                                $user_row .= get_lang('ExamFail').'</td>';
-                                $temp_array [] =         get_lang('ExamFail');
-                            }
-
-                            $user_row .= '<td >';
-                            $user_row .= $a_essais['essais'];
-                            $temp_array [] =         $a_essais['essais'];
-                            $user_row .= '</td>';
-                        } else {
-                            $score = '-';
-                            $user_row .= '<td  >';
-                            $user_row .=  '-';
-                            $temp_array [] =         '-';
-                            $user_row .= '</td>';
-
-                            $user_row .= '<td   style="background-color:#FCE89A">';
-                            $user_row .= get_lang('NoAttempt');
-                            $temp_array [] =     get_lang('NoAttempt');
-                            $user_row .= '</td>';
-                            $user_row .= '<td >';
-                            $user_row .= 0;
-                            $temp_array [] = 0;
-                            $user_row .= '</td>';
-                        }
-                        $user_row .= '</tr>';
-                        $student_result[$current_student_id]  = array('html'=>$user_row,'score'=>$score,'array'=>$temp_array,'user'=>$user_info);
-                        $temp_array = array();
+                        $html_result .= "<tr class='$s_css_class'>";
                     }
-                }
-
-                if (!$global) {
-                    if (!empty($student_result)) {
-                        $student_result_empty = $student_result_content = array();
-                        foreach($student_result as $row) {
-                            if ($row['score'] == '-') {
-                                $student_result_empty[] = $row;
-                            } else {
-                                $student_result_content[] = $row;
-                            }
-                        }
-                        //Sort only users with content
-                        usort($student_result_content, 'sort_user');
-                        $student_result = array_merge($student_result_content, $student_result_empty );
-
-                        foreach($student_result as $row) {
-                            $html_result .=$row['html'];
-                            $row_not_global['results'][]= $row['array'];
-                            $row_not_global['users'][]   = $row['user'];
-                        }
-                        $export_array[] = $row_not_global;
-                        $row_not_global = array();
-                    }
-                }
-                if ($global) {
-                    //Exam taken
-                    $html_result .= '<td >';
-                    $html_result .=         $taken;
-                    $global_row[]= $taken;
-                    //echo         $total.' /  '.$total_students;
-                    $html_result .= '</td>';
-
-                    //Exam NOT taken
-                    $html_result .= '<td >';
-                    $html_result .=         $not_taken = $total_students - $taken;
-                    $global_row[]= $not_taken;
-                    $html_result .= '</td>';
-
-                    //Examn pass
-                    if (!empty($total_with_parameter_score)) {
-                        $html_result .= '<td   style="background-color:#DFFFA8" >';
+                    if (!$global) {
+                        $html_result .= '<td ROWSPAN="'.$total_students.'">';
                     } else {
-                        $html_result .= '<td   style="background-color:#FCE89A"  >';
+                        $html_result .= '<td>';
                     }
-
-                    $html_result .= $total_with_parameter_score;
-                    $global_row[]= $total_with_parameter_score;
+    
+                    $html_result .= $a_exercices['title'];
                     $html_result .= '</td>';
-
-                    //Exam fail
-                    $html_result .= '<td >';
-
-                    $html_result .=         $fail = $taken - $total_with_parameter_score;
-                    $global_row[]= $fail;
-                    $html_result .= '</td>';
-
-                    $html_result .= '<td >';
-                    $html_result .=         $total_students;
-                    $global_row[]= $total_students;
-
-                    $global_counter++;
-                    $html_result .= '</td>';
-                    $html_result .= '</tr>';
-                    $export_array_global[] = $global_row;
-                    $global_row = array();
+    
+                    $global_row[]=$a_exercices['title'];
+                    $row_not_global['exercise']= $a_exercices['title'];
+    
+                    $taken = 0;
+                    $total_with_parameter = 0;
+                    $fail = 0;
+                    $not_taken = 0;
+    
+                    $total_with_parameter_score = 0;
+                    $total_with_parameter_porcentage = 0;
+    
+                    $student_result = array();
+    
+                    foreach ($a_students as $student ) {
+                        $current_student_id = $student['user_id'];
+                        $sqlEssais = "    SELECT COUNT(ex.exe_id) as essais
+                                        FROM $tbl_stats_exercices AS ex
+                                        WHERE  ex.exe_cours_id = '".$current_course['code']."'
+                                        AND ex.exe_exo_id = ".$a_exercices['id']."
+                                        AND exe_user_id='".$current_student_id."'";
+    
+    
+                        $resultEssais = Database::query($sqlEssais);
+                        $a_essais = Database::fetch_array($resultEssais);
+    
+                        $sqlScore = "SELECT exe_id, exe_result,exe_weighting
+                                 FROM $tbl_stats_exercices
+                                 WHERE exe_user_id = ".$current_student_id."
+                                 AND exe_cours_id = '".$current_course['code']."'
+                                 AND exe_exo_id = ".$a_exercices['id']."
+                                 ORDER BY exe_result DESC LIMIT 1"; // we take the higher value
+                                 //ORDER BY exe_date DESC LIMIT 1";
+    
+                        $resultScore = Database::query($sqlScore);
+                        $score = 0;
+    
+                        while($a_score = Database::fetch_array($resultScore)) {
+                            $score = $score + $a_score['exe_result'];
+                            $weighting = $weighting + $a_score['exe_weighting'];
+                            $exe_id = $a_score['exe_id'];
+                        }
+    
+                        $pourcentageScore = 0;
+                        if ($weighting!=0) {
+                            $pourcentageScore = round(($score*100)/$weighting);
+                        }
+    
+                        $weighting = 0;
+    
+                        if($i%2==0){
+                            $s_css_class="row_odd";
+                        } else {
+                            $s_css_class="row_even";
+                        }
+                        $i++;
+    
+                        /*echo "    <td align='right'>
+                              ";
+                        echo         $current_student_id.' ';
+                        echo "    </td>";
+                        */
+    
+                        //var_dump($pourcentageScore);
+                /*        echo "    <td align='right'>
+                              ";
+                        echo         $pourcentageScore.' %';
+                        echo "    </td>";
+    
+                        echo "<td align='right'>
+                             ";
+                             /*
+                        echo         $a_essais['essais'];
+                        echo "    </td>
+                                <td align='center'>
+                             ";*/
+    
+                        if ($a_essais['essais'] > 0 ) {
+                            $taken++;
+                        }
+    
+                        if ($pourcentageScore >= $parameter_porcentage) {
+                            $total_with_parameter_porcentage++;
+                        }
+    
+                        if ($pourcentageScore >= $filter_score) {
+                            $total_with_parameter_score++;
+                        }
+    
+                        if (!$global) {
+                            $user_info = api_get_user_info($current_student_id);
+    
+                            //User
+                            $user_row = '<td >';
+                            $user_row .=         $user_info['firstName'].' '.$user_info['lastName'];
+                            $user_row .= '</td>';
+                            $user_info = $user_info['firstName'].' '.$user_info['lastName'];
+    
+                            //Best result
+                            if (!empty($a_essais['essais'])) {
+                                $user_row .= '<td  >';
+                                $user_row .=         $pourcentageScore;
+                                $temp_array [] =         $pourcentageScore;
+                                $user_row .= '</td>';
+    
+                                if ($pourcentageScore >= $filter_score ) {
+                                    $user_row .= '<td  style="background-color:#DFFFA8">';
+                                    $user_row .= get_lang('PassExam').'</td>';
+                                    $temp_array [] =         get_lang('PassExam');
+                                } else {
+                                    $user_row .= '<td  style="background-color:#FC9A9E"  >';
+                                    $user_row .= get_lang('ExamFail').'</td>';
+                                    $temp_array [] =         get_lang('ExamFail');
+                                }
+    
+                                $user_row .= '<td >';
+                                $user_row .= $a_essais['essais'];
+                                $temp_array [] =         $a_essais['essais'];
+                                $user_row .= '</td>';
+                            } else {
+                                $score = '-';
+                                $user_row .= '<td  >';
+                                $user_row .=  '-';
+                                $temp_array [] =         '-';
+                                $user_row .= '</td>';
+    
+                                $user_row .= '<td   style="background-color:#FCE89A">';
+                                $user_row .= get_lang('NoAttempt');
+                                $temp_array [] =     get_lang('NoAttempt');
+                                $user_row .= '</td>';
+                                $user_row .= '<td >';
+                                $user_row .= 0;
+                                $temp_array [] = 0;
+                                $user_row .= '</td>';
+                            }
+                            $user_row .= '</tr>';
+                            $student_result[$current_student_id]  = array('html'=>$user_row,'score'=>$score,'array'=>$temp_array,'user'=>$user_info);
+                            $temp_array = array();
+                        }
+                    }
+    
+                    if (!$global) {
+                        if (!empty($student_result)) {
+                            $student_result_empty = $student_result_content = array();
+                            foreach($student_result as $row) {
+                                if ($row['score'] == '-') {
+                                    $student_result_empty[] = $row;
+                                } else {
+                                    $student_result_content[] = $row;
+                                }
+                            }
+                            //Sort only users with content
+                            usort($student_result_content, 'sort_user');
+                            $student_result = array_merge($student_result_content, $student_result_empty );
+    
+                            foreach($student_result as $row) {
+                                $html_result .=$row['html'];
+                                $row_not_global['results'][]= $row['array'];
+                                $row_not_global['users'][]   = $row['user'];
+                            }
+                            $export_array[] = $row_not_global;
+                            $row_not_global = array();
+                        }
+                    }
+                    if ($global) {
+                        //Exam taken
+                        $html_result .= '<td >';
+                        $html_result .=         $taken;
+                        $global_row[]= $taken;
+                        //echo         $total.' /  '.$total_students;
+                        $html_result .= '</td>';
+    
+                        //Exam NOT taken
+                        $html_result .= '<td >';
+                        $html_result .=         $not_taken = $total_students - $taken;
+                        $global_row[]= $not_taken;
+                        $html_result .= '</td>';
+    
+                        //Examn pass
+                        if (!empty($total_with_parameter_score)) {
+                            $html_result .= '<td   style="background-color:#DFFFA8" >';
+                        } else {
+                            $html_result .= '<td   style="background-color:#FCE89A"  >';
+                        }
+    
+                        $html_result .= $total_with_parameter_score;
+                        $global_row[]= $total_with_parameter_score;
+                        $html_result .= '</td>';
+    
+                        //Exam fail
+                        $html_result .= '<td >';
+    
+                        $html_result .=         $fail = $taken - $total_with_parameter_score;
+                        $global_row[]= $fail;
+                        $html_result .= '</td>';
+    
+                        $html_result .= '<td >';
+                        $html_result .=         $total_students;
+                        $global_row[]= $total_students;
+    
+                        $global_counter++;
+                        $html_result .= '</td>';
+                        $html_result .= '</tr>';
+                        $export_array_global[] = $global_row;
+                        $global_row = array();
+                    }
                 }
+            } else {
+                $html_result .= "    <tr>
+                            <td colspan='6'>
+                                ".get_lang('NoExercise')."
+                            </td>
+                        </tr>
+                     ";
             }
         } else {
             $html_result .= "    <tr>
@@ -406,13 +413,6 @@ foreach ($course_list as $current_course) {
                     </tr>
                  ";
         }
-    } else {
-        $html_result .= "    <tr>
-                    <td colspan='6'>
-                        ".get_lang('NoExercise')."
-                    </td>
-                </tr>
-             ";
     }
 }
 

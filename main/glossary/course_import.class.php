@@ -1,7 +1,13 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Glossay course import class definition
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 namespace Glossary;
-
 /**
  * Import glossary entries into a course/session.
  * 

@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Glossay request class definition
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 namespace Glossary;
 
 use \ChamiloSession as Session;

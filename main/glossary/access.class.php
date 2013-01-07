@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Glossary access class
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 namespace Glossary;
 
 /**

@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Glossary's AjaxController class definition
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 namespace Glossary;
 
 use \Display;

@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Glossay UploadFileForm class definition
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 namespace Glossary;
 
 use Chamilo;

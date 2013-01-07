@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * Glossay csv writer class definition
+ * @package chamilo.glossary
+ */
+/**
+ * Init
+ */
 
 namespace Glossary;
 

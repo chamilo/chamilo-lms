@@ -22,11 +22,15 @@
  </target>
 
  <target name="lint" description="Perform syntax check of sourcecode files">
-  <phplint>
-    <fileset dir="${basedir}">
-      <include name="**/*.php"/>
-    </fileset>
-  </phplint>
+   <apply executable="php" failonerror="true">
+     <arg value="-1" />
+     <fileset dir="${basedir}/main">
+       <include name="**/*.php"/>
+     </fileset>
+     <fileset dir="${basedir}/tests">
+       <include name="**/*.php"/>
+     </fileset>
+   </apply>
  </target>
 
  <target name="pdepend" description="Calculate software metrics using PHP_Depend">
@@ -83,7 +87,7 @@
    </simpletest>
  </target-->
 
- <target name="phpunit" description="Run unit tests with PHPUnit">
+ <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
    <exec executable="phpunit" failonerror="true" />
  </target>
 

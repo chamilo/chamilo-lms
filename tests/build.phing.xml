@@ -2,7 +2,22 @@
 
 <project name="Chamilo LMS" default="build">
  <target name="build"
-   depends="prepare,phpunit"/>
+   depends="prepare,lint,phpcs-ci,simpletest,phpdoc"/>
+
+ <target name="build-parallel"
+   depends="prepare,lint,tools-parallel,simpletest"/>
+
+ <target name="tools-parallel" description="Run tools in parallel">
+  <parallel threadCount="2">
+   <sequential>
+    <antcall target="pdepend"/>
+    <!--antcall target="phpmd-ci"/-->
+   </sequential>
+   <antcall target="phpcs-ci"/>
+   <antcall target="simpletest"/>
+   <antcall target="phpdoc"/>
+  </parallel>
+ </target>
 
  <target name="clean" description="Cleanup build artifacts">
   <delete dir="${basedir}/tests/api"/>
@@ -74,17 +89,13 @@
   </exec>
  </target>
 
- <!--target name="simpletest" description="Run simpletests">
+ <target name="simpletest" description="Run simpletests">
    <simpletest>
      <formatter type="plain"/>
      <fileset dir="${basedir}/tests">
        <include name="test_suite.php"/>
      </fileset>
    </simpletest>
- </target-->
-
- <target name="phpunit" description="Run unit tests with PHPUnit">
-   <exec executable="phpunit" failonerror="true" />
  </target>
 
  <target name="phpdoc" description="Generate API documentation">

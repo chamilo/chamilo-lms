@@ -25,11 +25,11 @@
    <apply executable="php" failonerror="true">
      <arg value="-l" />
 
-     <fileset dir="${basedir}/main">
+     <fileset dir="${basedir}/../main">
        <include name="**/*.php"/>
      </fileset>
 
-     <fileset dir="${basedir}/tests">
+     <fileset dir="${basedir}">
        <include name="**/*.php"/>
      </fileset>
 

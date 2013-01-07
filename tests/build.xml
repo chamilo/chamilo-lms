@@ -37,15 +37,11 @@
  </target>
 
  <target name="lint" description="Perform syntax check of sourcecode files">
-  <apply executable="php" failonerror="true">
-   <arg value="-l" />
-
-   <fileset dir="${basedir}">
-    <include name="**/*.php" />
-    <modified />
-   </fileset>
-
-  </apply>
+  <phplint>
+    <fileset dir="${basedir}">
+      <include name="**/*.php"/>
+    </fileset>
+  </phplint>
  </target>
 
  <target name="pdepend" description="Calculate software metrics using PHP_Depend">

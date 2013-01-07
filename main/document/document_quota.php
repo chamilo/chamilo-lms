@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Document quota management script
+ * @package chamilo.document
+ */
+/**
+ * Init
+ */
 
 $language_file = array('document');
 

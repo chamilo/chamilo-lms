@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * Light version of documents manager (currently disabled)
+ * @package chamilo.document
+ */
+/**
  * Code
  */
 

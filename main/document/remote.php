@@ -3,6 +3,7 @@
 /**
  * Script that allows download of a specific file from external applications
  * @author Arnaud Ligot <arnaud@cblue.be>, Based on work done for old videoconference application (I have about 30 minutes to write this peace of code so if somebody has more time, feel free to rewrite it...)
+ * @package chamilo.document
  */
 /**
  * Script that allows remote download of a file

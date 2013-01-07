@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Homepage for links tool
+ * @package chamilo.link
+ */
+/**
+ * Code
+ */
 namespace Link;
 
 $language_file = array('link', 'admin');

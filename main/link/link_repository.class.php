@@ -1,6 +1,12 @@
 <?php
-
-
+/* For licensing terms, see /license.txt */
+/**
+ * Link repository class definition
+ * @package chamilo.link
+ */
+/**
+ * Init
+ */
 namespace Link;
 
 use Database;

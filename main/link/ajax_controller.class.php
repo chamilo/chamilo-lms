@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Link controller (ajax) script
+ * @package chamilo.link
+ */
+/**
+ * Init
+ */
 namespace Link;
 
 use \Model\Course;

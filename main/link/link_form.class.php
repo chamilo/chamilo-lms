@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Link form class definition
+ * @package chamilo.link
+ */
+/**
+ * Init
+ */
 namespace Link;
 
 use Chamilo;

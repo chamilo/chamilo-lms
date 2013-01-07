@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Old reporting file - probably not used anymore
+ * @package chamilo.reporting
+ */
+/**
+ * Code
+ */
 // TODO: Is this file used?
 
 $nameTools = 'Reussite';

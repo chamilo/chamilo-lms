@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Homepage for the MySpace directory
+ * @package chamilo.reporting
+ */
+/**
+ * code
+ */
 $language_file = array('registration', 'index', 'tracking');
 
 // resetting the course id

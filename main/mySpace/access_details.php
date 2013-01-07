@@ -3,7 +3,7 @@
 /**
 *	This is the tracking library for Chamilo.
 *
-*	@package chamilo.library
+*	@package chamilo.reporting
 *
 * Calculates the time spent on the course
 * @param integer $user_id the user id
@@ -12,7 +12,9 @@
 * @author Jorge Frisancho Jibaja - select between dates
 * 
 */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array ('registration', 'index', 'tracking');
 

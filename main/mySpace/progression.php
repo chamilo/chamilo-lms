@@ -1,9 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-/*
+/**
+ * Progress report
+ * @package chamilo.reporting
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
  */
-
+/**
+ * Init
+ */
 // TODO: This file seems to be unfinished and unused.
 
 $language_file = array ('registration', 'index', 'tracking');

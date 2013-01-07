@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Deprecated
+ * @package chamilo.reporting
+ */
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array('admin', 'registration');
 $cidReset = true;

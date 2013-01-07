@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /*
- * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
- * Somes fixes by Julio Montoya
+ * Sessions reporting
+ * @package chamilo.reporting
  */
 ob_start();
 $nameTools= 'Sessions';

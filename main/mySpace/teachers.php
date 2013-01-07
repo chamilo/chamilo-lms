@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Teachers report
+ * @package chamilo.reporting
+ */
+/**
+ * Code
+ */
 ob_start();
 
 // names of the language file that needs to be included

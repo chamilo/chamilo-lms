@@ -1,15 +1,14 @@
-<?php // $Id: user_import.php 14792 2008-04-08 20:57:53Z yannoo $
+<?php
 /* For licensing terms, see /license.txt */
-
 /**
-*   This tool allows platform admins to add users by uploading a CSV or XML file
-*   This code is inherited from admin/user_import.php
-*   Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
+ * This tool allows platform admins to add users by uploading a CSV or XML file
+ * This code is inherited from admin/user_import.php
+ * @package chamilo.reporting
+ * Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
 */
-/*
-		Main script
-*/
-
+/**
+ * Main script
+ */
 $language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
 
 $cidReset = true;

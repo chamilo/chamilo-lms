@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Special report for corporate users
+ * @package chamilo.reporting
+ */
+/**
+ * Code
+ */
 $language_file = array('admin', 'gradebook', 'tracking');
 $cidReset = true;
 require_once '../inc/global.inc.php';

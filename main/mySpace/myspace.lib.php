@@ -1,8 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * MySpace class definition
+ * @package chamilo.reporting
+ */
+/**
+ * Init
+ */
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-
+/**
+ * MySpace class definition
+ */
 class MySpace {
 
 	/**

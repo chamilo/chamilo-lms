@@ -2,9 +2,11 @@
 /* For licensing terms, see /license.txt */
 /**
  * Implements the tracking of students in the Reporting pages
- * @package chamilo.mySpace
+ * @package chamilo.reporting
  */
-
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file = array('registration', 'index', 'tracking', 'exercice', 'admin', 'gradebook', 'survey');
 

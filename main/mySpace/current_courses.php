@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Report for current courses followed by the user
+ * @package chamilo.reporting
+ */
+/**
+ * Code
+ */
 $language_file = array ('registration', 'index', 'tracking', 'exercice','admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';

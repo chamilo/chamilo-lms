@@ -1,10 +1,12 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/*
- * Created on 18 October 2006 by Elixir Interactive http://www.elixir-interactive.com
+/**
+ * Special reporting page for admins
+ * @package chamilo.reporting
  */
-
+/**
+ * Code
+ */
 ob_start();
 
 // name of the language file that needs to be included

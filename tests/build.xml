@@ -92,6 +92,7 @@
 
  <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
    <exec executable="phpunit" failonerror="true" />
+     <arg line="${basedir}/phpunit" />
  </target>
 
  <target name="phpdoc" description="Generate API documentation">

@@ -23,13 +23,16 @@
 
  <target name="lint" description="Perform syntax check of sourcecode files">
    <apply executable="php" failonerror="true">
-     <arg value="-1" />
+     <arg value="-l" />
+
      <fileset dir="${basedir}/main">
        <include name="**/*.php"/>
      </fileset>
+
      <fileset dir="${basedir}/tests">
        <include name="**/*.php"/>
      </fileset>
+
    </apply>
  </target>
 

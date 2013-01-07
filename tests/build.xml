@@ -5,20 +5,20 @@
    depends="prepare,phpunit"/>
 
  <target name="clean" description="Cleanup build artifacts">
-  <delete dir="${basedir}/tests/api"/>
-  <delete dir="${basedir}/tests/code-browser"/>
-  <delete dir="${basedir}/tests/coverage"/>
-  <delete dir="${basedir}/tests/logs"/>
-  <delete dir="${basedir}/tests/pdepend"/>
+  <delete dir="${basedir}/../tests/api"/>
+  <delete dir="${basedir}/../tests/code-browser"/>
+  <delete dir="${basedir}/../tests/coverage"/>
+  <delete dir="${basedir}/../tests/logs"/>
+  <delete dir="${basedir}/../tests/pdepend"/>
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
-  <mkdir dir="${basedir}/tests/api"/>
-  <mkdir dir="${basedir}/tests/code-browser"/>
-  <mkdir dir="${basedir}/tests/coverage"/>
-  <mkdir dir="${basedir}/tests/logs"/>
-  <mkdir dir="${basedir}/tests/pdepend"/>
-  <mkdir dir="${basedir}/tests/phpdox"/>
+  <mkdir dir="${basedir}/../tests/api"/>
+  <mkdir dir="${basedir}/../tests/code-browser"/>
+  <mkdir dir="${basedir}/../tests/coverage"/>
+  <mkdir dir="${basedir}/../tests/logs"/>
+  <mkdir dir="${basedir}/../tests/pdepend"/>
+  <mkdir dir="${basedir}/../tests/phpdox"/>
  </target>
 
  <target name="lint" description="Perform syntax check of sourcecode files">

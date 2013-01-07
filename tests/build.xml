@@ -90,12 +90,13 @@
  </target>
 
  <target name="simpletest" description="Run simpletests">
-   <exec dir="${basedir}/tests"
-    executable="php"
-    failonerror="true">
-    <arg line="${basedir}/tests/run.sh"/>
-   </exec>
-  </target>
+   <simpletest>
+     <formatter type="plain"/>
+     <fileset dir="${basedir}/tests">
+       <include name="test_suite.php"/>
+     </fileset>
+   </simpletest>
+ </target>
 
  <target name="phpdoc" description="Generate API documentation">
    <exec executable="phpdoc">

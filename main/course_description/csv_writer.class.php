@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * CSV writer class definition
+ * @package chamilo.course_description
+ */
+/**
+ * Init
+ */
 
 namespace CourseDescription;
 

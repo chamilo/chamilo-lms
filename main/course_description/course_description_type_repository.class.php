@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * CourseDescriptionTypeRepository class definition
+ * @package chamilo.course_description
+ */
+/**
+ * Init
+ */
 
 namespace CourseDescription;
 

@@ -90,7 +90,7 @@
    </simpletest>
  </target-->
 
- <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
+ <target name="phpunit" description="Run unit tests with PHPUnit">
    <exec executable="phpunit" failonerror="true">
      <arg line="${basedir}/phpunit/classes" />
    </exec>

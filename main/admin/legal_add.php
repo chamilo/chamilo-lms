@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Management of legal conditions
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 $language_file = array('admin','registration');
 $cidReset = true;
 require_once '../inc/global.inc.php';

@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Edition of extensions configuration
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 // name of the language file that needs to be included
 $language_file='admin';
 $cidReset=true;

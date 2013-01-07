@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *	Index page of the admin tools
- *	@package chamilo.admin
+ * Index page of the admin tools
+ * @package chamilo.admin
  */
-
+/**
+ * Code
+ */
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 

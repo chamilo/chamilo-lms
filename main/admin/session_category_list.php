@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * List sessions categories
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 
 $language_file = 'admin';
 $cidReset = true;

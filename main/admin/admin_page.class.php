@@ -1,5 +1,9 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Admin pages class definition
+ * @package chamilo.admin
+ */
 /**
  *
  * @license see /license.txt

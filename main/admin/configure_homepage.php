@@ -1,6 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Configure the portal homepage (manages multi-urls and languages)
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 $language_file = array('index','admin', 'accessibility');
 $cidReset = true;
 require_once '../inc/global.inc.php';

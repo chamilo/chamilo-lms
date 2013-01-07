@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * User move scripti (to move between courses and sessions)
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 
 $language_file = 'admin';
 $cidReset = true;

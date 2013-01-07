@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Careers dashboard
+ * @package chamilo.admin.career
+ */
+/**
+ * Code
+ */
 
 // Language files that should be included.
 $language_file = array('courses', 'index', 'admin');

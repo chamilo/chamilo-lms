@@ -1,5 +1,12 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
+/**
+ * Sessions list script
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 
 $language_file = 'admin';
 $cidReset = true;

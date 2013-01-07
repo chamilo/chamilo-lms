@@ -1,5 +1,12 @@
 <?php
 /* For licensing terms, see /chamilo_license.txt */
+/**
+ * Deprecated - used to show a preview of a given stylesheet. Now replaced.
+ * @package chamilo.admin
+ */
+/**
+ * Code
+ */
 // @deprecated This page is not used
 
 exit;

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="autoload.php" backupGlobals="false"
          backupStaticAttributes="false" strict="true" verbose="true">
-  <testsuite name="UserManager">
-    <directory suffix="Test.php">classes</directory>
+  <testsuite name="Chamilo tests suite">
+    <directory suffix="Test.php">${basedir}/phpunit/classes</directory>
   </testsuite>
   <logging>
-    <log type="coverage-clover" target="../logs/clover.xml"/>
-    <log type="coverage-html" target="../coverage" title="UserManager"/>
-    <log type="junit" target="../logs/junit.xml"/>
+    <log type="coverage-clover" target="${basedir}/logs/clover.xml"/>
+    <log type="coverage-html" target="${basedir}/coverage" title="ChamiloTests"/>
+    <log type="junit" target="${basedir}/logs/junit.xml" logIncompleteSkipped="false"/>
   </logging>
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">

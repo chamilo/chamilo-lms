@@ -26,7 +26,7 @@ require_once api_get_path(LIBRARY_PATH).'message.lib.php';
  */
 class SocialManager extends UserManager {
 
-    private function __construct() {
+    public function __construct() {
     }
 
     /**

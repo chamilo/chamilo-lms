@@ -33,7 +33,7 @@ class UserManager {
         /**
          * The default constructor only instanciates an empty user object
          */
-    private function __construct () {
+    public function __construct () {
     }
 
     /**

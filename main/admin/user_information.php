@@ -161,6 +161,7 @@ if (Database::num_rows($res) > 0) {
 /**
  * Show the classes in which this user is subscribed
  */
+/*
 $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
 $table_class = Database :: get_main_table(TABLE_MAIN_CLASS);
 $sql = 'SELECT * FROM '.$table_class_user.' cu, '.$table_class.' c '.
@@ -182,8 +183,8 @@ if (Database::num_rows($res) > 0) {
     Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
     echo '</blockquote>';
 } else {    
-    Display::display_warning_message(get_lang('NoClassesForThisUser'));
-}
+    echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
+}*/
 
 /**
  * Show the URL in which this user is subscribed

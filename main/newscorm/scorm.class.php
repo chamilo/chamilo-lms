@@ -350,6 +350,7 @@ class scorm extends learnpath {
                 }
                 $title = Database::escape_string($item['title']);
                 $title = api_utf8_decode($title);
+
                 $max_score = Database::escape_string($item['max_score']);
 
                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
@@ -365,11 +366,15 @@ class scorm extends learnpath {
                 }
 
                 $identifier = Database::escape_string($item['identifier']);
+
+                if (empty($title)) {
+                    $title = get_lang('Untitled');
+                }
+
                 $prereq = Database::escape_string($item['prerequisites']);
 
                 $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters) VALUES " .
-                        "($course_id, $lp_id, '$type','".$identifier."','".$title."'," .
-                        "'$path',0,$max_score, $value_add" .
+                        "($course_id, $lp_id, '$type','$identifier', '$title', '$path' , 0, $max_score, $value_add" .
                         "$parent, $previous, 0, " .
                         "'$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."'," .
                         "'".$item['parameters']."'" .

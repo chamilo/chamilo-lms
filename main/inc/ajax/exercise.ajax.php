@@ -17,6 +17,9 @@ $course_id = api_get_course_int_id();
 
 if ($debug) error_log("$action ajax call");
 
+$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
+$course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
+
 switch ($action) {
     case 'get_live_stats':
         if (!api_is_allowed_to_edit(null, true)) {
@@ -140,17 +143,14 @@ switch ($action) {
         echo json_encode($response);
         break;            
     case 'update_exercise_list_order':
-        $session_id = api_get_session_id();
         if (api_is_allowed_to_edit(null, true)) {
             $new_list = $_REQUEST['exercise_list'];
             $table = Database::get_course_table(TABLE_QUIZ_ORDER);
             $counter = 1;
             //Drop all
             Database::query("DELETE FROM $table WHERE session_id = $session_id AND c_id = $course_id");
-            //Insert alll
+            //Insert all
             foreach ($new_list as $new_order_id) {
-                /*Database::update($table, array('exercise_order' => $counter),
-                    array('session_id = ? AND exercise_id = ? AND c_id = ? '=> array($session_id, intval($new_order_id), $course_id)));*/
                 Database::insert($table, array('exercise_order' => $counter, 'session_id' => $session_id, 'exercise_id' => intval($new_order_id), 'c_id' => $course_id));
                 $counter++;
             }
@@ -158,8 +158,6 @@ switch ($action) {
         }
         break;
     case 'update_question_order':
-        $session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : api_get_session_id();
-        $course_code = isset($_REQUEST['cidReq']) ? $_REQUEST['cidReq'] : api_get_course_id();
 
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
@@ -174,7 +172,7 @@ switch ($action) {
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);        
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {            
-                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)), true);
+                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)));
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));
@@ -190,6 +188,8 @@ switch ($action) {
     	}
     	break;
     case 'save_exercise_by_now':
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];
         //Use have permissions?
         if (api_is_allowed_to_session_edit()) {
         	            
@@ -288,7 +288,7 @@ switch ($action) {
             
             if ($type == 'simple') {           
                 foreach ($question_list as $my_question_id) {
-                    $objQuestionTmp  = Question :: read($my_question_id);
+                    $objQuestionTmp  = Question::read($my_question_id, $course_id);
                     $total_weight   += $objQuestionTmp->selectWeighting();
                 }
             }          
@@ -309,7 +309,7 @@ switch ($action) {
                 if ($debug) error_log("my_choice = ".print_r($my_choice, 1)."");
                                 
                // creates a temporary Question object
-            	$objQuestionTmp        = Question::read($my_question_id);
+            	$objQuestionTmp = Question::read($my_question_id, $course_id);
             	
             	//Getting free choice data
             	if ($objQuestionTmp->type  == FREE_ANSWER && $type == 'all') {
@@ -337,9 +337,9 @@ switch ($action) {
                 // Deleting old attempt
                 if (isset($attempt_list) && !empty($attempt_list[$my_question_id])) {          
                     if ($debug) error_log("delete_attempt  exe_id : $exe_id, my_question_id: $my_question_id");
-                    delete_attempt($exe_id, api_get_user_id() , api_get_course_id(), api_get_session_id(), $my_question_id);
+                    delete_attempt($exe_id, api_get_user_id() , $course_code, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {            	        
-            	        delete_attempt_hotspot($exe_id, api_get_user_id() , api_get_course_id(), $my_question_id);
+            	        delete_attempt_hotspot($exe_id, api_get_user_id() , $course_code, $my_question_id);
                     }
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {
             	    $total_score  -= $attempt_list[$my_question_id]['marks'];            	    
@@ -384,7 +384,7 @@ switch ($action) {
                                         $objExercise->selectId(), 
                                         $total_score, 
                                         $total_weight, 
-                                        api_get_session_id(),
+                                        $session_id,
                                         $exercise_stat_info['orig_lp_id'], 
                                         $exercise_stat_info['orig_lp_item_id'], 
                                         $exercise_stat_info['orig_lp_item_view_id'], 

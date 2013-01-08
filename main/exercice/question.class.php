@@ -1199,9 +1199,9 @@ abstract class Question
 		// default content
 		$isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
 
-		// question type
-		$answerType= intval($_REQUEST['answerType']);
-		$form->addElement('hidden','answerType',$_REQUEST['answerType']);
+		// Question type
+        $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
+		$form->addElement('hidden','answerType', $_REQUEST['answerType']);
 
 		// html editor
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');
@@ -1222,7 +1222,8 @@ abstract class Question
 		$form -> addElement ('html','</div>');
 
         // hidden values
-		$form->addElement('hidden', 'myid', intval($_REQUEST['myid']));
+        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
+		$form->addElement('hidden', 'myid', $my_id);
 
         if ($this->type != MEDIA_QUESTION) {
 
@@ -1456,17 +1457,14 @@ abstract class Question
         $question_title = $this->question;
 
         // display question category, if any
-        $header = Testcategory::returnCategoryAndTitle($this->id);
+        //$header = Testcategory::returnCategoryAndTitle($this->id);
         $show_media = null;
         if ($show_media) {
             $header .= $this->show_media_content();
         }
         $header .= Display::page_subheader2($counter_label.". ".$question_title);
-        //$header .=  Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.($score['result']).' </h4><h5 class="'.$class.'">'.$score['result'].' </h5>', array('class'=>'ribbon'));
 	    $header .= Display::div('<div class="rib rib-'.$class.'"><h3>'.$score_label.'</h3></div> <h4>'.$score['result'].' </h4>', array('class'=>'ribbon'));
 	    $header .= Display::div($this->description, array('id'=>'question_description'));
-
-
         return $header;
 	}
 

@@ -715,15 +715,15 @@ function parse_sql_queries($sql_text) {
     for ($i = 0; $i < $count; $i++) {
         $this_sql_query = $sql_instructions[$i]['query'];
         Database::query($this_sql_query);
+
         //UTF8 fix see #5678
-        /*
         if (strpos(strtolower($this_sql_query), 'create table') === false) {
             Database::query($this_sql_query);
         } else {
             //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1);
             $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';
             Database::query($this_sql_query);
-        }*/
+        }
     }
 }
 
@@ -3858,7 +3858,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $table_quiz_order = $course_db_name . 'quiz_order';
-    
+
     $sql = " CREATE TABLE $table_quiz_order(
         id int unsigned NOT NULL auto_increment,
         c_id int unsigned NOT NULL,

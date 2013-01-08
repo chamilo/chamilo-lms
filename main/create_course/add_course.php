@@ -183,8 +183,9 @@ if (isset($_user['language']) && $_user['language'] != '') {
 }
 
 $form->setDefaults($values);
+$message = null;
 
-// Validate the form.
+// Validate the form
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
@@ -237,9 +238,9 @@ if ($form->validate()) {
                 $tpl->assign('course_title', Display::url($title, $link));
                 $tpl->assign('course_id', $course_info['code']);
 
-                $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
-                $message = $tpl->fetch($add_course_tpl);
-
+                $template = $tpl->get_template('create_course/add_course.tpl');
+                $tpl->display($template);
+                exit;
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);
                 // Display the form.

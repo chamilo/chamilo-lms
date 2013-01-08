@@ -940,7 +940,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 SELECT u.user_id, firstname, lastname, email, username, g.name as group_name, g.id as group_id
                 FROM $TBL_USER u
                 INNER JOIN $TBL_GROUP_REL_USER gru ON ( gru.user_id = u.user_id AND gru.c_id=".$course_id.")
-                INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id)
+                INNER JOIN $TBL_GROUP g ON (gru.group_id = g.id AND g.c_id=".$course_id.")
             )";
 
         }

@@ -42,7 +42,7 @@ class Display {
     static $global_template;
     static $preview_style = null;
 
-    private function __construct() {
+    public function __construct() {
     }
 
      /**

@@ -8,9 +8,9 @@
     </testsuite>
   </testsuites>
   <logging>
-    <!--log type="coverage-clover" target="../logs/clover.xml"/>
+    <log type="coverage-clover" target="../logs/clover.xml"/>
     <log type="coverage-html" target="../coverage" title="ChamiloTests"/>
-    <log type="junit" target="../logs/junit.xml" logIncompleteSkipped="false"/-->
+    <log type="junit" target="../logs/junit.xml" logIncompleteSkipped="false"/>
   </logging>
   <filter>
     <whitelist addUncoveredFilesFromWhitelist="true">

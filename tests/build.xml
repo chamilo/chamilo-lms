@@ -2,7 +2,7 @@
 
 <project name="Chamilo LMS" default="build">
  <target name="build"
-   depends="prepare,phpunit"/>
+   depends="prepare,phpunit,pdepend,phpdoc"/>
 
  <target name="clean" description="Cleanup build artifacts">
   <delete dir="${basedir}/../tests/api"/>
@@ -90,7 +90,7 @@
    </simpletest>
  </target-->
 
- <target name="phpunit" description="Run unit tests with PHPUnit">
+ <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
    <!--exec executable="phpunit" failonerror="true"-->
    <exec executable="phpunit">
      <arg line="-c ${basedir}/phpunit/phpunit.xml" />

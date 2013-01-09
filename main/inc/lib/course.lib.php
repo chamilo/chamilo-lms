@@ -2045,57 +2045,49 @@ class CourseManager {
         $TABLECOURSE = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
-        $course_title = Database::result(Database::query('SELECT title FROM '.$TABLECOURSE.
-                ' WHERE code="'.$course_code.'"'), 0, 0);
+        $course_title = Database::result(Database::query('SELECT title FROM '.$TABLECOURSE.' WHERE code="'.$course_code.'"'), 0, 0);
 
-        $result = Database::query('SELECT course.code as code, course.title as title, cu.sort as sort FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
-                WHERE course.code = cu.course_code
-                AND user_id = "'.$user_id.'"
-                AND cu.relation_type<>'.COURSE_RELATION_TYPE_RRHH.'
-                AND user_course_cat=0 ORDER BY cu.sort');
+        $sql = 'SELECT course.code as code, course.title as title, cu.sort as sort FROM '.$TABLECOURSUSER.' as cu, '.$TABLECOURSE.' as course
+                WHERE   course.code = cu.course_code AND user_id = "'.$user_id.'" AND
+                        cu.relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND
+                        user_course_cat = 0
+                ORDER BY cu.sort';
+        $result = Database::query($sql);
 
         $course_title_precedent = '';
         $counter = 0;
         $course_found = false;
         $course_sort = 1;
 
-        while ($courses = Database::fetch_array($result)){
-
-            if ($course_title_precedent == '') {
-                $course_title_precedent = $courses['title'];
-            }
-
-            if (api_strcasecmp($course_title_precedent, $course_title) < 0) {
-
-                $course_found = true;
-                $course_sort = $courses['sort'];
-
-                if ($counter == 0) {
-                    $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort > "'.$course_sort.'"';
-                    $course_sort++;
-                } else {
-                    $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
+        if (Database::num_rows($result) > 0) {
+            while ($courses = Database::fetch_array($result)) {
+                if ($course_title_precedent == '') {
+                    $course_title_precedent = $courses['title'];
                 }
+                if (api_strcasecmp($course_title_precedent, $course_title) < 0) {
+                    $course_found = true;
+                    $course_sort = $courses['sort'];
+                    if ($counter == 0) {
+                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort > "'.$course_sort.'"';
+                        $course_sort++;
+                    } else {
+                        $sql = 'UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND relation_type<>'.COURSE_RELATION_TYPE_RRHH.' AND user_course_cat="0" AND sort >= "'.$course_sort.'"';
+                    }
+                    Database::query($sql);
+                    break;
 
-                Database::query($sql);
-                break;
-
-            } else {
-                $course_title_precedent = $courses['title'];
+                } else {
+                    $course_title_precedent = $courses['title'];
+                }
+                $counter++;
             }
 
-            $counter++;
+            // We must register the course in the beginning of the list
+            if (!$course_found) {
+                $course_sort = Database::result(Database::query('SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.' WHERE user_id="'.$user_id.'" AND user_course_cat="0"'), 0, 0);
+                Database::query('UPDATE '.$TABLECOURSUSER.' SET sort = sort+1 WHERE user_id= "'.$user_id.'" AND user_course_cat="0"');
+            }
         }
-
-        // We must register the course in the beginning of the list
-        if (Database::num_rows($result) > 0 && !$course_found) {
-            $course_sort = Database::result(Database::query('SELECT min(sort) as min_sort FROM '.$TABLECOURSUSER.
-                    ' WHERE user_id="'.$user_id.'" AND user_course_cat="0"'), 0, 0);
-
-            Database::query('UPDATE '.$TABLECOURSUSER.' SET sort = sort+1
-                    WHERE user_id= "'.$user_id.'" AND user_course_cat="0"');
-        }
-
         return $course_sort;
     }
 

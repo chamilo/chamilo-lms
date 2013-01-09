@@ -21,7 +21,7 @@ class Auth {
      * Constructor
      */
     public function __construct() {
-        
+
     }
 
     /**
@@ -183,16 +183,18 @@ class Auth {
             }
         }
 
-        foreach ($user_courses as $key => $course) {
+        $target_course = array();
+        foreach ($user_courses as $count => $course) {
             if ($course2move == $course['code']) {
                 // source_course is the course where we clicked the up or down icon
                 $source_course = $course;
                 // target_course is the course before/after the source_course (depending on the up/down icon)
                 if ($direction == 'up') {
-                    $target_course = $user_courses[$key - 1];
+                    $target_course = $user_courses[$count - 1];
                 } else {
-                    $target_course = $user_courses[$key + 1];
+                    $target_course = $user_courses[$count + 1];
                 }
+                break;
             }
         }
 
@@ -444,7 +446,7 @@ class Auth {
 
 
         // Get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id 
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
@@ -472,14 +474,14 @@ class Auth {
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
-                $sql = "SELECT COUNT(*) FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course ON (url_rel_course.course_code=course.code) 
+                $sql = "SELECT COUNT(*) FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course ON (url_rel_course.course_code=course.code)
                         WHERE access_url_id = $url_access_id ";
                 $result = Database::query($sql);
                 list($num_records) = Database::fetch_row($result);
 
-                $sql = "SELECT course.id FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course 
-                        ON (url_rel_course.course_code=course.code) 
-                        WHERE   access_url_id = $url_access_id AND 
+                $sql = "SELECT course.id FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.course_code=course.code)
+                        WHERE   access_url_id = $url_access_id AND
                                 RAND()*$num_records< $random_value
                                 $without_special_courses ORDER BY RAND() LIMIT 0, $random_value";
             } else {
@@ -555,7 +557,7 @@ class Auth {
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
 
         // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id 
+        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id =  tcf.id
                 WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
 
         $special_course_result = Database::query($sql);
@@ -616,7 +618,7 @@ class Auth {
     public function subscribe_user($course_code) {
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
-        
+
         if ($all_course_information['registration_code'] == '' || $_POST['course_registration_code'] == $all_course_information['registration_code']) {
             if (api_is_platform_admin()) {
                 $status_user_in_new_course = COURSEMANAGER;
@@ -633,7 +635,7 @@ class Auth {
                 $message = get_lang('EnrollToCourseSuccessful');
             } else {
                 $message = get_lang('ErrorContactPlatformAdmin');
-            }            
+            }
             return array('message' => $message);
         } else {
             if (isset($_POST['course_registration_code']) && $_POST['course_registration_code'] != $all_course_information['registration_code']) {
@@ -641,11 +643,11 @@ class Auth {
             }
             $message = get_lang('CourseRequiresPassword') . '<br />';
             $message .= $all_course_information['title'].' ('.$all_course_information['visual_code'].') ';
-            
-            $action  = api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_user_with_password&sec_token=" . $_SESSION['sec_token'];            
+
+            $action  = api_get_path(WEB_CODE_PATH) . "auth/courses.php?action=subscribe_user_with_password&sec_token=" . $_SESSION['sec_token'];
             $form = new FormValidator('subscribe_user_with_password', 'post', $action);
             $form->addElement('hidden', 'sec_token', $_SESSION['sec_token']);
-            $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);            
+            $form->addElement('hidden', 'subscribe_user_with_password', $all_course_information['code']);
             $form->addElement('text', 'course_registration_code');
             $form->addElement('button', 'submit', get_lang('SubmitRegistrationCode'));
             $content = $form->return_form();

@@ -1148,6 +1148,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
      * @covers UserManager::get_user_id_of_course_admin_or_session_admin
      * @todo   Implement testGet_user_id_of_course_admin_or_session_admin().
      */
+/*
     public function testGet_user_id_of_course_admin_or_session_admin()
     {
         // Remove the following lines when you implement this test.
@@ -1155,7 +1156,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
           'This test has not been implemented yet.'
         );
     }
-
+*/
     /**
      * @covers UserManager::is_user_certified
      * @todo   Implement testIs_user_certified().

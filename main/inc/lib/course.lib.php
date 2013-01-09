@@ -1268,7 +1268,7 @@ class CourseManager {
                         }
 
                         $users[$row_key]['extra_'.$extra['1']] = $name;
-                        $users[$row_key]['training_hours'] =+ Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0);
+                        $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0);
                         $users[$row_key]['count_users'] += $counter;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 

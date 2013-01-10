@@ -73,7 +73,7 @@ optimal flexibility, remote control and scalability. <br />
 
 <br />
 
-Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache 1.3, 2.0</span>, <span style="font-weight: bold;">MySQL 5.1 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
+Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache (1.3, 2.0 or 2.2)</span>, <span style="font-weight: bold;">MySQL 5.1 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3 (or 5.4)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
 
 
 <br />
@@ -93,6 +93,7 @@ For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
     <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections</li>
 
   <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
+  <li>Make sure you check the <a href="dependencies.html" title="Dependencies">Dependencies page</a> if you need to know the requirements in more precise way.
 </ul>
 
 
@@ -146,6 +147,9 @@ it, you will need to allow your system to write into the sarchdb directory:
 <ul>
   <li>[chamilo]/searchdb</li>
 </ul> 
+If you so happen to find a tests/ directory at the root of your package, please delete it. 
+This is a development directory that has not been checked for security issues, 
+an it should *never* be accessible to final users on a production server. 
 
 <p>On Linux, Mac OS X and BSD operating systems you can use the <em>chmod
 0775</em> command for this (although we recommend you seek advice from an
@@ -294,6 +298,8 @@ date.timezone = 'America/New_York'
     <li>php5-curl</li>
     <li>php5-iconv</li>
     <li>php5-xsl</li>
+    <li>php5-ldap</li>
+    <li>php5-xapian</li>
 </ul>
 
 
@@ -318,7 +324,20 @@ please contact one of the Chamilo Association's official providers <providers@ch
 
 <p></p>
 
-<h3>3.1 Upgrading from Chamilo 1.8.x</h3>
+<h3>3.1 Upgrading from Chamilo 1.9.x (minor upgrade)</h3>
+As this is only a minor version change from previous 1.9.* versions of Chamilo, the only thing you need to do is:
+<ul>
+  <li> check that you haven't left any customised stylesheet or image <span class="muted">(if you have, make sure you keep a copy on the side*)</span></li>
+  <li> download the Chamilo 1.9 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
+  <li> unzip the new files of Chamilo 1.9 over the files of the older version (or unzip the files in one folder and then copy the files from there to the older version's directory)</li>
+  <li> edit the main/inc/conf/configuration.php file: at the en of the file, locate the previous version number (e.g. '1.9.2') and change it to this new version (e.g. '1.9.4')</li>
+  <li> you're done! No other upgrade procedure is required</li>
+</ul>
+
+<br />
+
+
+<h3>3.2 Upgrading from Chamilo 1.8.x</h3>
 <ul>
   <li> check that you haven't left any customised stylesheet or image <span class="muted">(if you have, make sure you keep a copy on the side*)</span></li>
   <li> download the Chamilo 1.9 install package from the <a href="http://www.chamilo.org/download">Chamilo download page</a></li>
@@ -329,7 +348,7 @@ please contact one of the Chamilo Association's official providers <providers@ch
 
 <br />
 
-<h3>3.2 Upgrading from Dok€os 1.8.x</h3>
+<h3>3.3 Upgrading from Dok€os 1.8.x</h3>
 
 <em>If you upgrade from Dok€os 1.8.x</em> :&nbsp;
 <ul>
@@ -339,7 +358,12 @@ please contact one of the Chamilo Association's official providers <providers@ch
   <li> point your browser on your portal URL + main/install/</li>
   <li> choose your language and click&nbsp;<span style="font-style: italic;">Upgrade from 1.8.x</span></li>
 </ul>
-
+A bunch of Chamilo administrators have reported minor issues with the migration between versions considerably apart (like from Dok€os to Chamilo). 
+This might include loosing some assignments or forum posts. To avoid any ugly effect on your users, we recommend you first establish a checklist
+of all the content that is critical to you, and that you keep a working copy of your previous site on the side. This way, it will be easier to 
+manage the transition by letting your users get access to their contents from the previous site and making it easier for you to compare the two.
+If you are experiencing difficulties, consider asking for help from a PHP developer or hiring an <a href="http://www.chamilo.org/en/providers" target="_blank">official Chamilo provider</a>. They will make sure
+you get the best our of your Chamilo migration. 
 <br />
 
 <span class="muted">* Styles and images are located in the main/css or main/img
@@ -356,7 +380,7 @@ to the old ones which will be deprecated shortly (not maintained).</span>
 
 <p></p>
 
-<h3>3.3 Upgrading from Dok€os 1.6.x</h3>
+<h3>3.4 Upgrading from Dok€os 1.6.x</h3>
 
 
 <em>If you upgrade from a lower version of Dok€os (1.6.x)</em>, the first
@@ -410,7 +434,7 @@ Do not modify the home_*.html files directly. Instead,
 choose "Configure the homepage" in the Chamilo administration section.</p>
 
 <p></p>
-<h3>3.4 In both last cases</h3>
+<h3>3.5 In both last cases</h3>
 
 The following directories need to be readable, writeable and executable for the web server:
 <ul>
@@ -427,7 +451,7 @@ On Linux, Mac OS X and BSD operating systems you can quick-fix this using the
 your own OS on <a href="http://www.chamilo.org/forum">our forum</a>.
 In Windows, you may need to check the properties of the folders.
 <p></p>
-<h3>3.5 Quick-upgrade from 1.6.x guide for Linux</h3>
+<h3>3.6 Quick-upgrade from 1.8.x guide for Linux</h3>
 
 
 The following quick-upgrade guide assumes that:
@@ -475,9 +499,8 @@ Then:
 
 
 <p>If you have&nbsp;problems, go to the <a href="http://www.chamilo.org">Chamilo website</a> and ask a question on the
-<a href="http://forum.chamilo.org">support forum</a>. Please read the previous messages first to see if there is
-already an answer to your question. We also maintain a list of
-<a href="http://wiki.chamilo.org">Frequently Asked Questions</a>.</p>
+<a href="http://www.chamilo.forum">support forum</a>. Please read the previous messages first to see if there is
+already an answer to your question.</p>
 
 
 <h2></h2>
@@ -511,20 +534,15 @@ Newer distributions also allow downloading rpms for additional packages.</p>
 
 <h3><b>Activating LDAP in Chamilo</b></h3>
 
-<p class="muted">Note: The LDAP mechanism has been changed in 1.9. Please check 
+<p class="muted">Note: The LDAP mechanism has been changed in 1.9. As a result, some of the following information might not be correct. Please check 
 the configuration settings inside Chamilo to learn the details.</p>
 
 <p>
-In (chamilo folder)/main/inc/conf/configuration.php, around line 90, you see<br />
+In [Chamilo folder]/main/inc/conf/configuration.conf.php, around line 93, you'll find settings like the following: <br />
 
-//for new login module<br />
-
-//uncomment these to activate ldap<br />
-
-//$extAuthSource['ldap']['login'] = "./main/auth/ldap/login.php";<br />
-
-//$extAuthSource['ldap']['newUser'] = "./main/auth/ldap/newUser.php";<br />
-
+// -> Uncomment the two lines below to activate LDAP AND edit main/inc/conf/auth.conf.php for configuration<br />
+// $extAuthSource["extldap"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";<br />
+// $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.ldap.php";<br />
 <br />
 
 remove the // from the last two lines to activate LDAP.<br />

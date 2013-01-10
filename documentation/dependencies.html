@@ -63,14 +63,17 @@ required information to install it.</p>
 <h2>Dependencies - server-side</h2>
 <ul>
   <li> Apache 2+</li>
-  <li> PHP5.3.0+ with MySQL bindings and php-gd extension to allow
-Chamilo to resize pictures. The new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
-  <li> MySQL or MariaDB database server version 5</li>
+  <li> PHP 5.3 or 5.4 with MySQL bindings and php-gd extension to allow Chamilo to resize pictures. The 
+  new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
+  <li> MySQL 5.1+ or any version of MariaDB database server</li>
+  <li>php5-intl</li>
+  <li>php5-curl (only required for a feature in the links tool)</li>
+  <li>php5-mcrypt (only required for a feature in the survey tool)</li>
 </ul><br />
 <a name="included_dependencies"></a>
 <h2>Included Dependencies</h2>
 <ul>
-  <li>EZpdf</li>
+  <li>EZpdf and MPDF</li>
   <li>FCKEditor (previously HTMLArea) </li>
   <li>FormValidator </li>
   <li>iCalCreator</li>
@@ -89,7 +92,6 @@ Chamilo to resize pictures. The new components we have included from the Symfony
   <li>WCAG_Rendering</li>
   <li>xajax </li>
   <li>jQuery</li>
-  <li>php5-intl</li>
 </ul>
 </div>
 <hr />

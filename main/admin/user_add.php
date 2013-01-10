@@ -25,7 +25,7 @@ $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 $message = null;
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '
 <script>
 <!--
@@ -270,7 +270,7 @@ if( $form->validate()) {
 		}
 
 		if ($user['radio_expiration_date'] == '1') {
-			$expiration_date = $user['expiration_date'];            
+			$expiration_date = $user['expiration_date'];
 		} else {
 			$expiration_date = '0000-00-00 00:00:00';
 		}

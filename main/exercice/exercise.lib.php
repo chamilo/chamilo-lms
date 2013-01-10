@@ -1591,12 +1591,11 @@ function get_best_attempt_in_course($exercise_id, $course_code, $session_id) {
  *  Get the best score in a exercise (NO Exercises in LPs )
  */
 function get_best_attempt_by_user($user_id, $exercise_id, $course_code, $session_id) {
-    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false);
+    $user_results = get_all_exercise_results($exercise_id, $course_code, $session_id, false, $user_id);
     $best_score_data = array();
     $best_score = 0;
     if (!empty($user_results)) {
         foreach($user_results as $result) {
-            if ($result['exe_user_id'] != $user_id) continue;
             if (!empty($result['exe_weighting']) && intval($result['exe_weighting']) != 0) {
                 $score = $result['exe_result']/$result['exe_weighting'];
                 if ($score >= $best_score) {

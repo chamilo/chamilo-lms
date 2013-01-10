@@ -959,15 +959,27 @@ function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $s
  * @return  array   with the results
  *
  */
-function get_all_exercise_results($exercise_id, $course_code, $session_id = 0, $load_question_list = true) {
+function get_all_exercise_results($exercise_id, $course_code, $session_id = 0, $load_question_list = true, $user_id = null) {
     $TABLETRACK_EXERCICES  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_ATTEMPT     = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
     $course_code           = Database::escape_string($course_code);
     $exercise_id           = intval($exercise_id);
     $session_id            = intval($session_id);
 
+    $user_condition =  null;
+    if (!empty($user_id)) {
+        $user_id = intval($user_id);
+        $user_condition  = "AND exe_user_id = $user_id ";
+    }
     $sql = "SELECT * FROM $TABLETRACK_EXERCICES
-            WHERE status = ''  AND exe_cours_id = '$course_code' AND exe_exo_id = '$exercise_id' AND session_id = $session_id  AND orig_lp_id =0 AND orig_lp_item_id = 0 ORDER BY exe_id";
+            WHERE   status = ''  AND
+                    exe_cours_id = '$course_code' AND
+                    exe_exo_id = '$exercise_id' AND
+                    session_id = $session_id  AND
+                    orig_lp_id =0 AND
+                    orig_lp_item_id = 0
+                    $user_condition
+            ORDER BY exe_id";
     $res = Database::query($sql);
     $list = array();
     while($row = Database::fetch_array($res,'ASSOC')) {

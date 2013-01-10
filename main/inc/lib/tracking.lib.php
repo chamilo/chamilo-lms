@@ -2649,6 +2649,7 @@ class Tracking {
                                 if (!empty($weighting) && intval($weighting) != 0) {
                                     $my_score = $score/$weighting;
                                 }
+                                //@todo this function slows the page
                                 $position = get_exercise_result_ranking($my_score, $exe_id, $exercices['id'], $course_info['code'], $session_id, $user_list);
 
                                 $graph         = self::generate_exercise_result_thumbnail_graph($to_graph_exercise_result[$exercices['id']]);

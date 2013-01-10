@@ -187,7 +187,6 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 }));
 
 //Setting Doctrine service provider (DBAL)
-//Gathering default info of the current installation from the $_configuration array
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     'db.options' => array(
         'driver'    => 'pdo_mysql',
@@ -212,13 +211,16 @@ $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider
     ),
 ));
 
-//Doctrine extensions
+//Setting Doctrine2 extensions
 
 $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
 $app['db.event_manager']->addEventSubscriber($timestampableListener);
 
 $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
 $app['db.event_manager']->addEventSubscriber($sluggableListener);
+
+$sortableListener = new \Gedmo\Sortable\SortableListener();
+$app['db.event_manager']->addEventSubscriber($sortableListener);
 
 
 //Testing with another silex service provider
@@ -252,15 +254,15 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
     }
 }
 
+//Registering Chamilo service provider
+$app->register(new ChamiloServiceProvider(), array());
+
+//Controllers
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['pages.controller'] = $app->share(function() use ($app) {
     return new PagesController($app['pages.repository']);
 });
-
-
-//Registering Chamilo service provider
-$app->register(new ChamiloServiceProvider(), array());
 
 //Manage error messages
 /*

@@ -1,7 +1,12 @@
 <?php
-
 namespace Entity;
-use Doctrine\Mapping as ORM;
+
+use Gedmo\Mapping\Annotation as Gedmo;
+use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
 
 /**
  * EntityPages
@@ -24,14 +29,14 @@ class EntityPages
     /**
      * @var string
      *
-     * @Column(name="title", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     * @Column(name="title", type="string", length=255)
      */
     private $title;
 
     /**
      * @var string
-     *
-     * @Column(name="slug", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     * @Gedmo\Slug(fields={"title"})
+     * @Column(name="slug", type="string", length=255)
      */
     private $slug;
 
@@ -108,18 +113,6 @@ class EntityPages
     }
 
     /**
-     * Set slug
-     *
-     * @param string $slug
-     * @return EntityPages
-     */
-    public function setSlug($slug)
-    {
-        $this->slug = $slug;
-        return $this;
-    }
-
-    /**
      * Get slug
      *
      * @return string
@@ -127,6 +120,12 @@ class EntityPages
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
     }
 
     /**

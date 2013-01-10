@@ -1,7 +1,8 @@
 {
     "autoload": {
         "psr-0": {
-            "Entity" : "main/inc/"
+            "Entity" : "main/inc/",
+            "Gedmo": "vendor/gedmo/doctrine-extensions/lib'"
         },
         "classmap": [
             "main/auth",
@@ -35,7 +36,8 @@
         "doctrine/migrations": "dev-master",
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
-        "knplabs/knp-menu": "2.0.*@dev"
+        "knplabs/knp-menu": "2.0.*@dev",
+        "gedmo/doctrine-extensions": "2.3.*@dev"
     },
     "minimum-stability": "dev"
 }

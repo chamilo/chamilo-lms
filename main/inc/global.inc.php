@@ -116,7 +116,6 @@ require_once __DIR__.'../../../vendor/autoload.php';
 
 //Start Silex
 use Silex\Application;
-use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 
 $app = new Application();
 $app['configuration_file'] = $main_configuration_file_path;
@@ -199,10 +198,8 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
     )
 ));
 
-
-
 //Setting Doctrine ORM
-$app->register(new DoctrineOrmServiceProvider, array(
+$app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
     "orm.proxies_dir" => $app['db.orm.proxies_dir'],
     "orm.em.options" => array(
         "mappings" => array(
@@ -214,6 +211,15 @@ $app->register(new DoctrineOrmServiceProvider, array(
         ),
     ),
 ));
+
+//Doctrine extensions
+
+$timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+$app['db.event_manager']->addEventSubscriber($timestampableListener);
+
+$sluggableListener = new \Gedmo\Sluggable\SluggableListener();
+$app['db.event_manager']->addEventSubscriber($sluggableListener);
+
 
 //Testing with another silex service provider
 /*
@@ -234,7 +240,6 @@ $app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
 
 //Creating Chamilo service provider
 use Silex\ServiceProviderInterface;
-//use Sonata\AdminBundle\Controller\CRUDController;
 
 class ChamiloServiceProvider implements ServiceProviderInterface {
     public function register(Application $app) {
@@ -242,22 +247,17 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
         $app['template'] = $app->share(function() use($app){
             return new Template(null, $app);
         });
-
-        /*$app['sonata.crud_controller'] = $app->share(function() use ($app) {
-            $controller = new CRUDController();
-            $controller->setContainer($app);
-            $controller->configure();
-            return $controller;
-        });*/
-
-        //Formvalidator
-        $app['form_validator'] = $app->share(function() use($app){
-            return new FormValidator();
-        });
     }
     public function boot(Application $app) {
     }
 }
+
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+$app['pages.controller'] = $app->share(function() use ($app) {
+    return new PagesController($app['pages.repository']);
+});
+
 
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());

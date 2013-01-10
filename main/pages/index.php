@@ -27,6 +27,7 @@ class PagesController {
             $form->bindRequest($request);
             if ($form->isValid()) {
                 $page = $form->getData();
+                $page->setSlug($page->getTitle());
                 $em = $app['orm.em'];
                 /*$page_data = $form->getData();
                 $page->setContent($page_data['content']);
@@ -48,7 +49,6 @@ class PagesController {
         if (empty($page)) {
             $app->abort(404, "Page $id does not exist.");
         }
-
         $form = $this->getForm($app, $page);
 
         if ('POST' == $request->getMethod()) {
@@ -56,6 +56,7 @@ class PagesController {
             if ($form->isValid()) {
                 $em = $app['orm.em'];
                 //$page = $form->getData();
+                $page->setTitle($page->getTitle());
                 $em->persist($page);
                 $em->flush();
                 return $app->redirect($app['url_generator']->generate('show', array('id'=> $page->getId())), 201);
@@ -70,7 +71,6 @@ class PagesController {
         return $app['template']->render_template('pages/show.tpl', array(
             'page' => $page,
             'actions' => $actions,
-
         ));
     }
 
@@ -91,9 +91,8 @@ class PagesController {
 
         $em = $app['orm.em'];
         $dql = 'SELECT a FROM Entity\EntityPages a';
-        $query = $em->createQuery($dql)->setFirstResult(0)
-                    ->setMaxResults(100);
-        
+        $query = $em->createQuery($dql)->setFirstResult(0)->setMaxResults(100);
+
         //or using the repository
         //
         //$query = $em->getRepository('Entity\EntityPages')->getLatestPages();
@@ -104,6 +103,7 @@ class PagesController {
         $routeGenerator = function($page) use ($app) {
             return $app['url_generator']->generate('list', array('page' => $page));
         };
+        $page = intval($app['request']->get('page'));
 
         $pagerfanta->setMaxPerPage(2); // 10 by default
         $pagerfanta->setCurrentPage($page);
@@ -144,17 +144,18 @@ class PagesController {
     }
 }
 
-//$app->match('/{page}', 'PagesController::indexAction')->bind('index');
-$app->get('/', 'PagesController::listAction')->bind('index');
-$app->get('/page', 'PagesController::listAction')->bind('list');
-$app->get('/show/{id}', 'PagesController::showAction')
+$app->get('/', 'pages.controller:listAction')->bind('index');
+
+$app->get('/page', 'pages.controller:listAction')->bind('list');
+
+$app->get('/show/{id}', 'pages.controller:showAction')
     ->bind('show')
     ->assert('id', '\d+');
-$app->get('/delete/{id}', 'PagesController::deleteAction')
+$app->get('/delete/{id}', 'pages.controller:deleteAction')
     ->bind('delete')
     ->assert('id', '\d+');
-$app->match('/edit/{id}', 'PagesController::editAction', 'GET|POST')
+$app->match('/edit/{id}', 'pages.controller:editAction', 'GET|POST')
     ->bind('edit')
     ->assert('id', '\d+');
-$app->match('/add', 'PagesController::addAction', 'GET|POST')->bind('add');
+$app->match('/add', 'pages.controller:addAction', 'GET|POST')->bind('add');
 $app->run();

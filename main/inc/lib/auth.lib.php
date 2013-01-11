@@ -632,7 +632,8 @@ class Auth {
                 } else if ($send == 2) {
                     CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
                 }
-                $message = get_lang('EnrollToCourseSuccessful');
+                $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
+                $message = sprintf(get_lang('EnrollToCourseXSuccessful'), $url);
             } else {
                 $message = get_lang('ErrorContactPlatformAdmin');
             }

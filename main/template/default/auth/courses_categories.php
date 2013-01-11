@@ -52,7 +52,7 @@ $stok = Security::get_token();
             <?php
             if (!empty($browse_course_categories)) {
                 echo '<a class="btn" href="'.api_get_self().'?action=display_random_courses">'.get_lang('RandomPick').'</a><br /><br />';
-                
+
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
                 // level 1
@@ -111,14 +111,14 @@ $stok = Security::get_token();
         <?php
         if (!empty($message)) { Display::display_confirmation_message($message, false); }
         if (!empty($error)) { Display::display_error_message($error, false); }
-        
+
         if (!empty($content)) { echo $content; }
 
         if (!empty($search_term)) {
             echo "<p><strong>".get_lang('SearchResultsFor')." ".Security::remove_XSS($_POST['search_term'])."</strong><br />";
         }
 
-        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';         
+        $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
 
         if (!empty($browse_courses_in_category)) {
 
@@ -169,20 +169,20 @@ $stok = Security::get_token();
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
                         echo '<a class="ajax btn" href="'.api_get_path(WEB_CODE_PATH).'inc/ajax/course_home.ajax.php?a=show_course_information&amp;code='.$course['code'].'" title="'.$icon_title.'" class="thickbox">'.get_lang('Description').'</a>';
                     }
-                    
-                    // Get access type for course button ("enter" or/and "register")                    
-                    $access_type = CourseManager::get_access_link_by_user(api_get_user_id(), $course); 
-                   
+
+                    // Get access type for course button ("enter" or/and "register")
+                    $access_type = CourseManager::get_access_link_by_user(api_get_user_id(), $course);
+
                     // Go To Course button (only if admin, if course public or if student already subscribed)
                     if ($access_type && in_array('enter', $access_type)) {
                         echo ' <a class="btn btn-primary" href="'.  api_get_course_url($course['code']).'">'.get_lang('GoToCourse').'</a>';
                     }
-                    
+
                     // Register button
                     if ($access_type && in_array('register', $access_type)) {
                          echo ' <a class="btn btn-primary" href="'. api_get_self().'?action=subscribe_course&amp;sec_token='.$stok.'&amp;subscribe_course='.$course['code'].'&amp;search_term='.$search_term.'&amp;category_code='.$code.'">'.get_lang('Subscribe').'</a>';
                     }
-                    
+
                     // If user is already subscribed to the course
                     if (!api_is_anonymous() && in_array($course['code'], $user_coursecodes)) {
                         if ($course['unsubscribe'] == UNSUBSCRIBE_ALLOWED) {
@@ -200,9 +200,10 @@ $stok = Security::get_token();
                     echo '</div>';
                 echo '</div></div>';
             }
-        } else {            
-            if (!isset($_POST['subscribe_user_with_password']))
-            echo Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+        } else {
+            if (!isset($_REQUEST['subscribe_user_with_password']) && !isset($_REQUEST['subscribe_course'])) {
+                echo Display::display_warning_message(get_lang('ThereAreNoCoursesInThisCategory'));
+            }
         }
         ?>
     </div>

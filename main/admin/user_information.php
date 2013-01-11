@@ -87,18 +87,22 @@ if (count($sessions) > 0) {
     $header[] = array ('', false);
 
     foreach ($sessions as $session_item) {
-
+        
         $data = array ();
         $personal_course_list = array();
         $id_session = $session_item['session_id'];
-
+                
         foreach ($session_item['courses'] as $my_course) {
             $course_info = api_get_course_info($my_course['code']);
             $row = array ();
             $row[] = $my_course['code'];
             $row[] = $course_info['title'];
-            $row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
-
+            //$row[] = $my_course['status'] == STUDENT ? get_lang('Student') : get_lang('Teacher');
+            
+            $roles = api_detect_user_roles($user['user_id'], $my_course['code'], $id_session);
+            $row[] = api_get_roles_to_string($roles);
+        
+            
             $tools = '<a href="course_information.php?code='.$course_info['code'].'&id_session='.$id_session.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                     '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'?id_session='.$id_session.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>';
 
@@ -112,7 +116,7 @@ if (count($sessions) > 0) {
         Display :: display_sortable_table($header, $data, array (), array(), array ('user_id' => intval($_GET['user_id'])));
     }
 } else {
-    echo '<p>'.get_lang('NoSessionsForThisUser').'</p>';
+    Display::display_warning_message(get_lang('NoSessionsForThisUser'));
 }
 
 
@@ -129,12 +133,15 @@ if (Database::num_rows($res) > 0) {
     $header[] = array (get_lang('Title'), true);
     $header[] = array (get_lang('Status'), true);
     $header[] = array ('', false);
-    $data = array ();
+    $data = array();
     while ($course = Database::fetch_object($res)) {
         $row = array ();
         $row[] = $course->code;
         $row[] = $course->title;
-        $row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
+        
+        //$row[] = $course->status == STUDENT ? get_lang('Student') : get_lang('Teacher');
+        $roles = api_detect_user_roles($user['user_id'], $course->code);
+        $row[] = api_get_roles_to_string($roles);
         $tools = '<a href="course_information.php?code='.$course->code.'">'.Display::return_icon('synthese_view.gif', get_lang('Overview')).'</a>'.
                 '<a href="'.api_get_path(WEB_COURSE_PATH).$course->directory.'">'.Display::return_icon('course_home.gif', get_lang('CourseHomepage')).'</a>' .
                 '<a href="course_edit.php?course_code='.$course->code.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
@@ -146,9 +153,9 @@ if (Database::num_rows($res) > 0) {
         $data[] = $row;
     }
     echo Display::page_subheader(get_lang('Courses'));
-    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
+    Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));    
 } else {
-    echo '<p>'.get_lang('NoCoursesForThisUser').'</p>';
+    Display::display_warning_message(get_lang('NoCoursesForThisUser'));
 }
 
 /**
@@ -175,7 +182,7 @@ if (Database::num_rows($res) > 0) {
     echo '<blockquote>';
     Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
     echo '</blockquote>';
-} else {
+} else {    
     echo '<p>'.get_lang('NoClassesForThisUser').'</p>';
 }*/
 
@@ -183,7 +190,7 @@ if (Database::num_rows($res) > 0) {
  * Show the URL in which this user is subscribed
  */
 global $_configuration;
-if ($_configuration['multiple_access_urls']) {
+if ($_configuration['multiple_access_urls']) {    
     $url_list= UrlManager::get_access_url_from_user($user['user_id']);
     if (count($url_list) > 0) {
         $header = array();
@@ -194,8 +201,8 @@ if ($_configuration['multiple_access_urls']) {
             $row[] = Display::url($url['url'], $url['url']);
             $data[] = $row;
         }
-        echo '<p><b>'.get_lang('URLList').'</b></p>';
-        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));
+        echo '<p><b>'.get_lang('URLList').'</b></p>';        
+        Display :: display_sortable_table($header, $data, array (), array (), array ('user_id' => intval($_GET['user_id'])));        
     } else {
         echo '<p>'.get_lang('NoUrlForThisUser').'</p>';
     }

@@ -39,6 +39,10 @@ if (!empty($_GET['fill'])) {
             require api_get_path(SYS_TEST_PATH).'datafiller/fill_courses.php';
             $output = fill_courses();
             break;
+        case 'exe':
+            require api_get_path(SYS_TEST_PATH).'datafiller/fill_exe.php';
+            $output = fill_exe();
+            break;
         default:
             break;
     }
@@ -68,6 +72,7 @@ if (count($output)>0) {
   <ul>
     <li><a href="filler.php?fill=users"><?php echo get_lang('FillUsers');?></a></li>
     <li><a href="filler.php?fill=courses"><?php echo get_lang('FillCourses');?></a></li>
+    <li><a href="filler.php?fill=exe"><?php echo get_lang('FillExercises');?></a></li>
   </ul>
 </div>
 <?php

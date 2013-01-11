@@ -176,6 +176,7 @@ function handle_plugins() {
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
+
 }
 
 /**
@@ -185,7 +186,6 @@ function handle_plugins() {
 */
 function handle_stylesheets() {
     global $_configuration;
-
     // Current style.
     $currentstyle = api_get_setting('stylesheets');
 
@@ -197,14 +197,14 @@ function handle_stylesheets() {
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
             /*echo '<div class="actions" id="stylesheetuploadlink">';
-            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'', ICON_SIZE_MEDIUM);
+            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
             	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
             echo '</div>';*/
         }
     } else {
         $is_style_changeable = true;
         /*echo '<div class="actions" id="stylesheetuploadlink">';
-			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'', ICON_SIZE_MEDIUM);
+			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'',ICON_SIZE_MEDIUM);
         	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
         echo '</div>';*/
     }
@@ -239,19 +239,19 @@ function handle_stylesheets() {
 
     if (isset($_POST['stylesheet_upload'])) {
         if ($form->validate()) {
-            $values = $form->exportValues();
-            $picture_element = $form->getElement('new_stylesheet');
-            $picture = $picture_element->getValue();
-            $result  = upload_stylesheet($values, $picture);
+        $values = $form->exportValues();
+        $picture_element = $form->getElement('new_stylesheet');
+        $picture = $picture_element->getValue();
+        $result  = upload_stylesheet($values, $picture);
 
-            // Add event to the system log.
-            $user_id = api_get_user_id();
-            $category = $_GET['category'];
-            event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        // Add event to the system log.
+        $user_id = api_get_user_id();
+        $category = $_GET['category'];
+        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
 
-            if ($result) {
-                Display::display_confirmation_message(get_lang('StylesheetAdded'));
-            }
+        if ($result) {
+            Display::display_confirmation_message(get_lang('StylesheetAdded'));
+        }
         }
     }
 
@@ -287,7 +287,7 @@ function handle_stylesheets() {
                     $show_name = ucwords(str_replace('_', ' ', $style_dir));
 
                     if ($is_style_changeable) {
-                        $list_of_styles[$style_dir] = "<option value=\"".$style_dir."\" ".$selected." /> $show_name </option>";
+                        $list_of_styles[$style_dir] = "<option  value=\"".$style_dir."\" ".$selected." /> $show_name </option>";
                         $list_of_names[$style_dir]  = $show_name;
                         //echo "<input type=\"radio\" name=\"style\" value=\"".$style_dir."\" ".$selected." onClick=\"parent.preview.location='style_preview.php?style=".$style_dir."';\"/>";
                         //echo '<a href="style_preview.php?style='.$style_dir.'" target="preview">'.$show_name.'</a>';
@@ -304,7 +304,7 @@ function handle_stylesheets() {
     //Sort styles in alphabetical order
     asort($list_of_names);
     $select_list = array();
-    foreach ($list_of_names as $style_dir=>$item) {
+    foreach($list_of_names as $style_dir=>$item) {
         $select_list[$style_dir] = strip_tags($list_of_styles[$style_dir]);
     }
 
@@ -329,8 +329,7 @@ function handle_stylesheets() {
             Display::display_normal_message($str,false);
         }
     }
-
-    if ($is_style_changeable) {
+    if ($is_style_changeable){
         $group[] = $form_change->createElement('button', 'save', get_lang('SaveSettings'), array('class' => 'btn btn-primary'));
         $group[] = $form_change->createElement('button', 'preview', get_lang('Preview'), array('class' => 'btn'));
         $group[] = $form_change->createElement('button', 'download', get_lang('Download'), array('class' => 'btn'));
@@ -481,6 +480,7 @@ function store_regions() {
             }
         }
     }
+    api_set_setting_last_update();
 }
 
 /**
@@ -488,9 +488,11 @@ function store_regions() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function store_plugins() {
+
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
+
     $plugin_list = $plugin_obj->read_plugins_from_path();
 
     $installed_plugins = array();
@@ -510,6 +512,7 @@ function store_plugins() {
     foreach ($remove_plugins as $plugin) {
         $plugin_obj->uninstall($plugin);
     }
+    api_set_setting_last_update();
 }
 
 /**
@@ -518,12 +521,15 @@ function store_plugins() {
 */
 function store_stylesheets() {
     global $_configuration;
+
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
 
     if (is_style($style)) {
         api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
+        api_set_setting_last_update();
     }
+
     return true;
 }
 
@@ -637,7 +643,6 @@ function handle_search() {
     echo '</div>';
 
     if ($search_enabled == 'true') {
-        require_once api_get_path(LIBRARY_PATH).'sortable_table.class.php';
         $xapian_path = api_get_path(SYS_PATH).'searchdb';
 
         /*

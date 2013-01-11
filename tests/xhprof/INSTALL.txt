@@ -1,0 +1,46 @@
+Install XHProf
+--------------
+
+To install XHProf, use the following commands as described on http://techportal.inviqa.com/2009/12/01/profiling-with-xhprof/:
+
+  apt-get install php5-common
+  pecl config-set preferred_state beta
+  pecl install xhprof
+
+If it complains because it can't find config.m4, you can still build the extension manually, using the following steps:
+
+  wget http://pecl.php.net/get/xhprof-0.9.2.tgz
+  tar xvf xhprof-0.9.2.tgz
+  cd ./xhprof-0.9.2/extension/
+  phpize
+  ./configure --with-php-config=/usr/local/bin/php-config
+  make
+  make install
+  make test
+
+In the ./configure line above, if you use Ubuntu, it is likely you php-config
+will have to be declared as /usr/bin/php-config. Check it with 
+"which php-config".
+
+Once you have XHProf installed, you should enable it. Open your php.ini or 
+/etc/php5/conf.d/xhprof.ini and type:
+
+  [xhprof]
+  extension=xhprof.so
+  xhprof.output_dir="/tmp"
+
+If you use PHP 5.4, you will need to download xhprof from Git:
+git clone git://github.com/facebook/xhprof.git
+and sudo, make, make install
+
+Combine with Chamilo
+--------------------
+
+To enable XHProf on your Chamilo, add this to your VirtualHost configuration
+(assuming your Chamilo install is as /var/www/chamilo):
+
+  php_value auto_prepend_file /var/www/chamilo/tests/xhprof/header.php
+  php_value auto_append_file /var/www/chamilo/tests/xhprof/footer.php
+
+Also check /var/www/chamilo/tests/xhprof/footer.php to update the sprintf
+command to use the name of your host.

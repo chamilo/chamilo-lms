@@ -316,18 +316,6 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-/*
- *
- *    <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
-                <!-- log message layout -->
-                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                    <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
-                </div>
-                <!-- end log message layout -->
-                <?php } ?>
- */
-
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
     if ($is_allowed_to_edit) {
@@ -338,7 +326,7 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
         //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
 
-        echo return_breadcrumb($interbreadcrumb, null, null);
+        echo $app['template']->return_breadcrumb($interbreadcrumb, null, null);
         echo '</div>';
     }
     echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';

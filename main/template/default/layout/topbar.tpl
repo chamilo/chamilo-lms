@@ -2,13 +2,13 @@
 {% if show_toolbar == 1 %}
     <div id="topbar" class="navbar navbar-fixed-top">
         <div class="navbar-inner">
-            <div class="container">              
+            <div class="container">
                 <a class="brand" href="{{ _p.web }}">
                     {{ "siteName" | get_setting }}
                 </a>
 
                 {% if _u.logged %}
-                    <div class="nav-collapse">                        
+                    <div class="nav-collapse">
                         <ul class="nav">
                             <li class="active"><a href="{{ _p.web }}user_portal.php"> {{ "MyCourses"|get_lang }}</a></li>
                             {#
@@ -56,18 +56,18 @@
                             </li>
                             {% endif %}
                         </ul>
-                
+
 
                         {% if _u.is_admin == 1 %}
                         <form class="navbar-search pull-left" action="{{ _p.web_main }}admin/user_list.php" method="get">
                             <input type="text" class="search-query span2" placeholder="{{'SearchUsers'|get_lang }}" name="keyword">
                         </form>
                         {% endif %}
-                
+
                         <ul class="nav pull-right">
                             <li><a href="{{ _p.web_main }}social/home.php"><img src="{{ _u.avatar_small }}"/></a></li>
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown"  href="#">{{ _u.complete_name }}<b class="caret"></b></a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">{{ _u.complete_name }}<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{ _p.web_main }}social/home.php">{{ "Profile"|get_lang }}</a></li>
                                     <li><a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">{{ "MyAgenda"|get_lang }}</a></li>
@@ -80,7 +80,7 @@
                             <li><a href="{{  _p.web }}index.php?logout=logout">{{ "Logout"|get_lang }}</a></li>
                         </ul>
                     </div> <!-- /nav collapse -->
-                {% endif %}                 
+                {% endif %}
             </div> <!-- /container-fluid-->
         </div><!-- /navbar-inner -->
     </div><!-- /topbar -->

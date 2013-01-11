@@ -9,22 +9,8 @@
 /**
  * Code
  */
-require_once api_get_path(LIBRARY_PATH).'online.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
-
-/*
- * @todo use constants!
- */
-define('MESSAGE_STATUS_NEW',                    '0');
-define('MESSAGE_STATUS_UNREAD',                 '1');
-//2 ??
-define('MESSAGE_STATUS_DELETED',                '3');
-define('MESSAGE_STATUS_OUTBOX',                 '4');
-define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
-define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
-define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
 
 /**
  * Class
@@ -45,40 +31,6 @@ class MessageManager
 	}
 
 	/**
-	* Displays info stating that the message is sent successfully.
-	*/
-	public static function display_success_message($uid) {
-			global $charset;
-		if ($_SESSION['social_exist']===true) {
-			$redirect="#remote-tab-2";
-			if (api_get_setting('allow_social_tool')=='true' && api_get_setting('allow_message_tool')=='true') {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-			}
-		} else {
-				$success=get_lang('MessageSentTo').
-				"&nbsp;<b>".
-				GetFullUserName($uid).
-				"</b>";
-		}
-		return Display::return_message(api_xml_http_response_encode($success), 'confirmation', false);
-	}
-
-	/**
-	* Displays the wysiwyg html editor.
-	*/
-	public static function display_html_editor_area($name, $resp) {
-		api_disp_html_area($name, get_lang('TypeYourMessage'), '', '', null, array('ToolbarSet' => 'Messages', 'Width' => '95%', 'Height' => '250'));
-	}
-
-	/**
 	* Get the new messages for the current user from the database.
 	*/
 	public static function get_new_messages() {
@@ -86,11 +38,13 @@ class MessageManager
 		if (!api_get_user_id()) {
 			return false;
 		}
-		$i=0;
-		$query = "SELECT * FROM $table_message WHERE user_receiver_id=".api_get_user_id()." AND msg_status=".MESSAGE_STATUS_UNREAD;
+		$query = "SELECT count(id) as count FROM $table_message WHERE user_receiver_id = ".api_get_user_id()." AND msg_status = ".MESSAGE_STATUS_UNREAD;
 		$result = Database::query($query);
-		$i = Database::num_rows($result);
-		return $i;
+		if (Database::num_rows($result)) {
+            $result = Database::fetch_array($result);
+            return $result['count'];
+        };
+		return 0;
 	}
 
 	/**
@@ -109,7 +63,7 @@ class MessageManager
 	/**
 	 * Gets the total number of messages, used for the inbox sortable table
 	 */
-	public static function get_number_of_messages ($unread = false) {
+	public static function get_number_of_messages($unread = false) {
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
 
 		$condition_msg_status = '';
@@ -132,6 +86,7 @@ class MessageManager
 	 * @param string $direction
 	 */
 	public static function get_message_data($from, $number_of_items, $column, $direction) {
+		global $charset;
 		$from = intval($from);
 		$number_of_items = intval($number_of_items);
 
@@ -205,6 +160,7 @@ class MessageManager
         $edit_message_id    = intval($edit_message_id);
         $topic_id   		= intval($topic_id);
 
+        //Saving the user id for the chamilo inbox, if the sender is null we asume that the current user is the one that sent the message
         if (empty($sender_id)) {
             $user_sender_id     = api_get_user_id();
         } else {
@@ -282,9 +238,12 @@ class MessageManager
 
 			//Load user settings
 			$notification = new Notification();
-			$sender_info = api_get_user_info($user_sender_id);
 
 		    if (empty($group_id)) {
+                $sender_info = array();
+                if (!empty($user_sender_id)) {
+                    $sender_info = api_get_user_info($user_sender_id);
+                }
                 $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);
@@ -301,6 +260,7 @@ class MessageManager
                     $new_user_list[] = $user_data['user_id'];
                 }
                 $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
+
                 $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);
 		    }
 			return $inbox_last_id;
@@ -749,7 +709,6 @@ class MessageManager
             $message_content .= $user_image.' ';
         }
 
-        $message_content .='<tr>';
     	if (api_get_setting('allow_social_tool') == 'true') {
     		if ($source == 'outbox') {
     			$message_content .= get_lang('From').': <a href="'.api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_sender_id.'">'.$name.'</a> '.api_strtolower(get_lang('To')).'&nbsp;<b>'.GetFullUserName($row[2]).'</b>';
@@ -763,20 +722,23 @@ class MessageManager
     			$message_content .= get_lang('From').':&nbsp;'.$name.'</b> '.api_strtolower(get_lang('To')).' <b>'.get_lang('Me').'</b>';
     		}
     	}
-		 $message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']).'
-		        <br />
-		        <hr style="color:#ddd" />
-		        <table height="209px" width="100%">
-		            <tr>
-		              <td valign=top class="view-message-content">'.str_replace("\\","",$content).'</td>
-		            </tr>
-		        </table>
-		        <div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
-		        <div style="padding: 15px 0px 5px 0px">';
+
+		$message_content .=' '.get_lang('Date').':  '.api_get_local_time($row['send_date']);
+
+        $message_content .= '<br />';
+        $message_content .= '<br />';
+
+        $message_content .= str_replace("\\","",$content);
+        $message_content .= '<br />';
+
+        $message_content .= '<div id="message-attach">'.(!empty($files_attachments)?implode('<br />',$files_attachments):'').'</div>
+		        ';
 		    $social_link = '';
-		    if (isset($_GET['f']) && $_GET['f'] == 'social') {
+		    if ($_GET['f'] == 'social') {
 		    	$social_link = 'f=social';
 		    }
+
+
 		    if ($source == 'outbox') {
 		    	$message_content .= '<a href="outbox.php?'.$social_link.'">'.Display::return_icon('back.png',get_lang('ReturnToOutbox')).'</a> &nbsp';
 		    } else {
@@ -785,10 +747,7 @@ class MessageManager
 		    }
 			$message_content .= '<a href="inbox.php?action=deleteone&id='.$message_id.'&'.$social_link.'" >'.Display::return_icon('delete.png',get_lang('DeleteMessage')).'</a>&nbsp';
 
-			$message_content .='</div></td>
-		      <td width=10></td>
-		    </tr>
-		</table>';
+
 		return $message_content;
 	}
 
@@ -797,7 +756,7 @@ class MessageManager
 	 * display message box sent showing it into outbox
 	 * @return void
 	 */
-	public static function show_message_box_sent () {
+	public static function show_message_box_sent() {
 		global $charset;
 
 		$table_message = Database::get_main_table(TABLE_MESSAGE);
@@ -1261,11 +1220,12 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'), 3, 20, 'DESC');
+        $table = new SortableTable('message_inbox', array('MessageManager','get_number_of_messages'), array('MessageManager','get_message_data'),3,20,'DESC');
         $table->set_header(0, '', false,array ('style' => 'width:15px;'));
-        $table->set_header(1, get_lang('Messages'),false);
-        $table->set_header(2, get_lang('Date'),true, array('style' => 'width:180px;'));
-        $table->set_header(3, get_lang('Modify'), false,array ('style' => 'width:70px;'));
+
+        $table->set_header(1,get_lang('Messages'),false);
+        $table->set_header(2,get_lang('Date'),true, array('style' => 'width:180px;'));
+        $table->set_header(3,get_lang('Modify'),false,array ('style' => 'width:70px;'));
 
         if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
             $parameters['f'] = 'social';
@@ -1278,13 +1238,16 @@ class MessageManager
 
 
     static function outbox_display() {
+        $request=api_is_xml_http_request();
+        global $charset;
+
         $social_link = false;
-        if (isset($_REQUEST['f']) && $_REQUEST['f']=='social') {
+        if ($_REQUEST['f']=='social') {
             $social_link ='f=social';
         }
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
-        if (isset($_REQUEST['action'])) {
+        if (isset ($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :
                     $number_of_selected_messages = count($_POST['id']);
@@ -1304,7 +1267,7 @@ class MessageManager
         }
 
         // display sortable table with messages of the current user
-        $table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'), 3, 20,'DESC');
+        $table = new SortableTable('message_outbox', array('MessageManager','get_number_of_messages_sent'), array('MessageManager','get_message_data_sent'),3,20,'DESC');
 
         $parameters['f'] = Security::remove_XSS($_GET['f']);
         $table->set_additional_parameters($parameters);
@@ -1314,11 +1277,14 @@ class MessageManager
         $table->set_header(2, get_lang('Date'),true,array ('style' => 'width:160px;'));
         $table->set_header(3, get_lang('Modify'), false,array ('style' => 'width:70px;'));
 
-        $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
-        $html .= $table->return_table();
+
+            $table->set_form_actions(array ('delete' => get_lang('DeleteSelectedMessages')));
+            $html .= $table->return_table();
         return $html;
     }
 }
+
+
 
 function get_number_of_messages_mask() {
 	return MessageManager::get_number_of_messages();

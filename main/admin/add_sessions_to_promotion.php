@@ -12,10 +12,6 @@ $cidReset=true;
 
 // including some necessary files
 require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
-require_once api_get_path(LIBRARY_PATH).'promotion.lib.php';
-require_once api_get_path(LIBRARY_PATH).'career.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
 

@@ -31,7 +31,9 @@ if (isset($_GET['anchor_topic'])) {
 			break;
 		}
 	}
-	$anchor = 'topic_'.$match[1];
+    if (isset($match[1])) {
+        $anchor = 'topic_'.$match[1];
+    }
 }
 $htmlHeadXtra[] = '<script>
 

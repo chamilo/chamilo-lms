@@ -12,10 +12,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
-$course_user_table  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
 
 $course_code = isset($_GET['course_code']) ? $_GET['course_code'] : $_POST['code'];
 $noPHP_SELF = true;
@@ -174,19 +172,19 @@ $form->addElement('text','disk_quota',array(get_lang('CourseQuota'), null, get_l
 $form->addRule('disk_quota', get_lang('ThisFieldIsRequired'),'required');
 $form->addRule('disk_quota',get_lang('ThisFieldShouldBeNumeric'),'numeric');
 
-$list_course_extra_field = CourseManager::get_course_extra_field_list($course_code);
-//@todo this is wrong
-foreach ($list_course_extra_field as $extra_field) {
-	switch ($extra_field['field_type']) {		
-		case CourseManager::COURSE_FIELD_TYPE_CHECKBOX:
-			$checked = (array_key_exists('extra_field_value', $extra_field) && $extra_field['extra_field_value'] == 1)? array('checked'=>'checked'): '';
-			$form->addElement('hidden', '_extra_'.$extra_field['field_variable'], 0);
-			$field_display_text=$extra_field['field_display_text'];
-			//$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(get_lang('SpecialCourse'), get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang($extra_field['field_default_value']), $checked);
-			$form->addElement('checkbox', 'extra_'.$extra_field['field_variable'], array(null, get_lang('AllUsersAreAutomaticallyRegistered')) , get_lang('SpecialCourse'), $checked);
-			break;		
-	}
-}
+//Extra fields
+$extra_field = new ExtraField('course');
+$extra = $extra_field->add_elements($form, $course_code);
+
+$htmlHeadXtra[] ='
+<script>
+
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
+
 $form->addElement('style_submit_button', 'button', get_lang('ModifyCourseInfo'),'onclick="valide()"; class="save"');
 
 // Set some default values
@@ -201,10 +199,9 @@ $form->setDefaults($course);
 // Validate form
 if ($form->validate()) {
 	$course = $form->getSubmitValues();
-	$dbName = $_POST['dbName'];
-	$course_code = $course['code'];
-	$visual_code = $course['visual_code'];	
-	$visual_code = generate_course_code($visual_code);   
+    $visual_code = CourseManager::generate_course_code($course['visual_code']);
+    
+    CourseManager::update($course);
 
     // Check if the visual code is already used by *another* course
     $visual_code_is_used = false;
@@ -219,110 +216,13 @@ if ($form->validate()) {
             }
         }
         $warn = substr($warn,0,-1);
-    }
-    // an extra field
-    $extras = array();
-    foreach ($course as $key => $value) {
-	    if (substr($key,0,6)=='extra_') {
-			$extras[substr($key,6)] = $value;
-		}
-		if (substr($key,0,7)=='_extra_') {
-			if(!array_key_exists(substr($key,7), $extras)) $extras[substr($key,7)] = $value;
-		}
-    }
-
-	$tutor_id = $course['tutor_name'];
-	$tutor_name=$platform_teachers[$tutor_id];
-
-	$teachers = $course['group']['course_teachers'];
-
-	$title = $course['title'];
-	$category_code = $course['category_code'];
-	$department_name = $course['department_name'];
-	$department_url = $course['department_url'];
-	$course_language = $course['course_language'];
-    
-    $course['disk_quota'] = $course['disk_quota']*1024*1024;
-     
-	$disk_quota = $course['disk_quota'];
-	$visibility = $course['visibility'];
-	$subscribe = $course['subscribe'];
-	$unsubscribe = $course['unsubscribe'];
-	if (!stristr($department_url, 'http://')) {
-		$department_url = 'http://'.$department_url;
-	}
-	$sql = "UPDATE $course_table SET course_language='".Database::escape_string($course_language)."',
-								title='".Database::escape_string($title)."',
-								category_code='".Database::escape_string($category_code)."',
-								tutor_name='".Database::escape_string($tutor_name)."',
-								visual_code='".Database::escape_string($visual_code)."',
-								department_name='".Database::escape_string($department_name)."',
-								department_url='".Database::escape_string($department_url)."',
-								disk_quota='".Database::escape_string($disk_quota)."',
-								visibility = '".Database::escape_string($visibility)."',
-								subscribe = '".Database::escape_string($subscribe)."',
-								unsubscribe='".Database::escape_string($unsubscribe)."'
-							WHERE code='".Database::escape_string($course_code)."'";
-	Database::query($sql);
-
-	//update the extra fields
-	if (count($extras) > 0) {
-		foreach ($extras as $key => $value) {
-			CourseManager::update_course_extra_field_value($course_code, $key, $value);
-		}
-	}
-
-	//Delete only teacher relations that doesn't match the selected teachers
-	$cond='';
-	if (count($teachers)>0) {
-		foreach($teachers as $key) $cond.=" AND user_id<>'".$key."'";
-	}
-	$sql='DELETE FROM '.$course_user_table.' WHERE course_code="'.Database::escape_string($course_code).'" AND status="1"'.$cond;
-	Database::query($sql);
-
-	if (count($teachers)>0) {
-		foreach ($teachers as $key) {
-
-			//We check if the teacher is already subscribed in this course
-			$sql_select_teacher = 'SELECT 1 FROM '.$course_user_table.' WHERE user_id = "'.$key.'" AND course_code = "'.$course_code.'" ';
-			$result = Database::query($sql_select_teacher);
-
-			if (Database::num_rows($result) == 1) {
-				$sql = 'UPDATE '.$course_user_table.' SET status = "1" WHERE course_code = "'.$course_code.'" AND user_id = "'.$key.'"  ';
-			} else {
-				$sql = "INSERT INTO ".$course_user_table . " SET
-					course_code = '".Database::escape_string($course_code). "',
-					user_id = '".$key . "',
-					status = '1',
-					role = '',
-					tutor_id='0',
-					sort='0',
-					user_course_cat='0'";
-			}
-			Database::query($sql);
-		}
-	}
-
-	$sql = "INSERT IGNORE INTO ".$course_user_table . " SET
-				course_code = '".Database::escape_string($course_code). "',
-				user_id = '".$tutor_id . "',
-				status = '1',
-				role = '',
-				tutor_id='0',
-				sort='0',
-				user_course_cat='0'";
-	Database::query($sql);
-	
-	$course_info = api_get_course_info($course_code);
-	$course_id = $course_info['real_id'];
-	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
-	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
+    }    
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {
         header('Location: course_list.php');
 	}
-	exit ();
+	
 }
 Display::display_header($tool_name);
 

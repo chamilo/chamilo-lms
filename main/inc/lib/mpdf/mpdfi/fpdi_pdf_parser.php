@@ -27,33 +27,33 @@ class fpdi_pdf_parser extends pdf_parser {
      * @var array
      */
     var $pages;
-
+    
     /**
      * Page count
      * @var integer
      */
     var $page_count;
-
+    
     /**
      * actual page number
      * @var integer
      */
     var $pageno;
-
-
+    
+    
     /**
      * FPDI Reference
      * @var object
      */
     var $fpdi;
-
+    
     /**
      * Available BoxTypes
      *
      * @var array
      */
     var $availableBoxes = array("/MediaBox","/CropBox","/BleedBox","/TrimBox","/ArtBox");
-
+        
     /**
      * Constructor
      *
@@ -78,8 +78,8 @@ class fpdi_pdf_parser extends pdf_parser {
         // count pages;
         $this->page_count = count($this->pages);
     }
-
-
+    
+    
     /**
      * Get pagecount from sourcefile
      *
@@ -104,7 +104,7 @@ class fpdi_pdf_parser extends pdf_parser {
 
         $this->pageno = $pageno;
     }
-
+    
     /**
      * Get page-resources from current page
      *
@@ -113,7 +113,7 @@ class fpdi_pdf_parser extends pdf_parser {
     function getPageResources() {
         return $this->_getPageResources($this->pages[$this->pageno]);
     }
-
+    
     /**
      * Get page-resources from /Page
      *
@@ -153,18 +153,18 @@ class fpdi_pdf_parser extends pdf_parser {
      */
     function getContent() {
         $buffer = "";
-
+        
         if (isset($this->pages[$this->pageno][1][1]['/Contents'])) {
             $contents = $this->_getPageContent($this->pages[$this->pageno][1][1]['/Contents']);
             foreach($contents AS $tmp_content) {
                 $buffer .= $this->_rebuildContentStream($tmp_content).' ';
             }
         }
-
+        
         return $buffer;
     }
-
-
+    
+    
     /**
      * Resolve all content-objects
      *
@@ -173,7 +173,7 @@ class fpdi_pdf_parser extends pdf_parser {
      */
     function _getPageContent($content_ref) {
         $contents = array();
-
+        
         if ($content_ref[0] == PDF_TYPE_OBJREF) {
             $content = $this->pdf_resolve_object($this->c, $content_ref);
             if ($content[1][0] == PDF_TYPE_ARRAY) {
@@ -199,7 +199,7 @@ class fpdi_pdf_parser extends pdf_parser {
      */
     function _rebuildContentStream($obj) {
         $filters = array();
-
+        
         if (isset($obj[1][1]['/Filter'])) {
             $_filter = $obj[1][1]['/Filter'];
 
@@ -216,23 +216,25 @@ class fpdi_pdf_parser extends pdf_parser {
             switch ($_filter[1]) {
                 case "/FlateDecode":
 			if (function_exists('gzuncompress')) {
-                        $stream = (strlen($stream) > 0) ? @gzuncompress($stream) : '';
+                        $stream = (strlen($stream) > 0) ? @gzuncompress($stream) : '';                        
 			} else {
                         $this->fpdi->error(sprintf("To handle %s filter, please compile php with zlib support.",$_filter[1]));
 			}
-			if ($stream === false) {
+			if ($stream === false) { 
                         $this->fpdi->error("Error while decompressing stream.");
 			}
                 break;
 			// mPDF 4.2.003
-                case '/LZWDecode':
+                case '/LZWDecode': 
 			include_once(_MPDF_PATH.'mpdfi/filters/FilterLZW.php');
-			$decoder =& new FilterLZW();
+			// mPDF 5.0 Removed pass by reference =&
+			$decoder = new FilterLZW();
 			$stream = $decoder->decode($stream);
 			break;
                 case '/ASCII85Decode':
 			include_once(_MPDF_PATH.'mpdfi/filters/FilterASCII85.php');
-			$decoder =& new FilterASCII85();
+			// mPDF 5.0 Removed pass by reference =&
+			$decoder = new FilterASCII85();
 			$stream = $decoder->decode($stream);
 			break;
                 case null:
@@ -242,11 +244,11 @@ class fpdi_pdf_parser extends pdf_parser {
 			$this->fpdi->error(sprintf("Unsupported Filter: %s",$_filter[1]));
             }
         }
-
+        
         return $stream;
     }
-
-
+    
+    
     /**
      * Get a Box from a page
      * Arrayformat is same as used by fpdf_tpl
@@ -260,18 +262,18 @@ class fpdi_pdf_parser extends pdf_parser {
         $box = null;
         if (isset($page[1][1][$box_index]))
             $box =& $page[1][1][$box_index];
-
+        
         if (!is_null($box) && $box[0] == PDF_TYPE_OBJREF) {
             $tmp_box = $this->pdf_resolve_object($this->c,$box);
             $box = $tmp_box[1];
         }
-
+            
         if (!is_null($box) && $box[0] == PDF_TYPE_ARRAY) {
             $b =& $box[1];
-            return array("x" => $b[0][1]/$this->fpdi->k,
-                         "y" => $b[1][1]/$this->fpdi->k,
-                         "w" => abs($b[0][1]-$b[2][1])/$this->fpdi->k,
-                         "h" => abs($b[1][1]-$b[3][1])/$this->fpdi->k);
+            return array("x" => $b[0][1]/_MPDFK,
+                         "y" => $b[1][1]/_MPDFK,
+                         "w" => abs($b[0][1]-$b[2][1])/_MPDFK,
+                         "h" => abs($b[1][1]-$b[3][1])/_MPDFK);	// mPDF 5.3.90
         } else if (!isset ($page[1][1]['/Parent'])) {
             return false;
         } else {
@@ -282,7 +284,7 @@ class fpdi_pdf_parser extends pdf_parser {
     function getPageBoxes($pageno) {
         return $this->_getPageBoxes($this->pages[$pageno-1]);
     }
-
+    
     /**
      * Get all Boxes from /Page
      *
@@ -304,7 +306,7 @@ class fpdi_pdf_parser extends pdf_parser {
     function getPageRotation($pageno) {
         return $this->_getPageRotation($this->pages[$pageno-1]);
     }
-
+    
     function _getPageRotation ($obj) { // $obj = /Page
     	$obj = $this->pdf_resolve_object($this->c, $obj);
     	if (isset ($obj[1][1]['/Rotate'])) {
@@ -323,7 +325,7 @@ class fpdi_pdf_parser extends pdf_parser {
     		}
     	}
     }
-
+    
     /**
      * Read all /Page(es)
      *
@@ -353,9 +355,9 @@ class fpdi_pdf_parser extends pdf_parser {
     	}
     }
 
-
-
-
+    
+    
+    
 }
 
 ?>

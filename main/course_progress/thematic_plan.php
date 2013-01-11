@@ -9,10 +9,11 @@
 
 // actions menu
 $new_thematic_plan_data = array();
-if (!empty($thematic_plan_data))
-foreach($thematic_plan_data as $thematic_item) {    
-    $thematic_simple_list[] = $thematic_item['description_type'];
-    $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;       
+if (!empty($thematic_plan_data)) {
+    foreach($thematic_plan_data as $thematic_item) {    
+        $thematic_simple_list[] = $thematic_item['description_type'];
+        $new_thematic_plan_data[$thematic_item['description_type']] = $thematic_item;       
+    }
 }
 
 $new_id = ADD_THEMATIC_PLAN;
@@ -32,32 +33,36 @@ echo $thematic_data['content'];
 if ($message == 'ok') {
     Display::display_normal_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'));    
 }
-if ($action == 'thematic_plan_list') {            
-        $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');                
-        $form->addElement('hidden', 'action', 'thematic_plan_add');
-        $form->addElement('hidden', 'thematic_plan_token', $token);
-        $form->addElement('hidden', 'thematic_id', $thematic_id);   
-        
+if ($action == 'thematic_plan_list') {         
+    $form = new FormValidator('thematic_plan_add','POST','index.php?action=thematic_plan_list&thematic_id='.$thematic_id.'&'.api_get_cidreq().$param_gradebook,'','style="width: 100%;"');                
+    $form->addElement('hidden', 'action', 'thematic_plan_add');
+    $form->addElement('hidden', 'thematic_plan_token', $token);
+    $form->addElement('hidden', 'thematic_id', $thematic_id);   
+    if (empty($thematic_plan_data)) {
         foreach ($default_thematic_plan_title as $id => $title) {
             $form->addElement('hidden', 'description_type['.$id.']', $id);
-            $form->add_textfield('title['.$id.']', get_lang('Title'), true, array('size'=>'50'));
-            $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
-            //$form->addElement('textarea', 'description['.$id.']', get_lang('Description'));                            
-            if (!empty($thematic_simple_list) && in_array($id, $thematic_simple_list)) {
-                $thematic_plan = $new_thematic_plan_data[$id];                 
-                // set default values
-                $default['title['.$id.']']       = $thematic_plan['title'];
-                $default['description['.$id.']'] = $thematic_plan['description'];                
-                $thematic_plan = null;
-            } else {
-                $thematic_plan = null;               
-                $default['title['.$id.']']       = $title;
-                $default['description['.$id.']']= '';                    
-            }                        
-            $form->setDefaults($default);            
-		}                
-        $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_plan" class="save"');        
-        $form->display();        	
+            $form->add_textfield('title['.$id.']', get_lang('Title'), true, array('class'=>'span4'));
+            $form->add_html_editor('description['.$id.']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));            
+            
+            $default['title['.$id.']'] = $title;
+            $default['description['.$id.']']= '';
+            $form->setDefaults($default);
+        }
+    } else {
+        foreach ($thematic_plan_data as $data) {     
+            $form->addElement('hidden', 'description_type['.$data['description_type'].']', $data['description_type']);
+            $form->add_textfield('title['.$data['id'].']', get_lang('Title'), true, array('class'=>'span4'));
+            //$form->add_html_editor('description['.$data['id'].']', get_lang('Description'), false, false, array('ToolbarStartExpanded'=>'false', 'ToolbarSet' => 'TrainingDescription', 'Width' => '80%', 'Height' => '150'));
+            $form->addElement('textarea', 'description['.$data['id'].']', get_lang('Description'));        
+            $default['title['.$data['id'].']']       = $data['title'];
+            $default['description['.$data['id'].']'] = $data['description'];        
+            $form->addElement('checkbox', 'delete['.$data['id'].']', null, get_lang('Delete'));
+            $form->addElement('html', '<hr>');
+            $form->setDefaults($default);
+        }
+    }
+    $form->addElement('style_submit_button', null, get_lang('Save'), 'id="add_plan" class="save"');        
+    $form->display();        	
 } else if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	if ($description_type >= ADD_THEMATIC_PLAN) {
 		$header_form = get_lang('NewBloc');

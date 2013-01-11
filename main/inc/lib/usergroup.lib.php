@@ -14,14 +14,14 @@ require_once 'model.lib.php';
  * @package chamilo.library
  */
 class UserGroup extends Model {
-    
-    var $columns = array('id', 'name','description');
-    
+
+    public $columns = array('id', 'name', 'description');
+
 	public function __construct() {
-        $this->table                       = Database::get_main_table(TABLE_USERGROUP);
-        $this->usergroup_rel_user_table    = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-        $this->usergroup_rel_course_table  = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
-        $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
+        $this->table                        =  Database::get_main_table(TABLE_USERGROUP);
+        $this->usergroup_rel_user_table     =  Database::get_main_table(TABLE_USERGROUP_REL_USER);
+        $this->usergroup_rel_course_table   =  Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
+        $this->usergroup_rel_session_table  =  Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $this->table_course                = Database::get_main_table(TABLE_MAIN_COURSE);
 	}
 
@@ -34,7 +34,6 @@ class UserGroup extends Model {
         $row = Database::select('count(*) as count', $this->usergroup_rel_course_table, array('where' => array('course_id = ?' => $course_id)), 'first');
         return $row['count'];
     }
-    
     public function get_id_by_name($name) {
         $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)),'first');
         return $row['id'];
@@ -58,21 +57,21 @@ class UserGroup extends Model {
     }
     
     function display_teacher_view() {
-        // action links
+        // action links        
         echo Display::grid_html('usergroups');
     }
 
-    /**
+     /**
      * Gets a list of course ids by user group
-     * @param   int user group id
+     * @param   int     user group id
      * @return  array
      */
     public function get_courses_by_usergroup($id) {
-        $results = Database::select('course_id', $this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
+        $results = Database::select('course_id',$this->usergroup_rel_course_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {
             foreach($results as $row) {
-                $array[] = $row['course_id'];
+                $array[]= $row['course_id'];
             }
         }
         return $array;
@@ -87,7 +86,7 @@ class UserGroup extends Model {
                ";                
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
-        $result = Database::query($sql);        
+        $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');        
         return $array;
     }
@@ -103,7 +102,7 @@ class UserGroup extends Model {
                 LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                 ON (u.id = urc.usergroup_id AND course_id = $course_id)
                 WHERE course_id is NULL
-        ";
+               ";              
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;        
         $result = Database::query($sql);
@@ -128,7 +127,8 @@ class UserGroup extends Model {
          if (empty($results)) {
              return false;
          }
-         return true;       
+         return true;
+       
     }
 
     /**
@@ -137,7 +137,7 @@ class UserGroup extends Model {
      * @return  array
      */
     public function get_sessions_by_usergroup($id) {
-        $results = Database::select('session_id', $this->usergroup_rel_session_table, array('where' => array('usergroup_id = ?' => $id)));
+        $results = Database::select('session_id',$this->usergroup_rel_session_table, array('where'=>array('usergroup_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {
             foreach($results as $row) {
@@ -173,7 +173,7 @@ class UserGroup extends Model {
      * @param   int user id
      */
     public function get_usergroup_by_user($id) {
-        $results = Database::select('usergroup_id', $this->usergroup_rel_user_table, array('where' => array('user_id = ?' => $id)));
+        $results = Database::select('usergroup_id',$this->usergroup_rel_user_table, array('where'=>array('user_id = ?'=>$id)));
         $array = array();
         if (!empty($results)) {
             foreach($results as $row) {
@@ -214,7 +214,7 @@ class UserGroup extends Model {
             foreach($delete_items as $session_id) {
                 if (!empty($user_list)) {
                     foreach($user_list as $user_id) {
-                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);                        
+                        SessionManager::unsubscribe_user_from_session($session_id, $user_id);
                     }
                 }
                 Database::delete($this->usergroup_rel_session_table, array('usergroup_id = ? AND session_id = ?'=>array($usergroup_id, $session_id)));
@@ -224,12 +224,12 @@ class UserGroup extends Model {
         //Addding new relationships
         if (!empty($new_items)) {
             foreach($new_items as $session_id) {
-                $params = array('session_id'=>$session_id, 'usergroup_id' => $usergroup_id);
+                $params = array('session_id'=>$session_id, 'usergroup_id'=>$usergroup_id);
                 Database::insert($this->usergroup_rel_session_table, $params);
 
                 if (!empty($user_list)) {
                     SessionManager::suscribe_users_to_session($session_id, $user_list, null, false);
-                }        
+                }
             }
         }
     }
@@ -240,6 +240,7 @@ class UserGroup extends Model {
      * @param   array   list of course ids (integers)
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list, $delete_groups = true) {
+
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list    = self::get_users_by_usergroup($usergroup_id);
 
@@ -259,9 +260,9 @@ class UserGroup extends Model {
                 }
             }
         }
-        
+
         if ($delete_groups) {
-            self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
+        self::unsubscribe_courses_from_usergroup($usergroup_id, $delete_items);
         }
 
         //Addding new relationships
@@ -273,6 +274,7 @@ class UserGroup extends Model {
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
+
                 $params = array('course_id'=>$course_id, 'usergroup_id'=>$usergroup_id);
                 Database::insert($this->usergroup_rel_course_table, $params);
             }
@@ -282,7 +284,7 @@ class UserGroup extends Model {
     function unsubscribe_courses_from_usergroup($usergroup_id, $delete_items) {
         //Deleting items
         if (!empty($delete_items)) {
-            $user_list = self::get_users_by_usergroup($usergroup_id);
+            $user_list    = self::get_users_by_usergroup($usergroup_id);
             foreach ($delete_items as $course_id) {
                 $course_info = api_get_course_info_by_id($course_id);
                 if (!empty($user_list)) {
@@ -292,7 +294,8 @@ class UserGroup extends Model {
                 }
                 Database::delete($this->usergroup_rel_course_table, array('usergroup_id = ? AND course_id = ?'=>array($usergroup_id, $course_id)));
             }
-        }        
+        }
+        
     }
 
      /**
@@ -352,7 +355,6 @@ class UserGroup extends Model {
                     SessionManager::suscribe_users_to_session($session_id, $new_items, null, false);
                 }
             }
-            
             foreach($new_items as $user_id) {
                 //Adding courses
                 if (!empty($course_list)) {

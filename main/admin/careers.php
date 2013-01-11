@@ -10,12 +10,10 @@ $language_file = array('admin');
 
 $cidReset = true;
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'career.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -39,7 +37,6 @@ if ($action == 'add') {
     $interbreadcrumb[]=array('url' => '#','name' => get_lang('Careers'));
 }
 
-// The header.
 Display::display_header($tool_name);
 
 //jqgrid will use this URL to do the selects

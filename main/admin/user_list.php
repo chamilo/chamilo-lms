@@ -21,8 +21,8 @@ if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete
 	$delete_user_available = false;
 }
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
-        
-$htmlHeadXtra[] = '<script type="text/javascript">
+
+$htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
@@ -62,7 +62,7 @@ function active_user(element_div) {
 				if (data == 1) {
 					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/accept.png'.'");
 					$(ident).attr("title","'.get_lang('Lock').'");
-				} 
+				}
                 if (data == 0) {
 					$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'icons/16/error.png'.'");
 					$(ident).attr("title","'.get_lang('Unlock').'");
@@ -95,24 +95,24 @@ $(document).ready(function() {
 
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
-    
+
         if (select_val != 0) {
             document.getElementById(\'extra_data_text\').style.display="block";
-            if (document.getElementById(\'input_extra_text\')) 
+            if (document.getElementById(\'input_extra_text\'))
                 document.getElementById(\'input_extra_text\').value = "";
         } else {
             document.getElementById(\'extra_data_text\').style.display="none";
         }
     }
-    
-    
+
+
     $(".agenda_opener").live("click", function() {
         var url = this.href;
         var dialog = $("#dialog");
-                
+
         if ($("#dialog").length == 0) {
             dialog = $(\'<div id="dialog" style="display:hidden"></div> \').appendTo(\'body\');
-        }     
+        }
         // load remote content
         dialog.load(
                 url,
@@ -123,14 +123,14 @@ $(document).ready(function() {
             );
         //prevent the browser to follow the link
         return false;
-    });    
+    });
 });
 
 //Load user calendar
-function load_calendar(user_id, month, year) {  
+function load_calendar(user_id, month, year) {
  	var url = "'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id=" +user_id + "&month="+month+"&year="+year;
-	$("#dialog").load( url    	 	
-	);    	
+	$("#dialog").load( url
+	);
 }
 </script>';
 
@@ -147,20 +147,20 @@ api_protect_admin_script(true);
 *	@author Evie Embrechts
 *   @author Yannick Warnier <yannick.warnier@dokeos.com>
 */
-function login_user($user_id) {    
+function login_user($user_id) {
     $user_id = intval($user_id);
-    
+
     if (empty($user_id)) {
         return false;
     }
     if ($user_id != strval(intval($user_id))) {
     	return false;
     }
-    
+
     //Only superadmins can login to admin accounts
     if (!api_global_admin_can_edit_admin($user_id)) {
         return false;
-    }    
+    }
 
     //Load $_user to be sure we clean it before logging in
 	global $uidReset, $loginFailed, $_configuration, $_user;
@@ -201,10 +201,9 @@ function login_user($user_id) {
 			LEFT JOIN $track_e_login_table login
 			ON user.user_id = login.login_user_id
 			WHERE user.user_id = '".$user_id."'
-			ORDER BY login.login_date DESC LIMIT 1";		
+			ORDER BY login.login_date DESC LIMIT 1";
 
 		$sql_result = Database::query($sql_query);
-
 
 		if (Database::num_rows($sql_result) > 0) {
 			// Extracting the user data
@@ -253,82 +252,14 @@ function login_user($user_id) {
 		}
 	}
 }
+
 /**
  * Get the total number of users on the platform
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users() {
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
-
-	// adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-    }
-
-    if (isset($_GET['keyword_extra_data'])) {
-        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
-        if (!empty($keyword_extra_data)) {
-            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-            $field_id = $extra_info['id'];
-            $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
-        }
-    }
-
-	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%'  OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
-	} elseif (isset ($_GET['keyword_firstname'])) {
-		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
-		$keyword_email = Database::escape_string($_GET['keyword_email']);
-		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
-		$keyword_username = Database::escape_string($_GET['keyword_username']);
-		$keyword_status = Database::escape_string($_GET['keyword_status']);
-		$query_admin_table = '';
-		$keyword_admin = '';
-		if ($keyword_status == SESSIONADMIN) {
-			$keyword_status = '%';
-			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
-		}
-
-        $keyword_extra_value = '';
-        if (isset($_GET['keyword_extra_data'])) {
-            if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
-                $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-            }
-        }
-
-		$keyword_active = isset($_GET['keyword_active']);
-		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table .
-				" WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'" .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-		if($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
-		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
-		}
-		$sql .= " ) ";
-	}
-
-    // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-    }
-
-	$res = Database::query($sql);
-	$obj = Database::fetch_object($res);
-	return $obj->total_number_of_items;
+	$total_rows = get_user_data(null, null, null, null, true);
+    return $total_rows;
 }
 
 /**
@@ -339,12 +270,13 @@ function get_number_of_users() {
  * @param   string  Order (ASC,DESC)
  * @see SortableTable#get_table_data($from)
  */
-function get_user_data($from, $number_of_items, $column, $direction) {
+function get_user_data($from, $number_of_items, $column, $direction, $get_count = false) {
 	global $origin;
 
 	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
 	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-	$sql = "SELECT
+
+	$select = "SELECT
                  u.user_id				AS col0,
                  u.official_code		AS col2,
 				 ".(api_is_western_name_order()
@@ -358,8 +290,13 @@ function get_user_data($from, $number_of_items, $column, $direction) {
                  u.active				AS col8,
                  u.user_id				AS col9,
                  u.registration_date    AS col10 ".
-                 ", u.expiration_date   AS exp ".
-            " FROM $user_table u ";
+                 ", u.expiration_date   AS exp            ";
+
+    if ($get_count) {
+        $select = "SELECT count(u.user_id) as total_rows";
+    }
+
+     $sql = "$select FROM $user_table u ";
 
     // adding the filter to see the user's only of the current access_url
     if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
@@ -388,38 +325,53 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 		$keyword_status = Database::escape_string($_GET['keyword_status']);
 
 		$query_admin_table = '';
-		$keyword_admin = '';
+
+        $and_conditions = array();
 
 		if ($keyword_status == SESSIONADMIN) {
 			$keyword_status = '%';
 			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
+			$and_conditions[] = ' a.user_id = u.user_id ';
 		}
 
-		$keyword_extra_value = '';
-		
         if (isset($_GET['keyword_extra_data'])) {
         	if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
             	$keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+                $and_conditions[] = " ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
 			}
 		}
 
 		$keyword_active = isset($_GET['keyword_active']);
 		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
+		$sql .= $query_admin_table." WHERE ( ";
+
+        if (!empty($keyword_firstname)) {
+            $and_conditions[] = "u.firstname LIKE '%".$keyword_firstname."%' ";
+        }
+        if (!empty($keyword_lastname)) {
+            $and_conditions[] = "u.lastname LIKE '%".$keyword_lastname."%' ";
+        }
+        if (!empty($keyword_username)) {
+            $and_conditions[] = "u.username LIKE '%".$keyword_username."%'  ";
+        }
+        if (!empty($keyword_email)) {
+            $and_conditions[] = "u.email LIKE '%".$keyword_email."%' ";
+        }
+        if (!empty($keyword_officialcode)) {
+             $and_conditions[] = "u.official_code LIKE '%".$keyword_officialcode."%' ";
+        }
+        if (!empty($keyword_status)) {
+             $and_conditions[] = "u.status LIKE '".$keyword_status."' ";
+        }
 
 		if ($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
+			$and_conditions[] =  "  u.active='1' ";
 		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
+			$and_conditions[] = "  u.active='0' ";
 		}
+        if (!empty($and_conditions)) {
+            $sql .= implode(' AND ', $and_conditions);
+        }
 		$sql .= " ) ";
 	}
 
@@ -431,18 +383,25 @@ function get_user_data($from, $number_of_items, $column, $direction) {
     if (!in_array($direction, array('ASC','DESC'))) {
     	$direction = 'ASC';
     }
+
     $column = intval($column);
     $from 	= intval($from);
     $number_of_items = intval($number_of_items);
 
-	$sql .= " ORDER BY col$column $direction ";
-	$sql .= " LIMIT $from,$number_of_items";
+    //Returns counts and exits function
+    if ($get_count) {
+        $res = Database::query($sql);
+        $user = Database::fetch_array($res);
+        return $user['total_rows'];
+    }
 
-	$res = Database::query($sql);
+    $sql .= " ORDER BY col$column $direction ";
+	$sql .= " LIMIT $from,$number_of_items";
+    $res = Database::query($sql);
 
 	$users = array ();
     $t = time();
-	while ($user = Database::fetch_row($res)) {        
+	while ($user = Database::fetch_row($res)) {
 		$image_path 	= UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
 		$user_profile 	= UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
 		if (!api_is_anonymous()) {
@@ -491,12 +450,12 @@ function user_filter($name, $params, $row) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $charset, $_admins_list, $delete_user_available;    
+	global $charset, $_admins_list, $delete_user_available;
 	$is_admin   = in_array($user_id,$_admins_list);
 	$statusname = api_get_status_langvars();
 	$user_is_anonymous = false;
     $current_user_status_label = $row['7'];
-        
+
 	if ($current_user_status_label == $statusname[ANONYMOUS]) {
 		$user_is_anonymous =true;
 	}
@@ -524,7 +483,7 @@ function modify_filter($user_id, $url_params, $row) {
             if (api_global_admin_can_edit_admin($user_id)) {
                 $result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
             } else {
-                $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';                
+                $result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
             }
             //$result .= '<a href="user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
     	} else {
@@ -533,29 +492,29 @@ function modify_filter($user_id, $url_params, $row) {
     } else {
     	$result .= Display::return_icon('login_as_na.gif', get_lang('LoginAs')).'&nbsp;&nbsp;';
     }
-    
+
 	if ($current_user_status_label != $statusname[STUDENT]) {
 		$result .= Display::return_icon('statistics_na.gif', get_lang('Reporting')).'&nbsp;&nbsp;';
 	} else {
 		$result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;&nbsp;';
 	}
 
-	if (api_is_platform_admin(true)) {        
-        
+	if (api_is_platform_admin(true)) {
+
 		if (!$user_is_anonymous && api_global_admin_can_edit_admin($user_id, null, true)) {
             $result .= '<a href="user_edit.php?user_id='.$user_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		} else {
             $result .= Display::return_icon('edit_na.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
 		}
 	}
-    
-    
+
+
 	if ($is_admin) {
 		$result .= Display::return_icon('admin_star.png', get_lang('IsAdministrator'),array('width'=> ICON_SIZE_SMALL, 'heigth'=> ICON_SIZE_SMALL));
 	} else {
 		$result .= Display::return_icon('admin_star_na.png', get_lang('IsNotAdministrator'));
 	}
-	
+
 
 	// actions for assigning sessions, courses or users
 	if (api_is_session_admin()) {
@@ -571,17 +530,17 @@ function modify_filter($user_id, $url_params, $row) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}
 	}
-	
-    if (api_is_platform_admin()) {        
+
+    if (api_is_platform_admin()) {
         $result .= ' <a href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&amp;user_id='.$user_id.'" class="agenda_opener">'.Display::return_icon('month.png', get_lang('FreeBusyCalendar'), array(), ICON_SIZE_SMALL).'</a>';
         if ($delete_user_available) {
-            if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {                  
+            if ($user_id != api_get_user_id() && !$user_is_anonymous && api_global_admin_can_edit_admin($user_id)) {
                 // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
                 $result .= ' <a href="user_list.php?action=delete_user&amp;user_id='.$user_id.'&amp;'.$url_params.'&amp;sec_token='.$_SESSION['sec_token'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES,$charset))."'".')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
             } else {
                 $result .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
             }
-        }       
+        }
     }
 	return $result;
 }
@@ -614,7 +573,7 @@ function active_filter($active, $url_params, $row) {
     if ($action=='edit') {
         $result = Display::return_icon($image.'.png', get_lang('AccountExpired'), array(), 16);
     } elseif ($row['0']<>$_user['user_id']) {
-    	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.		
+    	// you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
 		$result = Display::return_icon($image.'.png', get_lang(ucfirst($action)), array('onclick'=>'active_user(this);', 'id'=>'img_'.$row['0']), 16).'</a>';
 	}
 	return $result;
@@ -648,7 +607,7 @@ if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
 $message = '';
 
 if (!empty($action)) {
-	$check = Security::check_token('get');    
+	$check = Security::check_token('get');
 	if ($check) {
 		switch ($action) {
             case 'add_user_to_my_url':
@@ -658,7 +617,7 @@ if (!empty($action)) {
                     $user_info = api_get_user_info($user_id);
                     $message = get_lang('UserAdded').' '.$user_info['firstname'].' '.$user_info['lastname'].' ('.$user_info['username'].')';
                     $message  = Display::return_message($message, 'confirmation');
-                }                
+                }
                 break;
             case 'login_as':
                 $login_as_user_id = $_GET["user_id"];
@@ -682,7 +641,7 @@ if (!empty($action)) {
 				if (api_is_platform_admin()) {
                     $user_to_delete = $_GET['user_id'];
                     $current_user_id = api_get_user_id();
-                    
+
 					if ($delete_user_available && api_global_admin_can_edit_admin($_GET['user_id'])) {
 						if ($user_to_delete != $current_user_id && UserManager :: delete_user($_GET['user_id'])) {
 							$message = Display :: return_message(get_lang('UserDeleted'), 'confirmation');
@@ -707,10 +666,10 @@ if (!empty($action)) {
 							}
 						}
 					}
-					if ($number_of_selected_users == $number_of_deleted_users) {						
+					if ($number_of_selected_users == $number_of_deleted_users) {
                         $message = Display :: return_message(get_lang('SelectedUsersDeleted'), 'confirmation');
 					} else {
-                        $message = Display :: return_message(get_lang('SomeUsersNotDeleted'), 'error');						
+                        $message = Display :: return_message(get_lang('SomeUsersNotDeleted'), 'error');
 					}
 				}
 				break;
@@ -733,7 +692,7 @@ if (api_is_platform_admin()) {
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
-$actions .=$form->return_form();
+$actions .= $form->return_form();
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -747,6 +706,7 @@ if (isset ($_GET['keyword'])) {
 	$parameters['keyword_active'] 		= Security::remove_XSS($_GET['keyword_active']);
 	$parameters['keyword_inactive'] 	= Security::remove_XSS($_GET['keyword_inactive']);
 }
+
 // Create a sortable table with user-data
 $parameters['sec_token'] = Security::get_token();
 
@@ -873,27 +833,27 @@ $extra_search_options = '';
 
 //Try to search the user everywhere
 if ($table->get_total_number_of_items() == 0) {
-    
-    if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {     
+
+    if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);
         //$conditions = array('firstname' => $keyword, 'lastname' => $keyword, 'username' => $keyword);
         $conditions = array('username' => $keyword);
-        $user_list = UserManager::get_user_list($conditions, array(), false, ' OR ');        
+        $user_list = UserManager::get_user_list($conditions, array(), false, ' OR ');
         if (!empty($user_list)) {
-            
+
             $extra_search_options = Display::page_subheader(get_lang('UsersFoundInOtherPortals'));
-            
+
             $table = new HTML_Table(array('class' => 'data_table'));
             $column = 0;
-            $row = 0;            
+            $row = 0;
             $headers = array(get_lang('User'), 'URL', get_lang('Actions'));
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
                 $column++;
             }
             $row++;
-            
-            foreach ($user_list as $user) {      
+
+            foreach ($user_list as $user) {
                 $column = 0;
                 $access_info = UrlManager::get_access_url_from_user($user['user_id']);
                 $access_info_to_string = '';
@@ -901,18 +861,18 @@ if ($table->get_total_number_of_items() == 0) {
                 if (!empty($access_info)) {
                     foreach ($access_info as $url_info) {
                         if ($current_access_url_id == $url_info['access_url_id']) {
-                            $add_user = false;                            
+                            $add_user = false;
                         }
                         $access_info_to_string .= $url_info['url'].'<br />';
                     }
                 }
-                if ($add_user) {   
+                if ($add_user) {
                     $row_table = array();
                     $row_table[] =  api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] =  $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['user_id'].'&sec_token='.$_SESSION['sec_token'];
                     $row_table[] =  Display::url(get_lang('AddUserToMyURL'), $url, array('class' => 'btn'));
-                    	
+
                     foreach ($row_table as $cell) {
                         $table->setCellContents($row, $column, $cell);
                         $table->updateCellAttributes($row, $column, 'align="center"');
@@ -925,7 +885,7 @@ if ($table->get_total_number_of_items() == 0) {
             $extra_search_options .= $table->toHtml();
             $table_result = '';
         }
-    }    
+    }
 }
 
 $tpl = new Template($tool_name);

@@ -13,10 +13,6 @@
  *
  *  @package chamilo.library
  */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
 
 /**
  * Database class definition
@@ -696,6 +692,11 @@ class Database {
                 strpos($query, 'track_c_referers') === false &&
                 strpos($query, 'track_c_browsers') === false &&
                 strpos($query, 'settings_current') === false &&
+                strpos($query, 'branch_sync') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_transaction') === false &&
+                strpos($query, 'branch_transaction_status') === false &&
                 strpos($query, 'dokeos_classic_2D') === false &&
                 strpos($query, 'cosmic_campus') === false &&
                 strpos($query, 'static_') === false &&
@@ -1122,18 +1123,23 @@ class Database {
             return false;
         }
         $filtred_attributes = array();
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
-            $result = self::query($sql);
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';            
+            $result = self::query($sql);            
+            //error_log($sql);
             if ($show_query) {
-            	var_dump($sql);
+            	//var_dump($sql);
+                error_log($sql);
             }
-            return  self::get_last_insert_id();
+            if (!$result) {                
+                error_log("Error in query: $sql");                
+            }
+            return self::get_last_insert_id();
         }
         return false;
     }
@@ -1146,8 +1152,7 @@ class Database {
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
-
-    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
+    public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {        
         $conditions = self::parse_conditions($conditions);
         
         //@todo we could do a describe here to check the columns ...
@@ -1161,12 +1166,12 @@ class Database {
                 $clean_columns = (string)$columns;
             }
         }
-
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+        $sql = "SELECT $clean_columns FROM $table_name $conditions";
         //var_dump($sql);
+                
         $result = self::query($sql);
         $array = array();
-        //if (self::num_rows($result) > 0 ) {
+        
         if ($type_result == 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
@@ -1184,7 +1189,7 @@ class Database {
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
      * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     * @param   array
+     * @param array
      * @todo lot of stuff to do here
     */
     static function parse_conditions($conditions) {        
@@ -1198,8 +1203,7 @@ class Database {
             }
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
-                case 'where':            
-                    
+                case 'where':                    
                     foreach ($condition_data as $condition => $value_array) {                       
                         if (is_array($value_array)) {
                             $clean_values = array();                       

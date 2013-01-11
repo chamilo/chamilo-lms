@@ -32,18 +32,8 @@ CREDITS From HTML2FPDF:
 -Seb for the _SetTextRendering() and SetTextOutline() functions [mailto:captainseb@wanadoo.fr]
 -MorphSoft for the colornames list idea
 -W3SCHOOLS for HTML-related reference info [http://www.w3schools.com/]
--Montfort Cultural Association - the site for which I generated this script [http://www.montfort.org.br] 
 
 
-/*******************************************************************************
-* Software: UFPDF, Unicode Free PDF generator                                  *
-* Version:  0.1                                                                *
-* Date:     2004-09-01                                                         *
-* Author:   Steven Wittens <steven@acko.net>                                   *
-* License:  GPL                                                                *
-*                                                                              *
-* UFPDF is a modification of FPDF to support Unicode through UTF-8.            *
-*******************************************************************************/
 
 /****************************************************************************
 * Software: FPDF_Protection                                                 *

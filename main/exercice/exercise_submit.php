@@ -809,8 +809,7 @@ if (!empty($error)) {
             function save_now(question_id, url_extra) {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-                console.log(my_choice);
-
+                
            		//2. Reminder checkbox
            		var remind_list = $(\'*[name*="remind_list"]\').serialize();
 

@@ -521,7 +521,6 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
   PRIMARY KEY (id_session, course_id, id_user)
 );
 
-ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_category_code (category_code);
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
 
@@ -3064,7 +3063,6 @@ CREATE TABLE grade_components (
     percentage VARCHAR(255)  NOT NULL,
     title VARCHAR(255) NOT NULL,
     acronym VARCHAR(255) NOT NULL,
-    grade_model_id INTEGER NOT NULL,
     prefix VARCHAR(255) DEFAULT NULL,
     count_elements INT DEFAULT 0,
     exclusions INT DEFAULT 0,

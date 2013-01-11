@@ -39,45 +39,50 @@ $ip_address = $_SERVER['SERVER_ADDR']; // This should be the IP address of the c
 //Secret key
 $secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
 
-//Creating a random user name and a random user id, this values need to be provided from your system
+//Creating a random user_id, this values need to be provided from your system
 $random_user_id = rand(0, 1000);
+//Creating a random username this values need to be provided from your system
 $generate_user_name = 'jbrion'.$random_user_id;
+//Creating a password (the username)
 $generate_password = sha1($generate_user_name);
 $user_field = 'uid';
 
-// 1. Create user
-
-$params = array(    'firstname'                 => 'Jon',
-                    'lastname'                  => 'Brion',
-                    'status'                    => '5', // STUDENT
-                    'email'                     => 'jon@example.com',
-                    'loginname'                 => $generate_user_name,
-                    'password'                  => $generate_password, // encrypted using sha1
-                    'encrypt_method'            => 'sha1',
-                    'language'                  => 'english',
-                    'official_code'             => 'official',
-                    'phone'                     => '00000000',
-                    'expiration_date'           => '0000-00-00',
-                    'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
-                    'original_user_id_value'    => $random_user_id, // third party user id
-                    'secret_key'                => $secret_key,
-                    'extra' => array(
-                        array('field_name' => 'ruc', 'field_value' => '123'),
-                        array('field_name' => 'DNI', 'field_value' => '4200000')
-                    ),
+$params = array(
+    'firstname'                 => 'Jon',
+    'lastname'                  => 'Brion',
+    'status'                    => '5', // 5 STUDENT - 1 TEACHER
+    'email'                     => 'jon@example.com',
+    'loginname'                 => $generate_user_name,
+    'password'                  => $generate_password, // encrypted using sha1
+    'encrypt_method'            => 'sha1',
+    'language'                  => 'english',
+    'official_code'             => 'official',
+    'phone'                     => '00000000',
+    'expiration_date'           => '0000-00-00',
+    'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
+    'original_user_id_value'    => $random_user_id, // third party user id
+    'secret_key'                => $secret_key,
+    //Extra fields
+    'extra' => array(
+        array('field_name' => 'ruc', 'field_value' => '123'),
+        array('field_name' => 'DNI', 'field_value' => '4200000')
+    ),
 );
 
+//1. Create user webservice
 $user_id = $client->call('WSCreateUserPasswordCrypted', array('createUserPasswordCrypted' => $params));
 
 if (!empty($user_id) && is_numeric($user_id)) {
 
-    // 2. Get user info of the user
+    // 2. Get user info of the new user
     echo '<h2>Trying to create an user via webservices</h2>';
     $original_params = $params;
 
-    $params = array('original_user_id_value'    => $random_user_id, // third party user id
-                    'original_user_id_name'     => $user_field, // the system field in the user profile (See Profiling)
-                    'secret_key'                => $secret_key);
+    $params = array(
+        'original_user_id_value'    => $random_user_id, // third party user id
+        'original_user_id_name'     => $user_field, // the system field in the user profile (See Profiling)
+        'secret_key'                => $secret_key
+    );
 
     $result = $client->call('WSGetUser', array('GetUser' => $params));
 
@@ -93,22 +98,22 @@ if (!empty($user_id) && is_numeric($user_id)) {
     //3. Updating user info
 
     $params = array(
-                    'firstname'                 => 'Jon edited',
-                    'lastname'                  => 'Brion edited',
-                    'status'                    => '5', // STUDENT
-                    'email'                     => 'jon@example.com',
-                    'username'                  => $generate_user_name,
-                    'password'                  => $generate_password, // encrypted using sha1
-                    'encrypt_method'            => 'sha1',
-                    'phone'                     => '00000000',
-                    'expiration_date'           => '0000-00-00',
-                    'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
-                    'original_user_id_value'    => $random_user_id, // third party user id
-                    'secret_key'                => $secret_key,
-                    'extra' => array(
-                            array('field_name' => 'ruc', 'field_value' => '666 edited'),
-                            array('field_name' => 'DNI', 'field_value' => '888 edited')
-                    ),
+        'firstname'                 => 'Jon edited',
+        'lastname'                  => 'Brion edited',
+        'status'                    => '5', // STUDENT
+        'email'                     => 'jon@example.com',
+        'username'                  => $generate_user_name,
+        'password'                  => $generate_password, // encrypted using sha1
+        'encrypt_method'            => 'sha1',
+        'phone'                     => '00000000',
+        'expiration_date'           => '0000-00-00',
+        'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
+        'original_user_id_value'    => $random_user_id, // third party user id
+        'secret_key'                => $secret_key,
+        'extra' => array(
+            array('field_name' => 'ruc', 'field_value' => '666 edited'),
+            array('field_name' => 'DNI', 'field_value' => '888 edited')
+        ),
     );
     $result = $client->call('WSEditUserPasswordCrypted', array('editUserPasswordCrypted' => $params));
 
@@ -122,19 +127,53 @@ if (!empty($user_id) && is_numeric($user_id)) {
         var_dump($result);
         var_dump($err);
     }
-    exit;
+
+    $params = array(
+        'ids' => array(
+            array(
+                'original_user_id_name' => $user_field,
+                'original_user_id_value' => $random_user_id
+            )
+        ),
+        'secret_key' => $secret_key
+    );
+
+    //Disable user
+    $result = $client->call('WSDisableUsers', array('user_ids' => $params));
+
+    //Enable user
+    $result = $client->call('WSEnableUsers', array('user_ids' => $params));
 
 
-    //4 .Adding user to the course TEST. The course TEST must be created manually in Chamilo
+    //4 Creating course TEST123
 
+    $params = array(
+        'courses' => array(
+            array(
+                'title'         => 'TEST 123', //Chamilo string course code
+                'category_code'  => 'LANG',
+                'wanted_code'    => 'TEST123',
+                'course_language' => 'english',
+                'original_course_id_name' => 'course_id_test',
+                'original_course_id_value' => '666',
+            )
+        ),
+        'secret_key'=> $secret_key,
+    );
+
+    $result = $client->call('WSCreateCourse', array('createCourse' => $params));
+
+    //5 .Adding user to the course TEST. The course TEST must be created manually in Chamilo
     echo '<h2>Trying to add user to a course called TEST via webservices</h2>';
 
-    $course_info = api_get_course_info('TEST');
+    $course_info = api_get_course_info('TEST123');
 
     if (!empty($course_info)) {
-        $params = array('course'        => 'TEST', //Chamilo string course code
-                        'user_id'       => $user_id,
-                        'secret_key'    => $secret_key);
+        $params = array(
+            'course'        => 'TEST', //Chamilo string course code
+            'user_id'       => $user_id,
+            'secret_key'    => $secret_key
+        );
         $result = $client->call('WSSubscribeUserToCourseSimple', array('subscribeUserToCourseSimple' => $params));
     } else {
         echo 'Course TEST does not exists please create one course with code "TEST"';

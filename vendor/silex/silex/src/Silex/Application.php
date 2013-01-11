@@ -52,10 +52,16 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
     private $booted = false;
 
     /**
-     * Constructor.
+     * Instantiate a new Application.
+     *
+     * Objects and parameters can be passed as argument to the constructor.
+     *
+     * @param array $values The parameters or objects.
      */
-    public function __construct()
+    public function __construct(array $values = array())
     {
+        parent::__construct();
+
         $app = $this;
 
         $this['logger'] = null;
@@ -137,6 +143,10 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
         $this['debug'] = false;
         $this['charset'] = 'UTF-8';
         $this['locale'] = 'en';
+
+        foreach ($values as $key => $value) {
+            $this[$key] = $value;
+        }
     }
 
     /**
@@ -250,7 +260,7 @@ class Application extends \Pimple implements HttpKernelInterface, TerminableInte
      */
     public function on($eventName, $callback, $priority = 0)
     {
-        return $this['dispatcher']->addListener($eventName, $callback, $priority);
+        $this['dispatcher']->addListener($eventName, $callback, $priority);
     }
 
     /**

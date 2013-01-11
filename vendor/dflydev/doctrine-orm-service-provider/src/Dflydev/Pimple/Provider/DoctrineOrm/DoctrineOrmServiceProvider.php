@@ -213,7 +213,7 @@ class DoctrineOrmServiceProvider
             $memcached->addServer($cacheOptions['host'], $cacheOptions['port']);
 
             $cache = new MemcachedCache;
-            $cache->setMemcached($memcache);
+            $cache->setMemcached($memcached);
 
             return $cache;
         });

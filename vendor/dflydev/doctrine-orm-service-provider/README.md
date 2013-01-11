@@ -96,7 +96,7 @@ $container["orm.em.options"] = array(
         // (requires registering a PSR-0 Resource Locator
         // Service Provider)
         array(
-            "type" => "annotations",
+            "type" => "annotation",
             "namespace" => "Baz\Entities",
             "resources_namespace" => "Baz\Entities",
         ),
@@ -149,7 +149,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
             // (requires registering a PSR-0 Resource Locator
             // Service Provider)
             array(
-                "type" => "annotations",
+                "type" => "annotation",
                 "namespace" => "Baz\Entities",
                 "resources_namespace" => "Baz\Entities",
             ),
@@ -193,10 +193,9 @@ Configuration
    Array of Entity Manager options.
 
    These options are available:
-   * **connection**:
+   * **connection** (Default: default):
      String defining which database connection to use. Used when using
      named databases via **dbs**.
-     *Default: default*
    * **mappings**:
      Array of mapping definitions.
 
@@ -213,7 +212,7 @@ Configuration
        files are located. Example: `Path\To\Foo\Resources\mappings`
 
      Each **annotation** mapping may also specify the following options:
-     * **use_simple_annotation_reader**:
+     * **use_simple_annotation_reader** (Default: true):
        If `true`, only simple notations like `@Entity` will work.
        If `false`, more advanced notations and aliasing via `use` will
        work. (Example: `use Doctrine\ORM\Mapping AS ORM`, `@ORM\Entity`)
@@ -221,15 +220,12 @@ Configuration
        need to be configured correctly so that it can load your Annotations
        classes. See this FAQ:
        [Why aren't my Annotations classes being found?](#why-arent-my-annotations-classes-being-found)
-   * **query_cache**:
+   * **query_cache** (Default: setting specified by orm.default_cache):
      String or array describing query cache implementation.
-     *Default: setting specified by orm.default_cache*
-   * **metadata_cache**:
+   * **metadata_cache** (Default: setting specified by orm.default_cache):
      String or array describing metadata cache implementation.
-     *Default: setting specified by orm.default_cache*
-   * **result_cache**:
+   * **result_cache** (Default: setting specified by orm.default_cache):
      String or array describing result cache implementation.
-     *Default: setting specified by orm.default_cache*
  * **orm.ems.options**:
    Array of Entity Manager configuration sets indexed by each Entity Manager's
    name. Each value should look like **orm.em.options**.
@@ -258,14 +254,12 @@ Configuration
    $emMysql = $app['orm.ems']['mysql'];
    $emSqlite = $app['orm.ems']['sqlite'];
    ```
- * **orm.ems.default**:
+ * **orm.ems.default** (Default: first Entity Manager processed):
    String defining the name of the default Entity Manager.
-   *Default: first Entity Manager processed*
  * **orm.proxies_dir**:
    String defining path to where Doctrine generated proxies should be located.
- * **orm.proxies_namespace**:
+ * **orm.proxies_namespace** (Default: DoctrineProxy):
    String defining namespace in which Doctrine generated proxies should reside.
-   *Default: DoctrineProxy*
  * **orm.auto_generate_proxies**:
    Boolean defining whether or not proxies should be generated automatically.
  * **orm.default_cache**:

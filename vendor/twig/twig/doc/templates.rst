@@ -489,7 +489,8 @@ expression:
 
     {{ '{{' }}
 
-For bigger sections it makes sense to mark a block :doc:`raw<tags/raw>`.
+For bigger sections it makes sense to mark a block
+:doc:`verbatim<tags/verbatim>`.
 
 Macros
 ------
@@ -722,8 +723,8 @@ tests.
 Other Operators
 ~~~~~~~~~~~~~~~
 
-.. versionadded:: 1.11.2
-    Support for the extended ternary operator was added in Twig 1.11.2.
+.. versionadded:: 1.12.0
+    Support for the extended ternary operator was added in Twig 1.12.0.
 
 The following operators are very useful but don't fit into any of the other
 categories:
@@ -746,7 +747,7 @@ categories:
 
       {{ foo ? 'yes' : 'no' }}
 
-      {# as of Twig 1.11.2 #}
+      {# as of Twig 1.12.0 #}
       {{ foo ?: 'no' }} == {{ foo ? foo : 'no' }}
       {{ foo ? 'yes' }} == {{ foo ? 'yes' : '' }}
 

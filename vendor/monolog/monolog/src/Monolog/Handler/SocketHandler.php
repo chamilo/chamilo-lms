@@ -52,7 +52,8 @@ class SocketHandler extends AbstractProcessingHandler
     public function write(array $record)
     {
         $this->connectIfNotConnected();
-        $this->writeToSocket((string) $record['formatted']);
+        $data = $this->generateDataStream($record);
+        $this->writeToSocket($data);
     }
 
     /**
@@ -224,6 +225,11 @@ class SocketHandler extends AbstractProcessingHandler
             return;
         }
         $this->connect();
+    }
+
+    protected function generateDataStream($record)
+    {
+        return (string) $record['formatted'];
     }
 
     private function connect()

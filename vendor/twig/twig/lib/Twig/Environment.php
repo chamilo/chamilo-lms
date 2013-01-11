@@ -17,7 +17,7 @@
  */
 class Twig_Environment
 {
-    const VERSION = '1.12.0-DEV';
+    const VERSION = '1.12.1-DEV';
 
     protected $charset;
     protected $loader;
@@ -873,6 +873,26 @@ class Twig_Environment
     }
 
     /**
+     * Gets a test by name.
+     *
+     * @param string $name The test name
+     *
+     * @return Twig_Test|false A Twig_Test instance or false if the test does not exist
+     */
+    public function getTest($name)
+    {
+        if (!$this->extensionInitialized) {
+            $this->initExtensions();
+        }
+
+        if (isset($this->tests[$name])) {
+            return $this->tests[$name];
+        }
+
+        return false;
+    }
+
+    /**
      * Registers a Function.
      *
      * @param string|Twig_SimpleFunction                 $name     The function name or a Twig_SimpleFunction instance
@@ -964,16 +984,30 @@ class Twig_Environment
     /**
      * Registers a Global.
      *
+     * New globals can be added before compiling or rendering a template;
+     * but after, you can only update existing globals.
+     *
      * @param string $name  The global name
      * @param mixed  $value The global value
      */
     public function addGlobal($name, $value)
     {
-        if ($this->extensionInitialized) {
-            throw new LogicException(sprintf('Unable to add global "%s" as extensions have already been initialized.', $name));
+        if ($this->extensionInitialized || $this->runtimeInitialized) {
+            if (null === $this->globals) {
+                $this->initGlobals();
+            }
+            
+            if (!array_key_exists($name, $this->globals)) {
+                throw new LogicException(sprintf('Unable to add global "%s" as the runtime or the extensions have already been initialized.', $name));
+            }
         }
 
-        $this->staging->addGlobal($name, $value);
+        if ($this->extensionInitialized || $this->runtimeInitialized) {
+            // update the value
+            $this->globals[$name] = $value;
+        } else {
+            $this->staging->addGlobal($name, $value);
+        }
     }
 
     /**
@@ -983,8 +1017,8 @@ class Twig_Environment
      */
     public function getGlobals()
     {
-        if (!$this->extensionInitialized) {
-            $this->initExtensions();
+        if (null === $this->globals || !($this->runtimeInitialized || $this->extensionInitialized)) {
+            $this->initGlobals();
         }
 
         return $this->globals;
@@ -1052,6 +1086,15 @@ class Twig_Environment
         return array_keys($alternatives);
     }
 
+    protected function initGlobals()
+    {
+        $this->globals = array();
+        foreach ($this->extensions as $extension) {
+            $this->globals = array_merge($this->globals, $extension->getGlobals());
+        }
+        $this->globals = array_merge($this->globals, $this->staging->getGlobals());
+    }
+
     protected function initExtensions()
     {
         if ($this->extensionInitialized) {
@@ -1063,7 +1106,6 @@ class Twig_Environment
         $this->filters = array();
         $this->functions = array();
         $this->tests = array();
-        $this->globals = array();
         $this->visitors = array();
         $this->unaryOperators = array();
         $this->binaryOperators = array();
@@ -1111,9 +1153,6 @@ class Twig_Environment
 
             $this->tests[$name] = $test;
         }
-
-        // globals
-        $this->globals = array_merge($this->globals, $extension->getGlobals());
 
         // token parsers
         foreach ($extension->getTokenParsers() as $parser) {

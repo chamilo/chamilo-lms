@@ -139,77 +139,6 @@
         ]
     },
     {
-        "name": "gedmo/doctrine-extensions",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
-            "reference": "8e004cf25a68f0812efbce9b7c349fe0c750c691"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/8e004cf25a68f0812efbce9b7c349fe0c750c691.zip",
-            "reference": "8e004cf25a68f0812efbce9b7c349fe0c750c691",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2",
-            "doctrine/common": ">=2.2,<2.5-dev"
-        },
-        "require-dev": {
-            "doctrine/mongodb": ">=1.0.0-BETA1",
-            "doctrine/mongodb-odm": ">=1.0.0-BETA6",
-            "doctrine/orm": ">=2.2",
-            "doctrine/dbal": ">=2.2",
-            "symfony/yaml": "2.*"
-        },
-        "suggest": {
-            "doctrine/orm": ">=2.2",
-            "doctrine/dbal": ">=2.2",
-            "doctrine/mongodb": ">=1.0.0",
-            "doctrine/mongodb-odm": ">=1.0.0-BETA7"
-        },
-        "time": "2013-01-09 08:33:47",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.3.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Gedmo": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Gediminas Morkevicius",
-                "email": "gediminas.morkevicius@gmail.com"
-            }
-        ],
-        "description": "Doctrine2 behavioral extensions",
-        "homepage": "http://gediminasm.org/",
-        "keywords": [
-            "tree",
-            "behaviors",
-            "doctrine2",
-            "extensions",
-            "gedmo",
-            "sluggable",
-            "loggable",
-            "translatable",
-            "nestedset",
-            "sortable",
-            "timestampable"
-        ]
-    },
-    {
         "name": "twig/twig",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -259,66 +188,6 @@
         "keywords": [
             "templating"
         ]
-    },
-    {
-        "name": "symfony/routing",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Component/Routing",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Routing",
-            "reference": "v2.2.0-BETA1"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/symfony/Routing/archive/v2.2.0-BETA1.zip",
-            "reference": "v2.2.0-BETA1",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "require-dev": {
-            "doctrine/common": ">=2.2,<2.4-dev",
-            "symfony/config": "2.2.*",
-            "symfony/yaml": "2.2.*",
-            "symfony/http-kernel": "2.2.*"
-        },
-        "suggest": {
-            "doctrine/common": ">=2.2,<2.4-dev",
-            "symfony/config": "2.2.*",
-            "symfony/yaml": "2.2.*"
-        },
-        "time": "2013-01-07 11:20:12",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Routing\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Routing Component",
-        "homepage": "http://symfony.com"
     },
     {
         "name": "symfony/http-foundation",
@@ -529,77 +398,6 @@
         ]
     },
     {
-        "name": "doctrine/common",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/doctrine/common",
-            "reference": "bc6bc47132613b28a58b7293dfd7872d9e3bcff3"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/doctrine/common/archive/bc6bc47132613b28a58b7293dfd7872d9e3bcff3.zip",
-            "reference": "bc6bc47132613b28a58b7293dfd7872d9e3bcff3",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2"
-        },
-        "time": "2013-01-08 17:20:32",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Doctrine\\Common\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jonathan Wage",
-                "email": "jonwage@gmail.com",
-                "homepage": "http://www.jwage.com/"
-            },
-            {
-                "name": "Guilherme Blanco",
-                "email": "guilhermeblanco@gmail.com",
-                "homepage": "http://www.instaclick.com"
-            },
-            {
-                "name": "Roman Borschel",
-                "email": "roman@code-factory.org"
-            },
-            {
-                "name": "Benjamin Eberlei",
-                "email": "kontakt@beberlei.de"
-            },
-            {
-                "name": "Johannes M. Schmitt",
-                "email": "schmittjoh@gmail.com",
-                "homepage": "https://github.com/schmittjoh",
-                "role": "Developer of wrapped JMSSerializerBundle"
-            }
-        ],
-        "description": "Common Library for Doctrine projects",
-        "homepage": "http://www.doctrine-project.org",
-        "keywords": [
-            "collections",
-            "spl",
-            "eventmanager",
-            "annotations",
-            "persistence"
-        ]
-    },
-    {
         "name": "doctrine/dbal",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -712,78 +510,6 @@
         ],
         "description": "Symfony Console Component",
         "homepage": "http://symfony.com"
-    },
-    {
-        "name": "doctrine/orm",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "git://github.com/doctrine/doctrine2.git",
-            "reference": "0b2d3d4f5d41c56fa07ff8d7ada406ec8bb34046"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/doctrine/doctrine2/archive/0b2d3d4f5d41c56fa07ff8d7ada406ec8bb34046.zip",
-            "reference": "0b2d3d4f5d41c56fa07ff8d7ada406ec8bb34046",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.2",
-            "ext-pdo": "*",
-            "symfony/console": "2.*",
-            "doctrine/dbal": ">=2.4-dev,<2.5-dev"
-        },
-        "suggest": {
-            "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
-        },
-        "time": "2013-01-06 18:16:12",
-        "bin": [
-            "bin/doctrine",
-            "bin/doctrine.php"
-        ],
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Doctrine\\ORM\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jonathan Wage",
-                "email": "jonwage@gmail.com",
-                "homepage": "http://www.jwage.com/"
-            },
-            {
-                "name": "Guilherme Blanco",
-                "email": "guilhermeblanco@gmail.com",
-                "homepage": "http://www.instaclick.com"
-            },
-            {
-                "name": "Roman Borschel",
-                "email": "roman@code-factory.org"
-            },
-            {
-                "name": "Benjamin Eberlei",
-                "email": "kontakt@beberlei.de"
-            }
-        ],
-        "description": "Object-Relational-Mapper for PHP",
-        "homepage": "http://www.doctrine-project.org",
-        "keywords": [
-            "database",
-            "orm"
-        ]
     },
     {
         "name": "dflydev/doctrine-orm-service-provider",
@@ -1015,74 +741,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "symfony/twig-bridge",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "target-dir": "Symfony/Bridge/Twig",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/TwigBridge",
-            "reference": "a13ff0ad1ac7716e8307d10f0de98704bb70399c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/symfony/TwigBridge/archive/a13ff0ad1ac7716e8307d10f0de98704bb70399c.zip",
-            "reference": "a13ff0ad1ac7716e8307d10f0de98704bb70399c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3",
-            "twig/twig": ">=1.9.1,<2.0-dev"
-        },
-        "require-dev": {
-            "symfony/form": "2.2.*",
-            "symfony/routing": "2.2.*",
-            "symfony/templating": "2.2.*",
-            "symfony/translation": "2.2.*",
-            "symfony/yaml": "2.2.*",
-            "symfony/security": "2.2.*",
-            "symfony/http-kernel": "2.2.*"
-        },
-        "suggest": {
-            "symfony/form": "2.2.*",
-            "symfony/routing": "2.2.*",
-            "symfony/templating": "2.2.*",
-            "symfony/translation": "2.2.*",
-            "symfony/yaml": "2.2.*",
-            "symfony/security": "2.2.*",
-            "symfony/http-kernel": "2.2.*"
-        },
-        "time": "2013-01-08 13:43:29",
-        "type": "symfony-bridge",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.2-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Bridge\\Twig\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Twig Bridge",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "symfony/security",
         "version": "2.1.x-dev",
         "version_normalized": "2.1.9999999.9999999-dev",
@@ -1143,70 +801,6 @@
         ],
         "description": "Symfony Security Component",
         "homepage": "http://symfony.com"
-    },
-    {
-        "name": "monolog/monolog",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Seldaek/monolog",
-            "reference": "1.3.0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://github.com/Seldaek/monolog/archive/1.3.0.zip",
-            "reference": "1.3.0",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "psr/log": ">=1.0,<2.0"
-        },
-        "require-dev": {
-            "mlehner/gelf-php": "1.0.*",
-            "doctrine/couchdb": "dev-master",
-            "raven/raven": "0.3.*"
-        },
-        "suggest": {
-            "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
-            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-            "raven/raven": "Allow sending log messages to a Sentry server"
-        },
-        "time": "2013-01-07 20:26:46",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.3.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Monolog": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be",
-                "role": "Developer"
-            }
-        ],
-        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "homepage": "http://github.com/Seldaek/monolog",
-        "keywords": [
-            "log",
-            "logging",
-            "psr-3"
-        ]
     },
     {
         "name": "symfony/options-resolver",
@@ -1576,18 +1170,555 @@
         "homepage": "http://symfony.com"
     },
     {
+        "name": "doctrine/cache",
+        "version": "v1.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/cache.git",
+            "reference": "v1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/cache/archive/v1.0.zip",
+            "reference": "v1.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2013-01-10 22:43:46",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common\\Cache\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "https://github.com/schmittjoh",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Caching library offering an object-oriented API for many cache backends",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "cache",
+            "caching"
+        ]
+    },
+    {
+        "name": "doctrine/inflector",
+        "version": "v1.0",
+        "version_normalized": "1.0.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/inflector.git",
+            "reference": "v1.0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/inflector/archive/v1.0.zip",
+            "reference": "v1.0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2"
+        },
+        "time": "2013-01-10 21:49:15",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common\\Inflector\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "https://github.com/schmittjoh",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Common String Manipulations with regard to casing and singular/plural rules.",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "string",
+            "inflection",
+            "singuarlize",
+            "pluarlize"
+        ]
+    },
+    {
+        "name": "gedmo/doctrine-extensions",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
+            "reference": "0d4393d25a0ff6074b5163311e058d7f3cbccf35"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/0d4393d25a0ff6074b5163311e058d7f3cbccf35.zip",
+            "reference": "0d4393d25a0ff6074b5163311e058d7f3cbccf35",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine/common": ">=2.2,<2.5-dev"
+        },
+        "require-dev": {
+            "doctrine/mongodb": ">=1.0.0-BETA1",
+            "doctrine/mongodb-odm": ">=1.0.0-BETA6",
+            "doctrine/orm": ">=2.2",
+            "doctrine/dbal": ">=2.2",
+            "symfony/yaml": "2.*"
+        },
+        "suggest": {
+            "doctrine/orm": ">=2.2",
+            "doctrine/dbal": ">=2.2",
+            "doctrine/mongodb": ">=1.0.0",
+            "doctrine/mongodb-odm": ">=1.0.0-BETA7"
+        },
+        "time": "2013-01-11 05:15:19",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.3.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Gedmo": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Gediminas Morkevicius",
+                "email": "gediminas.morkevicius@gmail.com"
+            }
+        ],
+        "description": "Doctrine2 behavioral extensions",
+        "homepage": "http://gediminasm.org/",
+        "keywords": [
+            "tree",
+            "behaviors",
+            "doctrine2",
+            "extensions",
+            "gedmo",
+            "sluggable",
+            "loggable",
+            "translatable",
+            "nestedset",
+            "sortable",
+            "timestampable"
+        ]
+    },
+    {
+        "name": "symfony/routing",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Component/Routing",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Routing",
+            "reference": "20b0af13fe2be7fa979f1829b0e23a56803a2c58"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/Routing/archive/20b0af13fe2be7fa979f1829b0e23a56803a2c58.zip",
+            "reference": "20b0af13fe2be7fa979f1829b0e23a56803a2c58",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "require-dev": {
+            "doctrine/common": ">=2.2,<2.4-dev",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/http-kernel": "2.2.*",
+            "psr/log": ">=1.0,<2.0"
+        },
+        "suggest": {
+            "doctrine/common": ">=2.2,<2.4-dev",
+            "symfony/config": "2.2.*",
+            "symfony/yaml": "2.2.*"
+        },
+        "time": "2013-01-10 16:57:14",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Routing\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Routing Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "doctrine/common",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/common",
+            "reference": "edeaab2851102e5a945770b479d21b600d6ea13a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/common/archive/edeaab2851102e5a945770b479d21b600d6ea13a.zip",
+            "reference": "edeaab2851102e5a945770b479d21b600d6ea13a",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "doctrine/inflector": "1.*",
+            "doctrine/cache": "1.*"
+        },
+        "time": "2013-01-10 23:14:02",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\Common\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            },
+            {
+                "name": "Johannes Schmitt",
+                "email": "schmittjoh@gmail.com",
+                "homepage": "https://github.com/schmittjoh",
+                "role": "Developer of wrapped JMSSerializerBundle"
+            }
+        ],
+        "description": "Common Library for Doctrine projects",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "collections",
+            "spl",
+            "eventmanager",
+            "annotations",
+            "persistence"
+        ]
+    },
+    {
+        "name": "doctrine/orm",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "git://github.com/doctrine/doctrine2.git",
+            "reference": "71efe2109aafc3c5ef81d5d5285f3b81e4de3bef"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/doctrine/doctrine2/archive/71efe2109aafc3c5ef81d5d5285f3b81e4de3bef.zip",
+            "reference": "71efe2109aafc3c5ef81d5d5285f3b81e4de3bef",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.2",
+            "ext-pdo": "*",
+            "symfony/console": "2.*",
+            "doctrine/dbal": ">=2.4-dev,<2.5-dev"
+        },
+        "suggest": {
+            "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+        },
+        "time": "2013-01-10 19:13:18",
+        "bin": [
+            "bin/doctrine",
+            "bin/doctrine.php"
+        ],
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\ORM\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Object-Relational-Mapper for PHP",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "orm"
+        ]
+    },
+    {
+        "name": "symfony/twig-bridge",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Symfony/Bridge/Twig",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/TwigBridge",
+            "reference": "7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/symfony/TwigBridge/archive/7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2.zip",
+            "reference": "7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3",
+            "twig/twig": ">=1.9.1,<2.0-dev"
+        },
+        "require-dev": {
+            "symfony/form": "2.2.*",
+            "symfony/routing": "2.2.*",
+            "symfony/templating": "2.2.*",
+            "symfony/translation": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/security": "2.2.*",
+            "symfony/http-kernel": "2.2.*"
+        },
+        "suggest": {
+            "symfony/form": "2.2.*",
+            "symfony/routing": "2.2.*",
+            "symfony/templating": "2.2.*",
+            "symfony/translation": "2.2.*",
+            "symfony/yaml": "2.2.*",
+            "symfony/security": "2.2.*",
+            "symfony/http-kernel": "2.2.*"
+        },
+        "time": "2013-01-10 16:09:48",
+        "type": "symfony-bridge",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.2-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Bridge\\Twig\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Twig Bridge",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "monolog/monolog",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Seldaek/monolog",
+            "reference": "98d3650785b1215eb9da24822b1216d531650c1f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://github.com/Seldaek/monolog/archive/98d3650785b1215eb9da24822b1216d531650c1f.zip",
+            "reference": "98d3650785b1215eb9da24822b1216d531650c1f",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0",
+            "psr/log": ">=1.0,<2.0"
+        },
+        "require-dev": {
+            "mlehner/gelf-php": "1.0.*",
+            "doctrine/couchdb": "dev-master",
+            "raven/raven": "0.3.*"
+        },
+        "suggest": {
+            "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+            "ext-mongo": "Allow sending log messages to a MongoDB server",
+            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+            "raven/raven": "Allow sending log messages to a Sentry server"
+        },
+        "time": "2013-01-10 16:59:48",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.3.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Monolog": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be",
+                "role": "Developer"
+            }
+        ],
+        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+        "homepage": "http://github.com/Seldaek/monolog",
+        "keywords": [
+            "log",
+            "logging",
+            "psr-3"
+        ]
+    },
+    {
         "name": "silex/silex",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "git://github.com/fabpot/Silex.git",
-            "reference": "d6243e37fcf78aadf679141ecb96b8eefed7a203"
+            "reference": "605f8262b6757e7721dcd8a0073a917e900f6862"
         },
         "dist": {
             "type": "zip",
-            "url": "https://github.com/fabpot/Silex/archive/d6243e37fcf78aadf679141ecb96b8eefed7a203.zip",
-            "reference": "d6243e37fcf78aadf679141ecb96b8eefed7a203",
+            "url": "https://github.com/fabpot/Silex/archive/605f8262b6757e7721dcd8a0073a917e900f6862.zip",
+            "reference": "605f8262b6757e7721dcd8a0073a917e900f6862",
             "shasum": ""
         },
         "require": {
@@ -1622,7 +1753,7 @@
             "symfony/css-selector": ">=2.1,<2.3-dev",
             "symfony/dom-crawler": ">=2.1,<2.3-dev"
         },
-        "time": "2013-01-10 07:32:36",
+        "time": "2013-01-11 06:54:36",
         "type": "library",
         "extra": {
             "branch-alias": {

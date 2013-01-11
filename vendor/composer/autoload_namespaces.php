@@ -34,6 +34,8 @@ return array(
     'Doctrine\\ORM\\' => $vendorDir . '/doctrine/orm/lib/',
     'Doctrine\\DBAL\\Migrations' => $vendorDir . '/doctrine/migrations/lib',
     'Doctrine\\DBAL\\' => $vendorDir . '/doctrine/dbal/lib/',
+    'Doctrine\\Common\\Inflector\\' => $vendorDir . '/doctrine/inflector/lib/',
+    'Doctrine\\Common\\Cache\\' => $vendorDir . '/doctrine/cache/lib/',
     'Doctrine\\Common\\' => $vendorDir . '/doctrine/common/lib/',
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Pimple\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',

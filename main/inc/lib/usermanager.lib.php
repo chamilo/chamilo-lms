@@ -351,7 +351,6 @@ class UserManager {
 
         } else {
             $return = false;
-            //echo $sql;
             return api_set_failure('error inserting in Database');
         }
 

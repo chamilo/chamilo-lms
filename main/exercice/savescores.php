@@ -83,7 +83,6 @@ function save_scores($file, $score) {
             $(document).ready(function() {
                 //API_obj = window.frames.window.content.API;
                 //API_obj = $('content_id').context.defaultView.content.API; //works only in FF
-                //console.log(window.parent.frames.window.top.API);
                 //API_obj = window.parent.frames.window.top.API;
                 API_obj = window.top.API;
                 API_obj.void_save_asset('$score', '$weighting', 0, 'completed');

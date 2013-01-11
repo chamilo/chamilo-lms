@@ -195,9 +195,7 @@ class UserManager {
             event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager, null, $user_info);
 
         } else {
-            //echo "false - failed" ;
             $return = false;
-            echo $sql;
             return api_set_failure('error inserting in Database');
         }
 

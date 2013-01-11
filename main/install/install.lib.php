@@ -714,7 +714,6 @@ function parse_sql_queries($sql_text) {
     $count = count($sql_instructions);
     for ($i = 0; $i < $count; $i++) {
         $this_sql_query = $sql_instructions[$i]['query'];
-        Database::query($this_sql_query);
 
         //UTF8 fix see #5678
         if (strpos(strtolower($this_sql_query), 'create table') === false) {

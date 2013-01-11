@@ -244,8 +244,8 @@ switch ($action) {
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
         break;
     case 'get_user_course_report_resumed':
-        $columns = array('extra_ruc', 'training_hours', 'count_users', 'average_hours_per_user', 'count_certificates');
-        $column_names = array(get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscribedUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates'));
+        $columns = array('extra_ruc', 'training_hours', 'count_users', 'count_users_registered', 'average_hours_per_user', 'count_certificates');
+        $column_names = array(get_lang('Company'), get_lang('TrainingHoursAccumulated'), get_lang('CountOfSubscriptions'), get_lang('CountOfUsers'), get_lang('AverageHoursPerStudent'), get_lang('CountCertificates'));
         $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true, true, 'ruc');
         $new_result = array();
         if (!empty($result)) {

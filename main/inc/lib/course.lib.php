@@ -1227,7 +1227,7 @@ class CourseManager {
             }
             return $result;
         }
-
+        $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 $report_info = array();
@@ -1270,6 +1270,20 @@ class CourseManager {
                         $users[$row_key]['extra_'.$extra['1']] = $name;
                         $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0);
                         $users[$row_key]['count_users'] += $counter;
+
+                        $registered_users_with_extra_field = 0;
+
+                        if (!empty($name) && $name != '-') {
+                            $name = Database::escape_string($name);
+                            $sql = "SELECT count(user_id) as count FROM $table_user_field_value WHERE field_value = '$name'";
+                            $result_count = Database::query($sql);
+                            if (Database::num_rows($result_count)) {
+                                $row_count = Database::fetch_array($result_count);
+                                $registered_users_with_extra_field = $row_count['count'];
+                            }
+                        }
+
+                        $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
                         $category = Category :: load (null, null, $course_code);

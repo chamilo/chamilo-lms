@@ -18,8 +18,6 @@ $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 
-//require_once 'statistics.lib.php'; moved to autoload
-
 $strCourse = get_lang('Courses');
 $strUsers = get_lang('Users');
 $strSystem = get_lang('System');
@@ -66,7 +64,7 @@ echo '</tr></table>';
 
 $course_categories = Statistics::get_course_categories();
 echo '<br/><br/>';//@todo: spaces between elements should be handled in the css, br should be removed if only there for presentation
-switch ($_GET['report']) {
+switch ($_REQUEST['report']) {
     case 'courses':
         // total amount of courses
         foreach ($course_categories as $code => $name) {

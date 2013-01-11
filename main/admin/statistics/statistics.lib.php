@@ -207,7 +207,7 @@ class Statistics {
         	}
             if (!empty($row[4])) { //user ID
                 $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[5], array('title' => get_lang('UserInfo')));
-             
+
                 $row[4] = TrackingUserLog::get_ip_from_user_event($row[4],$row[5],true);
                 if (empty($row[4])) {
                     $row[4] = get_lang('Unknown');
@@ -545,8 +545,8 @@ class Statistics {
             } else {
                 $direction = isset($_GET['direction']) ? $_GET['direction'] : SORT_ASC;
             }
-        $form = new FormValidator('courselastvisit','get');
-        $form->addElement('hidden','action','courselastvisit');
+        $form = new FormValidator('courselastvisit', 'get');
+        $form->addElement('hidden','report','courselastvisit');
         $form->add_textfield('date_diff',get_lang('Days'),true);
         $form->addRule('date_diff','InvalidNumber','numeric');
         $form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="search"');
@@ -587,9 +587,8 @@ class Statistics {
                 $course[] = '<span style="display:none;">'.$obj->access_date.'</span>'.api_convert_and_format_date($obj->access_date);
                 $courses[] = $course;
             }
-            $parameters['action'] = 'courselastvisit';
             $parameters['date_diff'] = $date_diff;
-            $parameters['action'] = 'courselastvisit';
+            $parameters['report'] = 'courselastvisit';
             $table_header[] = array (get_lang("CourseCode"), true);
             $table_header[] = array (get_lang("LastAccess"), true);
             Display :: display_sortable_table($table_header, $courses, array ('column'=>$column,'direction'=>$direction), array (), $parameters);

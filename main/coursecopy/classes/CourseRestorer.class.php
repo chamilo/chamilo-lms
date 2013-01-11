@@ -715,7 +715,7 @@ class CourseRestorer
                     $cat_id = $this->course->resources[RESOURCE_FORUMCATEGORY][$params['forum_category']]->destination_id;
                 }
 
-                self::DBUTF8_array($params);
+                $params = self::DBUTF8_array($params);
                 $params['c_id'] = $this->destination_course_id;
                 $params['forum_category'] = $cat_id;
                 unset($params['forum_id']);
@@ -779,7 +779,7 @@ class CourseRestorer
                     $params['c_id'] = $this->destination_course_id;
                     $params['cat_comment']    = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['cat_comment'], $this->course->code, $this->course->destination_path);
                     unset($params['cat_id']);
-                    self::DBUTF8_array($params);
+                    $params = self::DBUTF8_array($params);
                     $new_id = Database::insert($forum_cat_table, $params);
                     $this->course->resources[RESOURCE_FORUMCATEGORY][$id]->destination_id = $new_id;
                     if (!empty($my_id)) {
@@ -798,7 +798,7 @@ class CourseRestorer
 		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
         $params = (array)$topic->obj;
-        self::DBUTF8_array($params);
+        $params = self::DBUTF8_array($params);
         $params['c_id']     = $this->destination_course_id;
         $params['forum_id'] = $forum_id;
         $params['thread_poster_id'] = $this->first_teacher_id;
@@ -1098,7 +1098,6 @@ class CourseRestorer
                     $quiz = $quiz->obj;
                 } else {
                     //For backward compatibility
-                    //$quiz = $quiz->obj;
                     $quiz->obj = $quiz;
                 }
 
@@ -1112,8 +1111,6 @@ class CourseRestorer
 					}
 				}
 				if ($id != -1) {
-
-
 					// check resources inside html from fckeditor tool and copy correct urls into recipient course
 					$quiz->description = DocumentManager::replace_urls_inside_content_html_from_copy_course($quiz->description, $this->course->code, $this->course->destination_path);
 
@@ -1125,12 +1122,12 @@ class CourseRestorer
 
                     $params = array(
                         'c_id' => $this->destination_course_id,
-                        'title' => self::DBUTF8escapestring($quiz->title),
-                        'description' => self::DBUTF8escapestring($quiz->description),
+                        'title' => self::DBUTF8($quiz->title),
+                        'description' => self::DBUTF8($quiz->description),
                         'type' => $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
-                        'sound' => self::DBUTF8escapestring($doc),
+                        'sound' => self::DBUTF8($doc),
                         'max_attempt' => (int)$quiz->max_attempt,
                         'results_disabled' => (int)$quiz->results_disabled,
                         'access_condition' => $quiz->access_condition,
@@ -1967,7 +1964,6 @@ class CourseRestorer
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$thematic->content 	  = DocumentManager::replace_urls_inside_content_html_from_copy_course($thematic->content, $this->course->code, $this->course->destination_path);
 				$thematic->params['c_id']  = $this->destination_course_id;
-				$doc = '';
 				$thematic->params['id'] = null;
 				$last_id = Database::insert($table_thematic, $thematic->params, false);
 
@@ -2015,7 +2011,6 @@ class CourseRestorer
 
 				// check resources inside html from fckeditor tool and copy correct urls into recipient course
 				$obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path);
-				$doc = '';
 				$obj->params['id'] = null;
 				$obj->params['c_id'] = $this->destination_course_id;
 
@@ -2029,14 +2024,17 @@ class CourseRestorer
 						$attendance_calendar['attendance_id'] = $last_id;
 						$attendance_calendar['c_id'] = $this->destination_course_id;
 						$my_id = Database::insert($table_attendance_calendar, $attendance_calendar);
-	/*
-						if (is_numeric($my_id)) {
-							api_item_property_update($this->destination_course_info, 'thematic_advance', $my_id,"ThematicAdvanceAdded", api_get_user_id());
-						}*/
 					}
 				}
 			}
 		}
+	}
+
+    function DBUTF8($str) {
+		if (UTF8_CONVERT) {
+            $str = utf8_encode($str);
+        }
+		return $str;
 	}
 
 	function DBUTF8escapestring($str) {

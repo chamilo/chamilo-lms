@@ -29,6 +29,7 @@ $SessionIdentifier = "Identificador de la sesión";
 $SessionName = "Nombre de la sesión";
 $SessionCategory = "Categoría de la sesión";
 $SessionData = "Datos de la sesión";
-$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuración para el despliegue automático de lecciones está activada. Cuando los estudiantes entren en el curso, serán redirigidos a la lección seleccionada para que se despliegue automáticamente.";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "La configuración para el despliegue automático de Ejercicios está activada. Los estudiantes serán redirigidos al ejercicio seleccionado para que se muestre automáticamente.";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "La configuración para el despliegue automático de Lecciones está activada. Los estudiantes serán redirigidos a la lección seleccionada cuando entren al curso para que se muestre automáticamente.";
 $ToolSearch = "Búsqueda";
 ?>

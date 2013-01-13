@@ -84,5 +84,6 @@ $Collapse = "Collapse";
 $CourseDetails = "Course description";
 $GroupPendingInvitations = "Group pending invitations";
 $Compose = "Compose";
+$EnrollToCourseXSuccessful = "You have been registered to course: %s";
 $ThereAreNoCoursesInThisCategory = "No course at this category level";
 ?>

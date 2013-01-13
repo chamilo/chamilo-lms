@@ -29,6 +29,7 @@ $SessionIdentifier = "Identifier of session";
 $SessionName = "Session name";
 $SessionCategory = "Sessions categories";
 $SessionData = "Session's data";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "The exercises auto-launch feature configuration is enabled. Learners will be automatically redirected to the selected exercise.";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.";
 $ToolSearch = "Search";
 ?>

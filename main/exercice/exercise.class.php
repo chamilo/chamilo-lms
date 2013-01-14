@@ -126,6 +126,9 @@ class Exercise {
 			$this->description              = $object->description;
 			$this->sound                    = $object->sound;
 			$this->type                     = $object->type;
+            if (empty($this->type)) {
+                $this->type = ONE_PER_PAGE;
+            }
 			$this->random                   = $object->random;
 			$this->random_answers           = $object->random_answers;
 			$this->active                   = $object->active;

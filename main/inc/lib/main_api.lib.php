@@ -6495,8 +6495,8 @@ function api_set_settings_and_plugins() {
 
     // access_url == 1 is the default chamilo location
     $settings_by_access_list = array();
-
-    if ($_configuration['access_url'] != 1) {
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != 1) {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($url_info['active'] == 1) {
             $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
@@ -6518,7 +6518,7 @@ function api_set_settings_and_plugins() {
     $result = api_get_settings(null, 'list', 1);
 
     foreach ($result as & $row) {
-        if ($_configuration['access_url'] != 1) {
+        if ($access_url_id != 1) {
             if ($url_info['active'] == 1) {
                 $var = empty($row['variable']) ? 0 : $row['variable'];
                 $subkey = empty($row['subkey']) ? 0 : $row['subkey'];

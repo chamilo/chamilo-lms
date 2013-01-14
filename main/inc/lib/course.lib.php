@@ -1259,7 +1259,7 @@ class CourseManager {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
                 if ($resumed_report) {
-                    $sql = " SELECT count(field_id) ";
+                    //$sql = " SELECT count(field_id) ";
                 }
             } else {
                 if (empty($course_code)) {
@@ -1302,7 +1302,7 @@ class CourseManager {
             $sql .= " AND (access_url_id =  $current_access_url_id ) ";
         }
         if ($return_count && $resumed_report) {
-            $sql .= ' GROUP BY field_id ';
+            $sql .= ' AND field_id IS NOT NULL  GROUP BY field_value ';
         }
 
         $sql .= ' '.$order_by.' '.$limit;
@@ -1315,12 +1315,9 @@ class CourseManager {
         $counter = 1;
         $count_rows = Database::num_rows($rs);
         if ($return_count && $resumed_report) {
-            $result = 0;
-            while ($user = Database::fetch_array($rs)) {
-                $result += $user['count'];
+            return $count_rows;
             }
-            return $result;
-        }
+        $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
                 $report_info = array();
@@ -1362,6 +1359,19 @@ class CourseManager {
                         $users[$row_key]['extra_'.$extra['1']] = $name;
                         $users[$row_key]['training_hours'] += Tracking::get_time_spent_on_the_course($user['user_id'], $course_code, 0);
                         $users[$row_key]['count_users'] += $counter;
+                        $registered_users_with_extra_field = 0;
+
+                        if (!empty($name) && $name != '-') {
+                            $name = Database::escape_string($name);
+                            $sql = "SELECT count(user_id) as count FROM $table_user_field_value WHERE field_value = '$name'";
+                            $result_count = Database::query($sql);
+                            if (Database::num_rows($result_count)) {
+                                $row_count = Database::fetch_array($result_count);
+                                $registered_users_with_extra_field = $row_count['count'];
+                            }
+                        }
+
+                        $users[$row_key]['count_users_registered'] = $registered_users_with_extra_field;
                         $users[$row_key]['average_hours_per_user'] = $users[$row_key]['training_hours'] / $users[$row_key]['count_users'];
 
                         $category = Category :: load (null, null, $course_code);

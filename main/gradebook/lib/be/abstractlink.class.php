@@ -30,8 +30,8 @@ abstract class AbstractLink implements GradebookItem {
 
 	// CONSTRUCTORS
 
-    function __construct() {    	
-    	$this->course_id = api_get_course_int_id();    	
+    function __construct() {
+    	$this->course_id = api_get_course_int_id();
     }
 
 	// GETTERS AND SETTERS
@@ -47,7 +47,7 @@ abstract class AbstractLink implements GradebookItem {
 	public function get_ref_id() {
 		return $this->ref_id;
 	}
-    
+
     public function get_session_id() {
 		return $this->session_id;
 	}
@@ -71,10 +71,10 @@ abstract class AbstractLink implements GradebookItem {
 	public function get_weight() {
 		return $this->weight;
 	}
-        
+
     public function is_locked() {
 		return isset($this->locked) && $this->locked == 1 ? true : false ;
-	}  
+	}
 
 	public function is_visible() {
 		return $this->visible;
@@ -98,6 +98,8 @@ abstract class AbstractLink implements GradebookItem {
 
 	public function set_course_code ($course_code) {
 		$this->course_code = $course_code;
+        $course_info = api_get_course_info($course_code);
+        $this->course_id = $course_info['real_id'];
 	}
 
 	public function set_category_id ($category_id) {
@@ -115,7 +117,7 @@ abstract class AbstractLink implements GradebookItem {
 	public function set_visible ($visible) {
 		$this->visible = $visible;
 	}
-    
+
     public function set_session_id($id) {
     	$this->session_id = $id;
     }
@@ -130,7 +132,7 @@ abstract class AbstractLink implements GradebookItem {
 	 * To keep consistency, do not call this method but LinkFactory::load instead.
 	 */
 	public static function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
-    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);        
+    	$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 		$sql='SELECT * FROM '.$tbl_grade_links;
 		$paramcount = 0;
 		if (isset ($id)) {
@@ -185,7 +187,7 @@ abstract class AbstractLink implements GradebookItem {
 			$sql .= ' visible = '.intval($visible);
 			$paramcount ++;
 		}
-		
+
 		$result = Database::query($sql);
 		$links = AbstractLink::create_objects_from_sql_result($result);
 		return $links;
@@ -202,13 +204,13 @@ abstract class AbstractLink implements GradebookItem {
 			$link->set_course_code($data['course_code']);
 			$link->set_category_id($data['category_id']);
 			$link->set_date($data['created_at']);
-			$link->set_weight($data['weight']);            
-			$link->set_visible($data['visible']);  
+			$link->set_weight($data['weight']);
+			$link->set_visible($data['visible']);
             $link->set_locked($data['locked']);
-            
+
             //session id should depend of the category --> $data['category_id']
             $session_id = api_get_session_id();
-                        
+
             $link->set_session_id($session_id);
 			$links[]=$link;
 		}
@@ -226,7 +228,7 @@ abstract class AbstractLink implements GradebookItem {
 			$sql_testing="SELECT count(*) FROM ".$tbl_grade_links." WHERE ref_id=".$this->get_ref_id()." AND category_id =  ".$this->category." AND type =  ".$this->type." ;";
 			$result_testing=Database::query($sql_testing);
 			$row_testing=Database::fetch_array($result_testing);
-						
+
 			if ($row_testing[0]==0) {
 				$sql = 'INSERT INTO '.$tbl_grade_links.' (type, ref_id, user_id, course_code, category_id, weight, visible, created_at';
 				$sql .= ') VALUES ('
@@ -238,7 +240,7 @@ abstract class AbstractLink implements GradebookItem {
 					.",'".Database::escape_string($this->get_weight())."'"
 					.','.intval($this->is_visible());
 				$sql .= ','.'"'.$date_current=api_get_local_time().'"';
-				$sql .= ")";				
+				$sql .= ")";
 				Database::query($sql);
                 $inserted_id = Database::insert_id();
 				$this->set_id($inserted_id);
@@ -257,18 +259,18 @@ abstract class AbstractLink implements GradebookItem {
 		$this->save_linked_data();
 
 		$tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-		$sql = "UPDATE $tbl_grade_links SET 
-                    type        = ".intval($this->get_type()).", 
-				    ref_id      = ".intval($this->get_ref_id()).", 
-				    user_id     = ".intval($this->get_user_id()).", 
-				    course_code = '".Database::escape_string($this->get_course_code())."', 
-				    category_id = ".intval($this->get_category_id()).", 
-		            weight      = '".Database::escape_string($this->get_weight())."', 
+		$sql = "UPDATE $tbl_grade_links SET
+                    type        = ".intval($this->get_type()).",
+				    ref_id      = ".intval($this->get_ref_id()).",
+				    user_id     = ".intval($this->get_user_id()).",
+				    course_code = '".Database::escape_string($this->get_course_code())."',
+				    category_id = ".intval($this->get_category_id()).",
+		            weight      = '".Database::escape_string($this->get_weight())."',
 				    visible     = ".intval($this->is_visible())."
 			     WHERE id = ".intval($this->id);
-	
+
 		AbstractLink::add_link_log($this->id);
-        
+
 		Database::query($sql);
 	}
 
@@ -288,7 +290,7 @@ abstract class AbstractLink implements GradebookItem {
 		//error_log($name_log);
 		$sql="INSERT INTO ".$tbl_grade_linkeval_log."(id_linkeval_log,name,description,created_at,weight,visible,type,user_id_log)
 			  VALUES('".Database::escape_string($arreval['id'])."','".Database::escape_string($name_log)."','".Database::escape_string($description_log)."','".Database::escape_string($current_date_server)."','".Database::escape_string($arreval['weight'])."','".Database::escape_string($arreval['visible'])."','Link',".api_get_user_id().")";
-	
+
 		Database::query($sql);
 
 	}
@@ -398,7 +400,7 @@ abstract class AbstractLink implements GradebookItem {
 	abstract function is_allowed_to_change_name();
 
     /* TRIVIAL FUNCTIONS - to be overwritten by subclass if needed */
-    
+
     /* Seems to be not used anywhere */
 	public function get_not_created_links() {
 		return null;
@@ -426,16 +428,16 @@ abstract class AbstractLink implements GradebookItem {
 	}
 	public function get_view_url ($stud_id) {
 		return null;
-	}    
-    
+	}
+
     /**
   	 * Locks a link
-  	 * @param int locked 1 or unlocked 0  	 
-  	 * 
+  	 * @param int locked 1 or unlocked 0
+  	 *
   	 * */
-  	function lock($locked) {  		
+  	function lock($locked) {
   		$table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
   		$sql = "UPDATE $table SET locked = '".intval($locked)."' WHERE id='".$this->id."'";
   		Database::query($sql);
-  	}    
+  	}
 }

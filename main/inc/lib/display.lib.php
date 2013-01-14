@@ -861,9 +861,11 @@ class Display {
 
 
 
+        $all_value = 10000000;
+
         //Default row quantity
         if (!isset($extra_params['rowList'])) {
-            $extra_params['rowList'] = array(20, 50, 100, 500, 1000);
+            $extra_params['rowList'] = array(20, 50, 100, 500, 1000, $all_value);
             //$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
         }
 
@@ -967,6 +969,9 @@ class Display {
         $json .= '$("#'.$div_id.'").jqGrid(';
         $json .= $json_encode;
         $json .= ');';
+
+        $all_text = addslashes(get_lang('All'));
+        $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';
 
         $json.="\n";
 

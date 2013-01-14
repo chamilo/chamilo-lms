@@ -31,30 +31,30 @@ require_once 'Attendance.class.php';
  */
 class CourseBuilder {
 	/** Course */
-	var $course;
+    public $course;
     
     /* With this array you can filter the tools you want to be parsed by default all tools are included*/
-    var $tools_to_build = array(
-                                'announcements',
-                                'attendance',
-                                'course_descriptions',
-                                'documents', 
-                                'events',
-                                'forum_category', 
-                                'forums',
-                                'forum_topics',
-                                'glossary',
-                                'quizzes',                                     
-                                'learnpaths',
-                                'links', 
-                                'surveys',
-                                'tool_intro',
-                                'thematic',
-                                'wiki'
+    public $tools_to_build = array(
+        'announcements',
+        'attendance',
+        'course_descriptions',
+        'documents',
+        'events',
+        'forum_category',
+        'forums',
+        'forum_topics',
+        'glossary',
+        'quizzes',
+        'learnpaths',
+        'links',
+        'surveys',
+        'tool_intro',
+        'thematic',
+        'wiki'
     );
     
     /* With this array you can filter wich elements of the tools are going to be added in the course obj (only works with LPs) */
-    var $specific_id_list = array();
+    public $specific_id_list = array();
     
 	/**
 	 * Create a new CourseBuilder

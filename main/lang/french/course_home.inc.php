@@ -29,6 +29,7 @@ $SessionIdentifier = "Identifiant de session";
 $SessionName = "Nom de la session";
 $SessionCategory = "Catégorie de sessions";
 $SessionData = "Info de session";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "La fonctionnalité d'auto-démarrage des exercices est activée. Les apprenants seront automatiquement redirigés vers l'exercice sélectionné.";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Le paramètre d'auto-démarrage des parcours d'apprentissage est activé. Lorsque les apprenants entreront dans cet espace de cours, ils seront automatiquement redirigés vers le parcours d'apprentissage sélectionné pour l'auto-démarrage.";
 $ToolSearch = "Recherche";
 ?>

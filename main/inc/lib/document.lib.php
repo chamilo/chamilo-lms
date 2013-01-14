@@ -1881,7 +1881,9 @@ class DocumentManager {
                 '))' .
                 '|' .
             // '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))?/', -> takes a lot (like 100's of thousands of empty possibilities)
-                    '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/', $attrString, $regs
+                    '(@import([ \n\t\r]+)?("[^"]+"|\'[^\']+\'|[^ \n\t\r]+)))/',
+                    $attrString,
+                    $regs
             );
 
         } catch (Exception $e) {
@@ -1939,7 +1941,7 @@ class DocumentManager {
      * @param string		destination course directory
      * @return string	new content html with replaced urls or return false if content is not a string
      */
-    static function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory) {
+    static function replace_urls_inside_content_html_from_copy_course($content_html, $origin_course_code, $destination_course_directory, $origin_course_path_from_zip = null, $origin_course_info_path = null) {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         if (empty($content_html)) {
             return false;
@@ -1947,7 +1949,16 @@ class DocumentManager {
 
         $orig_source_html 	= DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info 	= api_get_course_info($origin_course_code);
+        //Course does not exist in the current DB probably this cames from a zip file?
+        if (empty($orig_course_info)) {
+            if (!empty($origin_course_path_from_zip)) {
+                $orig_course_path = $origin_course_path_from_zip.'/';
+                $orig_course_info_path = $origin_course_info_path;
+            }
+        } else {
         $orig_course_path 	= api_get_path(SYS_PATH).'courses/'.$orig_course_info['path'].'/';
+            $orig_course_info_path = $orig_course_info['path'];
+        }
         $destination_course_code = CourseManager::get_course_id_from_path ($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path 	= api_get_path(SYS_COURSE_PATH).$destination_course_directory.'/';
@@ -2020,7 +2031,7 @@ class DocumentManager {
                             // Replace origin course path by destination course path
                             if (strpos($content_html,$real_orig_url) !== false) {
                                 //$origin_course_code
-                                $url_course_path = str_replace($orig_course_info['path'].'/'.$document_file, '', $real_orig_path);
+                                $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
                                 $destination_url = $url_course_path.$destination_course_directory.'/'.$document_file.$dest_url_query;
 
                                 //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985

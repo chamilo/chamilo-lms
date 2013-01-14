@@ -1090,6 +1090,7 @@ class CourseRestorer
 			$resources = $this->course->resources;
 
 			foreach ($resources[RESOURCE_QUIZ] as $id => $quiz) {
+
                 if (isset($quiz->obj)) {
                     //For new imports
                     $quiz = $quiz->obj;
@@ -1121,7 +1122,7 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->type,
+                        'type' => $quiz->quiz_type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
@@ -1139,7 +1140,7 @@ class CourseRestorer
                         'text_when_finished' => $quiz->text_when_finished,
                         'expired_time' => (int)$quiz->expired_time,
                     );
-
+                  
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;
                         if (!empty($quiz->session_id)) {

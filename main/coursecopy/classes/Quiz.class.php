@@ -28,8 +28,9 @@ class Quiz extends Resource
     public $obj; //question
 
     function Quiz($obj) {
-        parent::Resource($obj->id, RESOURCE_QUIZ);
         $this->obj = $obj;
+        $this->obj->quiz_type = $this->obj->type;
+        parent::Resource($obj->id, RESOURCE_QUIZ);
     }
 
     /**

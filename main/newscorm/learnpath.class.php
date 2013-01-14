@@ -2337,6 +2337,7 @@ class learnpath {
         }
         $oItem = $this->items[$item_id];
         $prereq = $oItem->get_prereq_string();
+
         if (empty($prereq)) {
             return '';
         }
@@ -2350,9 +2351,9 @@ class learnpath {
             if (isset($this->refs_list[$prereq])) {
                 // It's a simple string item from which the ID can be found in the refs list,
                 // so we can transform it directly to an ID for export.
-                return 'ITEM_' . $this->refs_list[$prereq];
+                return $this->items[$this->refs_list[$prereq]]->ref;
             } else if (isset($this->refs_list['ITEM_'.$prereq])) {
-                return 'ITEM_'.$prereq;
+                return $this->items[$this->refs_list['ITEM_'.$prereq]]->ref;
             } else {
                 // The last case, if it's a complex form, then find all the IDs (SCORM strings)
                 // and replace them, one by one, by the internal IDs (chamilo db)
@@ -3603,6 +3604,7 @@ class learnpath {
             $item = $this->current;
         }
         if (is_object($this->items[$item])) {
+
             if ($this->type == 2) {
                 //Getting prereq from scorm
                 $prereq_string = $this->get_scorm_prereq_string($item);

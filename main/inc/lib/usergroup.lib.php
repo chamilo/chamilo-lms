@@ -116,7 +116,6 @@ class UserGroup extends Model
                 FROM {$this->table} u
                 LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                 ON (u.id = urc.usergroup_id AND course_id = $course_id)
-                WHERE course_id is NULL
                ";
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;

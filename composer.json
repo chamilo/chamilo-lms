@@ -1,0 +1,43 @@
+{
+    "autoload": {
+        "psr-0": {
+            "Entity" : "main/inc/",
+            "Gedmo": "vendor/gedmo/doctrine-extensions/lib'"
+        },
+        "classmap": [
+            "main/auth",
+            "main/admin",
+            "main/cron/lang",
+            "main/coursecopy",
+            "main/exercice",
+            "main/gradebook/lib",
+            "main/newscorm",
+            "main/inc/lib",
+            "main/install",
+            "main/inc/lib/getid3",
+            "main/survey"
+        ]
+    },
+    "require": {
+        "php": ">=5.3.2",
+        "silex/silex"           : "dev-master",
+        "symfony/config"        : "dev-master",
+        "symfony/yaml"          : "2.1.*",
+        "symfony/console"  : "dev-master",
+        "twig/twig": ">=1.8,<2.0-dev",
+        "symfony/twig-bridge": "2.2.*@dev",
+        "symfony/security": "2.1.*",
+        "monolog/monolog"       : ">=1.0.0",
+        "symfony/form": "2.1.*",
+        "symfony/validator": "2.1.*",
+        "symfony/translation": "2.1.*",
+        "symfony/dependency-injection": "dev-master",
+        "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
+        "doctrine/migrations": "dev-master",
+        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
+        "pagerfanta/pagerfanta": "dev-master",
+        "knplabs/knp-menu": "2.0.*@dev",
+        "gedmo/doctrine-extensions": "2.3.*@dev"
+    },
+    "minimum-stability": "dev"
+}

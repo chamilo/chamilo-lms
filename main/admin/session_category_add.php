@@ -13,8 +13,6 @@ $cidReset=true;
 // including the global Dokeos file
 require_once '../inc/global.inc.php';
 
-// including additional libraries
-require_once '../inc/lib/xajax/xajax.inc.php';
 $xajax = new xajax();
 $xajax -> registerFunction ('search_coachs');
 

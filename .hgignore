@@ -14,7 +14,6 @@ courses/*
 main/garbage/*
 !main/garbage/index.html
 !main/garbage/Serializer
-
 #Home
 home/*
 #!home/default_platform_document
@@ -123,3 +122,6 @@ syntax: regexp
 ^\.settings$
 
 nbproject/*
+
+.git
+tests/doctrine_console/

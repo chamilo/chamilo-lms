@@ -16,21 +16,10 @@
 $language_file = array('admin', 'create_course');
 
 $cidReset = true;
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-
-require_once api_get_path(LIBRARY_PATH).'add_course.lib.inc.php';
-require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
-require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
-// Including a configuration file.
-require_once api_get_path(CONFIGURATION_PATH).'add_course.conf.php';
-
-// Including additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 // The delete action should be deactivated in this page.
 // Better reject the target request, after that you can delete it.

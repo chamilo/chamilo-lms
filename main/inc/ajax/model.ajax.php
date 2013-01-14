@@ -502,6 +502,7 @@ switch ($action) {
     case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
+        $options['course_id'] = $course_id;
         switch ($type) {
             case 'not_registered':
                 $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);

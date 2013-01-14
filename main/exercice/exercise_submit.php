@@ -809,7 +809,7 @@ if (!empty($error)) {
             function save_now(question_id, url_extra) {
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-                
+
            		//2. Reminder checkbox
            		var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
@@ -1024,7 +1024,7 @@ if (!empty($error)) {
             //Checkbox review answers
 			if ($objExercise->review_answers) {
 				$remind_question_div = Display::tag('label', Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes).get_lang('ReviewQuestionLater'), array('class' => 'checkbox', 'for' =>'remind_list['.$questionId.']'));
-				$exercise_actions    .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
+				$exercise_actions .= Display::div($remind_question_div, array('class'=>'exercise_save_now_button'));
 			}
 			echo Display::div($exercise_actions, array('class'=>'form-actions'));
 		echo '</div>';

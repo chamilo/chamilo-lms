@@ -1160,7 +1160,7 @@ class CourseManager {
             if ($return_count) {
                 $sql = " SELECT COUNT(*) as count";
                 if ($resumed_report) {
-                    $sql = " SELECT count(field_id) ";
+                    //$sql = " SELECT count(field_id) ";
                 }
             } else {
                 if (empty($course_code)) {
@@ -1206,7 +1206,7 @@ class CourseManager {
         }
 
         if ($return_count && $resumed_report) {
-            $sql .= ' GROUP BY field_id ';
+            $sql .= ' AND field_id IS NOT NULL  GROUP BY field_value ';
         }
 
         $sql .= ' '.$order_by.' '.$limit;
@@ -1221,12 +1221,9 @@ class CourseManager {
         $count_rows = Database::num_rows($rs);
 
         if ($return_count && $resumed_report) {
-            $result = 0;
-            while ($user = Database::fetch_array($rs)) {
-                $result += $user['count'];
-            }
-            return $result;
+            return $count_rows;
         }
+        
         $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {

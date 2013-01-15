@@ -36,7 +36,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertGreaterThan(
           1,
-          UserManager::create_user('Sam','Gamegie',5,'sam@example.com','jo','jo')
+          UserManager::create_user('Sam','Gamgee',5,'sam@example.com','jo','jo')
         );
     }
 
@@ -49,7 +49,42 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     {
         $this->assertSame(
           false,
-          UserManager::create_user('Pippin','Took',null,null,'jo','jo')
+          UserManager::create_user('Pippin','Brandybuck',null,null,'jo','jo')
+        );
+    }
+    /**
+     * Test multiple URL case with users hosting limit
+     */
+    public function testCreate_user3()
+    {
+        global $_configuration;
+        $_configuration[1]['hosting_limit_users'] = 50;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Merry','Brandybuck',null,null,'jo','jo')
+        );
+    }
+    /**
+     * Test teachers hosting limit
+     */
+    public function testCreate_user4()
+    {
+        global $_configuration;
+        $_configuration[1]['hosting_limit_teachers'] = 50;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Pippin','Took',1,null,'jo','jo')
+        );
+    }
+    /**
+     * Test language non-existence
+     */
+    public function testCreate_user5()
+    {
+        global $_configuration;
+        $this->assertSame(
+          false,
+          UserManager::create_user('Pippin','Tooky',null,null,'jo','jo',null,'spaniard')
         );
     }
 

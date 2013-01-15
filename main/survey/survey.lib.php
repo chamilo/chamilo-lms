@@ -250,7 +250,7 @@ class survey_manager {
 			}
 
 			if ($values['survey_type'] == 1 && !empty($values['parent_id'])) {
-				survey_manager::copy_survey($values['parent_id'],$survey_id);
+				self::copy_survey($values['parent_id'],$survey_id);
 			}
 
 			$return['message'] = 'SurveyCreatedSuccesfully';
@@ -411,7 +411,7 @@ class survey_manager {
 		$res = Database::query($sql);
 
 		// Deleting the questions of the survey
-		survey_manager::delete_all_survey_questions($survey_id, $shared);
+		self::delete_all_survey_questions($survey_id, $shared);
 
 		// Update into item_property (delete)
 		api_item_property_update($course_info, TOOL_SURVEY, $survey_id, 'SurveyDeleted', api_get_user_id());
@@ -480,7 +480,7 @@ class survey_manager {
 
         $course_id = api_get_course_int_id();
 
-		$datas = survey_manager::get_survey($survey_id);
+		$datas = self::get_survey($survey_id);
 		$session_where = '';
 		if (api_get_session_id() != 0) {
 			$session_where = ' AND session_id = "'.api_get_session_id().'" ';
@@ -517,7 +517,7 @@ class survey_manager {
         $session_id = $survey_data['session_id'];
 
 		// Getting a list with all the people who have filled the survey
-		$people_filled = survey_manager::get_people_who_filled_survey($survey_id, false, $course_id);
+		$people_filled = self::get_people_who_filled_survey($survey_id, false, $course_id);
 
 		$number = intval(count($people_filled));
 
@@ -543,8 +543,8 @@ class survey_manager {
 	 * @version February 2007
 	 */
 	static function get_complete_survey_structure($survey_id, $shared = 0) {
-		$structure = survey_manager::get_survey($survey_id, $shared);
-		$structure['questions'] = survey_manager::get_questions($survey_id);
+		$structure = self::get_survey($survey_id, $shared);
+		$structure['questions'] = self::get_questions($survey_id);
 	}
 
 	/***
@@ -737,11 +737,11 @@ class survey_manager {
 				$tbl_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 
 				// Getting all the information of the survey
-				$survey_data = survey_manager::get_survey($form_content['survey_id']);
+				$survey_data = self::get_survey($form_content['survey_id']);
 
 				// Storing the question in the shared database
 				if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
-					$shared_question_id = survey_manager::save_shared_question($form_content, $survey_data);
+					$shared_question_id = self::save_shared_question($form_content, $survey_data);
 					$form_content['shared_question_id'] = $shared_question_id;
 				}
 
@@ -815,7 +815,7 @@ class survey_manager {
                 }
 
 				// Storing the options of the question
-				$message_options=survey_manager::save_question_options($form_content, $survey_data);
+				$message_options=self::save_question_options($form_content, $survey_data);
 			} else {
 				$return_message = 'PleasFillAllAnswer';
 			}
@@ -955,10 +955,10 @@ class survey_manager {
 		Database::query($sql);
 
 		// Deleting all the options of the questions of the survey
-		survey_manager::delete_all_survey_questions_options($survey_id, $shared);
+		self::delete_all_survey_questions_options($survey_id, $shared);
 
 		// Deleting all the answers on this survey
-		survey_manager::delete_all_survey_answers($survey_id);
+		self::delete_all_survey_answers($survey_id);
 	}
 
 	/**
@@ -978,7 +978,7 @@ class survey_manager {
 		// Table definitions
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		if ($shared) {
-			survey_manager::delete_shared_survey_question($survey_id, $question_id);
+			self::delete_shared_survey_question($survey_id, $question_id);
 		}
 
 		// Deleting the survey questions
@@ -986,7 +986,7 @@ class survey_manager {
 		$res = Database::query($sql);
 
 		// Deleting the options of the question of the survey
-		survey_manager::delete_survey_question_option($survey_id, $question_id, $shared);
+		self::delete_survey_question_option($survey_id, $question_id, $shared);
 	}
 
 	/**
@@ -1006,7 +1006,7 @@ class survey_manager {
 		$table_survey_question_option = Database :: get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
 
 		// First we have to get the shared_question_id
-		$question_data = survey_manager::get_question($question_id);
+		$question_data = self::get_question($question_id);
 
 		// Deleting the survey questions
 		$sql = "DELETE FROM $table_survey_question WHERE question_id='".Database::escape_string($question_data['shared_question_id'])."'";
@@ -1040,7 +1040,7 @@ class survey_manager {
 		}
 
 		if (is_numeric($survey_data['survey_share']) && $survey_data['survey_share'] != 0) {
-			survey_manager::save_shared_question_options($form_content, $survey_data);
+			self::save_shared_question_options($form_content, $survey_data);
 		}
 
 		// Table defintion
@@ -1104,7 +1104,7 @@ class survey_manager {
 
 	/*
 		if (is_numeric($survey_data['survey_share']) AND $survey_data['survey_share'] != 0) {
-			$form_content = survey_manager::save_shared_question($form_content, $survey_data);
+			$form_content = self::save_shared_question($form_content, $survey_data);
 		}
 	*/
 
@@ -1228,7 +1228,7 @@ class survey_manager {
 		$return = array();
 
 		// Getting the survey information
-		$survey_data	= survey_manager::get_survey($survey_id);
+		$survey_data	= self::get_survey($survey_id);
 
 		if (empty($course_id)) {
             $course_id  = api_get_course_int_id();
@@ -1305,8 +1305,8 @@ class survey_question {
 
 		global $survey_data;
 
-		//$tool_name = '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
-		$tool_name = Display::return_icon(survey_manager::icon_question(Security::remove_XSS($_GET['type'])), get_lang(ucfirst(Security::remove_XSS($_GET['type']))), array('align' => 'middle', 'height' => '22px')).' ';
+		//$tool_name = '<img src="../img/'.self::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
+		$tool_name = Display::return_icon(self::icon_question(Security::remove_XSS($_GET['type'])), get_lang(ucfirst(Security::remove_XSS($_GET['type']))), array('align' => 'middle', 'height' => '22px')).' ';
 		if ($_GET['action'] == 'add') {
 			$tool_name .= get_lang('AddQuestion');
 		}
@@ -1469,7 +1469,7 @@ class survey_question {
 
 		// Saving a question
 		if (isset($_POST['save_question'])) {
-			$message = survey_manager::save_question($form_content);
+			$message = self::save_question($form_content);
 
 			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {
 				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE c_id = '.$course_id.' AND survey_id = '.intval($_GET['survey_id']);
@@ -2313,7 +2313,7 @@ class SurveyUtil {
 		$error = false;
 
 		// Getting the survey data
-		$survey_data = survey_manager::get_survey($_GET['survey_id']);
+		$survey_data = self::get_survey($_GET['survey_id']);
 
 		// $_GET['survey_id'] has to be numeric
 		if (!is_numeric($_GET['survey_id'])) {
@@ -2334,7 +2334,7 @@ class SurveyUtil {
 			} else {
 				$people_filled_full_data = false;
 			}
-			$people_filled = survey_manager::get_people_who_filled_survey($_GET['survey_id'], $people_filled_full_data);
+			$people_filled = self::get_people_who_filled_survey($_GET['survey_id'], $people_filled_full_data);
 			if ($survey_data['anonymous'] == 0) {
 				foreach ($people_filled as $key => & $value) {
 					$people_filled_userids[] = $value['invited_user'];
@@ -2374,7 +2374,7 @@ class SurveyUtil {
 	 */
 	static function handle_reporting_actions() {
 		// Getting the number of question
-		$temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
+		$temp_questions_data = self::get_questions($_GET['survey_id']);
 
 		// Sorting like they should be displayed and removing the non-answer question types (comment and pagebreak)
 		$my_temp_questions_data=($temp_questions_data==null) ? array() : $temp_questions_data;
@@ -3500,7 +3500,7 @@ class SurveyUtil {
 		$allowed_question_types = array('yesno', 'multiplechoice', 'multipleresponse', 'dropdown', 'percentage', 'score');
 
 		// Getting all the questions
-		$questions = survey_manager::get_questions($_GET['survey_id']);
+		$questions = self::get_questions($_GET['survey_id']);
 
 		// Actions bar
 		echo '<div class="actions">';
@@ -3551,12 +3551,12 @@ class SurveyUtil {
 
 		// Getting all the information of the x axis
 		if (isset($_GET['xaxis']) && is_numeric($_GET['xaxis'])) {
-			$question_x = survey_manager::get_question($_GET['xaxis']);
+			$question_x = self::get_question($_GET['xaxis']);
 		}
 
 		// Getting all the information of the y axis
 		if (isset($_GET['yaxis']) && is_numeric($_GET['yaxis'])) {
-			$question_y = survey_manager::get_question($_GET['yaxis']);
+			$question_y = self::get_question($_GET['yaxis']);
 		}
 
 		if (isset($_GET['xaxis']) && is_numeric($_GET['xaxis']) && isset($_GET['yaxis']) && is_numeric($_GET['yaxis'])) {
@@ -3816,7 +3816,7 @@ class SurveyUtil {
 
 		if (!is_array($users_array)) return 0; // Should not happen
 		// Getting the survey information
-		$survey_data = survey_manager::get_survey($_GET['survey_id']);
+		$survey_data = self::get_survey($_GET['survey_id']);
 
 
 		$survey_invitations = SurveyUtil::get_invitations($survey_data['survey_code']);
@@ -3826,7 +3826,7 @@ class SurveyUtil {
 		$exclude_users = array();
 		if ($remindUnAnswered == 1) { // Remind only unanswered users
 			$reminder = 1;
-			$exclude_users = survey_manager::get_people_who_filled_survey($_GET['survey_id']);
+			$exclude_users = self::get_people_who_filled_survey($_GET['survey_id']);
 		}
 
 		$counter = 0;  // Nr of invitations "sent" (if sendmail option)
@@ -4209,7 +4209,7 @@ class SurveyUtil {
 		// Coach can see that only if the survey is in his session
 		if (api_is_allowed_to_edit() || api_is_element_in_the_session(TOOL_SURVEY, $survey_id)) {
 			$return .= '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>';
-            if (survey_manager::survey_generation_hash_available()) {
+            if (self::survey_generation_hash_available()) {
                 $return .=  Display::url(Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink'),'',ICON_SIZE_SMALL), 'generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq());
             }
             $return .=  Display::url(Display::return_icon('copy.png', get_lang('DuplicateSurvey'),'',ICON_SIZE_SMALL), 'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq());

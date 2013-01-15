@@ -67,6 +67,72 @@
             ]
         },
         {
+            "name": "doctrine/annotations",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/annotations.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/annotations/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "doctrine/lexer": "1.*"
+            },
+            "require-dev": {
+                "doctrine/cache": "1.*"
+            },
+            "time": "2013-01-12 19:23:32",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Annotations\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Docblock Annotations Parser",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "annotations",
+                "parser",
+                "docblock"
+            ]
+        },
+        {
             "name": "doctrine/cache",
             "version": "v1.0",
             "source": {
@@ -128,25 +194,90 @@
             ]
         },
         {
+            "name": "doctrine/collections",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/collections.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/collections/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "2013-01-12 16:36:50",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Collections\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com",
+                    "homepage": "http://www.jwage.com/"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Collections Abstraction library",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "collections",
+                "iterator",
+                "array"
+            ]
+        },
+        {
             "name": "doctrine/common",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common",
-                "reference": "edeaab2851102e5a945770b479d21b600d6ea13a"
+                "reference": "185e6d76765fe37ddb1a94aad8f51d97c92b0649"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/edeaab2851102e5a945770b479d21b600d6ea13a.zip",
-                "reference": "edeaab2851102e5a945770b479d21b600d6ea13a",
+                "url": "https://github.com/doctrine/common/archive/185e6d76765fe37ddb1a94aad8f51d97c92b0649.zip",
+                "reference": "185e6d76765fe37ddb1a94aad8f51d97c92b0649",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
                 "doctrine/inflector": "1.*",
-                "doctrine/cache": "1.*"
+                "doctrine/cache": "1.*",
+                "doctrine/collections": "1.*",
+                "doctrine/lexer": "1.*",
+                "doctrine/annotations": "1.*"
             },
-            "time": "2013-01-10 23:14:02",
+            "time": "2013-01-12 19:27:40",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -204,19 +335,25 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal",
-                "reference": "2f3377c0f28b276655a11ed54d0b2ac7ba5ad2d3"
+                "reference": "328d8a5387be1fc365f3bba27327023afdee30c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/dbal/archive/2f3377c0f28b276655a11ed54d0b2ac7ba5ad2d3.zip",
-                "reference": "2f3377c0f28b276655a11ed54d0b2ac7ba5ad2d3",
+                "url": "https://github.com/doctrine/dbal/archive/328d8a5387be1fc365f3bba27327023afdee30c5.zip",
+                "reference": "328d8a5387be1fc365f3bba27327023afdee30c5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2",
-                "doctrine/common": ">=2.3-dev,<2.5-dev"
+                "doctrine/common": "2.4.x-dev"
             },
-            "time": "2013-01-08 15:37:28",
+            "require-dev": {
+                "symfony/console": "2.*"
+            },
+            "suggest": {
+                "symfony/console": "For helpful console commands such as SQL execution and import of files."
+            },
+            "time": "2013-01-13 08:47:01",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -325,6 +462,58 @@
             ]
         },
         {
+            "name": "doctrine/lexer",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "v1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/doctrine/lexer/archive/v1.0.zip",
+                "reference": "v1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "time": "2013-01-12 18:59:04",
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com",
+                    "homepage": "http://www.instaclick.com"
+                },
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com",
+                    "homepage": "https://github.com/schmittjoh",
+                    "role": "Developer of wrapped JMSSerializerBundle"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "parser",
+                "lexer"
+            ]
+        },
+        {
             "name": "doctrine/migrations",
             "version": "dev-master",
             "source": {
@@ -384,12 +573,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/doctrine/doctrine2.git",
-                "reference": "71efe2109aafc3c5ef81d5d5285f3b81e4de3bef"
+                "reference": "b30b06852bc4eacf8bbbed472e1d6ec21310ec0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/doctrine2/archive/71efe2109aafc3c5ef81d5d5285f3b81e4de3bef.zip",
-                "reference": "71efe2109aafc3c5ef81d5d5285f3b81e4de3bef",
+                "url": "https://github.com/doctrine/doctrine2/archive/b30b06852bc4eacf8bbbed472e1d6ec21310ec0a.zip",
+                "reference": "b30b06852bc4eacf8bbbed472e1d6ec21310ec0a",
                 "shasum": ""
             },
             "require": {
@@ -401,7 +590,7 @@
             "suggest": {
                 "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
             },
-            "time": "2013-01-10 19:13:18",
+            "time": "2013-01-14 01:16:50",
             "bin": [
                 "bin/doctrine",
                 "bin/doctrine.php"
@@ -587,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog",
-                "reference": "98d3650785b1215eb9da24822b1216d531650c1f"
+                "reference": "1.3.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/Seldaek/monolog/archive/98d3650785b1215eb9da24822b1216d531650c1f.zip",
-                "reference": "98d3650785b1215eb9da24822b1216d531650c1f",
+                "url": "https://github.com/Seldaek/monolog/archive/1.3.1.zip",
+                "reference": "1.3.1",
                 "shasum": ""
             },
             "require": {
@@ -611,7 +800,7 @@
                 "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
                 "raven/raven": "Allow sending log messages to a Sentry server"
             },
-            "time": "2013-01-10 16:59:48",
+            "time": "2013-01-11 10:23:20",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -779,12 +968,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Silex.git",
-                "reference": "605f8262b6757e7721dcd8a0073a917e900f6862"
+                "reference": "c3dc8d7e0fba4a2858dc2099066f7e593bee2045"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Silex/archive/605f8262b6757e7721dcd8a0073a917e900f6862.zip",
-                "reference": "605f8262b6757e7721dcd8a0073a917e900f6862",
+                "url": "https://github.com/fabpot/Silex/archive/c3dc8d7e0fba4a2858dc2099066f7e593bee2045.zip",
+                "reference": "c3dc8d7e0fba4a2858dc2099066f7e593bee2045",
                 "shasum": ""
             },
             "require": {
@@ -819,7 +1008,7 @@
                 "symfony/css-selector": ">=2.1,<2.3-dev",
                 "symfony/dom-crawler": ">=2.1,<2.3-dev"
             },
-            "time": "2013-01-11 06:54:36",
+            "time": "2013-01-13 19:52:32",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1002,12 +1191,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection",
-                "reference": "v2.2.0-BETA1"
+                "reference": "c4016466a8632f27d72d4ecfc89b472d4050a2ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/DependencyInjection/archive/v2.2.0-BETA1.zip",
-                "reference": "v2.2.0-BETA1",
+                "url": "https://github.com/symfony/DependencyInjection/archive/c4016466a8632f27d72d4ecfc89b472d4050a2ca.zip",
+                "reference": "c4016466a8632f27d72d4ecfc89b472d4050a2ca",
                 "shasum": ""
             },
             "require": {
@@ -1021,7 +1210,7 @@
                 "symfony/yaml": "2.2.*",
                 "symfony/config": "2.2.*"
             },
-            "time": "2013-01-08 18:17:41",
+            "time": "2013-01-11 17:38:19",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1106,12 +1295,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form",
-                "reference": "ef499c49a08833089ebfb175e28f48ac5d3e8a53"
+                "reference": "36f95a1fe529b80794154f0778d1e8e9147eb45d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Form/archive/ef499c49a08833089ebfb175e28f48ac5d3e8a53.zip",
-                "reference": "ef499c49a08833089ebfb175e28f48ac5d3e8a53",
+                "url": "https://github.com/symfony/Form/archive/36f95a1fe529b80794154f0778d1e8e9147eb45d.zip",
+                "reference": "36f95a1fe529b80794154f0778d1e8e9147eb45d",
                 "shasum": ""
             },
             "require": {
@@ -1128,7 +1317,7 @@
                 "symfony/validator": "2.1.*",
                 "symfony/http-foundation": "2.1.*"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-01-11 13:37:17",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -1202,12 +1391,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel",
-                "reference": "daba04e69bc8cccc7d81d2ef82be81c36d783ae2"
+                "reference": "c40b512d466b132c8446a25a1e7fb0d60a49c65e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/HttpKernel/archive/daba04e69bc8cccc7d81d2ef82be81c36d783ae2.zip",
-                "reference": "daba04e69bc8cccc7d81d2ef82be81c36d783ae2",
+                "url": "https://github.com/symfony/HttpKernel/archive/c40b512d466b132c8446a25a1e7fb0d60a49c65e.zip",
+                "reference": "c40b512d466b132c8446a25a1e7fb0d60a49c65e",
                 "shasum": ""
             },
             "require": {
@@ -1233,7 +1422,7 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/finder": "2.1.*"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-01-11 10:35:43",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -1264,12 +1453,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Locale",
-                "reference": "d1819fbf750d58ad1d2f6213c337afe8081b75f0"
+                "reference": "3ad6a5129809b3815a2b9056eee470dc2877717f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Locale/archive/d1819fbf750d58ad1d2f6213c337afe8081b75f0.zip",
-                "reference": "d1819fbf750d58ad1d2f6213c337afe8081b75f0",
+                "url": "https://github.com/symfony/Locale/archive/3ad6a5129809b3815a2b9056eee470dc2877717f.zip",
+                "reference": "3ad6a5129809b3815a2b9056eee470dc2877717f",
                 "shasum": ""
             },
             "require": {
@@ -1278,7 +1467,7 @@
             "suggest": {
                 "ext-intl": ">=5.3.3"
             },
-            "time": "2013-01-09 08:51:07",
+            "time": "2013-01-10 04:41:59",
             "type": "library",
             "autoload": {
                 "psr-0": {
@@ -1356,12 +1545,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing",
-                "reference": "20b0af13fe2be7fa979f1829b0e23a56803a2c58"
+                "reference": "192243b2c5e36fc21e83fd63ab54582dcc31e7e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Routing/archive/20b0af13fe2be7fa979f1829b0e23a56803a2c58.zip",
-                "reference": "20b0af13fe2be7fa979f1829b0e23a56803a2c58",
+                "url": "https://github.com/symfony/Routing/archive/192243b2c5e36fc21e83fd63ab54582dcc31e7e4.zip",
+                "reference": "192243b2c5e36fc21e83fd63ab54582dcc31e7e4",
                 "shasum": ""
             },
             "require": {
@@ -1379,7 +1568,7 @@
                 "symfony/config": "2.2.*",
                 "symfony/yaml": "2.2.*"
             },
-            "time": "2013-01-10 16:57:14",
+            "time": "2013-01-11 17:38:19",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1525,12 +1714,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge",
-                "reference": "7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2"
+                "reference": "b4b2bb25ab6584eba422fc645ac1cdd04745220e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/TwigBridge/archive/7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2.zip",
-                "reference": "7e09dc64fd9bcb278cbb3cf89c5e4392a514c4b2",
+                "url": "https://github.com/symfony/TwigBridge/archive/b4b2bb25ab6584eba422fc645ac1cdd04745220e.zip",
+                "reference": "b4b2bb25ab6584eba422fc645ac1cdd04745220e",
                 "shasum": ""
             },
             "require": {
@@ -1555,7 +1744,7 @@
                 "symfony/security": "2.2.*",
                 "symfony/http-kernel": "2.2.*"
             },
-            "time": "2013-01-10 16:09:48",
+            "time": "2013-01-11 17:38:19",
             "type": "symfony-bridge",
             "extra": {
                 "branch-alias": {

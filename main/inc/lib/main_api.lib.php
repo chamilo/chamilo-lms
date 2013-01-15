@@ -6556,7 +6556,7 @@ function api_set_settings_and_plugins() {
         }
     }
 
-    $result = api_get_settings('Plugins', 'list', $_configuration['access_url']);
+    $result = api_get_settings('Plugins', 'list', $access_url_id);
     $_plugins = array();
     foreach ($result as & $row) {
         $key = & $row['variable'];

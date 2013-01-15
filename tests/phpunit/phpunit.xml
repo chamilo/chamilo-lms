@@ -16,6 +16,7 @@
         <testsuite name="Chamilo LMS classes">
             <directory suffix="Test.class.php">../phpunit/classes</directory>
             <directory suffix="Test.lib.php">../phpunit/classes</directory>
+            <directory>../../vendor/silex/silex/tests/</directory>
         </testsuite>
     </testsuites>
     <logging>

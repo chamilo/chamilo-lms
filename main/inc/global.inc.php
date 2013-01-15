@@ -22,6 +22,7 @@
  */
 
  //@todo will be removed before a stable release
+
 $mtime = microtime();
 $mtime = explode(" ",$mtime);
 $mtime = $mtime[1] + $mtime[0];
@@ -778,3 +779,5 @@ if (empty($default_quota)) {
     $default_quota = 100000000;
 }
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+return $app;

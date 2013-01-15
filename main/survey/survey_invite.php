@@ -21,7 +21,6 @@ require '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -144,12 +143,8 @@ $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAll
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'class="save"');
 // The rules (required fields)
-/*if ($survey_data['send_mail'] == 0) {
-    $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
-}*/
 $portal_url = api_get_path(WEB_PATH);
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$url = api_get_access_url($access_url_id);

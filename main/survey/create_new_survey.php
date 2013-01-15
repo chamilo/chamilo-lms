@@ -122,7 +122,7 @@ $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), 
 
 if ($_GET['action'] == 'edit') {
     //$survey_code->freeze();
-    $form->applyFilter('survey_code', 'api_strtoupper');
+    //$form->applyFilter('survey_code', 'api_strtoupper');
 }
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
@@ -180,7 +180,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
         } else {
             $form->addElement('html', '<div id="options_field" style="display:none">');
         }
-
+        $input_name_list = null;
         $field_list = SurveyUtil::make_field_list();
         if (is_array($field_list)) {
             // TODO hide and show the list in a fancy DIV
@@ -239,15 +239,6 @@ if ($form->validate()) {
     // Storing the survey
     $return = survey_manager::store_survey($values);
 
-    /* // Deleting the shared survey if the survey is getting unshared (this only happens when editing)
-      if (is_numeric($survey_data['survey_share']) && $values['survey_share']['survey_share'] == 0 && $values['survey_id'] != '') {
-      survey_manager::delete_survey($survey_data['survey_share'], true);
-      }
-      // Storing the already existing questions and options of a survey that gets shared (this only happens when editing)
-      if ($survey_data['survey_share'] == 0 && $values['survey_share']['survey_share'] !== 0 && $values['survey_id'] != '') {
-      survey_manager::get_complete_survey_structure($return['id']);
-      }
-     */
     if ($return['type'] == 'error') {
         // Display the error
         Display::display_error_message(get_lang($return['message']), false);
@@ -258,7 +249,7 @@ if ($form->validate()) {
         // Display the form
         $form->display();
     } else {
-        $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        $gradebook_option = isset($values['survey_qualify_gradebook']) && $values['survey_qualify_gradebook'] > 0;
         if ($gradebook_option) {
             $survey_id = intval($return['id']);
             if ($survey_id > 0) {
@@ -267,8 +258,6 @@ if ($form->validate()) {
                 $description_gradebook = ''; // Not needed here.
                 $survey_weight = floatval($_POST['survey_weight']);
                 $max_score = 1;
-                $date = time(); // TODO: Maybe time zones implementation is needed here.
-                $visible = 1; // 1 = visible
 
                 $link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
                 $gradebook_link_id = $link_info['id'];
@@ -292,9 +281,7 @@ if ($form->validate()) {
 } else {
     // Displaying the header
     Display::display_header($tool_name);
-
     $form->display();
 }
-
 // Footer
 Display :: display_footer();

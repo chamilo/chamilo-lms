@@ -4,7 +4,6 @@
  * @package chamilo.survey
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
- * @version $Id: survey.lib.php 22296 2009-07-22 22:05:50Z cfasanando $
  * @todo move this file to inc/lib
  * @todo use consistent naming for the functions (save vs store for instance)
  */
@@ -238,7 +237,7 @@ class survey_manager {
 						'".Database::escape_string('template')."',
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
-						'".date('Y-m-d H:i:s')."',
+						'".api_get_utc_datetime()."',
 						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
 						".intval($_SESSION['id_session'])."
 						)";
@@ -250,7 +249,7 @@ class survey_manager {
 			}
 
 			if ($values['survey_type'] == 1 && !empty($values['parent_id'])) {
-				self::copy_survey($values['parent_id'],$survey_id);
+				self::copy_survey($values['parent_id'], $survey_id);
 			}
 
 			$return['message'] = 'SurveyCreatedSuccesfully';
@@ -348,7 +347,7 @@ class survey_manager {
 						'".Database::escape_string('template')."',
 						'".Database::escape_string($values['survey_introduction'])."',
 						'".Database::escape_string($values['survey_thanks'])."',
-						'".date('Y-m-d H:i:s')."',
+						'".api_get_utc_datetime()."',
 						'".$_course['id']."')";
 			$result = Database::query($sql);
 			$return	= Database::insert_id();
@@ -4502,12 +4501,13 @@ class SurveyUtil {
 		echo '	<th>'.get_lang('SurveyName').'</th>';
 		echo '	<th>'.get_lang('Anonymous').'</th>';
 		echo '</tr>';
+        $now = api_get_utc_datetime();
 		$sql = "SELECT * FROM $table_survey survey, $table_survey_invitation survey_invitation
 				WHERE
 				survey_invitation.user 	= '".Database::escape_string($user_id)."' AND
 				survey.code 			= survey_invitation.survey_code AND
-				survey.avail_from 		<= '".date('Y-m-d H:i:s')."' AND
-				survey.avail_till 		>= '".date('Y-m-d H:i:s')."' AND
+				survey.avail_from 		<= '".$now."' AND
+				survey.avail_till 		>= '".$now."' AND
 				survey.c_id 			= $course_id AND
 				survey_invitation.c_id = $course_id
 				";

@@ -1302,11 +1302,15 @@ function WSEditUsers($params) {
             $results[] = 0; // username already exits.
             continue;
         }
-
-        $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',";
+        // Edit lastname and firstname only if not empty
+        $sql = "UPDATE $table_user SET ";
+        if (!empty($lastname)) {
+            $sql .= " lastname='".Database::escape_string($lastname)."', ";
+        }
+        if (!empty($firstname)) {
+            $sql .= " firstname='".Database::escape_string($firstname)."', ";
+        }
+        $sql .= " username='".Database::escape_string($username)."',";
         if (!is_null($password)) {
             $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
             $sql .= " password='".Database::escape_string($password)."',";
@@ -1443,11 +1447,15 @@ function WSEditUser($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
-
-    $sql = "UPDATE $table_user SET
-            lastname='".Database::escape_string($lastname)."',
-            firstname='".Database::escape_string($firstname)."',
-            username='".Database::escape_string($username)."',";
+    // Edit lastname an firstname only if not empty
+    $sql = "UPDATE $table_user SET ";
+    if (!empty($lastname)) {
+        $sql .= " lastname='".Database::escape_string($lastname)."', ";
+    }
+    if (!empty($firstname)) {
+        $sql .= " firstname='".Database::escape_string($firstname)."', ";
+    }
+    $sql .= " username='".Database::escape_string($username)."',";
     if (!is_null($password)) {
         $password = $_configuration['password_encryption'] ? api_get_encrypted_password($password) : $password;
         $sql .= " password='".Database::escape_string($password)."',";
@@ -1659,10 +1667,14 @@ function WSEditUsersPasswordCrypted($params) {
             continue; // username already exits
         }
 
-        $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',";
+        $sql = "UPDATE $table_user SET ";
+        if (!empty($lastname)) {
+            $sql .= " lastname='".Database::escape_string($lastname)."', ";
+        }
+        if (!empty($firstname)) {
+            $sql .= " firstname='".Database::escape_string($firstname)."', ";
+        }
+        $sql .= " username='".Database::escape_string($username)."',";
         if (!is_null($password)) {
             $sql .= " password='".Database::escape_string($password)."',";
         }
@@ -1819,11 +1831,15 @@ function WSEditUserPasswordCrypted($params) {
     if (!empty($r_username[0])) {
         return 0;
     }
-
-    $sql = "UPDATE $table_user SET
-                lastname='".Database::escape_string($lastname)."',
-                firstname='".Database::escape_string($firstname)."',
-                username='".Database::escape_string($username)."',";
+    // Edit lastname and firstname only if not empty
+    $sql = "UPDATE $table_user SET ";
+    if (!empty($lastname)) {
+        $sql .= " lastname='".Database::escape_string($lastname)."', ";
+    }
+    if (!empty($firstname)) {
+        $sql .= " firstname='".Database::escape_string($firstname)."', ";
+    }
+    $sql .= " username='".Database::escape_string($username)."',";
     if (!is_null($password)) {
         $sql .= " password='".Database::escape_string($password)."',";
     }

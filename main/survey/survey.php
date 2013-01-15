@@ -42,8 +42,8 @@ $table_course 					= Database :: get_main_table(TABLE_MAIN_COURSE);
 $table_user 					= Database :: get_main_table(TABLE_MAIN_USER);
 
 $survey_id = intval($_GET['survey_id']);
-
 $course_id = api_get_course_int_id();
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 // Breadcrumbs
 $interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
@@ -69,10 +69,11 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$tool_name .= '...';
 }
 
-if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'deletegroup') {
+
+if ($is_survey_type_1 && $action == 'addgroup' || $action == 'deletegroup') {
 	$_POST['name'] = trim($_POST['name']);
 
-	if (($_GET['action'] == 'addgroup')) {
+	if ($action == 'addgroup') {
 		if (!empty($_POST['group_id'])) {
 			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
 			                 WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -85,7 +86,7 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 		}
 	}
 
-	if ($_GET['action'] == 'deletegroup'){
+	if ($action == 'deletegroup'){
 		Database::query('DELETE FROM '.$table_survey_question_group.' WHERE c_id = '.$course_id.' AND id = '.Database::escape_string($_GET['gid']).' and survey_id = '.Database::escape_string($survey_id));
 		$sendmsg = 'GroupDeletedSuccessfully';
 	}
@@ -98,17 +99,17 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 Display::display_header($tool_name, 'Survey');
 
 // Action handling
-$my_action_survey		= Security::remove_XSS($_GET['action']);
+$my_action_survey		= Security::remove_XSS($action);
 $my_question_id_survey  = Security::remove_XSS($_GET['question_id']);
 $my_survey_id_survey    = Security::remove_XSS($_GET['survey_id']);
 $message_information    = Security::remove_XSS($_GET['message']);
 
-if (isset($_GET['action'])) {
-	if (($_GET['action'] == 'moveup' || $_GET['action'] == 'movedown') && isset($_GET['question_id'])) {
+if (isset($action)) {
+	if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {
 		survey_manager::move_survey_question($my_action_survey,$my_question_id_survey,$my_survey_id_survey);
 		Display::display_confirmation_message(get_lang('SurveyQuestionMoved'));
 	}
-	if ($_GET['action'] == 'delete' AND is_numeric($_GET['question_id'])) {
+	if ($action == 'delete' AND is_numeric($_GET['question_id'])) {
 		survey_manager::delete_survey_question($my_survey_id_survey, $my_question_id_survey, $survey_data['is_shared']);
 	}
 }
@@ -253,7 +254,7 @@ if ($is_survey_type_1) {
 	echo '<table border="0"><tr><td width="100">'.get_lang('Name').'</td><td>'.get_lang('Description').'</td></tr></table>';
 
 	echo '<form action="survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
-	if ($_GET['action'] == 'editgroup') {
+	if ($action == 'editgroup') {
 		$sql = 'SELECT name,description FROM '.$table_survey_question_group.' WHERE id = '.Database::escape_string($_GET['gid']).' AND survey_id = '.Database::escape_string($survey_id).' limit 1';
 		$rs = Database::query($sql);
 		$editedrow = Database::fetch_array($rs,'ASSOC');

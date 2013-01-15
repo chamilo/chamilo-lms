@@ -27,7 +27,7 @@ require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 		function advanced_parameters() {
 			if(document.getElementById(\'options\').style.display == \'none\') {
 					document.getElementById(\'options\').style.display = \'block\';
@@ -70,12 +70,7 @@ $course_id = api_get_course_id();
 $session_id = api_get_session_id();
 $gradebook_link_type = 8; // LINK_SURVEY
 
-/* $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-  if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-  $urlname .= '...';
-  } */
 $urlname = $survey_data['title'];
-
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
@@ -124,36 +119,19 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
-//$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {
-    $survey_code->freeze();
+    //$survey_code->freeze();
     $form->applyFilter('survey_code', 'api_strtoupper');
 }
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
 
-/*
-  //Language selection has been disabled. If you want to re-enable, please
-  //disable the following line (hidden language field).
-  $lang_array = api_get_languages();
-  foreach ($lang_array['name'] as $key => $value) {
-  $languages[$lang_array['folder'][$key]] = $value;
-  }
-  $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
- */
-
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
 $form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name' => 'survey'));
 $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name' => 'survey'));
-
-//$group = '';
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);
-/** TODO Maybe it is better to change this into false instead see line 95 in survey.lib.php */
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('No'), 0);
-//$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
@@ -226,7 +204,6 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
                 }
             }
         }
-
         $form->addElement('html', '</div>');
     }
 }

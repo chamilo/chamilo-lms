@@ -42,19 +42,19 @@ class survey_manager {
 	 * SYRVEY FUNCTIONS
 	 */
 
-	/**
-	 * This function retrieves all the survey information
-	 *
-	 * @param integer $survey_id the id of the survey
-	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
-	 * 		  course database
-	 * @param string course code optional
-	 *
-	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-	 * @version February 2007
-	 *
-	 * @todo this is the same function as in create_new_survey.php
-	 */
+    /**
+     * This function retrieves all the survey information
+     *
+     * @param integer $survey_id the id of the survey
+     * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
+     * 		  course database
+     * @param string course code optional
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @version February 2007
+     * @assert('0') === false
+     * @todo this is the same function as in create_new_survey.php
+     */
 	static function get_survey($survey_id, $shared = 0, $course_code = '') {
 		global $_course;
 
@@ -66,6 +66,9 @@ class survey_manager {
 		} else {
 			$my_course_id = api_get_course_id();
 		}
+        if (empty($survey_id)) {
+            return array();
+        }
 		$my_course_info = api_get_course_info($my_course_id);
 		$table_survey = Database :: get_course_table(TABLE_SURVEY);
 
@@ -4209,6 +4212,7 @@ class SurveyUtil {
             if (survey_manager::survey_generation_hash_available()) {
                 $return .=  Display::url(Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink'),'',ICON_SIZE_SMALL), 'generate_link.php?survey_id='.$survey_id.'&'.api_get_cidreq());
             }
+            $return .=  Display::url(Display::return_icon('copy.png', get_lang('DuplicateSurvey'),'',ICON_SIZE_SMALL), 'survey_list.php?action=copy_survey&survey_id='.$survey_id.'&'.api_get_cidreq());
 			$return .= ' <a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?')).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 
 		}
@@ -4224,16 +4228,10 @@ class SurveyUtil {
 	}
 
 	static function modify_filter_for_coach($survey_id) {
-
 		$survey_id = Security::remove_XSS($survey_id);
-		//$return = '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=edit&amp;survey_id='.$survey_id.'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-		//$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=delete&amp;survey_id='.$survey_id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("DeleteSurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
-		//$return .= '<a href="create_survey_in_another_language.php?id_survey='.$survey_id.'">'.Display::return_icon('copy.gif', get_lang('Copy')).'</a>';
-		//$return .= '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('add.gif', get_lang('Add')).'</a>';
 		$return .= '<a href="preview.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 		$return .= '<a href="survey_invite.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('mail_send.png', get_lang('Publish'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
 		$return .= '<a href="survey_list.php?'.api_get_cidreq().'&amp;action=empty&amp;survey_id='.$survey_id.'" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang("EmptySurvey").'?', ENT_QUOTES)).'\')) return false;">'.Display::return_icon('clean.png', get_lang('EmptySurvey'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
-		//$return .= '<a href="reporting.php?'.api_get_cidreq().'&amp;survey_id='.$survey_id.'">'.Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>';
 		return $return;
 	}
 
@@ -4748,7 +4746,6 @@ class SurveyUtil {
 		$user_answer = Database::escape_string($user_answer);
 
 		$course_id = api_get_course_int_id();
-
 
 		$sql  = 'SELECT COUNT(*) as count FROM '.$table_survey_invitation.'
 		          WHERE user='.$user_id.' AND survey_code="'.$survey_code.'" AND answered="1" AND c_id = '.$course_id.' ';

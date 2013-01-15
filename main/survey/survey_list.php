@@ -109,6 +109,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'empty') {
 	}
 }
 
+
+
 // Action handling: performing the same action on multiple surveys
 if (isset($_POST['action']) && $_POST['action']) {
 	if (is_array($_POST['id'])) {

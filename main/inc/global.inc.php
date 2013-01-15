@@ -130,10 +130,12 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-$app->register(new Silex\Provider\ValidatorServiceProvider());
+//$app->register(new Silex\Provider\SessionServiceProvider());
 
 //URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 
 $app->register(new Silex\Provider\TranslationServiceProvider(),array(
     'locale_fallback' => 'en'
@@ -308,6 +310,7 @@ $app->before(function() use ($app) {
     if (!file_exists($app['configuration_file'])) {
         $app->abort(500, "Chamilo has not been installed"); //error 2
     }
+    //$app['request']->getSession()->start();
 });
 
 $app->after(function() {
@@ -429,7 +432,8 @@ if (api_is_utf8($charset)) {
 }
 Database::query("SET NAMES 'utf8';");
 
-// Start session after the internationalization library has been initialized.
+// Start session after the internationalization library has been initialized
+//@todo user silex session provider instead of a custom class
 Chamilo::session()->start($already_installed);
 
 $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));

@@ -1384,10 +1384,12 @@ class survey_question
             $tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
         }
 
-        $this->html .= '<form class="form-horizontal" id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.Security::remove_XSS($_GET['question_id']).'">';
+        $question_id = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
+
+        $this->html .= '<form class="form-horizontal" id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.$question_id.'">';
         $this->html .= '<legend>'.$tool_name.'</legend>';
         $this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
-        $this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.Security::remove_XSS($_GET['question_id']).'"/>';
+        $this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$question_id.'"/>';
         $this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.Security::remove_XSS($form_content['shared_question_id']).'"/>';
         $this->html .= '		<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_GET['type']).'"/>';
 
@@ -1397,7 +1399,7 @@ class survey_question
         $this->html .= '			<span class="form_required">*</span> '.get_lang('Question');
         $this->html .= '		</label>';
         $this->html .= '		<div class="controls">';
-        $this->html .= api_return_html_area('question', Security::remove_XSS(stripslashes($form_content['question']), STUDENT), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
+        $this->html .= api_return_html_area('question', Security::remove_XSS($form_content['question'], STUDENT), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'));
         $this->html .= '		</div>';
         $this->html .= '	</div>';
 
@@ -2700,6 +2702,9 @@ class SurveyUtil
     static function display_question_report($survey_data)
     {
         $course_id = api_get_course_int_id();
+        $data = array();
+        $number_of_answers = 0;
+
         // Database table definitions
         $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);

@@ -17,12 +17,13 @@ require_once '../inc/global.inc.php';
 // Including additional libraries
 require_once 'survey.lib.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-						$(document).ready( function() {
-							$("button").click(function() {
-								$("#is_executable").attr("value",$(this).attr("name"));
-							});
-		 				} ); </script>';
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {
+    $("button").click(function() {
+        $("#is_executable").attr("value",$(this).attr("name"));
+    });
+});
+</script>';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
@@ -33,7 +34,8 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 // Is valid request
-$is_valid_request = $_REQUEST['is_executable'];
+$is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
+
 if ($request_index != $is_valid_request) {
 	if ($request_index == 'save_question') {
 		unset($_POST[$request_index]);

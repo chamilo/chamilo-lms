@@ -83,9 +83,9 @@ if (!empty($category)) {
 }
 
 if (empty($action)) {
-    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses 
-			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code 
-				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . " 
+    $myquery = "SELECT t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count,COUNT(DISTINCT t3.code) AS nbr_courses
+			 	FROM $tbl_category t1 LEFT JOIN $tbl_category t2 ON t1.code=t2.parent_id LEFT JOIN $tbl_course t3 ON t3.category_code=t1.code
+				WHERE t1.parent_id " . (empty($category) ? "IS NULL" : "='$category'") . "
 				GROUP BY t1.name,t1.code,t1.parent_id,t1.tree_pos,t1.children_count ORDER BY t1.tree_pos";
     $result = Database::query($myquery);
     $Categories = Database::store_result($result);
@@ -265,7 +265,7 @@ function addNode($code, $name, $canHaveCourses, $parent_id) {
 
     $tree_pos = $row['maxTreePos'] + 1;
 
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
     Database::query("INSERT INTO $tbl_category(name,code,parent_id,tree_pos,children_count,auth_course_child) VALUES('$name','$code'," . (empty($parent_id) ? "NULL" : "'$parent_id'") . ",'$tree_pos','0','$canHaveCourses')");
 
     updateFils($parent_id);
@@ -287,7 +287,7 @@ function editNode($code, $name, $canHaveCourses, $old_code) {
             return false;
         }
     }
-    $code = generate_course_code($code);
+    $code = CourseManager::generate_course_code($code);
     Database::query("UPDATE $tbl_category SET name='$name', code='$code',auth_course_child='$canHaveCourses' WHERE code='$old_code'");
     $sql = "UPDATE $tbl_course SET category_code = '$code' WHERE category_code = '$old_code' ";
     Database::query($sql);

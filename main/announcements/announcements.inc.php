@@ -930,6 +930,9 @@ class AnnouncementManager {
      * @return   array   Array of groups and users (each an array of IDs)
      */
     public static function separate_users_groups($to) {
+        $grouplist = array();
+        $userlist = array();
+        
         foreach ($to as $to_item) {
             list($type, $id) = explode(':', $to_item);
             switch ($type) {

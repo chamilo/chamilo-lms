@@ -60,8 +60,6 @@ $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 /*	Libraries	*/
 
 $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once $lib.'groupmanager.lib.php';
-require_once $lib.'mail.lib.inc.php';
 require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
@@ -73,8 +71,8 @@ $course_id = api_get_course_int_id();
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 /*	POST TO	*/
-$safe_emailTitle = $_POST['emailTitle'];
-$safe_newContent = $_POST['newContent'];
+$safe_emailTitle = isset($_POST['emailTitle']) ? $_POST['emailTitle'] : null;
+$safe_newContent = isset($_POST['newContent']) ? $_POST['newContent'] : null;
 
 $content_to_modify = $title_to_modify 	= '';
 
@@ -160,13 +158,13 @@ if(!empty($_GET['remind_inactive'])) {
 
 $group_id = api_get_group_id();
 
-if (!empty($group_id)) {	
+if (!empty($group_id)) {
 	$group_properties  = GroupManager :: get_group_properties($group_id);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$announcement_id = intval($_GET['id']);
+$announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $message = null;
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
@@ -370,7 +368,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 		} else {
 			//insert mode
-			if ($ctok == $_POST['sec_token']) {		
+			if ($ctok == $_POST['sec_token']) {
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
                 if (!empty($group_id)) {

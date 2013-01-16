@@ -23,6 +23,8 @@ return array(
     'AdminPage' => $baseDir . '/main/admin/admin_page.class.php',
     'AjaxController' => $baseDir . '/main/inc/lib/ajax_controller.class.php',
     'Announcement' => $baseDir . '/main/coursecopy/classes/Announcement.class.php',
+    'AnnouncementEmail' => $baseDir . '/main/inc/lib/announcement_email.class.php',
+    'AnnouncementManager' => $baseDir . '/main/inc/lib/announcements.inc.php',
     'Answer' => $baseDir . '/main/exercice/answer.class.php',
     'AppPlugin' => $baseDir . '/main/inc/lib/plugin.lib.php',
     'AssetAggregatedRenderer' => $baseDir . '/main/inc/lib/system/media/renderer/asset_aggregated_renderer.class.php',

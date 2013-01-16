@@ -932,7 +932,7 @@ class AnnouncementManager {
     public static function separate_users_groups($to) {
         $grouplist = array();
         $userlist = array();
-        
+
         foreach ($to as $to_item) {
             list($type, $id) = explode(':', $to_item);
             switch ($type) {
@@ -1120,7 +1120,7 @@ class AnnouncementManager {
         $id = intval($id);
         $course_id = api_get_course_int_id();
         $sql = "DELETE FROM $tbl_announcement_attachment WHERE c_id = $course_id AND id = $id";
-        $result = Database::query($sql);
+        Database::query($sql);
         // update item_property
         //api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
     }

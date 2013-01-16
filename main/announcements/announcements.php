@@ -63,7 +63,6 @@ $lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
 require_once $lib.'tracking.lib.php';
 require_once $lib.'fckeditor/fckeditor.php';
 require_once $lib.'fileUpload.lib.php';
-require_once 'announcements.inc.php';
 
 $course_id = api_get_course_int_id();
 

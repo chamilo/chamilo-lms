@@ -643,12 +643,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "0d4393d25a0ff6074b5163311e058d7f3cbccf35"
+                "reference": "8b76f310b038647c85ae17143971b0c2abbd0a57"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/0d4393d25a0ff6074b5163311e058d7f3cbccf35.zip",
-                "reference": "0d4393d25a0ff6074b5163311e058d7f3cbccf35",
+                "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/8b76f310b038647c85ae17143971b0c2abbd0a57.zip",
+                "reference": "8b76f310b038647c85ae17143971b0c2abbd0a57",
                 "shasum": ""
             },
             "require": {
@@ -668,7 +668,7 @@
                 "doctrine/mongodb": ">=1.0.0",
                 "doctrine/mongodb-odm": ">=1.0.0-BETA7"
             },
-            "time": "2013-01-11 05:15:19",
+            "time": "2013-01-16 05:01:32",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -968,12 +968,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Silex.git",
-                "reference": "c3dc8d7e0fba4a2858dc2099066f7e593bee2045"
+                "reference": "3d5d39ea73ef1fa8366957e96fa9204805d7cac6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Silex/archive/c3dc8d7e0fba4a2858dc2099066f7e593bee2045.zip",
-                "reference": "c3dc8d7e0fba4a2858dc2099066f7e593bee2045",
+                "url": "https://github.com/fabpot/Silex/archive/3d5d39ea73ef1fa8366957e96fa9204805d7cac6.zip",
+                "reference": "3d5d39ea73ef1fa8366957e96fa9204805d7cac6",
                 "shasum": ""
             },
             "require": {
@@ -1008,7 +1008,7 @@
                 "symfony/css-selector": ">=2.1,<2.3-dev",
                 "symfony/dom-crawler": ">=2.1,<2.3-dev"
             },
-            "time": "2013-01-13 19:52:32",
+            "time": "2013-01-15 13:27:32",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1191,12 +1191,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/DependencyInjection",
-                "reference": "c4016466a8632f27d72d4ecfc89b472d4050a2ca"
+                "reference": "b5fa8c4627840d22a13def4be4f3383ddd992aa1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/DependencyInjection/archive/c4016466a8632f27d72d4ecfc89b472d4050a2ca.zip",
-                "reference": "c4016466a8632f27d72d4ecfc89b472d4050a2ca",
+                "url": "https://github.com/symfony/DependencyInjection/archive/b5fa8c4627840d22a13def4be4f3383ddd992aa1.zip",
+                "reference": "b5fa8c4627840d22a13def4be4f3383ddd992aa1",
                 "shasum": ""
             },
             "require": {
@@ -1210,7 +1210,7 @@
                 "symfony/yaml": "2.2.*",
                 "symfony/config": "2.2.*"
             },
-            "time": "2013-01-11 17:38:19",
+            "time": "2013-01-16 08:59:03",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1545,12 +1545,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Routing",
-                "reference": "192243b2c5e36fc21e83fd63ab54582dcc31e7e4"
+                "reference": "81b5a5649b8b1fba057f3fdd5ca15cc3af822b66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Routing/archive/192243b2c5e36fc21e83fd63ab54582dcc31e7e4.zip",
-                "reference": "192243b2c5e36fc21e83fd63ab54582dcc31e7e4",
+                "url": "https://github.com/symfony/Routing/archive/81b5a5649b8b1fba057f3fdd5ca15cc3af822b66.zip",
+                "reference": "81b5a5649b8b1fba057f3fdd5ca15cc3af822b66",
                 "shasum": ""
             },
             "require": {
@@ -1568,7 +1568,7 @@
                 "symfony/config": "2.2.*",
                 "symfony/yaml": "2.2.*"
             },
-            "time": "2013-01-11 17:38:19",
+            "time": "2013-01-15 17:01:40",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1873,18 +1873,18 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Twig.git",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab"
+                "reference": "3225226e0be466395414da4b362013531eedb580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Twig/archive/3111e1265db1026323c589a5bd2d152871d7bbab.zip",
-                "reference": "3111e1265db1026323c589a5bd2d152871d7bbab",
+                "url": "https://github.com/fabpot/Twig/archive/3225226e0be466395414da4b362013531eedb580.zip",
+                "reference": "3225226e0be466395414da4b362013531eedb580",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2013-01-08 16:56:12",
+            "time": "2013-01-16 13:37:25",
             "type": "library",
             "extra": {
                 "branch-alias": {

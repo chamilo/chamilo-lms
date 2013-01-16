@@ -376,23 +376,23 @@ class UserManager {
          * @assert ('abc') === false
      */
     public static function can_delete_user($user_id) {
-            global $_configuration;
-            if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
-                    return false;
-            }
-            $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-            if ($user_id != strval(intval($user_id))) return false;
-            if ($user_id === false) return false;
-            $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
-            $res = Database::query($sql);
-            while ($course = Database::fetch_object($res)) {
-                    $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
-                    $res2 = Database::query($sql);
-                    if (Database::num_rows($res2) == 1) {
-                            return false;
-                    }
-            }
-            return true;
+        global $_configuration;
+        if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
+                return false;
+        }
+        $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
+        if ($user_id != strval(intval($user_id))) return false;
+        if ($user_id === false) return false;
+        $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
+        $res = Database::query($sql);
+        while ($course = Database::fetch_object($res)) {
+                $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
+                $res2 = Database::query($sql);
+                if (Database::num_rows($res2) == 1) {
+                        return false;
+                }
+        }
+        return true;
     }
 
     /**

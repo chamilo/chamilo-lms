@@ -3149,4 +3149,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21010' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21196' WHERE variable = 'chamilo_database_version';

@@ -114,5 +114,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 ALTER TABLE course_module change `row` row_module int unsigned NOT NULL default '0';
 ALTER TABLE course_module change `column` column_module int unsigned NOT NULL default '0';
 
+ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL DEFAULT 0;
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21010' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21196' WHERE variable = 'chamilo_database_version';

@@ -3606,6 +3606,7 @@ function create_course_tables($course_db_name = null) {
               reminder_date datetime NOT NULL,
               answered int NOT NULL default 0,
               session_id int UNSIGNED NOT NULL default 0,
+              group_id INT NOT NULL DEFAULT 0,
               PRIMARY KEY  (c_id, survey_invitation_id)
             )" . $charset_clause;
     $result = Database::query($sql);

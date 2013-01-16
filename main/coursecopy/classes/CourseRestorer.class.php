@@ -1140,7 +1140,7 @@ class CourseRestorer
                         'text_when_finished' => $quiz->text_when_finished,
                         'expired_time' => (int)$quiz->expired_time,
                     );
-                  
+
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;
                         if (!empty($quiz->session_id)) {
@@ -1159,17 +1159,24 @@ class CourseRestorer
 					$new_id = -1;
 				}
 
-				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+                 if ($new_id) {
+                    // updates the question position
+                    $exercise = new Exercise($this->destination_course_id);
+                    $exercise->read($new_id);
+                    $exercise->add_exercise_to_order_table();
 
-				$order = 0;
-                if (!empty($quiz->question_ids)) {
-                    foreach ($quiz->question_ids as $index => $question_id) {
-                        $qid = $this->restore_quiz_question($question_id);
-                        $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
-                        $sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
-                        Database::query($sql);
+                    $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+
+                    $order = 0;
+                    if (!empty($quiz->question_ids)) {
+                        foreach ($quiz->question_ids as $index => $question_id) {
+                            $qid = $this->restore_quiz_question($question_id);
+                            $question_order = $quiz->question_orders[$index] ? $quiz->question_orders[$index] : ++$order;
+                            $sql = "INSERT IGNORE INTO ".$table_rel." SET c_id = ".$this->destination_course_id.", question_id = ".$qid.", exercice_id = ".$new_id.", question_order = ".$question_order;
+                            Database::query($sql);
+                        }
                     }
-                }
+                 }
 			}
 		}
 	}

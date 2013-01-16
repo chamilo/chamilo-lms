@@ -30,7 +30,7 @@ $session_id = api_get_session_id();
 $all_categories = Category :: load(null, null, api_get_course_id(), null, null, $session_id);
 
 $category = Category :: load($_GET['selectcat']);
-$url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.(isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : '').'&course_code='.(empty($_GET['course_code']) ? '' : Security::remove_XSS($_GET['course_code']));
+$url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.(isset($_GET['typeselected']) ? Security::remove_XSS($_GET['typeselected']) : '').'&course_code='.api_get_course_id();
 $typeform = new LinkForm(LinkForm :: TYPE_CREATE, $category[0], null, 'create_link', null, $url, $_GET['typeselected']);
 
 // if user selected a link type
@@ -63,8 +63,6 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 
         $parent_cat = Category :: load($addvalues['select_gradebook']);
         $global_weight = $category[0]->get_weight();
-
-        //$addvalues['weight'] = $addvalues['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
 
         $link->set_weight($addvalues['weight_mask']);
 
@@ -113,7 +111,7 @@ if (isset($_GET['typeselected']) && $_GET['typeselected'] != '0') {
 $interbreadcrumb[] = array('url' => $_SESSION['gradebook_dest'].'?selectcat='.Security::remove_XSS($_GET['selectcat']), 'name' => get_lang('Gradebook'));
 $this_section = SECTION_COURSES;
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(document).ready( function() {
 
     $("#hide_category_id").change(function() {

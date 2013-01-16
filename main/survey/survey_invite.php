@@ -142,6 +142,7 @@ $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAll
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'class="save"');
+
 // The rules (required fields)
 $portal_url = api_get_path(WEB_PATH);
 if (api_is_multiple_url_enabled()) {
@@ -156,7 +157,7 @@ if (api_is_multiple_url_enabled()) {
 $auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'];
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
-$form->addElement('label', null, $auto_survey_link);
+$form->addElement('label', null, "<pre>$auto_survey_link</pre>");
 
 if ($form->validate()) {
    	$values = $form->exportValues();

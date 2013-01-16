@@ -1662,11 +1662,11 @@ class CourseManager {
      *    @param array $course_info
      *    @return array with user info
      */
-    public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0) {
+    public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0, $order_by = null) {
         $complete_user_list = array();
 
         //get users from real course
-        $user_list = self::get_user_list_from_course_code($course_code, $session_id);
+        $user_list = self::get_user_list_from_course_code($course_code, $session_id, null, $order_by);
         foreach ($user_list as $this_user) {
             $complete_user_list[] = $this_user;
         }

@@ -207,7 +207,6 @@ if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_e
             // tooledit : visibility = 2 : only visible for platform administrator
             if ($ctok == $_GET['sec_token']) {
                 AnnouncementManager::delete_announcement($_course, $id);
-                //delete_added_resource("Ad_Valvas", $delete);
 
                 $id = null;
                 $emailTitle = null;

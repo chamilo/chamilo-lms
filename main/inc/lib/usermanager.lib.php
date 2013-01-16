@@ -11,7 +11,7 @@
  * @package chamilo.include.user
  */
 class UserManager {
-    public static $columns = array(
+    public $columns = array(
         'user_id',
         'lastname',
         'firstname',
@@ -3886,5 +3886,72 @@ class UserManager {
             $sql = "UPDATE $table_user SET language = '$to' WHERE language = '$from'";
             Database::query($sql);
         }
+    }
+
+    static function transform_user_group_array($user_list, $group_list, $get_names = false, $remove_users_from_group = false) {
+        $complete_list = array();
+        if (!empty($user_list)) {
+            foreach ($user_list as $user_item) {
+                if ($get_names) {
+                     $user_item = api_get_user_info($user_item);
+                }
+                $complete_list["USER:".$user_item['user_id']] = api_get_person_name($user_item['firstname'], $user_item['lastname']);
+            }
+        }
+        if (!empty($group_list)) {
+            foreach ($group_list as $group_item) {
+
+                if ($get_names) {
+                    $group_info = GroupManager::get_group_properties($group_item);
+                } else {
+                    $group_info = GroupManager::get_group_properties($group_item['id']);
+                }
+                $complete_list["GROUP:".$group_info['id']] = $group_info['name']." [".$group_info['count_users']." ".get_lang('Users')."]";
+                if ($remove_users_from_group) {
+                    $users = GroupManager::get_users($group_info['id']);
+                    foreach($users as $user_id) {
+                        if (isset($complete_list["USER:".$user_id])) {
+                            unset($complete_list["USER:".$user_id]);
+                        }
+                    }
+                }
+            }
+        }
+        return $complete_list;
+    }
+
+    static function generate_user_group_array($course_code, $session_id = 0) {
+        $order = api_is_western_name_order() ? 'firstname' : 'lastname';
+        $user_list = CourseManager::get_real_and_linked_user_list($course_code, true, $session_id, $order);
+        $group_list = CourseManager::get_group_list_of_course($course_code, $session_id, 1);
+        $items = self::transform_user_group_array($user_list, $group_list);
+        return $items;
+    }
+
+    static function separate_users_groups_array($to, $add_group_users = false) {
+        $grouplist = array();
+        $userlist = array();
+        $send_to = array();
+
+        foreach ($to as $to_item) {
+            list($type, $id) = explode(':', $to_item);
+            switch ($type) {
+                case 'GROUP':
+                    $grouplist[] = intval($id);
+                    if ($add_group_users) {
+                        $users = GroupManager::get_users($id);
+                        foreach($users as $user_id) {
+                            $userlist[] = $user_id;
+                        }
+                    }
+                    break;
+                case 'USER':
+                    $userlist[] = intval($id);
+                    break;
+            }
+        }
+        $send_to['groups'] = $grouplist;
+        $send_to['users'] = array_unique($userlist);
+        return $send_to;
     }
 }

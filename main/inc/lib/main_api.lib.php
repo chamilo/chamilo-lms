@@ -1965,7 +1965,6 @@ function api_get_session_info($session_id, $add_extra_values = false) {
     return $data;
 }
 
-
 function api_get_session_date_validation($session_info, $course_code, $ignore_visibility_for_admins = true, $check_coach_dates = true) {
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {

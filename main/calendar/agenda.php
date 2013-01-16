@@ -86,25 +86,16 @@ if (!empty($_GET['sort']) and ($allow_individual_calendar_status == "show")) {
 // 4. filter user or group
 if (!empty($_GET['user']) or !empty($_GET['group'])) {
     $_SESSION['user'] = (int) $_GET['user'];
-
     $_SESSION['group'] = (int) $_GET['group'];
 }
 if ((!empty($_GET['user']) and $_GET['user'] == "none") or (!empty($_GET['group']) and $_GET['group'] == "none")) {
     Session::erase("user");
     Session::erase("group");
 }
-if (!$is_courseAdmin) {
-    if (!empty($_GET['toolgroup'])) {
-        $toolgroup = Security::remove_XSS($_GET['toolgroup']);
-        Session::write('toolgroup', $toolgroup);
-    }
-}
+
+$group_id = api_get_group_id();
+
 //It comes from the group tools. If it's define it overwrites $_SESSION['group']
-/*
-  if (!empty($_GET['isStudentView']) and $_GET['isStudentView']=="false") {
-  api_session_unregister("user");
-  api_session_unregister("group");
-  } */
 
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
@@ -117,11 +108,10 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in
 // the learning path, we do not include the banner so we have to explicitly
 // include the stylesheet, which is normally done in the header
-if (isset($_GET['toolgroup']) && !empty($_GET['toolgroup'])) {
-    $_clean['toolgroup'] = intval($_GET['toolgroup']);
-    $group_properties = GroupManager :: get_group_properties($_clean['toolgroup']);
+if (!empty($group_id)) {
+    $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = array("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array("url" => "../group/group_space.php?gidReq=".Security::remove_XSS($_GET['toolgroup']), "name" => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array("url" => "../group/group_space.php?gidReq=".$group_id, "name" => get_lang('GroupSpace').' '.$group_properties['name']);
     Display::display_header($nameTools, 'Agenda');
 } elseif (empty($origin) or $origin != 'learnpath') {
     Display::display_header($nameTools, 'Agenda');
@@ -198,7 +188,10 @@ echo '</div>';
 $event_id = isset($_GET['id']) ? $_GET['id'] : null;
 $course_info = api_get_course_info();
 
-if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true))) {
+if (api_is_allowed_to_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) OR
+     GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+    ) {
     switch ($action) {
         case 'add':
             if (isset($_POST['submit_event']) && $_POST['submit_event']) {

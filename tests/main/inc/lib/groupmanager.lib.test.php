@@ -50,12 +50,6 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testCreateGroupsFromVirtualCourses(){
-		$res = GroupManager::create_groups_from_virtual_courses();
-		$this->assertTrue($res);
-		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
 
 	public function testCreateClassGroups(){
 		$category_id=2;

@@ -1044,24 +1044,6 @@ class CourseManager {
     }
 
     /**
-     *  Return an array of arrays, listing course info of all virtual course
-     *  linked to the real course ID $real_course_code
-     *
-     *  @param string The id of the real course which the virtual courses are linked to
-     *  @return array List of courses details
-     *  @deprecated virtual courses doesn't exist anymore
-     */
-    public static function get_virtual_courses_linked_to_real_course($real_course_code) {
-        $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE target_course_code = '".Database::get_main_table(TABLE_MAIN_COURSE)."'");
-        $result_array = array();
-        while ($result = Database::fetch_array($sql_result)) {
-            $result_array[] = $result;
-        }
-        return $result_array;
-    }
-
-    /**
      * This function returns the course code of the real course
      * to which a virtual course is linked.
      *
@@ -1681,8 +1663,6 @@ class CourseManager {
      *    @return array with user info
      */
     public static function get_real_and_linked_user_list($course_code, $with_sessions = true, $session_id = 0) {
-        //get list of virtual courses
-        $virtual_course_list = self::get_virtual_courses_linked_to_real_course($course_code);
         $complete_user_list = array();
 
         //get users from real course
@@ -1690,16 +1670,6 @@ class CourseManager {
         foreach ($user_list as $this_user) {
             $complete_user_list[] = $this_user;
         }
-
-        //get users from linked courses
-        foreach ($virtual_course_list as $this_course) {
-            $course_code = $this_course['code'];
-            $user_list = self::get_user_list_from_course_code($course_code, $session_id);
-            foreach ($user_list as $this_user) {
-                $complete_user_list[] = $this_user;
-            }
-        }
-
         return $complete_user_list;
     }
 

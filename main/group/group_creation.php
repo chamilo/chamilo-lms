@@ -50,11 +50,6 @@ if (isset ($_POST['action'])) {
 			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;
-		case 'create_virtual_groups':
-			$ids = GroupManager :: create_groups_from_virtual_courses();
-			$msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
 		case 'create_subgroups':
 			GroupManager :: create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
 			$msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
@@ -184,7 +179,7 @@ EOT;
 			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
 			if (api_get_setting('allow_group_categories') == 'true') {
 				$group_el[] = $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
-			}			
+			}
 			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
 
 			if ($_POST['number_of_groups'] < 10000) {
@@ -232,23 +227,6 @@ EOT;
 	} else {
 		echo get_lang('NoCategoriesDefined');
 	}
-	//echo '</blockquote>';
-
-	/*
-	 * Show form to generate groups from virtual courses
-	 */
-	$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($_course['sysCode']);
-	if (count($virtual_courses) > 0) {
-		echo '<b>'.get_lang('CreateGroupsFromVirtualCourses').'</b>';
-		echo '<blockquote>';
-		echo get_lang('CreateGroupsFromVirtualCoursesInfo');
-		$create_virtual_groups_form = new FormValidator('create_virtual_groups');
-		$create_virtual_groups_form->addElement('hidden', 'action');
-		$create_virtual_groups_form->addElement('submit', 'submit', get_lang('Ok'));
-		$create_virtual_groups_form->setDefaults(array('action' => 'create_virtual_groups'));
-		$create_virtual_groups_form->display();
-		echo '</blockquote>';
-	}
 
 	/*
 	 * Show form to generate subgroups
@@ -262,7 +240,7 @@ EOT;
 				$base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
 			}
 		}
-		if (count($base_group_options) > 0) {			
+		if (count($base_group_options) > 0) {
 			$create_subgroups_form = new FormValidator('create_subgroups');
             $create_subgroups_form->addElement('header', get_lang('CreateSubgroups'));
             $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
@@ -277,7 +255,7 @@ EOT;
 			$defaults = array();
 			$defaults['action'] = 'create_subgroups';
 			$create_subgroups_form->setDefaults($defaults);
-			$create_subgroups_form->display();			
+			$create_subgroups_form->display();
 		}
 	}
 
@@ -285,7 +263,7 @@ EOT;
 	 * Show form to generate groups from classes subscribed to the course
 	 */
     $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
-    $obj = new UserGroup();	 
+    $obj = new UserGroup();
     $classes = $obj->get_usergroup_in_course($options);
 	if (count($classes) > 0) {
 		echo '<b>'.get_lang('GroupsFromClasses').'</b>';
@@ -323,7 +301,7 @@ EOT;
 		$create_class_groups_form->display();
 		echo '</blockquote>';
 	}
-    
+
 }
 
 /*	FOOTER */

@@ -28,23 +28,23 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script>
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-		}
+    function advanced_parameters() {
+        if(document.getElementById(\'options\').style.display == \'none\') {
+                document.getElementById(\'options\').style.display = \'block\';
+                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        } else {
+                document.getElementById(\'options\').style.display = \'none\';
+                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        }
+    }
 
-		function setFocus(){
-		  $("#surveycode_title").focus();
-		}
-		$(document).ready(function () {
-		  setFocus();
-		});
-	</script>';
+    function setFocus(){
+      $("#surveycode_title").focus();
+    }
+    $(document).ready(function () {
+      setFocus();
+    });
+</script>';
 
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -103,8 +103,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['start_date'] = date('d-F-Y H:i');
     $startdateandxdays = time() + 864000; // today + 10 days
     $defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
-    //$defaults['survey_share']['survey_share'] = 0;
-    //$form_share_value = 1;
     $defaults['anonymous'] = 0;
 }
 
@@ -119,11 +117,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
-
-if ($_GET['action'] == 'edit') {
-    //$survey_code->freeze();
-    //$form->applyFilter('survey_code', 'api_strtoupper');
-}
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
@@ -240,11 +233,12 @@ if ($form->validate()) {
     $return = survey_manager::store_survey($values);
 
     if ($return['type'] == 'error') {
-        // Display the error
-        Display::display_error_message(get_lang($return['message']), false);
 
         // Displaying the header
         Display::display_header($tool_name);
+
+        // Display the error
+        Display::display_error_message(get_lang($return['message']), false);
 
         // Display the form
         $form->display();
@@ -268,12 +262,6 @@ if ($form->validate()) {
                 }
             }
         }
-    }
-
-    if ($config['survey']['debug']) {
-        // Displaying a feedback message
-        Display::display_confirmation_message($return['message'], false);
-    } else {
         // Redirecting to the survey page (whilst showing the return message)
         header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
         exit;

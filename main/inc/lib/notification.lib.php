@@ -137,20 +137,22 @@ class Notification extends Model {
         switch ($this->type) {
             case NOTIFICATION_TYPE_MESSAGE;
                 $setting_to_check = 'mail_notify_message';
+                $default_status = NOTIFY_MESSAGE_AT_ONCE;
                 break;
             case NOTIFICATION_TYPE_INVITATION;
                 $setting_to_check = 'mail_notify_invitation';
+                $default_status = NOTIFY_INVITATION_AT_ONCE;
                 break;
             case NOTIFICATION_TYPE_GROUP;
                 $setting_to_check = 'mail_notify_group_message';
+                $default_status = NOTIFY_GROUP_AT_ONCE;
                 $avoid_my_self  = true;
                 break;
         }
 
+        $setting_info = UserManager::get_extra_field_information_by_name($setting_to_check);
         if (!empty($user_list)) {
             foreach ($user_list  as $user_id) {
-                $extra_data = UserManager::get_extra_user_data($user_id);
-                $params = array();
                 if ($avoid_my_self) {
                     if ($user_id == api_get_user_id()) {
                         continue;
@@ -158,7 +160,15 @@ class Notification extends Model {
                 }
 
                 $user_info = api_get_user_info($user_id);
-                $user_setting = $extra_data[$setting_to_check];
+                //Extra field was deleted or removed? Use the default status
+                if (empty($setting_info)) {
+                    $user_setting = $default_status;
+                } else {
+                    $extra_data = UserManager::get_extra_user_data($user_id);
+                    $user_setting = $extra_data[$setting_to_check];
+                }
+
+                $params = array();
 
                 switch ($user_setting) {
                     //No notifications

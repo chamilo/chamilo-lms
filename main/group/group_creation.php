@@ -211,7 +211,7 @@ EOT;
 	 */
 	$categories = GroupManager :: get_categories();
 	//echo '<blockquote>';
-	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != VIRTUAL_COURSE_CATEGORY) {
+	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 		$create_groups_form = new FormValidator('create_groups');
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();

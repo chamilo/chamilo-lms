@@ -153,7 +153,7 @@ class GroupManager {
 		$groups = array();
 		$thisGroup= array();
         while ($thisGroup = Database::fetch_array($groupList)) {
-            $thisGroup['number_of_members'] = count(GroupManager::get_subscribed_users($thisGroup['id']));
+            $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup['id']));
 
             if ($thisGroup['session_id']!=0) {
                 $sql_session = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$thisGroup['session_id'];
@@ -276,7 +276,7 @@ class GroupManager {
 	public static function create_subgroups ($group_id, $number_of_groups) {
 		$course_id = api_get_course_int_id();
 		$table_group = Database :: get_course_table(TABLE_GROUP);
-		$category_id = self :: create_category('Subgroups', '', GroupManager::TOOL_PRIVATE, GroupManager::TOOL_PRIVATE, 0, 0, 1, 1);
+		$category_id = self :: create_category('Subgroups', '', self::TOOL_PRIVATE, self::TOOL_PRIVATE, 0, 0, 1, 1);
 		$users = self :: get_users($group_id);
 		$group_ids = array ();
 
@@ -845,7 +845,7 @@ class GroupManager {
 				WHERE
 					g.id IN (".implode(',', $group_ids).")
 				GROUP BY (g.id)
-				HAVING (nbPlaces > 0 OR g.max_student = ".GroupManager::MEMBER_PER_GROUP_NO_LIMIT.")
+				HAVING (nbPlaces > 0 OR g.max_student = ".self::MEMBER_PER_GROUP_NO_LIMIT.")
 				ORDER BY nbPlaces DESC";
 		$sql_result = Database::query($sql);
 		$group_available_place = array ();
@@ -1528,21 +1528,23 @@ class GroupManager {
         //Check group properties
 		$group_info = self :: get_group_properties($group_id);
 
-        //Check group category if exists
-        $category_group_info = self::get_category_from_group($group_id);
+        if (api_get_setting('allow_group_categories') == 'true') {
+            //Check group category if exists
+            $category_group_info = self::get_category_from_group($group_id);
 
         if (!empty($category_group_info)) {
             //if exists check the category group status first
-            if ($category_group_info[$state_key] == GroupManager::TOOL_NOT_AVAILABLE) {
-                return false;
-            } elseif($category_group_info[$state_key] == GroupManager::TOOL_PRIVATE && !$user_is_in_group) {
-                return false;
+                if ($category_group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
+                    return false;
+                } elseif($category_group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
+                    return false;
+                }
             }
         }
 
         //is_user_in_group() is more complete that  the  is_subscribed() function
 
-		if ($group_info[$state_key] == GroupManager::TOOL_NOT_AVAILABLE) {
+		if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
 			return false;
 		} elseif ($group_info[$state_key] == self::TOOL_PUBLIC) {
 			return true;
@@ -1550,7 +1552,7 @@ class GroupManager {
 			return true;
 		} elseif($group_info['tutor_id'] == $user_id) { //this tutor implementation was dropped
 			return true;
-        } elseif($group_info[$state_key] == GroupManager::TOOL_PRIVATE && !$user_is_in_group) {
+        } elseif($group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
             return false;
         } else {
             return $user_is_in_group;
@@ -1624,7 +1626,7 @@ class GroupManager {
                         ug.c_id = $course_id AND
                         g.id IN (".implode(',', $group_ids).")
                 GROUP BY (g.id)
-                HAVING (nbPlaces > 0 OR g.max_student = ".GroupManager::MEMBER_PER_GROUP_NO_LIMIT.")
+                HAVING (nbPlaces > 0 OR g.max_student = ".self::MEMBER_PER_GROUP_NO_LIMIT.")
                 ORDER BY nbPlaces DESC";
         $sql_result = Database::query($sql);
         $group_available_place = array ();
@@ -1670,7 +1672,7 @@ class GroupManager {
             $session_img = api_get_session_image($this_group['session_id'], $user_info['status']);
 
             // All the tutors of this group
-            $tutorsids_of_group = GroupManager::get_subscribed_tutors($this_group['id'], true);
+            $tutorsids_of_group = self::get_subscribed_tutors($this_group['id'], true);
 
             // Create a new table-row
             $row = array ();
@@ -1683,12 +1685,12 @@ class GroupManager {
             if ((api_is_allowed_to_edit(false, true) ||
                     in_array($user_id, $tutorsids_of_group) ||
                     $this_group['is_member'] ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_FORUM) ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_DOCUMENTS) ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_CALENDAR) ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_ANNOUNCEMENT) ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_WORK) ||
-                    GroupManager::user_has_access($user_id, $this_group['id'], GroupManager::GROUP_TOOL_WIKI))
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_FORUM) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_DOCUMENTS) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_CALENDAR) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_ANNOUNCEMENT) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WORK) ||
+                    self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI))
                     && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)) {
 
                 $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.Security::remove_XSS($this_group['name']).'</a> ';
@@ -1729,16 +1731,16 @@ class GroupManager {
             $row[] = $tutor_info;
 
             // Max number of members in group
-            $max_members = ($this_group['maximum_number_of_members'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members']);
+            $max_members = ($this_group['maximum_number_of_members'] == self::MEMBER_PER_GROUP_NO_LIMIT ? ' ' : ' / '.$this_group['maximum_number_of_members']);
 
             // Number of members in group
             $row[] = $this_group['number_of_members'].$max_members;
 
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
-                if (GroupManager :: is_self_registration_allowed($user_id, $this_group['id'])) {
+                if (self :: is_self_registration_allowed($user_id, $this_group['id'])) {
                     $row[] = '<a class = "btn" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&amp;action=self_reg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
-                } elseif (GroupManager :: is_self_unregistration_allowed($user_id, $this_group['id'])) {
+                } elseif (self :: is_self_unregistration_allowed($user_id, $this_group['id'])) {
                     $row[] = '<a class = "btn" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&amp;action=self_unreg&amp;group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
                 } else {
                     $row[] = '-';

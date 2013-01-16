@@ -178,7 +178,10 @@ if (empty($select_month)) {
 
 echo '<div class="actions">';
 
-if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true)) {
+if (api_is_allowed_to_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
+    GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+) {
     echo display_courseadmin_links();
 }
 

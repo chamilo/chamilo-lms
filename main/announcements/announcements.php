@@ -160,7 +160,7 @@ if(!empty($_GET['remind_inactive'])) {
 
 $group_id = api_get_group_id();
 
-if (!empty($group_id)) {	
+if (!empty($group_id)) {
 	$group_properties  = GroupManager :: get_group_properties($group_id);
 	$interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
@@ -175,9 +175,9 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
 }
 
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-/*
-	Change visibility of announcement
-*/
+    /*
+        Change visibility of announcement
+    */
 	// $_GET['isStudentView']<>"false" is added to prevent that the visibility
 	// is changed after you do the following:
 	// change visibility -> studentview -> course manager view
@@ -338,8 +338,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	/*
 		Submit announcement
 	*/
-	//if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-
+	
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
 	$newContent=(!empty($_POST['newContent'])?$safe_newContent:'');
 
@@ -370,7 +369,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 			}
 		} else {
 			//insert mode
-			if ($ctok == $_POST['sec_token']) {		
+			if ($ctok == $_POST['sec_token']) {
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
                 if (!empty($group_id)) {

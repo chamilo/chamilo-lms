@@ -3575,6 +3575,9 @@ class TrackingCourseLog {
 
 		// get all users data from a course for sortable with limit
 		$condition_user = "";
+        $url_table = null;
+        
+        $url_condition = null;
 		if (is_array($user_ids)) {
 			$user_ids = array_map('intval', $user_ids);
 			$condition_user = " WHERE user.user_id IN (".implode(',',$user_ids).") ";

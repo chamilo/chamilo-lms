@@ -184,7 +184,7 @@ EOT;
 			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_name');
 			if (api_get_setting('allow_group_categories') == 'true') {
 				$group_el[] = $form->createElement('select', 'group_'.$group_number.'_category', null, $cat_options, array('id' => 'category_'.$group_number));
-			}			
+			}
 			$group_el[] = $form->createElement('text', 'group_'.$group_number.'_places', null, array('class' => 'span1', 'id' => 'places_'.$group_number));
 
 			if ($_POST['number_of_groups'] < 10000) {
@@ -216,7 +216,7 @@ EOT;
 	 */
 	$categories = GroupManager :: get_categories();
 	//echo '<blockquote>';
-	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != VIRTUAL_COURSE_CATEGORY) {
+	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 		$create_groups_form = new FormValidator('create_groups');
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
@@ -262,7 +262,7 @@ EOT;
 				$base_group_options[$group['id']] = $group['name'].' ('.$number_of_students.' '.get_lang('Users').')';
 			}
 		}
-		if (count($base_group_options) > 0) {			
+		if (count($base_group_options) > 0) {
 			$create_subgroups_form = new FormValidator('create_subgroups');
             $create_subgroups_form->addElement('header', get_lang('CreateSubgroups'));
             $create_subgroups_form->addElement('html', get_lang('CreateSubgroupsInfo'));
@@ -277,7 +277,7 @@ EOT;
 			$defaults = array();
 			$defaults['action'] = 'create_subgroups';
 			$create_subgroups_form->setDefaults($defaults);
-			$create_subgroups_form->display();			
+			$create_subgroups_form->display();
 		}
 	}
 
@@ -285,7 +285,7 @@ EOT;
 	 * Show form to generate groups from classes subscribed to the course
 	 */
     $options['where'] = array(" usergroup.course_id = ? " =>  api_get_real_course_id());
-    $obj = new UserGroup();	 
+    $obj = new UserGroup();
     $classes = $obj->get_usergroup_in_course($options);
 	if (count($classes) > 0) {
 		echo '<b>'.get_lang('GroupsFromClasses').'</b>';
@@ -323,7 +323,7 @@ EOT;
 		$create_class_groups_form->display();
 		echo '</blockquote>';
 	}
-    
+
 }
 
 /*	FOOTER */

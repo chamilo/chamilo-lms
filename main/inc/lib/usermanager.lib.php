@@ -30,9 +30,9 @@ class UserManager {
     CONST USER_FIELD_TYPE_TIMEZONE =                11;
     CONST USER_FIELD_TYPE_SOCIAL_PROFILE =          12;
 
-        /**
-         * The default constructor only instanciates an empty user object
-         */
+    /**
+     * The default constructor only instanciates an empty user object
+     */
     public function __construct () {
     }
 

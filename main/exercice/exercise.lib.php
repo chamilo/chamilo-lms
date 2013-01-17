@@ -2137,6 +2137,9 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+            if (empty($result)) {
+                continue;
+            }
 
             $total_score     += $result['score'];
             $total_weight    += $result['weight'];

@@ -1935,6 +1935,9 @@ class Exercise {
 		// Creates a temporary Question object
 		$course_id              = api_get_course_int_id();
 		$objQuestionTmp         = Question::read($questionId, $course_id);
+                if ($objQuestionTmp === false) {
+                    return false;
+                }
 
 		$questionName 			= $objQuestionTmp->selectTitle();
 		$questionWeighting 		= $objQuestionTmp->selectWeighting();

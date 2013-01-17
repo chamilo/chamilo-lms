@@ -425,7 +425,10 @@ class Template {
         $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
     }
-    
+    /**
+     * Declare and define the template variable that will be used to load
+     * javascript libraries in the header.
+     */
     function set_js_files() {
         global $disable_js_and_css_files, $htmlHeadXtra;
         
@@ -437,7 +440,7 @@ class Template {
             'thickbox.js',            
             'bootstrap/bootstrap.js',
         );
-        
+
         if (api_is_global_chat_enabled()) {           
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
@@ -477,6 +480,31 @@ class Template {
                 }
             }
             $this->assign('extra_headers', $extra_headers);
+        }
+    }
+    /**
+     * Special function to declare last-minute JS libraries which depend on 
+     * other things to be declared first. In particular, it might be useful
+     * under IE9 with compatibility mode, which for some reason is getting
+     * upset when a variable is used in a function (even if not used yet)
+     * when this variable hasn't been defined yet.
+     */
+    function set_js_files_post() {
+        global $disable_js_and_css_files, $htmlHeadXtra;
+        $js_files = array();
+        if (api_is_global_chat_enabled()) {           
+            //Do not include the global chat in LP
+            if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
+                $js_files[] = 'chat/js/chat.js';
+            }            
+        }
+        $js_file_to_string = null;
+        
+        foreach ($js_files as $js_file) {
+            $js_file_to_string .= api_get_js($js_file);
+        }
+        if (!$disable_js_and_css_files) {       
+            $this->assign('js_file_to_string_post', $js_file_to_string);
         }
     }
 
@@ -533,6 +561,7 @@ class Template {
         //Setting the theme and CSS files
         $this->set_css_files();
         $this->set_js_files();
+        //$this->set_js_files_post();
         
         // Implementation of prefetch. 
         // See http://cdn.chamilo.org/main/img/online.png for details

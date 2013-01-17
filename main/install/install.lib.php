@@ -2234,6 +2234,7 @@ function create_course_tables($course_db_name = null) {
 
     // New Learning path
     $TABLELP                    = $course_db_name . 'lp';
+    $TABLE_LP_CATEGORY          = $course_db_name . 'lp_category';
     $TABLELPITEM                = $course_db_name . 'lp_item';
     $TABLELPVIEW                = $course_db_name . 'lp_view';
     $TABLELPITEMVIEW            = $course_db_name . 'lp_item_view';
@@ -3203,10 +3204,20 @@ function create_course_tables($course_db_name = null) {
         "modified_on    DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .
         "publicated_on  DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .
         "expired_on     DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00',
+         category_id INT unsigned NOT NULL default 0,
     	 PRIMARY KEY  (c_id, id)
         )" . $charset_clause;
 
     Database::query($sql);
+
+    $sql = "CREATE TABLE IF NOT EXISTS `$TABLE_LP_CATEGORY` (
+        id int unsigned NOT NULL auto_increment,
+        $add_to_all_tables
+        name VARCHAR(255),
+        PRIMARY KEY (id)
+        )" . $charset_clause;
+    Database::query($sql);
+    
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPVIEW` (
     	$add_to_all_tables" .

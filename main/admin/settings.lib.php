@@ -256,7 +256,6 @@ function handle_stylesheets() {
     }
 
     $form_change = new FormValidator('stylesheet_upload', 'post', api_get_self().'?category=Stylesheets', null, array('id' => 'stylesheets_id'));
-    //$form_change->addElement('header', get_lang('ChangeStylesheet'));
 
     $list_of_styles = array();
     $list_of_names  = array();

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use APY\DataGridBundle\Grid\Mapping as GRID;
 
 /**
  * EntityPages
@@ -14,6 +15,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
  * @Table(name="pages")
  * @Entity(repositoryClass="Entity\Repository\PagesRepository")
  * @HasLifecycleCallbacks()
+ * @GRID\Source(columns="id, title")
  */
 class EntityPages
 {

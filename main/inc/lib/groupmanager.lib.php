@@ -720,10 +720,14 @@ class GroupManager {
 	 * @param int $group_id The group
          * @return array list of user id
 	 */
-	public static function get_users($group_id, $load_extra_info = false) {
+	public static function get_users($group_id, $load_extra_info = false, $course_id = null) {
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
-		$course_id = api_get_course_int_id();
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
 		$sql = "SELECT user_id FROM $group_user_table WHERE c_id = $course_id AND group_id = $group_id";
 		$res = Database::query($sql);
 		$users = array ();

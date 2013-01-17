@@ -1504,19 +1504,25 @@ class CourseManager {
      *    @param boolean $full list to true if we want sessions students too
      *    @return array with user id
      */
-    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0) {
+    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $group_id = 0) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
 
         $students = array();
 
         if ($session_id == 0) {
-            // students directly subscribed to the course
-            $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                   WHERE course_code = '$course_code' AND status = ".STUDENT;
-            $rs = Database::query($sql);
-            while ($student = Database::fetch_array($rs)) {
-                $students[$student['user_id']] = $student;
+            if (empty($group_id)) {
+                // students directly subscribed to the course
+                $sql = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
+                       WHERE course_code = '$course_code' AND status = ".STUDENT;
+                $rs = Database::query($sql);
+                while ($student = Database::fetch_array($rs)) {
+                    $students[$student['user_id']] = $student;
+                }
+            } else {
+                $course_info = api_get_course_info($course_code);
+                $students = GroupManager::get_users($group_id, false, $course_info['real_id']);
+                $students = array_flip($students);
             }
         }
 

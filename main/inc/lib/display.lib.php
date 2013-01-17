@@ -1136,16 +1136,19 @@ class Display {
                 // If it's a survey, make sure the user's invited. Otherwise drop it.
                 if ($item_property['tool'] == TOOL_SURVEY) {
                     $survey_info = survey_manager::get_survey($item_property['ref'], 0, $course_code);
-                    $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_code);
-                    if (!in_array($user_id, $invited_users['course_users'])) continue;
+                    if ($survey_info) {
+                        $invited_users = SurveyUtil::get_invited_users($survey_info['code'], $course_code);
+                        if (!in_array($user_id, $invited_users['course_users'])) {
+                            continue;
+                        }
+                    }
                 }
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-                    if (!learnpath::is_lp_visible_for_student($item_property['ref'],$user_id, $course_code)) {
+                    if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
-
                 }
                 $notifications[$item_property['tool']] = $item_property;
             }

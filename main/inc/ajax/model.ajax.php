@@ -175,6 +175,11 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_group_reporting':
+        $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
+        $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
+        $count = Tracking::get_group_reporting($course_id, $group_id, 'count');
+        break;
     case 'get_user_course_report_resumed':
         $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc');
         break;
@@ -302,6 +307,10 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_group_reporting':
+        $columns = array('name', 'time', 'progress', 'score', 'works', 'messages', 'actions');
+        $result = Tracking::get_group_reporting($course_id, $group_id, 'all', $start, $limit, $sidx, $sord, $where_condition);
+        break;
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
@@ -612,24 +621,26 @@ switch ($action) {
         exit;
 }
 
-$allowed_actions = array('get_careers',
-                         'get_promotions',
-                         'get_usergroups',
-                         'get_usergroups_teacher',
-                         'get_gradebooks',
-                         'get_sessions',
-                         'get_exercise_results',
-                         'get_hotpotatoes_exercise_results',
-                         'get_work_user_list',
-                         'get_timelines',
-                         'get_grade_models',
-                         'get_event_email_template',
-                         'get_user_skill_ranking',
-                         'get_extra_fields',
-                         'get_extra_field_options',
-                         'get_course_exercise_medias',
-                         'get_user_course_report',
-                         'get_user_course_report_resumed'
+$allowed_actions = array(
+    'get_careers',
+    'get_promotions',
+    'get_usergroups',
+    'get_usergroups_teacher',
+    'get_gradebooks',
+    'get_sessions',
+    'get_exercise_results',
+    'get_hotpotatoes_exercise_results',
+    'get_work_user_list',
+    'get_timelines',
+    'get_grade_models',
+    'get_event_email_template',
+    'get_user_skill_ranking',
+    'get_extra_fields',
+    'get_extra_field_options',
+    'get_course_exercise_medias',
+    'get_user_course_report',
+    'get_user_course_report_resumed',
+    'get_group_reporting'
 );
 
 //5. Creating an obj to return a json

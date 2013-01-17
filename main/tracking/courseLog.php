@@ -114,9 +114,6 @@ $htmlHeadXtra[] = "<style type='text/css'>
 div#reporting_table table th {
   vertical-align:top;
 }
-</style>
-<style media='print' type='text/css'>
-
 </style>";
 $htmlHeadXtra[] .= $js;
 
@@ -172,10 +169,12 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
 
 echo '<div class="actions">';
 
-echo Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32);
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('user_na.png', get_lang('StudentsTracking'), array(), 32), '#');
+echo Display::url(Display::return_icon('group.png', get_lang('GroupReporting'), array(), 32), 'course_log_groups.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq(true, false));
 echo Display::url(Display::return_icon('tools.png', get_lang('ResourcesTracking'), array(), 32), 'course_log_resources.php?'.api_get_cidreq());
 echo Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq());
+
 
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';

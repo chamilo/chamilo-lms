@@ -131,13 +131,25 @@ $counter = count($attempts);
 $my_attempt_array = array();
 $table_content = '';
 
+/* Make a special case for IE, which doesn't seem to be able to handle the
+ * results popup -> send it to the full results page */
+require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+$browser = new Browser();
+$current_browser = $browser->getBrowser();
+$url_suffix = '';
+$btn_class = 'ajax ';
+if ($current_browser == 'Internet Explorer') {
+    $url_suffix = '&amp;show_headers=1';
+    $btn_class = '';
+}
+
 if (!empty($attempts)) {
     $i = $counter;
 	foreach ($attempts as $attempt_result) {
 
 		$score = show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
-		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&id='.$attempt_result['exe_id'].'&id_session='.api_get_session_id().'&height=500&width=950';
-		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>'ajax btn'));
+		$attempt_url 	= api_get_path(WEB_CODE_PATH).'exercice/result.php?'.api_get_cidreq().'&amp;id='.$attempt_result['exe_id'].'&amp;id_session='.api_get_session_id().'&amp;height=500&amp;width=950'.$url_suffix;
+		$attempt_link 	= Display::url(get_lang('Show'), $attempt_url, array('class'=>$btn_class.'btn'));
 
 		$teacher_revised = Display::label(get_lang('Validated'), 'success');
 			//$attempt_link = get_lang('NoResult');

@@ -206,10 +206,15 @@ if (!empty($flat_list)) {
         }
 
         $counter++;
-        if (($counter % 2) == 0) { $oddclass = 'row_odd'; } else { $oddclass = 'row_even'; }
+        if (($counter % 2) == 0) {
+            $oddclass = 'row_odd';
+        } else {
+            $oddclass = 'row_even';
+        }
 
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
+        $extra = null;
         if ($is_allowed_to_edit) {
             $url_start_lp .= '&isStudentView=true';
             $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id())?'':' - ('.get_lang('LPNotVisibleToStudent').')');
@@ -379,19 +384,6 @@ if (!empty($flat_list)) {
                     $dsp_default_view = Display::return_icon('view_left_right_na.png', get_lang('ViewModeEmbedded'),'',ICON_SIZE_SMALL);
 				}
             }
-
-            /* Increase SCORM recording */
-            /*
-            if ($details['lp_force_commit'] == 1) {
-                $dsp_force_commit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_force_commit&lp_id='.$id.'">' .
-                    '<img src="../img/clock.gif" border="0" alt="Normal SCORM recordings" title="'.get_lang('MakeScormRecordingNormal').'"/>' .
-                    '</a>&nbsp;';
-            }else{
-                $dsp_force_commit = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_force_commit&lp_id='.$id.'">' .
-                    '<img src="../img/clock_gray.gif" border="0" alt="Extra SCORM recordings" title="'.get_lang('MakeScormRecordingExtra').'"/>' .
-                    '</a>&nbsp;';
-            }
-            */
 
             /*  DEBUG  */
 

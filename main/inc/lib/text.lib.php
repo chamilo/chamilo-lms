@@ -396,10 +396,8 @@ function domesticate($input) {
  *         transformation if it already contains some "<a href:" or "<img src=".
  * @param string $text text to be converted
  * @return text after conversion
- * @author Rewritten by Nathan Codding - Feb 6, 2001.
- *         completed by Hugues Peeters - July 22, 2002
+ * See http://php.net/manual/fr/function.eregi-replace.php
  *
- * Actually this function is taken from the PHP BB 1.4 script
  * - Goes through the given string, and replaces xxxx://yyyy with an HTML <a> tag linking
  *     to that URL
  * - Goes through the given string, and replaces www.xxxx.yyyy[zzzz] with an HTML <a> tag linking
@@ -408,16 +406,12 @@ function domesticate($input) {
  *        to that email address
  * - Only matches these 2 patterns either after a space, or at the beginning of a line
  *
- * Notes: the email one might get annoying - it's easy to make it more restrictive, though.. maybe
- * have it require something like xxxx@yyyy.zzzz or such. We'll see.
  */
-function make_clickable($string) {
-    // TODO: eregi_replace() is deprecated as of PHP 5.3
-    if (!stristr($string, ' src=') && !stristr($string, ' href=')) {
-        $string = eregi_replace("(https?|ftp)://([a-z0-9#?/&=._+:~%-]+)", "<a href=\"\\1://\\2\" target=\"_blank\">\\1://\\2</a>", $string);
-        $string = eregi_replace("([a-z0-9_.-]+@[a-z0-9.-]+)", "<a href=\"mailto:\\1\">\\1</a>", $string);
-    }
-    return $string;
+function make_clickable($text) {
+    $regex = '/(\S+@\S+\.\S+)/i';
+    $replace = "<a href='mailto:$1'>$1</a>";
+    $result = preg_replace($regex, $replace, $text);
+    return preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s])?)?)@', '<a href="$1" target="_blank">$1</a>', $result);
 }
 
 /**
@@ -431,38 +425,6 @@ function make_clickable($string) {
  * @version March 2OO6
  */
 function text_filter($input, $filter = true) {
-
-    //$input = stripslashes($input);
-
-    if ($filter) {
-        // ***  parse [tex]...[/tex] tags  *** //
-        // which will return techexplorer or image html depending on the capabilities of the
-        // browser of the user (using some javascript that checks if the browser has the TechExplorer plugin installed or not)
-        //$input = _text_parse_tex($input);
-        // *** parse [teximage]...[/teximage] tags *** //
-        // these force the gif rendering of LaTeX using the mimetex gif renderer
-        //$input=_text_parse_tex_image($input);
-        // *** parse [texexplorer]...[/texexplorer] tags  *** //
-        // these force the texeplorer LaTeX notation
-        //$input = _text_parse_texexplorer($input);
-        // *** Censor Words *** //
-        // censor words. This function removes certain words by [censored]
-        // this can be usefull when the campus is open to the world.
-        // $input=text_censor_words($input);
-        // *** parse [?]...[/?] tags *** //
-        // for the glossary tool
-        //$input = _text_parse_glossary($input);
-        // parse [wiki]...[/wiki] tags
-        // this is for the coolwiki plugin.
-        // $input=text_parse_wiki($input);
-        // parse [tool]...[/tool] tags
-        // this parse function adds a link to a certain tool
-        // $input=text_parse_tool($input);
-        // parse [user]...[/user] tags
-        // parse [email]...[/email] tags
-        // parse [code]...[/code] tags
-    }
-
     return $input;
 }
 
@@ -476,17 +438,12 @@ function text_filter($input, $filter = true) {
  * @version June 2004
  */
 function _text_parse_tex($textext) {
-    //$textext = str_replace(array ("[tex]", "[/tex]"), array ('[*****]', '[/*****]'), $textext);
-    //$textext = stripslashes($texttext);
-
     $input_array = preg_split("/(\[tex]|\[\/tex])/", $textext, -1, PREG_SPLIT_DELIM_CAPTURE);
-
     foreach ($input_array as $key => $value) {
         if ($key > 0 && $input_array[$key - 1] == '[tex]' AND $input_array[$key + 1] == '[/tex]') {
             $input_array[$key] = latex_gif_renderer($value);
             unset($input_array[$key - 1]);
             unset($input_array[$key + 1]);
-            //echo 'LaTeX: <embed type="application/x-techexplorer" texdata="'.stripslashes($value).'" autosize="true" pluginspage="http://www.integretechpub.com/techexplorer/"><br />';
         }
     }
 
@@ -511,7 +468,6 @@ function _text_parse_tool($input) {
     // An array with all the valid tools
     $tools[] = array(TOOL_ANNOUNCEMENT, 'announcements/announcements.php');
     $tools[] = array(TOOL_CALENDAR_EVENT, 'calendar/agenda.php');
-
     // Check if the name between the [tool] [/tool] tags is a valid one
 }
 
@@ -664,12 +620,12 @@ function _text_parse_texexplorer($textext) {
 }
 
 /**
- * This function splits the string into words and then joins them back together again one by one.  
- * Example: "Test example of a long string" 
- * 			substrwords(5) = Test ... *  
- * @param string 
+ * This function splits the string into words and then joins them back together again one by one.
+ * Example: "Test example of a long string"
+ * 			substrwords(5) = Test ... *
+ * @param string
  * @param int the max number of character
- * @param string how the string will be end 
+ * @param string how the string will be end
  * @return a reduce string
  */
 function substrwords($text, $maxchar, $end = '...') {

@@ -2513,6 +2513,7 @@ class learnpath {
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
         $res = 0;
+        $num = 0;
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res);
             $num = $row[0];
@@ -2576,6 +2577,7 @@ class learnpath {
         //@todo seems that this always returns 0
         $res = Database::query($sql);
         $res = 0;
+        $num = 0;
         if (Database::num_rows($res)) {
             $row = Database :: fetch_array($res);
             $num = $row[0];

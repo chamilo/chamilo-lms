@@ -13,6 +13,10 @@ use Pagerfanta\View\TwitterBootstrapView;
 //use Pagerfanta\View\DefaultView;
 //use Pages\PagesAdmin;
 
+use APY\DataGridBundle\Grid\Grid;
+use APY\DataGridBundle\Grid\Source\Entity;
+
+
 class PagesController {
     /*
     function indexAction(Application $app, $page) {
@@ -83,11 +87,18 @@ class PagesController {
     }
 
     function listAction(Application $app, $page = 1) {
-        /*$app['sonata.crud_controller']->listAction();
-        require_once 'pageadmin.php';
-        $pages_admin = new PagesAdmin('a', 'b', 'Controller');
-        $html = $pages_admin->getDatagrid();
-        var_dump($html);*/
+
+        $source = new Entity('Entity\EntityPages');
+        $grid = new Grid();
+
+        // Attach the source to the grid
+        $grid->setSource($source);
+
+        // Return the response of the grid to the template
+        //return $grid->getGridResponse('MyProjectMyBundle::myGrid.html.twig');
+
+
+
 
         $em = $app['orm.em'];
         $dql = 'SELECT a FROM Entity\EntityPages a';

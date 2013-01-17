@@ -151,7 +151,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 
-//$tool_name = get_lang('ImportSkillsListXMLCSV');
 $tool_name = get_lang('ImportSkillsListCSV');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 

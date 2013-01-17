@@ -84,5 +84,6 @@ $Collapse = "Contraer";
 $CourseDetails = "Descrición do curso";
 $GroupPendingInvitations = "Invitacións de grupo pendentes";
 $Compose = "Redactar";
+$EnrollToCourseXSuccessful = "A súa inscrición no curso %s completouse.";
 $ThereAreNoCoursesInThisCategory = "Non existen cursos na categoria actual";
 ?>

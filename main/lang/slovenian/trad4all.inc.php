@@ -950,6 +950,7 @@ $SkillXWithCourseX = "%s s %s";
 $ToGetToLearnXYouWillNeedToTakeOneOfTheFollowingCourses = "Znanje za pridobitev %s dobite z enim od tečajev:";
 $YourSkillRankingX = "Rang tvojih veščin: %s";
 $ManageSkills = "Upravljaj kompetence";
+$Categories = "Kategorije";
 $StartDateMustBeBeforeTheEndDate = "Začetni datum mora biti pred končnim";
 $SkillRoot = "Koren";
 $SkillInfo = "Informacija o veščini";

@@ -117,6 +117,9 @@ $AllowUserViewUserList = "Omogoči uporabnikom vpogled v seznam uporabnikov";
 $AllowUserViewUserListActivate = "Omogoči seznam uporabnikov";
 $AllowUserViewUserListDeactivate = "Onemogoči seznam uporabnikov";
 $DoNotDisplayAnyAdvance = "Ne prikaži napredka";
+$RedirectToTheExerciseList = "Preusmeri na seznam testov/vaj";
+$RedirectToExercise = "Preusmeri na izbrani test/vajo";
+$ConfigExercise = "Nastavitve orodja Testi/Vaje";
 $CourseSettingsRegisterDirectLink = "V primeru, da je vaš tečaj javen ali odprt, lahko dodate direktno povezavo spodaj za pošiljanje vabila novim uporabnikom, da bodo po registraciji lahko direktno dostopili do tečaja. Dodatno lahko dodate parameter e=1 k URL; z nadomestitvijo vrednosti 1 z ID izbranega testa, ga npr. lahko pošljete direktno na ta test. ID testa lahko razberete iz URL po odprtju testa.
 %s";
 $DirectLink = "Direktna povezava";

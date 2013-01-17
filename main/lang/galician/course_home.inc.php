@@ -29,6 +29,7 @@ $SessionIdentifier = "Identificador da sesión";
 $SessionName = "Nome da sesión";
 $SessionCategory = "Categoría da sesión";
 $SessionData = "Datos da sesión";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "A configuración para o despregue automático de exercicios está activada. Os estudantes van ser redirixidos ao exercicio seleccionado para que se amose automaticamente.";
 $TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "A configuración para o despregue automático de leccións está activada. Cando os alumnos entren no curso, serán redirixidos á lección seleccionada para que se despregue automaticamente.";
 $ToolSearch = "Procura";
 ?>

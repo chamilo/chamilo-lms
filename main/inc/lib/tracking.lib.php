@@ -53,11 +53,11 @@ class Tracking
             foreach ($result as $group) {
                 $users = GroupManager::get_users($group['id'], true);
 
-                $time = null;
+                $time = 0;
                 $avg_student_score = 0;
                 $avg_student_progress = 0;
-                $work = null;
-                $messages = null;
+                $work = 0;
+                $messages = 0;
 
                 foreach ($users as $user_data) {
                     $time += Tracking::get_time_spent_on_the_course($user_data['user_id'], $course_info['code'], 0);

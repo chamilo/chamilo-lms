@@ -59,11 +59,12 @@ class learnpathList {
         $time_conditions = '';
 
         if ($check_publication_dates) {
-            $time_conditions = " AND ( (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now'  AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now' )  OR
-                        (publicated_on <> '0000-00-00 00:00:00'  AND publicated_on < '$now'  AND expired_on = '0000-00-00 00:00:00') OR
-                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR
-                        (publicated_on = '0000-00-00 00:00:00'   AND expired_on = '0000-00-00 00:00:00' ))
-            ";
+            $time_conditions = " AND (
+                (publicated_on <> '0000-00-00 00:00:00' AND publicated_on < '$now'  AND expired_on <> '0000-00-00 00:00:00'  AND expired_on > '$now' )  OR
+                (publicated_on <> '0000-00-00 00:00:00'  AND publicated_on < '$now'  AND expired_on = '0000-00-00 00:00:00') OR
+                (publicated_on = '0000-00-00 00:00:00'   AND expired_on <> '0000-00-00 00:00:00' AND expired_on > '$now') OR
+                (publicated_on = '0000-00-00 00:00:00'   AND expired_on = '0000-00-00 00:00:00' )
+            )";
         }
 
         $category_filter = null;
@@ -133,7 +134,7 @@ class learnpathList {
                 'lp_visibility'     => $vis,
                 'lp_published'	    => $pub,
                 'lp_prevent_reinit' => $row['prevent_reinit'],
-          			'seriousgame_mode' => $row['seriousgame_mode'],
+                'seriousgame_mode' => $row['seriousgame_mode'],
                 'lp_scorm_debug'    => $row['debug'],
                 'lp_display_order'  => $row['display_order'],
                 'lp_preview_image'  => stripslashes($row['preview_image']),
@@ -144,10 +145,10 @@ class learnpathList {
                 'publicated_on'     => $row['publicated_on'],
                 'expired_on'        => $row['expired_on'],
                 'category_id'        => $row['category_id']
-                );
+            );
             $names[$row['name']] = $row['id'];
-           }
-           $this->alpha_list = asort($names);
+        }
+        $this->alpha_list = asort($names);
     }
 
     /**

@@ -120,52 +120,55 @@ function showChatConnect() {
  * Start chat session
  */
 function startChatSession() {
-	$.ajax({
-	  url: ajax_url+"?action=startchatsession",
-	  cache: false,
-	  dataType: "json",
-	  success: function(data) {
-		if (data) {
-			username = data.me;	
-            user_status = data.user_status;
-            showChatConnect();
-            if (user_status == 1) {            
-                startChatHeartBeat();   
-            } else {
-                stopChatHeartBeat();   
-            }
-            
-			$.each(data.items, function(my_user_id, user_items) {
-                my_items = user_items['items'];                
-				$.each(my_items, function(i, item) {
-				
-					if (item)	{ // fix strange ie bug						
-						//my_user_id		= item.f;                        
-						if ($("#chatbox_"+my_user_id).length <= 0) {                            
-							createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
-						}
-
-						if (item.s == 1) {
-							//item.f = username;
-						}
-						if (item.s == 2) {
-							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
-						} else {
-							$("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage">\n\
-																					<span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>\n\
-																					<span class="chatboxmessagecontent">'+item.m+'</span></div>');
-						}
-					}
-				});
-						
-			});
-
-			for (i=0;i<chatBoxes.length;i++) {
-				my_user_id = chatBoxes[i];
-				$("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop($("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight);
-			}
-		}		
-	}});
+    /* fix bug BT#5728 whereby users cannot move to the next question in IE9 */
+    if (ajax_url) {
+        $.ajax({
+          url: ajax_url+"?action=startchatsession",
+          cache: false,
+          dataType: "json",
+          success: function(data) {
+            if (data) {
+                username = data.me;    
+                user_status = data.user_status;
+                showChatConnect();
+                if (user_status == 1) {            
+                    startChatHeartBeat();   
+                } else {
+                    stopChatHeartBeat();   
+                }
+                
+                $.each(data.items, function(my_user_id, user_items) {
+                    my_items = user_items['items'];                
+                    $.each(my_items, function(i, item) {
+                    
+                        if (item)    { // fix strange ie bug                        
+                            //my_user_id        = item.f;                        
+                            if ($("#chatbox_"+my_user_id).length <= 0) {                            
+                                createChatBox(my_user_id, user_items.user_info.user_name, 1, user_items.user_info.online);
+                            }
+    
+                            if (item.s == 1) {
+                                //item.f = username;
+                            }
+                            if (item.s == 2) {
+                                $("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage"><span class="chatboxinfo">'+item.m+'</span></div>');
+                            } else {
+                                $("#chatbox_"+my_user_id+" .chatboxcontent").append('<div class="chatboxmessage">\n\
+                                                                                        <span class="chatboxmessagefrom">'+item.username+':&nbsp;&nbsp;</span>\n\
+                                                                                        <span class="chatboxmessagecontent">'+item.m+'</span></div>');
+                            }
+                        }
+                    });
+                            
+                });
+    
+                for (i=0;i<chatBoxes.length;i++) {
+                    my_user_id = chatBoxes[i];
+                    $("#chatbox_"+my_user_id+" .chatboxcontent").scrollTop($("#chatbox_"+my_user_id+" .chatboxcontent")[0].scrollHeight);
+                }
+            }        
+        }});
+    }
 }
 
 function stopChatHeartBeat() {    

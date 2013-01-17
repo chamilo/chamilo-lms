@@ -149,6 +149,7 @@ class learnpath {
                 $this->created_on       = $row['created_on'];
                 $this->modified_on      = $row['modified_on'];
                 $this->ref              = $row['ref'];
+                $this->category_id = $row['category_id'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
                     $this->publicated_on   = $row['publicated_on'];
@@ -622,7 +623,7 @@ class learnpath {
      * @param	string	Zip file containing the learnpath or directory containing the learnpath
      * @return	integer	The new learnpath ID on success, 0 on failure
      */
-    public static function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '') {
+    public static function add_lp($course, $name, $description = '', $learnpath = 'guess', $origin = 'zip', $zipname = '', $publicated_on = '', $expired_on = '', $category_id = 0) {
         global $charset;
         $course_id = api_get_course_int_id();
         $tbl_lp = Database :: get_course_table(TABLE_LP_MAIN);
@@ -630,6 +631,7 @@ class learnpath {
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
         $name = Database::escape_string($name);
+        $category_id = intval($category_id);
 
         // Session id.
         $session_id = api_get_session_id();
@@ -695,8 +697,8 @@ class learnpath {
                     $dsp = $row[0] + 1;
                 }
 
-                $sql_insert = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on) " .
-                              "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."')";
+                $sql_insert = "INSERT INTO $tbl_lp (c_id, lp_type,name,description,path,default_view_mod, default_encoding,display_order,content_maker,content_local,js_lib,session_id, created_on, publicated_on, expired_on, category_id) " .
+                              "VALUES ($course_id, $type,'$name','$description','','embedded','UTF-8','$dsp','Chamilo','local','','".$session_id."', '".api_get_utc_datetime()."' , '".$publicated_on."' , '".$expired_on."', $category_id)";
 
                 Database::query($sql_insert);
                 $id = Database :: insert_id();
@@ -2288,6 +2290,10 @@ class learnpath {
             }
         }
         return false;
+    }
+
+    public function get_category_id() {
+        return $this->category_id;
     }
 
     /**
@@ -4353,6 +4359,16 @@ class learnpath {
         return true;
     }
 
+    public function set_category_id($category_id) {
+        $this->category_id = $category_id;
+
+        $course_id = api_get_course_int_id();
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET category_id = '" . intval($category_id). "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
+        Database::query($sql);
+        return true;
+    }
 
 
     /**
@@ -9280,6 +9296,67 @@ EOD;
                 $old_type = $item->get_type();
             }
         }
+    }
+
+    static function create_category($params) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = new Entity\EntityCLpCategory();
+        $item->setName($params['name']);
+        $item->setCId($params['c_id']);
+        $em->persist($item);
+        $em->flush();
+    }
+
+    static function update_category($params) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = $em->find('Entity\EntityCLpCategory', $params['id']);
+        $item->setName($params['name']);
+        $item->setCId($params['c_id']);
+        $em->persist($item);
+        $em->flush();
+    }
+
+    static function get_categories($course_id) {
+        global $app;
+        $em = $app['orm.em'];
+        $items = $em->getRepository('Entity\EntityCLpCategory')->findBy(array('cId' => $course_id), array('name' => 'ASC'));
+        return $items;
+    }
+
+    static function get_category($id) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = $em->find('Entity\EntityCLpCategory', $id);
+        return $item;
+    }
+
+    static function get_category_by_course($course_id) {
+        global $app;
+        $items = $app['orm.em']->getRepository('Entity\EntityCLpCategory')->findBy(array('cId' => $course_id));
+        return $items;
+    }
+
+    static function delete_category($id) {
+        global $app;
+        $em = $app['orm.em'];
+        $item = $em->find('Entity\EntityCLpCategory', $id);
+        if ($item) {
+            $em->remove($item);
+            $em->flush();
+        }
+    }
+
+    static function get_category_from_course_into_select($course_id) {
+        $items = self::get_category_by_course($course_id);
+        $cats = array();
+        if (!empty($items)) {
+            foreach($items as $cat) {
+                $cats[$cat->getId()] = $cat->getName();
+            }
+        }
+        return $cats;
     }
 }
 

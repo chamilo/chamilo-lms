@@ -20,10 +20,8 @@ api_protect_course_script();
 /* Libraries */
 
 require 'learnpath_functions.inc.php';
-//include '../resourcelinker/resourcelinker.inc.php';
 require 'resourcelinker.inc.php';
-// Rewrite the language file, sadly overwritten by resourcelinker.inc.php.
-// Name of the language file that needs to be included.
+
 $language_file = 'learnpath';
 
 /* Header and action code */
@@ -105,57 +103,43 @@ $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => g
 Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
 echo '<div class="actions">';
-echo '<a href="lp_controller.php?cidReq='.$_course['sysCode'].'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-Display::display_normal_message(get_lang('AddLpIntro'), false);
-
-if ($_POST AND empty($_REQUEST['lp_name'])) {
-    Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'), false);
-}
-
-$form = new FormValidator('lp_add', 'post', 'lp_controller.php');
+$form = new FormValidator('lp_add_category', 'post', 'lp_controller.php');
 
 // Form title
-$form->addElement('header', null, get_lang('AddLpToStart'));
+$form->addElement('header', null, get_lang('AddLPCategory'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('class' => 'span6'));
-$form->applyFilter('lp_name', 'html_filter');
-$form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addElement('text', 'name', api_ucfirst(get_lang('Name')), array('class' => 'span6'));
+$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
-$form->addElement('hidden', 'post_time', time());
-$form->addElement('hidden', 'action', 'add_lp');
+$form->addElement('hidden', 'action', 'add_lp_category');
+$form->addElement('hidden', 'c_id', api_get_course_int_id());
+$form->addElement('hidden', 'id', 0);
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
-$form -> addElement('advanced_settings',$advanced);
-$form -> addElement('html','<div id="options" style="display:none">');
+$form->addElement('style_submit_button', 'Submit', get_lang('Save'),'class="save"');
 
-$items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
-$form->addElement('select', 'category_id', get_lang('Category'), $items);
+if ($form->validate()) {
+    $values = $form->getSubmitValues();
+    if (isset($values['id'])) {
+        learnpath::update_category($values);
+    } else {
+        learnpath::create_category($values);
+    }
+} else {
+    $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 
-//Start date
-$form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
-$form->addElement('html','<div id="start_date_div" style="display:block;">');
-$form->addElement('datepicker', 'publicated_on', get_lang('PublicationDate'), array('form_name'=>'lp_add'), 5);
-$form->addElement('html','</div>');
-
-//End date
-$form->addElement('checkbox', 'activate_end_date_check', null, get_lang('EnableEndTime'), array('onclick' => 'activate_end_date()'));
-$form->addElement('html','<div id="end_date_div" style="display:none;">');
-$form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array('form_name'=>'lp_add'), 5);
-$form->addElement('html','</div>');
-
-$form->addElement('html','</div>');
-
-
-$defaults['activate_start_date_check']  = 1;
-
-$defaults['publicated_on']  = date('Y-m-d 08:00:00');
-$defaults['expired_on']     = date('Y-m-d 08:00:00',time()+84600);
-
-$form->setDefaults($defaults);
-$form->addElement('style_submit_button', 'Submit',get_lang('CreateLearningPath'),'class="save"');
+    if ($id) {
+        $item = learnpath::get_category($id);
+        $defaults = array(
+            'id' => $item->getId(),
+            'name' => $item->getName()
+        );
+        $form->setDefaults($defaults);
+    }
+}
 
 
 $form->display();

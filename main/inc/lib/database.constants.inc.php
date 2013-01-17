@@ -214,6 +214,7 @@ define('TABLE_LINKED_RESOURCES', 'resource');
 
 // New SCORM tables
 define('TABLE_LP_MAIN', 'lp');
+define('TABLE_LP_CATEGORY', 'lp_category');
 define('TABLE_LP_ITEM', 'lp_item');
 define('TABLE_LP_VIEW', 'lp_view');
 define('TABLE_LP_ITEM_VIEW', 'lp_item_view');

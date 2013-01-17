@@ -2592,8 +2592,6 @@ class Exercise {
 						} elseif ($answerType == HOT_SPOT_DELINEATION) {
 							$user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
-							//$_SESSION['exerciseResultCoordinates']=str_replace('/','|',$user_answer);
-							//if (!$comes_from_popup) {
 							//round-up the coordinates
 							$coords = explode('/',$user_answer);
 							$user_array = '';

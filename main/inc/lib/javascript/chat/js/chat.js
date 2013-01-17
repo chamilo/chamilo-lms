@@ -121,7 +121,7 @@ function showChatConnect() {
  */
 function startChatSession() {
     /* fix bug BT#5728 whereby users cannot move to the next question in IE9 */
-    if (ajax_url) {
+    if (typeof ajax_url != 'undefined') {
         $.ajax({
           url: ajax_url+"?action=startchatsession",
           cache: false,

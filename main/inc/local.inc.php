@@ -133,7 +133,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 
 // parameters passed via GET
 $logout = isset($_GET["logout"]) ? $_GET["logout"] : '';
-$gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : '';
+$gidReq = isset($_GET["gidReq"]) ? Database::escape_string($_GET["gidReq"]) : null;
 
 //this fixes some problems with generic functionalities like
 //My Agenda & What's New icons linking to courses
@@ -666,8 +666,8 @@ if (isset($cidReset) && $cidReset) {
                 Session::erase('id_session');
             }
 
-            if (!empty($_GET['gidReq'])) {
-                $_SESSION['_gid'] = intval($_GET['gidReq']);
+            if (isset($_REQUEST['gidReq'])) {
+                $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
             } else {
                 Session::erase('_gid');
             }
@@ -741,14 +741,16 @@ if (isset($cidReset) && $cidReset) {
             $_SESSION['id_session']         = intval($_GET['id_session']);
         }
 
-        if (!empty($_REQUEST['gidReq'])) {
+        if (isset($_REQUEST['gidReq'])) {
             $_SESSION['_gid'] = intval($_REQUEST['gidReq']);
+
             $group_table = Database::get_course_table(TABLE_GROUP);
-            $sql = "SELECT * FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
+            $sql = "SELECT id FROM $group_table WHERE c_id = ".$_course['real_id']." AND id = '$gidReq'";
             $result = Database::query($sql);
-            if (Database::num_rows($result) > 0) { // This group has recorded status related to this course
-                $gpData = Database::fetch_array($result);
-                $_gid = $gpData ['id'];
+            if (Database::num_rows($result) > 0) {
+                // This group has recorded status related to this course
+                $group_info = Database::fetch_array($result);
+                $_gid = $group_info['id'];
                 Session::write('_gid', $_gid);
             }
         }

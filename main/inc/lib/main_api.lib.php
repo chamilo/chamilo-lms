@@ -3161,7 +3161,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = null, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = 0, $start_visible = 0, $end_visible = 0, $session_id = 0) {
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
@@ -3185,7 +3185,7 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     if ($to_user_id <= 0) {
-        $to_user_id = null; // No to_user_id set
+        $to_user_id = 0; // No to_user_id set
     }
 
     // Set filters for $to_user_id and $to_group_id, with priority for $to_user_id
@@ -3373,25 +3373,25 @@ function api_get_item_property_id($course_code, $tool, $ref) {
  */
 
 function api_track_item_property_update($tool, $ref, $title, $content, $progress) {
-        $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
-        $course_id = api_get_real_course_id(); //numeric
-        $course_code = api_get_course_id(); //alphanumeric
-        $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
-        if (!empty($item_property_id)) {
-            $sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
-                    course_id           = '$course_id',
-                    item_property_id    = '$item_property_id',
-                    title               = '".Database::escape_string($title)."',
-                    content             = '".Database::escape_string($content)."',
-                    progress            = '".intval($progress)."',
-                    lastedit_date       = '".api_get_utc_datetime()."',
-                    lastedit_user_id    = '".api_get_user_id()."',
-                    session_id          = '".api_get_session_id()."'";
-            Database::query($sql);
-            $affected_rows = Database::affected_rows();
-            return $affected_rows;
-        }
-        return false;
+    $tbl_stats_item_property = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY);
+    $course_id = api_get_real_course_id(); //numeric
+    $course_code = api_get_course_id(); //alphanumeric
+    $item_property_id = api_get_item_property_id($course_code, $tool, $ref);
+    if (!empty($item_property_id)) {
+        $sql = "INSERT IGNORE INTO $tbl_stats_item_property SET
+                course_id           = '$course_id',
+                item_property_id    = '$item_property_id',
+                title               = '".Database::escape_string($title)."',
+                content             = '".Database::escape_string($content)."',
+                progress            = '".intval($progress)."',
+                lastedit_date       = '".api_get_utc_datetime()."',
+                lastedit_user_id    = '".api_get_user_id()."',
+                session_id          = '".api_get_session_id()."'";
+        Database::query($sql);
+        $affected_rows = Database::affected_rows();
+        return $affected_rows;
+    }
+    return false;
 }
 
 function api_get_track_item_property_history($tool, $ref) {

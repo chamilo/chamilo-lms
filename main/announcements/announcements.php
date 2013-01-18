@@ -432,7 +432,6 @@ if (api_is_allowed_to_edit(false, true)) {
         $group_memberships = GroupManager::get_group_ids($_course['real_id'], api_get_user_id());
 
         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-
             if (api_get_group_id() == 0) {
                 $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
@@ -445,23 +444,24 @@ if (api_is_allowed_to_edit(false, true)) {
                 $cond_user_id = " AND ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
             } else {
-                $cond_user_id = " AND ( ip.to_user_id='".api_get_user_id()."'".
-                    "OR ip.to_group_id IN (0, ".api_get_group_id().")) ";
+                $cond_user_id = " AND (
+                    (ip.to_user_id='".api_get_user_id()."' AND ip.to_group_id = ".api_get_group_id().") OR
+                    ip.to_group_id IN (".api_get_group_id().") AND ip.to_user_id = 0 ) ";
             }
         }
 
         // the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
         if (is_array($group_memberships) && count($group_memberships) > 0) {
-            $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+           $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                 FROM $tbl_announcement announcement, $tbl_item_property ip
                 WHERE
-                announcement.c_id = $course_id AND
-                ip.c_id = $course_id AND
-                announcement.id = ip.ref AND
-                ip.tool='announcement'
-                AND ip.visibility='1'
-                $cond_user_id
-                $condition_session
+                    announcement.c_id = $course_id AND
+                    ip.c_id = $course_id AND
+                    announcement.id = ip.ref AND
+                    ip.tool='announcement' AND
+                    ip.visibility='1'
+                    $cond_user_id
+                    $condition_session
                 GROUP BY ip.ref
                 ORDER BY display_order DESC
                 LIMIT 0,$maximum";
@@ -588,8 +588,8 @@ if ($display_form) {
     //@todo use formvalidator
 
     if (empty($group_id)) {
-        echo '	<div class="control-group">
-					<label class="control-label">'.
+        echo '<div class="control-group">
+                <label class="control-label">'.
         Display::return_icon('group.png', get_lang('ModifyRecipientList'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
 					</label>
 					<div class="controls">';
@@ -614,10 +614,8 @@ if ($display_form) {
             // setting the variables for the form elements: the message has to be sent by email
             $email_ann = '1';
             // setting the variables for the form elements: the title of the email
-            //$title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'),' > ',$_course['name']);
             $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
             // setting the variables for the form elements: the message of the email
-            //$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'),api_get_setting('siteName'),' > ',$_course['name'],$since);
             $content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), $since);
             // when we want to remind the users who have never been active then we have a different subject and content for the announcement
             if ($_GET['since'] == 'never') {
@@ -646,13 +644,13 @@ if ($display_form) {
             $announcement_to_modify = "";
         }
 
-        ($email_ann == '1' || !empty($surveyid)) ? $checked = 'checked' : $checked = '';
+        ($email_ann == '1') ? $checked = 'checked' : $checked = '';
         echo '<div class="control-group">
               <div class="controls">
               <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
               '.get_lang('EmailOption').': <span id="recipient_overview">'.Display::label(get_lang('MyGroup'), 'success').'</span>
               <a href="#" onclick="toggle_sendto();">'.get_lang('ModifyRecipientList').'</a>';
-        AnnouncementManager::show_to_form_group($group_id);
+        AnnouncementManager::show_to_form_group($group_id, $to);
         echo '</div></div>';
     }
 
@@ -763,7 +761,7 @@ if ($display_announcement_list) {
 							ip.c_id = $course_id AND
 							announcement.id = ip.ref AND
 							ip.tool			= 'announcement' AND
-							(ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
+							(ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )
 							$condition_session
 
 					ORDER BY display_order DESC";
@@ -831,21 +829,25 @@ if ($display_announcement_list) {
         //STUDENT
 
         if (is_array($group_memberships) && count($group_memberships) > 0) {
-            if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if (AnnouncementManager::user_can_edit_announcement()) {
                 if (api_get_group_id() == 0) {
                     //No group
                     $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'".
                         " OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
                 } else {
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
-					OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+                    $cond_user_id = " AND (
+                        ip.lastedit_user_id = '".api_get_user_id()."' OR
+                        ip.to_group_id IN (".api_get_group_id().")
+                    )";
                 }
-                //$cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") )) ";
             } else {
                 if (api_get_group_id() == 0) {
                     $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
                 } else {
-                    $cond_user_id = " AND (ip.to_user_id = $user_id OR ip.to_group_id IN (".api_get_group_id()."))";
+                    $cond_user_id = " AND (
+                            (ip.to_user_id = $user_id AND ip.to_group_id = ".api_get_group_id().") OR
+                            (ip.to_group_id IN (".api_get_group_id().") AND ip.to_user_id = 0 )
+                    )";
                 }
             }
 
@@ -922,7 +924,6 @@ if ($display_announcement_list) {
                 echo '</div>';
                 echo '</div>';
             } else {
-                //echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
                 Display::display_warning_message(get_lang('NoAnnouncements'));
             }
         } else {
@@ -950,9 +951,6 @@ if ($display_announcement_list) {
                     }
 
                     $title = $myrow['title'].$sent_to_icon;
-
-                    /* DATE */
-                    $last_post_datetime = $myrow['end_date'];
 
                     $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);
                     $myrow['visibility'] = $item_visibility;

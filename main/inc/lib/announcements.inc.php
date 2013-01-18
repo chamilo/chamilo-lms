@@ -142,35 +142,33 @@ class AnnouncementManager
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $course_id = api_get_course_int_id();
 
-        if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+        if (self::user_can_edit_announcement()) {
             $sql_query = "  SELECT announcement.*, toolitemproperties.*
                             FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-                            WHERE announcement.id = toolitemproperties.ref
-                            AND announcement.id = '$announcement_id'
-                            AND toolitemproperties.tool='announcement' AND
-                            announcement.c_id = $course_id AND
-							toolitemproperties.c_id = $course_id
+                            WHERE
+                                announcement.id = toolitemproperties.ref AND
+                                announcement.id = '$announcement_id' AND
+                                toolitemproperties.tool='announcement' AND
+                                announcement.c_id = $course_id AND
+                                toolitemproperties.c_id = $course_id
                             ORDER BY display_order DESC";
         } else {
-
-            $group_list = GroupManager::get_group_ids($course_id, api_get_user_id());
-            if (empty($group_list)) {
-                $group_list[] = 0;
-            }
-
             $visibility_condition = " toolitemproperties.visibility='1'";
             if (GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
                 $visibility_condition = " toolitemproperties.visibility IN ('0', '1') ";
             }
 
             if (api_get_user_id() != 0) {
-                $sql_query = "	SELECT announcement.*, toolitemproperties.*
+               $sql_query = "	SELECT announcement.*, toolitemproperties.*
     							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
     							WHERE
                                     announcement.id = toolitemproperties.ref  AND
                                     announcement.id = '$announcement_id' AND
                                     toolitemproperties.tool='announcement' AND
-                                    (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id IN ('0', '".implode("', '", $group_list)."')) AND
+                                    (
+                                        (toolitemproperties.to_user_id='".api_get_user_id()."'  AND toolitemproperties.to_group_id = ".api_get_group_id().") OR
+                                         toolitemproperties.to_group_id IN ('".api_get_group_id()."') AND toolitemproperties.to_user_id = 0
+                                    ) AND
                                     $visibility_condition AND
                                     announcement.c_id = $course_id AND
                                     toolitemproperties.c_id = $course_id
@@ -587,13 +585,14 @@ class AnnouncementManager
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function show_to_form_group($group_id)
+    public static function show_to_form_group($group_id, $to = array())
     {
+        $group_users = GroupManager::get_subscribed_users($group_id);
+
         echo "<table id=\"recipient_list\" style=\"display: none;\">";
         echo "<tr>";
         echo "<td>";
         echo "<select name=\"not_selected_form[]\" size=5 class=\"span4\" multiple>";
-        $group_users = GroupManager::get_subscribed_users($group_id);
         foreach ($group_users as $user) {
             echo '<option value="'.$user['user_id'].'" title="'.sprintf(get_lang('LoginX'), $user['username']).'" >'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
         }
@@ -609,12 +608,22 @@ class AnnouncementManager
         echo "<td>";
 
         echo "<select id=\"selectedform\" name=\"selectedform[]\" size=5 class=\"span4\" multiple>";
+        if (!empty($to)) {
+            foreach ($to as $user) {
+                $user = explode(':', $user);
+                if ($user[0] == 'USER') {
+                    $user = api_get_user_info($user[1]);
+                    echo '<option value="'.$user['user_id'].'" title="'.sprintf(get_lang('LoginX'), $user['username']).'" >'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
+                }
+            }
+        }
         echo '</select>';
 
         echo "</td>";
         echo "</tr>";
         echo "</table>";
     }
+
     /*
       CONSTRUCT_NOT_SELECT_SELECT_FORM
      */
@@ -800,22 +809,26 @@ class AnnouncementManager
         $id = Database::escape_string($id);
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT * FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
+        $sql = "SELECT to_group_id, to_user_id FROM $tbl_item_property WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $to_group = $row['to_group_id'];
-            switch ($to_group) {
-                // it was send to one specific user
-                case null:
-                    $to[] = "USER:".$row['to_user_id'];
-                    break;
-                // it was sent to everyone
-                case 0:
-                    return "everyone";
-                    exit;
-                    break;
-                default:
-                    $to[] = "GROUP:".$row['to_group_id'];
+            $to_user = $row['to_user_id'];
+
+            if (empty($to_user) && empty($to_group)) {
+                return "everyone";
+            }
+
+            if (!empty($to_user) && !empty($to_group)) {
+                $to[] = "USER:".$to_user;
+            }
+
+            if (empty($to_user) && !empty($to_group)) {
+                $to[] = "GROUP:".$to_group;
+            }
+
+            if (!empty($to_user) && empty($to_group)) {
+                $to[] = "USER:".$to_user;
             }
         }
         return $to;

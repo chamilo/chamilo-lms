@@ -465,13 +465,21 @@ class Agenda {
         $session_id = intval($session_id);
 
 		if (is_array($group_memberships) && count($group_memberships) > 0) {
-		    if (api_is_allowed_to_edit()) {
+		    if (api_is_allowed_to_edit() || GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
 		        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             } else {
-                $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                $where_condition = "(
+                    (ip.to_user_id = $user_id AND ip.to_group_id = $group_id ) OR
+                    ip.to_group_id IN (0, ".implode(", ", $group_memberships).") AND  ip.to_user_id  = 0 ) ";
             }
 
-            $sql = "SELECT DISTINCT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref, to_user_id
+            $sql = "SELECT DISTINCT
+                    agenda.*,
+                    ip.visibility,
+                    ip.to_group_id,
+                    ip.insert_user_id,
+                    ip.ref,
+                    to_user_id
                     FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE   agenda.id       = ip.ref  AND
                             ip.tool         ='".TOOL_CALENDAR_EVENT."' AND

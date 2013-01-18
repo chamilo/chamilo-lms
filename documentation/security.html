@@ -19,6 +19,7 @@
   <li><a href="#1.Disclosing-server-info">Disclosing server info</a></li>
   <li><a href="#2.Keeping-up-to-date">Keeping up to date</a></li>
   <li><a href="#3.Using-safe-browsers">Using safe browsers</a></li>
+  <li><a href="#4.Moving-config-file">Moving your configuration file out of the web directory</a></li>
 </ol>
 
 <h2><a name="1.Disclosing-server-info"></a>1. Disclosing server info</h2>
@@ -38,13 +39,28 @@ Make sure you check <a href="http://support.chamilo.org/projects/chamilo-18/wiki
 Subscribe to our free security alerts mailing-list: <a href="http://lists.chamilo.org/listinfo/security">http://lists.chamilo.org/listinfo/security</a> or that you follow our security Twitter feed: <a href="http://twitter.com/chamilosecurity">http://twitter.com/chamilosecurity</a>.
 </p>
 
-<h2><a name="2.Using-safe-browsers"></a>3. Using safe browsers</h2>
+<h2><a name="3.Using-safe-browsers"></a>3. Using safe browsers</h2>
 <p> Additionnally to lacking the implementation of features that really improve the quality of your browsing the Internet, older browsers tend to have many unresolved security flaws. Using an old browser, you put in danger the security of your computer and the data it contains, but you can also put others in danger by letting crackers take control of it and attacking others.</p>
 <p>To  avoid being a risk to yourself and others, you should download and install a recent browser. We recommend <a href="http://www.getfirefox.com" target="_blank">the latest stable version of Firefox</a>.</p>
+
+<h2><a name="4.Moving-config-file"></a>4. Moving your configuration file out of the web directory</h2>
+<p>It is considered unsafe to leave the configuration file inside the main/inc/conf/ directory, as it will be directly accessible for all users, which could lead crackers to download it, uninterpreted, and read through your configuration, which could lead to illicit 
+access to your database if that one isn't well protected and many other stuff we'd prefer to avoid. To secure it, move the configuration file out of your web directory. If your
+Chamilo installation is in /var/www/, move your configuration to /etc/chamilo/configuration.php, for example. Then create a new main/inc/conf/configuration.php file, open it, and write the following:</p>
+<p>
+<pre>
+&lt;?php
+require '/etc/chamilo/configuration.php';
+</pre>
+</p>
+<p>
+This will prevent direct access to your settings and make it seem totally the same to Chamilo.
+</p>
+
 <hr />
 <h2>Authors</h2>
 <ul>
-<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>
 </ul>
 </div>
 </body>

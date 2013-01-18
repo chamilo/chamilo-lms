@@ -55,45 +55,46 @@
 <ul>
   <li>Gradebook: Allow teacher to print certificates for entire class (#3708)</li>
   <li>Attendances: Warn about overlapping course attendances (#3716)</li>
-  <li>Reporting: Use links in statistics (#3731)</li>
+  <li>Attendances: Added 3 attendance states and updated style to improve visualization (BT#5419)</li>
+  <li>Agenda: Tutors can now add events (and other related options) in group calendars (BT#4284)</li>
   <li>Admin: Class import/export (#3882)</li>
+  <li>Admin: Add stylesheet download button to avoid requiring access to the code to start customizing a stylesheet (#5862)</li>
+  <li>Admin: Added extra fields for courses and sessions (facilitates synchronization through webservices with additional info) (BT#4882)</li>
   <li>Reporting: Show IP addresses in main/admin/statistics reports (#3987)</li>
+  <li>Learning paths: Enabled LP result in exercise report (#5469)</li>
+  <li>Learning paths: LP illustration image is now shown as tool icon on course homepage (BT#5486)</li>
+  <li>Exercises: Enabled exercise report by category (#5716)</li>
+  <li>Exercises: Added "Media" type questions, including notion of parent questions and special ordering of random questions with media parent (BT#5714)</li>
+  <li>Survey: Anonymous survey participation link auto-generator, fixing awkward issues with invitations (#5851)</li>
+  <li>Translation: Added support for Tagalog native language and main translation (still requires manual db update to enable, will be completed in 1.10) (#5854)</li>
+  <li>Users: Added the possibility for teachers to add students to their course through users classes (#5514)</li>
+  <li>Reporting: Added links to resources from statistics (#3731)</li>
   <li>Documents: Show course documents volume proper to a session (#4483)</li>
   <li>Skills: skills tree need a return link (#4492)</li>
-  <li>Classes: Enable class users import (#4518)</li>
   <li>Assignments: tool work: add zip and download feature from inside an assignment folder (#4616)</li>
-  <li>Feature #5283: Add a icon to see in page whoisonline.php if user is admin, teacher or student
-  <li>Classes: Add a searchbox and a way to display more than 20 items in classe table (#5381)</li>
-  <li>Learning paths: Enable LP result in exercice report (#5469)</li>
-  <li>Exercises: Enable exercise report by category (#5716)</li>
+  <li>Global: Added an icon to see in page whoisonline.php if user is admin, teacher or student (#5283)</li>
+  <li>Classes: Added a search box and a way to display more than 20 items in classes tables (#5381)</li>
   <li>Reporting: In the Course Tracking table, we don't have possibility to display more line in the result table (#5753)</li>
-  <li>Learning paths: Reintegratd features lost since 1.9 (#5758)</li>
-  <li>Survey: Anonymous survey participation link auto-generator (#5851)</li>
-  <li>Translation: Add support for Tagalog native language and main translation (#5854)</li>
-  <li>Admin: Add stylesheet download button (#5862)</li>
+  <li>Learning paths: Reintegrated features lost since 1.9 (#5758)</li>
+  <li>Learning paths: Adding a preview when checking the LP items in the reporting tab (BT#4961)</li>
   <li>Internal/Development: Measure most frequent language terms (#4804)</li>
   <li>Survey: Survey invitations are now sent through the Chamilo messaging feature as well</li>
-  <li>Learning paths: Adding a preview when checking the LP items in the reporting tab (BT#4961)</li>
   <li>Thematic advance: Allowing multiple creation of course progress not restricted to 6 types (BT#4878)</li>
   <li>Plugins: Added security to Single Sign On mechanism - Limit IPs (BT#5137)</li>
   <li>Learning paths: Implements a Scorm constraint: If SCO_MasteryScore does not evaluate to a number, passed/failed status won't be set at all (BT#5153)</li>
-  <li>Exercises: Added "Media" type questions, including notion of parent questions and special ordering of random questions with media parent (BT#5714)</li>
-  <li>Admin: Added extra fields for courses and sessions (facilitates synchronization through webservices with additional info) (BT#4882)</li>
   <li>Link: Added url type selector (#5794)</li>
-  <li>Users: Added the possibility for teachers to add students to their course through users classes (#5514)</li>
-  <li>Attendances: Added 3 attendance states and updated style to improve visualization (BT#5419)</li>
-  <li>Admin: Added CSS download button in stylesheets settings page (BT#5862)</li>
-  <li>Learning paths: LP illustration image is now shown as tool icon on course homepage</li>
+  <li>Admin: Enabled class users import (#4518)</li>
 </ul>
 <h3>Improvements</h3>
 <ul>
-  <li>Forum: Cleant forum UI (#3376)</li>
   <li>Wiki: Export to PDF in WIKI (#3471)</li>
+  <li>Learning paths: Considerably improved learning path ergonomy (#5593)</li>
+  <li>Classes: In courses, added a button to see which classes are registered in the course (#5619)</li>
+  <li>Exercises: Fixed questions alignment in IE8</li>
+  <li>Forum: Cleant forum UI (#3376)</li>
   <li>Global: Multi select boxes are too narrow. Find a way to enlarge it ? (#4062)</li>
   <li>Exercises: Test "Learner score" page for teacher, keep filter active after correcting a test (#4697)</li>
   <li>Classes: When you want to Subscribe classes to courses, you should see the course Visual Code (#5553)</li>
-  <li>Learning paths: Improve learning path ergonomy (#5593)</li>
-  <li>Classes: In a course, add a button to see which classes are registered in the course (#5619)</li>
   <li>Learning paths: In Learning path editing mode, add item display when click on the item title on the left side (#5662)</li>
   <li>Reporting: Change "X" icon for visibility eye icon (#5700)</li>
   <li>Assignments: Hide "Contains a file" text in assignments submit paper form (#5781)</li>
@@ -117,7 +118,6 @@
   <li>Learning path: Added a configuration setting $_configuration['hide_teacher_icons_lp'] to show icons as before the ergonomy changes (#5593)</li>
   <li>Internal/Development: Removed call of $oLP object by reference to avoid PHP 5.4 warning (BT#5198)</li>
   <li>Global: Changed position of the notification counter to make it more visible</li>
-  <li>Exercises: Fixed questions alignment in IE8</li>
   <li>Global: Updated position of the ribbon to floats (#5771)</li>
   <li>Courses: Disable options for students with assistant status in course (#5802)</li>
   <li>Exercises: Added the possibility to force the edition of a question if it has been used in a learning path (#5288)</li>
@@ -137,14 +137,19 @@
   <li>Plugins: Videoconference: Block students from closing if conference status says "FAILED" (#5802)</li>
   <li>Attendances: The creation of an attendance sheet now creates a first attendance date (BT#5622)</li>
   <li>Internal/Development: Creating main tables with UTF8 adding "DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci" (#5678)</li>
+  <li>Internal/Development: First running version of continuous integration build system at http://testing.chamilo.org/ using PHPUnit</li>
+  <li>Global: Improved message when user subscribes to course (BT#5655)</li>
+  <li>Web services: Added examples for users registration web services (commit:21137)</li>
+  <li>Plugins: Improved translation of BigBlueButton plugin (BT#5272)</li>
+  <li>Web services: Added check on emptiness of firstname/lastname in WSUserEdit* services (BT#5743)</li>
+  <li>Admin: Avoid not sending mails if notification extra fields do not exist (BT#5739)</li>  
 </ul>
 <h3>Debugging</h3>
 <ul>
   <li>Fixed some issues for IE9 compatibility (#2233)</li>
   <li>Fixed issue with number of questions in random exercises(#2469)</li>
   <li>Fixed issue with HTML &amp; text encoding in online editor (#3069)</li>
-  <li>3343?</li>
-  <li>3417?</li>
+  <li>Colored correction (tags Abbr style) lost in document tool (#3417)</li>
   <li>Documents: Fixed problem in documents quota (#3535)</li>
   <li>Search: Fixed blank page when search plugin enabled (#3550)</li>
   <li>Exercises: Fixed view bug when moving questions (#3775)</li>
@@ -156,8 +161,6 @@
   <li>Global: Error in upper toolbar (#4038)</li>
   <li>Work: Tasks without directory lost in upgrade from 1.8 (#4046)</li>
   <li>Global: Bug using api_strtotime() (#4263)</li>
-  <li>4271?</li>
-  <li>4866?</li>
   <li>Documents: MPEG video playing doesn't work (#4877)</li>
   <li>Global: IE9 doesn't show Cosmic Campus menu background (#5194)</li>
   <li>Global: Error in WMV MIME type (#5294)</li>
@@ -165,7 +168,6 @@
   <li>Social: Height of social messaging's answer subject field is too low (#5326)</li>
   <li>Documents: Documents in learning path (sessions) do not appear to tutor (#5328)</li>
   <li>Work: Homework pagination count errors (#5332)</li>
-  <li>5343?</li>
   <li>Documents: Simple upload doesn't work with HTTPS (#5344)</li>
   <li>Global: Login field does not get focus in IE (#5345)</li>
   <li>Sessions: Removing user from one course doesn't update the subscribed users count (#5352)</li>
@@ -288,6 +290,16 @@
   <li>Survey: Fixed survey questions count (#5567)</li>
   <li>Learning paths: Fixed LP JS error with Hotpotatos +fixed empty iframe + fixed wrong HTML attribute (#3343)</li>
   <li>Security: Fixed issue with check_abs_path() function under Windows whereby the path was not similar for uppercases reasons (#5670)</li>
+  <li>Exercises: Fixed error in tests results sorting by category (commit:21109)</li>
+  <li>Global: Fixed possible loop in course code search (BT#5558) and improve user filter (BT#5707)</li>
+  <li>Install: Fixed double settings insertion during install (commit:21134)</li>
+  <li>Admin: Fixed last access report (BT#5171)</li>
+  <li>Course copy: Fixed many issues in exercises copy from course to course and portal to portal (commit:21142, BT#5731)</li>
+  <li>Learning paths: Fixed SCORM support regression (BT#5069)</li>
+  <li>Learning paths: Fixed start time (BT#5710)</li>
+  <li>Global: Applied max num rows patch to dynamic tables (Jqgrid, BT#5476)</li>
+  <li>Admin: Fixed users extra fields dates (#5879)</li>
+  <li>Exercises: Fixed "Next" button bug in IE8&9 + results page not showing in review page (BT#5728)</li>
 </ul>
 <h3>Third-Party Libraries additions/updates</h3>
 <ul>
@@ -300,7 +312,7 @@
 <h3>Stylesheets and theming</h3>
 <ul>
   <li>Added session-box-text and session-item elements to improve styling</li>
-  <li>Modified   #main_content to #top_main_content to avoid double #main_content id on the same page</li>
+  <li>Modified #main_content to #top_main_content to avoid double #main_content id on the same page</li>
 </ul>
   
 

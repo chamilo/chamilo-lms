@@ -9312,10 +9312,12 @@ EOD;
         global $app;
         $em = $app['orm.em'];
         $item = $em->find('Entity\EntityCLpCategory', $params['id']);
-        $item->setName($params['name']);
-        $item->setCId($params['c_id']);
-        $em->persist($item);
-        $em->flush();
+        if ($item) {
+            $item->setName($params['name']);
+            $item->setCId($params['c_id']);
+            $em->persist($item);
+            $em->flush();
+        }
     }
 
     static function get_categories($course_id) {

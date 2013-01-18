@@ -100,11 +100,7 @@ if (!empty($gradebook) && $gradebook=='view') {
 
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 
-Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
 
-echo '<div class="actions">';
-echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
-echo '</div>';
 
 $form = new FormValidator('lp_add_category', 'post', 'lp_controller.php');
 
@@ -123,10 +119,16 @@ $form->addElement('style_submit_button', 'Submit', get_lang('Save'),'class="save
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
-    if (isset($values['id'])) {
+    if (!empty($values['id'])) {
         learnpath::update_category($values);
+        $url = api_get_self().'?action=list&'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     } else {
         learnpath::create_category($values);
+        $url = api_get_self().'?action=list&'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
     }
 } else {
     $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
@@ -141,6 +143,11 @@ if ($form->validate()) {
     }
 }
 
+Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
+
+echo '<div class="actions">';
+echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.Display::return_icon('back.png', get_lang('ReturnToLearningPaths'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '</div>';
 
 $form->display();
 // Footer

@@ -331,7 +331,7 @@ class AnnouncementManager {
       STORE ANNOUNCEMENT  GROUP ITEM
      */
 
-    public static function add_group_announcement($emailTitle, $newContent, $order, $to, $to_users, $file = array(), $file_comment = '') {
+    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '') {
         global $_course;
 
         // database definitions

@@ -1133,7 +1133,6 @@ function _api_format_user($user, $add_password = false) {
     $result['language']         = $user['language'];
 
     if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-        require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
         $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
         // Convert the timestamp back into a datetime
         // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function

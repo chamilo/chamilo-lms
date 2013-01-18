@@ -890,7 +890,7 @@ class AnnouncementManager {
                 if (is_array($sent_to_array['users'])) {
                     foreach ($sent_to_array['users'] as $user_id) {
                         $user_info = api_get_user_info($user_id);
-                        $output[] = '<span title="' . sprintf(get_lang('LoginX'), $user_info) . '"' . api_get_person_name($user_info['firstname'], $user_info['lastname']) . " (" . $user_info['username'] . ")";
+                        $output[] = $user_info['complete_name_with_username'];
                     }
                 }
             }

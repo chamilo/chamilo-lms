@@ -271,7 +271,7 @@ class Template {
         $this->user_is_logged_in = false;
 
         if (api_user_is_login()) {
-            $user_info = api_get_user_info();
+            $user_info = api_get_user_info(api_get_user_id());
             $user_info['logged'] = 1;
 
             $user_info['is_admin'] = 0;

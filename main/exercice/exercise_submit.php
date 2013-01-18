@@ -933,7 +933,7 @@ if (!empty($error)) {
                     	} else {
                         	$("#save_all_reponse").html("'.addslashes(Display::return_icon('wrong.gif')).'");
                         }
-                    },
+                    }
                 });
                 return false;
             }

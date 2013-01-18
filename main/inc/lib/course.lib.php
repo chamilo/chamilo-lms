@@ -1374,8 +1374,11 @@ class CourseManager {
                     if (isset($category[0]) && $category[0]->is_certificate_available($user['user_id'])) {
                         $report_info['certificate'] = Display::label(get_lang('Yes'), 'success');
                     }
-                    $report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
-                        $report_info['progress'] = Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), 0)."%";
+                    //$report_info['score'] = Tracking::get_avg_student_score($user['user_id'], $course_code, array(), 0);
+
+                    $progress = intval(Tracking::get_avg_student_progress($user['user_id'], $course_code, array(), 0));
+                    $report_info['progress_100'] =  $progress == 100 ? Display::label(get_lang('Yes'), 'success') : Display::label(get_lang('No'));
+                    $report_info['progress'] = $progress."%";
 
                     foreach ($extra_fields as $extra) {
                         $user_data = UserManager::get_extra_user_data_by_field($user['user_id'], $extra['1']);

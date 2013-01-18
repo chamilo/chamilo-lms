@@ -330,8 +330,8 @@ switch ($action) {
         }
         break;
     case 'get_user_course_report':
-        $columns = array('course', 'user', 'time', 'certificate', 'score', 'progress');
-        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('Approved'), get_lang('Score'), get_lang('NotesObtained'));
+        $columns = array('course', 'user', 'time', 'certificate', 'progress_100', 'progress');
+        $column_names = array(get_lang('Course'), get_lang('User'), get_lang('ManHours'), get_lang('CertificateGenerated'), get_lang('Approved'), get_lang('CourseAdvance'));
         $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
         if (!empty($extra_fields)) {
             foreach($extra_fields as $extra) {

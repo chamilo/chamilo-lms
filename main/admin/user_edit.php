@@ -368,7 +368,20 @@ if ($form->validate()) {
 		}
 
 		foreach ($user as $key => $value) {
-			if (substr($key, 0, 6) == 'extra_') { //an extra field
+			if (substr($key, 0, 6) == 'extra_') {
+                //an extra field
+                //@todo remove this as well as in the profile.php ad put it in a function
+                if (is_array($value) && isset($value['Y']) && isset($value['F']) && isset($value['d'])) {
+                    if (isset($value['H']) && isset($value['i'])) {
+                        // extra field date time
+                        $time = mktime($value['H'],$value['i'],0,$value['F'],$value['d'],$value['Y']);
+                        $value = date('Y-m-d H:i:s',$time);
+                    } else {
+                        // extra field date
+                        $time = mktime(0,0,0,$value['F'],$value['d'],$value['Y']);
+                        $value = date('Y-m-d',$time);
+                    }
+                }
 				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
 			}
 		}

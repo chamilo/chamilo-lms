@@ -228,7 +228,7 @@ $(function() {
         autoHeight: false,
         active: false, // all items closed by default
         collapsible: true,
-        header: ".accordion-heading",
+        header: ".accordion-heading"
     })
 
     //Global popup

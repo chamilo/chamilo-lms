@@ -100,10 +100,10 @@ For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
 <br />
 
 
-<h3><span style="font-weight: bold;">MySQL database server</span></h3>
+<h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
 
 You will need a login and password allowing to manage and create 
-a database.<br />
+a database. Usually, the default configuration on local computers is to allow you to connect as root with an empty password. It is highly recommended to change the password and define a user with access to only a specific database. Please refer to the MySQL or MariaDB documentation in order to do this.<br />
 <span class="muted">Note that this has been greatly simplified since version 1.9, as it 
 previously required to choose between multiple databases and a deprecated
 single-database mode.</span><br />
@@ -118,7 +118,7 @@ single-database mode.</span><br />
     <span style="font-weight: bold;">C:\xampp\htdocs\</span> on a Windows server or <span style="font-weight: bold;">/var/www/html/</span> (or /var/www/chamilo/) on a Linux server</li>
   <li>Open your web browser (Internet Explorer, Firefox...) and type
     <span style="font-weight: bold;">http://localhost/chamilo/</span> if you install locally or
-    <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> if you install remotely. <span class="muted">We recommend defining a specific Virtual Host for this installation if you posess the skills to do so</span>
+    <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> if you install remotely. <span class="muted">We recommend defining a specific Virtual Host for this installation if you have the skills to do so</span>
     </li>
 
   <li>Follow the web installation process. You can accept all default
@@ -147,7 +147,7 @@ it, you will need to allow your system to write into the sarchdb directory:
 <ul>
   <li>[chamilo]/searchdb</li>
 </ul> 
-If you so happen to find a tests/ directory at the root of your package, please delete it. 
+If you find a tests/ directory at the root of your package, please delete it. 
 This is a development directory that has not been checked for security issues, 
 an it should *never* be accessible to final users on a production server. 
 

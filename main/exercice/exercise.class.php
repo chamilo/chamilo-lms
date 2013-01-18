@@ -2026,6 +2026,9 @@ class Exercise {
 		// Creates a temporary Question object
 		$course_id              = api_get_course_int_id();
 		$objQuestionTmp         = Question::read($questionId, $course_id);
+                if ($objQuestionTmp === false) {
+                    return false;
+                }
 
 		$questionName 			= $objQuestionTmp->selectTitle();
 		$questionWeighting 		= $objQuestionTmp->selectWeighting();
@@ -2683,8 +2686,6 @@ class Exercise {
 						} elseif ($answerType == HOT_SPOT_DELINEATION) {
 							$user_answer = $_SESSION['exerciseResultCoordinates'][$questionId];
 
-							//$_SESSION['exerciseResultCoordinates']=str_replace('/','|',$user_answer);
-							//if (!$comes_from_popup) {
 							//round-up the coordinates
 							$coords = explode('/',$user_answer);
 							$user_array = '';

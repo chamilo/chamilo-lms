@@ -13,10 +13,6 @@ use Pagerfanta\View\TwitterBootstrapView;
 //use Pagerfanta\View\DefaultView;
 //use Pages\PagesAdmin;
 
-use APY\DataGridBundle\Grid\Grid;
-use APY\DataGridBundle\Grid\Source\Entity;
-
-
 class PagesController {
     /*
     function indexAction(Application $app, $page) {
@@ -87,7 +83,7 @@ class PagesController {
     }
 
     function listAction(Application $app, $page = 1) {
-
+        /*
         $source = new Entity('Entity\EntityPages');
         $grid = new Grid();
 
@@ -96,7 +92,7 @@ class PagesController {
 
         // Return the response of the grid to the template
         //return $grid->getGridResponse('MyProjectMyBundle::myGrid.html.twig');
-
+        */
 
 
 

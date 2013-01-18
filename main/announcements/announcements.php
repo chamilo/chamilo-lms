@@ -161,10 +161,7 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) OR
-    (!empty($group_id) AND GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_ANNOUNCEMENT) AND GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))
-) {
+if (AnnouncementManager::user_can_edit_announcement()){
     /*
       Change visibility of announcement
      */
@@ -178,7 +175,6 @@ if (api_is_allowed_to_edit(false, true) OR
             }
             if (!api_is_course_coach() || api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $_GET['id'])) {
                 if ($ctok == $_GET['sec_token']) {
-
                     AnnouncementManager::change_visibility_announcement($_course, $_GET['id']);
                     $message = get_lang('VisibilityChanged');
                 }
@@ -527,10 +523,7 @@ $announcement_number = Database::num_rows($result);
  */
 
 $show_actions = false;
-if ((api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) OR
-    (!empty($group_id) AND GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_ANNOUNCEMENT) AND GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))
-) {
+if (AnnouncementManager::user_can_edit_announcement()) {
     echo '<div class="actions">';
     if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify', 'view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -751,25 +744,12 @@ if ($display_form) {
   DISPLAY ANNOUNCEMENT LIST
  */
 
-$course_id = api_get_course_int_id();
-
-//if ($display_announcement_list && !$surveyid) {
 if ($display_announcement_list) {
-    // by default we use the id of the current user. The course administrator can see the announcement of other users by using the user / group filter
-    //$user_id=$_user['user_id'];
-    if (isset($_SESSION['user'])) {
-        //$user_id=$_SESSION['user'];
-    }
-    $user_id = api_get_user_id();
 
-    if (isset($_SESSION['group'])) {
-        //$group_id=$_SESSION['group'];
-    }
+    $user_id = api_get_user_id();
     $group_id = api_get_group_id();
 
     $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
-
-    //$is_group_member = GroupManager :: is_tutor(api_get_user_id());
 
     if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
         // A.1. you are a course admin with a USER filter
@@ -809,7 +789,7 @@ if ($display_announcement_list) {
 						announcement.id = ip.ref
 						AND ip.tool='announcement'
 						AND ip.visibility<>'2'
-						AND (ip.to_group_id=$group_id OR ip.to_group_id='0')
+						AND (ip.to_group_id = $group_id OR ip.to_group_id='0')
 						$condition_session
 				GROUP BY ip.ref
 				ORDER BY display_order DESC";
@@ -832,15 +812,16 @@ if ($display_announcement_list) {
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
             } else {
-                // A.3.a you are a course admin without user or group filter and WTIHOUT studentview (= the normal course admin view)
+                // A.3.a you are a course admin without user or group filter and WITHOUT studentview (= the normal course admin view)
                 // => see all the messages of all the users and groups with editing possibilities
                 $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
 					FROM $tbl_announcement announcement, $tbl_item_property ip
 					WHERE 	announcement.c_id = $course_id AND
 							ip.c_id = $course_id AND
-							announcement.id = ip.ref
-							AND ip.tool='announcement'
-							AND (ip.visibility='0' or ip.visibility='1')
+							announcement.id = ip.ref AND
+                            ip.tool='announcement' AND
+                            (ip.visibility='0' or ip.visibility='1') AND
+                            to_group_id = 0
 							$condition_session
 					GROUP BY ip.ref
 					ORDER BY display_order DESC";
@@ -864,8 +845,13 @@ if ($display_announcement_list) {
                 if (api_get_group_id() == 0) {
                     $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
                 } else {
-                    $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".api_get_group_id()."))";
+                    $cond_user_id = " AND (ip.to_user_id = $user_id OR ip.to_group_id IN (".api_get_group_id()."))";
                 }
+            }
+
+            $visibility_condition = " ip.visibility='1'";
+            if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)) {
+                $visibility_condition = " ip.visibility IN ('0', '1') ";
             }
 
             $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.insert_date
@@ -875,8 +861,7 @@ if ($display_announcement_list) {
 	        				announcement.id = ip.ref
 	        				AND ip.tool='announcement'
 	        				$cond_user_id
-	        				$condition_session
-	        				AND ip.visibility='1'
+	        				$condition_session AND $visibility_condition
     				ORDER BY display_order DESC";
         } else {
             if ($_user['user_id']) {
@@ -1041,7 +1026,6 @@ if ($display_announcement_list) {
             echo "</table>";
         }
 } // end: if ($displayAnnoucementList)
-
 
 if (isset($_GET['action']) && $_GET['action'] == 'view') {
     AnnouncementManager::display_announcement($announcement_id);

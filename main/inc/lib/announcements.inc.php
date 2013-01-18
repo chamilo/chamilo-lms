@@ -157,28 +157,35 @@ class AnnouncementManager
             if (empty($group_list)) {
                 $group_list[] = 0;
             }
+
+            $visibility_condition = " toolitemproperties.visibility='1'";
+            if (GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
+                $visibility_condition = " toolitemproperties.visibility IN ('0', '1') ";
+            }
+
             if (api_get_user_id() != 0) {
                 $sql_query = "	SELECT announcement.*, toolitemproperties.*
     							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-    							WHERE announcement.id = toolitemproperties.ref
-    							AND announcement.id = '$announcement_id'
-    							AND toolitemproperties.tool='announcement'
-    							AND (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id IN ('0', '".implode("', '", $group_list)."'))
-    							AND toolitemproperties.visibility='1' AND
-    							announcement.c_id = $course_id AND
-								toolitemproperties.c_id = $course_id
+    							WHERE
+                                    announcement.id = toolitemproperties.ref  AND
+                                    announcement.id = '$announcement_id' AND
+                                    toolitemproperties.tool='announcement' AND
+                                    (toolitemproperties.to_user_id='".api_get_user_id()."' OR toolitemproperties.to_group_id IN ('0', '".implode("', '", $group_list)."')) AND
+                                    $visibility_condition AND
+                                    announcement.c_id = $course_id AND
+                                    toolitemproperties.c_id = $course_id
     							ORDER BY display_order DESC";
             } else {
                 $sql_query = "	SELECT announcement.*, toolitemproperties.*
     							FROM $tbl_announcement announcement, $tbl_item_property toolitemproperties
-    							WHERE announcement.id = toolitemproperties.ref
-    							AND announcement.id = '$announcement_id'
-    							AND toolitemproperties.tool='announcement'
-    							AND toolitemproperties.to_group_id='0'
-    							AND toolitemproperties.visibility='1' AND
-    							announcement.c_id = $course_id AND
-								toolitemproperties.c_id = $course_id
-    							";
+    							WHERE
+                                    announcement.id = toolitemproperties.ref AND
+                                    announcement.id = '$announcement_id' AND
+                                    toolitemproperties.tool='announcement' AND
+                                    toolitemproperties.to_group_id='0' AND
+                                    toolitemproperties.visibility='1' AND
+                                    announcement.c_id = $course_id AND
+                                    toolitemproperties.c_id = $course_id";
             }
         }
 
@@ -191,7 +198,7 @@ class AnnouncementManager
             echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
             echo "<tr><td><h2>".$title."</h2></td></tr>";
 
-            if (api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if (self::user_can_edit_announcement()) {
                 $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$announcement_id."\">".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
                 if ($result['visibility'] == 1) {
                     $image_visibility = "visible";
@@ -205,15 +212,13 @@ class AnnouncementManager
                 $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '')."&action=showhide&id=".$announcement_id."&sec_token=".$stok."\">".
                     Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
-                if (api_is_allowed_to_edit(false, true)) {
+                if (self::user_can_edit_announcement()) {
                     $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$announcement_id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
                         Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                         "</a>";
                 }
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
             }
-
-
 
             echo "<tr><td>$content</td></tr>";
 
@@ -364,18 +369,15 @@ class AnnouncementManager
                 end_date 		= '$now',
                 display_order 	= '$order',
                 session_id		= ".api_get_session_id();
-        var_dump($sql);
 
         $result = Database::query($sql);
         if ($result === false) {
             return false;
         }
 
-
         //store the attach file
         $last_id = Database::insert_id();
-        var_dump($last_id)
-        exit;
+
         if (!empty($file)) {
             self::add_announcement_attachment_file($last_id, $file_comment, $file);
         }
@@ -384,7 +386,6 @@ class AnnouncementManager
 
         if (!isset($to_users)) {
             $send_to = self::separate_users_groups($to);
-            var_dump($send_to);
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
@@ -396,7 +397,7 @@ class AnnouncementManager
             // storing the selected users
             if (is_array($to_users)) {
                 foreach ($to_users as $user) {
-                    api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
+                    api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), api_get_group_id(), $user);
                 }
             }
         }
@@ -1001,8 +1002,10 @@ class AnnouncementManager
         while ($row = Database::fetch_array($result)) {
             // if to_group_id is null then it is sent to a specific user
             // if to_group_id = 0 then it is sent to everybody
-            if ($row['to_group_id'] != 0) {
-                $sent_to_group[] = $row['to_group_id'];
+            if (empty($row['to_user_id'])) {
+                if ($row['to_group_id'] != 0) {
+                    $sent_to_group[] = $row['to_group_id'];
+                }
             }
             // if to_user_id <> 0 then it is sent to a specific user
             if ($row['to_user_id'] <> 0) {
@@ -1077,8 +1080,8 @@ class AnnouncementManager
                 $safe_file_name = Database::escape_string($file_name);
                 $safe_new_file_name = Database::escape_string($new_file_name);
                 // Storing the attachments if any
-                $sql = 'INSERT INTO '.$tbl_announcement_attachment.' (c_id, filename, comment, path, announcement_id, size) '.
-                    "VALUES ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
+                $sql = "INSERT INTO $tbl_announcement_attachment (c_id, filename, comment, path, announcement_id, size) VALUES
+                        ($course_id, '$safe_file_name', '$file_comment', '$safe_new_file_name' , '$announcement_id', '".intval($file['size'])."' )";
                 Database::query($sql);
                 $return = 1;
             }
@@ -1155,6 +1158,14 @@ class AnnouncementManager
     {
         $email = AnnouncementEmail::create(null, $annoucement_id);
         $email->send();
+    }
+
+    public static function user_can_edit_announcement() {
+        $group_id = api_get_group_id();
+        return  api_is_allowed_to_edit(false, true) OR
+                (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) OR
+                (!empty($group_id) AND GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_ANNOUNCEMENT) AND GroupManager::is_tutor_of_group(api_get_user_id(), $group_id));
+
     }
 }
 //end class

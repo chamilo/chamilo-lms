@@ -274,7 +274,6 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
         }
     }
     if (!empty($actions_array)) {
-        echo Display::page_subheader2(get_lang('Tools'));
         echo Display::actions($actions_array);
     }
 }

@@ -164,8 +164,6 @@ if (AnnouncementManager::user_can_edit_announcement()){
     /*
       Change visibility of announcement
      */
-    // $_GET['isStudentView']<>"false" is added to prevent that the visibility
-    // is changed after you do the following:
     // change visibility -> studentview -> course manager view
     if (!isset($_GET['isStudentView']) || $_GET['isStudentView'] != 'false') {
         if (isset($_GET['id']) AND $_GET['id'] AND isset($_GET['action']) AND $_GET['action'] == "showhide") {
@@ -330,8 +328,7 @@ if (AnnouncementManager::user_can_edit_announcement()){
     $newContent = (!empty($_POST['newContent']) ? $safe_newContent : '');
 
     $submitAnnouncement = isset($_POST['submitAnnouncement']) ? $_POST['submitAnnouncement'] : 0;
-
-
+    
     $id = 0;
     if (!empty($_POST['id'])) {
         $id = intval($_POST['id']);

@@ -154,7 +154,7 @@ if (!isset($src)) {
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 $file_info = pathinfo($file_info['path']);
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
+                if (isset($file_info['extension']) && api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
@@ -199,6 +199,10 @@ if ($debug) {
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
+}
+
+if (!$_SESSION['oLP']->check_attempts()) {
+    api_not_allowed(true);
 }
 
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {

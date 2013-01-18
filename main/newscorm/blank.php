@@ -30,8 +30,13 @@ if (isset($_GET['error'])) {
             Display::display_warning_message(get_lang('FileNotFound'));
             break;
         case 'reached_one_attempt':
+            //Seems not be use
             echo '<br /><br />';
             Display::display_warning_message(get_lang('ReachedOneAttempt'));
+            break;
+        case 'max_attempt_reached':
+            echo '<br /><br />';
+            Display::display_warning_message(get_lang('ReachedMaxAttempt'));
             break;
         default:
             break;

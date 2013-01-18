@@ -3205,6 +3205,7 @@ function create_course_tables($course_db_name = null) {
         "publicated_on  DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', " .
         "expired_on     DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00',
          category_id INT unsigned NOT NULL default 0,
+         max_attempts INT NOT NULL default 0,
     	 PRIMARY KEY  (c_id, id)
         )" . $charset_clause;
 
@@ -3217,7 +3218,7 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY (id)
         )" . $charset_clause;
     Database::query($sql);
-    
+
 
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPVIEW` (
     	$add_to_all_tables" .

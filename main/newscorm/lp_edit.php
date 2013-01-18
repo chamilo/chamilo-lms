@@ -29,7 +29,6 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
-//$interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id", 'name' => get_lang('NewStep'));
 
 $htmlHeadXtra[] = '<script>
 function activate_start_date() {
@@ -64,7 +63,7 @@ $form = new FormValidator('form1', 'post', 'lp_controller.php');
 $form->addElement('header', get_lang('EditLPSettings'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('size' => 43));
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), array('class' => 'span5'));
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -135,6 +134,15 @@ $publicated_on  = $_SESSION['oLP'] ->publicated_on;
 $form->addElement('html', '<div class="control-group"><label class="control-label">'.get_lang('LearnpathPrerequisites').'</label>
 <div class="controls">'.$_SESSION['oLP']->display_lp_prerequisites_list().' <span class="help-block">'.get_lang('LpPrerequisiteDescription').'</span></div></div>');
 
+$options = array(
+    '0' => get_lang('Unlimited'),
+);
+for ($i = 1; $i <= 10; $i++) {
+    $options[$i] = $i;
+}
+
+$form->addElement('select', 'max_attempts', get_lang('MaxAttempts'), $options);
+
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null,get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $display_date = 'none';
@@ -165,7 +173,7 @@ if (api_is_platform_admin()) {
 }
 
 //Submit button
-$form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
+$form->addElement('style_submit_button', 'Submit', get_lang('SaveLPSettings'),'class="save"');
 
 // Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
@@ -173,7 +181,7 @@ $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 $defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
 $defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
-
+$defaults['max_attempts'] = $_SESSION['oLP']->get_max_attempts();
 $form->setDefaults($defaults);
 
 echo '<div class="row">';

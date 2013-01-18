@@ -176,19 +176,6 @@ class learnpathItem
         if (($index + 1) > $this->interactions_count) {
             $this->interactions_count = $index + 1;
         }
-        /*
-          if (is_array($this->interactions[$index]) && count($this->interactions[$index]) > 0) {
-          $this->interactions[$index] = $params;
-          return false;
-          } else {
-          if (count($params)==8) { // We rely on the calling script to provide parameters in the right order.
-          $this->interactions[$index] = $params;
-          return true;
-          } else {
-          return false;
-          }
-          }
-         */
     }
 
     /**
@@ -2682,6 +2669,48 @@ class learnpathItem
         }
     }
 
+    function get_check_attempts($item_id) {
+        $count = $this->items[$item_id]->get_view_count();
+        $max_attempts = $this->get_max_attempts();
+        switch ($max_attempts) {
+            case 0: //unlimited
+                return true;
+                break;
+            case $max_attempts >= 1:
+                if ($count < $max_attempts) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    function check_attempts($attempt) {
+        $course_id = api_get_course_int_id();
+        $table = Database::get_course_table(TABLE_LP_MAIN);
+        $sql = "SELECT max_attempts FROM $table WHERE id = $this->lp_id AND c_id = $course_id";
+        $result = Database::query($sql);
+
+        $max_attempt = 1;
+        if (Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $max_attempt = $row['max_attempts'];
+        }
+
+        switch ($max_attempt) {
+           case 0: //unlimited
+               return true;
+               break;
+           case $max_attempt >= 1:
+               if ($attempt <= $max_attempt) {
+                   return true;
+               }
+               break;
+       }
+       return false;
+    }
+
+
     /**
      * Writes the current data to the database
      * @return	boolean	Query result
@@ -2708,8 +2737,7 @@ class learnpathItem
 		                 WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ;';
         $rs_verified = Database::query($sql_verified);
         $row_verified = Database::fetch_array($rs_verified);
-
-        $my_case_completed = array('completed', 'passed', 'browsed', 'failed'); // Added by Isaac Flores.
+        $my_case_completed = array('completed', 'passed', 'browsed', 'failed');
 
         $save = true;
 
@@ -2768,11 +2796,18 @@ class learnpathItem
                 $inserted = true;
             }
 
+            $check_attempts = self::check_attempts($this->get_attempt_id());
+            if (!$check_attempts) {
+                return false;
+            }
+
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $check = "SELECT * FROM $item_view_table ".
-                "WHERE c_id = $course_id AND lp_item_id = ".$this->db_id." ".
-                "AND   lp_view_id = ".$this->view_id." ".
-                "AND   view_count = ".$this->get_attempt_id();
+            $check = "SELECT * FROM $item_view_table
+                        WHERE
+                            c_id = $course_id AND
+                            lp_item_id = ".$this->db_id." AND
+                            lp_view_id = ".$this->view_id." AND
+                            view_count = ".$this->get_attempt_id();
             if (self::debug > 2) {
                 error_log('learnpathItem::write_to_db() - Querying item_view: '.$check, 0);
             }
@@ -2853,7 +2888,8 @@ class learnpathItem
                             $my_status = " status = '".$this->get_status(false)."' ,";
                         } elseif ($this->get_prevent_reinit() == 1) {
                             // Process of status verified into data base.
-                            $sql_verified = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ;';
+                            $sql_verified = 'SELECT status FROM '.$item_view_table.'
+                                             WHERE c_id = '.$course_id.' AND lp_item_id = "'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ;';
                             $rs_verified = Database::query($sql_verified);
                             $row_verified = Database::fetch_array($rs_verified);
 
@@ -2897,7 +2933,8 @@ class learnpathItem
                             // This code line fixes the problem of wrong status.
                             if ($my_type_lp == 2) {
                                 // Verify current status in multiples attempts.
-                                $sql_status = 'SELECT status FROM '.$item_view_table.' WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ';
+                                $sql_status = 'SELECT status FROM '.$item_view_table.'
+                                               WHERE c_id = '.$course_id.' AND lp_item_id="'.$this->db_id.'" AND lp_view_id="'.$this->view_id.'" AND view_count="'.$this->get_attempt_id().'" ';
                                 $rs_status = Database::query($sql_status);
                                 $current_status = Database::result($rs_status, 0, 'status');
                                 if (in_array($current_status, $case_completed)) {

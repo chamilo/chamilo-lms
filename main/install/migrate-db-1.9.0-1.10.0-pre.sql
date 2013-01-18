@@ -117,7 +117,9 @@ ALTER TABLE course_module change `column` column_module int unsigned NOT NULL de
 ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL DEFAULT 0;
 
 ALTER TABLE c_lp ADD COLUMN category_id INT unsigned NOT NULL default 0;
+ALTER TABLE c_lp ADD COLUMN max_attempts INT NOT NULL default 0;
+
 CREATE TABLE c_lp_category (id int unsigned NOT NULL auto_increment, c_id INT unsigned NOT NULL, name VARCHAR(255), PRIMARY KEY (id));
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21217' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21257' WHERE variable = 'chamilo_database_version';

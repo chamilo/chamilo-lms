@@ -150,6 +150,7 @@ class learnpath {
                 $this->modified_on      = $row['modified_on'];
                 $this->ref              = $row['ref'];
                 $this->category_id = $row['category_id'];
+                $this->max_attempts = $row['max_attempts'];
 
                 if ($row['publicated_on'] != '0000-00-00 00:00:00') {
                     $this->publicated_on   = $row['publicated_on'];
@@ -3611,7 +3612,7 @@ class learnpath {
         if (empty($item)) {
             $item = $this->current;
         }
-        if (is_object($this->items[$item])) {
+        if (isset($this->items[$item]) && is_object($this->items[$item])) {
 
             if ($this->type == 2) {
                 //Getting prereq from scorm
@@ -3754,6 +3755,7 @@ class learnpath {
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
         $sql = "INSERT INTO $lp_view_table (c_id, lp_id, user_id, view_count, session_id) " .
         	   "VALUES ($course_id, " . $this->lp_id . "," . $this->get_user_id() . "," . ($this->attempt + 1) . ", $session_id)";
+
         if ($this->debug > 2) {
             error_log('New LP - Inserting new lp_view for restart: ' . $sql, 0);
         }
@@ -4153,8 +4155,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new theme : ' . $this->theme, 0);
         }
-        //$res = Database::query($sql);
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -4269,7 +4270,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new proximity : ' . $this->proximity, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -4284,6 +4285,56 @@ class learnpath {
         $this->last = $id;
     }
 
+    public function get_max_attempts() {
+        return $this->max_attempts;
+    }
+
+    public function check_attempts() {
+        $max_attempts = $this->get_max_attempts();
+        switch($max_attempts) {
+            case 0: //unlimited
+                return true;
+                break;
+            case $max_attempts >= 1:
+                if ($this->attempt <= $max_attempts) {
+                    return true;
+                }
+                break;
+        }
+        return false;
+    }
+
+    function check_item_attempts($item_id) {
+        if (isset($this->items[$item_id]) && is_object($this->items[$item_id])) {
+            $count = $this->items[$item_id]->get_view_count();
+            $max_attempts = $this->get_max_attempts();
+            switch ($max_attempts) {
+                case 0: //unlimited
+                    return true;
+                    break;
+                case $max_attempts >= 1:
+                    if ($count <= $max_attempts) {
+                        return true;
+                    }
+                    break;
+            }
+            return false;
+        }
+    }
+
+    public function set_max_attempts($attempts) {
+        $mode = 'multiple';
+        if ($attempts == 1) {
+            $mode = 'single';
+        }
+        $this->max_attempts = intval($attempts);
+
+        $lp_id = $this->get_id();
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $sql = "UPDATE $lp_table SET max_attempts = '" . $this->max_attempts . "' WHERE c_id = ".$this->course_int_id." AND id = '$lp_id'";
+        Database::query($sql);
+        $this->set_attempt_mode($mode);
+    }
 
      /**
      * Sets use_max_score
@@ -4291,7 +4342,6 @@ class learnpath {
      * @return  boolean True on success / False on error
      */
     public function set_use_max_score($use_max_score = 1) {
-        $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
         }
@@ -4299,12 +4349,12 @@ class learnpath {
         $this->use_max_score = $use_max_score;
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $lp_table SET use_max_score = '" . $this->use_max_score . "' WHERE c_id = ".$course_id." AND id = '$lp_id'";
+        $sql = "UPDATE $lp_table SET use_max_score = '" . $this->use_max_score . "' WHERE c_id = ".$this->course_int_id." AND id = '$lp_id'";
 
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new use_max_score : ' . $this->use_max_score, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -4330,7 +4380,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new expired_on : ' . $this->expired_on, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -4355,7 +4405,7 @@ class learnpath {
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new publicated_on : ' . $this->publicated_on, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 

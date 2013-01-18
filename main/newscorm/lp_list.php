@@ -322,6 +322,8 @@ foreach ($categories as $item) {
                     $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'), '', ICON_SIZE_SMALL);
                 }
 
+                //$dsp_reinit = null;
+
                 /* FUll screen VIEW */
                 if ($current_session == $details['lp_session']) {
 

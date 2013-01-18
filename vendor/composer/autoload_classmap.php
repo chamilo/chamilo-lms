@@ -50,8 +50,6 @@ return array(
     'Attribute_Translator' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/attribute_translator.cls.php',
     'Auth' => $baseDir . '/main/inc/lib/fckeditor/editor/plugins/ajaxfilemanager/inc/class.auth.php',
     'AutoLoader' => $baseDir . '/main/inc/lib/phpdocx/classes/AutoLoader.inc',
-    'Autoload' => $baseDir . '/main/inc/lib/autoload.class.php',
-    'AutoloadClassFinder' => $baseDir . '/main/inc/lib/autoload.class.php',
     'BaseFacebook' => $baseDir . '/main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
     'Block_Frame_Decorator' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/block_frame_decorator.cls.php',
     'Block_Frame_Reflower' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/block_frame_reflower.cls.php',

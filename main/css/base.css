@@ -4758,3 +4758,6 @@ i.size-32.icon-new-work{
 .exercise_save_mini_message {
     margin-left: 5px;
 }
+#learning_path_left_zone .no-border {
+    border: 0px;
+}

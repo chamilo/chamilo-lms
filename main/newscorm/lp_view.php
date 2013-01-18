@@ -352,9 +352,9 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
                     </td>
                     <td>';
                          if ($is_allowed_to_edit) {
-                            echo '<a class="link" href="lp_controller.php?isStudentView=false&action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
+                            echo '<a class="link no-border" href="lp_controller.php?isStudentView=false&action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
                          } else {
-                            echo '<a class="link" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
+                            echo '<a class="link no-border" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
                          }
                         echo get_lang('CourseHomepageLink').'
                         </a>

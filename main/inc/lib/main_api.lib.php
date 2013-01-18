@@ -1026,6 +1026,11 @@ function _api_format_user($user, $add_password = false) {
     }
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
+    
+    $result['complete_name_with_username'] = $result['complete_name'];
+    if (!empty($user['username'])) {
+        $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
+    }
 
     $result['firstname'] 		= $firstname;
     $result['lastname'] 		= $lastname;

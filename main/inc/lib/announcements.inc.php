@@ -135,7 +135,8 @@ class AnnouncementManager
     {
         if ($announcement_id != strval(intval($announcement_id))) {
             return false;
-        } // potencial sql injection
+        }
+
         global $charset;
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -185,7 +186,8 @@ class AnnouncementManager
         if (Database::num_rows($sql_result) > 0) {
             $result = Database::fetch_array($sql_result, 'ASSOC');
             $title = $result['title'];
-            $content = $result['content'];
+            $content = self::parse_content($result['content'], api_get_course_id());
+
             echo "<table height=\"100\" width=\"100%\" cellpadding=\"5\" cellspacing=\"0\" class=\"data_table\">";
             echo "<tr><td><h2>".$title."</h2></td></tr>";
 
@@ -211,7 +213,7 @@ class AnnouncementManager
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
             }
 
-            $content = self::parse_content($content, api_get_course_id());
+
 
             echo "<tr><td>$content</td></tr>";
 
@@ -340,7 +342,7 @@ class AnnouncementManager
       STORE ANNOUNCEMENT  GROUP ITEM
      */
 
-    public static function add_group_announcement($emailTitle, $newContent, $order, $to, $to_users, $file = array(), $file_comment = '')
+    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '')
     {
         global $_course;
 
@@ -362,21 +364,27 @@ class AnnouncementManager
                 end_date 		= '$now',
                 display_order 	= '$order',
                 session_id		= ".api_get_session_id();
+        var_dump($sql);
+
         $result = Database::query($sql);
         if ($result === false) {
             return false;
         }
 
+
         //store the attach file
         $last_id = Database::insert_id();
+        var_dump($last_id)
+        exit;
         if (!empty($file)) {
-            $save_attachment = self::add_announcement_attachment_file($last_id, $file_comment, $file);
+            self::add_announcement_attachment_file($last_id, $file_comment, $file);
         }
 
         // store in item_property (first the groups, then the users
 
-        if (!isset($to_users)) { // !isset($to): when no user is selected we send it to everyone
+        if (!isset($to_users)) {
             $send_to = self::separate_users_groups($to);
+            var_dump($send_to);
             // storing the selected groups
             if (is_array($send_to['groups'])) {
                 foreach ($send_to['groups'] as $group) {
@@ -583,7 +591,7 @@ class AnnouncementManager
         echo "<table id=\"recipient_list\" style=\"display: none;\">";
         echo "<tr>";
         echo "<td>";
-        echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
+        echo "<select name=\"not_selected_form[]\" size=5 class=\"span4\" multiple>";
         $group_users = GroupManager::get_subscribed_users($group_id);
         foreach ($group_users as $user) {
             echo '<option value="'.$user['user_id'].'" title="'.sprintf(get_lang('LoginX'), $user['username']).'" >'.api_get_person_name($user['firstname'], $user['lastname']).'</option>';
@@ -599,7 +607,7 @@ class AnnouncementManager
         echo "</td>";
         echo "<td>";
 
-        echo "<select id=\"selectedform\" name=\"selectedform[]\" size=5 style=\"width:200px\" multiple>";
+        echo "<select id=\"selectedform\" name=\"selectedform[]\" size=5 class=\"span4\" multiple>";
         echo '</select>';
 
         echo "</td>";
@@ -978,7 +986,6 @@ class AnnouncementManager
      */
     public static function sent_to($tool, $id)
     {
-        global $_course;
         global $tbl_item_property;
 
         $tool = Database::escape_string($tool);

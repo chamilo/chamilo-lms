@@ -48,13 +48,7 @@ $display_title_list = true;
 // Maximum title messages to display
 $maximum = '12';
 
-// Length of the titles
-$length = '36';
-
 // Database Table Definitions
-$tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
-
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -126,14 +120,10 @@ $htmlHeadXtra[] = AnnouncementManager::to_javascript();
 
 /* 	Filter user/group */
 
-if (!empty($_GET['toolgroup'])) {
-    if ($_GET['toolgroup'] == strval(intval($_GET['toolgroup']))) { //check is integer
-        $toolgroup = $_GET['toolgroup'];
-        $_SESSION['select_groupusers'] = 'hide';
-    } else {
-        $toolgroup = 0;
-    }
-    Session::write("toolgroup", $toolgroup);
+$group_id = api_get_group_id();
+
+if (!empty($group_id)) {
+    $_SESSION['select_groupusers'] = 'hide';
 }
 
 /* 	Sessions */
@@ -149,7 +139,6 @@ if (!empty($_SESSION['formelements']) and !empty($_GET['originalresource']) and 
     $content_to_modify = $form_elements['newContent'];
     $announcement_to_modify = $form_elements['id'];
     $to = $form_elements['to'];
-    //load_edit_users('announcement',$announcement_to_modify);
     $email_ann = $form_elements['emailoption'];
 }
 if (!empty($_GET['remind_inactive'])) {
@@ -172,7 +161,10 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+if (api_is_allowed_to_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous()) OR
+    (!empty($group_id) AND GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_ANNOUNCEMENT) AND GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))
+) {
     /*
       Change visibility of announcement
      */
@@ -311,6 +303,8 @@ if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_e
             "ORDER BY display_order $sortDirection";
         $result = Database::query($my_sql);
 
+        $thisAnnouncementOrderFound = false;
+        $thisAnnouncementOrder = 1;
         while (list ($announcementId, $announcementOrder) = Database::fetch_row($result)) {
             // STEP 2 : FOUND THE NEXT ANNOUNCEMENT ID AND ORDER.
             //          COMMIT ORDER SWAP ON THE DB
@@ -342,6 +336,7 @@ if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_e
 
     $submitAnnouncement = isset($_POST['submitAnnouncement']) ? $_POST['submitAnnouncement'] : 0;
 
+
     $id = 0;
     if (!empty($_POST['id'])) {
         $id = intval($_POST['id']);
@@ -351,13 +346,14 @@ if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_e
         $error_message = get_lang('TitleIsRequired');
         $content_to_modify = $newContent;
     } else if ($submitAnnouncement) {
+        $selected_form = isset($_POST['selectedform']) ? $_POST['selectedform'] : null;
 
         if (isset($id) && $id) {
             // there is an Id => the announcement already exists => update mode
             if ($ctok == $_POST['sec_token']) {
                 $file_comment = $_POST['file_comment'];
                 $file = $_FILES['user_upload'];
-                AnnouncementManager::edit_announcement($id, $emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
+                AnnouncementManager::edit_announcement($id, $emailTitle, $newContent, $selected_form, $file, $file_comment);
 
                 /* 		MAIL FUNCTION	 */
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
@@ -370,17 +366,18 @@ if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_e
             if ($ctok == $_POST['sec_token']) {
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
+
                 if (!empty($group_id)) {
-                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $selected_form, $file, $file_comment);
                 } else {
-                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $selected_form, $file, $file_comment);
                 }
                 //store_resources($_SESSION['source_type'],$insert_id);
                 $_SESSION['select_groupusers'] = "hide";
                 $message = get_lang('AnnouncementAdded');
 
                 /* 		MAIL FUNCTION	 */
-                if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
+                if (isset($_POST['email_ann']) && $_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
                     AnnouncementManager::send_email($insert_id);
                 }
             } // end condition token
@@ -436,12 +433,12 @@ if (api_is_allowed_to_edit(false, true)) {
 } else {
     // students only get to see the visible announcements
     if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
-        $group_memberships = GroupManager::get_group_ids($_course['real_id'], $_user['user_id']);
+        $group_memberships = GroupManager::get_group_ids($_course['real_id'], api_get_user_id());
 
         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
 
             if (api_get_group_id() == 0) {
-                $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'".
+                $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
             } else {
                 $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
@@ -449,10 +446,10 @@ if (api_is_allowed_to_edit(false, true)) {
             }
         } else {
             if (api_get_group_id() == 0) {
-                $cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."'".
+                $cond_user_id = " AND ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
             } else {
-                $cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."'".
+                $cond_user_id = " AND ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".api_get_group_id().")) ";
             }
         }
@@ -530,7 +527,10 @@ $announcement_number = Database::num_rows($result);
  */
 
 $show_actions = false;
-if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+if ((api_is_allowed_to_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) OR
+    (!empty($group_id) AND GroupManager::user_has_access(api_get_user_id(), $group_id, GroupManager::GROUP_TOOL_ANNOUNCEMENT) AND GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))
+) {
     echo '<div class="actions">';
     if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify', 'view'))) {
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -539,7 +539,7 @@ if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_
     }
     $show_actions = true;
 } else {
-    if (in_array($_GET['action'], array('view'))) {
+    if (isset($_GET['action']) && in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
         echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
         echo '</div>';
@@ -547,17 +547,16 @@ if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_
 }
 
 if (api_is_allowed_to_edit() && $announcement_number > 1) {
-    if (api_get_group_id() == 0) {
+    if ($group_id == 0) {
         if (!$show_actions)
             echo '<div class="actions">';
-        if (!in_array($_GET['action'], array('add', 'modify', 'view')))
+        if (!isset($_GET['action']) OR !in_array($_GET['action'], array('add', 'modify', 'view')))
             echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png', get_lang('AnnouncementDeleteAll'), '', ICON_SIZE_MEDIUM)."</a>";
-    } // if announcementNumber > 1
+    }
 }
 
 if ($show_actions)
     echo '</div>';
-
 
 //	ANNOUNCEMENTS LIST
 
@@ -658,7 +657,7 @@ if ($display_form) {
         echo '<div class="control-group">
               <div class="controls">
               <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
-              '.get_lang('EmailOption').': <span id="recipient_overview">'.get_lang('MyGroup').'</span>
+              '.get_lang('EmailOption').': <span id="recipient_overview">'.Display::label(get_lang('MyGroup'), 'success').'</span>
               <a href="#" onclick="toggle_sendto();">'.get_lang('ModifyRecipientList').'</a>';
         AnnouncementManager::show_to_form_group($group_id);
         echo '</div></div>';
@@ -983,7 +982,6 @@ if ($display_announcement_list) {
                     echo "<tr>";
 
                     // show attachment list
-                    $attachment_list = array();
                     $attachment_list = AnnouncementManager::get_attachment($myrow['id']);
 
                     $attachment_icon = '';

@@ -740,7 +740,6 @@ class PageController
             return false;
         }
 
-
         $session_categories = array();
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
@@ -765,7 +764,7 @@ class PageController
         $special_courses = '';
 
         $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
-
+        
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             //Display special courses
@@ -778,8 +777,6 @@ class PageController
 
         $sessions_with_category = '';
         $sessions_with_no_category = '';
-
-        $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
 
         if (is_array($session_categories)) {
             foreach ($session_categories as $session_category) {

@@ -144,7 +144,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     $mycomplete         = $mylp->get_complete_items_count();
     $myprogress_mode    = $mylp->get_progress_bar_mode();
     $myprogress_mode    = ($myprogress_mode == '' ? '%' : $myprogress_mode);
-    
+
     //$mylpi->write_to_db();
     $_SESSION['lpobject'] = serialize($mylp);
     if ($mylpi->get_type()!='sco'){
@@ -170,7 +170,7 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
         $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login 
+        $sql_last_connection = "SELECT login_id, login_date FROM $tbl_track_login
                                 WHERE login_user_id='".api_get_user_id()."' ORDER BY login_date DESC LIMIT 0,1";
 
         $q_last_connection = Database::query($sql_last_connection);
@@ -337,14 +337,6 @@ function switch_item_details($lp_id, $user_id, $view_id, $current_item, $next_it
     $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
     $mylaunch_data = $mylpi->get_launch_data();
-    /*
-    if ($mylpi->get_type() == 'asset') {
-        // Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
-        $mylesson_status = 'completed';
-        $mylpi->set_status('completed');
-        $mylpi->save();
-    }
-    */
     $mysession_time = $mylpi->get_total_time();
     $mysuspend_data = $mylpi->get_suspend_data();
     $mylesson_location = $mylpi->get_lesson_location();

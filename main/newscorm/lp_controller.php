@@ -225,7 +225,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 }
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
-
+error_log("ACTION -->>>>>>>>>>>>>>> $action");
 switch ($action) {
     case 'add_item':
         if (!$is_allowed_to_edit) {

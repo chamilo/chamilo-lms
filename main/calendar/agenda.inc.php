@@ -18,22 +18,17 @@ $DaysLong = api_get_week_days_long();
 $MonthsLong = api_get_months_long();
 
 $htmlHeadXtra[] = to_javascript();
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#agenda_title").focus();
 }
-$(document).ready(function () {
-    setFocus();
-});
-</script>';
-$htmlHeadXtra[] = '<script>
 $(function() {
+    setFocus();
     $("#selected_form_id").change(function() {
         var temp ="&user_id="+$("#selected_form_id").val();
         url = window.location+temp;
         window.location.replace(url);
-
-});
+    });
 });
 </script>';
 
@@ -1007,8 +1002,6 @@ function construct_not_selected_select_form($group_list = null, $user_list = nul
 
 function show_to($filter = 0)
 {
-    /* $user_list     = get_course_users();
-      $group_list    = get_course_groups(); */
     $order = 'lastname';
     if (api_is_western_name_order()) {
         $order = 'firstname';
@@ -1022,10 +1015,12 @@ function show_to($filter = 0)
 
 function construct_to_select_form($group_list = null, $user_list = null, $filter = 0)
 {
-    $result = '<form style="float:right;"><select data-placeholder="'.get_lang('Select').'name="sel_to" class="chzn-select" id="selected_form_id"></form>';
+    $result = '<form class="form-search">';
+    $result .= '<select data-placeholder= "'.get_lang('Everyone').'" name="sel_to" class="chzn-select" id="selected_form_id">';
 
     // adding the groups to the select form
-    $result .= '<option value=0>'.get_lang('Everyone').'</option>';
+    $result .= '<option value=""></option>';
+    $result .= '<option value="0">'.get_lang('Everyone').'</option>';
     // adding the individual users to the select form
     if (!empty($user_list)) {
         $result .= '<optgroup label="'.get_lang('Users').'">';
@@ -1033,11 +1028,12 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
             $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
             $selected = $this_user['user_id'] == $filter ? "selected" : null;
-            $result .= "<option  title='$username' value=".$this_user['user_id']." ".$selected.">$user_info.</option>";
+            $result .= "<option  title='$username' value=".$this_user['user_id']." ".$selected.">$user_info</option>";
         }
         $result .= "</optgroup>";
     }
     $result .= "</select>";
+    $result .= "</form>";
     return $result;
 }
 
@@ -1559,18 +1555,16 @@ function change_visibility($tool, $id, $visibility)
  */
 function display_courseadmin_links($filter = 0)
 {
+    $form = null;
     if (!isset($_GET['action'])) {
-        $to = show_to($filter);
+        $form = show_to($filter);
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     }
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
-    $actions .= '<div style="width:380px;">';
-    $actions .= Display::return_icon('group.png', get_lang('To'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).' '.get_lang('To');
-    $actions .= $to;
-    $actions .= '</div>';
+    $actions .= $form;
     return $actions;
 }
 

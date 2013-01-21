@@ -866,7 +866,6 @@ switch ($action) {
         }
         require 'lp_list.php';
         break;
-
     case 'mode':
         // Switch between fullscreen and embedded mode.
         if ($debug > 0) error_log('New LP - mode change triggered', 0);
@@ -877,10 +876,11 @@ switch ($action) {
             $_SESSION['oLP']->mode = 'embedded';
         } elseif ($mode == 'embedframe') {
         	$_SESSION['oLP']->mode = 'embedframe';
+        } elseif ($mode == 'impress') {
+            $_SESSION['oLP']->mode = 'impress';
         }
         require 'lp_view.php';
         break;
-
     case 'switch_view_mode':
         if ($debug > 0) error_log('New LP - switch_view_mode action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }

@@ -360,16 +360,23 @@ if (!empty($flat_list)) {
             /* FUll screen VIEW */
             if ($current_session == $details['lp_session']) {
 
-                /* Default view mode settings (fullscreen/embedded) */
-                if ($details['lp_view_mode'] == 'fullscreen') {
+                switch($details['lp_view_mode']) {
+                    case 'fullscreen':
                     $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
                         Display::return_icon('view_fullscreen.png', get_lang('ViewModeFullScreen'),'',ICON_SIZE_SMALL).'</a>';
-                } elseif ($details['lp_view_mode'] == 'embedded') {
-                    $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
+                        break;
+                    case 'embedded':
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
                          Display::return_icon('view_left_right.png', get_lang('ViewModeEmbedded'),'',ICON_SIZE_SMALL).'</a>';
-                } elseif ($details['lp_view_mode'] == 'embedframe') {
-                    $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
+                        break;
+                    case 'embedframe':
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
                         Display::return_icon('view_nofullscreen.png', get_lang('ViewModeEmbedFrame'),'',ICON_SIZE_SMALL).'</a>';
+                        break;
+                    case 'impress':
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">' .
+                        Display::return_icon('window_list_slide.png', get_lang('ViewModeImpress'),'',ICON_SIZE_SMALL).'</a>';
+                        break;
                 }
             } else {
                 if ($details['lp_view_mode'] == 'fullscreen'){

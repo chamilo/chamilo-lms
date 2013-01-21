@@ -97,10 +97,17 @@ if ($_SESSION['oLP']->mode == 'embedframe' || $_SESSION['oLP']->get_hide_toc_fra
         </script>';
 }
 
+//Impress js
+if ($_SESSION['oLP']->mode == 'impress') {
+    $lp_id = $_SESSION['oLP']->get_id();
+    $url = api_get_path(WEB_CODE_PATH)."newscorm/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
+    header("Location: $url");
+    exit;
+}
+
 // Prepare variables for the test tool (just in case) - honestly, this should disappear later on.
 $_SESSION['scorm_view_id'] = $_SESSION['oLP']->get_view_id();
 $_SESSION['scorm_item_id'] = $lp_item_id;
-$_SESSION['lp_mode'] 	   = $_SESSION['oLP']->mode;
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
 if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {

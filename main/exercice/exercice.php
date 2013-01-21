@@ -656,17 +656,7 @@ if (!empty($exercise_list)) {
                         continue;
                     }
 
-                    // if time is actived show link to exercise
-
-                    if ($time_limits) {
-                        if ($is_actived_time) {
-                            $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
-                        } else {
-                            $url = $row['title'];
-                        }
-                    } else {
-                        $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
-                    }
+                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
 
                     //Link of the exercise
                     $item = Display::tag('td', $url.' '.$session_img);
@@ -700,53 +690,17 @@ if (!empty($exercise_list)) {
                     //Hide the results
                     $my_result_disabled = $row['results_disabled'];
 
-                    //Time limits are on
-                    if ($time_limits) {
-                        // Examn is ready to be taken
-                        if ($is_actived_time) {
-                            //Show results
-                            if ($my_result_disabled == 0 || $my_result_disabled == 2) {
-                                //More than one attempt
-                                if ($num > 0) {
-                                    $row_track = Database :: fetch_array($qryres);
-                                    $attempt_text = get_lang('LatestAttempt').' : ';
-                                    $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
-                                } else {
-                                    //No attempts
-                                    $attempt_text = get_lang('NotAttempted');
-                                }
-                            } else {
-                                $attempt_text = get_lang('CantShowResults');
-                            }
+                    //Show results
+                    if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                        if ($num > 0) {
+                            $row_track = Database :: fetch_array($qryres);
+                            $attempt_text = get_lang('LatestAttempt').' : ';
+                            $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                         } else {
-                            //Quiz not ready due to time limits
-                            //@todo use the is_visible function
-                            if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                            } else {
-                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                                if ($row['start_time'] != '0000-00-00 00:00:00') {
-                                    $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
-                                }
-                                if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                    $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
-                                }
-                            }
+                            $attempt_text = get_lang('NotAttempted');
                         }
                     } else {
-                        //Normal behaviour
-                        //Show results
-                        if ($my_result_disabled == 0 || $my_result_disabled == 2) {
-                            if ($num > 0) {
-                                $row_track = Database :: fetch_array($qryres);
-                                $attempt_text = get_lang('LatestAttempt').' : ';
-                                $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
-                            } else {
-                                $attempt_text = get_lang('NotAttempted');
-                            }
-                        } else {
-                            $attempt_text = get_lang('CantShowResults');
-                        }
+                        $attempt_text = get_lang('CantShowResults');
                     }
 
                     $class_tip = '';

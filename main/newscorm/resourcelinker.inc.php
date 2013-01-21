@@ -1614,6 +1614,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
     $course_info = api_get_course_info_by_id($course_id);    
     $course_id = $course_info['real_id'];
     $course_code = $course_info['code'];
+    $session_id = api_get_session_id();
     
     $learnpath_id 	= intval($learnpath_id);
     $id_in_path		= intval($id_in_path);
@@ -1656,7 +1657,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
 
                 if ($row_item['title'] != '') { $myrow['title'] = $row_item['title']; }
                 //$link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
-                $link .= $main_dir_path.'exercice/overview.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
+                $link .= $main_dir_path.'exercice/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
             break;
         case 'hotpotatoes': //lowercase because of strtolower above

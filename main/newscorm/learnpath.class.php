@@ -4492,13 +4492,21 @@ class learnpath {
         $res = Database::query($sql);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
-            $view_mode = $row['default_view_mod'];
-            if ($view_mode == 'fullscreen') {
-                $view_mode = 'embedded';
-            } elseif ($view_mode == 'embedded') {
-                $view_mode = 'embedframe';
-            } elseif ($view_mode == 'embedframe') {
-                $view_mode = 'fullscreen';
+            $default_view_mode = $row['default_view_mod'];
+            $view_mode = $default_view_mode;
+            switch ($default_view_mode) {
+                case 'fullscreen':
+                    $view_mode = 'embedded';
+                    break;
+                case 'embedded':
+                    $view_mode = 'embedframe';
+                    break;
+                case 'embedframe':
+                    $view_mode = 'impress';
+                    break;
+                case 'impress':
+                    $view_mode = 'fullscreen';
+                    break;
             }
             $sql = "UPDATE $lp_table SET default_view_mod = '$view_mode' WHERE c_id = ".$course_id." AND id = " . $this->get_id();
             $res = Database::query($sql);

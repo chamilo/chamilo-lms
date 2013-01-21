@@ -114,7 +114,7 @@ $(function() {
     .sortable({
         cursor: "move", // works?
         update: function(event, ui) {
-            var order = $(this).sortable("serialize") + "&a=update_question_order";
+            var order = $(this).sortable("serialize") + "&a=update_question_order&exercise_id=<?php echo intval($_GET['exerciseId']);?>";
             $.post("<?php echo $ajax_url ?>", order, function(reponse){
                 $("#message").html(reponse);
             });

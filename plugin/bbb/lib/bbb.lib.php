@@ -127,7 +127,7 @@ class bbb {
                 'moderatorPw' => $moderator_password, 					// Match this value in getJoinMeetingURL() to join as moderator.
                 'welcomeMsg' => $welcome_msg, 					// ''= use default. Change to customize.
                 'dialNumber' => '', 					// The main number to call into. Optional.
-                'voiceBridge' => '0', 					// PIN to join voice. Optional.
+                'voiceBridge' => '12345', 					// PIN to join voice. Required.
                 'webVoice' => '', 						// Alphanumeric to join voice. Optional.
                 'logoutUrl' =>  $this->logout_url,
                 'maxParticipants' => $max, 				// Optional. -1 = unlimitted. Not supported in BBB. [number]

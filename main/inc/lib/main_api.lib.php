@@ -1101,8 +1101,11 @@ function _api_format_user($user, $add_password = false) {
     }
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
-    $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
 
+    $result['complete_name_with_username'] = $result['complete_name'];
+    if (!empty($user['username'])) {
+        $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
+    }
     $result['firstname'] 		= $firstname;
     $result['lastname'] 		= $lastname;
 
@@ -3631,9 +3634,11 @@ function api_get_visual_theme() {
 
         if (api_get_setting('user_selected_theme') == 'true') {
             $user_info = api_get_user_info();
-            $user_theme = $user_info['theme'];
-            if (!empty($user_theme)) {
+            if (isset($user_info['theme'])) {
+                $user_theme = $user_info['theme'];
+                if (!empty($user_theme)) {
                 $visual_theme = $user_theme;                // User's theme.
+             }
             }
         }
 

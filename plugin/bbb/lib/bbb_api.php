@@ -153,7 +153,7 @@ class BigBlueButtonBN {
 			'moderatorPw' => 'mp', 		-- Set to 'mp' and use 'mp' to join = no user pass required.
 			'welcomeMsg' => '', 		-- ''= use default. Change to customize.
 			'dialNumber' => '', 		-- The main number to call into. Optional.
-			'voiceBridge' => '', 		-- PIN to join voice. Optional.
+			'voiceBridge' => '', 		-- 5 digits PIN to join voice. Required.
 			'webVoice' => '', 			-- Alphanumeric to join voice. Optional.
 			'logoutUrl' => '', 			-- Default in bigbluebutton.properties. Optional.
 			'maxParticipants' => '-1', 	-- Optional. -1 = unlimitted. Not supported in BBB. [number]

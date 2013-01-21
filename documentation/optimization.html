@@ -41,7 +41,7 @@
 
 <ol>
 
-  <li><a href="#1.Using-XCache">Using xCache</a></li>
+  <li><a href="#1.Using-XCache">Using xCache or APC</a></li>
   <li><a href="#2.Slow-queries">Slow queries</a></li>
   <li><a href="#3.Indexes-caching">Indexes caching</a></li>
   <li><a href="#4.Sessions-directories">Sessions directories</a></li>
@@ -50,7 +50,7 @@
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
 </ol>
 
-<h2><a name="1.Using-XCache"></a>1. Using xCache</h2>
+<h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
 See <a href="http://xcache.lighttpd.net/">xCache's website</a> for summary documentation.<br />
 <ul>
 <li>On Debian/Ubuntu: sudo apt-get install php5-xcache</li>
@@ -72,15 +72,17 @@ xcache.var_gc_interval =     300
 xcache.test =                Off
 </pre>
 xCache will feel useless until you actually start to put some variables in cache. If you're showing the "Who is online" counter, that's one of the best item there is to implement xCache.<br />
-For example, you could implement it this way (in main/inc/banner.inc.php):<br />
+For example, you could implement it this way (in main/inc/lib/banner.lib.php):<br />
 <pre>
 $xc = function_exists('xcache_isset');
 $number = 0;
-if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple')) {
-  $number = xcache_get('campus_chamilo_org_whoisonline_count_simple');
-} else {
-  $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
-  xcache_set('campus_chamilo_org_whoisonline_count_simple',$number);
+if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+  if ($xc &amp;&amp; xcache_isset('campus_chamilo_org_whoisonline_count_simple')) {
+    $number = xcache_get('campus_chamilo_org_whoisonline_count_simple');
+  } else {
+    $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+    xcache_set('campus_chamilo_org_whoisonline_count_simple',$number);
+  }
 }
 $number_online_in_course = 0;
 if(!empty($_course['id'])) {
@@ -95,6 +97,43 @@ if(!empty($_course['id'])) {
 Note that, as xCache is a shared caching system, it is very important to prefix your variables with a domain name or some kind of identifier, otherwise it would end up in disaster if you use a shared server for several portals.<br />
 <br />
 An optional additional caching mechanism you may use is the realpath_cache_size and realpath_cache_ttl php.ini parameters. See <a href="http://php.net/manual/en/ini.core.php">the PHP documentation</a> for more details.
+<br />
+<br />
+If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you can use the same kind of trick as above, just changing the code a little:
+<pre>
+    $xc = function_exists('apc_exists');
+    $number = 0;
+    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+        if ($xc) {
+            $apc = apc_cache_info(null,true);
+            $apc_end = $apc['start_time']+$apc['ttl'];
+            if (apc_exists('my_campus_whoisonline_count_simple') AND (time() < $apc_end) AND apc_fetch('my_campus_whoisonline_count_simple') > 0 ) {
+                $number = apc_fetch('my_campus_whoisonline_count_simple');
+            } else {
+                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+                apc_clear_cache();
+                apc_store('my_campus_whoisonline_count_simple',$number,15);
+            }
+        } else {
+                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+        }
+        $number_online_in_course = 0;
+        if (!empty($_course['id'])) {
+            if ($xc) {
+                $apc = apc_cache_info(null,true);
+                $apc_end = $apc['start_time']+$apc['ttl'];
+                if (apc_exists('my_campus_whoisonline_count_simple_'.$_course['id']) AND (time() < $apc_end) AND apc_fetch('my_campus_whoisonline_count_simple_'.$_course['id']) > 0) {
+                    $number_online_in_course = apc_fetch('my_campus_whoisonline_count_simple_'.$_course['id']);
+                } else {
+                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+                    apc_store('my_campus_whoisonline_count_simple_'.$_course['id'],$number_online_in_course,15);
+                }
+            } else {
+                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+            }
+        }
+     ...
+</pre>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log

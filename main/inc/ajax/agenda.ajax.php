@@ -79,7 +79,12 @@ switch ($action) {
 	case 'get_events':
 		$start 	= $_REQUEST['start'];
 		$end 	= $_REQUEST['end'];
-		$events = $agenda->get_events($start, $end, api_get_course_int_id(), $group_id);
+        if (isset($_REQUEST['user_id'])) {
+            $sel_user = $_REQUEST['user_id'];
+        } else {
+            $sel_user = 0;
+        }
+		$events = $agenda->get_events($start, $end, api_get_course_int_id(), $group_id,$_REQUEST['user_id']);
 		echo $events;
 		break;
     case 'get_user_agenda':

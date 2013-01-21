@@ -134,9 +134,13 @@ $export_icon_high = '../img/export_high_fade.png';
 $tpl->assign('export_ical_confidential_icon', 	Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
 
 $actions = null;
+
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true) OR $is_group_tutor) {
     if ($type == 'course') {
-        $actions = display_courseadmin_links();
+        if (isset($_GET['user_id'])) {
+            $filter = $_GET['user_id'];
+        }
+        $actions = display_courseadmin_links($filter);
     }
 	$tpl->assign('actions', $actions);
 }
@@ -163,9 +167,13 @@ $tpl->assign('type_event_class', $type_event_class);
 $tpl->assign('can_add_events', $can_add_events);
 
 //Setting AJAX caller
-$agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
+if (isset($_GET['user_id'])) {
+    $user_id = $_GET['user_id'];
+    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?user_id='.$user_id.'&type='.$type;
+} else {
+    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
+}
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
-
 $course_code  = api_get_course_id();
 
 if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {

@@ -26,6 +26,16 @@ $(document).ready(function () {
     setFocus();
 });
 </script>';
+$htmlHeadXtra[] = '<script>
+$(function() {
+    $("#selected_form_id").change(function() {
+        var temp ="&user_id="+$("#selected_form_id").val();
+        url = window.location+temp;
+        window.location.replace(url);
+
+});
+});
+</script>';
 
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
@@ -958,7 +968,7 @@ function show_to_form($to_already_selected) {
 * @return html code
 */
 function construct_not_selected_select_form($group_list=null, $user_list=null, $to_already_selected=array()) {
-	echo '<select data-placeholder="'.get_lang('Select').'" style="width:350px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
+	echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id" name="selected_form[]" multiple="multiple">';
 
 	// adding the groups to the select form
   echo	'<option value="everyone">'.get_lang('Everyone').'</option>';
@@ -995,6 +1005,42 @@ function construct_not_selected_select_form($group_list=null, $user_list=null, $
 	}
     echo "</select>";
 }
+
+function show_to($filter=0) {
+	/*$user_list     = get_course_users();
+	$group_list    = get_course_groups();*/
+    $order = 'lastname';
+    if (api_is_western_name_order()) {
+        $order = 'firstname';
+    }
+
+    $user_list  = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
+    $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+
+    return construct_to_select_form($group_list, $user_list, $filter);
+}
+
+function construct_to_select_form($group_list=null, $user_list=null, $filter=0) {
+    $result = '<form style="float:right;"><select data-placeholder="'.get_lang('Select').'name="sel_to" class="chzn-select" id="selected_form_id"></form>';
+
+	// adding the groups to the select form
+    $result .=	'<option value=0>'.get_lang('Everyone').'</option>';
+		// adding the individual users to the select form
+    if (!empty($user_list)) {
+        $result .= '<optgroup label="'.get_lang('Users').'">';
+        foreach($user_list as $this_user) {
+            $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
+            $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
+            $selected = $this_user['user_id'] == $filter ? "selected" : null;
+            $result .= "<option  title='$username' value=".$this_user['user_id']." ". $selected.">$user_info.</option>";
+        }
+        $result .= "</optgroup>";
+
+    }
+    $result .= "</select>";
+    return $result;
+}
+
 
 /**
 * This function shows the form with the user that were selected
@@ -1533,15 +1579,20 @@ function change_visibility($tool,$id,$visibility)
 * The links that allows the course administrator to add a new agenda item, to filter on groups or users
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function display_courseadmin_links() {
-	if (!isset($_GET['action'])) {
-		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
-	} else {
-		$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
-	}
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'',ICON_SIZE_MEDIUM)."</a>";
-	$actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'',ICON_SIZE_MEDIUM)."</a>";
-	return $actions;
+function display_courseadmin_links($filter = 0) {
+    if (!isset($_GET['action'])) {
+        $to = show_to($filter);
+        $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
+    } else {
+    	$actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'),'',ICON_SIZE_MEDIUM)."</a>";
+    }
+    $actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'),'',ICON_SIZE_MEDIUM)."</a>";
+    $actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'),'',ICON_SIZE_MEDIUM)."</a>";
+    $actions .= '<div style="width:380px;">';
+    $actions .= Display::return_icon('group.png', get_lang('To'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).' '.get_lang('To');
+    $actions .= $to;
+    $actions .= '</div>';
+    return $actions;
 }
 
 
@@ -2135,7 +2186,7 @@ function display_one_agenda_item($agenda_id) {
 	// Content
 	$content = $myrow['content'];
 	$content = make_clickable($content);
-	
+
     echo '<tr class="row_even">';
     echo '<td '.(api_is_allowed_to_edit()?'colspan="3"':'colspan="2"'). '>';
     echo $content;

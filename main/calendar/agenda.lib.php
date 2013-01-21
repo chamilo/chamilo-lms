@@ -228,7 +228,7 @@ class Agenda {
 	 * @param	int		course id *integer* not the course code
 	 *
 	 */
-	function get_events($start, $end, $course_id = null, $group_id = null) {
+	function get_events($start, $end, $course_id = null, $group_id = null,$sel_user = 0) {
 
 		switch ($this->type) {
 			case 'admin':
@@ -237,7 +237,7 @@ class Agenda {
 			case 'course':
                 $session_id = api_get_session_id();
 				$course_info = api_get_course_info_by_id($course_id);
-				$this->get_course_events($start, $end, $course_info, $group_id, $session_id);
+				$this->get_course_events($start, $end, $course_info, $group_id, $session_id,$sel_user);
 				break;
 			case 'personal':
 			default:
@@ -436,7 +436,7 @@ class Agenda {
 		return $my_events;
 	}
 
-	function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0) {
+	function get_course_events($start, $end, $course_info, $group_id = 0, $session_id = 0, $sel_user = 0) {
 		$course_id = $course_info['real_id'];
         $group_list = GroupManager::get_group_list(null, $course_info['code']);
 
@@ -455,8 +455,11 @@ class Agenda {
 
 		$tlb_course_agenda	= Database::get_course_table(TABLE_AGENDA);
 		$tbl_property 		= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
-		$user_id = api_get_user_id();
+        if (api_is_allowed_to_edit()) {
+            $user_id            = $sel_user;
+        } else {
+            $user_id = api_get_user_id();
+        }
 
         if (!empty($group_id)) {
             $group_memberships = array($group_id);
@@ -466,7 +469,12 @@ class Agenda {
 
 		if (is_array($group_memberships) && count($group_memberships) > 0) {
 		    if (api_is_allowed_to_edit()) {
-		        $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+		        if($user_id !=0) {
+                    $where_condition = "( ip.to_user_id = $user_id AND ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+		        } else {
+		          $where_condition = "( ip.to_group_id is null OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
+                }
+
             } else {
                 $where_condition = "( ip.to_user_id = $user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
             }
@@ -479,6 +487,7 @@ class Agenda {
                             ip.visibility   = '1' AND
                             agenda.c_id     = $course_id AND
                             ip.c_id         = $course_id
+
                     GROUP BY id";
 
 		} else {
@@ -633,7 +642,7 @@ class Agenda {
 				$this->events[] = $event;
 			}
 		}
-		return $events;
+		//return $events;
 	}
 
 	function get_platform_events($start, $end) {

@@ -1165,7 +1165,7 @@ class CourseRestorer
                     $exercise->read($new_id);
                     $exercise->add_exercise_to_order_table();
 
-                    $this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+                    $this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 
                     $order = 0;
                     if (!empty($quiz->question_ids)) {

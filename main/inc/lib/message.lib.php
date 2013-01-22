@@ -285,7 +285,7 @@ class MessageManager
 			$sender_info = api_get_user_info($user_sender_id);
 
 		    if (empty($group_id)) {
-                $notification->save_notification(NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);
+                $notification->save_notification(Notification::NOTIFICATION_TYPE_MESSAGE, array($receiver_user_id), $subject, $content, $sender_info);
 		    } else {
 		        $group_info = GroupPortalManager::get_group_data($group_id);
 		        $group_info['topic_id'] = $topic_id;
@@ -301,7 +301,7 @@ class MessageManager
                     $new_user_list[] = $user_data['user_id'];
                 }
                 $group_info = array('group_info' => $group_info, 'user_info' => $sender_info);
-                $notification->save_notification(NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);
+                $notification->save_notification(Notification::NOTIFICATION_TYPE_GROUP, $new_user_list, $subject, $content, $group_info);
 		    }
 			return $inbox_last_id;
         }

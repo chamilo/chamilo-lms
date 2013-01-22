@@ -26,6 +26,12 @@ $htmlHeadXtra[] = '<script>
 
 class survey_manager {
 
+    /**
+     * Deletes all survey invitations of a user
+     * @param int $user_id
+     * @return boolean
+     * @assert ('') === false
+     */
     public static function delete_all_survey_invitations_by_user($user_id) {
         $user_id = intval($user_id);
 
@@ -36,9 +42,18 @@ class survey_manager {
 		$sql = "DELETE FROM $table_survey_invitation WHERE user = '$user_id'";
 		Database::query($sql);
     }
-
+    /**
+     *
+     * @param type $course_code
+     * @param type $session_id
+     * @return type
+     * @assert ('') === false
+     */
     public static function get_surveys($course_code, $session_id = 0) {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);
+        if (empty($course_code)) {
+            return false;
+        }
         $course_info = api_get_course_info($course_code);
         $session_condition = api_get_session_condition($session_id, true, true);
 
@@ -48,12 +63,8 @@ class survey_manager {
         return $result;
     }
 
-	/***
-	 * SYRVEY FUNCTIONS
-	 */
-
 	/**
-	 * This function retrieves all the survey information
+	 * Retrieves all the survey information
 	 *
 	 * @param integer $survey_id the id of the survey
 	 * @param boolean $shared this parameter determines if we have to get the information of a survey from the central (shared) database or from the
@@ -62,6 +73,7 @@ class survey_manager {
 	 *
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
+     * @assert ('') === false
 	 *
 	 * @todo this is the same function as in create_new_survey.php
 	 */

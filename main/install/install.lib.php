@@ -2305,7 +2305,7 @@ function create_course_tables($course_db_name = null) {
     /*  Announcement tool	*/
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLANNOUNCEMENTS . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLANNOUNCEMENTS . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         title text,
@@ -2322,7 +2322,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Announcement Attachment
-    $sql = "CREATE TABLE  `".$TABLETOOLANNOUNCEMENTSATTACHMENT."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLANNOUNCEMENTSATTACHMENT."` (
 			$add_to_all_tables
             id int NOT NULL auto_increment,
             path varchar(255) NOT NULL,
@@ -2339,7 +2339,7 @@ function create_course_tables($course_db_name = null) {
     */
 
     $sql = "
-        CREATE TABLE `".$TABLEADDEDRESOURCES . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEADDEDRESOURCES . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         source_type varchar(50) default NULL,
@@ -2351,7 +2351,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLUSERINFOCONTENT . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLUSERINFOCONTENT . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         user_id int unsigned NOT NULL,
@@ -2367,7 +2367,7 @@ function create_course_tables($course_db_name = null) {
     // Unused table. Temporarily ignored for tests.
     // Reused because of user/userInfo and user/userInfoLib scripts
     $sql = "
-        CREATE TABLE `".$TABLETOOLUSERINFODEF . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLUSERINFODEF . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         title varchar(80) NOT NULL default '',
@@ -2382,7 +2382,7 @@ function create_course_tables($course_db_name = null) {
 
     // Forum Category
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUMCATEGORY . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLFORUMCATEGORY . "` (
 		 $add_to_all_tables
          cat_id int NOT NULL auto_increment,
          cat_title varchar(255) NOT NULL default '',
@@ -2399,7 +2399,7 @@ function create_course_tables($course_db_name = null) {
 
     // Forum
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUM . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLFORUM . "` (
         $add_to_all_tables
          forum_id int NOT NULL auto_increment,
          forum_title varchar(255) NOT NULL default '',
@@ -2428,7 +2428,7 @@ function create_course_tables($course_db_name = null) {
 
     // Forum Threads
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUMTHREAD . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLFORUMTHREAD . "` (
          $add_to_all_tables
          thread_id int NOT NULL auto_increment,
          thread_title varchar(255) default NULL,
@@ -2455,7 +2455,7 @@ function create_course_tables($course_db_name = null) {
 
     // Forum Posts
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUMPOST . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLFORUMPOST . "` (
          $add_to_all_tables
          post_id int NOT NULL auto_increment,
          post_title varchar(250) default NULL,
@@ -2482,7 +2482,7 @@ function create_course_tables($course_db_name = null) {
 
     // Forum Mailcue
     $sql = "
-        CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
          id int NOT NULL auto_increment,
          user_id int default NULL,
@@ -2493,7 +2493,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Forum Attachment
-    $sql = "CREATE TABLE  `".$TABLETOOLFORUMATTACHMENT."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLFORUMATTACHMENT."` (
     		  $add_to_all_tables
               id int NOT NULL auto_increment,
               path varchar(255) NOT NULL,
@@ -2506,7 +2506,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Forum notification
-    $sql = "CREATE TABLE  `".$TABLETOOLFORUMNOTIFICATION."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLFORUMNOTIFICATION."` (
     		  $add_to_all_tables
               id int NOT NULL auto_increment,
               user_id int,
@@ -2520,7 +2520,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Forum thread qualify :Add table forum_thread_qualify
-    $sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFY."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLFORUMQUALIFY."` (
     		$add_to_all_tables
             id int unsigned AUTO_INCREMENT,
             user_id int unsigned NOT NULL,
@@ -2537,7 +2537,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     //Forum thread qualify: Add table forum_thread_qualify_historical
-    $sql = "CREATE TABLE  `".$TABLETOOLFORUMQUALIFYLOG."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLFORUMQUALIFYLOG."` (
     		$add_to_all_tables
             id int unsigned AUTO_INCREMENT,
             user_id int unsigned NOT NULL,
@@ -2558,7 +2558,7 @@ function create_course_tables($course_db_name = null) {
     */
 
     // Exercise tool - Tests/exercises
-    $sql = "CREATE TABLE `".$TABLEQUIZ . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLEQUIZ . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         title varchar(255) NOT NULL,
@@ -2591,7 +2591,7 @@ function create_course_tables($course_db_name = null) {
 
     // Exercise tool - questions
     $sql = "
-        CREATE TABLE `".$TABLEQUIZQUESTIONLIST . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEQUIZQUESTIONLIST . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         parent_id int unsigned NOT NULL default 0,
@@ -2613,7 +2613,7 @@ function create_course_tables($course_db_name = null) {
 
     // Exercise tool - answers
     $sql = "
-        CREATE TABLE `".$TABLEQUIZANSWERSLIST . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEQUIZANSWERSLIST . "` (
         $add_to_all_tables
         id int unsigned NOT NULL,
         id_auto int NOT NULL AUTO_INCREMENT,
@@ -2631,12 +2631,9 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
-    $sql = "ALTER TABLE `".$TABLEQUIZANSWERSLIST . "` ADD INDEX idx_quiz_answer_c_q (c_id, question_id)";
-    Database::query($sql);
-
     // Exercise tool - answer options
     $sql = "
-        CREATE TABLE `".$TABLEQUIZQUESTIONOPTION . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEQUIZQUESTIONOPTION . "` (
         $add_to_all_tables
         id          int NOT NULL auto_increment,
         question_id int NOT NULL,
@@ -2649,7 +2646,7 @@ function create_course_tables($course_db_name = null) {
 
     // Exercise tool - Test/question relations
     $sql = "
-        CREATE TABLE `".$TABLEQUIZQUESTION . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEQUIZQUESTION . "` (
         $add_to_all_tables
         question_id int unsigned NOT NULL,
         exercice_id int unsigned NOT NULL,
@@ -2660,7 +2657,7 @@ function create_course_tables($course_db_name = null) {
 
 
 
-    $sql = "CREATE TABLE `".$table_quiz_question_category . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$table_quiz_question_category . "` (
 	  $add_to_all_tables
 	  id int unsigned NOT NULL AUTO_INCREMENT,
 	  title varchar(255) NOT NULL,
@@ -2670,7 +2667,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
 
-	$sql = "CREATE TABLE `".$table_quiz_question_rel_category . "` (
+	$sql = "CREATE TABLE IF NOT EXISTS `".$table_quiz_question_rel_category . "` (
 	  $add_to_all_tables
       id int unsigned NOT NULL AUTO_INCREMENT,
 	  question_id int NOT NULL,
@@ -2683,7 +2680,7 @@ function create_course_tables($course_db_name = null) {
     //Course description
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLCOURSEDESC . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLCOURSEDESC . "` (
         $add_to_all_tables
         id int UNSIGNED NOT NULL auto_increment,
         title VARCHAR(255),
@@ -2701,7 +2698,7 @@ function create_course_tables($course_db_name = null) {
     /*  Course homepage tool list    */
 
     $sql = "
-        CREATE TABLE `" . $tbl_course_homepage . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_course_homepage . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         name varchar(255) NOT NULL,
@@ -2723,7 +2720,7 @@ function create_course_tables($course_db_name = null) {
     /*        Agenda tool	   */
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLAGENDA . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLAGENDA . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         title varchar(255) NOT NULL,
@@ -2741,7 +2738,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLAGENDAREPEAT. "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLAGENDAREPEAT. "` (
         $add_to_all_tables
         cal_id INT DEFAULT 0 NOT NULL,
         cal_type VARCHAR(20),
@@ -2753,7 +2750,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLAGENDAREPEATNOT."` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLAGENDAREPEATNOT."` (
         $add_to_all_tables
         cal_id INT NOT NULL,
         cal_date INT NOT NULL,
@@ -2762,7 +2759,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Agenda Attachment
-    $sql = "CREATE TABLE  `".$TABLETOOLAGENDAATTACHMENT."` (
+    $sql = "CREATE TABLE IF NOT EXISTS  `".$TABLETOOLAGENDAATTACHMENT."` (
     			$add_to_all_tables
               id int NOT NULL auto_increment,
               path varchar(255) NOT NULL,
@@ -2779,7 +2776,7 @@ function create_course_tables($course_db_name = null) {
     */
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLDOCUMENT . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLDOCUMENT . "` (
         	$add_to_all_tables
             id int unsigned NOT NULL auto_increment,
             path varchar(255) NOT NULL default '',
@@ -2797,7 +2794,7 @@ function create_course_tables($course_db_name = null) {
         Student publications
     */
     $sql = "
-        CREATE TABLE `".$TABLETOOLWORKS . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLWORKS . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         url varchar(255) default NULL,
@@ -2825,7 +2822,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLWORKSASS."` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLWORKSASS."` (
         $add_to_all_tables
         id int NOT NULL auto_increment,
         expires_on datetime NOT NULL default '0000-00-00 00:00:00',
@@ -2845,7 +2842,7 @@ function create_course_tables($course_db_name = null) {
     */
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLLINK . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLLINK . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         url TEXT NOT NULL,
@@ -2864,7 +2861,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLLINKCATEGORIES . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLLINKCATEGORIES . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         category_title varchar(255) NOT NULL,
@@ -2880,7 +2877,7 @@ function create_course_tables($course_db_name = null) {
 
     /* Wiki   */
 
-    $sql = "CREATE TABLE `".$TABLETOOLWIKI . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLETOOLWIKI . "` (
     	$add_to_all_tables
         id int NOT NULL auto_increment,
         page_id int NOT NULL default 0,
@@ -2916,7 +2913,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLEWIKICONF . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLEWIKICONF . "` (
     	$add_to_all_tables
         page_id int NOT NULL default 0,
         task text NOT NULL,
@@ -2937,7 +2934,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLEWIKIDISCUSS . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLEWIKIDISCUSS . "` (
     	$add_to_all_tables
         id int NOT NULL auto_increment,
         publication_id int NOT NULL default 0,
@@ -2949,7 +2946,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
     Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLEWIKIMAILCUE . "` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLEWIKIMAILCUE . "` (
     	$add_to_all_tables
         id int NOT NULL,
         user_id int NOT NULL,
@@ -2966,7 +2963,7 @@ function create_course_tables($course_db_name = null) {
     */
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLONLINECONNECTED . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLONLINECONNECTED . "` (
 		$add_to_all_tables
         user_id int unsigned NOT NULL,
         last_connection datetime NOT NULL default '0000-00-00 00:00:00',
@@ -2975,7 +2972,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLONLINELINK . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLONLINELINK . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         name char(50) NOT NULL default '',
@@ -2985,7 +2982,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `".$TABLETOOLCHATCONNECTED . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLCHATCONNECTED . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         user_id int unsigned NOT NULL default '0',
@@ -3003,7 +3000,7 @@ function create_course_tables($course_db_name = null) {
         Groups tool
     */
 
-    Database::query("CREATE TABLE `".$TABLEGROUPS . "` (
+    Database::query("CREATE TABLE IF NOT EXISTS `".$TABLEGROUPS . "` (
     	$add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         name varchar(100) default NULL,
@@ -3026,7 +3023,7 @@ function create_course_tables($course_db_name = null) {
 
     Database::query("ALTER TABLE `".$TABLEGROUPS . "` ADD INDEX ( session_id )");
 
-    Database::query("CREATE TABLE `".$TABLEGROUPCATEGORIES . "` (
+    Database::query("CREATE TABLE IF NOT EXISTS `".$TABLEGROUPCATEGORIES . "` (
     	$add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         title varchar(255) NOT NULL default '',
@@ -3046,7 +3043,7 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
-    Database::query("CREATE TABLE `".$TABLEGROUPUSER . "` (
+    Database::query("CREATE TABLE IF NOT EXISTS `".$TABLEGROUPUSER . "` (
     	$add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         user_id int unsigned NOT NULL,
@@ -3056,7 +3053,7 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
-    Database::query("CREATE TABLE `".$TABLEGROUPTUTOR . "` (
+    Database::query("CREATE TABLE IF NOT EXISTS `".$TABLEGROUPTUTOR . "` (
     	$add_to_all_tables
         id int NOT NULL auto_increment,
         user_id int NOT NULL,
@@ -3064,7 +3061,7 @@ function create_course_tables($course_db_name = null) {
         PRIMARY KEY (c_id, id)
         )" . $charset_clause);
 
-    Database::query("CREATE TABLE `".$TABLEITEMPROPERTY . "` (
+    Database::query("CREATE TABLE IF NOT EXISTS `".$TABLEITEMPROPERTY . "` (
     	$add_to_all_tables
         id int NOT NULL auto_increment,
         tool varchar(100) NOT NULL default '',
@@ -3088,7 +3085,7 @@ function create_course_tables($course_db_name = null) {
 
     /*           Tool introductions    */
     Database::query("
-        CREATE TABLE `".$TABLEINTROS . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLEINTROS . "` (
         $add_to_all_tables
         id varchar(50) NOT NULL,
         intro_text MEDIUMTEXT NOT NULL,
@@ -3099,7 +3096,7 @@ function create_course_tables($course_db_name = null) {
     /* Dropbox tool */
 
     Database::query("
-        CREATE TABLE `".$TABLETOOLDROPBOXFILE . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLDROPBOXFILE . "` (
         $add_to_all_tables
         id int unsigned NOT NULL auto_increment,
         uploader_id int unsigned NOT NULL default 0,
@@ -3119,7 +3116,7 @@ function create_course_tables($course_db_name = null) {
     Database::query("ALTER TABLE `$TABLETOOLDROPBOXFILE` ADD INDEX ( session_id )");
 
     Database::query("
-        CREATE TABLE `".$TABLETOOLDROPBOXPOST . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLDROPBOXPOST . "` (
         $add_to_all_tables
         file_id int unsigned NOT NULL,
         dest_user_id int unsigned NOT NULL default 0,
@@ -3133,14 +3130,14 @@ function create_course_tables($course_db_name = null) {
     Database::query("ALTER TABLE `$TABLETOOLDROPBOXPOST` ADD INDEX ( session_id )");
 
     Database::query("
-        CREATE TABLE `".$TABLETOOLDROPBOXPERSON . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLETOOLDROPBOXPERSON . "` (
         $add_to_all_tables
         file_id int unsigned NOT NULL,
         user_id int unsigned NOT NULL default 0,
         PRIMARY KEY (c_id, file_id, user_id)
         )" . $charset_clause);
 
-    $sql = "CREATE TABLE `".$TABLETOOLDROPBOXCATEGORY."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLETOOLDROPBOXCATEGORY."` (
     		  $add_to_all_tables
               cat_id int NOT NULL auto_increment,
               cat_name text NOT NULL,
@@ -3155,7 +3152,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "ALTER TABLE `".$TABLETOOLDROPBOXCATEGORY . "` ADD INDEX ( session_id ) ";
     Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLETOOLDROPBOXFEEDBACK."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLETOOLDROPBOXFEEDBACK."` (
     			$add_to_all_tables
               feedback_id int NOT NULL auto_increment,
               file_id int NOT NULL default 0,
@@ -3351,7 +3348,7 @@ function create_course_tables($course_db_name = null) {
     /* Blogs */
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs . "` (
             $add_to_all_tables
             blog_id int NOT NULL AUTO_INCREMENT ,
             blog_name varchar( 250 ) NOT NULL default '',
@@ -3368,7 +3365,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_comments . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_comments . "` (
         	$add_to_all_tables
             comment_id int NOT NULL AUTO_INCREMENT ,
             title varchar( 250 ) NOT NULL default '',
@@ -3385,7 +3382,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_posts . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_posts . "` (
         	$add_to_all_tables
             post_id int NOT NULL AUTO_INCREMENT ,
             title varchar( 250 ) NOT NULL default '',
@@ -3399,7 +3396,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_rating . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_rating . "` (
         	$add_to_all_tables
             rating_id int NOT NULL AUTO_INCREMENT ,
             blog_id int NOT NULL default 0,
@@ -3413,7 +3410,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_rel_user . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_rel_user . "` (
         	$add_to_all_tables
             blog_id int NOT NULL default 0,
             user_id int NOT NULL default 0,
@@ -3423,7 +3420,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_tasks . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_tasks . "` (
         	$add_to_all_tables
             task_id int NOT NULL AUTO_INCREMENT ,
             blog_id int NOT NULL default 0,
@@ -3437,7 +3434,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_blogs_tasks_rel_user . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_blogs_tasks_rel_user . "` (
         	$add_to_all_tables
             blog_id int NOT NULL default 0,
             user_id int NOT NULL default 0,
@@ -3448,7 +3445,7 @@ function create_course_tables($course_db_name = null) {
 
     Database::query($sql);
 
-    $sql ="CREATE TABLE  `" .$tbl_blogs_attachment."` (
+    $sql ="CREATE TABLE IF NOT EXISTS  `" .$tbl_blogs_attachment."` (
     	  $add_to_all_tables
           id int unsigned NOT NULL auto_increment,
           path varchar(255) NOT NULL COMMENT 'the real filename',
@@ -3464,7 +3461,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_permission_group . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_permission_group . "` (
         	$add_to_all_tables
             id int NOT NULL AUTO_INCREMENT ,
             group_id int NOT NULL default 0,
@@ -3476,7 +3473,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_permission_user . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_permission_user . "` (
         	$add_to_all_tables
             id int NOT NULL AUTO_INCREMENT ,
             user_id int NOT NULL default 0,
@@ -3488,7 +3485,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_permission_task . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_permission_task . "` (
         	$add_to_all_tables
             id int NOT NULL AUTO_INCREMENT,
             task_id int NOT NULL default 0,
@@ -3500,7 +3497,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_role . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_role . "` (
         	$add_to_all_tables
             role_id int NOT NULL AUTO_INCREMENT,
             role_name varchar( 250 ) NOT NULL default '',
@@ -3512,7 +3509,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_role_group . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_role_group . "` (
         	$add_to_all_tables
             id int NOT NULL AUTO_INCREMENT,
             role_id int NOT NULL default 0,
@@ -3524,7 +3521,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_role_permissions . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_role_permissions . "` (
         	$add_to_all_tables
             id int NOT NULL AUTO_INCREMENT,
             role_id int NOT NULL default 0,
@@ -3537,7 +3534,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "
-        CREATE TABLE `" . $tbl_role_user . "` (
+        CREATE TABLE IF NOT EXISTS `" . $tbl_role_user . "` (
         	$add_to_all_tables
             role_id int NOT NULL default 0,
             scope varchar( 20 ) NOT NULL default 'course',
@@ -3553,7 +3550,7 @@ function create_course_tables($course_db_name = null) {
      */
 
     Database::query("
-        CREATE TABLE `".$TABLESETTING . "` (
+        CREATE TABLE IF NOT EXISTS `".$TABLESETTING . "` (
         $add_to_all_tables
         id          int unsigned NOT NULL auto_increment,
         variable    varchar(255) NOT NULL default '',
@@ -3571,7 +3568,7 @@ function create_course_tables($course_db_name = null) {
         Survey
     */
 
-    $sql = "CREATE TABLE `".$TABLESURVEY."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLESURVEY."` (
     		$add_to_all_tables
               survey_id int unsigned NOT NULL auto_increment,
               code varchar(20) default NULL,
@@ -3608,7 +3605,7 @@ function create_course_tables($course_db_name = null) {
     $sql = "ALTER TABLE `".$TABLESURVEY."` ADD INDEX ( session_id )";
     Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLESURVEYINVITATION."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLESURVEYINVITATION."` (
     		  $add_to_all_tables
               survey_invitation_id int unsigned NOT NULL auto_increment,
               survey_code varchar(20) NOT NULL,
@@ -3623,7 +3620,7 @@ function create_course_tables($course_db_name = null) {
             )" . $charset_clause;
     $result = Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLESURVEYQUESTION."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLESURVEYQUESTION."` (
     		  $add_to_all_tables
               question_id int unsigned NOT NULL auto_increment,
               survey_id int unsigned NOT NULL,
@@ -3641,7 +3638,7 @@ function create_course_tables($course_db_name = null) {
             )" . $charset_clause;
     $result = Database::query($sql);
 
-    $sql ="CREATE TABLE `".$TABLESURVEYQUESTIONOPTION."` (
+    $sql ="CREATE TABLE IF NOT EXISTS `".$TABLESURVEYQUESTIONOPTION."` (
     	$add_to_all_tables
       question_option_id int unsigned NOT NULL auto_increment,
       question_id int unsigned NOT NULL,
@@ -3654,7 +3651,7 @@ function create_course_tables($course_db_name = null) {
 
     $result = Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLESURVEYANSWER."` (
     		  $add_to_all_tables
               answer_id int unsigned NOT NULL auto_increment,
               survey_id int unsigned NOT NULL,
@@ -3666,7 +3663,7 @@ function create_course_tables($course_db_name = null) {
             )" . $charset_clause;
     $result = Database::query($sql);
 
-    $sql = "CREATE TABLE `".$TABLESURVEYGROUP."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TABLESURVEYGROUP."` (
 				$add_to_all_tables
               id int unsigned NOT NULL auto_increment,
               name varchar(20) NOT NULL,
@@ -3677,7 +3674,7 @@ function create_course_tables($course_db_name = null) {
     $result = Database::query($sql);
 
     // Table glosary
-    $sql = "CREATE TABLE `".$TBL_GLOSSARY."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TBL_GLOSSARY."` (
     		  $add_to_all_tables
               glossary_id int unsigned NOT NULL auto_increment,
               name varchar(255) NOT NULL,
@@ -3692,7 +3689,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // Table notebook
-    $sql = "CREATE TABLE `".$TBL_NOTEBOOK."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TBL_NOTEBOOK."` (
     		  $add_to_all_tables
               notebook_id int unsigned NOT NULL auto_increment,
               user_id int unsigned NOT NULL,
@@ -3711,7 +3708,7 @@ function create_course_tables($course_db_name = null) {
 
     // Attendance table
     $sql = "
-        CREATE TABLE `".$TBL_ATTENDANCE."` (
+        CREATE TABLE IF NOT EXISTS `".$TBL_ATTENDANCE."` (
         	$add_to_all_tables
             id int NOT NULL auto_increment,
             name text NOT NULL,
@@ -3734,7 +3731,7 @@ function create_course_tables($course_db_name = null) {
 
     // Attendance sheet table
     $sql = "
-        CREATE TABLE `".$TBL_ATTENDANCE_SHEET."` (
+        CREATE TABLE IF NOT EXISTS `".$TBL_ATTENDANCE_SHEET."` (
         	$add_to_all_tables
             user_id int NOT NULL,
             attendance_calendar_id int NOT NULL,
@@ -3748,7 +3745,7 @@ function create_course_tables($course_db_name = null) {
 
     // Attendance calendar table
     $sql = "
-        CREATE TABLE `".$TBL_ATTENDANCE_CALENDAR."` (
+        CREATE TABLE IF NOT EXISTS `".$TBL_ATTENDANCE_CALENDAR."` (
         	$add_to_all_tables
             id int NOT NULL auto_increment,
             attendance_id int NOT NULL ,
@@ -3766,7 +3763,7 @@ function create_course_tables($course_db_name = null) {
 
     // Attendance result table
     $sql = "
-        CREATE TABLE `".$TBL_ATTENDANCE_RESULT."` (
+        CREATE TABLE IF NOT EXISTS `".$TBL_ATTENDANCE_RESULT."` (
         	$add_to_all_tables
             id int NOT NULL auto_increment,
             user_id int NOT NULL,
@@ -3783,7 +3780,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // attendance sheet log table
-    $sql = "CREATE TABLE `".$TBL_ATTENDANCE_SHEET_LOG."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TBL_ATTENDANCE_SHEET_LOG."` (
     			  $add_to_all_tables
                   id int  NOT NULL auto_increment,
                   attendance_id int  NOT NULL DEFAULT 0,
@@ -3797,7 +3794,7 @@ function create_course_tables($course_db_name = null) {
 
 
     // Thematic table
-    $sql = "CREATE TABLE `".$TBL_THEMATIC."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TBL_THEMATIC."` (
     			$add_to_all_tables
                 id int NOT NULL auto_increment,
                 title varchar(255) NOT NULL,
@@ -3813,7 +3810,7 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     // thematic plan table
-    $sql = "CREATE TABLE `".$TBL_THEMATIC_PLAN."` (
+    $sql = "CREATE TABLE IF NOT EXISTS `".$TBL_THEMATIC_PLAN."` (
             	$add_to_all_tables
                 id int NOT NULL auto_increment,
                 thematic_id int NOT NULL,
@@ -3829,7 +3826,7 @@ function create_course_tables($course_db_name = null) {
 
     // thematic advance table
     $sql = "
-            CREATE TABLE `".$TBL_THEMATIC_ADVANCE."` (
+            CREATE TABLE IF NOT EXISTS `".$TBL_THEMATIC_ADVANCE."` (
             	$add_to_all_tables
                 id int NOT NULL auto_increment,
                 thematic_id int NOT NULL,
@@ -3844,7 +3841,6 @@ function create_course_tables($course_db_name = null) {
 
     $sql    = "ALTER TABLE `".$TBL_THEMATIC_ADVANCE."` ADD INDEX (thematic_id)";
     Database::query($sql);
-
 
     $sql = "CREATE TABLE IF NOT EXISTS " . $TBL_METADATA . " (    " .
             $add_to_all_tables.
@@ -3871,7 +3867,7 @@ function create_course_tables($course_db_name = null) {
 
     $table_quiz_order = $course_db_name . 'quiz_order';
 
-    $sql = " CREATE TABLE $table_quiz_order(
+    $sql = " CREATE TABLE IF NOT EXISTS $table_quiz_order(
         id int unsigned NOT NULL auto_increment,
         c_id int unsigned NOT NULL,
         session_id int unsigned NOT NULL,

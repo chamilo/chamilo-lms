@@ -284,6 +284,19 @@ define('LINK_FORUM_THREAD',			5);
 define('LINK_ATTENDANCE',			7);
 define('LINK_SURVEY',				8);
 
+//From display.lib.php
+
+define('MAX_LENGTH_BREADCRUMB', 100);
+
+define('ICON_SIZE_TINY',    16);
+define('ICON_SIZE_SMALL',   22);
+define('ICON_SIZE_MEDIUM',  32);
+define('ICON_SIZE_LARGE',   48);
+define('ICON_SIZE_BIG',     64);
+define('ICON_SIZE_HUGE',    128);
+
+define('SHOW_TEXT_NEAR_ICONS', false);
+
 
 
 /**
@@ -1026,7 +1039,7 @@ function _api_format_user($user, $add_password = false) {
     }
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
-    
+
     $result['complete_name_with_username'] = $result['complete_name'];
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';

@@ -322,19 +322,6 @@ if (Database::num_rows($res_media) > 0) {
         if (!empty($row_media['audio'])) {$show_audioplayer = true; break;}
     }
 }
-
-/*
- *
- *    <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
-                <!-- log message layout -->
-                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                    <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
-                </div>
-                <!-- end log message layout -->
-                <?php } ?>
- */
-
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
     if ($is_allowed_to_edit) {

@@ -59,7 +59,6 @@ if (isset($_GET['u'])) {
 }
 $libpath = api_get_path(LIBRARY_PATH);
 require_once api_get_path(SYS_CODE_PATH).'calendar/myagenda.inc.php';
-require_once api_get_path(SYS_CODE_PATH).'announcements/announcements.inc.php';
 
 require_once $libpath.'magpierss/rss_fetch.inc';
 $ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
@@ -275,11 +274,10 @@ $personal_course_list = UserManager::get_personal_session_course_list($my_user_i
 
 $course_list_code = array();
 $i=1;
-
 if (is_array($personal_course_list)) {
     foreach ($personal_course_list as $my_course) {
         if ($i<=10) {
-            $list[] = SocialManager::get_logged_user_course_html($my_course, $i);
+            $list[$my_course['code']] = SocialManager::get_logged_user_course_html($my_course, $i);
             $course_list_code[] = array('code'=> $my_course['code']);
         } else {
             break;
@@ -424,7 +422,7 @@ if ($show_full_profile) {
                 if (is_array($data)) {
                     $extra_information_value .= '<dt>'.ucfirst($field_display_text).'</dt><dd> '.implode(',',$data).'</dd>';
                 } else {
-                    if ($field_type == USER_FIELD_TYPE_DOUBLE_SELECT) {
+                    if ($field_type == Extrafield::FIELD_TYPE_DOUBLE_SELECT) {
                         $id_options = explode(';',$data);
                         $value_options = array();
                         // get option display text from user_field_options table
@@ -435,7 +433,7 @@ if ($show_full_profile) {
                             $value_options[] = $row_options[0];
                         }
                         $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode(' ',$value_options).'</dd>';
-                    } elseif($field_type == USER_FIELD_TYPE_TAG ) {
+                    } elseif($field_type == Extrafield::FIELD_TYPE_TAG ) {
                         $user_tags = UserManager::get_user_tags($user_id, $field_id);
                         $tag_tmp = array();
                         foreach ($user_tags as $tags) {
@@ -444,7 +442,7 @@ if ($show_full_profile) {
                         if (is_array($user_tags) && count($user_tags)>0) {
                             $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode('', $tag_tmp).'</dd>';
                         }
-                    } elseif ($field_type == USER_FIELD_TYPE_SOCIAL_PROFILE) {
+                    } elseif ($field_type == Extrafield::FIELD_TYPE_SOCIAL_PROFILE) {
                         $icon_path = UserManager::get_favicon_from_url($data);
                         $bottom = '0.3';
                         //quick hack for hi5
@@ -541,31 +539,22 @@ if ($show_full_profile) {
         }
         $social_right_content .=  SocialManager::social_wrapper_div($my_groups, 9);
     }
-    
-    $my_courses = null;
+
     // COURSES LIST
+    $my_courses = null;
     if ( is_array($list) ) {
         $my_courses .=  '<div><h3>'.api_ucfirst(get_lang('MyCourses')).'</h3></div>';
         $my_courses .=  '<div class="social-content-training">';
 
         //Courses without sessions
         $i=1;
-        foreach ($list as $key=>$value) {
-            if ( empty($value[2]) ) { //if out of any session
-                $my_courses .=  $value[1];
+        foreach ($list as $value) {
+            if (!empty($value)) { //if out of any session
+                $my_courses .=  $value;
                 $my_courses .=  '<div id="social_content'.$i.'" class="course_social_content" style="display:none" >s</div>';
                 $i++;
             }
         }
-        /*
-        $listActives = $listInactives = array();
-        foreach ( $list as $key=>$value ) {
-            if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
-                $listActives[] = $value;
-            } elseif ( !empty($value[2]) ) { //if there is a session but it is not active
-                $listInactives[] = $value;
-            }
-        }*/
         $my_courses .=  '</div>';        //social-content-training
         $social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
     }
@@ -681,6 +670,5 @@ $social_right_content .= MessageManager::generate_invitation_form('send_invitati
 $tpl = new Template(get_lang('Social'));
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
-
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

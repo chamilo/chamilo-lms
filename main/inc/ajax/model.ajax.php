@@ -68,21 +68,22 @@ function get_where_clause($col, $oper, $val) {
     if (empty($col)){
         return '';
     }
-    if ($oper == 'bw' || $oper == 'bn') $val .= '%';
-    if ($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
-    if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
+    if($oper == 'bw' || $oper == 'bn') $val .= '%';
+    if($oper == 'ew' || $oper == 'en' ) $val = '%'.$val;
+    if($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') $val = '%'.$val.'%';
     $val = Database::escape_string($val);
     return " $col {$ops[$oper]} '$val' ";
 }
 
 $where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
-
 $operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
 $export_format    = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
 
 $search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
 $search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
 $search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
+
+$extra_fields = array();
 
 if ($_REQUEST['_search'] == 'true') {
     $where_condition = ' 1 = 1 ';
@@ -91,23 +92,81 @@ if ($_REQUEST['_search'] == 'true') {
     if (!empty($where_condition_in_form)) {
         $where_condition .= ' AND '.$where_condition_in_form;
     }
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //var_dump($filters);
 
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    //for now
+    $extra_field = new ExtraField('session');
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';
-        $counter = 0;
-        foreach ($filters->rules as $key=>$rule) {
-            $where_condition .= get_where_clause($rule->field,$rule->op, $rule->data);
 
-            if ($counter < count($filters->rules) -1) {
-                $where_condition .= $filters->groupOp;
+        //Getting double select if exists
+        $double_select = array();
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, '_second') === false) {
+
+            } else {
+                $my_field = str_replace('_second', '', $rule->field);
+                $double_select[$my_field] = $rule->data;
             }
-            $counter++;
         }
-        $where_condition .= ' ) ';
+
+        $condition_array = array();
+
+        foreach ($filters->rules as $rule) {
+            if (strpos($rule->field, 'extra_') === false) {
+                //normal fields
+                $field = $rule->field;
+                if (!empty($rule->data)) {
+                    $condition_array[] = get_where_clause($field, $rule->op, $rule->data);
+                }
+            } else {
+                //Extra fields
+
+                //normal
+                if (strpos($rule->field, '_second') === false) {
+                    //No _second
+                    $original_field = str_replace('extra_', '', $rule->field);
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+
+                    if ($field_option['field_type'] == ExtraField::FIELD_TYPE_DOUBLE_SELECT) {
+
+                        if (isset($double_select[$rule->field])) {
+                            $data = explode('#', $rule->data);
+                            //var_dump($data);
+                            $rule->data = $data[1].'::'.$double_select[$rule->field];
+                        } else {
+                            // only was sent 1 select
+                            $data = explode('#', $rule->data);
+                            $rule->data = $data[1];
+                        }
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
+                    } else {
+                        if (!empty($rule->data)) {
+                            $condition_array[] = ' ('.get_where_clause($rule->field, $rule->op, $rule->data).') ';
+                            $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                        }
+                    }
+                } else {
+                    $my_field = str_replace('_second', '', $rule->field);
+                    $original_field = str_replace('extra_', '', $my_field);
+                    $field_option = $extra_field->get_handler_field_info_by_field_variable($original_field);
+                    $extra_fields[] = array('field' => $rule->field, 'id' => $field_option['id']);
+                }
+            }
+        }
+
+        if (!empty($condition_array)) {
+            $where_condition .= ' AND ( ';
+            //var_dump($condition_array);
+            $where_condition .= implode($filters->groupOp, $condition_array);
+
+            $where_condition .= ' ) ';
+        }
     }
 }
-
 // get index row - i.e. user click to sort $sord = $_GET['sord'];
 // get the direction
 if (!$sidx) $sidx = 1;
@@ -116,6 +175,11 @@ if (!$sidx) $sidx = 1;
 //@todo rework this
 
 switch ($action) {
+    case 'get_group_reporting':
+        $course_id = isset($_REQUEST['course_id']) ? $_REQUEST['course_id'] : null;
+        $group_id = isset($_REQUEST['gidReq']) ? $_REQUEST['gidReq'] : null;
+        $count = Tracking::get_group_reporting($course_id, $group_id, 'count');
+        break;
     case 'get_user_course_report_resumed':
         $count = CourseManager::get_count_user_list_from_course_code(true, 'ruc');
         break;
@@ -138,7 +202,6 @@ switch ($action) {
 	case 'get_exercise_results':
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_id = $_REQUEST['exerciseId'];
-
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
             if ($where_condition == "") {
@@ -155,9 +218,14 @@ switch ($action) {
 		$count = get_count_exam_hotpotatoes_results($hotpot_path);
 		break;
     case 'get_sessions':
-        $count = SessionManager::get_count_admin();
+        $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
+        if ($list_type == 'simple') {
+            $count = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'extra' => $extra_fields), true);
+        } else {
+            $count = SessionManager::get_count_admin_complete(array('where'=> $where_condition, 'extra' => $extra_fields));
+        }
         break;
-    /*case 'get_extra_fields':
+    case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
         $count = $obj->get_count();
@@ -167,7 +235,7 @@ switch ($action) {
         $field_id = $_REQUEST['field_id'];
         $obj = new ExtraFieldOption($type);
         $count = $obj->get_count_by_field_id($field_id);
-        break;*/
+        break;
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
         $obj        = new Timeline();
@@ -205,7 +273,7 @@ switch ($action) {
         if ($type == 'registered') {
             $count = $obj->get_usergroup_by_course_with_data_count($course_id);
         } else {
-            $count = $obj->get_count();
+        $count      = $obj->get_count();
         }
         break;
     default:
@@ -239,6 +307,10 @@ $is_allowedToEdit = api_is_allowed_to_edit(null,true) || api_is_allowed_to_edit(
 $columns = array();
 
 switch ($action) {
+    case 'get_group_reporting':
+        $columns = array('name', 'time', 'progress', 'score', 'works', 'messages', 'actions');
+        $result = Tracking::get_group_reporting($course_id, $group_id, 'all', $start, $limit, $sidx, $sord, $where_condition);
+        break;
     case 'get_course_exercise_medias':
         $columns = array('question');
         $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
@@ -267,8 +339,8 @@ switch ($action) {
                 $column_names[] = $extra['3'];
             }
         }
-        $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
-        break;
+    $result = CourseManager::get_user_list_from_course_code(null, null, "LIMIT $start, $limit", " $sidx $sord", null, null, true);
+    break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
 	    $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
@@ -303,9 +375,9 @@ switch ($action) {
         $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         break;
 	case 'get_exercise_results':
-		$course = api_get_course_info();
+		$course                     = api_get_course_info();
         //used inside get_exam_results_data()
-		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+		$documentPath				= api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
 		if ($is_allowedToEdit) {
 			$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions');
 		} else {
@@ -321,8 +393,14 @@ switch ($action) {
 		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
     case 'get_sessions':
-        $columns = array('name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility');
-        $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'limit'=> "$start , $limit"));
+        $session_columns = SessionManager::get_session_columns($list_type);
+        $columns = $session_columns['simple_column_name'];
+
+        if ($list_type == 'simple') {
+            $result = SessionManager::get_sessions_admin(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"), false);
+        } else {
+            $result = SessionManager::get_sessions_admin_complete(array('where'=> $where_condition, 'order'=>"$sidx $sord", 'extra' => $extra_fields, 'limit'=> "$start , $limit"));
+        }
         break;
      case 'get_timelines':
         $columns = array('headline', 'actions');
@@ -390,7 +468,7 @@ switch ($action) {
         if(!in_array($sidx, $columns)) {
         	$sidx = 'subject';
         }
-        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $result = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         foreach ($result as $item) {
             $language_info = api_get_language_info($item['language_id']);
@@ -448,7 +526,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses','sessions','actions');
+        $columns = array('name', 'users', 'courses', 'sessions', 'actions');
         $result     = Database::select('*', $obj->table, array('order'=>"name $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         if (!empty($result)) {
@@ -499,7 +577,7 @@ switch ($action) {
             $result = $new_result;
         }*/
         break;
-    case 'get_usergroups_teacher':
+      case 'get_usergroups_teacher':
         $columns = array('name', 'users', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         $options['course_id'] = $course_id;
@@ -514,9 +592,11 @@ switch ($action) {
                 break;
         }
         $new_result = array();
+
         if (!empty($result)) {
             foreach ($result as $group) {
-                $group['users'] = count($obj->get_users_by_usergroup($group['id']));
+                $group['users']      = count($obj->get_users_by_usergroup($group['id']));
+
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
                     $url  = 'class.php?action=remove_class_from_course&id='.$group['id'];
                     $icon = Display::return_icon('delete.png', get_lang('Remove'));
@@ -525,39 +605,42 @@ switch ($action) {
                     $icon = Display::return_icon('add.png', get_lang('Add'));
                 }
                 $group['actions']    = Display::url($icon, $url);
+
                 $new_result[]        = $group;
             }
             $result = $new_result;
         }
-
-        if (!in_array($sidx, $columns)) {
+        if(!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
         //Multidimensional sort
         msort($result, $sidx);
         break;
+
     default:
         exit;
 }
 
-$allowed_actions = array('get_careers',
-                         'get_promotions',
-                         'get_usergroups',
-                         'get_usergroups_teacher',
-                         'get_gradebooks',
-                         'get_sessions',
-                         'get_exercise_results',
-                         'get_hotpotatoes_exercise_results',
-                         'get_work_user_list',
-                         'get_timelines',
-                         'get_grade_models',
-                         'get_event_email_template',
-                         'get_user_skill_ranking',
-                         //'get_extra_fields',
-                         //'get_extra_field_options',
-                         //'get_course_exercise_medias',
-                         'get_user_course_report',
-                         'get_user_course_report_resumed'
+$allowed_actions = array(
+    'get_careers',
+    'get_promotions',
+    'get_usergroups',
+    'get_usergroups_teacher',
+    'get_gradebooks',
+    'get_sessions',
+    'get_exercise_results',
+    'get_hotpotatoes_exercise_results',
+    'get_work_user_list',
+    'get_timelines',
+    'get_grade_models',
+    'get_event_email_template',
+    'get_user_skill_ranking',
+    'get_extra_fields',
+    'get_extra_field_options',
+    'get_course_exercise_medias',
+    'get_user_course_report',
+    'get_user_course_report_resumed',
+    'get_group_reporting'
 );
 
 //5. Creating an obj to return a json
@@ -597,9 +680,7 @@ if (in_array($action, $allowed_actions)) {
         }
         exit;
     }
-
     $i = 0;
-
     if (!empty($result)) {
         foreach ($result as $row) {
             //print_r($row);
@@ -617,7 +698,6 @@ if (in_array($action, $allowed_actions)) {
             $i++;
         }
     }
-
     echo json_encode($response);
 }
 exit;

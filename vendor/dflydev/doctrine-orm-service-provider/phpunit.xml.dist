@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Doctrine ORM Service Provider Test Suite">
+            <directory>./tests/Dflydev/Cilex/Provider/DoctrineOrm</directory>
+            <directory>./tests/Dflydev/Pimple/Provider/DoctrineOrm</directory>
+            <directory>./tests/Dflydev/Silex/Provider/DoctrineOrm</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./src/Dflydev/Cilex/Provider/DoctrineOrm/</directory>
+            <directory>./src/Dflydev/Pimple/Provider/DoctrineOrm/</directory>
+            <directory>./src/Dflydev/Silex/Provider/DoctrineOrm/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

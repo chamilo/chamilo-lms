@@ -150,7 +150,7 @@ if (!empty($_GET['link'])) {
 
 // Start analysing requested actions
 if (!empty($action)) {
-	if ($_POST['formSent']) {
+	if (isset($_POST['formSent']) && $_POST['formSent']) {
 		// Variables used are $homep for home path, $menuf for menu file, $newsf
 		// for news file, $topf for top file, $noticef for noticefile,
 		// $ext for '.html'
@@ -821,7 +821,7 @@ switch ($action) {
 			</tr>
 			<tr>
 			<?php
-            
+
 			$access_url_id = 1;
 			// we only show the category options for the main chamilo installation
 			if (api_is_multiple_url_enabled()) {

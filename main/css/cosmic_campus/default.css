@@ -274,19 +274,6 @@ ul#navigation .student-connect a {
 	margin-bottom: 5px;
 	height: 30px;
 }
-/* user_portal session list */
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-.session_course_item {
-	/* padding: 0px; */
-	margin: 0px;
-	font-size:135%;
-}
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-     font-size:80%; 
-}
 .user_course_category {
 	background-color: #efefef;
 	border: 1px solid #666;

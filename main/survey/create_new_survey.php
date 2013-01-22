@@ -27,24 +27,24 @@ require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-		}
+$htmlHeadXtra[] = '<script>
+    function advanced_parameters() {
+        if(document.getElementById(\'options\').style.display == \'none\') {
+                document.getElementById(\'options\').style.display = \'block\';
+                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        } else {
+                document.getElementById(\'options\').style.display = \'none\';
+                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        }
+    }
 
-		function setFocus(){
-		  $("#surveycode_title").focus();
-		}
-		$(document).ready(function () {
-		  setFocus();
-		});
-	</script>';
+    function setFocus(){
+      $("#surveycode_title").focus();
+    }
+    $(document).ready(function () {
+      setFocus();
+    });
+</script>';
 
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -70,12 +70,7 @@ $course_id = api_get_course_id();
 $session_id = api_get_session_id();
 $gradebook_link_type = 8; // LINK_SURVEY
 
-/* $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-  if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-  $urlname .= '...';
-  } */
 $urlname = $survey_data['title'];
-
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
@@ -108,8 +103,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults['start_date'] = date('d-F-Y H:i');
     $startdateandxdays = time() + 864000; // today + 10 days
     $defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
-    //$defaults['survey_share']['survey_share'] = 0;
-    //$form_share_value = 1;
     $defaults['anonymous'] = 0;
 }
 
@@ -124,36 +117,14 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
-//$form->applyFilter('survey_code', 'html_filter');
-
-if ($_GET['action'] == 'edit') {
-    $survey_code->freeze();
-    $form->applyFilter('survey_code', 'api_strtoupper');
-}
 
 $form->addElement('html_editor', 'survey_title', get_lang('SurveyTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200'));
 $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '100', 'ToolbarStartExpanded' => false));
-
-/*
-  //Language selection has been disabled. If you want to re-enable, please
-  //disable the following line (hidden language field).
-  $lang_array = api_get_languages();
-  foreach ($lang_array['name'] as $key => $value) {
-  $languages[$lang_array['folder'][$key]] = $value;
-  }
-  $form->addElement('select', 'survey_language', get_lang('Language'), $languages);
- */
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
 $form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name' => 'survey'));
 $form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name' => 'survey'));
-
-//$group = '';
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);
-/** TODO Maybe it is better to change this into false instead see line 95 in survey.lib.php */
-//$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('No'), 0);
-//$form->addGroup($group, 'survey_share', get_lang('ShareSurvey'), '&nbsp;');
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
@@ -202,7 +173,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
         } else {
             $form->addElement('html', '<div id="options_field" style="display:none">');
         }
-
+        $input_name_list = null;
         $field_list = SurveyUtil::make_field_list();
         if (is_array($field_list)) {
             // TODO hide and show the list in a fancy DIV
@@ -226,7 +197,6 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
                 }
             }
         }
-
         $form->addElement('html', '</div>');
     }
 }
@@ -262,26 +232,18 @@ if ($form->validate()) {
     // Storing the survey
     $return = survey_manager::store_survey($values);
 
-    /* // Deleting the shared survey if the survey is getting unshared (this only happens when editing)
-      if (is_numeric($survey_data['survey_share']) && $values['survey_share']['survey_share'] == 0 && $values['survey_id'] != '') {
-      survey_manager::delete_survey($survey_data['survey_share'], true);
-      }
-      // Storing the already existing questions and options of a survey that gets shared (this only happens when editing)
-      if ($survey_data['survey_share'] == 0 && $values['survey_share']['survey_share'] !== 0 && $values['survey_id'] != '') {
-      survey_manager::get_complete_survey_structure($return['id']);
-      }
-     */
     if ($return['type'] == 'error') {
-        // Display the error
-        Display::display_error_message(get_lang($return['message']), false);
 
         // Displaying the header
         Display::display_header($tool_name);
 
+        // Display the error
+        Display::display_error_message(get_lang($return['message']), false);
+
         // Display the form
         $form->display();
     } else {
-        $gradebook_option = $values['survey_qualify_gradebook'] > 0;
+        $gradebook_option = isset($values['survey_qualify_gradebook']) && $values['survey_qualify_gradebook'] > 0;
         if ($gradebook_option) {
             $survey_id = intval($return['id']);
             if ($survey_id > 0) {
@@ -290,8 +252,6 @@ if ($form->validate()) {
                 $description_gradebook = ''; // Not needed here.
                 $survey_weight = floatval($_POST['survey_weight']);
                 $max_score = 1;
-                $date = time(); // TODO: Maybe time zones implementation is needed here.
-                $visible = 1; // 1 = visible
 
                 $link_info = is_resource_in_course_gradebook($course_id, $gradebook_link_type, $survey_id, $session_id);
                 $gradebook_link_id = $link_info['id'];
@@ -302,12 +262,6 @@ if ($form->validate()) {
                 }
             }
         }
-    }
-
-    if ($config['survey']['debug']) {
-        // Displaying a feedback message
-        Display::display_confirmation_message($return['message'], false);
-    } else {
         // Redirecting to the survey page (whilst showing the return message)
         header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
         exit;
@@ -315,9 +269,7 @@ if ($form->validate()) {
 } else {
     // Displaying the header
     Display::display_header($tool_name);
-
     $form->display();
 }
-
 // Footer
 Display :: display_footer();

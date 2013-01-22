@@ -25,7 +25,7 @@ require_once $libpath.'fileUpload.lib.php';
 require_once $libpath.'group_portal_manager.lib.php';
 require_once $libpath.'mail.lib.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 var textarea = "";
 var num_characters_permited = 255;
 function textarea_maxlength(){
@@ -142,17 +142,15 @@ $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 $social_left_content = SocialManager::show_social_menu('group_edit',$group_id);
-$social_right_content = $form->return_form();
-
+$social_right_content = '<div class="span9">';
+$social_right_content .= $form->return_form();
+$social_right_content .= '</div>';
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
+
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);
 

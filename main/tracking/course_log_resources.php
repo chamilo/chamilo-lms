@@ -27,7 +27,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";    
+    $this_section = "session_my_space";
 } else {
     $this_section = SECTION_COURSES;
 }
@@ -35,8 +35,8 @@ if ($from == 'myspace') {
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
-if (!$is_allowedToTrack) {    
-    api_not_allowed();    
+if (!$is_allowedToTrack) {
+    api_not_allowed();
     exit;
 }
 
@@ -79,7 +79,8 @@ Display::display_header($nameTools, 'Tracking');
 /* MAIN CODE */
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());  
+echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('group.png', get_lang('GroupReporting'), array(), 32),  'course_log_groups.php?'.api_get_cidreq(true, false));
 echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq());
 echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), 32);
 echo '<span style="float:right; padding-top:0px;">';

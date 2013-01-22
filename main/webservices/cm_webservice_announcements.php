@@ -2,11 +2,6 @@
 
 require_once(dirname(__FILE__).'/../inc/global.inc.php');
 $libpath = api_get_path(LIBRARY_PATH);
-
-require_once(dirname(__FILE__).'/../announcements/announcements.inc.php');
-require_once $libpath.'usermanager.lib.php';
-require_once $libpath.'course.lib.php';
-require_once $libpath.'groupmanager.lib.php';
 require_once(dirname(__FILE__).'/cm_webservice.php');
 
 
@@ -16,11 +11,11 @@ require_once(dirname(__FILE__).'/cm_webservice.php');
  * @author marcosousa
  */
 class WSCMAnnouncements extends WSCM {
-    
+
     public function get_announcements_id($username, $password, $course_code)
-    { 
+    {
         if($this->verifyUserPass($username, $password) == "valid")
-        { 
+        {
 
             $result = self::get_announcements($username, $course_code);
 
@@ -36,7 +31,7 @@ class WSCMAnnouncements extends WSCM {
     }
 
     public function get_announcement_data($username, $password, $course_code, $announcement_id, $field)
-    { 
+    {
         if($this->verifyUserPass($username, $password) == "valid")
         {
             $htmlcode = false;
@@ -87,11 +82,11 @@ class WSCMAnnouncements extends WSCM {
 
             $announcement_id = ($announcement_id == 0) ? "" : "AND announcement.id=".$announcement_id;
             $user_id = UserManager::get_user_id_from_username($username);
-  
+
             //$listOfCourses = CourseManager::get_course_information_by_id($course_id);
-            
+
             $course_info = CourseManager::get_course_information($course_code);
-  
+
             $course_db = $course_info['db_name'];
 
             $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY, $course_db);
@@ -168,7 +163,7 @@ class WSCMAnnouncements extends WSCM {
                                     LIMIT 0,$maximum";
                     }
             }
-            
+
             $result = Database::query($sql);
             return $result;
     }

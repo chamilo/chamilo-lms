@@ -294,38 +294,7 @@ class GroupManager {
 			Database::query($sql);
 		}
 	}
-	/**
-	 * Create groups from all virtual courses in the given course.
-	 */
-	public static function create_groups_from_virtual_courses() {
-		self :: delete_category(self::VIRTUAL_COURSE_CATEGORY);
-		$id = self :: create_category(get_lang('GroupsFromVirtualCourses'), '', self::TOOL_NOT_AVAILABLE, self::TOOL_NOT_AVAILABLE, 0, 0, 1, 1);
-		$table_group_cat = Database :: get_course_table(TABLE_GROUP_CATEGORY);
-        $course_id = api_get_course_int_id();
 
-		$sql = "UPDATE ".$table_group_cat." SET id=".self::VIRTUAL_COURSE_CATEGORY." WHERE c_id = $course_id AND id=$id";
-		Database::query($sql);
-		$course = api_get_course_info();
-		$course['code'] = $course['sysCode'];
-		$course['title'] = $course['name'];
-		$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($course['sysCode']);
-		$group_courses = $virtual_courses;
-		$group_courses[] = $course;
-		$ids = array ();
-		foreach ($group_courses as $index => $group_course) {
-			$users = CourseManager :: get_user_list_from_course_code($group_course['code']);
-			$members = array ();
-			foreach ($users as $index => $user) {
-				if ($user['status'] == 5 && $user['tutor_id'] == 0) {
-					$members[] = $user['user_id'];
-				}
-			}
-			$id = self :: create_group($group_course['code'], self::VIRTUAL_COURSE_CATEGORY, 0, count($members));
-			self :: subscribe_users($members, $id);
-			$ids[] = $id;
-		}
-		return $ids;
-	}
 	/**
 	 * Create a group for every class subscribed to the current course
 	 * @param int $category_id The category in which the groups should be
@@ -751,10 +720,14 @@ class GroupManager {
 	 * @param int $group_id The group
          * @return array list of user id
 	 */
-	public static function get_users($group_id, $load_extra_info = false) {
+	public static function get_users($group_id, $load_extra_info = false, $course_id = null) {
 		$group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
 		$group_id = Database::escape_string($group_id);
-		$course_id = api_get_course_int_id();
+        if (empty($course_id)) {
+            $course_id = api_get_course_int_id();
+        } else {
+            $course_id = intval($course_id);
+        }
 		$sql = "SELECT user_id FROM $group_user_table WHERE c_id = $course_id AND group_id = $group_id";
 		$res = Database::query($sql);
 		$users = array ();
@@ -1518,6 +1491,7 @@ class GroupManager {
 	 * given course.
 	 */
 	public static function user_has_access($user_id, $group_id, $tool) {
+
         //Admin have access everywhere
         if (api_is_platform_admin()) {
             return true;
@@ -1562,8 +1536,8 @@ class GroupManager {
             //Check group category if exists
             $category_group_info = self::get_category_from_group($group_id);
 
-            if (!empty($category_group_info)) {
-                //if exists check the category group status first
+        if (!empty($category_group_info)) {
+            //if exists check the category group status first
                 if ($category_group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
                     return false;
                 } elseif($category_group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {

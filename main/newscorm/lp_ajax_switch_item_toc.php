@@ -87,7 +87,7 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $mylp->start_current_item(true);
     if ($mylp->force_commit) {
         $mylp->save_current();
-    }    
+    }
     if (is_object($mylp->items[$new_item_id])) {
         $mylpi = $mylp->items[$new_item_id];
     } else {
@@ -114,14 +114,6 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     $mymastery_score = $mylpi->get_mastery_score();
     $mymax_time_allowed = $mylpi->get_max_time_allowed();
     $mylaunch_data = $mylpi->get_launch_data();
-    /*
-    if ($mylpi->get_type() == 'asset') {
-        // Temporary measure to save completion of an asset. Later on, Chamilo should trigger something on unload, maybe... (even though that would mean the last item cannot be completed)
-        $mylesson_status = 'completed';
-        $mylpi->set_status('completed');
-        $mylpi->save();
-    }
-    */
     $mysession_time = $mylpi->get_total_time();
     $mysuspend_data = $mylpi->get_suspend_data();
     $mylesson_location = $mylpi->get_lesson_location();
@@ -181,6 +173,6 @@ function switch_item_toc($lp_id, $user_id, $view_id, $current_item, $next_item) 
     if ($debug > 1) { error_log('Prereq_match() returned '.htmlentities($mylp->error), 0); }
     $_SESSION['scorm_item_id'] = $new_item_id; // Save the new item ID for the exercise tool to use.
     $_SESSION['lpobject'] = serialize($mylp);
-    return $return;    
+    return $return;
 }
 echo switch_item_toc($_POST['lid'], $_POST['uid'], $_POST['vid'], $_POST['iid'], $_POST['next']);

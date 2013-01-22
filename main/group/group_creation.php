@@ -50,11 +50,6 @@ if (isset ($_POST['action'])) {
 			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;
-		case 'create_virtual_groups':
-			$ids = GroupManager :: create_groups_from_virtual_courses();
-			$msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
 		case 'create_subgroups':
 			GroupManager :: create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
 			$msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
@@ -231,23 +226,6 @@ EOT;
 		$create_groups_form->display();
 	} else {
 		echo get_lang('NoCategoriesDefined');
-	}
-	//echo '</blockquote>';
-
-	/*
-	 * Show form to generate groups from virtual courses
-	 */
-	$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($_course['sysCode']);
-	if (count($virtual_courses) > 0) {
-		echo '<b>'.get_lang('CreateGroupsFromVirtualCourses').'</b>';
-		echo '<blockquote>';
-		echo get_lang('CreateGroupsFromVirtualCoursesInfo');
-		$create_virtual_groups_form = new FormValidator('create_virtual_groups');
-		$create_virtual_groups_form->addElement('hidden', 'action');
-		$create_virtual_groups_form->addElement('submit', 'submit', get_lang('Ok'));
-		$create_virtual_groups_form->setDefaults(array('action' => 'create_virtual_groups'));
-		$create_virtual_groups_form->display();
-		echo '</blockquote>';
 	}
 
 	/*

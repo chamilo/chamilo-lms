@@ -131,6 +131,9 @@ $advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><sp
 $form -> addElement('advanced_settings',$advanced);
 $form -> addElement('html','<div id="options" style="display:none">');
 
+$items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
+$form->addElement('select', 'category_id', get_lang('Category'), $items);
+
 //Start date
 $form->addElement('checkbox', 'activate_start_date_check', null, get_lang('EnableStartTime'), array('onclick' => 'activate_start_date()'));
 $form->addElement('html','<div id="start_date_div" style="display:block;">');
@@ -144,6 +147,7 @@ $form->addElement('datepicker', 'expired_on', get_lang('ExpirationDate'), array(
 $form->addElement('html','</div>');
 
 $form->addElement('html','</div>');
+
 
 $defaults['activate_start_date_check']  = 1;
 

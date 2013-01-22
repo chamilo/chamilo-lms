@@ -13,17 +13,13 @@
  *
  *  @package chamilo.library
  */
-/**
- * Constants definition
- */
-require_once 'database.constants.inc.php';
 
 /**
  * Database class definition
  * @package chamilo.database
  */
 class Database {
-    
+
     /* Variable use only in the installation process to log errors. See the Database::query function */
     static $log_queries = false;
 
@@ -136,7 +132,7 @@ class Database {
 
     /**
      * A more generic method than the other get_main_xxx_table methods,
-     * This one returns the correct complete name of any table of the main 
+     * This one returns the correct complete name of any table of the main
      * database of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
@@ -145,14 +141,14 @@ class Database {
      */
     public static function get_main_table($short_table_name) {
         return self::format_table_name(
-          self::get_main_database(), 
+          self::get_main_database(),
           $short_table_name);
     }
 
     /**
 
      * A more generic method than the older get_course_xxx_table methods,
-     * This one can return the correct complete name of any course table of 
+     * This one can return the correct complete name of any course table of
      * which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
@@ -162,7 +158,7 @@ class Database {
      * - if you don't specify this, you work on the current course.
      */
     public static function get_course_table($short_table_name, $extra = null) {
-        //forces fatal errors so we can debug more easily        
+        //forces fatal errors so we can debug more easily
         if (!empty($extra)) {
             var_dump($extra);
             //@todo remove this
@@ -174,7 +170,7 @@ class Database {
     }
 
     /**
-     * This generic method returns the correct and complete name of any 
+     * This generic method returns the correct and complete name of any
      * statistic table of which you pass the short name as a parameter.
      * Please, define table names as constants in this library and use them
      * instead of directly using magic words in your tool code.
@@ -272,9 +268,9 @@ class Database {
      *	@author	Roan Embrechts
      *
      * 	@todo What's the use of this method. I think this is better removed.
-     * 		  There should be consistency in the variable names and the 
+     * 		  There should be consistency in the variable names and the
      *            use throughout the scripts
-     * 		  for the database name we should consistently use or db_name 
+     * 		  for the database name we should consistently use or db_name
      *            or database (db_name probably being the better one)
      */
     public static function generate_abstract_course_field_names($result_array) {
@@ -343,7 +339,7 @@ class Database {
      * @return int The number of rows in the given table.
      */
     public static function count_rows($table) {
-        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));   // 
+        $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));   //
         return $obj->n;
     }
 
@@ -400,7 +396,7 @@ class Database {
         if (!isset($parameters['client_flags'])) {
             $parameters['client_flags'] = 0;
         }
-        
+
         $persistent = isset($parameters['persistent']) ? $parameters['persistent'] : null;
         $server = isset($parameters['server']) ? $parameters['server'] : null;
         $username = isset($parameters['username']) ? $parameters['username'] : null;
@@ -415,7 +411,7 @@ class Database {
 
     /**
      * Returns error number from the last operation done on the database server.
-     * @param resource $connection (optional)	The database server connection, 
+     * @param resource $connection (optional)	The database server connection,
      * for detailed description see the method query().
      * @return int Returns the error number from the last database (operation, or 0 (zero) if no error occurred.
      */
@@ -677,25 +673,30 @@ class Database {
             $line = $file;
             $file = $connection;
             $connection = null;
-        }                
+        }
         //@todo remove this before the stable release
-        
+
         //Check if the table contains a c_ (means a course id)
         if (api_get_setting('server_type')==='test' && strpos($query, 'c_')) {
-        	//Check if the table contains inner joins 
-        	if (     
+        	//Check if the table contains inner joins
+        	if (
                 strpos($query, 'assoc_handle') === false &&
                 strpos($query, 'olpc_peru_filter') === false &&
                 strpos($query, 'allow_public_certificates') === false &&
-                strpos($query, 'DROP TABLE IF EXISTS') === false &&      
-                strpos($query, 'thematic_advance') === false &&  
-                strpos($query, 'thematic_plan') === false &&  
-                strpos($query, 'track_c_countries') === false &&                        
+                strpos($query, 'DROP TABLE IF EXISTS') === false &&
+                strpos($query, 'thematic_advance') === false &&
+                strpos($query, 'thematic_plan') === false &&
+                strpos($query, 'track_c_countries') === false &&
                 strpos($query, 'track_c_os') === false &&
                 strpos($query, 'track_c_providers') === false &&
                 strpos($query, 'track_c_referers') === false &&
                 strpos($query, 'track_c_browsers') === false &&
                 strpos($query, 'settings_current') === false &&
+                strpos($query, 'branch_sync') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_sync_log') === false &&
+                strpos($query, 'branch_transaction') === false &&
+                strpos($query, 'branch_transaction_status') === false &&
                 strpos($query, 'dokeos_classic_2D') === false &&
                 strpos($query, 'cosmic_campus') === false &&
                 strpos($query, 'static_') === false &&
@@ -704,7 +705,7 @@ class Database {
                 strpos($query, 'wcag_anysurfer_public_pages') === false &&
                 strpos($query, 'specific_field') === false &&
         	    strpos($query, 'down_doc_path') === false &&
-        		strpos($query, 'INNER JOIN') === false &&  
+        		strpos($query, 'INNER JOIN') === false &&
         		strpos($query, 'inner join') === false &&
         		strpos($query, 'left join') === false &&
         		strpos($query, 'LEFT JOIN') === false &&
@@ -715,18 +716,18 @@ class Database {
         		strpos($query, 'c_id') === false &&
         		strpos($query, 'create table') === false &&
         		strpos($query, 'CREATE TABLE') === false &&
-        		strpos($query, 'AUTO_INCREMENT') === false        	
+        		strpos($query, 'AUTO_INCREMENT') === false
         	) {
                 //@todo remove this
                 echo '<pre>';
                 $message = '<h4>Dev message: please add the c_id field in this query or report this error in support.chamilo.org </h4>';
-                $message .= $query;    
+                $message .= $query;
                 echo $message;
-                echo '</pre>';        	    
+                echo '</pre>';
                 //error_log($message);
-        	}        	
-        }        
-        
+        	}
+        }
+
         if (!($result = $use_default_connection ? @mysql_query($query) : @mysql_query($query, $connection))) {
             $backtrace = debug_backtrace(); // Retrieving information about the caller statement.
             if (isset($backtrace[0])) {
@@ -772,18 +773,18 @@ class Database {
                 $info .= '</pre>';
                 echo $info;
             }
-            
+
             if (isset(self::$log_queries) && self::$log_queries) {
                 error_log("----------------  SQL error ---------------- ");
                 error_log($query);
-                
+
                 error_log('error #'.self::errno($connection));
-                error_log('error: '.self::error($connection)); 
-                
-                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);                
+                error_log('error: '.self::error($connection));
+
+                $info = 'FILE: ' .(empty($file) ? ' unknown ' : $file);
                 $info .= ' +'.(empty($line) ? ' unknown ' : $line);
                 error_log($info);
-                
+
                 if (empty($type)) {
                     if (!empty($function)) {
                         $info = 'FUNCTION: ' . $function;
@@ -792,7 +793,7 @@ class Database {
                 } else {
                     if (!empty($class) && !empty($function)) {
                         $info = 'CLASS: ' . $class.' METHOD: '.$function;
-                        error_log($info);                        
+                        error_log($info);
                     }
                 }
                 error_log("---------------- end ----------------");
@@ -1005,7 +1006,7 @@ class Database {
         if ($_configuration['single_database']) {
             $table_name =  '`'.$database.'`.`'.$table.'`';
         } else {
-            $table_name =  '`'.$database.$_configuration['db_glue'].$table.'`'; 
+            $table_name =  '`'.$database.$_configuration['db_glue'].$table.'`';
         }
         return $table_name;
     }
@@ -1122,18 +1123,23 @@ class Database {
             return false;
         }
         $filtred_attributes = array();
-        foreach($attributes as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
         $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
-            $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
+            $sql    = 'INSERT INTO '.$table_name.' ('.implode(', ',$params).') VALUES ('.implode(', ',$values).')';
             $result = self::query($sql);
+            //error_log($sql);
             if ($show_query) {
-            	var_dump($sql);
+            	//var_dump($sql);
+                error_log($sql);
             }
-            return  self::get_last_insert_id();
+            if (!$result) {
+                error_log("Error in query: $sql");
+            }
+            return self::get_last_insert_id();
         }
         return false;
     }
@@ -1141,15 +1147,14 @@ class Database {
     /**
      * Experimental useful database finder
      * @todo lot of stuff to do here
-     * @todo known issues, it doesn't work when using LIKE conditions 
+     * @todo known issues, it doesn't work when using LIKE conditions
      * @example array('where'=> array('course_code LIKE "?%"'))
      * @example array('where'=> array('type = ? AND category = ?' => array('setting', 'Plugins'))
      * @example array('where'=> array('name = "Julio" AND lastname = "montoya"))
     */
-
     public static function select($columns, $table_name, $conditions = array(), $type_result = 'all', $option = 'ASSOC') {
         $conditions = self::parse_conditions($conditions);
-        
+
         //@todo we could do a describe here to check the columns ...
         $clean_columns = '';
         if (is_array($columns)) {
@@ -1161,12 +1166,12 @@ class Database {
                 $clean_columns = (string)$columns;
             }
         }
-
-        $sql    = "SELECT $clean_columns FROM $table_name $conditions";
+        $sql = "SELECT $clean_columns FROM $table_name $conditions";
         //var_dump($sql);
+
         $result = self::query($sql);
         $array = array();
-        //if (self::num_rows($result) > 0 ) {
+
         if ($type_result == 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {
@@ -1184,35 +1189,34 @@ class Database {
     /**
      * Parses WHERE/ORDER conditions i.e array('where'=>array('id = ?' =>'4'), 'order'=>'id DESC'))
      * @todo known issues, it doesn't work when using LIKE conditions example: array('where'=>array('course_code LIKE "?%"'))
-     * @param   array
+     * @param array
      * @todo lot of stuff to do here
     */
-    static function parse_conditions($conditions) {        
+    static function parse_conditions($conditions) {
         if (empty($conditions)) {
             return '';
         }
-        $return_value = $where_return = '';    
-        foreach ($conditions as $type_condition => $condition_data) {       
+        $return_value = $where_return = '';
+        foreach ($conditions as $type_condition => $condition_data) {
             if ($condition_data == false) {
                 continue;
             }
             $type_condition = strtolower($type_condition);
             switch ($type_condition) {
-                case 'where':            
-                    
-                    foreach ($condition_data as $condition => $value_array) {                       
+                case 'where':
+                    foreach ($condition_data as $condition => $value_array) {
                         if (is_array($value_array)) {
-                            $clean_values = array();                       
+                            $clean_values = array();
                             foreach($value_array as $item) {
                                 $item = Database::escape_string($item);
                                 $clean_values[]= $item;
                             }
                         } else {
                             $value_array = Database::escape_string($value_array);
-                            $clean_values = $value_array;                            
+                            $clean_values = $value_array;
                         }
 
-                        if (!empty($condition) && $clean_values != '') {                                                                                      
+                        if (!empty($condition) && $clean_values != '') {
                             $condition = str_replace('%',"'@percentage@'", $condition); //replace "%"
                             $condition = str_replace("'?'","%s", $condition);
                             $condition = str_replace("?","%s", $condition);
@@ -1221,25 +1225,25 @@ class Database {
                             $condition = str_replace("%s","'%s'", $condition);
                             $condition = str_replace("@-@","@%s@", $condition);
 
-                            //Treat conditons as string                            
-                            $condition = vsprintf($condition, $clean_values);                                                        
-                            $condition = str_replace('@percentage@','%', $condition); //replace "%"                            
+                            //Treat conditons as string
+                            $condition = vsprintf($condition, $clean_values);
+                            $condition = str_replace('@percentage@','%', $condition); //replace "%"
                             $where_return .= $condition;
-                        }                       
+                        }
                     }
-                                         
-                        
+
+
                     if (!empty($where_return)) {
                         $return_value = " WHERE $where_return" ;
                     }
                     break;
-                case 'order':                    
+                case 'order':
                     $order_array = $condition_data;
-                    
+
                     if (!empty($order_array)) {
                         // 'order' => 'id desc, name desc'
                         $order_array = self::escape_string($order_array);
-                        $new_order_array = explode(',', $order_array);                            
+                        $new_order_array = explode(',', $order_array);
                         $temp_value = array();
 
                         foreach($new_order_array as $element) {
@@ -1252,25 +1256,25 @@ class Database {
                                 $order = 'DESC';
                                 if (in_array($element[1], array('desc', 'asc'))) {
                                     $order = $element[1];
-                                }                            
-                                $temp_value[]= $element[0].' '.$order.' ';                                       
+                                }
+                                $temp_value[]= $element[0].' '.$order.' ';
                             } else {
                                 //by default DESC
-                                $temp_value[]= $element[0].' DESC ';                                       
+                                $temp_value[]= $element[0].' DESC ';
                             }
                         }
                         if (!empty($temp_value)) {
-                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);                                
+                            $return_value .= ' ORDER BY '.implode(', ', $temp_value);
                         } else {
                             //$return_value .= '';
-                        }                        
-                    }                    
+                        }
+                    }
                     break;
                 case 'limit':
                     $limit_array = explode(',', $condition_data);
-                    
+
                     if (!empty($limit_array)) {
-                        if (count($limit_array) > 1) {                            
+                        if (count($limit_array) > 1) {
                             $return_value .= ' LIMIT '.intval($limit_array[0]).' , '.intval($limit_array[1]);
                         }  else {
                             $return_value .= ' LIMIT '.intval($limit_array[0]);
@@ -1305,7 +1309,7 @@ class Database {
     /**
      * Experimental useful database update
      * @param	string	table name use Database::get_main_table
-     * @param	array	array with values to updates, keys are the fields in the database: Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya'; 
+     * @param	array	array with values to updates, keys are the fields in the database: Example: $params['name'] = 'Julio'; $params['lastname'] = 'Montoya';
      * @param	array	where conditions i.e array('id = ?' =>'4')
      * @todo lot of stuff to do here
      */
@@ -1316,9 +1320,9 @@ class Database {
             //Cleaning attributes
             $count = 1;
             foreach ($attributes as $key=>$value) {
-                
+
                 if (!is_array($value))
-                    
+
                 $value = self::escape_string($value);
                 $update_sql .= "$key = '$value' ";
                 if ($count < count($attributes)) {
@@ -1328,7 +1332,7 @@ class Database {
             }
             if (!empty($update_sql)) {
                 //Parsing and cleaning the where conditions
-                $where_return = self::parse_where_conditions($where_conditions);                
+                $where_return = self::parse_where_conditions($where_conditions);
                 $sql    = "UPDATE $table_name SET $update_sql $where_return ";
                 if ($show_query) { var_dump($sql); }
                 $result = self::query($sql);
@@ -1337,7 +1341,7 @@ class Database {
             }
         }
         return false;
-    }    
+    }
 
      /*
         DEPRECATED METHODS

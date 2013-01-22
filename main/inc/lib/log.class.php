@@ -44,9 +44,9 @@ class Log
             return true;
         }
 
-        $directory = api_get_path(LIBRARY_PATH) . 'symfony';
+        $directory = api_get_path(SYS_PATH) . 'vendor';
         if (!class_exists('Doctrine\Common\ClassLoader', false)) {
-            require_once $directory . '/Doctrine/Common/ClassLoader.php';
+            require_once $directory . '/doctrine/common/lib/Doctrine/Common/ClassLoader.php';
         }
 
         $loader = new Doctrine\Common\ClassLoader('Monolog', $directory);

@@ -11,8 +11,6 @@ $language_file='admin';
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'add_many_session_to_category_functions.lib.php';
-require_once api_get_path(LIBRARY_PATH).'sessionmanager.lib.php';
 
 $xajax = new xajax();
 $xajax -> registerFunction ('search_courses');

@@ -1067,20 +1067,8 @@ div.system_announcement {
 	margin-bottom: 10px;
 	background-color:#F9F9F9;
 }
-.session_course_item {
-	margin: 0px;
-	margin-bottom:20px;
-	font-size:135%;
-}
-.session_course_item .item_closed, .userportal-course-item-title .item_closed {
-     font-size:80%; 
-}
-.session_course_item .courses {
-	margin-bottom: 5px;
-	height:35px;
-}
-/*NAVIGATION MENU BAR*/
 
+/*NAVIGATION MENU BAR*/
 
 .menucaption {
 	font-size: 12px;

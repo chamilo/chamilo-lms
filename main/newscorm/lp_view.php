@@ -161,7 +161,7 @@ if (!isset($src)) {
                 //Prevents FF 3.6 + Adobe Reader 9 bug see BT#794 when calling a pdf file in a LP.
                 $file_info = parse_url($src);
                 $file_info = pathinfo($file_info['path']);
-                if (api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
+                if (isset($file_info['extension']) && api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')) {
                     $src = api_get_path(WEB_CODE_PATH).'newscorm/lp_view_item.php?lp_item_id='.$lp_item_id;
                 }
                 $_SESSION['oLP']->start_current_item(); // starts time counter manually if asset
@@ -206,6 +206,10 @@ if ($debug) {
     error_log('$_REQUEST[exeId]: '.intval($_REQUEST['exeId']));
     error_log('$lp_id: '.$lp_id);
     error_log('$_GET[lp_item_id]: '.intval($_GET['lp_item_id']));
+}
+
+if (!$_SESSION['oLP']->check_attempts()) {
+    api_not_allowed(true);
 }
 
 if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp_item_id'])) {
@@ -323,18 +327,6 @@ if (Database::num_rows($res_media) > 0) {
     }
 }
 
-/*
- *
- *    <?php  if (!empty($_SESSION['oLP']->scorm_debug) && api_is_platform_admin()) { //only show log  ?>
-                <!-- log message layout -->
-                <div id="lp_log_name" name="lp_log_name" class="lp_log" style="height:150px;overflow:auto;margin:4px">
-                    <div id="log_content"></div>
-                    <div id="log_content_cleaner" style="cursor: pointer; color:blue;"><?php echo get_lang('Clean'); ?></div>
-                </div>
-                <!-- end log message layout -->
-                <?php } ?>
- */
-
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
     if ($is_allowed_to_edit) {
@@ -345,7 +337,7 @@ echo '<div id="learning_path_main" style="width:100%;height:100%;">';
         $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
         //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
 
-        echo return_breadcrumb($interbreadcrumb, null, null);
+        echo $app['template']->return_breadcrumb($interbreadcrumb, null, null);
         echo '</div>';
     }
     echo '<div id="learning_path_left_zone" style="'.$display_none.'"> ';

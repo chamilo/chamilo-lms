@@ -16,7 +16,7 @@ require_once 'model.lib.php';
  */
 class UserGroup extends Model
 {
-    var $columns = array('id', 'name', 'description');
+    public $columns = array('id', 'name', 'description');
 
     public function __construct()
     {
@@ -71,7 +71,7 @@ class UserGroup extends Model
 
     /**
      * Gets a list of course ids by user group
-     * @param   int user group id
+     * @param   int     user group id
      * @return  array
      */
     public function get_courses_by_usergroup($id)
@@ -108,6 +108,7 @@ class UserGroup extends Model
             $course_id = intval($options['course_id']);
             unset($options['course_id']);
         }
+
         if (empty($course_id)) {
             return false;
         }
@@ -115,7 +116,7 @@ class UserGroup extends Model
                 FROM {$this->table} u
                 LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                 ON (u.id = urc.usergroup_id AND course_id = $course_id)
-        ";
+               ";
         $conditions = Database::parse_conditions($options);
         $sql .= $conditions;
         $result = Database::query($sql);
@@ -258,6 +259,7 @@ class UserGroup extends Model
      */
     function subscribe_courses_to_usergroup($usergroup_id, $list, $delete_groups = true)
     {
+
         $current_list = self::get_courses_by_usergroup($usergroup_id);
         $user_list = self::get_users_by_usergroup($usergroup_id);
 
@@ -291,6 +293,7 @@ class UserGroup extends Model
                         CourseManager::subscribe_user($user_id, $course_info['code']);
                     }
                 }
+
                 $params = array('course_id' => $course_id, 'usergroup_id' => $usergroup_id);
                 Database::insert($this->usergroup_rel_course_table, $params);
             }
@@ -372,7 +375,6 @@ class UserGroup extends Model
                     SessionManager::suscribe_users_to_session($session_id, $new_items, null, false);
                 }
             }
-
             foreach ($new_items as $user_id) {
                 //Adding courses
                 if (!empty($course_list)) {

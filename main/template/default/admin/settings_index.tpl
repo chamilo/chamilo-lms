@@ -1,3 +1,5 @@
+{% extends "default/layout/layout_1_col.tpl" %}
+{% block content %}
 <script>
 $(function() {
     //$("#settings").tabs();
@@ -14,32 +16,33 @@ $(function() {
         <li><a href="#tabs-5">Aenean lacinia</a></li>
         <li><a href="#tabs-6">Aenean lacinia</a></li>
         <li><a href="#tabs-7">Aenean lacinia</a></li>
-        <li><a href="#tabs-8">Aenean lacinia</a></li>        
+        <li><a href="#tabs-8">Aenean lacinia</a></li>
     </ul>
-    -->        
+    -->
     <div class="row">
     {% for block_item in blocks %}
         <div id="tabs-{{loop.index}}" class="span6">
             <div class="well_border">
-                <h4>{{block_item.icon}} {{block_item.label}}</h4>                
+                <h4>{{block_item.icon}} {{block_item.label}}</h4>
                 <div style="list-style-type:none">
                     {{ block_item.search_form }}
-                </div>                           
+                </div>
                 {% if block_item.items is not null %}
                     <ul>
     		    	{% for url in block_item.items %}
-    		    		<li><a href="{{url.url}}">{{ url.label }}</a></li>	    	
+    		    		<li><a href="{{url.url}}">{{ url.label }}</a></li>
     				{% endfor %}
-                    </ul>    	
+                    </ul>
                 {% endif %}
-                
+
                 {% if block_item.extra is not null %}
                     <div>
                     {{ block_item.extra }}
                     </div>
-                {% endif %}                
+                {% endif %}
             </div>
-        </div>        
+        </div>
     {% endfor %}
     </div>
 </div>
+{% endblock %}

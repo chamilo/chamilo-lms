@@ -1,8 +1,8 @@
 {% block header %}
-{% include "default/layout/main_header.tpl" %}    
+{% include "default/layout/main_header.tpl" %}
 {% endblock %}
 
-{% block body %}	
+{% block body %}
 	{% if show_sniff == 1 %}
 	 	{% include "default/layout/sniff.tpl" %}
 	{% endif %}
@@ -17,4 +17,5 @@
         </div> <!-- end of #wrapper section -->
     {% endif %}
 {% include "default/layout/main_footer.tpl" %}
+{{ xhprof }}
 {% endblock %}

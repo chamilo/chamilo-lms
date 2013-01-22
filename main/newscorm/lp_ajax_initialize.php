@@ -36,6 +36,7 @@ require_once 'aiccItem.class.php';
  * @param   integer New item ID
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item) {
+    global $debug;
     $return = '';
     if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
     /*$item_id may be one of:
@@ -66,6 +67,12 @@ function initialize_item($lp_id, $user_id, $view_id, $next_item) {
             error_log("lpobject was not set");
         }
     }
+
+    $check_attempts = $mylp->check_item_attempts($next_item);
+    if (!$check_attempts) {
+        return false;
+    }
+
     $mylp->set_current_item($next_item);
     if ($debug > 1) { error_log('In initialize_item() - new item is '.$next_item, 0); }
     $mylp->start_current_item(true);

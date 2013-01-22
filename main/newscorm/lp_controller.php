@@ -312,6 +312,21 @@ switch ($action) {
             }
         }
         break;
+    case 'add_lp_category':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        require 'lp_add_category.php';
+        break;
+    case 'delete_lp_category':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed(true);
+        }
+        if (isset($_REQUEST['id'])) {
+            learnpath::delete_category($_REQUEST['id']);
+        }
+        require 'lp_list.php';
+        break;
     case 'add_lp':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -340,7 +355,7 @@ switch ($action) {
                 	$expired_on   = null;
                 }
 
-                $new_lp_id = learnpath::add_lp(api_get_course_id(), Security::remove_XSS($_REQUEST['lp_name']), '', 'chamilo', 'manual', '', $publicated_on, $expired_on);
+                $new_lp_id = learnpath::add_lp(api_get_course_id(), Security::remove_XSS($_REQUEST['lp_name']), '', 'chamilo', 'manual', '', $publicated_on, $expired_on, $_REQUEST['category_id']);
 
                 if (is_numeric($new_lp_id)) {
                     // TODO: Maybe create a first module directly to avoid bugging the user with useless queries
@@ -674,6 +689,8 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
+            $_SESSION['oLP']->set_max_attempts($_REQUEST['max_attempts']);
+
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
             	$publicated_on  = $_REQUEST['publicated_on'];
             	$publicated_on  = $publicated_on['Y'].'-'.$publicated_on['F'].'-'.$publicated_on['d'].' '.$publicated_on['H'].':'.$publicated_on['i'].':00';
@@ -687,7 +704,7 @@ switch ($action) {
             } else {
             	$expired_on   = null;
             }
-
+            $_SESSION['oLP']->set_category_id($_REQUEST['category_id']);
             $_SESSION['oLP']->set_modified_on();
             $_SESSION['oLP']->set_publicated_on($publicated_on);
             $_SESSION['oLP']->set_expired_on($expired_on);

@@ -53,8 +53,8 @@ header #logo {
 }
 
 .subnav {
-    font-size: 11px;
-    font-weight: bold;
+    /*font-size: 11px;
+    font-weight: bold;*/
 }
 
 .subnav .btn-navbar {
@@ -251,17 +251,13 @@ form .formw input {
     margin-top: 2px;
 }
 
+#accept_licence, #checkbox {
+  margin-right: 5px;
+  margin-top: -1px;
+}
+
 /* end chamilo forms fixes */
 
-#top_main_content .span3 {
-  float: left;
-}
-#top_main_content .span9 {
-  float: left;
-}
-#top_main_content .span6 {
-  width: 460px;
-}
 
 
 /* New changes Chamilo 1.9 */
@@ -482,14 +478,7 @@ a.tag {
 
 /* Admin index.php */
 #settings .span6 {
-    min-height: 260px;
-    width: 47%;
-}
-#settings .span6 .well_border{
-    min-height: 250px;
-}
-#settings .form-search .span3 {
-    float: left;
+    min-height: 320px;
 }
 
 /* user_portal course status icon */
@@ -505,6 +494,7 @@ a.tag {
     margin-bottom: 5px;
     height: 30px;
 }
+
 /* user_portal session list */
 .session_course_item .courses {
     margin-bottom: 5px;
@@ -1994,7 +1984,7 @@ div.image-social-content center.friend {
     margin-right:4px;
 }
 
-
+/*
 textarea {
     border:1px solid #CCCCCC;
     padding:5px;
@@ -2003,7 +1993,8 @@ textarea {
     border-radius:5px;
     color:#666666;
 }
-
+*/
+/*
 select {
     color:#555;
     border: 1px solid #CCC;
@@ -2014,7 +2005,7 @@ select {
     -moz-border-radius:5px;
     -webkit-border-radius:5px;
     border-radius:5px;
-}
+}*/
 
 /* Fixes the FB input*/
 input.maininput:focus {
@@ -2029,6 +2020,17 @@ input.maininput:focus {
 }
 
 #course_tools .content {
+    text-align:center;
+    margin-bottom: 20px;
+}
+
+/* session.php */
+#session_course_list .big_icon {
+    padding:10px;
+    text-align:center;
+}
+
+#session_course_list .content {
     text-align:center;
     margin-bottom: 20px;
 }
@@ -2082,18 +2084,7 @@ input.maininput:focus {
     padding: 18px;
 }
 
-/* Makes the course elements more readable */
-.userportal-course-item {
-
-}
-
-.session_course_item {
-    padding: 6px 0px 6px 5px ;
-}
-
 /* LP tool*/
-
-
 #lp_overview .thumbnail {
     text-align: center;
 }
@@ -2363,6 +2354,9 @@ div.admin_section h4 {
     height:5px;
 }
 
+#question_list .ui-state-highlight{
+    height: 80px;
+}
 
 .ui-state-highlight {
     height:25px;
@@ -2513,7 +2507,6 @@ div.admin_section h4 {
 .question_options {
     min-height:150px;
 }
-
 .question_options label {
     margin-bottom: 14px;
     display:block;
@@ -2532,7 +2525,6 @@ div.admin_section h4 {
     /* margin-right:10px; */
 
 }
-
 .question_description {
     padding: 0px;
 }
@@ -2611,7 +2603,7 @@ div.admin_section h4 {
 }
 
 .ribbon .rib {
-    height: 28px;
+    height: 30px;
     width: 120px;
     display: block;
     line-height: 1.3;
@@ -2635,7 +2627,6 @@ div.admin_section h4 {
 
     border-radius: 5px 2px 0 0;
     box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-
     float: left;
 }
 
@@ -2645,6 +2636,7 @@ div.admin_section h4 {
     float:left;
     line-height: 16px;
     padding-top: 5px;
+    margin-top: 0px;
 }
 
 .ribbon .rib-total {
@@ -2660,9 +2652,9 @@ div.admin_section h4 {
     background-image: -o-linear-gradient(top, #992800, #C83F25);
     background-image: -moz-linear-gradient(top, #992800, #C83F25);
     background-image: linear-gradient(top, #992800, #C83F25);
+
     border-top: 1px solid #C56E5B;
     border-bottom: 1px solid #7A290F;
-
     float: left;
 }
 
@@ -2940,9 +2932,11 @@ form .formw .freeze {
 .label_tag.admin_event {
     background:red;
 }
+
 .label_tag.course_event {
     background:#458B00;
 }
+
 .label_tag.group_event {
     background:#A0522D;
 }
@@ -3086,7 +3080,7 @@ form .formw .freeze {
     padding: 5px 5px 0px 5px;
 }
 .tableFloatingHeaderOriginal th, .tableWithFloatingHeader th{
-    height:80px;
+    height:40px;
 }
 
 /* jsPlumb */
@@ -3444,8 +3438,6 @@ a:active{
     display: inline-block;
     margin-right: 4px;
 }
-
-
 #online_grid_container .thumbnail .caption {
     text-align:center;
 }
@@ -3466,10 +3458,6 @@ a:active{
 
 }
 
-/*#homepage, #hot_courses, #announcements {*/
-#top_main_content section{
-    /* margin-left: 5px; */
-}
 .welcome_course li {
     float:left;
     list-style-type: none;
@@ -3876,7 +3864,7 @@ a.forum_group_link {
 }
 
 #main_content .course_item {
-    padding: 5px 0px 5px 0px;
+    padding: 0px 0px 16px 0px;
 }
 
 /* actions */
@@ -3973,10 +3961,6 @@ footer {
 
 
 /* Default LP left column values */
-
-#learning_path_breadcrumb_zone {
-
-}
 
 #learning_path_left_zone {
     float:left;
@@ -4740,17 +4724,20 @@ i.size-32.icon-new-work{
 #filepaths input{
     margin-bottom:5px;
 }
-.section-social #main_content .span3 {
-  float: left;
+
+/* Fixing z-index */
+#ui-datepicker-div {
+    z-index: 1005 !important;
 }
-.section-social #main_content .span9 {
-  float: right;
+
+
+.exercise_save_mini_message {
+    padding-left: 5px;
 }
 
 .xdebug-error {
     margin-top: 20px;
 }
-
 .multiple_select_header {
     height: 35px;
     margin-bottom: 15px;

@@ -539,7 +539,7 @@ function api_get_timezones() {
  * @return string The timezone chosen
  */
 function _api_get_timezone() {
-    global $_user;
+    $user_id = api_get_user_id();
     // First, get the default timezone of the server
     $to_timezone = date_default_timezone_get();
     // Second, see if a timezone has been chosen for the platform
@@ -547,11 +547,14 @@ function _api_get_timezone() {
     if ($timezone_value != null) {
         $to_timezone = $timezone_value;
     }
+
     // If allowed by the administrator
     $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
+
     if ($use_users_timezone == 'true') {
         // Get the timezone based on user preference, if it exists
-        $timezone_user = UserManager::get_extra_user_data_by_field($_user['user_id'],'timezone');
+        $timezone_user = UserManager::get_extra_user_data_by_field($user_id, 'timezone');
+
         if (isset($timezone_user['timezone']) && $timezone_user['timezone'] != null) {
             $to_timezone = $timezone_user['timezone'];
         }
@@ -571,6 +574,7 @@ function _api_get_timezone() {
  */
 function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false) {
     $from_timezone = _api_get_timezone();
+
     $to_timezone = 'UTC';
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
         if ($return_null_if_invalid_date) {
@@ -666,6 +670,8 @@ function api_strtotime($time, $timezone = null) {
     date_default_timezone_set($system_timezone);
     return $timestamp;
 }
+
+
 
 /**
  * Returns formated date/time, correspondent to a given language.

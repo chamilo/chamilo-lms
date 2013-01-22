@@ -10,14 +10,15 @@
  */
 
 require_once 'back_compat.inc.php';
-
 $_SESSION['whereami'] = 'lp/impress';
 $this_section = SECTION_COURSES;
+
 
 //To prevent the template class
 $show_learnpath = true;
 
 api_protect_course_script();
+
 
 $lp_id = intval($_GET['lp_id']);
 
@@ -66,7 +67,8 @@ foreach ($list as $toc) {
 }
 
 //Setting the template
-$tpl = new Template($tool_name, false, false, true);
+//$tpl = new Template($tool_name, false, false, true);
+$tpl = new Template($tool_name);
 $tpl->assign('html', $html);
 $content = $tpl->fetch('default/learnpath/impress.tpl');
 $tpl->assign('content', $content);

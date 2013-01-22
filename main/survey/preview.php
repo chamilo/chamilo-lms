@@ -65,14 +65,9 @@ Display :: display_header(get_lang('SurveyPreview'));
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($survey_id, false);
 
-// Only a course admin is allowed to preview a survey: you are NOT a course admin => error message
-
-/*
-if (!api_is_allowed_to_edit(false, true)) {
-	Display :: display_error_message(get_lang('NotAllowed'), false);
-}*/
-
 $counter_question = 0;
+$questions = array();
+
 // Only a course admin is allowed to preview a survey: you are a course admin
 if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] == 'true') || api_is_allowed_to_session_edit(false, true)) {
 	// Survey information
@@ -101,7 +96,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		$questions_displayed = array();
 		$paged_questions = array();
 		$counter = 0;
-		$sql = "SELECT * FROM $table_survey_question 
+		$sql = "SELECT * FROM $table_survey_question
 		        WHERE c_id = $course_id AND survey_id = '".Database::escape_string($survey_id)."'
 				ORDER BY sort ASC";
 		$result = Database::query($sql);
@@ -117,15 +112,15 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
         } else {
             $questions_exists = false;
         }
-		
+
 		if (array_key_exists($_GET['show'], $paged_questions)) {
 			$sql = "SELECT survey_question.question_id, survey_question.survey_id, survey_question.survey_question, survey_question.display, survey_question.sort, survey_question.type, survey_question.max_value,
 							survey_question_option.question_option_id, survey_question_option.option_text, survey_question_option.sort as option_sort
 					FROM $table_survey_question survey_question LEFT JOIN $table_survey_question_option survey_question_option
-					ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id 
-					WHERE 	survey_question.survey_id = '".Database::escape_string($survey_id)."' AND 
-							survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND							
-							survey_question.c_id =  $course_id 
+					ON survey_question.question_id = survey_question_option.question_id AND survey_question_option.c_id = $course_id
+					WHERE 	survey_question.survey_id = '".Database::escape_string($survey_id)."' AND
+							survey_question.question_id IN (".Database::escape_string(implode(',',$paged_questions[$_GET['show']])).") AND
+							survey_question.c_id =  $course_id
 					ORDER BY survey_question.sort, survey_question_option.sort ASC";
 
 			$result = Database::query($sql);
@@ -162,7 +157,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 	}
 	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show.'">';
 
-	if (is_array($questions) && count($questions) > 0) {
+	if (isset($questions) && is_array($questions) && count($questions) > 0) {
 		foreach ($questions as $key => & $question) {
 			$ch_type = 'ch_'.$question['type'];
 			$display = new $ch_type;

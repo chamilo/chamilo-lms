@@ -21,7 +21,6 @@ require '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 $this_section = SECTION_COURSES;
 
@@ -104,7 +103,12 @@ $possible_users = array();
 foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
 }
-$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
+
+$list = UserManager::generate_user_group_array(api_get_course_id(), api_get_session_id());
+
+$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $list, 'style="width: 250px; height: 200px;"');
+
+//$users = $form->addElement('advmultiselect', 'course_users', get_lang('CourseUsers'), $possible_users, 'style="width: 250px; height: 200px;"');
 $users->setElementTemplate('
 {javascript}
 <table{class}>
@@ -143,13 +147,10 @@ $form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAll
 
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'class="save"');
+
 // The rules (required fields)
-/*if ($survey_data['send_mail'] == 0) {
-    $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
-}*/
 $portal_url = api_get_path(WEB_PATH);
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$url = api_get_access_url($access_url_id);
@@ -161,7 +162,7 @@ if ($_configuration['multiple_access_urls']) {
 $auto_survey_link = $portal_url.'main/survey/fillsurvey.php?course='.$_course['sysCode'].'&invitationcode=auto&scode='.$survey_data['survey_code'];
 
 $form->addElement('label', null, get_lang('AutoInviteLink'));
-$form->addElement('label', null, $auto_survey_link);
+$form->addElement('label', null, "<pre>$auto_survey_link</pre>");
 
 if ($form->validate()) {
    	$values = $form->exportValues();
@@ -184,11 +185,13 @@ if ($form->validate()) {
             return;
         }
     }
+
     // Save the invitation mail
 	SurveyUtil::save_invite_mail($values['mail_text'], $values['mail_title'], !empty($survey_data['invite_mail']));
 	// Saving the invitations for the course users
 	$count_course_users = SurveyUtil::save_invitations($values['course_users'], $values['mail_title'],
     $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+
 	// Saving the invitations for the additional users
 	$values['additional_users'] = $values['additional_users'].';'; 	// This is for the case when you enter only one email
 	$temp = str_replace(',', ';', $values['additional_users']);		// This is to allow , and ; as email separators
@@ -201,12 +204,9 @@ if ($form->validate()) {
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-    $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
-	// Counting the number of people that are invited
-	$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
-	$result = Database::query($sql);
-	$row = Database::fetch_array($result);
-	$total_invited = $row['invited'];
+
+    $total_invited = count(SurveyUtil::get_invitations($survey_data['code']));
+
     if ($total_invited > 0) {
     	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
     	$message .= get_lang('HaveAnswered').' ';
@@ -227,6 +227,8 @@ if ($form->validate()) {
 	}
 	$defaults['mail_title'] = $survey_data['mail_subject'];
 	$defaults['send_mail'] = 1;
+
+    $defaults['course_users'] = array_keys(UserManager::transform_user_group_array($defaults['course_users'], $defaults['course_groups'], true, true));
 
 	$form->setDefaults($defaults);
     $form->display();

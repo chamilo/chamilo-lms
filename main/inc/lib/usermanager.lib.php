@@ -11,7 +11,7 @@
  * @package chamilo.include.user
  */
 class UserManager {
-    public $columns = array(
+    static public $columns = array(
         'user_id',
         'lastname',
         'firstname',

@@ -99,6 +99,8 @@ if ($is_allowed_to_edit) {
     echo '</div>';
 }
 
+$token = Security::get_token();
+
 /* DISPLAY SCORM LIST */
 $list = new LearnpathList(api_get_user_id());
 $flat_list = $list->get_flat_list();
@@ -206,9 +208,7 @@ if (!empty($flat_list)) {
 
         $dsp_desc = '';
         $dsp_export = '';
-        $dsp_edit = '';
         $dsp_build = '';
-        $dsp_edit_close = '';
         $dsp_delete = '';
         $dsp_visible = '';
         $dsp_default_view = '';
@@ -225,6 +225,8 @@ if (!empty($flat_list)) {
 
         $dsp_edit = '<td class="td_actions">';
         $dsp_edit_close = '</td>';
+
+        $token_parameter = "&sec_token=$token";
 
         if ($is_allowed_to_edit) {
 
@@ -297,24 +299,24 @@ if (!empty($flat_list)) {
                 $dsp_reinit = Display::return_icon('reload_na.png', get_lang('AllowMultipleAttempts'), '', ICON_SIZE_SMALL);
             }
 
-            /* FUll screen VIEW */
+            /* SCREEN LP VIEW */
             if ($current_session == $details['lp_session']) {
 
                 switch ($details['lp_view_mode']) {
                     case 'fullscreen':
-                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">'.
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.$token_parameter.'">'.
                             Display::return_icon('view_fullscreen.png', get_lang('ViewModeFullScreen'), '', ICON_SIZE_SMALL).'</a>';
                         break;
                     case 'embedded':
-                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">'.
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.$token_parameter.'">'.
                             Display::return_icon('view_left_right.png', get_lang('ViewModeEmbedded'), '', ICON_SIZE_SMALL).'</a>';
                         break;
                     case 'embedframe':
-                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">'.
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.$token_parameter.'">'.
                             Display::return_icon('view_nofullscreen.png', get_lang('ViewModeEmbedFrame'), '', ICON_SIZE_SMALL).'</a>';
                         break;
                     case 'impress':
-                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">'.
+                        $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.$token_parameter.'">'.
                             Display::return_icon('window_list_slide.png', get_lang('ViewModeImpress'), '', ICON_SIZE_SMALL).'</a>';
                         break;
                 }
@@ -366,6 +368,7 @@ if (!empty($flat_list)) {
             }
 
             //if (api_get_setting('pdf_export_watermark_enable') == 'true') {
+            //Export to PDF
             $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">
 				  '.Display::return_icon('pdf.png', get_lang('ExportToPDFOnlyHTMLAndImages'), '', ICON_SIZE_SMALL).'</a>';
             //}

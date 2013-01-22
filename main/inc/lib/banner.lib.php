@@ -504,7 +504,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
                 $navigation_item['title'] = get_lang('Gallery');
             }
             //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
-
             $navigation_item['title'] = cut($navigation_item['title'], MAX_LENGTH_BREADCRUMB);
             $navigation_item['title'] = Security::remove_XSS($navigation_item['title']);
             $navigation[] = $navigation_item;
@@ -539,7 +538,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
 
     $final_navigation = array();
     $counter = 0;
-
     foreach ($navigation as $index => $navigation_info) {
         if (!empty($navigation_info['title'])) {
             if ($navigation_info['url'] == '#') {
@@ -560,17 +558,13 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             $view_as_student_link = api_display_tool_view_option();
         }
     }
-
     if (!empty($final_navigation)) {
         $lis = '';
         $i = 0;
-        //$home_link = Display::url(Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('Homepage'), array('align'=>'middle')), api_get_path(WEB_PATH), array('class'=>'home'));
-        //$lis.= Display::tag('li', Display::url(get_lang('Homepage').'<span class="divider">/</span>', api_get_path(WEB_PATH)));
         $final_navigation_count = count($final_navigation);
 
         if (!empty($final_navigation)) {
             // $home_link.= '<span class="divider">/</span>';
-
             if (!empty($home_link)) {
                 $lis.= Display::tag('li', $home_link);
             }

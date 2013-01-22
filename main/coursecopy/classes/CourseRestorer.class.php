@@ -1159,7 +1159,7 @@ class CourseRestorer
 					$new_id = -1;
 				}
 
-				$this->course->resources[RESOURCE_QUIZ][$id]->obj->destination_id = $new_id;
+				$this->course->resources[RESOURCE_QUIZ][$id]->destination_id = $new_id;
 
 				$order = 0;
                 if (!empty($quiz->question_ids)) {

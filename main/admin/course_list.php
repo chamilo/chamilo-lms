@@ -105,7 +105,8 @@ function get_course_data($from, $number_of_items, $column, $direction) {
     $courses = array ();
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
-        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.Display::label($course['visual_code'], 'info');
+        $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
+        $course[1] = get_course_visibility_icon($course[8]).'<a href="'.api_get_path(WEB_COURSE_PATH).$course[9].'/index.php">'.$course[1].'</a> '.$show_visual_code;
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course_rem = array($course[0], $course[1], $course[2], $course[3], $course[4], $course[5], $course[6], $course[7]);

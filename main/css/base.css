@@ -171,6 +171,11 @@ header {
     margin-bottom: 0px;
 }
 
+.breadcrumb a, .breadcrumb li {
+    text-shadow:none;
+    font-size: 13px;
+}
+
 /* To fix the increase/decrease buttons */
 label, input, button, select, textarea, p {
     font-size: inherit;

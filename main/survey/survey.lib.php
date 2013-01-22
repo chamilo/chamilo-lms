@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * Survey manager class
+ *
  * @package chamilo.survey
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
@@ -21,11 +23,19 @@ $htmlHeadXtra[] = '<script>
 		  setFocus();
 		});
 </script>';
-/**
- * Survey manager class
- * @package chamilo.survey
- */
+
 class survey_manager {
+
+    public static function delete_all_survey_invitations_by_user($user_id) {
+        $user_id = intval($user_id);
+
+        if (empty($user_id)) {
+            return false;
+        }
+        $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
+		$sql = "DELETE FROM $table_survey_invitation WHERE user = '$user_id'";
+		Database::query($sql);
+    }
 
     public static function get_surveys($course_code, $session_id = 0) {
         $table_survey = Database :: get_course_table(TABLE_SURVEY);

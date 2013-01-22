@@ -270,7 +270,7 @@ class UserManager
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
         $usergroup_rel_user = Database :: get_main_table(TABLE_USERGROUP_REL_USER);
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
+        //$table_class_user = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
         $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
         $table_admin = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $table_session_user = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
@@ -339,10 +339,9 @@ class UserManager
         $sql = 'DELETE FROM '.$gradebook_results_table.' WHERE user_id = '.$user_id;
         Database::query($sql);
 
-        $user = Database::fetch_array($res);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $sqlv = "DELETE FROM $t_ufv WHERE user_id = $user_id";
-        $resv = Database::query($sqlv);
+        Database::query($sqlv);
 
         require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
         if (api_get_multiple_access_url()) {
@@ -367,9 +366,13 @@ class UserManager
             //Delete user from friend lists
             SocialManager::remove_user_rel_user($user_id, true);
         }
+
+        //Removing survey invitation
+        survey_manager::delete_all_survey_invitations_by_user($user_id);
+
         // Delete students works
         $sqlw = "DELETE FROM $table_work WHERE user_id = $user_id";
-        $resw = Database::query($sqlw);
+        Database::query($sqlw);
         unset($sqlw);
         // Add event to system log
         $user_id_manager = api_get_user_id();

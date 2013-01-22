@@ -18,16 +18,14 @@ define('FRAME', 'message');
 $language_file = array('chat');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course = api_get_course_id();
-$session_id = intval($_SESSION['id_session']);
-$group_id 	= intval($_SESSION['_gid']);
+$session_id = api_get_session_id();
+$group_id 	= api_get_group_id();
 
 // Juan Carlos Raña inserted smileys and self-closing window.
-
 ?>
-<script type="text/javascript">
+<script >
 function insert_smile(text) {
 	if (text.createTextRange) {
 		text.smile = document.selection.createRange().duplicate();
@@ -96,22 +94,9 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	}
 	$chat_path = $document_path.$basepath_chat.'/';
 
-	$TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	$course_id = api_get_course_int_id();
-
 	if (!is_dir($chat_path)) {
 		if (is_file($chat_path)) {
 			@unlink($chat_path);
-		}
-		if (!api_is_anonymous()) {
-			@mkdir($chat_path, api_get_permissions_for_new_directories());
-			// save chat files document for group into item property
-			if (!empty($group_id)) {
-				$doc_id = add_document($_course,$basepath_chat, 'folder', 0, 'chat_files');
-				$sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-						VALUES ($course_id, 'document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
-				Database::query($sql);
-			}
 		}
 	}
 
@@ -159,7 +144,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	$emoticon_img19  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_question.gif" alt="'.get_lang('Question').'" title="'.get_lang('Question').'" />';
 	$emoticon_text20 = '0-';
 	$emoticon_img20  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_idea.gif" alt="'.get_lang('Idea').'" title="'.get_lang('Idea').'" />';
-  //
+
 	$emoticon_text201 = '*';
 	$emoticon_img201  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/waiting.gif" alt="'.get_lang('AskPermissionSpeak').'" title="'.get_lang('AskPermissionSpeak').'" />';
 	$emoticon_text202 = ':speak:';
@@ -211,8 +196,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		if (!api_is_anonymous()) {
 			if (!empty($message)) {
 				$message = make_clickable($message);
-
-				if (!file_exists($chat_path.$basename_chat.'.log.html')) {
+                if (!file_exists($chat_path.$basename_chat.'.log.html')) {
 					$doc_id = add_document($_course, $basepath_chat.'/'.$basename_chat.'.log.html', 'file', 0, $basename_chat.'.log.html');
 
 					api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'DocumentAdded', $_user['user_id'], $group_id, null, null, null, $session_id);
@@ -251,7 +235,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
         <textarea name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
-            <button type="submit" value="<?php echo get_lang('Send'); ?>" class="background_submit"><?php echo get_lang('Send'); ?></button>
+            <button type="submit" value="<?php echo get_lang('Send'); ?>" class="btn"><?php echo get_lang('Send'); ?></button>
         </td>
 	</tr>
     <tr>

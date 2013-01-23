@@ -38,6 +38,15 @@ define('ANONYMOUS', 6);
  * the teacher through HTMLPurifier */
 define('COURSEMANAGERLOWSECURITY', 10);
 
+//Soft user status
+define('PLATFORM_ADMIN', 11);
+define('SESSION_COURSE_COACH', 12);
+define('SESSION_GENERAL_COACH', 13);
+define('COURSE_STUDENT', 14);   //student subscribed in a course
+define('SESSION_STUDENT', 15);  //student subscribed in a session course
+define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
+
+
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
@@ -6194,8 +6203,223 @@ function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
     }
 }
 
-
 function api_get_security_key() {
     global $_configuration;
     return $_configuration['security_key'];
+}
+
+function api_get_datetime_picker_js($htmlHeadXtra) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+
+    $isocode = api_get_language_isocode();
+    if ($isocode != 'en') {
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+    }
+    return $htmlHeadXtra;
+}
+
+
+function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
+    $user_roles = array();
+    /*$user_info = api_get_user_info($user_id);
+    $user_roles[] = $user_info['status'];*/
+
+    $url_id = api_get_current_access_url_id();
+    if (api_is_platform_admin_by_id($user_id, $url_id)) {
+        $user_roles[] = PLATFORM_ADMIN;
+    }
+
+    /*if (api_is_drh()) {
+        $user_roles[] = DRH;
+    }*/
+
+    if (!empty($session_id)) {
+        if (SessionManager::user_is_general_coach($user_id, $session_id)) {
+            $user_roles[] = SESSION_GENERAL_COACH;
+        }
+    }
+
+    if (!empty($course_code)) {
+        if (empty($session_id)) {
+            if (CourseManager::is_course_teacher($user_id, $course_code)) {
+                $user_roles[] = COURSEMANAGER;
+            }
+            if (CourseManager::get_tutor_in_course_status($user_id, $course_code)) {
+                $user_roles[] = COURSE_TUTOR;
+            }
+
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                $user_roles[] = COURSE_STUDENT;
+            }
+        } else {
+            $user_status_in_session = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
+
+            if (!empty($user_status_in_session)) {
+                if ($user_status_in_session == 0) {
+                    $user_roles[] = SESSION_STUDENT;
+                }
+                if ($user_status_in_session == 2) {
+                    $user_roles[] = SESSION_COURSE_COACH;
+                }
+            }
+
+            /*if (api_is_course_session_coach($user_id, $course_code, $session_id)) {
+               $user_roles[] = SESSION_COURSE_COACH;
+            }*/
+        }
+    }
+    return $user_roles;
+}
+
+function api_get_roles_to_string($roles) {
+    $role_names = array();
+    if (!empty($roles)) {
+        foreach ($roles as $role) {
+            $role_names[] = get_status_from_code($role);
+        }
+    }
+    if (!empty($role_names)) {
+        return implode(', ', $role_names);
+    }
+    return null;
+}
+
+function role_actions() {
+    return array(
+        'course' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        ),
+        'admin' => array(
+            'create',
+            'read',
+            'edit',
+            'delete'
+        )
+    );
+}
+
+function api_coach_can_edit_view_results($course_code = null, $session_id = null) {
+    $user_id = api_get_user_id();
+
+    if (empty($course_code)) {
+        $course_code = api_get_course_id();
+    }
+
+    if (empty($session_id)) {
+        $session_id = api_get_session_id();
+    }
+
+    if (api_is_platform_admin()) {
+        return true;
+    }
+
+    $roles = api_detect_user_roles($user_id, $course_code, $session_id);
+
+    if (in_array(SESSION_COURSE_COACH, $roles)) {
+        //return api_get_setting('session_tutor_reports_visibility') == 'true';
+        return true;
+    } else {
+        if (in_array(COURSEMANAGER, $roles)) {
+            return true;
+        }
+        return false;
+    }
+}
+
+function api_get_js_simple($file) {
+    return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+}
+
+
+function api_set_settings_and_plugins() {
+    global $_configuration;
+    //error_log('Loading settings from DB');
+    $_setting = array();
+    $_plugins = array();
+
+    // access_url == 1 is the default chamilo location
+    $settings_by_access_list = array();
+    $access_url_id = api_get_current_access_url_id();
+    if ($access_url_id != 1) {
+        $url_info = api_get_access_url($_configuration['access_url']);
+        if ($url_info['active'] == 1) {
+            $settings_by_access = & api_get_settings(null, 'list', $_configuration['access_url'], 1);
+            foreach ($settings_by_access as & $row) {
+                if (empty($row['variable'])) {
+                    $row['variable'] = 0;
+                }
+                if (empty($row['subkey'])) {
+                    $row['subkey'] = 0;
+                }
+                if (empty($row['category'])) {
+                    $row['category'] = 0;
+                }
+                $settings_by_access_list[$row['variable']][$row['subkey']][$row['category']] = $row;
+            }
+        }
+    }
+
+    $result = api_get_settings(null, 'list', 1);
+
+    foreach ($result as & $row) {
+        if ($access_url_id != 1) {
+            if ($url_info['active'] == 1) {
+                $var = empty($row['variable']) ? 0 : $row['variable'];
+                $subkey = empty($row['subkey']) ? 0 : $row['subkey'];
+                $category = empty($row['category']) ? 0 : $row['category'];
+            }
+
+            if ($row['access_url_changeable'] == 1 && $url_info['active'] == 1) {
+                if (isset($settings_by_access_list[$var]) &&
+                    $settings_by_access_list[$var][$subkey][$category]['selected_value'] != '') {
+                    if ($row['subkey'] == null) {
+                        $_setting[$row['variable']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                    } else {
+                        $_setting[$row['variable']][$row['subkey']] = $settings_by_access_list[$var][$subkey][$category]['selected_value'];
+                    }
+                } else {
+                    if ($row['subkey'] == null) {
+                        $_setting[$row['variable']] = $row['selected_value'];
+                    } else {
+                        $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                    }
+                }
+            } else {
+                if ($row['subkey'] == null) {
+                    $_setting[$row['variable']] = $row['selected_value'];
+                } else {
+                    $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+                }
+            }
+        } else {
+            if ($row['subkey'] == null) {
+                $_setting[$row['variable']] = $row['selected_value'];
+            } else {
+                $_setting[$row['variable']][$row['subkey']] = $row['selected_value'];
+            }
+        }
+    }
+
+    $result = api_get_settings('Plugins', 'list', $access_url_id);
+    $_plugins = array();
+    foreach ($result as & $row) {
+        $key = & $row['variable'];
+        if (is_string($_setting[$key])) {
+            $_setting[$key] = array();
+        }
+        $_setting[$key][] = $row['selected_value'];
+        $_plugins[$key][] = $row['selected_value'];
+    }
+    //global $app;
+    $_SESSION['_setting'] = $_setting;
+    $_SESSION['_plugins'] = $_plugins;
+}
+
+function api_set_setting_last_update() {
+    //Saving latest refresh
+    api_set_setting('settings_latest_update', api_get_utc_datetime());
 }

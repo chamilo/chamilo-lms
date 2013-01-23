@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS user (
   active tinyint unsigned NOT NULL default 1,
   openid varchar(255) DEFAULT NULL,
   theme varchar(255) DEFAULT NULL,
-  hr_dept_id smallint unsigned NOT NULL default 0,
+  hr_dept_id int unsigned NOT NULL default 0,
   PRIMARY KEY  (user_id),
   UNIQUE KEY username (username)
 );
@@ -466,12 +466,12 @@ CREATE TABLE IF NOT EXISTS php_session (
 --
 DROP TABLE IF EXISTS session;
 CREATE TABLE IF NOT EXISTS session (
-  id MEDIUMINT unsigned NOT NULL auto_increment,
+  id INT unsigned NOT NULL auto_increment,
   id_coach int unsigned NOT NULL default '0',
   name char(150) NOT NULL default '',
-  nbr_courses smallint unsigned NOT NULL default '0',
-  nbr_users mediumint unsigned NOT NULL default '0',
-  nbr_classes mediumint unsigned NOT NULL default '0',
+  nbr_courses int unsigned NOT NULL default '0',
+  nbr_users int unsigned NOT NULL default '0',
+  nbr_classes int unsigned NOT NULL default '0',
   session_admin_id INT UNSIGNED NOT NULL,
   visibility int NOT NULL default 1,
   session_category_id int NOT NULL,
@@ -496,10 +496,11 @@ ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 --
 DROP TABLE IF EXISTS session_rel_course;
 CREATE TABLE IF NOT EXISTS session_rel_course (
-  id_session MEDIUMINT unsigned NOT NULL default '0',
-  course_id INT NOT NULL default '0',
-  nbr_users smallint unsigned NOT NULL default '0',
-  PRIMARY KEY  (id_session, course_id)
+    id_session INT unsigned NOT NULL default '0',
+    course_id INT NOT NULL default '0',
+    course_code char(40),
+    nbr_users int unsigned NOT NULL default '0',
+    PRIMARY KEY  (id_session, course_id)
 );
 
 ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
@@ -3149,4 +3150,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21272' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21309' WHERE variable = 'chamilo_database_version';

@@ -1753,11 +1753,9 @@ class Exercise
             $sql_fields_values = "";
         }
         $questionList = array_map('intval', $questionList);
-        $session_id = api_get_session_id();
-
         $weight = Database::escape_string($weight);
-        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status,session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting, session_id)
-                VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight', $session_id)";
+        $sql = "INSERT INTO $track_exercises ($sql_fields exe_exo_id, exe_user_id, exe_cours_id, status, session_id, data_tracking, start_date, orig_lp_id, orig_lp_item_id, exe_weighting)
+                VALUES($sql_fields_values '".$this->id."','".api_get_user_id()."','".api_get_course_id()."', 'incomplete','".api_get_session_id()."','".implode(',', $questionList)."', '".api_get_utc_datetime()."', '$safe_lp_id', '$safe_lp_item_id', '$weight')";
 
         Database::query($sql);
         $id = Database::insert_id();

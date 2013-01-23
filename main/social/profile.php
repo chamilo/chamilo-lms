@@ -541,7 +541,7 @@ if ($show_full_profile) {
         }
         $social_right_content .=  SocialManager::social_wrapper_div($my_groups, 9);
     }
-    
+
     $my_courses = null;
     // COURSES LIST
     if ( is_array($list) ) {
@@ -557,15 +557,6 @@ if ($show_full_profile) {
                 $i++;
             }
         }
-        /*
-        $listActives = $listInactives = array();
-        foreach ( $list as $key=>$value ) {
-            if ( $value['active'] ) { //if the session is still active (as told by get_logged_user_course_html())
-                $listActives[] = $value;
-            } elseif ( !empty($value[2]) ) { //if there is a session but it is not active
-                $listInactives[] = $value;
-            }
-        }*/
         $my_courses .=  '</div>';        //social-content-training
         $social_right_content .=  SocialManager::social_wrapper_div($my_courses, 9);
     }
@@ -595,7 +586,6 @@ if ($show_full_profile) {
         $list_get_path_web     = SocialManager::get_list_web_path_user_invitation_by_user_id(api_get_user_id());
         $count_pending_invitations = count($pending_invitations);
     }
-
 
     if (!empty($production_list) || !empty($file_list) || $count_pending_invitations > 0) {
 
@@ -649,7 +639,6 @@ if ($show_full_profile) {
     if (!empty($user_info['competences']) || !empty($user_info['diplomas']) || !empty($user_info['openarea']) || !empty($user_info['teach']) ) {
 
         $more_info .=  '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
-        $cut_size = 220;
         if (!empty($user_info['competences'])) {
             $more_info .=  '<br />';
                 $more_info .=  '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';

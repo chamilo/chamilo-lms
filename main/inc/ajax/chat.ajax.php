@@ -30,7 +30,6 @@ if (!isset($_SESSION['openChatBoxes'])) {
 }
 
 $chat = new Chat();
-
 if ($chat->is_chat_blocked_by_exercises()) {
     //Desconnecting the user
     $chat->set_user_status(0);

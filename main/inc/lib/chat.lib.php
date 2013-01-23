@@ -57,13 +57,11 @@ class Chat extends Model
         if (isset($_SESSION['chatHistory'])) {
             $items = $_SESSION['chatHistory'];
         }
-        //print_r($items);
         $return = array(
             'user_status' => $this->get_user_status(),
             'me' => get_lang('Me'),
             'items' => $items
         );
-        print_r($return);
         echo json_encode($return);
         exit;
     }

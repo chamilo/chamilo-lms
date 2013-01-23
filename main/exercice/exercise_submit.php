@@ -216,10 +216,12 @@ if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
 //var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
+
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
+    if ($debug)  error_log("learnpath_id: $learnpath_id, learnpath_item_id: $learnpath_item_id, learnpath_item_view_id: $learnpath_item_view_id");
     if ($debug)  error_log('5  $exercise_stat_info is empty ');
 	$total_weight = 0;
 	$questionList = $objExercise->get_question_list(true);
@@ -244,7 +246,7 @@ if (empty($exercise_stat_info)) {
 	}
 	$exe_id = $objExercise->save_stat_track_exercise_info($clock_expired_time, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $questionList, $total_weight);
 	$exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
-    if ($debug)  error_log("5.5  exercise_stat_info[] exists getting exe_id $exe_id");
+    if ($debug)  error_log("5.5  exercise_stat_info[] created. exe_id: $exe_id");
 } else {
 	$exe_id = $exercise_stat_info['exe_id'];
     if ($debug)  error_log("5  exercise_stat_info[] exists getting exe_id $exe_id ");
@@ -816,7 +818,7 @@ if (!empty($error)) {
 
            		//1. Normal choice inputs
            		var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-                
+
            		//2. Reminder checkbox
            		var remind_list = $(\'*[name*="remind_list"]\').serialize();
 

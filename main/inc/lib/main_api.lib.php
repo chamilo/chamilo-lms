@@ -6415,6 +6415,7 @@ function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
     }
     return $user_roles;
 }
+
 function api_get_roles_to_string($roles) {
     $role_names = array();
     if (!empty($roles)) {

@@ -61,7 +61,6 @@ class Exercise {
     public $exercise_was_added_in_lp = false;
     public $force_edit_exercise_in_lp = false;
 
-
 	/**
 	 * Constructor of the class
 	 *
@@ -233,7 +232,6 @@ class Exercise {
 	function selectFeedbackType() {
 		return $this->feedback_type;
 	}
-
 
 	/**
 	 * returns the time limit
@@ -1897,8 +1895,17 @@ class Exercise {
 	 * @return  string  html code
 	 */
 	public function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0, $hotspot_delineation_result = array()) {
-		global $feedback_type, $debug;
+		global $debug;
         global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
+
+        $feedback_type = $this->selectFeedbackType();
+        if ($from == 'exercise_show') {
+            if (api_is_allowed_to_edit()) {
+                //For teachers
+                $feedback_type = EXERCISE_FEEDBACK_TYPE_END;
+            }
+        }
+
 		require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
         if ($debug) error_log("<------ manage_answer ------> ");
@@ -1935,9 +1942,10 @@ class Exercise {
 		// Creates a temporary Question object
 		$course_id              = api_get_course_int_id();
 		$objQuestionTmp         = Question::read($questionId, $course_id);
-                if ($objQuestionTmp === false) {
-                    return false;
-                }
+
+        if ($objQuestionTmp === false) {
+            return false;
+        }
 
 		$questionName 			= $objQuestionTmp->selectTitle();
 		$questionWeighting 		= $objQuestionTmp->selectWeighting();
@@ -1959,6 +1967,9 @@ class Exercise {
 
 		$totalWeighting 		= 0;
 		$totalScore				= 0;
+
+
+
 
 		// Destruction of the Question object
 		unset ($objQuestionTmp);
@@ -2454,10 +2465,14 @@ class Exercise {
 									$user_answer = '<span style="color: #FF0000; text-decoration: line-through;">'.$real_list[$s_user_answer].'</span>';
 								}
 							}
+
 							if ($show_result) {
-								echo '<tr>';
-								echo '<td>'.$s_answer_label.'</td><td>'.$user_answer.' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b></td>';
-								echo '</tr>';
+                                echo '<tr>';
+                                echo '<td>'.$s_answer_label.'</td>';
+                                echo '<td>'.$user_answer;
+                                echo ' <b><span style="color: #008000;">'.$real_list[$i_answer_correct_answer].'</span></b> ';
+                                echo '</td>';
+                                echo '</tr>';
 							}
 						}
 						break(2); //break the switch and the "for" condition
@@ -2742,14 +2757,12 @@ class Exercise {
 									error_log(__LINE__.' first',0);
 								}
 							}
-
-
-						} elseif($answerType==MATCHING) {
-							if ($origin != 'learnpath') {
-								echo '<tr>';
-								echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
-								echo '</tr>';
-							}
+						} elseif($answerType == MATCHING) {
+                            if ($origin != 'learnpath') {
+                                echo '<tr>';
+                                echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
+                                echo '</tr>';
+                            }
 						}
 					}
 				} else {
@@ -2945,11 +2958,11 @@ class Exercise {
 							ExerciseShowFunctions::display_hotspot_order_answer($answerId, $answer, $studentChoice, $answerComment);
 							break;
 						case MATCHING:
-							if ($origin != 'learnpath') {
-								echo '<tr>';
-								echo '<td>'.text_filter($answer_matching[$answerId]).'</td><td>'.text_filter($user_answer).' / <b><span style="color: #008000;">'.text_filter($answer_matching[$answerCorrect]).'</span></b></td>';
-								echo '</tr>';
-							}
+                            if ($origin != 'learnpath') {
+                                echo '<tr>';
+                                echo '<td>'.$answer_matching[$answerId].'</td><td>'.$user_answer.' / <b><span style="color: #008000;">'.$answer_matching[$answerCorrect].'</span></b></td>';
+                                echo '</tr>';
+                            }
 							break;
 					}
 				}
@@ -2958,13 +2971,6 @@ class Exercise {
 		} // end for that loops over all answers of the current question
 
         if ($debug) error_log('-- end answer loop --');
-
-		/*
-		if (!$saved_results && $answerType == HOT_SPOT) {
-			$queryfree      = "SELECT marks FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".Database::escape_string($exeId)."' and question_id= '".Database::escape_string($questionId)."'";
-			$resfree        = Database::query($queryfree);
-			$questionScore  = Database::result($resfree,0,"marks");
-		}*/
 
 		$final_answer = true;
 		foreach ($real_answers as $my_answer) {
@@ -3014,15 +3020,16 @@ class Exercise {
             }
         }
 
-		$extra_data = array('final_overlap' => $final_overlap,
-                            'final_missing'=>$final_missing,
-                            'final_excess'=> $final_excess,
-        					'overlap_color' => $overlap_color,
-                            'missing_color'=>$missing_color,
-                            'excess_color'=> $excess_color,
-        					'threadhold1'   => $threadhold1,
-                            'threadhold2'=>$threadhold2,
-                            'threadhold3'=> $threadhold3,
+		$extra_data = array(
+            'final_overlap' => $final_overlap,
+            'final_missing'=>$final_missing,
+            'final_excess'=> $final_excess,
+            'overlap_color' => $overlap_color,
+            'missing_color'=>$missing_color,
+            'excess_color'=> $excess_color,
+            'threadhold1'   => $threadhold1,
+            'threadhold2'=>$threadhold2,
+            'threadhold3'=> $threadhold3,
 		);
 
 		if ($from == 'exercise_result') {
@@ -3175,6 +3182,8 @@ class Exercise {
 		}
 		unset ($objAnswerTmp);
 
+
+
 		$totalWeighting += $questionWeighting;
 		// Store results directly in the database
 		// For all in one page exercises, the results will be
@@ -3260,17 +3269,16 @@ class Exercise {
 			Database::query($sql_update);
 		}
 
-		$return_array = array(  'score'         => $questionScore,
-                                'weight'        => $questionWeighting,
-                                'extra'         => $extra_data,
-                                'open_question' => $arrques,
-                                'open_answer'   => $arrans,
-                                'answer_type'   => $answerType
+		$return_array = array(
+            'score'         => $questionScore,
+            'weight'        => $questionWeighting,
+            'extra'         => $extra_data,
+            'open_question' => $arrques,
+            'open_answer'   => $arrans,
+            'answer_type'   => $answerType
         );
-
-
 		return $return_array;
-	} //End function
+	}
 
 	/**
 	 * Sends a notification when a user ends an examn

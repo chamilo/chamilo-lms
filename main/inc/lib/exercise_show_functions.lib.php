@@ -56,20 +56,20 @@ class ExerciseShowFunctions {
 	 * @return void
 	 */
 	static function display_free_answer($answer, $exe_id, $questionId, $questionScore = null) {
-        global $feedback_type;        
-        
+        global $feedback_type;
+
         $comments = get_comments($exe_id, $questionId);
-        
+
         if (!empty($answer)) {
             echo '<tr><td>';
             echo nl2br(Security::remove_XSS($answer, COURSEMANAGERLOWSECURITY));
             echo '</td></tr>';
         }
-        
-        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {            
-            if ($questionScore > 0 || !empty($comments)) {                
+
+        if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($questionScore > 0 || !empty($comments)) {
             } else {
-                echo '<tr>';                
+                echo '<tr>';
                 echo Display::tag('td', Display::return_message(get_lang('notCorrectedYet')), array());
                 echo '</tr>';
             }
@@ -277,6 +277,7 @@ class ExerciseShowFunctions {
         } else {
             echo '-';
         }
+        
         ?>
         </td>
         <td width="40%">
@@ -285,7 +286,7 @@ class ExerciseShowFunctions {
 
         <?php if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { ?>
         <td width="20%">
-            <?php            
+            <?php
             $color = "black";
             if (isset($new_options[$studentChoice])) {
                 if ($studentChoice == $answerCorrect) {

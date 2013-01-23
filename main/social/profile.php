@@ -97,6 +97,7 @@ function send_message_to_user(user_id) {
                     $.ajax({
                         url: url+"&"+params,
                         success:function(data) {
+                            $("#message_ajax_reponse").attr("class", "");
                             $("#message_ajax_reponse").html(data);
                             $("#message_ajax_reponse").show();
                             $("#send_message_div").dialog({ buttons:{}});
@@ -132,6 +133,7 @@ function send_invitation_to_user(user_id) {
                     $.ajax({
                         url: url+"&"+params,
                         success:function(data) {
+                            $("#message_ajax_reponse").attr("class", "");
                             $("#message_ajax_reponse").html(data);
                             $("#message_ajax_reponse").show();
 

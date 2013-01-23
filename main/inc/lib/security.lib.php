@@ -62,11 +62,12 @@ class Security {
                 }
             }
             // Code specific to courses directory stored on other disk.
+            /*
             $checker_path = str_replace(api_get_path(SYS_COURSE_PATH), $_configuration['symbolic_course_folder_abs'], $checker_path);
             $found = strpos($true_path.'/', $checker_path);
             if ($found === 0) {
                 return true;
-            }
+            }*/
         }
         return false;
     }
@@ -285,8 +286,8 @@ class Security {
             //$config->set('Cache.DefinitionImpl', null); // Enable this line for testing purposes, for turning off caching. Don't forget to disable this line later!
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
-            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');            
-            $config->set('HTML.MaxImgLength', '2560');                    
+            $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
+            $config->set('HTML.MaxImgLength', '2560');
             $config->set('HTML.TidyLevel', 'light');
             $config->set('Core.ConvertDocumentToFragment', false);
             $config->set('Core.RemoveProcessingInstructions', true);

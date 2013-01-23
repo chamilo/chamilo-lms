@@ -24,8 +24,7 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_fill_in_blanks_answer($answer,$id,$questionId) {
-        global $feedback_type;
+	static function display_fill_in_blanks_answer($feedback_type, $answer,$id,$questionId) {
         if (empty($id)) {
             echo '<tr><td>'. nl2br(Security::remove_XSS($answer,COURSEMANAGERLOWSECURITY)).'</td></tr>';
         } else {
@@ -55,9 +54,7 @@ class ExerciseShowFunctions {
 	 * @param int       Question ID
 	 * @return void
 	 */
-	static function display_free_answer($answer, $exe_id, $questionId, $questionScore = null) {
-        global $feedback_type;
-
+	static function display_free_answer($feedback_type, $answer, $exe_id, $questionId, $questionScore = null) {
         $comments = get_comments($exe_id, $questionId);
 
         if (!empty($answer)) {
@@ -76,9 +73,7 @@ class ExerciseShowFunctions {
         }
 	}
 
-	static function display_oral_expression_answer($answer, $id, $questionId, $nano = null) {
-		global $feedback_type;
-
+	static function display_oral_expression_answer($feedback_type, $answer, $id, $questionId, $nano = null) {
 		if (isset($nano)) {
 			echo $nano->show_audio_file();
 		}
@@ -119,22 +114,23 @@ class ExerciseShowFunctions {
 	 * @param string $studentChoice
 	 * @param string $answerComment
 	 */
-	static function display_hotspot_answer($answerId, $answer, $studentChoice, $answerComment) {
-		global $feedback_type;
-		$hotspot_colors = array("", // $i starts from 1 on next loop (ugly fix)
-	            						"#4271B5",
-										"#FE8E16",
-										"#45C7F0",
-										"#BCD631",
-										"#D63173",
-										"#D7D7D7",
-										"#90AFDD",
-										"#AF8640",
-										"#4F9242",
-										"#F4EB24",
-										"#ED2024",
-										"#3B3B3B",
-										"#F7BDE2");
+	static function display_hotspot_answer($feedback_type, $answerId, $answer, $studentChoice, $answerComment) {
+
+		$hotspot_colors = array(
+            "", // $i starts from 1 on next loop (ugly fix)
+            "#4271B5",
+            "#FE8E16",
+            "#45C7F0",
+            "#BCD631",
+            "#D63173",
+            "#D7D7D7",
+            "#90AFDD",
+            "#AF8640",
+            "#4F9242",
+            "#F4EB24",
+            "#ED2024",
+            "#3B3B3B",
+            "#F7BDE2");
 		?>
 		<table class="data_table">
 		<tr>
@@ -185,8 +181,7 @@ class ExerciseShowFunctions {
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	static function display_unique_or_multiple_answer($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-		global $feedback_type;
+	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
 		?>
 		<tr>
 		<td width="5%">
@@ -250,8 +245,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-        global $feedback_type;
+    static function display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         ?>
         <tr>
         <td width="5%">
@@ -277,7 +271,7 @@ class ExerciseShowFunctions {
         } else {
             echo '-';
         }
-        
+
         ?>
         </td>
         <td width="40%">
@@ -321,8 +315,7 @@ class ExerciseShowFunctions {
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_combination_true_false($answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
-        global $feedback_type;
+    static function display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans) {
         ?>
         <tr>
         <td width="5%">

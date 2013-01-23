@@ -1043,6 +1043,7 @@ if (!empty($error)) {
     }
     echo '</form>';
 }
+
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
     echo '</div>'; //End glossary div

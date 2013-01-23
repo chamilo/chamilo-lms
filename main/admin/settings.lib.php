@@ -196,17 +196,9 @@ function handle_stylesheets() {
         $url_info = api_get_access_url($_configuration['access_url']);
         if ($style_info[0]['access_url_changeable'] == 1 && $url_info['active'] == 1) {
             $is_style_changeable = true;
-            /*echo '<div class="actions" id="stylesheetuploadlink">';
-            	Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'', ICON_SIZE_MEDIUM);
-            	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-            echo '</div>';*/
         }
     } else {
         $is_style_changeable = true;
-        /*echo '<div class="actions" id="stylesheetuploadlink">';
-			Display::display_icon('upload_stylesheets.png',get_lang('UploadNewStylesheet'),'', ICON_SIZE_MEDIUM);
-        	echo '<a href="" onclick="javascript: document.getElementById(\'newstylesheetform\').style.display = \'block\'; document.getElementById(\'stylesheetuploadlink\').style.display = \'none\'; return false; ">'.get_lang('UploadNewStylesheet').'</a>';
-        echo '</div>';*/
     }
 
     $form = new FormValidator('stylesheet_upload', 'post', 'settings.php?category=Stylesheets#tabs-2');
@@ -227,11 +219,9 @@ function handle_stylesheets() {
     } else {
         // Uploading a new stylesheet.
         if ($_configuration['access_url'] == 1) {
-            //$form->display();
             $show_upload_form = true;
         } else {
             if ($is_style_changeable) {
-                //$form->display();
                 $show_upload_form = true;
             }
         }
@@ -516,12 +506,10 @@ function store_plugins() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
 function store_stylesheets() {
-    global $_configuration;
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
-
     if (is_style($style)) {
-        api_set_setting('stylesheets', $style, null, 'stylesheets', $_configuration['access_url']);
+        api_set_setting('stylesheets', $style, null, 'stylesheets', api_get_current_access_url_id());
     }
     return true;
 }
@@ -554,12 +542,6 @@ function handle_search() {
     $search_enabled = api_get_setting('search_enabled');
 
     $form = new FormValidator('search-options', 'post', api_get_self().'?category=Search');
-
-    //$renderer = & $form->defaultRenderer();
-    //$renderer->setHeaderTemplate('<div class="sectiontitle">{header}</div>'."\n");
-    //$renderer->setElementTemplate('<div class="sectioncomment">{label}</div>'."\n".'<div class="sectionvalue">{element}</div>'."\n");
-    //$renderer->setElementTemplate('<div class="row"><div class="label">{label}</div><div class="formw">{element}<!-- BEGIN label_2 --><span class="help-block">{label_2}</span><!-- END label_2 --></div></div>');
-
     $values = api_get_settings_options('search_enabled');
     $form->addElement('header', null, get_lang('SearchEnabledTitle'));
 
@@ -567,11 +549,6 @@ function handle_search() {
     if (is_array($values)) {
         foreach ($values as $key => $value) {
             $element = & $form->createElement('radio', 'search_enabled', '', get_lang($value['display_text']), $value['value']);
-            /* $hide_element is not defined
-            if ($hide_element) {
-                $element->freeze();
-            }
-            */
             $group[] = $element;
         }
     }
@@ -593,10 +570,6 @@ function handle_search() {
     $specific_fields = get_specific_field_list();
 
     if ($search_enabled == 'true') {
-
-        // Search_show_unlinked_results.
-        //$form->addElement('header', null, get_lang('SearchShowUnlinkedResultsTitle'));
-        //$form->addElement('label', null, get_lang('SearchShowUnlinkedResultsComment'));
         $values = api_get_settings_options('search_show_unlinked_results');
         $group = array ();
         foreach ($values as $key => $value) {
@@ -605,10 +578,6 @@ function handle_search() {
         }
         $form->addGroup($group, 'search_show_unlinked_results', array(get_lang('SearchShowUnlinkedResultsTitle'),get_lang('SearchShowUnlinkedResultsComment')), '', false);
         $default_values['search_show_unlinked_results'] = api_get_setting('search_show_unlinked_results');
-
-        // Search_prefilter_prefix.
-        //$form->addElement('header', null, get_lang('SearchPrefilterPrefix'));
-        //$form->addElement('label', null, get_lang('SearchPrefilterPrefixComment'));
 
         $sf_values = array();
         foreach ($specific_fields as $sf) {
@@ -627,7 +596,6 @@ function handle_search() {
 
     $default_values['search_enabled'] = $search_enabled;
 
-    //$form->addRule('search_show_unlinked_results', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
     $form->setDefaults($default_values);
 
@@ -1025,7 +993,7 @@ function delete_template($id) {
 
     // Now we remove it from the database.
     $sql = "DELETE FROM $table_system_template WHERE id = '".Database::escape_string($id)."'";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     // Display a feedback message.
     Display::display_confirmation_message(get_lang('TemplateDeleted'));

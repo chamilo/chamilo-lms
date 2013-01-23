@@ -11,7 +11,6 @@
 $language_file = array('document');
 
 require_once '../inc/global.inc.php';
-
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 if (!api_is_allowed_to_edit(null, true)) {
@@ -35,20 +34,15 @@ $course_id      = api_get_course_int_id();
 $session_id     = api_get_session_id();
 $group_id       = api_get_group_id();
 $user_id        = api_get_user_id();
-$user_name      = api_get_user_info($user_id);
+$user_info      = api_get_user_info($user_id);
 
 $session = array();
-
-$user_name = $user_name ['firstname'].' '.$user_name ['lastname'];
+$user_name = $user_info['complete_name'];
 
 $course_list =  SessionManager::get_course_list_by_session_id ($session_id);
-
 $session_list = SessionManager::get_session_by_course($course_code);
-
 $total_quota_bytes = DocumentManager::get_course_quota();
-
 $quota_bytes = DocumentManager::documents_total_space($course_id, 0 , 0);
-
 $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
 
 $session[] = array(get_lang('Course').' ('.format_file_size($quota_bytes).')', $quota_percentage);

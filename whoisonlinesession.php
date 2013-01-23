@@ -1,5 +1,5 @@
 <?php
-/* For licensing terms, see /dokeos_license.txt */
+/* For licensing terms, see /license.txt */
 /**
  * Shows who is online in a specific session
  * @package chamilo.main
@@ -32,7 +32,7 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 
 ?>
 <br /><br />
-<table class="data_table">	
+<table class="data_table">
 	<tr>
 		<th>
 			<?php echo get_lang('Name'); ?>
@@ -50,43 +50,15 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 <?php
 	$session_is_coach = array();
 	if (isset($_user['user_id']) && $_user['user_id'] != '') {
-        
-		/*$_user['user_id'] = intval($_user['user_id']);
-		$result = Database::query("SELECT DISTINCT id,
-										name,
-										date_start,
-										date_end
-									FROM $tbl_session as session
-									INNER JOIN $tbl_session_course_user as srcru
-										ON srcru.id_user = ".$_user['user_id']." AND srcru.status=2
-										AND session.id = srcru.id_session
-									ORDER BY date_start, date_end, name");
-
-		while ($session = Database:: fetch_array($result)) {
-			$session_is_coach[$session['id']] = $session;
-		}
-
-		$result = Database::query("SELECT DISTINCT id,
-										name,
-										date_start,
-										date_end
-								FROM $tbl_session as session
-								WHERE session.id_coach = ".$_user['user_id']."
-								ORDER BY date_start, date_end, name");
-		while ($session = Database:: fetch_array($result)) {
-			$session_is_coach[$session['id']] = $session;
-		}*/
-        
         $session_is_coach = SessionManager::get_sessions_coached_by_user(api_get_user_id());
-        
 		$students_online = array();
         $now = api_get_utc_datetime();
-        
+
         $time_limit     = api_get_setting('time_limit_whosonline');
         $online_time 	= time() - $time_limit*60;
-        $current_date	= api_get_utc_datetime($online_time);	
-           
-        foreach ($session_is_coach as $session) {            
+        $current_date	= api_get_utc_datetime($online_time);
+
+        foreach ($session_is_coach as $session) {
 			$sql = "SELECT 	DISTINCT last_access.access_user_id,
 							last_access.access_date,
 							last_access.access_cours_code,
@@ -123,7 +95,7 @@ echo Display::page_header(get_lang('UserOnlineListSession'));
 				echo "	</td>
 						<td align='center'>
 					 ";
-				echo '<a target="_blank" class="btn" href="main/chat/chat.php?cidReq='.$student_online['access_cours_code'].'&id_session='.$student_online['access_session_id'].'"> 
+				echo '<a target="_blank" class="btn" href="main/chat/chat.php?cidReq='.$student_online['access_cours_code'].'&id_session='.$student_online['access_session_id'].'">
                     '.get_lang('Chat').'
                         </a>';
 				echo "	</td>

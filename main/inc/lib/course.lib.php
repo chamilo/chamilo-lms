@@ -218,11 +218,6 @@ class CourseManager {
         Database::query($sql);
 
         $course_info = api_get_course_info($course_code);
-        //$course_id = $course_info['real_id'];
-        //That table does no exists
-        /*$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
-        $sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
-        Database::query($sql);*/
         return $course_info;
     }
 
@@ -350,7 +345,6 @@ class CourseManager {
         );
         return $result['tutor_id'];
     }
-
 
     /**
      * Unsubscribe one or more users from a course
@@ -747,10 +741,9 @@ class CourseManager {
     }
 
     public static function get_user_list_from_courses_as_coach($user_id, $include_sessions = true) {
-        $courses_as_admin = $students_in_courses = array();
+        $students_in_courses = array();
 
         $sessions = CourseManager::get_course_list_as_coach($user_id, true);
-
         if (!empty($sessions)) {
             foreach($sessions as $session_id => $courses) {
                 if (!$include_sessions) {
@@ -797,8 +790,7 @@ class CourseManager {
     }
 
     /**
-     *    @return an array with the course info of all the courses (real and virtual) of which
-     *    the current user is course admin
+     *    @return an array with the course info of all the courses of whichthe current user is course admin
      */
     public static function get_course_list_of_user_as_course_admin($user_id) {
         if ($user_id != strval(intval($user_id))) {
@@ -841,10 +833,6 @@ class CourseManager {
         }
         return $data;
     }
-
-    /*
-        USER FUNCTIONS
-    */
 
     /**
      * Check if user is subscribed inside a course
@@ -896,7 +884,6 @@ class CourseManager {
                 ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
             return true;
         }
-
         return false;
     }
 
@@ -973,13 +960,12 @@ class CourseManager {
                     AND id_coach='$user_id'"))) {
             return true;
         }
-
         return false;
     }
 
     /**
-     *    Return user info array of all users registered in the specified real or virtual course
-     *    This only returns the users that are registered in this actual course, not linked courses.
+     * Return user info array of all users registered in the specified course
+     * This only returns the users that are registered in this actual course, not linked courses.
      *
      * @param string    $course_code the code of the course
      * @param boolean   $with_session determines if the course is used in a session or not
@@ -1083,7 +1069,7 @@ class CourseManager {
         $count_rows = Database::num_rows($rs);
         if ($return_count && $resumed_report) {
             return $count_rows;
-            }
+        }
         $table_user_field_value = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         if ($count_rows) {
             while ($user = Database::fetch_array($rs)) {
@@ -1172,23 +1158,18 @@ class CourseManager {
                     $users[] = $report_info;
                     }
                 } else {
-                $users[$user['user_id']] = $user_info;
+                    $users[$user['user_id']] = $user_info;
+                }
             }
-        }
             $counter++;
         }
-        if ($add_reports) {
-            if ($resumed_report) {
-                //var_dump($counter);
-            }
-        }
-        //var_dump($users);
         return $users;
     }
 
     static function get_count_user_list_from_course_code($resumed_report = false, $extra_field = null) {
         return self::get_user_list_from_course_code(null, 0, null, null, null, true, false, $resumed_report, $extra_field);
     }
+
     /**
      * Gets subscribed users in a course or in a course/session
      *
@@ -1372,13 +1353,13 @@ class CourseManager {
         return $teacher_string;
     }
 
-     /**
-     * This function returns information about coachs from a course in session
-     * @param int       - optional, session id
-     * @param string    - optional, course code
-     * @return array    - array containing user_id, lastname, firstname, username
-     *
-     */
+    /**
+    * This function returns information about coachs from a course in session
+    * @param int       - optional, session id
+    * @param string    - optional, course code
+    * @return array    - array containing user_id, lastname, firstname, username
+    *
+    */
     public static function get_coachs_from_course($session_id=0, $course_code='') {
 
         if (!empty($session_id)) {
@@ -1522,8 +1503,7 @@ class CourseManager {
                 ON (g.id = gu.group_id AND g.c_id = $course_id AND gu.c_id = $course_id)
                 $session_condition
                 ORDER BY g.name";
-                }
-        else {
+        } else {
             // get all groups even if they are empty
             $sql = "SELECT g.id, g.name
                     FROM ".Database::get_course_table(TABLE_GROUP)." AS g
@@ -1792,7 +1772,6 @@ class CourseManager {
             } else {
                 $course_title_precedent = $courses['title'];
             }
-
             $counter++;
         }
 
@@ -3948,8 +3927,6 @@ class CourseManager {
             $course_documents_folder_cert = $sys_course_path.$course_repository.'/document/certificates/';
 
             /* Images */
-            $files = array();
-
             $files = self::browse_folders($img_code_path, $files, 'images');
 
             $pictures_array = self::sort_pictures($files, 'dir');
@@ -3986,10 +3963,7 @@ class CourseManager {
             $default_document_array['images'] = $pictures_array;
 
             /* Audio */
-            $files = array();
-
             $files = self::browse_folders($audio_code_path, $files, 'audio');
-
             $audio_array = self::sort_pictures($files, 'dir');
             $audio_array = array_merge($audio_array, self::sort_pictures($files, 'file'));
 
@@ -4015,7 +3989,6 @@ class CourseManager {
             /*
              * Flash
              */
-            $files = array();
 
             $files = self::browse_folders($flash_code_path, $files, 'flash');
 
@@ -4216,7 +4189,6 @@ class CourseManager {
         /*    Example Material  */
         global $language_interface;
         $language_interface = !empty($language_interface) ? $language_interface : api_get_setting('platformLanguage');
-
 
         // Example material should be in the same language as the course is.
         $language_interface_original = $language_interface;
@@ -4605,25 +4577,25 @@ class CourseManager {
 
            // Here we must add 2 fields.
           $sql = "INSERT INTO ".$TABLECOURSE . " SET
-                        code            = '".Database :: escape_string($code) . "',
-                        directory       = '".Database :: escape_string($directory) . "',
-                        course_language = '".Database :: escape_string($course_language) . "',
-                        title           = '".Database :: escape_string($title) . "',
-                        description     = '".lang2db(get_lang('CourseDescription')) . "',
-                        category_code   = '".Database :: escape_string($category_code) . "',
-                        visibility      = '".$visibility . "',
-                        show_score      = '1',
-                        disk_quota      = '".intval($disk_quota) . "',
-                        creation_date   = '$time',
-                        expiration_date = '".$expiration_date . "',
-                        last_edit       = '$time',
-                        last_visit      = NULL,
-                        tutor_name      = '".Database :: escape_string($tutor_name) . "',
-                        department_name = '".Database :: escape_string($department_name) . "',
-                        department_url  = '".Database :: escape_string($department_url) . "',
-                        subscribe       = '".intval($subscribe) . "',
-                        unsubscribe     = '".intval($unsubscribe) . "',
-                        visual_code     = '".Database :: escape_string($visual_code) . "'";
+                code            = '".Database :: escape_string($code) . "',
+                directory       = '".Database :: escape_string($directory) . "',
+                course_language = '".Database :: escape_string($course_language) . "',
+                title           = '".Database :: escape_string($title) . "',
+                description     = '".lang2db(get_lang('CourseDescription')) . "',
+                category_code   = '".Database :: escape_string($category_code) . "',
+                visibility      = '".$visibility . "',
+                show_score      = '1',
+                disk_quota      = '".intval($disk_quota) . "',
+                creation_date   = '$time',
+                expiration_date = '".$expiration_date . "',
+                last_edit       = '$time',
+                last_visit      = NULL,
+                tutor_name      = '".Database :: escape_string($tutor_name) . "',
+                department_name = '".Database :: escape_string($department_name) . "',
+                department_url  = '".Database :: escape_string($department_url) . "',
+                subscribe       = '".intval($subscribe) . "',
+                unsubscribe     = '".intval($unsubscribe) . "',
+                visual_code     = '".Database :: escape_string($visual_code) . "'";
             Database::query($sql);
             //error_log($sql);
 
@@ -4703,7 +4675,6 @@ class CourseManager {
                 }
             }
         }
-
         return $course_id;
     }
 
@@ -4718,22 +4689,7 @@ class CourseManager {
      * @return array        List of files properties from the ZIP package
      */
     static function readPropertiesInArchive($archive, $is_compressed = true) {
-        include api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
-        debug::printVar(dirname($archive), 'Zip : ');
         $uid = api_get_user_id();
-        /*
-        string tempnam (string dir, string prefix)
-        tempnam() creates a unique temporary file in the dir directory. If the
-        directory doesn't existm tempnam() will generate a filename in the system's
-        temporary directory.
-        Before PHP 4.0.6, the behaviour of tempnam() depended of the underlying OS.
-        Under Windows, the "TMP" environment variable replaces the dir parameter;
-        under Linux, the "TMPDIR" environment variable has priority, while for the
-        OSes based on system V R4, the dir parameter will always be used if the
-        directory which it represents exists. Consult your documentation for more
-        details.
-        tempnam() returns the temporary filename, or the string NULL upon failure.
-        */
         $zip_file = new PclZip($archive);
         $tmp_dir_name = dirname($archive) . '/tmp'.$uid.uniqid($uid);
         if (mkdir($tmp_dir_name, api_get_permissions_for_new_directories(), true)) {

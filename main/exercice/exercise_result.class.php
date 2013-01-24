@@ -285,6 +285,7 @@ class ExerciseResult
             }
         }
         $data .= get_lang('Email').';';
+        $data .= get_lang('Groups').';';
 
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
@@ -316,6 +317,7 @@ class ExerciseResult
             }
 
             $data .= str_replace("\r\n",'  ',api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
+            $data .= str_replace("\r\n",'  ',implode(", ", GroupManager :: get_user_group_name($row['user_id']))).';';
 
 			if ($export_user_fields) {
 				//show user fields data, if any, for this user
@@ -389,10 +391,6 @@ class ExerciseResult
 
 
 		if ($with_column_user) {
-
-		    $worksheet->write($line,$column,get_lang('Email'));
-		    $column++;
-
             if (api_is_western_name_order()) {
     			$worksheet->write($line,$column,get_lang('FirstName'));
     			$column++;
@@ -404,8 +402,12 @@ class ExerciseResult
                 $worksheet->write($line,$column,get_lang('FirstName'));
                 $column++;
             }
+		    $worksheet->write($line,$column,get_lang('Email'));
+		    $column++;
 		}
-
+	    $worksheet->write($line,$column,get_lang('Groups'));
+	    $column++;
+        
 		if ($export_user_fields) {
 			//show user fields section with a big th colspan that spans over all fields
 			$extra_user_fields = UserManager::get_extra_fields(0,1000,5,'ASC',false, 1);
@@ -436,9 +438,6 @@ class ExerciseResult
 			$column = 0;
 
             if ($with_column_user) {
-                $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
-                $column++;
-
                 if (api_is_western_name_order()) {
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
@@ -450,8 +449,13 @@ class ExerciseResult
                     $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['first_name']), ENT_QUOTES, $charset));
                     $column++;
                 }
+                $worksheet->write($line,$column,api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset));
+                $column++;
 			}
 
+            $worksheet->write($line,$column,api_html_entity_decode(strip_tags(implode(", ", GroupManager :: get_user_group_name($row['user_id']))), ENT_QUOTES, $charset));
+            $column++;
+            
 			if ($export_user_fields) {
 				//show user fields data, if any, for this user
 				$user_fields_values = UserManager::get_extra_user_data($row['user_id'],false,false, false, true);

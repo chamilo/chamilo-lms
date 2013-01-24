@@ -149,6 +149,7 @@ class CourseManager {
      * @param string $course_code, the course code
      * @return an array with all the fields of the course table
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     * @assert ('') === false
      */
     public static function get_course_information($course_code) {
         return Database::fetch_array(Database::query(
@@ -161,12 +162,11 @@ class CourseManager {
      * Returns all the information of a given coursecode
      * @param   int     the course id
      * @return an array with all the fields of the course table
-
+     * @assert ('') === false
      */
     public static function get_course_information_by_id($course_id) {
         return Database::select('*, id as real_id', Database::get_main_table(TABLE_MAIN_COURSE), array('where'=>array('id = ?' =>intval($course_id))),'first');
     }
-
 
     /**
      * Returns a list of courses. Should work with quickform syntax
@@ -227,6 +227,7 @@ class CourseManager {
      * @param string $course_code, the course code
      * @todo for more consistency: use course_info call from database API
      * @return an array with int fields "visibility", "subscribe", "unsubscribe"
+     * @assert ('') === false
      */
     public static function get_access_settings($course_code) {
         return Database::fetch_array(Database::query(
@@ -264,6 +265,7 @@ class CourseManager {
      * @param   mixed   user_id or an array with user ids
      * @param   int     session id
      * @param   string  course code
+     * @assert ('', '') === false
      *
      */
     public static function unsubscribe_user($user_id, $course_code, $session_id = 0) {
@@ -385,6 +387,7 @@ class CourseManager {
      * @param   int     Status (STUDENT, COURSEMANAGER, COURSE_ADMIN, NORMAL_COURSE_MEMBER)
      * @return  bool    True on success, false on failure
      * @see add_user_to_course
+     * @assert ('', '') === false
      */
     public static function subscribe_user($user_id, $course_code, $status = STUDENT, $session_id = 0) {
 
@@ -486,6 +489,7 @@ class CourseManager {
      * @param string Original course id
      * @param string Original field name
      * @return int Course id
+     * @assert ('', '') === false
      */
     public static function get_course_code_from_original_id($original_course_id_value, $original_course_id_name) {
         $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -505,6 +509,7 @@ class CourseManager {
      *
      * @param int Course id
      * @return string Course code
+     * @assert ('') === false
      */
     public static function get_course_code_from_course_id($id) {
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -529,6 +534,7 @@ class CourseManager {
      * @param string $status (optional) The user's status in the course
      *
      * @return boolean true if subscription succeeds, boolean false otherwise.
+     * @assert ('', '') === false
      */
     public static function add_user_to_course($user_id, $course_code, $status = STUDENT) {
         $debug = false;

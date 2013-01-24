@@ -133,7 +133,7 @@ if (isset($_POST['add_resources']) AND $_POST['add_resources'] == get_lang('Reso
 
 /* Header */
 
-if ($origin == 'learnpath') {    
+if ($origin == 'learnpath') {
     Display :: display_reduced_header('');
 } else {
     // The last element of the breadcrumb navigation is already set in interbreadcrumb, so give an empty string.
@@ -161,13 +161,12 @@ $values      = show_add_post_form($my_action, $my_post, $my_elements); // Note: 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
     $result = store_reply($values);
     //@todo split the show_add_post_form function
-    
+
     $url = 'viewthread.php?forum='.$current_thread['forum_id'].'&gradebook='.$gradebook.'&thread='.intval($_GET['thread']).'&gidReq='.api_get_group_id().'&origin='.$origin.'&msg='.$result['msg'].'&type='.$result['type'];
     echo '
-    <script type="text/javascript">
+    <script>
     window.location = "'.$url.'";
-    </script>';    
-    //header('Location: );
+    </script>';
 }
 
 if ($origin != 'learnpath') {

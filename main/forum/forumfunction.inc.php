@@ -2162,9 +2162,10 @@ function show_add_post_form($action = '', $id = '', $form_values = '')
 
     // If we are quoting a message we have to retrieve the information of the post we are quoting so that
     // we can add this as default to the textarea.
+
     if (($action == 'quote' || $action == 'replymessage') && isset($my_post)) {
         // We also need to put the parent_id of the post in a hidden form when we are quoting or replying to a message (<> reply to a thread !!!)
-        $form->addElement('hidden', 'post_parent_id', strval(intval($my_post))); // Note: This has to be cleaned first.
+        $form->addElement('hidden', 'post_parent_id', intval($my_post)); // Note: This has to be cleaned first.
         // If we are replying or are quoting then we display a default title.
         $values = get_post_information($my_post); // Note: This has to be cleaned first.
         $defaults['post_title'] = get_lang('ReplyShort').api_html_entity_decode($values['post_title'], ENT_QUOTES);
@@ -2527,7 +2528,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     $form->addElement('hidden', 'post_id', $current_post['post_id']);
     $form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
     $form->addElement('hidden', 'id_attach', $id_attach);
-    var_dump($current_post);
+    
     if ($current_post['post_parent_id'] == 0) {
         $form->addElement('hidden', 'is_first_post_of_thread', '1');
     }
@@ -2665,11 +2666,17 @@ function store_edit_post($values)
 
     $course_id = api_get_course_int_id();
 
-
+    //check if this post is the first of the thread
     // First we check if the change affects the thread and if so we commit the changes (sticky and post_title=thread_title are relevant).
-    var_dump($values);
-    exit;
-    if (array_key_exists('is_first_post_of_thread', $values) AND $values['is_first_post_of_thread'] == '1') {
+
+    $posts = get_posts($values['thread_id']);
+    $first_post = null;
+    if (!empty($posts)) {
+        $first_post = $posts[0];
+    }
+
+    if (!empty($first_post) && $first_post['post_id'] == $values['post_id']) {
+        //if (array_key_exists('is_first_post_of_thread', $values) AND $values['is_first_post_of_thread'] == '1') {
         $sql = "UPDATE $table_threads SET
                 thread_title            ='".Database::escape_string($values['post_title'])."',
                 thread_sticky           ='".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
@@ -2686,7 +2693,7 @@ function store_edit_post($values)
                 post_title          ='".Database::escape_string($values['post_title'])."',
                 post_text           ='".Database::escape_string($values['post_text'])."',
                 post_notification   ='".Database::escape_string(isset($values['post_notification']) ? $values['post_notification'] : null)."'
-                WHERE c_id = $course_id AND post_id='".intval($values['post_id'])."'";
+                WHERE c_id = $course_id AND post_id = '".intval($values['post_id'])."'";
 
     Database::query($sql);
 

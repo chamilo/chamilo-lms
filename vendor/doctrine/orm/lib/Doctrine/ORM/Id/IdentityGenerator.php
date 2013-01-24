@@ -33,7 +33,7 @@ class IdentityGenerator extends AbstractIdGenerator
      *
      * @var string
      */
-    private $_seqName;
+    private $sequenceName;
 
     /**
      * Constructor.
@@ -42,9 +42,9 @@ class IdentityGenerator extends AbstractIdGenerator
      *                             to obtain the last generated identifier within the current
      *                             database session/connection, if any.
      */
-    public function __construct($seqName = null)
+    public function __construct($sequenceName = null)
     {
-        $this->_seqName = $seqName;
+        $this->sequenceName = $sequenceName;
     }
 
     /**
@@ -52,7 +52,7 @@ class IdentityGenerator extends AbstractIdGenerator
      */
     public function generate(EntityManager $em, $entity)
     {
-        return (int)$em->getConnection()->lastInsertId($this->_seqName);
+        return (int)$em->getConnection()->lastInsertId($this->sequenceName);
     }
 
     /**

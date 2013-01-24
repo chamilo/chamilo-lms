@@ -38,7 +38,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
         'rows' => array(),
     );
 
-    protected $sendHeaders = true;
+    protected static $sendHeaders = true;
 
     /**
      * {@inheritdoc}
@@ -91,7 +91,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
     protected function send()
     {
         if (!self::$initialized) {
-            $this->sendHeaders = $this->headersAccepted();
+            self::$sendHeaders = $this->headersAccepted();
             self::$json['request_uri'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 
             self::$initialized = true;
@@ -108,7 +108,7 @@ class ChromePHPHandler extends AbstractProcessingHandler
      */
     protected function sendHeader($header, $content)
     {
-        if (!headers_sent() && $this->sendHeaders) {
+        if (!headers_sent() && self::$sendHeaders) {
             header(sprintf('%s: %s', $header, $content));
         }
     }
@@ -122,5 +122,29 @@ class ChromePHPHandler extends AbstractProcessingHandler
     {
         return !isset($_SERVER['HTTP_USER_AGENT'])
                || preg_match('{\bChrome/\d+[\.\d+]*\b}', $_SERVER['HTTP_USER_AGENT']);
+    }
+
+    /**
+     * BC getter for the sendHeaders property that has been made static
+     */
+    public function __get($property)
+    {
+        if ('sendHeaders' !== $property) {
+            throw new \InvalidArgumentException('Undefined property '.$property);
+        }
+
+        return static::$sendHeaders;
+    }
+
+    /**
+     * BC setter for the sendHeaders property that has been made static
+     */
+    public function __set($property, $value)
+    {
+        if ('sendHeaders' !== $property) {
+            throw new \InvalidArgumentException('Undefined property '.$property);
+        }
+
+        static::$sendHeaders = $value;
     }
 }

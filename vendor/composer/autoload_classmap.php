@@ -141,7 +141,6 @@ return array(
     'DashboardManager' => $baseDir . '/main/inc/lib/dashboard.lib.php',
     'DataForm' => $baseDir . '/main/gradebook/lib/fe/dataform.class.php',
     'Database' => $baseDir . '/main/inc/lib/database.lib.php',
-    'Debug' => $baseDir . '/main/inc/lib/debug.lib.php',
     'Diagnoser' => $baseDir . '/main/inc/lib/diagnoser.lib.php',
     'Display' => $baseDir . '/main/inc/lib/display.lib.php',
     'DisplayGradebook' => $baseDir . '/main/gradebook/lib/fe/displaygradebook.php',

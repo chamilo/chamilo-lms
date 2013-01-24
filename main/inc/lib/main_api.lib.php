@@ -5487,7 +5487,6 @@ function api_sql_query($query, $file = '', $line = 0) {
 }
 
 /**
- * @deprecated 25-JAN-2010: See api_mail() and api_mail_html(), mail.lib.inc.php
  *
  * Send an email.
  *

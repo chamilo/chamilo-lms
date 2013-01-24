@@ -8,7 +8,6 @@ $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'nusoap/nusoap.php';
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once api_get_path(INCLUDE_PATH).'lib/mail.lib.inc.php';
 
 $debug = false;
 
@@ -2878,7 +2877,7 @@ function WSEditCourseDescription($params) {
         $res_check_id = Database::query($sql_check_id);
 
         if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' 
+            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content'
                     WHERE c_id = {$course_info['real_id']} AND id = '".$course_desc_id."'";
             Database::query($sql);
         } else {
@@ -3133,10 +3132,10 @@ function WSCreateSession($params) {
     foreach ($sessions_params as $session_param) {
 
         $name = trim($session_param['name']);
-        
+
         $access_start_date = $session_param['access_start_date'];
         $access_end_date = $session_param['access_end_date'];
-        
+
         /*
         $year_start = intval($session_param['year_start']);
         $month_start = intval($session_param['month_start']);
@@ -3160,7 +3159,7 @@ function WSCreateSession($params) {
             $results[] = 0;
             continue;
         }
-    
+
         if (empty($name)) {
             $results[] = 0;
             continue;
@@ -3187,9 +3186,9 @@ function WSCreateSession($params) {
                     'access_end_date' => $access_end_date,
                 );
                 $id_session = SessionManager::add($params);
-            
+
                 //Database::query("INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, VALUES('".addslashes($name)."','$date_start','$date_end','$id_coach',".intval($_user['user_id']).",".$nb_days_acess_before.", ".$nb_days_acess_after.")");
-            
+
                 //$id_session = Database::insert_id();
 
                 // Save new fieldlabel into course_field table.

@@ -16,7 +16,6 @@ require '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'survey.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 if (!api_is_allowed_to_edit(false, true)) {

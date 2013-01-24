@@ -22,8 +22,6 @@ $this_section = SECTION_SOCIAL;
 $libpath = api_get_path(LIBRARY_PATH);
 require_once $libpath.'fileManage.lib.php';
 require_once $libpath.'fileUpload.lib.php';
-require_once $libpath.'group_portal_manager.lib.php';
-require_once $libpath.'mail.lib.inc.php';
 
 $htmlHeadXtra[] = '<script>
 var textarea = "";

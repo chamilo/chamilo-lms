@@ -20,10 +20,6 @@ $this_section = SECTION_COURSES;
 
 $current_course_tool  = TOOL_WIKI;
 
-// including additional library scripts
-
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-
 require_once 'wiki.inc.php';
 
 $course_id = api_get_course_int_id();

@@ -13,9 +13,7 @@
 require_once('language.php');
 require_once('../inc/global.inc.php');
 require_once api_get_path(LIBRARY_PATH).'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 /**
  * Removes some unwanted elementend of the form object
  */

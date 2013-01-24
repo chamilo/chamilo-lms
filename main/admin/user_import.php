@@ -116,7 +116,6 @@ function save_data($users) {
 	if (!isset($inserted_in_course)) {
 		$inserted_in_course = array();
 	}
-	require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';	
 	$send_mail = $_POST['sendMail'] ? 1 : 0;
 	if (is_array($users)) {
 		foreach ($users as $index => $user)	{
@@ -300,7 +299,7 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 			$user_id_error[] = $my_errors['UserName'];
 		}
 	}
-	
+
 	if (is_array($users)) {
 		foreach ($users as $my_user) {
 			if (!in_array($my_user['UserName'], $user_id_error)) {
@@ -309,10 +308,10 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
 		}
 	}
 
-	$inserted_in_course = array();	
-	if (strcmp($file_type, 'csv') === 0) {	 
+	$inserted_in_course = array();
+	if (strcmp($file_type, 'csv') === 0) {
 		save_data($users_to_insert);
-	} elseif (strcmp($file_type, 'xml') === 0) {   
+	} elseif (strcmp($file_type, 'xml') === 0) {
 		save_data($users_to_insert);
 	} else {
 		$error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
@@ -374,7 +373,7 @@ $group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example
 $group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 
-$group = array(); 
+$group = array();
 $group[] = $form->createElement('radio', 'sendMail', '', get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'sendMail', null, get_lang('No'), 0);
 $form->addGroup($group, '', get_lang('SendMailToUsers'), '<br/>');

@@ -21,10 +21,9 @@
 $language_file = array('registration', 'index');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // Custom pages
-// Had to move the form handling in here, because otherwise there would 
+// Had to move the form handling in here, because otherwise there would
 // already be some display output.
 global $_configuration;
 
@@ -91,9 +90,9 @@ if (api_get_setting('allow_lostpassword') == 'false') {
 	api_not_allowed();
 }
 
-if (isset($_GET['reset']) && isset($_GET['id'])) {	
-    $message = Display::return_message(Login::reset_password($_GET["reset"], $_GET["id"], true), 'normal', false);    
-	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';	
+if (isset($_GET['reset']) && isset($_GET['id'])) {
+    $message = Display::return_message(Login::reset_password($_GET["reset"], $_GET["id"], true), 'normal', false);
+	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php" class="btn" >'.get_lang('Back').'</a>';
 	echo $message;
 } else {
 	$form = new FormValidator('lost_password');
@@ -107,11 +106,11 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
 
 	if ($form->validate()) {
 		$values = $form->exportValues();
-        
+
         $users_related_to_username = Login::get_user_accounts_by_username($values['user']);
-		
+
 		if ($users_related_to_username) {
-            $by_username = true;            
+            $by_username = true;
             foreach ($users_related_to_username as $user) {
                 if ($_configuration['password_encryption'] != 'none') {
                     Login::handle_encrypted_password($user, $by_username);
@@ -120,9 +119,9 @@ if (isset($_GET['reset']) && isset($_GET['id'])) {
                 }
             }
 		} else {
-			Display::display_warning_message(get_lang('NoUserAccountWithThisEmailAddress'));			
+			Display::display_warning_message(get_lang('NoUserAccountWithThisEmailAddress'));
 		}
-	} else {						
+	} else {
 		$form->display();
 	}
 }

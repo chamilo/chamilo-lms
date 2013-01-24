@@ -48,7 +48,6 @@ require_once 'dropbox_config.inc.php';
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 // protecting the script

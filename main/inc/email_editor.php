@@ -16,7 +16,6 @@ use \ChamiloSession as Session;
 $language_file = array('index', 'admin', 'registration');
 
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (empty($_user['user_id'])) {
 	api_not_allowed(true);
@@ -40,12 +39,12 @@ $form->addRule('email_text', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('email_address', get_lang('EmailWrong'), 'email');
 
 $form->addElement('button', 'submit', get_lang('SendMail'));
-        
-$defaults = array(  'dest' => Security::remove_XSS($_REQUEST['dest']),
-                    'email_address' => Security::remove_XSS($_REQUEST['dest']),
-                    'email_title' => Security::remove_XSS($_POST['email_title']),
-                    'email_text' => Security::remove_XSS($_POST['email_text'])
-    
+
+$defaults = array(
+    'dest' => Security::remove_XSS($_REQUEST['dest']),
+    'email_address' => Security::remove_XSS($_REQUEST['dest']),
+    'email_title' => Security::remove_XSS($_POST['email_title']),
+    'email_text' => Security::remove_XSS($_POST['email_text'])
 );
 $form->setDefaults($defaults);
 
@@ -55,7 +54,7 @@ if ($form->validate()) {
 	$user_id=api_get_user_id();
 	$title=Security::remove_XSS($_POST['email_title']);
 	$content=Security::remove_XSS($_POST['email_text']);
-	if (!empty($_user['mail'])) {        
+	if (!empty($_user['mail'])) {
 		api_mail_html('',$email_administrator,$title,$text,api_get_person_name($_user['firstname'],$_user['lastname']), $_user['mail']);
 		UserManager::send_message_in_outbox ($email_administrator,$user_id,$title, $content);
 	} else {

@@ -3,7 +3,7 @@
 /**
  *	Exercise list: This script shows the list of exercises for administrators and students.
  *	@package chamilo.exercise
- *	@author hubert.borderiou 
+ *	@author hubert.borderiou
  *
  */
 /**
@@ -33,7 +33,6 @@ require_once 'answer.class.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 // need functions of statsutils lib to display previous exercices scores
 require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
@@ -78,7 +77,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
         if (isset($_REQUEST['extra_data']) && $_REQUEST['extra_data'] == 1) {
             $load_extra_data = true;
         }
-        
+
         require_once 'hotpotatoes_exercise_result.class.php';
         // @todo make xls export work
 //        switch ($_GET['export_format']) {

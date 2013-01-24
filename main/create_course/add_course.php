@@ -34,11 +34,9 @@ $course_validation_feature = api_get_setting('course_validation') == 'true';
 
 // Require additional libraries.
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-//require_once api_get_path(CONFIGURATION_PATH).'course_info.conf.php';
 
 if ($course_validation_feature) {
     require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
-    require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">

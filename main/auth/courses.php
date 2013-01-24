@@ -16,10 +16,9 @@ $cidReset = true; // Flag forcing the 'current course' reset
 
 // including files
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'auth.lib.php'; 
+require_once api_get_path(LIBRARY_PATH).'auth.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'courses_controller.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
     $htmlHeadXtra[] = '
@@ -31,23 +30,23 @@ if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
 	            if ($("#dialog").length == 0) {
 	                dialog  = $(\'<div id="dialog" style="display:hidden"></div>\').appendTo(\'body\');
 	            }
-	            
+
 	            // load remote content
 	            dialog.load(
-	                    url,                    
+	                    url,
 	                    {},
 	                    function(responseText, textStatus, XMLHttpRequest) {
 	                        dialog.dialog({
-	                            modal	: true, 
-	            				width	: 540, 
-	            				height	: 400,              
-	                        });	                    
+	                            modal	: true,
+	            				width	: 540,
+	            				height	: 400,
+	                        });
 				});
 	            //prevent the browser to follow the link
 	            return false;
 	        });
         });
-        
+
     </script>';
 }
 
@@ -81,7 +80,7 @@ if (isset($_GET['action']) && in_array($_GET['action'],$actions)) {
 	$action = $_GET['action'];
 }
 
-if ($action == 'createcoursecategory') {	
+if ($action == 'createcoursecategory') {
 	$nameTools = get_lang('CreateCourseCategory');
 }
 if ($action == 'subscribe') {
@@ -102,13 +101,13 @@ $interbreadcrumb[] = array('url' => api_get_path(WEB_PATH).'user_portal.php', 'n
 if (empty($nameTools)) {
 	$nameTools = get_lang('CourseManagement');
 } else {
-	
+
 	if (!in_array($action, array('sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'))) {
 		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php', 'name' => get_lang('CourseManagement'));
 	}
 	if ($action == 'createcoursecategory') {
 		$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses', 'name' => get_lang('SortMyCourses'));
-	} 
+	}
     $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
 }
 
@@ -156,7 +155,7 @@ if ($action == 'deletecoursecategory' && isset($_GET['id'])) {
 // We are creating a new user defined course category (= Create Course Category).
 if (isset($_POST['create_course_category']) && isset($_POST['title_course_category']) && strlen(trim($_POST['title_course_category'])) > 0) {
 	if ($ctok == $_POST['sec_token']) {
-        $courses_controller->add_course_category($_POST['title_course_category']);        
+        $courses_controller->add_course_category($_POST['title_course_category']);
 	}
 }
 
@@ -169,9 +168,9 @@ if (isset($_REQUEST['search_course'])) {
 }
 
 // Subscribe user to course
-if (isset($_REQUEST['subscribe_course'])) {    
+if (isset($_REQUEST['subscribe_course'])) {
     if ($ctok == $_GET['sec_token']) {
-        $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);                
+        $courses_controller->subscribe_user($_GET['subscribe_course'], $_GET['search_term'], $_GET['category_code']);
     }
 }
 // We are unsubscribing from a course (=Unsubscribe from course).
@@ -189,8 +188,8 @@ if (isset($_POST['unsubscribe'])) {
 	}
 }
 switch ($action) {
-    case 'subscribe_user_with_password':        
-        $courses_controller->subscribe_user($_POST['subscribe_user_with_password'], $_POST['search_term'], $_POST['category_code']);                       
+    case 'subscribe_user_with_password':
+        $courses_controller->subscribe_user($_POST['subscribe_user_with_password'], $_POST['search_term'], $_POST['category_code']);
         exit;
         break;
     case 'createcoursecategory':
@@ -199,16 +198,16 @@ switch ($action) {
     case 'deletecoursecategory':
         $courses_controller->courses_list($action);
         break;
-    case 'sortmycourses':        
+    case 'sortmycourses':
         $courses_controller->courses_list($action);
         break;
-    case 'subscribe':                
+    case 'subscribe':
     case 'display_random_courses':
         if ($user_can_view_page) {
             $courses_controller->courses_categories($action);
         } else {
             api_not_allowed();
-        }            
+        }
         break;
     case 'display_courses':
         $courses_controller->courses_categories($action, $_GET['category_code']);

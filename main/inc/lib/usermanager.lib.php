@@ -378,19 +378,24 @@ class UserManager {
     public static function can_delete_user($user_id) {
         global $_configuration;
         if (isset($_configuration['delete_users']) && $_configuration['delete_users'] == false) {
-                return false;
+            return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         if ($user_id != strval(intval($user_id))) return false;
         if ($user_id === false) return false;
+        $user_info = api_get_user_info($user_id);
+
+        if (empty($user_info)) {
+            return false;
+        }
         $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
-                $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
-                $res2 = Database::query($sql);
-                if (Database::num_rows($res2) == 1) {
-                        return false;
-                }
+            $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
+            $res2 = Database::query($sql);
+            if (Database::num_rows($res2) == 1) {
+                return false;
+            }
         }
         return true;
     }
@@ -413,10 +418,13 @@ class UserManager {
         if (!self::can_delete_user($user_id)) {
             return false;
         }
+
+        $user_info = api_get_user_info($user_id);
+
         $table_user                   = Database :: get_main_table(TABLE_MAIN_USER);
         $usergroup_rel_user           = Database :: get_main_table(TABLE_USERGROUP_REL_USER);
         $table_course_user            = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_class_user             = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
+        //$table_class_user             = Database :: get_main_table(TABLE_MAIN_CLASS_USER);
         $table_course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
         $table_admin                  = Database :: get_main_table(TABLE_MAIN_ADMIN);
         $table_session_user           = Database :: get_main_table(TABLE_MAIN_SESSION_USER);
@@ -456,7 +464,6 @@ class UserManager {
 
         // Delete user picture
         // TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
-        $user_info = api_get_user_info($user_id);
 
         if (strlen($user_info['picture_uri']) > 0) {
             $img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
@@ -521,7 +528,7 @@ class UserManager {
         // Add event to system log
         $user_id_manager = api_get_user_id();
         event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-            event_system(LOG_USER_DELETE, LOG_USER_OBJECT, implode(';',$user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, implode(';',$user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
         return true;
     }
 
@@ -538,14 +545,21 @@ class UserManager {
      * @assert (array(-1)) === false
      */
     static function delete_users($ids = array()) {
+        if (empty($ids)) {
+            return false;
+        }
         $result = false;
         $ids = is_array($ids) ? $ids : func_get_args();
         $ids = array_map('intval', $ids);
-        foreach ($ids as $id) {
-            $deleted = self::delete_user($id);
-            $result = $deleted || $result;
+        if (!empty($ids)) {
+            foreach ($ids as $id) {
+                $deleted = self::delete_user($id);
+                $result = $deleted || $result;
+            }
+            return $result;
+        } else {
+            return false;
         }
-        return $result;
     }
 
     /**
@@ -567,8 +581,10 @@ class UserManager {
             foreach ($ids as $id) {
                 self::change_active_state($id, 0);
             }
+            return true;
+        } else {
+            return false;
         }
-        return true;
     }
 
     /**
@@ -606,7 +622,7 @@ class UserManager {
         if ($user_id != strval(intval($user_id))) return false;
         if ($user_id === false) return false;
         $sql = "UPDATE $table_user SET openid='".Database::escape_string($openid)."'";
-        $sql .=    " WHERE user_id='$user_id'";
+        $sql .= " WHERE user_id = '$user_id'";
         return Database::query($sql);
     }
 
@@ -629,7 +645,7 @@ class UserManager {
      * @return boolean true if the user information was updated
      * @assert (false) === false
      */
-    public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0) {
+    public static function update_user($user_id, $firstname, $lastname, $username, $password = null, $auth_source = null, $email = null, $status = STUDENT, $official_code = null, $phone = null , $picture_uri = null, $expiration_date = null, $active = 1, $creator_id = null, $hr_dept_id = 0, $extra = null, $language = 'english', $encrypt_method = '', $send_email = false, $reset_password = 0) {
         global $_configuration;
         $original_password = $password;
 
@@ -760,7 +776,6 @@ class UserManager {
                 $user_info = api_get_user_info($user_id);
                 $recipient_name = api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
-                //$sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $emailbody=get_lang('Dear')." ".stripslashes($recipient_name).",\n\n";
                 $emailbody.=sprintf(get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'), api_get_setting('siteName'))."\n";
                 $emailbody.=sprintf(get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'), api_get_path(WEB_PATH)).",\n\n";
@@ -769,7 +784,6 @@ class UserManager {
                 $emailbody.= api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n". get_lang('Manager'). " ".api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n" .get_lang('Email') ." : ".api_get_setting('emailAdministrator');
 
                 MessageManager::send_message_simple($user_id, $emailsubject, $emailbody);
-                //$result = api_mail_html($recipient_name, $user_info['mail'], $emailsubject, $emailbody, $sender_name, $email_admin);
             }
         }
 

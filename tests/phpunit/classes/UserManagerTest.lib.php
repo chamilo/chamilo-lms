@@ -30,14 +30,14 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     function customUser() {
+        $unique_id = uniqid();
         return array(
-            array('julio', 'montoya', 5, 'julio@example.com', 'jmontoya666', 'jmontoya666'),
-            array('julio', 'montoya', 5, 'julio@example.com', 'jmontoya777', 'jmontoya777')
+            array('julio', 'montoya', 5, 'julio@example.com', 'jmontoya1_'.$unique_id, 'jmontoya1_'.$unique_id),
+            array('julio', 'montoya', 5, 'julio@example.com', 'jmontoya2_'.$unique_id, 'jmontoya2_'.$unique_id)
         );
     }
 
     /**
-     * Generated from @assert ('') === false.
      *
      * @covers UserManager::is_username_available
      */
@@ -74,7 +74,23 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(
             1, $user_id
         );
+        return $user_id;
     }
+
+
+    /**
+     * @covers UserManager::get_user_info_by_id
+     * @depends testCreate_user
+     */
+    public function testGet_user_info_by_id($user_id)
+    {
+        $user_info = UserManager::get_user_info_by_id($user_id);
+        $this->assertGreaterThan(
+            1, $user_info['user_id']
+        );
+        return $user_info;
+    }
+
 
     /**
      * @dataProvider customUser
@@ -82,18 +98,18 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate_user2($firstname, $lastname, $status, $email, $username, $password)
     {
-        $this->assertSame(
-            false, UserManager::create_user($firstname, $lastname, $status, $email, $username, $password)
+        $this->assertGreaterThan(
+            1, UserManager::create_user($firstname, $lastname, $status, $email, $username, $password)
         );
     }
 
     /**
      * @covers UserManager::get_user_info
-     * @depends testCreate_user2
+     * @depends testGet_user_info_by_id
      */
-    public function testGet_user_info()
+    public function testGet_user_info($user_info)
     {
-        $user_info = UserManager::get_user_info('jmontoya666');
+        $user_info = UserManager::get_user_info($user_info['username']);
         $this->assertGreaterThan(
             1, $user_info['user_id']
         );
@@ -126,7 +142,7 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @depends testGet_user_info
+     * @depends testCreate_user
      */
     public function testDelete_user2()
     {
@@ -160,24 +176,6 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
         );
     }
 
-
-
-
-
-    /**
-     *
-     * @covers UserManager::delete_users
-     * @depends testDelete_user
-     */
-    public function testDelete_users2()
-    {
-        $new_user_id = UserManager::create_user('julio', 'montoya', STUDENT, 'julio@example.com', 'jmontoya666', 'jmontoya');
-        UserManager::delete_user($new_user_id);
-        $user_info = api_get_user_info($new_user_id);
-        $this->assertSame(
-            false, $user_info
-        );
-    }
 
     /**
      * Generated from @assert (null) === false.
@@ -252,14 +250,13 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generated from @assert (false) === false.
      *
      * @covers UserManager::update_user
      */
     public function testUpdate_user()
     {
         $this->assertSame(
-            false, UserManager::update_user(false)
+            false, UserManager::update_user(false, false, false, false)
         );
     }
 
@@ -426,19 +423,6 @@ class UserManagerTest extends PHPUnit_Framework_TestCase
      * @todo   Implement testGet_user_list_like().
      */
     public function testGet_user_list_like()
-    {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-    }
-
-
-    /**
-     * @covers UserManager::get_user_info_by_id
-     * @todo   Implement testGet_user_info_by_id().
-     */
-    public function testGet_user_info_by_id()
     {
         // Remove the following lines when you implement this test.
         $this->markTestIncomplete(

@@ -19,7 +19,7 @@ use \ChamiloSession as Session;
  * @todo check for duplication of "require_once" files with test_suite.php
  * @author Arthur Portugal
  */
- 
+
 /*
 		INIT SECTION
 */
@@ -79,10 +79,9 @@ require_once $libdir.'exercise_show_functions.lib.php';
 require_once $libdir.'fileManage.lib.php';
 require_once $libdir.'notebook.lib.php';
 
-/**This files need be inside a buffering to clean the objects*/ 
+/**This files need be inside a buffering to clean the objects*/
 ob_start();
 require_once $libdir.'main_api.lib.php';
-require_once $libdir.'course_document.lib.php';
 require_once $libdir.'add_course.lib.inc.php';
 require_once $libdir.'geometry.lib.php';
 ob_end_clean();
@@ -91,7 +90,7 @@ ob_end_clean();
 //require_once $maindir.'exercice/exercise.lib.php';
 
 class TestManager {
-	
+
 /* MAIN CODE */
 
 /**
@@ -102,23 +101,23 @@ class TestManager {
  */
 
 function create_test_course($course_code = 'TESTCOURSE') {
-		
-	/* Table definitions */	
+
+	/* Table definitions */
 	$table_course 		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$course_table 		= Database::get_main_table(TABLE_MAIN_COURSE);
 	$course_cat_table 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
-	
+
 	global $_configuration, $_user, $_course, $cidReq;
 	$cidReq = $course_code;
-	
+
 	/*	Check if the course exists	*/
-	
+
 	$sql = "SELECT code FROM  $table_course WHERE code = '$cidReq' ";
 	$rs = Database::query($sql, __FILE__, __LINE__);
 	$row = Database::fetch_row($rs);
-	
+
 	/*	Create the course in the database */
-	
+
 	if (empty($row[0])) {
 	    // Create a course
 	    $course_data = array(
@@ -136,18 +135,18 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	                         $course_data['course_language'],$course_data['course_admin_id'],
 	                         $course_data['db_prefix'], $course_data['firstExpirationDelay']);
 	}
-	
-	
+
+
 	$sql =  "SELECT course.*, course_category.code faCode, course_category.name faName
 	         FROM $course_table
 	         LEFT JOIN $course_cat_table
 	         ON course.category_code = course_category.code
 	         WHERE course.code = '$cidReq'";
-	         
+
 	$result = Database::query($sql);
-	
+
 	/*	Create the session	*/
-	
+
 	if (Database::num_rows($result)>0) {
 	    $cData = Database::fetch_array($result);
 	    $_cid                            = $cData['code'             ];
@@ -168,24 +167,24 @@ function create_test_course($course_code = 'TESTCOURSE') {
 	    $_course['visibility'  ]         = $cData['visibility'		 ];
 	    $_course['subscribe_allowed']    = $cData['subscribe'		 ];
 	    $_course['unsubscribe']          = $cData['unsubscribe'		 ];
-	
+
 	    Session::write('_cid',$_cid);
 	    Session::write('_course',$_course);
 	}
-	   
+
 	/*	Load the session	*/
-	
-	$_SESSION['_user']['user_id'] = 1;    
+
+	$_SESSION['_user']['user_id'] = 1;
 	$_SESSION['is_courseAdmin'] = 1;
 	$_SESSION['show'] = showall;
-	
+
 	/*		Load the user	*/
-	
+
 	$_user['user_id'] = $_SESSION['_user']['user_id'];
 }
 
 /**
- * This function delete the test course from the database and destroy the sessions. 
+ * This function delete the test course from the database and destroy the sessions.
  * @param string the course code than will be delete.
  * @return void
  */
@@ -193,7 +192,7 @@ function create_test_course($course_code = 'TESTCOURSE') {
 function delete_test_course($course_code = 'TESTCOURSE') {
 	$res = CourseManager::delete_course($course_code);
 	$path = api_get_path(SYS_PATH).'archive';
-	
+
 	if ($handle = opendir($path)) {
 		while (false !== ($file = readdir($handle))) {
 			if (strpos($file,$course_code)!==false) {
@@ -204,7 +203,7 @@ function delete_test_course($course_code = 'TESTCOURSE') {
 		}
 		closedir($handle);
 	}
-		
+
 	//	Check api session destroy
 	if (!headers_sent() && session_id() != "") {
 		$res=Session::destroy();

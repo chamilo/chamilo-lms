@@ -8,12 +8,10 @@ require 'global.inc.php';
 
 /*	Libraries */
 
-require_once api_get_path(LIBRARY_PATH).'course_document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-//require_once api_get_path(LIBRARY_PATH).'tablesort.lib.php'; moved to autoload
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 //if(!$is_in_admin){
@@ -176,7 +174,7 @@ if ($is_allowed_to_edit) { // TEACHER ONLY
 
 $docs_and_folders = getlist ($base_work_dir.'/');
 
-if ($docs_and_folders) {	
+if ($docs_and_folders) {
 	//create a sortable table with our data
 	$sortable_data = array();
 	while (list ($key, $id) = each($docs_and_folders)) {

@@ -3,8 +3,7 @@
 
 /**
  * @package chamilo.main
-*/
-
+ */
 define('CHAMILO_HOMEPAGE', true);
 
 $language_file = array('courses', 'index');
@@ -20,7 +19,7 @@ require_once 'main/chat/chat_functions.lib.php';
 $this_section = SECTION_CAMPUS;
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
-$htmlHeadXtra[] ='
+$htmlHeadXtra[] = '
 <script>
 	$(document).ready(function(){
 		$("#slider").bxSlider({
@@ -44,7 +43,9 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController
 {
-    public function indexAction(Application $app) {
+
+    public function indexAction(Application $app)
+    {
         $request = $app['request'];
 
         //Actions
@@ -56,28 +57,22 @@ class IndexController
 
         //$article = $app['orm.em']->getRepository('Entity\EntityCourse');
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
-
         //$a = new EntityCourse();
-//require_once '/var/www/chamilo11/main/inc/Entity/EntityCourse.php';
         //$article = $app['orm.em']->getRepository('EntityCourse');
         //var_dump($article);
-
         //$courses_query = $app['orm.em']->createQuery('SELECT a FROM Entity\EntityCourse a');
-/*
-        $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
-        $c = count($paginator);
-        foreach ($paginator as $course) {
-            echo $course->getCode() . "\n";
-        }
-        exit;*/
+        /*
+          $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($courses_query, $fetchJoinCollection = true);
+          $c = count($paginator);
+          foreach ($paginator as $course) {
+          echo $course->getCode() . "\n";
+          }
+          exit; */
 
         //$app['orm.em']->find('EntityCourse', 1);
         //var_dump($app['orm.ems']['mysql']);
-
-
         // Defines wether or not anonymous visitors can see a list of the courses on the Chamilo homepage that are open to the world.
         //$_setting['display_courses_to_anonymous_users'] = 'true';
-
         // Delete session neccesary for legal terms
         if (api_get_setting('allow_terms_conditions') == 'true') {
             unset($_SESSION['term_and_condition']);
@@ -130,17 +125,17 @@ class IndexController
             $announcements_block = PageController::return_announcements();
         }
 
-        $app['template']->assign('hot_courses',              $hot_courses);
-        $app['template']->assign('announcements_block', 	 $announcements_block);
+        $app['template']->assign('hot_courses', $hot_courses);
+        $app['template']->assign('announcements_block', $announcements_block);
 
         //Homepage
-        $app['template']->assign('home_page_block', 		 PageController::return_home_page());
+        $app['template']->assign('home_page_block', PageController::return_home_page());
 
         //Navigation links
         $nav_links = $app['template']->return_navigation_links();
 
-        $app['template']->assign('navigation_course_links',  $nav_links);
-        $app['template']->assign('main_navigation_block',	 $nav_links);
+        $app['template']->assign('navigation_course_links', $nav_links);
+        $app['template']->assign('main_navigation_block', $nav_links);
 
         PageController::return_notice();
         PageController::return_help();
@@ -156,17 +151,18 @@ class IndexController
 
     /**
      *
-    * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
-    * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
-    *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
-    *       on api_get_setting('page_after_login').
+     * @todo This piece of code should probably move to local.inc.php where the actual login procedure is handled.
+     * @todo Check if this code is used. I think this code is never executed because after clicking the submit button
+     *       the code does the stuff in local.inc.php and then redirects to index.php or user_portal.php depending
+     *       on api_get_setting('page_after_login').
      * @deprecated seems not to be used
-    */
-    function check_last_login() {
+     */
+    function check_last_login()
+    {
         if (!empty($_POST['submitAuth'])) {
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
-                $track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+                $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
                 $sql_last_login = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'
@@ -194,62 +190,64 @@ class IndexController
         }
     }
 
-    function set_login_form(Application $app) {
+    function set_login_form(Application $app)
+    {
         $user_id = api_get_user_id();
         $login_form = null;
         if (!$user_id || api_is_anonymous($user_id)) {
 
-			// Only display if the user isn't logged in.
-			$app['template']->assign('login_language_form', api_display_language_form(true));
+            // Only display if the user isn't logged in.
+            $app['template']->assign('login_language_form', api_display_language_form(true));
             //self::display_login_form($app);
 
-			$app['template']->assign('login_form',  self::display_login_form($app));
+            $app['template']->assign('login_form', self::display_login_form($app));
 
-			if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-				$login_form .= '<ul class="nav nav-list">';
-				if (api_get_setting('allow_registration') != 'false') {
-					$login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
-				}
-				if (api_get_setting('allow_lostpassword') == 'true') {
-					$login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-				}
-				$login_form .= '</ul>';
-			}
-			$app['template']->assign('login_options',  $login_form);
+            if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
+                $login_form .= '<ul class="nav nav-list">';
+                if (api_get_setting('allow_registration') != 'false') {
+                    $login_form .= '<li><a href="main/auth/inscription.php">'.get_lang('Reg').'</a></li>';
+                }
+                if (api_get_setting('allow_lostpassword') == 'true') {
+                    $login_form .= '<li><a href="main/auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
+                }
+                $login_form .= '</ul>';
+            }
+            $app['template']->assign('login_options', $login_form);
         }
     }
 
-    function logout() {
+    function logout()
+    {
         $user_id = api_get_user_id();
         online_logout($user_id, true);
-	}
+    }
 
-    function display_login_form(Application $app) {
-         /*{{ form_widget(form) }}
-         $form = $app['form.factory']->createBuilder('form')
-        ->add('name')
-        ->add('email')
-        ->add('gender', 'choice', array(
-            'choices' => array(1 => 'male', 2 => 'female'),
-            'expanded' => true,
-        ))
-        ->getForm();
-        return $app['template']->assign('form', $form->createView());
-*/
+    function display_login_form(Application $app)
+    {
+        /* {{ form_widget(form) }}
+          $form = $app['form.factory']->createBuilder('form')
+          ->add('name')
+          ->add('email')
+          ->add('gender', 'choice', array(
+          'choices' => array(1 => 'male', 2 => 'female'),
+          'expanded' => true,
+          ))
+          ->getForm();
+          return $app['template']->assign('form', $form->createView());
+         */
 
-		$form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
+        $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
         $form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
-		$form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
-		$form->addElement('style_submit_button','submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
-		$html = $form->return_form();
-		if (api_get_setting('openid_authentication') == 'true') {
-			include_once 'main/auth/openid/login.php';
-			$html .= '<div>'.openid_form().'</div>';
-		}
-		return $html;
-	}
+        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
+        $html = $form->return_form();
+        if (api_get_setting('openid_authentication') == 'true') {
+            include_once 'main/auth/openid/login.php';
+            $html .= '<div>'.openid_form().'</div>';
+        }
+        return $html;
+    }
 }
-
 $app->match('/', 'IndexController::indexAction', 'POST|GET');
 $app->run();
 //$app['http_cache']->run();

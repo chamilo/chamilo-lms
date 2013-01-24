@@ -9,8 +9,8 @@ require_once 'main/inc/global.inc.php';
 $tool_name = get_lang('SystemAnnouncements');
 
 $actions = '';
-if (api_is_platform_admin()) {	
-	$actions = '<a href="'.api_get_path(WEB_PATH).'main/admin/system_announcements.php">'.Display::return_icon('edit.png', get_lang('EditSystemAnnouncement'), array(), 32).'</a>';	
+if (api_is_platform_admin()) {
+	$actions = '<a href="'.api_get_path(WEB_PATH).'main/admin/system_announcements.php">'.Display::return_icon('edit.png', get_lang('EditSystemAnnouncement'), array(), 32).'</a>';
 }
 
 if (api_is_anonymous()) {
@@ -22,6 +22,5 @@ $content =  SystemAnnouncementManager ::display_announcements_slider($visibility
 
 $tpl = new Template($tool_name);
 $tpl->assign('actions', $actions);
-//$tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

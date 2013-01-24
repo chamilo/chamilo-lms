@@ -137,11 +137,11 @@ if (!empty($current_group['description'])) {
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_get_user_id(), $current_group['id'])) {	
+if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_get_user_id(), $current_group['id'])) {
 	$actions_array = array();
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
-    
+
 	if (is_array($forums_of_groups)) {
 		if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
@@ -155,7 +155,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 		}
 	}
 	if ($current_group['doc_state'] != GroupManager::TOOL_NOT_AVAILABLE ) {
-		// Link to the documents area of this group		
+		// Link to the documents area of this group
         $actions_array[] = array(
                         'url' => '../document/document.php?'.api_get_cidreq(),
                         'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), 32)
@@ -174,7 +174,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
                         'url' => '../work/work.php?'.api_get_cidreq(),
                         'content' => Display::return_icon('work.png', get_lang('GroupWork'), array(), 32)
          );
-         
+
 	}
 	if ($current_group['announcements_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
 		// Link to a group-specific part of announcements
@@ -183,13 +183,13 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
                         'content' => Display::return_icon('announce.png', get_lang('GroupAnnouncements'), array(), 32)
         );
 	}
-    
+
 	if ($current_group['wiki_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
 		// Link to the wiki area of this group
         $actions_array[] = array(
                         'url' => '../wiki/index.php?'.api_get_cidreq().'&amp;action=show&amp;title=index&amp;session_id='.api_get_session_id().'&amp;group_id='.$current_group['id'],
                         'content' => Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), 32)
-        );		
+        );
 	}
 	if ($current_group['chat_state'] != GroupManager::TOOL_NOT_AVAILABLE) {
 		// Link to the chat area of this group
@@ -205,25 +205,24 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
             );
 		}
 	}
-    
+
 	if (!empty($actions_array)) {
-        echo Display::page_subheader(get_lang('Tools'));
 		echo Display::actions($actions_array);
 	}
 
 } else {
 	$actions_array = array();
-    
+
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
 	if (is_array($forums_of_groups)) {
 		if ( $current_group['forum_state'] == GroupManager::TOOL_PUBLIC ) {
 			foreach ($forums_of_groups as $key => $value) {
-				if ($value['forum_group_public_private'] == 'public' ) {					                    
+				if ($value['forum_group_public_private'] == 'public' ) {
                     $actions_array[] = array(
                         'url' => '../forum/viewforum.php?cidReq='.api_get_course_id().'&forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&amp;origin=group',
                         'content' => Display::return_icon('forum.png', get_lang('GroupForum'), array(), ICON_SIZE_MEDIUM)
-                    );                     
+                    );
 				}
 			}
 		}
@@ -241,7 +240,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
                         'url' => '../calendar/agenda.php?'.api_get_cidreq(),
                         'content' => Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_MEDIUM)
         );
-        
+
 	}
 	if ($current_group['work_state'] == GroupManager::TOOL_PUBLIC) {
 		// Link to the works area of this group
@@ -279,7 +278,6 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 		}
 	}
 	if (!empty($actions_array)) {
-        echo Display::page_subheader(get_lang('Tools'));
 		echo Display::actions($actions_array);
 	}
 }
@@ -387,7 +385,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 	// Database table definition
 	$table_group_user 	= Database :: get_course_table(TABLE_GROUP_USER);
 	$table_user 		= Database :: get_main_table(TABLE_MAIN_USER);
-	
+
 	$course_id = api_get_course_int_id();
 
 	// Query
@@ -421,7 +419,7 @@ function get_group_user_data($from, $number_of_items, $column, $direction) {
 						FROM ".$table_user." u INNER JOIN ".$table_group_user." gu ON (gu.user_id = u.user_id) AND gu.c_id = $course_id
 						WHERE gu.group_id = '".Database::escape_string($current_group['id'])."'";
 			$sql .= " ORDER BY col$column $direction ";
-			$sql .= " LIMIT $from,$number_of_items";            
+			$sql .= " LIMIT $from,$number_of_items";
 		} else {
 			$sql = "SELECT DISTINCT
 						user.user_id 	AS col0,
@@ -477,9 +475,9 @@ function user_icon_filter($user_id) {
 }
 /**
  * Return user profile link around the given user name.
- * 
+ *
  * The parameters use a trick of the sorteable table, where the first param is
- * the original value of the column 
+ * the original value of the column
  * @param   string  User name (value of the column at the time of calling)
  * @param   string  URL parameters
  * @param   array   Row of the "sortable table" as it is at the time of function call - we extract the user ID from there
@@ -488,7 +486,7 @@ function user_icon_filter($user_id) {
 function user_name_filter($name, $url_params, $row) {
     global $origin;
     $tab_user_info = Database::get_user_info_from_id($row[0]);
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);	
+    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
     return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'" title="'.$username.'">'.$name.'</a>';
 }
 

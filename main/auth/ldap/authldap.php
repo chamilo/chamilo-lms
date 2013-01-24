@@ -50,7 +50,7 @@
     *    @version 3.0
     *    @package chamilo.auth.ldap
  * Note:
- * If you are using a firewall, you might need to check port 389 is open in 
+ * If you are using a firewall, you might need to check port 389 is open in
  * order for Chamilo to communicate with the LDAP server.
  * See http://support.chamilo.org/issues/4675 for details.
  */
@@ -288,7 +288,7 @@ function ldap_authentication_check ($uname, $passwd) {
     if ($passwd=="") {
         return(1);
     }
-    // Opening 2nd LDAP connection : Connection user for password check 
+    // Opening 2nd LDAP connection : Connection user for password check
     $ds=ldap_connect($ldap_host,$ldap_port);
     ldap_set_version($ds);
     if (!$test_bind) {
@@ -478,6 +478,7 @@ function ldap_add_user($login) {
     global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass;
     $ds = ldap_connect($ldap_host, $ldap_port);
     ldap_set_version($ds);
+    $user_id = 0;
     if ($ds) {
         $str_query="(uid=".$login.")";
         $r = false;
@@ -487,47 +488,56 @@ function ldap_add_user($login) {
         $info = ldap_get_entries($ds, $sr);
 
         for ($key = 0; $key < $info['count']; $key ++) {
-            $lastname = api_convert_encoding($info[$key]['sn'][0], api_get_system_encoding(), 'UTF-8');
-            $firstname = api_convert_encoding($info[$key]['cn'][0], api_get_system_encoding(), 'UTF-8');
-            $email = $info[$key]['mail'][0];
-            // Get uid from dn
-            $dn_array=ldap_explode_dn($info[$key]['dn'],1);
-            $username = $dn_array[0]; // uid is first key
-            $outab[] = $info[$key]['edupersonprimaryaffiliation'][0]; // Here, "student"
-            //$val = ldap_get_values_len($ds, $entry, "userPassword");
-            //$val = ldap_get_values_len($ds, $info[$key], "userPassword");
-            //$password = $val[0];
-            // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
-            $password = $info[$key]['userPassword'][0];
-            $structure=$info[$key]['edupersonprimaryorgunitdn'][0];
-            $array_structure=explode(",", $structure);
-            $array_val=explode("=", $array_structure[0]);
-            $etape=$array_val[1];
-            $array_val=explode("=", $array_structure[1]);
-            $annee=$array_val[1];
-            // To ease management, we add the step-year (etape-annee) code
-            $official_code=$etape."-".$annee;
-            $auth_source='ldap';
-            // No expiration date for students (recover from LDAP's shadow expiry)
-            $expiration_date='0000-00-00 00:00:00';
-            $active=1;
-            if(empty($status)){$status = 5;}
-            if(empty($phone)){$phone = '';}
-            if(empty($picture_uri)){$picture_uri = '';}
-            // Adding user
-            if (UserManager::is_username_available($username)) {
-                $user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
-            } else {
-                $user = UserManager::get_user_info($username);
-                $user_id=$user['user_id'];
-                UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
-            }
+            $user_id = ldap_add_user_by_array($info[$key]);
         }
 
     } else {
         Display :: display_error_message(get_lang('LDAPConnectionError'));
     }
-    return $user_id;;
+    return $user_id;
+}
+
+function ldap_add_user_by_array($data, $update_if_exists = true) {
+
+    $lastname = api_convert_encoding($data['sn'][0], api_get_system_encoding(), 'UTF-8');
+    $firstname = api_convert_encoding($data['cn'][0], api_get_system_encoding(), 'UTF-8');
+    $email = $data['mail'][0];
+    // Get uid from dn
+    $dn_array=ldap_explode_dn($data['dn'],1);
+    $username = $dn_array[0]; // uid is first key
+    $outab[] = $data['edupersonprimaryaffiliation'][0]; // Here, "student"
+    //$val = ldap_get_values_len($ds, $entry, "userPassword");
+    //$val = ldap_get_values_len($ds, $data, "userPassword");
+    //$password = $val[0];
+    // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
+    $password = $data['userPassword'][0];
+    $structure=$data['edupersonprimaryorgunitdn'][0];
+    $array_structure=explode(",", $structure);
+    $array_val=explode("=", $array_structure[0]);
+    $etape=$array_val[1];
+    $array_val=explode("=", $array_structure[1]);
+    $annee=$array_val[1];
+    // To ease management, we add the step-year (etape-annee) code
+    $official_code=$etape."-".$annee;
+    $auth_source='ldap';
+    // No expiration date for students (recover from LDAP's shadow expiry)
+    $expiration_date='0000-00-00 00:00:00';
+    $active=1;
+    if(empty($status)){$status = 5;}
+    if(empty($phone)){$phone = '';}
+    if(empty($picture_uri)){$picture_uri = '';}
+    // Adding user
+    $user_id = 0;
+    if (UserManager::is_username_available($username)) {
+        $user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+    } else {
+        if ($update_if_exists) {
+            $user = UserManager::get_user_info($username);
+            $user_id=$user['user_id'];
+            UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+        }
+    }
+    return $user_id;
 }
 
 /**
@@ -590,4 +600,48 @@ function ldap_add_user_to_session($UserList, $id_session) {
     list($nbr_users) = Database::fetch_array($rs);
     Database::query("UPDATE $tbl_session SET nbr_users=$nbr_users ".
            " WHERE id='$id_session'");
+}
+
+function syncro_users() {
+    global $ldap_basedn, $ldap_host, $ldap_port, $ldap_rdn, $ldap_pass, $ldap_search_dn;
+    echo "Connecting ...";
+    $ldap_connect = ldap_connect( $ldap_host, $ldap_port);
+    ldap_set_version($ldap_connect);
+    if ($ldap_connect) {
+        //echo " Connect to LDAP server successful ";
+        //echo "Binding ...";
+        $ldap_bind = false;
+        $ldap_bind_res = ldap_handle_bind($ldap_connect,$ldap_bind);
+        if ($ldap_bind_res) {
+            //echo " LDAP bind successful... ";
+            //echo " Searching for uid... ";
+            // Search surname entry
+            //OLD: $sr=ldap_search($ldapconnect,"dc=rug, dc=ac, dc=be", "uid=$login");
+            //echo "<p> ldapDc = '$LDAPbasedn' </p>";
+            $all_user_query = "uid=*";
+            if(!empty($ldap_search_dn)) {
+                $sr = ldap_search($ldap_connect, $ldap_search_dn, $all_user_query);
+            } else {
+                $sr = ldap_search($ldap_connect, $ldap_basedn, $all_user_query);
+            }
+            //echo " Number of entries returned is ".ldap_count_entries($ldapconnect,$sr);
+            //echo " Getting entries ...";
+            $info = ldap_get_entries($ldap_connect, $sr);
+            for ($key = 0; $key < $info['count']; $key ++) {
+                $user_id = ldap_add_user_by_array($info[$key], false);
+                if ($user_id) {
+                    echo "User #$user_id created ";
+                } else {
+                    echo "User was not created ";
+                }
+            }
+            //echo "Data for ".$info["count"]." items returned:<p>";
+        } else {
+            //echo "LDAP bind failed...";
+        }
+        //echo "Closing LDAP connection<hr>";
+        ldap_close($ldap_connect);
+    } else {
+        //echo "<h3>Unable to connect to LDAP server</h3>";
+    }
 }

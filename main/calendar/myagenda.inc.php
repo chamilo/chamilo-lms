@@ -477,14 +477,12 @@ function show_new_personal_item_form($id = "") {
 	echo "<option value=\"55\">55</option>";
 	echo '</select>';
 	echo '</div><br/>';
-	// ********** The title field ********** \\
+
 	echo '<div>';
 	echo ''.get_lang('Title').' : <input type="text" name="frm_title" size="50" value="'.$title.'" />';
 	echo '</div>';
-	// ********** The text field ********** \\
-	echo '<br /><div class="formw">';
 
-	require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
+	echo '<br /><div class="formw">';
 
 	$oFCKeditor = new FCKeditor('frm_content') ;
 

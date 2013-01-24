@@ -13,8 +13,6 @@
 /**
  * Code
  */
-// The initialization class for the online editor is needed here.
-require_once dirname(__FILE__).'/../inc/lib/fckeditor/fckeditor.php';
 
 /**
  * Shows a question
@@ -829,7 +827,6 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path)
 //function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
 function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
 {
-
     $tab_res = array();
     $course_code = api_get_course_id();
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
@@ -874,8 +871,6 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
  */
 function get_exam_results_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false)
 {
-
-
     //@todo replace all this globals
     global $documentPath, $filter;
 
@@ -2149,7 +2144,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
-            
+
             if (empty($result)) {
                 continue;
             }

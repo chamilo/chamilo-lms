@@ -26,12 +26,7 @@ if(isset($_GET['id_session'])) {
 	$_SESSION['id_session'] = intval($_GET['id_session']);
 }
 
-$lib_path = api_get_path(LIBRARY_PATH);
-require_once $lib_path.'blog.lib.php';
-require_once $lib_path.'fckeditor/fckeditor.php';
-
 $blog_table_attachment 	= Database::get_course_table(TABLE_BLOGS_ATTACHMENT);
-
 $nameTools  = get_lang('Blogs');
 $DaysShort  = api_get_week_days_short();
 $DaysLong   = api_get_week_days_long();
@@ -302,7 +297,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<?php Blog::get_personal_task_list(); ?>
 				</td>
 			</tr>
-		</table>		
+		</table>
 	</td>
 	<td valign="top" class="blog_right">
 		<?php

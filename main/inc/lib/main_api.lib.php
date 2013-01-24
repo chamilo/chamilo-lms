@@ -357,6 +357,8 @@ define('MESSAGE_STATUS_INVITATION_PENDING',     '5');
 define('MESSAGE_STATUS_INVITATION_ACCEPTED',    '6');
 define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
 
+define('SESSION_LINK_TARGET', '_self');
+
 
 /**
  * Inclusion of internationalization libraries

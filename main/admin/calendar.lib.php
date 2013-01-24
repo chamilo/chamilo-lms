@@ -1475,15 +1475,11 @@ function show_add_form($id = '') {
 			<input type="text" size="60" name="title" value="<?php  if (isset($title)) echo $title; ?>" />
 		</td>
 	</tr>
-
 	<tr>
 		<td colspan="4">
-
 			<?php
-			require_once api_get_path(LIBRARY_PATH) . "/fckeditor/fckeditor.php";
 
 			$oFCKeditor = new FCKeditor('content') ;
-
 			$oFCKeditor->ToolbarSet = 'GlobalAgenda';
 			$oFCKeditor->Width		= '100%';
 			$oFCKeditor->Height		= '175';
@@ -1496,25 +1492,11 @@ function show_add_form($id = '') {
  ?>
 		</td>
 	</tr>
-	<!--<?php /* ADDED BY UGENT, Patrick Cool, march 2004 */ ?>
-	<tr>
-		<td colspan="4">
-	    <?php
-			//onclick="selectAll(this.form.elements[6],true)"
-
-//				show_addresource_button('onclick="selectAll(this.form.elements[6],true)"');
-
-		?>
-		</td>
-	</tr>-->
 	<?php
-	   //if ($_SESSION['addedresource'])
 	   echo "<tr>\n";
-	   echo "<td colspan=\"4\">\n";
-	   //echo display_resources(0);//--------------------------------------------------------
+	   echo "<td colspan=\"4\">";
 	   $test=$_SESSION['addedresource'];
-	   echo "</td>\n</tr>\n";
-	   /* END ADDED BY UGENT, Patrick Cool, march 2004 */
+	   echo "</td>\n</tr>";
     if(empty($id)) //only show repeat fields when adding the first time
     {
 	?>

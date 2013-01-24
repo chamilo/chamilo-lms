@@ -1,9 +1,9 @@
 {% if menu is not null %}
-    
+
 <div class="navbar subnav">
     <div class="navbar-inner">
         <div class="container">
-            <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">              
+            <a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
@@ -16,13 +16,13 @@
 
                 {% if _u.logged == 1 %}
                 <ul class="nav pull-right">
-                    
+
                     {% if user_notifications is not null %}
                     <li>
-                        <a href="{{ profile_url }}">{{ user_notifications }}</a>
-                    </li>                    
+                        <a href="{{ message_url }}">{{ user_notifications }}</a>
+                    </li>
                     {% endif %}
-                    
+
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>
@@ -38,9 +38,9 @@
 
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
-                            <img src="{{ "exit.png"|icon(22) }}">                            
+                            <img src="{{ "exit.png"|icon(22) }}">
                         </a>
-                    </li>            
+                    </li>
                 </ul>
                 {% endif %}
             </div>

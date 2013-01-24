@@ -3,8 +3,8 @@
 /* For licensing terms, see /license.txt */
 /**
  *  @author Julio Montoya <gugli100@gmail.com>
- *  @todo better organization of the class, methods and variables 
- * 
+ *  @todo better organization of the class, methods and variables
+ *
  * */
 
 require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
@@ -12,7 +12,7 @@ require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
 
 class Template {
 
-    var $style = 'default'; //see the template folder 
+    var $style = 'default'; //see the template folder
     var $preview_theme = null;
     var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
     var $title = null;
@@ -39,7 +39,7 @@ class Template {
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 
-        //Twig settings        
+        //Twig settings
         Twig_Autoloader::register();
 
         $template_paths = array(
@@ -102,10 +102,10 @@ class Template {
         //Setting system variables
         $this->set_system_parameters();
 
-        //Setting user variables 
+        //Setting user variables
         $this->set_user_parameters();
 
-        //Setting course variables 
+        //Setting course variables
         $this->set_course_parameters();
 
         //header and footer are showed by default
@@ -137,8 +137,8 @@ class Template {
                 }
             }
         }
-    }    
-    
+    }
+
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
         return Display:: return_icon($image, '', array(), $size, false, true);
     }
@@ -146,12 +146,12 @@ class Template {
     public static function format_date($timestamp, $format = null) {
         return api_format_date($timestamp, $format);
     }
-        
+
     /**
      * Return the item's url key:
-     * 
+     *
      *      c_id=xx&id=xx
-     * 
+     *
      * @param object $item
      * @return string
      */
@@ -239,8 +239,8 @@ class Template {
         $this->display($tpl);
     }
 
-    /** 	  
-     * Sets the footer visibility 
+    /**
+     * Sets the footer visibility
      * @param bool true if we show the footer
      */
     function set_footer($status) {
@@ -256,7 +256,7 @@ class Template {
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
-        //Toolbar                
+        //Toolbar
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
         $show_toolbar = 0;
 
@@ -279,7 +279,7 @@ class Template {
         }
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available        
+        //Only if course is available
         $show_course_shortcut = null;
         $show_course_navigation_menu = null;
 
@@ -325,7 +325,7 @@ class Template {
             $user_info['messages_count'] = MessageManager::get_new_messages();
             $this->user_is_logged_in = true;
         }
-        //Setting the $_u array that could be use in any template 
+        //Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 
@@ -360,7 +360,7 @@ class Template {
     function set_css_files() {
         global $disable_js_and_css_files;
         $css = array();
-        
+
         //$platform_theme = api_get_setting('stylesheets');
         $this->theme = api_get_visual_theme();
 
@@ -375,11 +375,11 @@ class Template {
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
-        
+
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
-            
+
         if ($this->show_learnpath) {
             $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
             $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
@@ -388,39 +388,39 @@ class Template {
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
         }
-               
+
         $css_file_to_string = null;
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
-        }    
-        
+        }
+
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
         if (SHOW_TEXT_NEAR_ICONS == true) {
             //hack in order to fix the actions buttons
-            $css_file_to_string .= '<style>                
+            $css_file_to_string .= '<style>
                 .td_actions a {
                     float:left;
                     width:100%;
-                }                
+                }
                 .forum_message_left a {
                     float:left;
                     width:100%;
                 }
                 </style>';
         }
-        
+
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
             $css_file_to_string .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
         }
-        
+
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
-            
+
             $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
-        
+
         // Logo
         $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
@@ -431,21 +431,21 @@ class Template {
      */
     function set_js_files() {
         global $disable_js_and_css_files, $htmlHeadXtra;
-        
-        //JS files        
+
+        //JS files
         $js_files = array(
             'modernizr.js',
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
-            'thickbox.js',            
+            'thickbox.js',
             'bootstrap/bootstrap.js',
         );
 
-        if (api_is_global_chat_enabled()) {           
+        if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-            }            
+            }
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
@@ -454,26 +454,26 @@ class Template {
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
             $js_files[] = 'asciimath/ASCIIMathML.js';
-        }       
-        
+        }
+
         $js_file_to_string = null;
-        
+
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
-        
+
         //Loading email_editor js
         if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');            
+            $js_file_to_string .= $this->fetch('default/mail_editor/email_link.js.tpl');
         }
-        
-        if (!$disable_js_and_css_files) {       
+
+        if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string', $js_file_to_string);
-            
+
             //Adding jquery ui by default
             $extra_headers = api_get_jquery_ui_js();
 
-            //$extra_headers = '';		
+            //$extra_headers = '';
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {
                     $extra_headers .= $this_html_head . "\n";
@@ -483,7 +483,7 @@ class Template {
         }
     }
     /**
-     * Special function to declare last-minute JS libraries which depend on 
+     * Special function to declare last-minute JS libraries which depend on
      * other things to be declared first. In particular, it might be useful
      * under IE9 with compatibility mode, which for some reason is getting
      * upset when a variable is used in a function (even if not used yet)
@@ -492,18 +492,18 @@ class Template {
     function set_js_files_post() {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $js_files = array();
-        if (api_is_global_chat_enabled()) {           
+        if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
-            }            
+            }
         }
         $js_file_to_string = null;
-        
+
         foreach ($js_files as $js_file) {
             $js_file_to_string .= api_get_js($js_file);
         }
-        if (!$disable_js_and_css_files) {       
+        if (!$disable_js_and_css_files) {
             $this->assign('js_file_to_string_post', $js_file_to_string);
         }
     }
@@ -511,7 +511,7 @@ class Template {
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {        
+    private function set_header_parameters() {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
         $help = $this->help;
         $nameTools = $this->title;
@@ -529,7 +529,7 @@ class Template {
         $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
         $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
 
-        // Get language iso-code for this page - ignore errors				
+        // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
 
         $course_title = $_course['name'];
@@ -545,7 +545,7 @@ class Template {
         if ($nameTools != '') {
             $title_list[] = $nameTools;
         }
-        
+
         $title_string = '';
         for ($i = 0; $i < count($title_list); $i++) {
             $title_string .=$title_list[$i];
@@ -557,13 +557,13 @@ class Template {
         }
 
         $this->assign('title_string', $title_string);
-               
+
         //Setting the theme and CSS files
         $this->set_css_files();
         $this->set_js_files();
         //$this->set_js_files_post();
-        
-        // Implementation of prefetch. 
+
+        // Implementation of prefetch.
         // See http://cdn.chamilo.org/main/img/online.png for details
         $prefetch = '';
         if (!empty($_configuration['cdn_enable'])) {
@@ -572,7 +572,7 @@ class Template {
                 $prefetch .= '<link rel="dns-prefetch" href="' . $host . '">';
             }
         }
-        
+
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-' . $this_section);
@@ -613,43 +613,46 @@ class Template {
         $this->assign('bug_notification_link', $bug_notification_link);
 
         $notification = return_notification_menu();
-        $this->assign('notification_menu', $notification);        
-        
+        $this->assign('notification_menu', $notification);
+
         //Preparing values for the menu
-        
+
         //Logout link
-        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());        
-        
+        $this->assign('logout_link', api_get_path(WEB_PATH).'index.php?logout=logout&&uid='.api_get_user_id());
+
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
             $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
             $profile_link = Display::url(get_lang('Profile'), $profile_url);
         } else {
-            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';            
+            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
             $profile_link = Display::url(get_lang('Profile'), $profile_url);
         }
         $this->assign('profile_link', $profile_link);
         $this->assign('profile_url', $profile_url);
-        
+
         //Message link
         $message_link = null;
+        $message_url = null;
         if (api_get_setting('allow_message_tool') == 'true') {
+            $message_url = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
         }
         $this->assign('message_link', $message_link);
-        
+        $this->assign('message_url', $message_url);
+
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
-        
+
         $this->assign('portal_name', $portal_name);
-        
+
         //Menu
         $menu = return_menu();
         $this->assign('menu', $menu);
-        
+
         //Setting notifications
-        
-           
+
+
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool')=='true') {
             // get count unread message and total invitations
@@ -665,13 +668,13 @@ class Template {
                 $group_pending_invitations = count($group_pending_invitations);
             }
             $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
-        }        
-        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);    
-                
+        }
+        $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
+
         $this->assign('user_notifications', $total_invitations);
-        
-        
-        //Breadcrumb        
+
+
+        //Breadcrumb
         $breadcrumb = return_breadcrumb($interbreadcrumb, $language_file, $nameTools);
         $this->assign('breadcrumb', $breadcrumb);
 
@@ -681,7 +684,7 @@ class Template {
             $extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
-        
+
         if ($this->show_header == 1) {
             header('Content-Type: text/html; charset=' . api_get_system_encoding());
             header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));
@@ -760,7 +763,7 @@ class Template {
                 $this->assign('teachers', $teacher_data);
             }
         }
-        /* $stats = '';	
+        /* $stats = '';
           $this->assign('execution_stats', $stats); */
     }
 

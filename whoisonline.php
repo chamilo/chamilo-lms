@@ -116,7 +116,6 @@ if ((api_get_setting('showonline', 'world') == 'true' && !$_user['user_id']) || 
 	} else {
 		$user_list = who_is_online(0, 9);
 	}
-
 	if (!isset($_GET['id'])) {
 		if (api_get_setting('allow_social_tool') == 'true') {
 			if (!api_is_anonymous()) {
@@ -155,7 +154,6 @@ $tpl = new Template(get_lang('UsersOnLineList'));
 
 if (api_get_setting('allow_social_tool') == 'true' && !api_is_anonymous()) {
     $tpl->assign('social_left_content', $social_left_content);
-    //$tpl->assign('social_left_menu', $social_left_menu);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('layout/social_layout.tpl');
     $tpl->display($social_layout);

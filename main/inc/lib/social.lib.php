@@ -779,7 +779,6 @@ class SocialManager extends UserManager
     public static function display_user_list($user_list)
     {
         if ($_GET['id'] == '') {
-
             $column_size = '9';
             $add_row = false;
             if (api_is_anonymous()) {
@@ -801,6 +800,7 @@ class SocialManager extends UserManager
             $html .= '<div class="span'.$column_size.'">';
 
             $html .= '<ul id="online_grid_container" class="thumbnails">';
+
             foreach ($user_list as $uid) {
                 $user_info = api_get_user_info($uid);
                 //Anonymous users can't have access to the profile

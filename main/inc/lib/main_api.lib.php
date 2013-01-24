@@ -1035,10 +1035,6 @@ function api_get_user_courses($userid, $fetch_session = true) {
 function _api_format_user($user, $add_password = false) {
     $result = array();
 
-    if (api_is_anonymous()) {
-        return $user;
-    }
-
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
@@ -1168,7 +1164,7 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
             }
             $result_array['user_is_online_in_chat'] = $user_online_in_chat;
 		}
-        $user =  _api_format_user($result_array, $show_password);
+        $user = _api_format_user($result_array, $show_password);
         return $user;
     }
     return false;

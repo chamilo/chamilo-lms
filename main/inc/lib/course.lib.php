@@ -5,9 +5,6 @@
  *
  * All main course functions should be placed here.
  *
- * Many functions of this library deal with providing support for
- * virtual/linked/combined courses (this was already used in several universities
- * but not available in standard Chamilo).
  *
  * The implementation changed, initially a course was a real course
  * if target_course_code was 0 , this was changed to NULL.
@@ -667,31 +664,6 @@ class CourseManager {
     }
 
     /**
-     *    Checks wether a parameter exists.
-     *    If it doesn't, the function displays an error message.
-     *
-     *    @return true if parameter is set and not empty, false otherwise
-     *    @todo move function to better place, main_api ?
-     */
-    public static function check_parameter($parameter, $error_message) {
-        if (empty($parameter)) {
-            Display::display_normal_message($error_message);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     *    Lets the script die when a parameter check fails.
-     *    @todo move function to better place, main_api ?
-     */
-    public static function check_parameter_or_fail($parameter, $error_message) {
-        if (!self::check_parameter($parameter, $error_message)) {
-            die();
-        }
-    }
-
-    /**
      *    @return true if there already are one or more courses
      *    with the same code OR visual_code (visualcode), false otherwise
      */
@@ -711,19 +683,6 @@ class CourseManager {
             $real_course_list[$result['code']] = $result;
         }
         return $real_course_list;
-    }
-
-    /**
-     * Lists all virtual courses
-     * @return array   Course info (course code => details) of all virtual courses on the platform
-     */
-    public static function get_virtual_course_list() {
-        $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." WHERE target_course_code IS NOT NULL");
-        $virtual_course_list = array();
-        while ($result = Database::fetch_array($sql_result)) {
-            $virtual_course_list[$result['code']] = $result;
-        }
-        return $virtual_course_list;
     }
 
     /**
@@ -880,181 +839,7 @@ class CourseManager {
                 $data[$row['course_code']] = $row;
             }
         }
-
         return $data;
-    }
-
-    /**
-     * Find out for which courses the user is registered and determine a visual course code and course title from that.
-     * Takes virtual courses into account
-     *
-     * Default case: the name and code stay what they are.
-     *
-     * Scenarios:
-     * - User is registered in real course and virtual courses; name / code become a mix of all
-     * - User is registered in real course only: name stays that of real course
-     * - User is registered in virtual course only: name becomes that of virtual course
-     * - user is not registered to any of the real/virtual courses: name stays that of real course
-     * (I'm not sure about the last case, but this seems not too bad)
-     *
-     * @author Roan Embrechts
-     * @param $user_id, the id of the user
-     * @param $course_info, an array with course info that you get using Database::get_course_info($course_system_code);
-     * @return an array with indices
-     *    $return_result['title'] - the course title of the combined courses
-     *    $return_result['code']  - the course code of the combined courses
-     * @deprecated use api_get_course_info()
-     */
-    public static function determine_course_title_from_course_info($user_id, $course_info) {
-
-        if ($user_id != strval(intval($user_id))) {
-            return array();
-        }
-
-        $real_course_id = $course_info['system_code'];
-        $real_course_info = Database::get_course_info($real_course_id);
-        $real_course_name = $real_course_info['title'];
-        $real_course_visual_code = $real_course_info['visual_code'];
-        $real_course_real_code = Database::escape_string($course_info['system_code']);
-
-        //is the user registered in the real course?
-        $result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                WHERE user_id = '$user_id' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND course_code = '$real_course_real_code'"));
-        $user_is_registered_in_real_course = !empty($result);
-
-        //get a list of virtual courses linked to the current real course and to which the current user is subscribed
-        $user_subscribed_virtual_course_list = self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_id);
-        $virtual_courses_exist = count($user_subscribed_virtual_course_list) > 0;
-
-        //now determine course code and name
-        if ($user_is_registered_in_real_course && $virtual_courses_exist) {
-            $course_info['name'] = self::create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-            $course_info['official_code'] = self::create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
-        }
-        elseif ($user_is_registered_in_real_course) {
-            //course name remains real course name
-            $course_info['name'] = $real_course_name;
-            $course_info['official_code'] = $real_course_visual_code;
-        }
-        elseif ($virtual_courses_exist) {
-            $course_info['name'] = self::create_combined_name($user_is_registered_in_real_course, $real_course_name, $user_subscribed_virtual_course_list);
-            $course_info['official_code'] = self::create_combined_code($user_is_registered_in_real_course, $real_course_visual_code, $user_subscribed_virtual_course_list);
-        } else {
-            //course name remains real course name
-            $course_info['name'] = $real_course_name;
-            $course_info['official_code'] = $real_course_visual_code;
-        }
-
-        $return_result['title'] = $course_info['name'];
-        $return_result['code'] = $course_info['official_code'];
-        return $return_result;
-    }
-
-    /**
-     * Create a course title based on all real and virtual courses the user is registered in.
-     * @param boolean $user_is_registered_in_real_course
-     * @param string $real_course_name, the title of the real course
-     * @param array $virtual_course_list, the list of virtual courses
-     */
-    public static function create_combined_name($user_is_registered_in_real_course, $real_course_name, $virtual_course_list) {
-
-        $complete_course_name = array();
-
-        if ($user_is_registered_in_real_course) {
-            // Add the real name to the result.
-            $complete_course_name[] = $real_course_name;
-        }
-
-        // Add course titles of all virtual courses.
-        foreach ($virtual_course_list as $current_course) {
-            $complete_course_name[] = $current_course['title'];
-        }
-
-        // 'CombinedCourse' is from course_home language file.
-        return (($user_is_registered_in_real_course || count($virtual_course_list) > 1) ? get_lang('CombinedCourse').' ' : '').implode(' &amp; ', $complete_course_name);
-    }
-
-    /**
-     *    Create a course code based on all real and virtual courses the user is registered in.
-     */
-    public static function create_combined_code($user_is_registered_in_real_course, $real_course_code, $virtual_course_list) {
-
-        $complete_course_code = array();
-
-        if ($user_is_registered_in_real_course) {
-            // Add the real code to the result
-            $complete_course_code[] = $real_course_code;
-        }
-
-        // Add codes of all virtual courses.
-        foreach ($virtual_course_list as $current_course) {
-            $complete_course_code[] = $current_course['visual_code'];
-        }
-
-        return implode(' &amp; ', $complete_course_code);
-    }
-
-    /**
-     *    Return course info array of virtual course
-     *
-     *    Note this is different from getting information about a real course!
-     *
-     *    @param $real_course_code, the id of the real course which the virtual course is linked to
-     *  @deprecated virtual courses doesn't exist anymore
-     */
-    public static function get_virtual_course_info($real_course_code) {
-        $sql_result = Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE target_course_code = '".Database::escape_string($real_course_code)."'");
-        $result = array();
-        while ($virtual_course = Database::fetch_array($sql_result)) {
-            $result[] = $virtual_course;
-        }
-        return $result;
-    }
-
-    /**
-     *    @param string $system_code, the system code of the course
-     *    @return true if the course is a virtual course, false otherwise
-     *  @deprecated virtual courses doesn't exist anymore
-     */
-    public static function is_virtual_course_from_system_code($system_code) {
-        $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '".Database::escape_string($system_code)."'"));
-        return !empty($result['target_course_code']);
-    }
-
-    /**
-     *    Returns whether the course code given is a visual code
-     *  @param  string  Visual course code
-     *    @return true if the course is a virtual course, false otherwise
-     *  @deprecated virtual courses doesn't exist anymore
-     */
-    public static function is_virtual_course_from_visual_code($visual_code) {
-        $result = Database::fetch_array(Database::query("SELECT target_course_code FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE visual_code = '".Database::escape_string($visual_code)."'"));
-        return !empty($result['target_course_code']);
-    }
-
-    /**
-     * @return true if the real course has virtual courses that the user is subscribed to, false otherwise
-     *  @deprecated virtual courses doesn't exist anymore
-     */
-    public static function has_virtual_courses_from_code($real_course_code, $user_id) {
-        return count(self::get_list_of_virtual_courses_for_specific_user_and_real_course($user_id, $real_course_code)) > 0;
-    }
-
-    /**
-     * This function returns the course code of the real course
-     * to which a virtual course is linked.
-     *
-     * @param the course code of the virtual course
-     * @return the course code of the real course
-     */
-    public static function get_target_of_linked_course($virtual_course_code) {
-        //get info about the virtual course
-        $result = Database::fetch_array(Database::query("SELECT * FROM ".Database::get_main_table(TABLE_MAIN_COURSE)."
-                WHERE code = '".Database::escape_string($virtual_course_code)."'"));
-        return $result['target_course_code'];
     }
 
     /*
@@ -1752,86 +1537,6 @@ class CourseManager {
             $group_list[$group_data['id']] = $group_data;
         }
         return $group_list;
-    }
-
-    /**
-     * Checks all parameters needed to create a virtual course.
-     * If they are all set, the virtual course creation procedure is called.
-     *
-     * Call this function instead of create_virtual_course
-     * @param  string  Course code
-     * @param  string  Course title
-     * @param  string  Wanted course code
-     * @param  string  Course language
-     * @param  string  Course category
-     * @return bool    True on success, false on error
-     */
-    public static function attempt_create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
-        //better: create parameter list, check the entire list, when false display errormessage
-        self::check_parameter_or_fail($real_course_code, 'Unspecified parameter: real course id.');
-        self::check_parameter_or_fail($course_title, 'Unspecified parameter: course title.');
-        self::check_parameter_or_fail($wanted_course_code, 'Unspecified parameter: wanted course code.');
-        self::check_parameter_or_fail($course_language, 'Unspecified parameter: course language.');
-        self::check_parameter_or_fail($course_category, 'Unspecified parameter: course category.');
-
-        return self::create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category);
-    }
-
-    /**
-     * This function creates a virtual course.
-     * It assumes all parameters have been checked and are not empty.
-     * It checks wether a course with the $wanted_course_code already exists.
-     *
-     * Users of this library should consider this function private,
-     * please call attempt_create_virtual_course instead of this one.
-     *
-     * note: The virtual course 'owner' id (the first course admin) is set to the CURRENT user id.
-     * @param  string  Course code
-     * @param  string  Course title
-     * @param  string  Wanted course code
-     * @param  string  Course language
-     * @param  string  Course category
-     * @return true if the course creation succeeded, false otherwise
-     * @deprecated this is deprecated?
-     * @todo research: expiration date of a course
-     */
-    public static function create_virtual_course($real_course_code, $course_title, $wanted_course_code, $course_language, $course_category) {
-        global $firstExpirationDelay;
-
-        $user_id = api_get_user_id();
-        $real_course_info = Database::get_course_info($real_course_code);
-        $real_course_code = $real_course_info['system_code'];
-
-        //check: virtual course creation fails if another course has the same
-        //code, real or fake.
-        if (self::course_code_exists($wanted_course_code)) {
-            Display::display_error_message($wanted_course_code.' - '.get_lang('CourseCodeAlreadyExists'));
-            return false;
-        }
-
-        //add data to course table, course_rel_user
-        $course_sys_code = $wanted_course_code;
-        $course_screen_code = $wanted_course_code;
-        $course_repository = $real_course_info['directory'];
-        $course_db_name = $real_course_info['db_name'];
-        $responsible_teacher = $real_course_info['tutor_name'];
-        $faculty_shortname = $course_category;
-        // $course_title = $course_title;
-        // $course_language = $course_language;
-        $teacher_id = $user_id;
-
-        //HACK ----------------------------------------------------------------
-        $expiration_date = time() + $firstExpirationDelay;
-        //END HACK ------------------------------------------------------------
-
-        self::register_course($course_sys_code, $course_screen_code, $course_repository, $course_db_name, $responsible_teacher, $faculty_shortname, $course_title, $course_language, $teacher_id, $expiration_date);
-
-        //above was the normal course creation table update call,
-        //now one more thing: fill in the target_course_code field
-        Database::query("UPDATE ".Database::get_main_table(TABLE_MAIN_COURSE)." SET target_course_code = '$real_course_code'
-                WHERE code = '".Database::escape_string($course_sys_code)."' LIMIT 1 ");
-
-        return true;
     }
 
     /**

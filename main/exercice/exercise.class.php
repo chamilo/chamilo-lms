@@ -1899,12 +1899,14 @@ class Exercise {
         global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
 
         $feedback_type = $this->selectFeedbackType();
+        
+        /*
         if ($from == 'exercise_show') {
             if (api_is_allowed_to_edit()) {
                 //For teachers
                 $feedback_type = EXERCISE_FEEDBACK_TYPE_END;
             }
-        }
+        }*/
 
 		require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 

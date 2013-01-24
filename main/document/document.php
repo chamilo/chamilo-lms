@@ -879,7 +879,8 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $to_group_id, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 }
 if (api_get_group_id() != 0) {
-    if (GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()) || UserManager::is_admin(api_get_user_id())) {
+
+    if (api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
         $folders = DocumentManager::get_all_document_folders($_course, api_get_group_id(), $is_allowed_to_edit || $group_member_with_upload_rights);
     }
 } else {
@@ -1017,7 +1018,7 @@ $table_footer = '';
 $total_size = 0;
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    if (api_get_group_id() == 0 || (GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()) || UserManager::is_admin(api_get_user_id()))) {
+    if (api_get_group_id() == 0 || ( api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(),0) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()))) {
         // Create a sortable table with our data
         $sortable_data = array();
 

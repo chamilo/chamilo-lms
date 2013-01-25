@@ -1003,11 +1003,11 @@ class Database {
      */
     private static function format_table_name($database, $table) {
         global $_configuration;
-        if ($_configuration['single_database']) {
+        /*if ($_configuration['single_database']) {
             $table_name =  '`'.$database.'`.`'.$table.'`';
-        } else {
+        } else {*/
             $table_name =  '`'.$database.$_configuration['db_glue'].$table.'`';
-        }
+        //}
         return $table_name;
     }
 

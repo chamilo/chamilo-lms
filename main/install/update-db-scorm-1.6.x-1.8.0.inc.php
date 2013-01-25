@@ -12,7 +12,6 @@
 /**
  * Include mandatory libraries
  */
-Log::notice('Entering file');
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()
@@ -81,7 +80,7 @@ while ($row = Database::fetch_array($res)) {
     $courses_dir_list[$row['code']] = $row['directory'];
 }
 
-if ($loglevel > 0) { Log::notice("Tables created/deleted for all courses"); }
+if ($loglevel > 0) { $app['monolog']->addInfo("Tables created/deleted for all courses"); }
 
 /**
  * The migration needs to take all data from the original learnpath tables and add them to the new
@@ -91,12 +90,12 @@ if ($loglevel > 0) { Log::notice("Tables created/deleted for all courses"); }
 // Test only one course
 foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     if (strlen($courses_id_list[$course_code]) > 40) {
-        Log::error('Database '.$courses_id_list[$course_code].' is too long, skipping');
+        $app['monolog']->addError('Database '.$courses_id_list[$course_code].' is too long, skipping');
         continue;
     }
 
     $incoherences = 0;
-    if ($loglevel > 0) { Log::notice("Now starting migration of learnpath tables from $db database..."); }
+    if ($loglevel > 0) { $app['monolog']->addInfo("Now starting migration of learnpath tables from $db database..."); }
     $lp_doc = $db.TABLE_DOCUMENT;
     $lp_main = $db.TABLE_LEARNPATH_MAIN;
     $lp_ids = array();
@@ -119,13 +118,13 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
     $sql_test = "SELECT * FROM $my_new_lp";
     $res_test = Database::query($sql_test);
     $sql_lp = "SELECT * FROM $lp_main";
-    if ($loglevel > 1) { Log::notice("$sql_lp"); }
+    if ($loglevel > 1) { $app['monolog']->addInfo("$sql_lp"); }
     $res_lp = Database::query($sql_lp);
     if (!$res_lp or !$res_test) {
         if ($loglevel > 1) {
-            Log::error("+++Problem querying DB $lp_main+++ skipping (".Database::error().")");
+            $app['monolog']->addError("+++Problem querying DB $lp_main+++ skipping (".Database::error().")");
             if (!$res_test) {
-                Log::error("This might be due to no existing table in the destination course");
+                $app['monolog']->addError("This might be due to no existing table in the destination course");
             }
         }
         continue;
@@ -280,13 +279,13 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
                 case 'c':
                     // chapter-type prereq
                     $prereq_id = $lp_chap_items[$row['prereq_id']];
-                    if (empty($prereq_id) && $loglevel > 1) { Log::error("Could not find prereq chapter ".$row['prereq_id']); }
+                    if (empty($prereq_id) && $loglevel > 1) { $app['monolog']->addError("Could not find prereq chapter ".$row['prereq_id']); }
                     break;
                 case 'i':
                 default:
                     // item type prereq
                     $prereq_id = $lp_items[$parent_lps[$row['chapter_id']]][$row['prereq_id']];
-                    if (empty($prereq_id) && $loglevel > 1) { Log::error("Could not find prereq item ".$row['prereq_id']); }
+                    if (empty($prereq_id) && $loglevel > 1) { $app['monolog']->addError("Could not find prereq item ".$row['prereq_id']); }
                     break;
             }
         }
@@ -513,7 +512,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             $sql_tool_upd = "UPDATE $tbl_tool " .
                     "SET link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id' " .
                     "WHERE id = ".$row_tool['id'];
-            Log::notice('New LP - Migration - Updating tool table: '.$sql_tool_upd);
+            $app['monolog']->addInfo('New LP - Migration - Updating tool table: '.$sql_tool_upd);
             // Make sure there is a way of retrieving which links were updated (to revert)
             fwrite($fh,$sql_tool_upd." AND link ='$link'");
             fwrite($fh_revert, "UPDATE $tbl_tool SET link='$link' WHERE id=".$row_tool['id']." AND link ='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id';\n");
@@ -534,7 +533,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
             if (!empty($matches[3]) && (strtolower(substr($matches[3], -15)) == 'imsmanifest.xml') && !is_file(realpath(urldecode($matches[3])))) {
                 //echo "Removing link $link from tools<br />";
                 $sql_tool_upd = "DELETE FROM $tbl_tool WHERE id = ".$row_tool['id'];
-                Log::notice('New LP - Migration - Updating tool table (dead link): '.$sql_tool_upd);
+                $app['monolog']->addInfo('New LP - Migration - Updating tool table (dead link): '.$sql_tool_upd);
                 // Make sure there is a way of retrieving which links were updated (to revert)
                 fwrite($fh, $sql_tool_upd." AND link ='$link'");
                 fwrite($fh_revert, "INSERT INTO $tbl_tool (link) VALUES ('$link');\n");
@@ -579,7 +578,7 @@ foreach ($courses_id_full_table_prefix_list as $course_code => $db) {
         }
     }
 
-    if ($loglevel > 0) { Log::notice("Done!".$msg); }
+    if ($loglevel > 0) { $app['monolog']->addInfo("Done!".$msg); }
     //flush();
     //ob_flush();
 }
@@ -602,7 +601,7 @@ fwrite($fh_res, "-- Recording resulting course homepages links changes for SCORM
  * The migration needs to take all data from the scorm.scorm_main and scorm.scorm_sco_data tables
  * and add them to the new lp, lp_view, lp_item and lp_item_view tables.
  */
-if ($loglevel > 0) { Log::notice("Now starting migration of scorm tables from global SCORM database"); }
+if ($loglevel > 0) { $app['monolog']->addInfo("Now starting migration of scorm tables from global SCORM database"); }
 
 $scorm_main = $dbScormForm.'.'.TABLE_SCORM_MAIN;
 $scorm_item = $dbScormForm.'.'.TABLE_SCORM_SCO_DATA;
@@ -619,7 +618,7 @@ $scorm_lp_paths = array();
 Database::select_db($dbNameForm);
 $course_main = TABLE_MAIN_COURSE;
 $sql_crs = "SELECT * FROM $course_main WHERE target_course_code IS NULL";
-if ($loglevel > 0) { Log::notice("$sql_crs"); }
+if ($loglevel > 0) { $app['monolog']->addInfo("$sql_crs"); }
 $res_crs = Database::query($sql_crs);
 $num = Database::num_rows($res_crs);
 
@@ -629,7 +628,7 @@ $course_code_swap = '';
 $scormdocuments_lps = array();
 while ($course_row = Database::fetch_array($res_crs)) {
 
-    if ($loglevel > 0) { Log::notice("Now dealing with course ".$course_row['code']."..."); }
+    if ($loglevel > 0) { $app['monolog']->addInfo("Now dealing with course ".$course_row['code']."..."); }
     // Check the validity of this new course
     $my_course_code = $course_row['code'];
 
@@ -637,21 +636,21 @@ while ($course_row = Database::fetch_array($res_crs)) {
     //$scormdocuments_lps = array();
     $db_name = $courses_id_full_table_prefix_list[$my_course_code];
     if (strlen($courses_id_list[$course_code]) > 40) {
-        Log::notice('Database '.$courses_id_list[$course_code].' is too long, skipping');
+        $app['monolog']->addInfo('Database '.$courses_id_list[$course_code].' is too long, skipping');
         continue;
     }
 
     //echo "Now processing database $db_name<br />";
     $tblscodoc = $db_name.TABLE_SCORMDOC;
     $sql_scodoc = "SELECT path FROM $tblscodoc WHERE path IS NOT NULL AND path != ''";
-    if ($loglevel > 1) { Log::notice("$sql_scodoc"); }
+    if ($loglevel > 1) { $app['monolog']->addInfo("$sql_scodoc"); }
     $res_scodoc = Database::query($sql_scodoc);
     while ($row_scodoc = Database::fetch_array($res_scodoc)) {
 
         // Check if there's more than one slash in total
         if (strpos($row_scodoc['path'], '/', 1) === false) {
             $tmp_path = $row_scodoc['path'];
-            if ($loglevel > 1) { Log::notice("++Now opening $tmp_path"); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("++Now opening $tmp_path"); }
 
             // Add a prefixing slash if there is none
             if (substr($tmp_path, 0, 1) != '/') {
@@ -672,17 +671,17 @@ while ($course_row = Database::fetch_array($res_crs)) {
                 // Avoid if contentTitle is not the name of an existing directory
             } elseif (!is_file($courses_dir."/imsmanifest.xml")) {
                 // If the imsmanifest file was not found there
-                if ($loglevel > 2) { Log::error("  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping"); }
+                if ($loglevel > 2) { $app['monolog']->addError("  !!imsmanifest.xml  not found at scormdocument's $courses_dir/imsmanifest.xml, skipping"); }
                 // Try subdirectories on one level depth
-                if ($loglevel > 2) { Log::notice("  Trying subdirectories..."); }
+                if ($loglevel > 2) { $app['monolog']->addInfo("  Trying subdirectories..."); }
                 $dh = opendir($courses_dir);
                 while ($entry = readdir($dh)) {
                     if (substr($entry, 0, 1) != '.') {
                         if (is_dir($courses_dir."/".$entry)) {
                             if (is_file($courses_dir."/".$entry."/imsmanifest.xml")) {
-                                if ($loglevel > 2) { Log::notice(".  .. and found $courses_dir/$entry/imsmanifest.xml!"); }
+                                if ($loglevel > 2) { $app['monolog']->addInfo(".  .. and found $courses_dir/$entry/imsmanifest.xml!"); }
                                 if (!in_array($tmp_path."/".$entry."/imsmanifest.xml",$scormdocuments_lps)) {
-                                    if ($loglevel > 2){ Log::notice("  Recording.<br />"); }
+                                    if ($loglevel > 2){ $app['monolog']->addInfo("  Recording.<br />"); }
                                     $scormdocuments_lps[] = $tmp_path."/".$entry;
                                 }
                             }
@@ -690,7 +689,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
                     }
                 }
             } else {
-                if ($loglevel > 2) { Log::notice("  Found scormdocument $tmp_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, treating it."); }
+                if ($loglevel > 2) { $app['monolog']->addInfo("  Found scormdocument $tmp_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, treating it."); }
                 $scormdocuments_lps[] = $tmp_path;
             }
         }
@@ -736,9 +735,9 @@ while ($course_row = Database::fetch_array($res_crs)) {
                             //echo "Checking if manifest exists in ".$courses_dir.$entry."/imsmanifest.xml<br />";
                             if (is_file($courses_dir.$entry."/imsmanifest.xml")) {
                                 //echo "found $courses_dir/$entry/imsmanifest.xml!<br />";
-                                if ($loglevel > 2) { Log::notice(".  .. and found $courses_dir/$entry/imsmanifest.xml!"); }
+                                if ($loglevel > 2) { $app['monolog']->addInfo(".  .. and found $courses_dir/$entry/imsmanifest.xml!"); }
                                 if (!in_array($entry."/imsmanifest.xml", $scormdocuments_lps)) {
-                                    if ($loglevel > 2) { Log::notice("  Recording.<br />"); }
+                                    if ($loglevel > 2) { $app['monolog']->addInfo("  Recording.<br />"); }
                                     //echo "Recording $entry<br />";
                                     $scormdocuments_lps[] = $entry;
                                 }
@@ -756,7 +755,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
     $scorms[$my_course_code] = array();
 
     $sql_paths = "SELECT * FROM $scorm_main WHERE dokeosCourse = '".$my_course_code."'";
-    if ($loglevel > 0) { Log::notice("$sql_paths"); }
+    if ($loglevel > 0) { $app['monolog']->addInfo("$sql_paths"); }
     $res_paths = Database::query($sql_paths);
     $num = Database::num_rows($res_paths);
     while ($scorm_row = Database::fetch_array($res_paths)) {
@@ -769,16 +768,16 @@ while ($course_row = Database::fetch_array($res_crs)) {
         if ($my_path == '/') {
             $my_path = '';
         }
-        if ($loglevel > 1) { Log::notice("++++Now opening $my_path"); }
+        if ($loglevel > 1) { $app['monolog']->addInfo("++++Now opening $my_path"); }
         if (!is_dir($courses_dir = $sys_course_path.''.$courses_dir_list[$my_course_code].'/scorm'.$my_path)) {
-            if ($loglevel > 1) { Log::notice("Path $my_content_id: $my_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping"); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("Path $my_content_id: $my_path doesn't exist in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm, skipping"); }
             continue;
             // Avoid if contentTitle is not the name of an existing directory
         } elseif (!is_file($sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml")) {
-            if ($loglevel > 1) { Log::notice("!!imsmanifest.xml not found at ".$sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping"); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("!!imsmanifest.xml not found at ".$sys_course_path.$courses_dir_list[$my_course_code].'/scorm'.$my_path."/imsmanifest.xml, skipping"); }
             continue;
         } else {
-            if ($loglevel > 1) { Log::notice("Found $my_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it."); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("Found $my_path in ".$sys_course_path.$courses_dir_list[$my_course_code]."/scorm".$mypath."/imsmanifest.xml, keeping it."); }
             $scorms[$my_course_code][$my_path] = $my_content_id;
         }
     }
@@ -787,7 +786,7 @@ while ($course_row = Database::fetch_array($res_crs)) {
     foreach ($scormdocuments_lps as $path) {
         if (!in_array($path,array_keys($scorms[$my_course_code]))) {
             // Add it (-1 means no ID)
-            if ($loglevel > 1) { Log::notice("** Scormdocument path $path wasn't recorded yet. Added."); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("** Scormdocument path $path wasn't recorded yet. Added."); }
             $scorms[$my_course_code][$path] = -1;
         }
     }
@@ -801,7 +800,7 @@ $my_count = 0;
 foreach ($scorms as $mycourse => $my_paths) {
     $my_count += count($my_paths);
 }
-if ($loglevel > 0) { Log::notice("---- Scorms array now contains ".$mycount." paths to migrate. Starting migration..."); }
+if ($loglevel > 0) { $app['monolog']->addInfo("---- Scorms array now contains ".$mycount." paths to migrate. Starting migration..."); }
 
 /**
  * Looping through the SCO_MAIN table for SCORM learnpath attached to courses
@@ -813,9 +812,9 @@ foreach ($scorms as $my_course_code => $paths_list) {
   $course_lp_done = array();
   $db_name = $courses_id_full_table_prefix_list[$my_course_code];
   foreach ($paths_list as $my_path => $old_id) {
-    if ($loglevel > 1) { Log::notice("Migrating lp $my_path from course $my_course_code..."); }
+    if ($loglevel > 1) { $app['monolog']->addInfo("Migrating lp $my_path from course $my_course_code..."); }
     $i_count ++;
-    //Log::notice('New LP - Migration script - Content '.$i_count.' on '.$num.' (course '.$scorm['dokeosCourse'].')');
+    //$app['monolog']->addInfo('New LP - Migration script - Content '.$i_count.' on '.$num.' (course '.$scorm['dokeosCourse'].')');
     // Check whether there is no embedded learnpaths into other learnpaths (one root-level and another embedded)
     $embedded = false;
     foreach ($course_lp_done as $tmp_lp) {
@@ -826,7 +825,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
             // Let it be
         } else {
             // This lp is embedded inside another lp who's imsmanifest exists, so prevent from parsing
-            if ($loglevel > 1) { Log::notice("LP $my_path is embedded into $tmp_lp, ignoring..."); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("LP $my_path is embedded into $tmp_lp, ignoring..."); }
             $embedded = true;
             continue;
         }
@@ -840,7 +839,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
     $my_path = $my_path;
     $my_name = basename($my_path);
 
-    if ($loglevel > 1) { Log::notice("Try importing LP $my_path from imsmanifest first as it is more reliable"); }
+    if ($loglevel > 1) { $app['monolog']->addInfo("Try importing LP $my_path from imsmanifest first as it is more reliable"); }
 
     // Setup the ims path (path to the imsmanifest.xml file)
     //echo "Looking for course with code ".$lp_course_code[$my_content_id]." (using $my_content_id)<br />\n";
@@ -855,7 +854,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         $oScorm = new scorm();
         // Check whether imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
         // That should have been done before already, now.
-        if ($loglevel > 1) { Log::notice("Found imsmanifest ($ims), importing..."); }
+        if ($loglevel > 1) { $app['monolog']->addInfo("Found imsmanifest ($ims), importing..."); }
         if (!empty($sco_middle_path)) { $oScorm->subdir = $sco_middle_path; } //this sets the subdir for the scorm package inside the scorm dir
         // Parse manifest file
         $manifest = $oScorm->parse_manifest($ims);
@@ -864,7 +863,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         //TODO: Add code to update the path in that new lp created, as it probably uses / where
         // $sco_path_temp should be used...
         $lp_ids[$my_content_id] = $oScorm->lp_id; // Contains the old LP ID => the new LP ID
-        if ($loglevel > 1) { Log::notice(" @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code"); }
+        if ($loglevel > 1) { $app['monolog']->addInfo(" @@@ Created scorm lp ".$oScorm->lp_id." from imsmanifest [".$ims."] in course $my_course_code"); }
         $lp_course[$my_content_id] = $courses_id_list[$my_course_code]; // Contains the old learnpath ID => the course DB name
         $lp_course_code[$my_content_id] = $my_course_code;
         $max_dsp_lp++;
@@ -945,7 +944,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
 
     } else {
         //echo "Could not find $ims... Proceeding from database...(line ".__LINE__.")<br />";
-        if ($loglevel > 1) { Log::notice("This is a normal SCORM path"); }
+        if ($loglevel > 1) { $app['monolog']->addInfo("This is a normal SCORM path"); }
         $scorm_lp_paths[$my_content_id]['path'] = $my_path;
         //$scorm_lp_paths[$my_content_id]['ims'] = '';
         $table_name = $db_name.$new_lp;
@@ -972,7 +971,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
                 "'Unknown'," .
                 "'scorm_api.php'" .
                 ")";
-        if ($loglevel > 1) { Log::notice("$sql_ins"); }
+        if ($loglevel > 1) { $app['monolog']->addInfo("$sql_ins"); }
         $sql_res = Database::query($sql_ins);
         $in_id = Database::insert_id();
         if (!$in_id) die('Could not insert scorm lp: '.$sql_ins);
@@ -994,7 +993,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
         // Check whether imsmanifest.xml exists at this location. If not, ignore the imsmanifest.
         // That should have been done before already, now.
         if (!is_file($scorm_lp_paths[$my_content_id]['ims'])) {
-            if ($loglevel > 1) { Log::notice("!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id]); }
+            if ($loglevel > 1) { $app['monolog']->addInfo("!!! imsmanifest file not found at ".$scorm_lp_paths[$my_content_id]['ims'].' for old lp '.$my_content_id.' and new '.$lp_ids[$my_content_id]); }
             $manifest = false;
         } else {
             //echo "Parsing ".$scorm_lp_paths[$my_content_id]['ims']."<br />\n";
@@ -1009,7 +1008,7 @@ foreach ($scorms as $my_course_code => $paths_list) {
                         "SET name = '$my_lp_title', " .
                         "default_encoding = '".strtoupper($oScorm->manifest_encoding)."' " .
                         "WHERE id = ".$lp_ids[$my_content_id];
-                if ($loglevel > 1) { Log::notice("Updating title and encoding: ".$my_sql); }
+                if ($loglevel > 1) { $app['monolog']->addInfo("Updating title and encoding: ".$my_sql); }
                 $my_res = Database::query($my_sql);
             }
         }
@@ -1280,5 +1279,5 @@ foreach ($scorms as $my_course_code => $paths_list) {
 fclose($fh);
 fclose($fh_revert);
 fclose($fh_res);
-if ($loglevel > 0) { Log::notice("All done!"); }
+if ($loglevel > 0) { $app['monolog']->addInfo("All done!"); }
 //echo "</body></html>";

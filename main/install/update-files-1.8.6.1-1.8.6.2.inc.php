@@ -12,8 +12,6 @@
  * @package chamilo.install
  */
 
-Log::notice('Entering file');
-
 if (defined('SYSTEM_INSTALLATION')) {
 
     // Edit the configuration file
@@ -59,7 +57,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM $db_name.course";
-    Log::notice('Getting courses for files updates: ' . $sql);
+    $app['monolog']->addInfo('Getting courses for files updates: ' . $sql);
     $result = iDatabase::query($sql);
 
     if (iDatabase::num_rows($result) > 0) {
@@ -71,7 +69,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $success = mkdir($path, $perm, true);
                 if(!$success){
                     $course_directory = $courses_directories['directory'];
-                    Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: , perm: $perm");
+                    $app['monolog']->addError("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: , perm: $perm");
                 }
             }
 
@@ -81,7 +79,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                 $success = mkdir($path, $perm, true);
                 if(!$success){
                     $course_directory = $courses_directories['directory'];
-                    Log::error("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: $perm");
+                    $app['monolog']->addError("Failed to create dir path: $path, course directory: $course_directory, sys course path: $sys_course_path, perm: $perm");
                 }
             }
         }
@@ -93,6 +91,5 @@ if (defined('SYSTEM_INSTALLATION')) {
         mkdir($pathForm . 'home/default_platform_document/template_thumb', $perm);
     }
 } else {
-
     echo 'You are not allowed here !' . __FILE__;
 }

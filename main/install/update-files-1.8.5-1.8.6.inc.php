@@ -18,8 +18,6 @@
  * @package chamilo.install
  */
 
-Log::notice('Entering file');
-
 if (defined('SYSTEM_INSTALLATION')) {
 
     // Edit the configuration file
@@ -64,7 +62,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM $db_name.course";
-    Log::notice('Getting courses for files updates: ' . $sql);
+    $app['monolog']->addInfo('Getting courses for files updates: ' . $sql);
     $result = iDatabase::query($sql);
 
     while ($courses_directories = iDatabase::fetch_array($result)) {
@@ -75,13 +73,13 @@ if (defined('SYSTEM_INSTALLATION')) {
         $origCRS = $updatePath . 'courses/' . $courses_directories['directory'];
 
         if (!is_dir($origCRS)) {
-            Log::error('Directory ' . $origCRS . ' does not exist. Skipping.');
+            $app['monolog']->addError('Directory ' . $origCRS . ' does not exist. Skipping.');
             continue;
         }
         // Move everything to the new hierarchy (from old path to new path)
-        Log::notice('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories['directory']);
+        $app['monolog']->addInfo('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories['directory']);
         rename($origCRS, $sys_course_path . $courses_directories['directory']);
-        Log::notice('Creating dirs in ' . $currentCourseRepositorySys);
+        $app['monolog']->addInfo('Creating dirs in ' . $currentCourseRepositorySys);
 
         // DOCUMENT FOLDER
         // document > shared_folder
@@ -116,6 +114,5 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
     }
 } else {
-
     echo 'You are not allowed here !' . __FILE__;
 }

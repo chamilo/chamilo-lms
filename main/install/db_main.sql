@@ -13,11 +13,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
---
--- Table structure for table user
---
-
 DROP TABLE IF EXISTS user;
 CREATE TABLE IF NOT EXISTS user (
   user_id int unsigned NOT NULL auto_increment,
@@ -52,9 +47,6 @@ CREATE TABLE IF NOT EXISTS user (
 );
 ALTER TABLE user ADD INDEX (status);
 
---
--- Dumping data for table user
---
 
 /*!40000 ALTER TABLE user DISABLE KEYS */;
 LOCK TABLES user WRITE;
@@ -165,10 +157,10 @@ CREATE TABLE IF NOT EXISTS course (
 );
 ALTER TABLE course ADD INDEX idx_course_category_code (category_code);
 ALTER TABLE course ADD INDEX idx_course_directory (directory(10));
+
 --
 -- Dumping data for table course
 --
-
 
 /*!40000 ALTER TABLE course DISABLE KEYS */;
 LOCK TABLES course WRITE;
@@ -489,8 +481,6 @@ CREATE TABLE IF NOT EXISTS session (
 ALTER TABLE session ADD INDEX idx_id_coach (id_coach);
 ALTER TABLE session ADD INDEX idx_id_session_admin_id (session_admin_id);
 
--- --------------------------------------------------------
-
 --
 -- Table structure for table session_rel_course
 --
@@ -505,7 +495,7 @@ CREATE TABLE IF NOT EXISTS session_rel_course (
 
 ALTER TABLE session_rel_course ADD INDEX idx_session_rel_course_course_id (course_id);
 
--- --------------------------------------------------------
+
 
 --
 -- Table structure for table session_rel_course_rel_user
@@ -525,7 +515,7 @@ CREATE TABLE IF NOT EXISTS session_rel_course_rel_user (
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_id_user (id_user);
 ALTER TABLE session_rel_course_rel_user ADD INDEX idx_session_rel_course_rel_user_course_id (course_id);
 
--- --------------------------------------------------------
+
 
 --
 -- Table structure for table session_rel_user
@@ -1315,11 +1305,6 @@ CREATE TABLE IF NOT EXISTS shared_survey (
   UNIQUE KEY id (survey_id)
 );
 
--- --------------------------------------------------------
-
---
--- Table structure for shared_survey_question
---
 
 DROP TABLE IF EXISTS shared_survey_question;
 CREATE TABLE IF NOT EXISTS shared_survey_question (
@@ -1335,11 +1320,6 @@ CREATE TABLE IF NOT EXISTS shared_survey_question (
   PRIMARY KEY  (question_id)
 );
 
--- --------------------------------------------------------
-
---
--- Table structure for shared_survey_question_option
---
 
 DROP TABLE IF EXISTS shared_survey_question_option;
 CREATE TABLE IF NOT EXISTS shared_survey_question_option (
@@ -1351,12 +1331,6 @@ CREATE TABLE IF NOT EXISTS shared_survey_question_option (
   PRIMARY KEY  (question_option_id)
 );
 
-
--- --------------------------------------------------------
-
---
--- Table structure for templates (User's FCKEditor templates)
---
 
 DROP TABLE IF EXISTS templates;
 CREATE TABLE IF NOT EXISTS templates (
@@ -1370,16 +1344,6 @@ CREATE TABLE IF NOT EXISTS templates (
   PRIMARY KEY  (id)
 );
 
-
-
---
-
--- --------------------------------------------------------
-
---
--- Table structure of openid_association (keep info on openid servers)
---
-
 DROP TABLE IF EXISTS openid_association;
 CREATE TABLE IF NOT EXISTS openid_association (
   id int NOT NULL auto_increment,
@@ -1392,11 +1356,8 @@ CREATE TABLE IF NOT EXISTS openid_association (
   created bigint NOT NULL,
   PRIMARY KEY  (id)
 );
---
--- --------------------------------------------------------
---
--- Tables for gradebook
---
+
+
 DROP TABLE IF EXISTS gradebook_category;
 CREATE TABLE IF NOT EXISTS gradebook_category (
     id int NOT NULL auto_increment,
@@ -1569,12 +1530,6 @@ CREATE TABLE IF NOT EXISTS gradebook_linkeval_log (
     user_id_log int NOT NULL,
     PRIMARY KEY  (id)
 );
-
---
--- --------------------------------------------------------
---
--- Tables for the access URL feature
---
 
 DROP TABLE IF EXISTS access_url;
 CREATE TABLE IF NOT EXISTS access_url(
@@ -2409,18 +2364,6 @@ INSERT INTO system_template (title, comment, image, content) VALUES
             </body>
 ');
 
-
---
--- --------------------------------------------------------
---
--- Tables for reservation
---
-
-
---
--- Table structure for table reservation category
---
-
 DROP TABLE IF EXISTS reservation_category;
 CREATE TABLE IF NOT EXISTS reservation_category (
    id  int unsigned NOT NULL auto_increment,
@@ -2428,10 +2371,6 @@ CREATE TABLE IF NOT EXISTS reservation_category (
    name  varchar(128) NOT NULL default '',
   PRIMARY KEY  ( id )
 );
-
---
--- Table structure for table reservation category_rights
---
 
 DROP TABLE IF EXISTS reservation_category_rights;
 CREATE TABLE IF NOT EXISTS reservation_category_rights  (
@@ -2442,9 +2381,6 @@ CREATE TABLE IF NOT EXISTS reservation_category_rights  (
     PRIMARY KEY  ( id )
 );
 
---
--- Table structure for table  item reservation
---
 DROP TABLE IF EXISTS reservation_item;
 CREATE TABLE IF NOT EXISTS  reservation_item  (
    id  int unsigned NOT NULL auto_increment,
@@ -2458,7 +2394,7 @@ CREATE TABLE IF NOT EXISTS  reservation_item  (
   PRIMARY KEY  ( id )
 );
 
--- --------------------------------------------------------
+
 
 --
 -- Table structure for table reservation item_rights
@@ -2475,7 +2411,7 @@ CREATE TABLE IF NOT EXISTS  reservation_item_rights  (
   PRIMARY KEY  ( item_id , class_id )
 );
 
--- --------------------------------------------------------
+
 
 --
 -- Table structure for main reservation table
@@ -2500,8 +2436,6 @@ CREATE TABLE IF NOT EXISTS  reservation_main  (
   PRIMARY KEY  ( id )
 );
 
--- --------------------------------------------------------
-
 --
 -- Table structure for reservation subscription table
 --
@@ -2516,8 +2450,6 @@ CREATE TABLE IF NOT EXISTS  reservation_subscription  (
    end_at  datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  ( dummy )
 );
-
--- ---------------------------------------------------------
 
 --
 -- Table structure for table user_rel_user
@@ -2566,15 +2498,15 @@ CREATE TABLE IF NOT EXISTS user_api_key (
 );
 ALTER TABLE user_api_key ADD INDEX idx_user_api_keys_user (user_id);
 
---
 -- Table structure for table message
---
+-- status: 0 read, 1 unread, 3 deleted, 5 pending invitation, 6 accepted invitation, 7 invitation denied
+
 DROP TABLE IF EXISTS message;
 CREATE TABLE IF NOT EXISTS message(
     id bigint unsigned not null auto_increment,
     user_sender_id int unsigned not null,
     user_receiver_id int unsigned not null,
-    msg_status tinyint unsigned not null default 0, -- 0 read, 1 unread, 3 deleted, 5 pending invitation, 6 accepted invitation, 7 invitation denied
+    msg_status tinyint unsigned not null default 0,
     send_date datetime not null default '0000-00-00 00:00:00',
     title varchar(255) not null,
     content text not null,
@@ -2631,8 +2563,6 @@ CREATE TABLE IF NOT EXISTS gradebook_certificate (
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id(cat_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_user_id(user_id);
 ALTER TABLE gradebook_certificate ADD INDEX idx_gradebook_certificate_category_id_user_id(cat_id,user_id);
-
-
 
 --
 -- Tables structure for search tool

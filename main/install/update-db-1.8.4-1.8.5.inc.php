@@ -16,8 +16,6 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
-
 $old_file_version = '1.8.4';
 $new_file_version = '1.8.5';
 
@@ -30,7 +28,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 								'.get_lang('PleasGoBackToStep1').'.
 							    <p><button type="submit" class="back" name="step1" value="&lt; '.get_lang('Back').'">'.get_lang('Back').'</button></p>
 							    </td></tr></table></form></body></html>';
-		exit ();
+		exit();
 	}
 
 	$_configuration['db_glue'] = get_config_param('dbGlu');
@@ -191,7 +189,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					if (!$singleDbForm) { //otherwise just use the main one
 						Database::select_db($row_course['db_name']);
 					}
-                    Log::notice('Course db ' . $row_course['db_name']);
+                    $app['monolog']->addInfo('Course db ' . $row_course['db_name']);
 
 					foreach ($c_q_list as $query) {
 						if ($singleDbForm) {

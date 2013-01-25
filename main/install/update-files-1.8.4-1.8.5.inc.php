@@ -16,43 +16,37 @@
  * version be available until the end of the installation.
  * @package chamilo.install
  */
-
-Log::notice('Entering file');
-
 if (defined('SYSTEM_INSTALLATION')) {
 
-	// Edit the configuration file
-	$file = file(api_get_path(CONFIGURATION_PATH).'configuration.php');
-	$fh = fopen(api_get_path(CONFIGURATION_PATH).'configuration.php', 'w');
-	$found_version = false;
-	$found_stable = false;
-	foreach ($file as $line) {
-		$ignore = false;
-		if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
-			$found_version = true;
-			$line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
-		} elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {
-			$found_stable = true;
-			$line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
-		} elseif (stripos($line, '?>') !== false) {
-			// Ignore the line
-			$ignore = true;
-		}
-		if (!$ignore) {
-			fwrite($fh, $line);
-		}
-	}
-	if (!$found_version) {
-		fwrite($fh, '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n");
-	}
-	if (!$found_stable) {
-		fwrite($fh, '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n");
-	}
-	fwrite($fh, '?>');
-	fclose($fh);
-
+    // Edit the configuration file
+    $file = file(api_get_path(CONFIGURATION_PATH).'configuration.php');
+    $fh = fopen(api_get_path(CONFIGURATION_PATH).'configuration.php', 'w');
+    $found_version = false;
+    $found_stable = false;
+    foreach ($file as $line) {
+        $ignore = false;
+        if (stripos($line, '$_configuration[\'dokeos_version\']') !== false) {
+            $found_version = true;
+            $line = '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n";
+        } elseif (stripos($line, '$_configuration[\'dokeos_stable\']') !== false) {
+            $found_stable = true;
+            $line = '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n";
+        } elseif (stripos($line, '?>') !== false) {
+            // Ignore the line
+            $ignore = true;
+        }
+        if (!$ignore) {
+            fwrite($fh, $line);
+        }
+    }
+    if (!$found_version) {
+        fwrite($fh, '$_configuration[\'dokeos_version\'] = \''.$new_version.'\';'."\r\n");
+    }
+    if (!$found_stable) {
+        fwrite($fh, '$_configuration[\'dokeos_stable\'] = '.($new_version_stable ? 'true' : 'false').';'."\r\n");
+    }
+    fwrite($fh, '?>');
+    fclose($fh);
 } else {
-
-	echo 'You are not allowed here !' . __FILE__;
-
+    echo 'You are not allowed here !'.__FILE__;
 }

@@ -17,7 +17,6 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
 
 // Check if we come from index.php or update_courses.php - otherwise display error msg
 if (defined('SYSTEM_INSTALLATION')) {
@@ -185,8 +184,8 @@ if (defined('SYSTEM_INSTALLATION')) {
                      */
                     if (!$singleDbForm) { // otherwise just use the main one
                         Database::select_db($row_course['db_name']);
-                    }                
-                    Log::notice('Course db ' . $row_course['db_name']);
+                    }
+                    $app['monolog']->addInfo('Course db ' . $row_course['db_name']);
 
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) {

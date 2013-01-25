@@ -16,8 +16,6 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
-
 $old_file_version = '1.8.6.1';
 $new_file_version = '1.8.6.2';
 
@@ -83,18 +81,18 @@ if (defined('SYSTEM_INSTALLATION')) {
 			 * without a database name
 			 */
 			if (strlen($dbNameForm) > 40) {
-				 Log::error('Database name '.$dbNameForm.' is too long, skipping');
+				 $app['monolog']->addError('Database name '.$dbNameForm.' is too long, skipping');
 			} elseif (!in_array($dbNameForm,$dblist)) {
-				 Log::error('Database '.$dbNameForm.' was not found, skipping');
+				 $app['monolog']->addError('Database '.$dbNameForm.' was not found, skipping');
 			} else {
 				iDatabase::select_db($dbNameForm);
 				foreach ($m_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("iDatabase::query($dbNameForm,$query)");
+						 $app['monolog']->addInfo("iDatabase::query($dbNameForm,$query)");
 					} else {
 						$res = iDatabase::query($query);
 						if ($log) {
-							 Log::notice("In $dbNameForm, executed: $query");
+							 $app['monolog']->addInfo("In $dbNameForm, executed: $query");
 						}
 					}
 				}
@@ -113,7 +111,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 				$res = iDatabase::query($sql);
 
 				if ($res === false) {
-				     Log::error('Could not query session course coaches table: '.iDatabase::error());
+				     $app['monolog']->addError('Could not query session course coaches table: '.iDatabase::error());
 				} else {
 					// For each coach found, add him as a course coach in the
 					// session_rel_course_rel_user table
@@ -135,7 +133,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 						$rs_coachs = iDatabase::query($sql_ins);
 
 						if ($rs_coachs === false) {
-							 Log::error('Could not move course coach to new table: '.iDatabase::error());
+							 $app['monolog']->addError('Could not move course coach to new table: '.iDatabase::error());
 						}
 
 					}
@@ -147,7 +145,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 				$rs_chk_id1 = iDatabase::query($sql);
 
 				if ($rs_chk_id1 === false) {
-				     Log::error('Could not query settings_current ids table: '.iDatabase::error());
+				     $app['monolog']->addError('Could not query settings_current ids table: '.iDatabase::error());
 				} else {
 					$i = 1;
 					while ($row_id1 = iDatabase::fetch_array($rs_chk_id1)) {
@@ -164,7 +162,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 				$rs_chk_id2 = iDatabase::query($sql);
 
 				if ($rs_chk_id2 === false) {
-				     Log::error('Could not query settings_current ids table: '.iDatabase::error());
+				     $app['monolog']->addError('Could not query settings_current ids table: '.iDatabase::error());
 				} else {
 					$i = 1;
 					while ($row_id2 = iDatabase::fetch_array($rs_chk_id2)) {
@@ -188,18 +186,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                 Log::error('Database name '.$dbNameForm.' is too long, skipping');
+                 $app['monolog']->addError('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm,$dblist)) {
-                 Log::error('Database '.$dbNameForm.' was not found, skipping');
+                 $app['monolog']->addError('Database '.$dbNameForm.' was not found, skipping');
             } else {
                 iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                         Log::notice("iDatabase::query($dbNameForm,$query)");
+                         $app['monolog']->addInfo("iDatabase::query($dbNameForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                             Log::notice("In $dbNameForm, executed: $query");
+                             $app['monolog']->addInfo("In $dbNameForm, executed: $query");
                         }
                     }
                 }
@@ -216,18 +214,18 @@ if (defined('SYSTEM_INSTALLATION')) {
 			 * without a database name
 			 */
 			if (strlen($dbStatsForm) > 40) {
-				 Log::error('Database name '.$dbStatsForm.' is too long, skipping');
+				 $app['monolog']->addError('Database name '.$dbStatsForm.' is too long, skipping');
 			} elseif (!in_array($dbStatsForm, $dblist)) {
-				 Log::error('Database '.$dbStatsForm.' was not found, skipping');
+				 $app['monolog']->addError('Database '.$dbStatsForm.' was not found, skipping');
 			} else {
 				iDatabase::select_db($dbStatsForm);
 				foreach ($s_q_list as $query) {
 					if ($only_test) {
-						 Log::notice("iDatabase::query($dbStatsForm,$query)");
+						 $app['monolog']->addInfo("iDatabase::query($dbStatsForm,$query)");
 					} else {
 						$res = iDatabase::query($query);
 						if ($log) {
-							 Log::notice("In $dbStatsForm, executed: $query");
+							 $app['monolog']->addInfo("In $dbStatsForm, executed: $query");
 						}
 					}
 				}
@@ -242,15 +240,15 @@ if (defined('SYSTEM_INSTALLATION')) {
 			 * without a database name
 			 */
 			if (strlen($dbUserForm) > 40) {
-				 Log::error('Database name '.$dbUserForm.' is too long, skipping');
+				 $app['monolog']->addError('Database name '.$dbUserForm.' is too long, skipping');
 			} elseif (!in_array($dbUserForm,$dblist)) {
-				 Log::error('Database '.$dbUserForm.' was not found, skipping');
+				 $app['monolog']->addError('Database '.$dbUserForm.' was not found, skipping');
 			} else {
 				iDatabase::select_db($dbUserForm);
 				foreach ($u_q_list as $query) {
 					if ($only_test){
-						 Log::notice("iDatabase::query($dbUserForm,$query)");
-						 Log::notice("In $dbUserForm, executed: $query");
+						 $app['monolog']->addInfo("iDatabase::query($dbUserForm,$query)");
+						 $app['monolog']->addInfo("In $dbUserForm, executed: $query");
 					} else {
 						$res = iDatabase::query($query);
 					}
@@ -271,9 +269,9 @@ if (defined('SYSTEM_INSTALLATION')) {
 	if (count($c_q_list) > 0) {
 		// Get the courses list
 		if (strlen($dbNameForm) > 40) {
-			 Log::error('Database name '.$dbNameForm.' is too long, skipping');
+			 $app['monolog']->addError('Database name '.$dbNameForm.' is too long, skipping');
 		} elseif (!in_array($dbNameForm, $dblist)) {
-			 Log::error('Database '.$dbNameForm.' was not found, skipping');
+			 $app['monolog']->addError('Database '.$dbNameForm.' was not found, skipping');
 		} else {
 			iDatabase::select_db($dbNameForm);
 			$res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
@@ -296,7 +294,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					if (!$singleDbForm) { //otherwise just use the main one
 						iDatabase::select_db($row_course['db_name']);
 					}
-                    Log::notice('Course db ' . $row_course['db_name']);
+                    $app['monolog']->addInfo('Course db ' . $row_course['db_name']);
 
 					foreach ($c_q_list as $query) {
 						if ($singleDbForm) {
@@ -304,11 +302,11 @@ if (defined('SYSTEM_INSTALLATION')) {
 						}
 
 						if ($only_test) {
-							 Log::error("iDatabase::query(".$row_course['db_name'].",$query)");
+							 $app['monolog']->addError("iDatabase::query(".$row_course['db_name'].",$query)");
 						} else {
 							$res = iDatabase::query($query);
 							if ($log) {
-								 Log::error("In ".$row_course['db_name'].", executed: $query");
+								 $app['monolog']->addError("In ".$row_course['db_name'].", executed: $query");
 							}
 						}
 					}
@@ -326,7 +324,7 @@ if (defined('SYSTEM_INSTALLATION')) {
 					$rs_sel = iDatabase::query($sql_sel);
 
 					if ($rs_sel === false) {
-				    	 Log::error('Could not query course_description ids table: '.iDatabase::error());
+				    	 $app['monolog']->addError('Could not query course_description ids table: '.iDatabase::error());
 					} else {
 						if (iDatabase::num_rows($rs_sel) > 0) {
 							while ($row_ids = iDatabase::fetch_array($rs_sel)) {

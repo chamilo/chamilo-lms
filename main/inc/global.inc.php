@@ -49,12 +49,13 @@ if (file_exists($main_configuration_file_path)) {
 }
 
 //Redirects to the main/install/ page
+/*
 if (!$already_installed) {
     $global_error_code = 2;
     // The system has not been installed yet.
     require $includePath.'/global_error_message.inc.php';
     die();
-}
+}*/
 
 // Ensure that _configuration is in the global scope before loading
 // main_api.lib.php. This is particularly helpful for unit tests
@@ -117,6 +118,7 @@ use Silex\Application;
 
 $app = new Application();
 $app['configuration_file'] = $main_configuration_file_path;
+$app['conf'] = $_configuration;
 
 //require_once __DIR__.'/../../resources/config/prod.php';
 require_once __DIR__.'/../../resources/config/dev.php';
@@ -187,58 +189,45 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 }));
 
 //Setting Doctrine service provider (DBAL)
-$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
-    'db.options' => array(
-        'driver'    => 'pdo_mysql',
-        'dbname'    => $_configuration['main_database'],
-        'user'      => $_configuration['db_user'],
-        'password'  => $_configuration['db_password'],
-        'host'      => $_configuration['db_host'],
-    )
-));
+if (isset($_configuration['main_database'])) {
 
-//Setting Doctrine ORM
-$app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
-    "orm.proxies_dir" => $app['db.orm.proxies_dir'],
-    "orm.em.options" => array(
-        "mappings" => array(
-            array(
-                "type" => "annotation",
-                "namespace" => "Entity",
-                "path" => api_get_path(INCLUDE_PATH).'Entity',
-            )
+    $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+        'db.options' => array(
+            'driver'    => 'pdo_mysql',
+            'dbname'    => $_configuration['main_database'],
+            'user'      => $_configuration['db_user'],
+            'password'  => $_configuration['db_password'],
+            'host'      => $_configuration['db_host'],
+        )
+    ));
+
+
+    //Setting Doctrine ORM
+    $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
+        "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+        "orm.em.options" => array(
+            "mappings" => array(
+                array(
+                    "type" => "annotation",
+                    "namespace" => "Entity",
+                    "path" => api_get_path(INCLUDE_PATH).'Entity',
+                )
+            ),
         ),
-    ),
-));
-
-//Setting Doctrine2 extensions
-
-$timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-$app['db.event_manager']->addEventSubscriber($timestampableListener);
-
-$sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-$app['db.event_manager']->addEventSubscriber($sluggableListener);
-
-$sortableListener = new \Gedmo\Sortable\SortableListener();
-$app['db.event_manager']->addEventSubscriber($sortableListener);
+    ));
 
 
-//Testing with another silex service provider
-/*
-// Register Doctrine ORM
-$app->register(new Nutwerk\Provider\DoctrineORMServiceProvider(), array(
-    'db.orm.proxies_dir'           => $app['db.orm.proxies_dir'],
-    'db.orm.proxies_namespace'     => 'DoctrineProxy',
-    'db.orm.cache'                 =>
-        !$app['debug'] && extension_loaded('apc') ? new ApcCache() : new ArrayCache(),
-    'db.orm.auto_generate_proxies' => true,
-    'db.orm.entities'              => array(array(
-        'type'      => 'annotation',       // entity definition
-        'path'      => api_get_path(INCLUDE_PATH).'Entity',
-        'namespace' => 'Entity', // your classes namespace
-    )),
-));*/
+    //Setting Doctrine2 extensions
 
+    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+    $app['db.event_manager']->addEventSubscriber($timestampableListener);
+
+    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
+    $app['db.event_manager']->addEventSubscriber($sluggableListener);
+
+    $sortableListener = new \Gedmo\Sortable\SortableListener();
+    $app['db.event_manager']->addEventSubscriber($sortableListener);
+}
 
 //Creating Chamilo service provider
 use Silex\ServiceProviderInterface;
@@ -257,7 +246,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface {
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
 
-//Controllers
+//Controllers as services
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 
 $app['pages.controller'] = $app->share(function() use ($app) {
@@ -265,11 +254,12 @@ $app['pages.controller'] = $app->share(function() use ($app) {
 });
 
 //Manage error messages
-/*
+
 $app->error(function (\Exception $e, $code) use ($app) {
     if ($app['debug']) {
         //return;
     }
+
     if (isset($code)) {
         switch ($code) {
              case 404:
@@ -289,13 +279,12 @@ $app->error(function (\Exception $e, $code) use ($app) {
     $response = $app['template']->render_layout('error.tpl');
     return new Response($response);
 });
- *
- */
 
 /*
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 ErrorHandler::register();
  */
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //Filters
 $app->before(function() use ($app) {
@@ -305,7 +294,7 @@ $app->before(function() use ($app) {
     }
 
     if (!file_exists($app['configuration_file'])) {
-        $app->abort(500, "Chamilo has not been installed"); //error 2
+        return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
     }
     //$app['request']->getSession()->start();
 });
@@ -349,11 +338,6 @@ require_once $lib_path.'online.inc.php';
 
 /*  DATABASE CONNECTION  */
 
-// @todo: this shouldn't be done here. It should be stored correctly during installation.
-if (empty($_configuration['statistics_database']) && $already_installed) {
-    $_configuration['statistics_database'] = $_configuration['main_database'];
-}
-
 global $database_connection;
 // Connect to the server database and select the main chamilo database.
 if (!($conn_return = @Database::connect(
@@ -363,11 +347,11 @@ if (!($conn_return = @Database::connect(
         'password'      => $_configuration['db_password'],
         'persistent'    => $_configuration['db_persistent_connection'] // When $_configuration['db_persistent_connection'] is set, it is expected to be a boolean type.
     )))) {
-    $app->abort(500, "Database is unavailable"); //error 3
+    //$app->abort(500, "Database is unavailable"); //error 3
 }
 
 if (!$_configuration['db_host']) {
-    $app->abort(500, "Database is unavailable"); //error 3
+    //$app->abort(500, "Database is unavailable"); //error 3
 }
 
 
@@ -393,7 +377,7 @@ if (!empty($_configuration['multiple_access_urls'])) {
 Database::query("set session sql_mode='';");
 
 if (!Database::select_db($_configuration['main_database'], $database_connection)) {
-    $app->abort(500, "Database is unavailable"); //error 3
+    //$app->abort(500, "Database is unavailable"); //error 3
 }
 
 /*   Initialization of the default encodings */

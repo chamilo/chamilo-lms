@@ -17,7 +17,7 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
+$app['monolog']->addInfo('Entering file');
 
 $old_file_version = '1.8.5';
 $new_file_version = '1.8.6';
@@ -84,18 +84,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbNameForm . ' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("iDatabase::query($dbNameForm,$query)");
+                        $app['monolog']->addInfo("iDatabase::query($dbNameForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                            Log::notice("In $dbNameForm, executed: $query");
+                            $app['monolog']->addInfo("In $dbNameForm, executed: $query");
                         }
                     }
                 }
@@ -103,7 +103,7 @@ if (defined('SYSTEM_INSTALLATION')) {
         }
 
         require_once '../inc/lib/image.lib.php'; //this library has been created
-        // in 1.8.8, which makes this inclusion retroactively necessary in 
+        // in 1.8.8, which makes this inclusion retroactively necessary in
         // updates from 1.8.5
         // Filling the access_url_rel_user table with access_url_id by default = 1
         $query = "SELECT user_id FROM $dbNameForm.user";
@@ -1023,18 +1023,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbStatsForm) > 40) {
-                Log::error('Database name ' . $dbStatsForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbStatsForm . ' is too long, skipping');
             } elseif (!in_array($dbStatsForm, $dblist)) {
-                Log::error('Database ' . $dbStatsForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbStatsForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbStatsForm);
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("iDatabase::query($dbStatsForm,$query)");
+                        $app['monolog']->addInfo("iDatabase::query($dbStatsForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                            Log::notice("In $dbStatsForm, executed: $query");
+                            $app['monolog']->addInfo("In $dbStatsForm, executed: $query");
                         }
                     }
                 }
@@ -1049,9 +1049,9 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbUserForm) > 40) {
-                Log::error('Database name ' . $dbUserForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbUserForm . ' is too long, skipping');
             } elseif (!in_array($dbUserForm, $dblist)) {
-                Log::error('Database ' . $dbUserForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbUserForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbUserForm);
                 foreach ($u_q_list as $query) {
@@ -1105,7 +1105,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     if (!$singleDbForm) { //otherwise just use the main one
                         iDatabase::select_db($row_course['db_name']);
                     }
-                    Log::notice('Course db ' . $row_course['db_name']);
+                    $app['monolog']->addInfo('Course db ' . $row_course['db_name']);
 
                     foreach ($c_q_list as $query) {
                         if ($singleDbForm) { //otherwise just use the main one
@@ -1113,11 +1113,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
 
                         if ($only_test) {
-                            Log::notice("iDatabase::query(" . $row_course['db_name'] . ",$query)");
+                            $app['monolog']->addInfo("iDatabase::query(" . $row_course['db_name'] . ",$query)");
                         } else {
                             $res = iDatabase::query($query);
                             if ($log) {
-                                Log::notice("In " . $row_course['db_name'] . ", executed: $query");
+                                $app['monolog']->addInfo("In " . $row_course['db_name'] . ", executed: $query");
                             }
                         }
                     }

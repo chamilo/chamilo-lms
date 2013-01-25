@@ -66,21 +66,21 @@ if (empty($mysqlUserDb) || $mysqlUserDb == 'mysql' || $mysqlUserDb == $dbPrefixF
 if (!defined('CLI_INSTALLATION')) {
 
 	$result = Database::query("SHOW VARIABLES LIKE 'datadir'") or die(Database::error());
-	
+
 	$mysqlRepositorySys = Database::fetch_array($result);
 	$mysqlRepositorySys = $mysqlRepositorySys['Value'];
-	
+
 	$create_database = true;
-    
+
 	if (database_exists($mysqlMainDb)) {
         $create_database = false;
-    }	
+    }
 	//Create database
 	if ($create_database) {
         $charset_clause = ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci';
-		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` $charset_clause";   
+		$sql = "CREATE DATABASE IF NOT EXISTS `$mysqlMainDb` $charset_clause";
 		Database::query($sql) or die(Database::error());
-	}	
+	}
 }
 
 $mysqlStatsDb = $mysqlMainDb;
@@ -95,7 +95,7 @@ if (!defined('CLI_INSTALLATION')) {
 	}
 }
 
-Database::select_db($mysqlMainDb) or die(Database::error());
+iDatabase::select_db($mysqlMainDb) or die(Database::error());
 
 $installation_settings = array();
 $installation_settings['{ORGANISATIONNAME}']                = $institutionForm;
@@ -116,18 +116,23 @@ $installation_settings['{HASHFUNCTIONMODE}']                = $encryptPassForm;
 
 load_main_database($installation_settings);
 
-
+$app['monolog']->addInfo("drop_course_tables");
 drop_course_tables();
 
+$app['monolog']->addInfo("create_course_tables");
 create_course_tables();
 
+$app['monolog']->addInfo("loading db_stats.sql");
 load_database_script('db_stats.sql');
 
 $track_countries_table = "track_c_countries";
+
+$app['monolog']->addInfo("fill_track_countries_table");
 fill_track_countries_table($track_countries_table);
 
 load_database_script('db_user.sql');
 
+$app['monolog']->addInfo("locking_settings");
 locking_settings();
 
 update_dir_and_files_permissions();

@@ -16,8 +16,6 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
-
 $old_file_version = '1.9.0';
 $new_file_version = '1.10.0';
 
@@ -83,18 +81,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                Log::error('Database name '.$dbNameForm.' is too long, skipping');
+                $app['monolog']->addError('Database name '.$dbNameForm.' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                Log::error('Database '.$dbNameForm.' was not found, skipping');
+                $app['monolog']->addError('Database '.$dbNameForm.' was not found, skipping');
             } else {
                 iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("iDatabase::query($dbNameForm,$query)");
+                        $app['monolog']->addInfo("iDatabase::query($dbNameForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($res === false) {
-                            Log::error('Error in '.$query.': '.iDatabase::error());
+                            $app['monolog']->addError('Error in '.$query.': '.iDatabase::error());
                         }
                     }
                 }

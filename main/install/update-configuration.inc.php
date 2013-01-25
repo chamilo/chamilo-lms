@@ -2,20 +2,20 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * 
+ *
  * Chamilo LMS
- * 
- * Only updates the  main/inc/conf/configuration.php  file with the new version use only from 1.8.8.1 to 1.8.8.2 (with no DB changes) 
+ *
+ * Only updates the  main/inc/conf/configuration.php  file with the new version use only from 1.8.8.1 to 1.8.8.2 (with no DB changes)
  * @package chamilo.install
  */
 if (defined('SYSTEM_INSTALLATION')) {
 
-    Log::notice("Starting " . basename(__FILE__));
+    $app['monolog']->addInfo("Starting " . basename(__FILE__));
 
     // Edit the configuration file
     $file   = file(api_get_path(CONFIGURATION_PATH) . 'configuration.php');
     $fh     = fopen(api_get_path(CONFIGURATION_PATH) . 'configuration.php', 'w');
-    
+
     $found_version_old      = false;
     $found_stable_old       = false;
     $found_version          = false;
@@ -47,7 +47,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             $line = '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n";
         } elseif (stripos($line, '$userPasswordCrypted') !== false) {
             //$line = '$userPasswordCrypted = \'' . ($userPasswordCrypted) . '\';' . "\r\n";
-            $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";            
+            $line = '$_configuration[\'password_encryption\'] = \'' .$userPasswordCrypted.'\';' . "\r\n";
         } elseif (stripos($line, '?>') !== false) {
             $ignore = true;
         }
@@ -55,7 +55,7 @@ if (defined('SYSTEM_INSTALLATION')) {
             fwrite($fh, $line);
         }
     }
-    
+
     if (!$found_version) {
         fwrite($fh, '$_configuration[\'system_version\'] = \'' . $new_version . '\';' . "\r\n");
     }
@@ -67,7 +67,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     }
     if (!$found_software_url) {
         fwrite($fh, '$_configuration[\'software_url\'] = \'' . $software_url . '\';' . "\r\n");
-    }    
+    }
     fwrite($fh, '?>');
     fclose($fh);
 } else {

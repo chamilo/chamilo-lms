@@ -11,8 +11,6 @@
  * @package chamilo.install
  */
 
-Log::notice('Entering file');
-
 if (defined('SYSTEM_INSTALLATION')) {
 
 	// Edit the configuration file

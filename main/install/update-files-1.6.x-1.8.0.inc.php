@@ -18,11 +18,9 @@
  *
  * @package chamilo.install
  */
-Log::notice('Entering file');
 
 function insert_db($db_name, $folder_name, $text)
 {
-
     // TODO: The (global?) variable $_course has not been declared/initialized.
     $_course['dbName'] = $db_name;
 
@@ -37,7 +35,7 @@ if (defined('SYSTEM_INSTALLATION')) {
     Database::select_db($dbNameForm);
     $db_name = $dbNameForm;
     $sql = "SELECT * FROM course";
-    Log::notice('Getting courses for files updates: ' . $sql);
+    $app['monolog']->addInfo('Getting courses for files updates: ' . $sql);
     $result = Database::query($sql);
 
     while ($courses_directories = Database::fetch_array($result)) {
@@ -47,13 +45,13 @@ if (defined('SYSTEM_INSTALLATION')) {
         $origCRS = $updatePath . 'courses/' . $courses_directories["directory"];
 
         if (!is_dir($origCRS)) {
-            Log::error('Directory ' . $origCRS . ' does not exist. Skipping.');
+            $app['monolog']->addError('Directory ' . $origCRS . ' does not exist. Skipping.');
             continue;
         }
         // Move everything to the new hierarchy (from old path to new path)
-        Log::notice('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories["directory"]);
+        $app['monolog']->addInfo('Renaming ' . $origCRS . ' to ' . $sys_course_path . $courses_directories["directory"]);
         rename($origCRS, $sys_course_path . $courses_directories["directory"]);
-        Log::notice('Creating dirs in ' . $currentCourseRepositorySys);
+        $app['monolog']->addInfo('Creating dirs in ' . $currentCourseRepositorySys);
 
         // FOLDER DOCUMENT
         // document > audio
@@ -116,11 +114,11 @@ if (defined('SYSTEM_INSTALLATION')) {
         unlink($currentCourseRepositorySys . 'index.php');
         $fp = @ fopen($currentCourseRepositorySys . 'index.php', 'w');
         if ($fp) {
-            Log::error('Writing redirection file in ' . $currentCourseRepositorySys . 'index.php');
+            $app['monolog']->addError('Writing redirection file in ' . $currentCourseRepositorySys . 'index.php');
             fwrite($fp, $content);
             fclose($fp);
         } else {
-            Log::error('Could not open file ' . $currentCourseRepositorySys . 'index.php');
+            $app['monolog']->addError('Could not open file ' . $currentCourseRepositorySys . 'index.php');
         }
     }
 
@@ -135,17 +133,16 @@ if (defined('SYSTEM_INSTALLATION')) {
     copy($updatePath . 'claroline/inc/conf/mail.conf.php', $pathForm . 'main/inc/conf/mail.conf.php');
     copy($updatePath . 'claroline/inc/conf/profile.conf.inc.php', $pathForm . 'main/inc/conf/profile.conf.php');
 
-    Log::notice('Renaming ' . $updatePath . 'claroline/upload/users to ' . $pathForm . 'main/upload/users');
+    $app['monolog']->addInfo('Renaming ' . $updatePath . 'claroline/upload/users to ' . $pathForm . 'main/upload/users');
     rename($updatePath . 'claroline/upload/users', $pathForm . 'main/upload/users');
-    Log::notice('Renaming ' . $updatePath . 'claroline/upload/audio to ' . $pathForm . 'main/upload/audio');
+    $app['monolog']->addInfo('Renaming ' . $updatePath . 'claroline/upload/audio to ' . $pathForm . 'main/upload/audio');
     rename($updatePath . 'claroline/upload/audio', $pathForm . 'main/upload/audio');
-    Log::notice('Renaming ' . $updatePath . 'claroline/upload/images to ' . $pathForm . 'main/upload/images');
+    $app['monolog']->addInfo('Renaming ' . $updatePath . 'claroline/upload/images to ' . $pathForm . 'main/upload/images');
     rename($updatePath . 'claroline/upload/images', $pathForm . 'main/upload/images');
-    Log::notice('Renaming ' . $updatePath . 'claroline/upload/linked_files to ' . $pathForm . 'main/upload/linked_files');
+    $app['monolog']->addInfo('Renaming ' . $updatePath . 'claroline/upload/linked_files to ' . $pathForm . 'main/upload/linked_files');
     rename($updatePath . 'claroline/upload/linked_files', $pathForm . 'main/upload/linked_files');
-    Log::notice('Renaming ' . $updatePath . 'claroline/upload/video to ' . $pathForm . 'main/upload/video');
+    $app['monolog']->addInfo('Renaming ' . $updatePath . 'claroline/upload/video to ' . $pathForm . 'main/upload/video');
     rename($updatePath . 'claroline/upload/video', $pathForm . 'main/upload/video');
 } else {
-
     echo 'You are not allowed here !' . __FILE__;
 }

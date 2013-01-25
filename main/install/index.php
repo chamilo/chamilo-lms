@@ -25,23 +25,9 @@ define('FORM_FIELD_DISPLAY_LENGTH',             40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH',    25);
 define('MAX_FORM_FIELD_LENGTH',                 80);
 
-/*		PHP VERSION CHECK */
-
-// Including necessary libraries.
-require_once '../inc/lib/main_api.lib.php';
-
-api_check_php_version('../inc/');
-
-/*		INITIALIZATION SECTION */
-
-ob_implicit_flush(true);
-session_start();
-
-//Composer autoloader
-require_once __DIR__.'../../../vendor/autoload.php';
+require_once '../inc/global.inc.php';
 
 require_once 'install.lib.php';
-require_once 'install.class.php';
 require_once 'i_database.class.php';
 
 // This value is use in database::query in order to prompt errors in the error log (course databases)
@@ -126,13 +112,13 @@ if (!empty($_POST['old_version'])) {
 
 require_once __DIR__.'/version.php';
 
+
 // A protection measure for already installed systems.
 
 if (is_already_installed_system()) {
 	// The system has already been installed, so block re-installation.
-	$global_error_code = 6;
-	require '../inc/global_error_message.inc.php';
-	die();
+    header("Location: ".api_get_path(WEB_PATH));
+    exit;
 }
 
 /*		STEP 1 : INITIALIZES FORM VARIABLES IF IT IS THE FIRST VISIT */
@@ -740,11 +726,12 @@ if (@$_POST['step2']) {
           <div id="pleasewait" class="warning-message">'.get_lang('PleaseWaitThisCouldTakeAWhile').'</div>
           </div>';
 
-
     // Push the web server to send these strings before we start the real
     // installation process
     flush();
     ob_flush();
+
+    $app['monolog']->addInfo("installType: $installType");
 
 	if ($installType == 'update') {
 
@@ -762,8 +749,7 @@ if (@$_POST['step2']) {
 		if (empty($my_old_version)) { $my_old_version = '1.8.6.2'; } //we guess
 
 		$_configuration['main_database'] = $dbNameForm;
-		//$urlAppendPath = get_config_param('urlAppend');
-        Log::notice('Starting migration process from old version: '.$my_old_version.' ('.time().')');
+        $app['monolog']->addInfo('Starting migration process from old version: '.$my_old_version.' ('.time().')');
 
         if (isset($userPasswordCrypted)) {
             if ($userPasswordCrypted == '1') {
@@ -780,7 +766,7 @@ if (@$_POST['step2']) {
             $singleDbForm   	= isset($_configuration['single_database']) ? $_configuration['single_database'] : false;
         }
 
-        Log::notice("singledbForm: '$singleDbForm'");
+        $app['monolog']->addInfo("singledbForm: '$singleDbForm'");
 
 		Database::query("SET storage_engine = MYISAM;");
 
@@ -790,6 +776,8 @@ if (@$_POST['step2']) {
 			//Database::query("SET CHARACTER SET 'utf8';"); // See task #1802.
 			Database::query("SET NAMES 'utf8';");
 		}
+
+        $app['monolog']->addInfo("my_old_version $my_old_version");
 
 		switch ($my_old_version) {
 			case '1.6':

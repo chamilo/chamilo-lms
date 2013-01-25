@@ -17,7 +17,6 @@
  * - reorganise code into functions
  * @todo use database library
  */
-Log::notice('Entering file');
 
 $old_file_version = '1.8.6.2';
 $new_file_version = '1.8.7';
@@ -84,21 +83,21 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbNameForm . ' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("Database::query($dbNameForm,$query)");
+                        $app['monolog']->addInfo("Database::query($dbNameForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                            Log::notice("In $dbNameForm, executed: $query");
+                            $app['monolog']->addInfo("In $dbNameForm, executed: $query");
                         }
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                            $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
@@ -107,13 +106,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                        $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbNameForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = Database::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                    $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                 }
             }
         }
@@ -222,18 +221,18 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbNameForm) > 40) {
-                Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbNameForm . ' is too long, skipping');
             } elseif (!in_array($dbNameForm, $dblist)) {
-                Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbNameForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbNameForm);
                 foreach ($m_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("Database::query($dbNameForm,$query)");
+                        $app['monolog']->addInfo("Database::query($dbNameForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                            Log::notice("In $dbNameForm, executed: $query");
+                            $app['monolog']->addInfo("In $dbNameForm, executed: $query");
                         }
                     }
                 }
@@ -249,22 +248,22 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbStatsForm) > 40) {
-                Log::error('Database name ' . $dbStatsForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbStatsForm . ' is too long, skipping');
             } elseif (!in_array($dbStatsForm, $dblist)) {
-                Log::error('Database ' . $dbStatsForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbStatsForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbStatsForm);
 
                 foreach ($s_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("Database::query($dbStatsForm,$query)");
+                        $app['monolog']->addInfo("Database::query($dbStatsForm,$query)");
                     } else {
                         $res = iDatabase::query($query);
                         if ($log) {
-                            Log::notice("In $dbStatsForm, executed: $query");
+                            $app['monolog']->addInfo("In $dbStatsForm, executed: $query");
                         }
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                            $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
@@ -273,13 +272,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                        $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbStatsForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = iDatabase::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                    $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                 }
 
 
@@ -298,7 +297,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                         $question_id = $row['question_id'];
                         $answer = $row['answer'];
                         $exe_id = $row['exe_id'];
-                        
+
                         if(empty($answer)){
                             continue;
                         }
@@ -339,19 +338,19 @@ if (defined('SYSTEM_INSTALLATION')) {
              * without a database name
              */
             if (strlen($dbUserForm) > 40) {
-                Log::error('Database name ' . $dbUserForm . ' is too long, skipping');
+                $app['monolog']->addError('Database name ' . $dbUserForm . ' is too long, skipping');
             } elseif (!in_array($dbUserForm, $dblist)) {
-                Log::error('Database ' . $dbUserForm . ' was not found, skipping');
+                $app['monolog']->addError('Database ' . $dbUserForm . ' was not found, skipping');
             } else {
                 iDatabase::select_db($dbUserForm);
                 foreach ($u_q_list as $query) {
                     if ($only_test) {
-                        Log::notice("Database::query($dbUserForm,$query)");
-                        Log::notice("In $dbUserForm, executed: $query");
+                        $app['monolog']->addInfo("Database::query($dbUserForm,$query)");
+                        $app['monolog']->addInfo("In $dbUserForm, executed: $query");
                     } else {
                         $res = iDatabase::query($query);
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                            $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                 }
@@ -360,13 +359,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                     $res = iDatabase::query($query);
                     if ($res === false) {
-                        Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                        $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                     }
                 }
                 $query = "ALTER DATABASE `" . $dbUserForm . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                 $res = iDatabase::query($query);
                 if ($res === false) {
-                    Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                    $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                 }
             }
         }
@@ -383,9 +382,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
-            Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+            $app['monolog']->addError('Database name ' . $dbNameForm . ' is too long, skipping');
         } elseif (!in_array($dbNameForm, $dblist)) {
-            Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+            $app['monolog']->addError('Database ' . $dbNameForm . ' was not found, skipping');
         } else {
             iDatabase::select_db($dbNameForm);
             $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL ORDER BY code");
@@ -417,14 +416,14 @@ if (defined('SYSTEM_INSTALLATION')) {
                         }
 
                         if ($only_test) {
-                            Log::notice("Database::query(" . $row_course['db_name'] . ",$query)");
+                            $app['monolog']->addInfo("Database::query(" . $row_course['db_name'] . ",$query)");
                         } else {
                             $res = iDatabase::query($query);
                             if ($log) {
-                                Log::notice("In " . $row_course['db_name'] . ", executed: $query");
+                                $app['monolog']->addInfo("In " . $row_course['db_name'] . ", executed: $query");
                             }
                             if ($res === false) {
-                                Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                                $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                             }
                         }
                     }
@@ -435,13 +434,13 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $query = "ALTER TABLE `" . $table . "` CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;";
                             $res = iDatabase::query($query);
                             if ($res === false) {
-                                Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                                $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                             }
                         }
                         $query = "ALTER DATABASE `" . $row_course['db_name'] . "` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;";
                         $res = iDatabase::query($query);
                         if ($res === false) {
-                            Log::error('Error in ' . $query . ': ' . iDatabase::error());
+                            $app['monolog']->addError('Error in ' . $query . ': ' . iDatabase::error());
                         }
                     }
                     $t_student_publication = $row_course['db_name'] . ".student_publication";
@@ -457,7 +456,7 @@ if (defined('SYSTEM_INSTALLATION')) {
                     $rs_insert_user = iDatabase::query($sql_insert_user);
 
                     if ($rs_insert_user === false) {
-                        Log::error('Could not query insert_user_id table: ' . iDatabase::error());
+                        $app['monolog']->addError('Could not query insert_user_id table: ' . iDatabase::error());
                     } else {
                         if (iDatabase::num_rows($rs_insert_user) > 0) {
                             while ($row_ids = iDatabase::fetch_array($rs_insert_user)) {
@@ -517,9 +516,9 @@ if (defined('SYSTEM_INSTALLATION')) {
     if (count($c_q_list) > 0) {
         // Get the courses list
         if (strlen($dbNameForm) > 40) {
-            Log::error('Database name ' . $dbNameForm . ' is too long, skipping');
+            $app['monolog']->addError('Database name ' . $dbNameForm . ' is too long, skipping');
         } elseif (!in_array($dbNameForm, $dblist)) {
-            Log::error('Database ' . $dbNameForm . ' was not found, skipping');
+            $app['monolog']->addError('Database ' . $dbNameForm . ' was not found, skipping');
         } else {
             iDatabase::select_db($dbNameForm);
             $res = iDatabase::query("SELECT code,db_name,directory,course_language FROM course WHERE target_course_code IS NULL");
@@ -550,11 +549,11 @@ if (defined('SYSTEM_INSTALLATION')) {
                             $query = preg_replace('/^(UPDATE|ALTER TABLE|CREATE TABLE|DROP TABLE|INSERT INTO|DELETE FROM)\s+(\w*)(.*)$/', "$1 $prefix$2$3", $query);
                         }
                         if ($only_test) {
-                            Log::notice("Database::query(" . $row['db_name'] . ",$query)");
+                            $app['monolog']->addInfo("Database::query(" . $row['db_name'] . ",$query)");
                         } else {
                             $res = iDatabase::query($query);
                             if ($log) {
-                                Log::notice("In " . $row['db_name'] . ", executed: $query");
+                                $app['monolog']->addInfo("In " . $row['db_name'] . ", executed: $query");
                             }
                         }
                     }

@@ -717,11 +717,11 @@ function parse_sql_queries($sql_text) {
 
         //UTF8 fix see #5678
         if (strpos(strtolower($this_sql_query), 'create table') === false) {
-            Database::query($this_sql_query);
+            iDatabase::query($this_sql_query);
         } else {
             //$this_sql_query .= substr($this_sql_query, strlen($this_sql_query), strlen($this_sql_query)-1);
             $this_sql_query .= ' DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci ';
-            Database::query($this_sql_query);
+            iDatabase::query($this_sql_query);
         }
     }
 }
@@ -2134,9 +2134,6 @@ function compare_setting_values($current_value, $wanted_value) {
 }
 
 
-
-
-
 /* Executed only before create_course_tables() */
 function drop_course_tables() {
     $list = CourseManager::get_course_tables();
@@ -2145,8 +2142,6 @@ function drop_course_tables() {
         Database::query($sql);
     }
 }
-
-
 
 /**
  * Creates all the necessary tables for a new course

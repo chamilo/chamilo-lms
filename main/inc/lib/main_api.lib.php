@@ -505,10 +505,10 @@ function api_get_path($path_type, $path = null) {
     // Always load root_web modifications for multiple url features
     global $_configuration;
     //default $_configuration['root_web'] configuration
-    $root_web = $_configuration['root_web'];
+    $root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : null;
 
     // Configuration data for already installed system.
-    $root_sys = $_configuration['root_sys'];
+    $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : realpath(dirname(__FILE__).'/../../../');
     $load_new_config = false;
 
     // To avoid that the api_get_access_url() function fails since global.inc.php also calls the main_api.lib.php
@@ -520,20 +520,27 @@ function api_get_path($path_type, $path = null) {
             $load_new_config = true;
         }
     }
-
     if (!$is_this_function_initialized) {
         global $_configuration;
 
-        $root_rel       = $_configuration['url_append'];
-        $code_folder    = $_configuration['code_append'];
-        $course_folder  = $_configuration['course_folder'];
+        $root_rel       = isset($_configuration['url_append']) ? $_configuration['url_append'] : null;
+        //$code_folder    = $_configuration['code_append'];
+        $code_folder    = 'main/';
+        $course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
 
         // Support for the installation process.
         // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced), at the moment when
         // configuration has not been created yet. This is why this function should be upgraded to return correct results in this case.
 
-        if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
-            if (($pos = strpos(($requested_page_rel = api_get_self()), 'main/install')) !== false) {
+        //if (defined('SYSTEM_INSTALLATION') && SYSTEM_INSTALLATION) {
+        if (empty($root_web)) {
+            $pos = strpos(($requested_page_rel = api_get_self()), 'index.php');
+            $pos_install = strpos(($requested_page_rel = api_get_self()), 'main/install');
+
+            if ($pos_install) {
+                $pos = $pos_install;
+            }
+            //if (() !== false) {
                 $root_rel = substr($requested_page_rel, 0, $pos);
                 // See http://www.mediawiki.org/wiki/Manual:$wgServer
                 $server_protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http';
@@ -552,15 +559,18 @@ function api_get_path($path_type, $path = null) {
                 $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
                 $code_folder = 'main/';
                 $course_folder = 'courses/';
-            }
+            //}
             // Here we give up, so we don't touch anything.
         }
 
         // Dealing with trailing slashes.
         $root_web       = api_add_trailing_slash($root_web);
+
         $root_sys       = api_add_trailing_slash($root_sys);
+
         $root_rel       = api_add_trailing_slash($root_rel);
         $code_folder    = api_add_trailing_slash($code_folder);
+
         $course_folder  = api_add_trailing_slash($course_folder);
 
         // Web server base and system server base.
@@ -578,6 +588,7 @@ function api_get_path($path_type, $path = null) {
         $paths[REL_COURSE_PATH]         = $root_rel.$course_folder;
         $paths[REL_CODE_PATH]           = $root_rel.$code_folder;
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
+
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
         // Now we can switch into api_get_path() "terminology".
@@ -6618,7 +6629,6 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
         $reply_to_mail = $extra_headers['reply_to']['mail'];
         $reply_to_name = $extra_headers['reply_to']['name'];
     }
-    //var_dump(array($reply_to_mail => $reply_to_name));
     try {
         $message = \Swift_Message::newInstance()
             ->setSubject($subject)

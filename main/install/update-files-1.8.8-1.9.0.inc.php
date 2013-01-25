@@ -11,8 +11,6 @@
  * current configuration file.
  * @package chamilo.install
  */
-Log::notice('Entering file');
-
 if (defined('SYSTEM_INSTALLATION')) {
 
     $conf_dir = api_get_path(CONFIGURATION_PATH);

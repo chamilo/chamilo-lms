@@ -8905,8 +8905,8 @@ class learnpath
             $return .= '<td class="radio"'.(($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '').'>';
 
             $return .= '<label for="id'.$arrLP[$i]['id'].'">';
-
-            $return .= '<input'.(($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '').(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ').'id="id'.$arrLP[$i]['id'].'" name="prerequisites" style="margin-left:'.$arrLP[$i]['depth'] * 10.'px; margin-right:10px;" type="radio" value="'.$arrLP[$i]['id'].'" />';
+            $depth_multi = $arrLP[$i]['depth'] * 10;
+            $return .= '<input'.(($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '').(($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ').'id="id'.$arrLP[$i]['id'].'" name="prerequisites" style="margin-left:'.$depth_multi.'px; margin-right:10px;" type="radio" value="'.$arrLP[$i]['id'].'" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             if (file_exists('../img/lp_'.$icon_name.'.png')) {
                 $return .= '<img alt="" src="../img/lp_'.$icon_name.'.png" style="margin-right:5px;" title="" />';

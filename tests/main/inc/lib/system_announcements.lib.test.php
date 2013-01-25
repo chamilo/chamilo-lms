@@ -1,6 +1,5 @@
 <?php
 require_once(api_get_path(LIBRARY_PATH).'system_announcements.lib.php');
-require_once(api_get_path(LIBRARY_PATH).'mail.lib.inc.php');
 
 
 class TestSystemAnnouncementManager extends UnitTestCase {

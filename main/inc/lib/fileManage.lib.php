@@ -19,14 +19,10 @@
 function update_db_info($action, $old_path, $new_path = '') {
     $dbTable = Database::get_course_table(TABLE_DOCUMENT);
     $course_id = api_get_course_int_id();
-    
+
 	/* DELETE */
 	if ($action == 'delete') {
-		/*  // RH: metadata, update 2004/08/23
-		    these two lines replaced by new code below:
-        	$query = "DELETE FROM $dbTable
-    		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
-        */
+
         $old_path = Database::escape_string($old_path);
         $to_delete = "WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
         $query = "DELETE FROM $dbTable " . $to_delete;
@@ -50,23 +46,15 @@ function update_db_info($action, $old_path, $new_path = '') {
 	/* UPDATE */
 
 	if ($action == 'update') {
-		//Display::display_normal_message("new_path = $new_path");
 		if ($new_path[0] == '.') $new_path = substr($new_path, 1);
 		$new_path = str_replace('//', '/', $new_path);
-		//Display::display_normal_message("character 0 = " . $new_path[0] . " 1=" . $new_path[1]);
-		//Display::display_normal_message("new_path = $new_path");
-
-		// Older broken version
-		//$query = "UPDATE $dbTable
-		//SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-		//WHERE path = '".$old_path."' OR path LIKE '".$old_path."/%'";
 
 		// Attempt to update	- tested & working for root	dir
 		$new_path = Database::escape_string($new_path);
 		$query = "UPDATE $dbTable
 		SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
 		WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
-	}	
+	}
 	Database::query($query);
 }
 
@@ -159,7 +147,7 @@ function removeDir($dir) {
 
 
 /**
- * Return true if folder is empty 
+ * Return true if folder is empty
  * @author : hubert.borderiou@grenet.fr
  * @param string $in_folder : folder path on disk
  * @return 1 if folder is empty, 0 otherwise
@@ -596,89 +584,3 @@ class FileManager
 
 
 } //end class FileManager
-
-
-
-
-
-/*	DEPRECATED FUNCTIONS */
-
-/**
- * Like in Java, creates the directory named by this abstract pathname,
- * including any necessary but nonexistent parent directories.
- *
- * @author Hugues Peeters <peeters@ipm.ucl.ac.be>
- * @author Christophe Gesche <gesche@ipm.ucl.ac.be>
- *
- * @param  string $path - path to create
- * @param  string $mode - directory permission (default is '770')
- *
- * @return boolean TRUE if succeeds FALSE otherwise
- */
-function mkdirs($path, $mode = '0770') {
-	if (file_exists($path)) {
-		return false;
-	} else {
-		FileManager :: mkdirs(dirname($path), $mode);
-	 	//mkdir($path, $mode);
-		return true;
-	}
-}
-
-/**
- * @deprecated 06-FEB-2010. The function mkdir() is able to create directories recursively.
- * @link http://php.net/manual/en/function.mkdir.php
- *
- * to create missing directory in a gived path
- *
- * @returns a resource identifier or FALSE if the query was not executed correctly.
- * @author KilerCris@Mail.com original function from  php manual
- * @author Christophe Gesch� gesche@ipm.ucl.ac.be Claroline Team
- * @since  28-Aug-2001 09:12
- * @param 	sting	$path 		wanted path
- * @param 	boolean	$verbose	fix if comments must be printed
- * @param 	string	$mode		fix if chmod is same of parent or default (Note: This misterious parameter is not used).
- * Note 	string  $langCreatedIn string used to say "create in"
- */
-function mkpath($path, $verbose = false, $mode = 'herit') {
-	global $langCreatedIn, $_configuration;
-
-	$path = str_replace('/', "\\", $path);
-	$dirs = explode("\\", $path);
-
-	$path = $dirs[0];
-
-	if ($verbose) {
-		echo '<ul>';
-	}
-
-	for ($i = 1; $i < sizeof($dirs); $i++) {
-		$path .= '/'.$dirs[$i];
-
-		if (ereg('^'.$path, $_configuration['root_sys']) && strlen($path) < strlen($_configuration['root_sys'])) {
-			continue;
-		}
-
-		if (!is_dir($path)) {
-			$ret = mkdir($path, api_get_permissions_for_new_directories());
-
-			if ($ret) {
-				if ($verbose) {
-					echo '<li><strong>'.basename($path).'</strong><br />'.$langCreatedIn.'<br /><strong>'.realpath($path.'/..').'</strong></li>';
-				}
-			} else {
-				if ($verbose) {
-					echo '</ul>error : '.$path.' not created';
-				}
-				$ret = false;
-				break;
-			}
-		}
-	}
-
-	if ($verbose) {
-		echo '</ul>';
-	}
-
-	return $ret;
-}

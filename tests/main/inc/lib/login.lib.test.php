@@ -1,6 +1,5 @@
 <?php
 require_once api_get_path(LIBRARY_PATH).'login.lib.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 
 class TestLogin extends UnitTestCase {
 
@@ -41,7 +40,6 @@ class TestLogin extends UnitTestCase {
 	}
 
 	function testhandle_encrypted_password() {
-		require_once api_get_path (LIBRARY_PATH).'mail.lib.inc.php';
 		global $charset;
 		global $_configuration;
 		ob_start();

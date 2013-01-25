@@ -9,7 +9,7 @@
  * Code
  */
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $_SESSION['whereami'] = 'lp/impress';
 $this_section = SECTION_COURSES;
 

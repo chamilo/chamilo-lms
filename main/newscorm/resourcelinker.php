@@ -23,7 +23,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included.
 $language_file = 'resourcelinker';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 

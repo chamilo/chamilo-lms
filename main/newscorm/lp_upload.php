@@ -10,7 +10,7 @@
  */
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $course_dir = api_get_course_path().'/scorm';
 $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_dir;
 if (empty($_POST['current_dir'])) {

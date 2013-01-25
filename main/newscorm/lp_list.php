@@ -17,7 +17,7 @@ if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
     header('location: lp_controller.php?action=list');
 }
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 

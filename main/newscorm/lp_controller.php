@@ -88,7 +88,7 @@ if ($debug > 0) error_log('New LP - Included aicc', 0);
 require_once 'aiccItem.class.php';
 if ($debug > 0) error_log('New LP - Included aiccItem', 0);
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 if ($debug > 0) error_log('New LP - Included back_compat', 0);
 
 $session_id = api_get_session_id();

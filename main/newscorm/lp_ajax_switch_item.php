@@ -17,7 +17,7 @@ $use_anonymous = true;
 // Name of the language file that needs to be included
 $language_file[] = 'learnpath';
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 
 /**
  * Get one item's details

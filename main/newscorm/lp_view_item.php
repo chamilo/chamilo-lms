@@ -18,7 +18,7 @@
 // The main_api.lib.php, database.lib.php and display.lib.php
 // libraries are included by default.
 
-require_once 'back_compat.inc.php';
+require_once '../inc/global.inc.php';
 require_once 'learnpath.class.php';
 require_once 'learnpathItem.class.php';
 require_once 'learnpath_functions.inc.php';

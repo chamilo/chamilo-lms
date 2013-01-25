@@ -6,7 +6,7 @@
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-require_once dirname(__FILE__) . '/../inc/autoload.inc.php';
+//require_once dirname(__FILE__) . '/../inc/autoload.inc.php';
 
 $controller = CourseNoticeController::instance();
 KeyAuth::enable_services($controller);

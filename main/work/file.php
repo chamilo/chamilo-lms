@@ -4,25 +4,24 @@ Use Model\StudentPublication;
 Use Model\Course;
 
 /**
- * 	Return either 
- * 
+ * 	Return either
+ *
  *      - one work item (file)
  *      - several work items (files) zipped together
- * 
+ *
  * Used to transfer files to another application through http.
- * 
+ *
  * Script parameters:
- * 
- *      - id        id(s) of the work item id=1 or id=1,2,4  
+ *
+ *      - id        id(s) of the work item id=1 or id=1,2,4
  *      - cidReq    course code
- * 
+ *
  * Note this script enables key authentication so access with a key token is possible.
- * 
+ *
  * @package chamilo.document
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-require_once __DIR__ . '/../inc/autoload.inc.php';
 KeyAuth::enable();
 
 require_once __DIR__ . '/../inc/global.inc.php';
@@ -41,7 +40,7 @@ $course = Course::current();
 
 /**
  * No files requested. We make sure we return 404 error to tell the client
- * that the call failed. 
+ * that the call failed.
  */
 if (count($ids) == 0 || empty($course)) {
     Response::not_found();
@@ -69,7 +68,7 @@ if (count($ids) == 1) {
     }
 
     /**
-     * one folder requested 
+     * one folder requested
      */
     $items = array();
     $children = $pub->get_children();
@@ -93,7 +92,7 @@ if (count($ids) == 1) {
 }
 
 /**
- * Several files requested. In this case we zip them together. 
+ * Several files requested. In this case we zip them together.
  */
 $items = array();
 foreach ($ids as $id) {
@@ -105,19 +104,19 @@ foreach ($ids as $id) {
         $items[] = $pub;
     }
     /**
-     * We ignore folders 
+     * We ignore folders
      */
 }
 
 /**
- * Requested files may not be accessible. 
+ * Requested files may not be accessible.
  */
 if (count($items) == 0) {
     Response::not_found();
 }
 
 /**
- * Zip files together. 
+ * Zip files together.
  */
 $zip = Chamilo::temp_zip();
 foreach ($items as $item) {
@@ -127,7 +126,7 @@ foreach ($items as $item) {
 }
 
 /**
- * Send file for download 
+ * Send file for download
  */
 event_download(Uri::here());
 DocumentManager::file_send_for_download($zip->get_path(), false, get_lang('StudentPublications') . '.zip');

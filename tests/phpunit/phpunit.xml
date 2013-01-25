@@ -27,7 +27,6 @@
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../../main/inc</directory>
             <exclude>
-                <!--file>autoload.inc.php</file-->
                 <!--file>global.inc.php</file-->
             </exclude>
         </whitelist>

@@ -4,25 +4,24 @@ Use Model\Document;
 Use Model\Course;
 
 /**
- * 	Return either 
- * 
+ * 	Return either
+ *
  *      - one document
  *      - several documents (file and/or folders) zipped together
- * 
+ *
  * Used to transfer files to another application through http.
- * 
+ *
  * Script parameters:
- * 
- *      - id        id(s) of the document id=1 or id=1,2,4  
+ *
+ *      - id        id(s) of the document id=1 or id=1,2,4
  *      - cidReq    course code
- * 
+ *
  * Note this script enables key authentication so access with a key token is possible.
- * 
+ *
  * @package chamilo.document
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-require_once __DIR__ . '/../inc/autoload.inc.php';
 KeyAuth::enable();
 
 require_once __DIR__ . '/../inc/global.inc.php';
@@ -41,14 +40,14 @@ $course = Course::current();
 
 /**
  * No files requested. We make sure we return 404 error to tell the client
- * that the call failed. 
+ * that the call failed.
  */
 if (count($ids) == 0 || empty($course)) {
     Response::not_found();
 }
 
 /**
- * One file requested. In this case we return the file itself. 
+ * One file requested. In this case we return the file itself.
  */
 if (count($ids) == 1) {
     $id = reset($ids);
@@ -70,7 +69,7 @@ if (count($ids) == 1) {
 }
 
 /**
- * Several files requested. In this case we zip them together. 
+ * Several files requested. In this case we zip them together.
  */
 $files = array();
 $folders = array();
@@ -90,9 +89,9 @@ foreach ($ids as $id) {
 $requested_folders = $folders;
 
 /**
- * Note that if a parent folder is hidden children should not be accesible 
- * even if they are visible. It is therefore not sufficient to check document 
- * visibility. 
+ * Note that if a parent folder is hidden children should not be accesible
+ * even if they are visible. It is therefore not sufficient to check document
+ * visibility.
  */
 while ($folders) {
     $items = $folders;
@@ -116,7 +115,7 @@ while ($folders) {
 $folders = $requested_folders;
 
 /**
- * Requested files may not be accessible. 
+ * Requested files may not be accessible.
  */
 if (count($files) == 0) {
     Response::not_found();
@@ -135,7 +134,7 @@ foreach ($items as $item) {
 }
 
 /**
- * Zip files together. 
+ * Zip files together.
  */
 $temp_zip_path = Chamilo::temp_file('zip');
 $zip_folder = new PclZip($temp_zip_path);
@@ -148,7 +147,7 @@ foreach ($files as $file) {
 }
 
 /**
- * Send file for download 
+ * Send file for download
  */
 event_download(Uri::here());
 DocumentManager::file_send_for_download($temp_zip_path, false, get_lang('Documents') . '.zip');

@@ -5,35 +5,34 @@ use \ChamiloSession as Session;
 /**
  * Used to authenticate user with an access token. By default this method is disabled.
  * Method used primarily to make API calls: Rss, file upload.
- * 
- * Access is granted only for the services that are enabled.  
- * 
- * To be secured this method must 
- * 
+ *
+ * Access is granted only for the services that are enabled.
+ *
+ * To be secured this method must
+ *
  *      1) be called through httpS to avoid sniffing (note that this is the case anyway with other methods such as cookies)
  *      2) the url/access token must be secured
- * 
- * This authentication method is session less. This is to ensure that the navigator 
+ *
+ * This authentication method is session less. This is to ensure that the navigator
  * do not receive an access cookie that will grant it access to other parts of the
  * application.
- * 
- * 
+ *
+ *
  * Usage:
- * 
- * Enable KeyAuth for a specific service. Add the following lines so that 
- * the key authentication method is enabled for a specific service before 
+ *
+ * Enable KeyAuth for a specific service. Add the following lines so that
+ * the key authentication method is enabled for a specific service before
  * calling global.inc.php.
  * 
- *      include_once '.../main/inc/autoload.inc.php';
  *      KeyAuth::enable_services('my_service');
  *      include_once '.../main/inc/global.inc.php';
- * 
- * 
+ *
+ *
  * Enable url access for a short period of time:
- * 
+ *
  *      token = KeyAuth::create_temp_token();
  *      url = '...?access_token=' . $token ;
- * 
+ *
  * @see AccessToken
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
@@ -52,7 +51,7 @@ class KeyAuth
 
     /**
      * Returns enabled services
-     * 
+     *
      * @return array
      */
     public static function get_services()
@@ -61,9 +60,9 @@ class KeyAuth
     }
 
     /**
-     * Name of the service for which we are goint to check the API Key. 
+     * Name of the service for which we are goint to check the API Key.
      * If empty it disables authentication.
-     *  
+     *
      * !! 10 chars max !!
      */
     public static function enable_services($_)
@@ -109,7 +108,7 @@ class KeyAuth
     }
 
     /**
-     * Enable key authentication for the default service - i.e. chamilo 
+     * Enable key authentication for the default service - i.e. chamilo
      */
     public static function enable()
     {
@@ -124,7 +123,7 @@ class KeyAuth
     /**
      * Returns true if the key authentication method is enabled. False otherwise.
      * Default to false.
-     * 
+     *
      * @return bool
      */
     public static function is_enabled()
@@ -133,7 +132,7 @@ class KeyAuth
     }
 
     /**
-     * @return KeyAuth 
+     * @return KeyAuth
      */
     public static function instance()
     {
@@ -146,18 +145,18 @@ class KeyAuth
 
     protected function __construct()
     {
-        
+
     }
 
     /**
      * Returns true if authentication accepts to run otherwise returns false.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function accept()
     {
         /**
-         * Authentication method must be enabled 
+         * Authentication method must be enabled
          */
         if (!self::is_enabled()) {
             return false;
@@ -174,7 +173,7 @@ class KeyAuth
         }
 
         /**
-         * The service corresponding to the key must be enabled. 
+         * The service corresponding to the key must be enabled.
          */
         $service = $key['api_service'];
         if (!self::is_service_enabled($service)) {
@@ -182,7 +181,7 @@ class KeyAuth
         }
 
         /**
-         * User associated with the key must be active 
+         * User associated with the key must be active
          */
         $user = UserManager::get_user_info_by_id($token->get_user_id());
         if (empty($user)) {
@@ -193,16 +192,16 @@ class KeyAuth
         }
 
         /**
-         * Token must be valid. 
+         * Token must be valid.
          */
         return $token->is_valid();
     }
 
     /**
-     * If accepted tear down session, log in user and returns true. 
+     * If accepted tear down session, log in user and returns true.
      * If not accepted do nothing and returns false.
-     * 
-     * @return boolean 
+     *
+     * @return boolean
      */
     public function login()
     {
@@ -210,22 +209,22 @@ class KeyAuth
             return false;
         }
         /**
-         * ! important this is to ensure we don't grant access for other parts 
+         * ! important this is to ensure we don't grant access for other parts
          */
         Session::destroy();
 
         /**
-         * We don't allow redirection since access is granted only for this call 
+         * We don't allow redirection since access is granted only for this call
          */
         global $no_redirection, $noredirection;
         $no_redirection = true;
         $noredirection = true;
         Session::write('noredirection', $noredirection);
-        
+
         $user_id = $this->get_user_id();
         $course_code = $this->get_course_code();
         $group_id = $this->get_group_id();
-        
+
         Login::init_user($user_id, true);
         Login::init_course($course_code, true);
         Login::init_group($group_id, true);
@@ -235,7 +234,7 @@ class KeyAuth
 
     /**
      * Returns the request access token
-     * 
+     *
      * @return AccessToken
      */
     public function get_access_token()
@@ -243,17 +242,17 @@ class KeyAuth
         $string = Request::get(self::PARAM_ACCESS_TOKEN);
         return AccessToken::parse($string);
     }
-    
+
     public function get_user_id()
     {
         return $this->get_access_token()->get_user_id();
     }
-    
+
     public function get_course_code()
     {
         return Request::get('cidReq', 0);
     }
-    
+
     public function get_group_id()
     {
         return Request::get('gidReq', 0);

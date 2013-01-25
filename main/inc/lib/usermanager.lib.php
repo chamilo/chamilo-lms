@@ -1155,11 +1155,10 @@ class UserManager
 
         $big = new Image($source_file); // This is the original picture.
 
-        $ok = false;
-        $ok = $small->send_image($path.'small_'.$filename) &&
-            $medium->send_image($path.'medium_'.$filename) &&
-            $normal->send_image($path.$filename) &&
-            $big->send_image($path.'big_'.$filename);
+        $ok = $small && $small->send_image($path.'small_'.$filename) &&
+            $medium && $medium->send_image($path.'medium_'.$filename) &&
+            $normal && $normal->send_image($path.$filename) &&
+            $big && $big->send_image($path.'big_'.$filename);
         return $ok ? $filename : false;
     }
 
@@ -2578,7 +2577,7 @@ class UserManager
      */
     public static function resize_picture($file, $max_size_for_picture)
     {
-        $temp = null;
+        $temp = false;
         if (file_exists($file)) {
             $temp = new Image($file);
             $image_size = $temp->get_image_size($file);

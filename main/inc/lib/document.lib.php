@@ -913,9 +913,9 @@ class DocumentManager {
                         self::delete_document_from_db($row['id'], $_course, $current_session_id, true);
                     }
                     //delete documents, do it like this so metadata get's deleted too
-                    //update_db_info('delete', $path);
+                    //FileManager::update_db_info('delete', $path);
                     //throw it away
-                    my_delete($base_work_dir.$path);
+                    FileManager::my_delete($base_work_dir.$path);
                     $file_deleted_from_disk = true;
                 }
             } else {
@@ -1149,7 +1149,7 @@ class DocumentManager {
         $template_id = Database::result($result,0,0);
 
         include_once(api_get_path(LIBRARY_PATH) . 'fileManage.lib.php');
-        my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');
+        FileManager::my_delete(api_get_path(SYS_CODE_PATH).'upload/template_thumbnails/'.$template_id.'.jpg');
 
         $sql = 'DELETE FROM '.$table_template.' WHERE course_code="'.$course_code.'" AND user_id="'.$user_id.'" AND ref_doc="'.$document_id.'"';
 
@@ -2890,7 +2890,7 @@ class DocumentManager {
     				if (!is_array($resource)) {
     					$resource = base64_decode($resource);
     					// It's a file.
-    					$icon		= choose_image($resource);
+    					$icon		= FileManager::choose_image($resource);
     					$position 	= strrpos($icon, '.');
     					$icon 		= substr($icon, 0, $position) . '_small.gif';
     					$file_info	= explode('|@j@|', $resource);

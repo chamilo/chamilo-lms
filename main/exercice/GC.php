@@ -52,7 +52,7 @@ function HotPotGCt($folder,$flag,$userID) { // Garbage Collector
 		 if (stristr($val,$userID.".t.html"))
 		 { if ($flag == 1)
 		 		{
-						my_delete($folder."/".$val);
+						FileManager::my_delete($folder."/".$val);
 				}
 			 else
 			  {

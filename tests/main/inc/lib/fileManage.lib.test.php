@@ -37,14 +37,14 @@ class TestFileManager extends UnitTestCase {
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
-		$res = update_db_info($action, $oldPath, $newPath="");
+		$res = FileManager::update_db_info($action, $oldPath, $newPath="");
 		$this->assertNull($res);
 		//var_dump($res);
 	}
 
 	public function testCheckNameExist(){
 		$filePath ='';
-		$res = check_name_exist($filePath);
+		$res = FileManager::check_name_exist($filePath);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -53,7 +53,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testMyDelete(){
 		$file='';
-		$res = my_delete($file);
+		$res = FileManager::my_delete($file);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res===false);
@@ -62,7 +62,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testRemoveDir(){
 		$dir='';
-		$res = removeDir($dir);
+		$res = FileManager::removeDir($dir);
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse($res === true);
 		//var_dump($res);
@@ -71,7 +71,7 @@ class TestFileManager extends UnitTestCase {
 	public function testMyRename(){
 		$filePath ='document/';
 		$newFileName='';
-		$res = my_rename($filePath, $newFileName);
+		$res = FileManager::my_rename($filePath, $newFileName);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -80,7 +80,7 @@ class TestFileManager extends UnitTestCase {
 	public function testMove(){
 		$source ='';
 		$target ='';
-		$res = move($source, $target);
+		$res = FileManager::move($source, $target);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		$this->assertFalse($res);
@@ -90,14 +90,14 @@ class TestFileManager extends UnitTestCase {
 	public function testCopyDirTo(){
 		$origDirPath=api_get_path(SYS_COURSE_PATH).'document/audio';
 		$destination=api_get_path(SYS_COURSE_PATH).'document/flash/audio';
-		$res = copyDirTo($origDirPath, $destination, $move = false);
+		$res = FileManager::copyDirTo($origDirPath, $destination, $move = false);
 		$this->assertTrue($res===null);
 		$this->assertNull($res);
 	}
 
 	public function testIndexDir(){
 		$path=api_get_path(SYS_COURSE_PATH).'document/';
-	  	$res = index_dir($path);
+	  	$res = FileManager::index_dir($path);
 	  	if(!is_null($res)) {
 			$this->assertTrue(is_array($res));
 	  	} else {
@@ -108,7 +108,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testIndexAndSortDir(){
 		$path=api_get_path(SYS_COURSE_PATH).'document/';
-		$res = index_and_sort_dir($path);
+		$res = FileManager::index_and_sort_dir($path);
 		if(!is_bool($res)) {
 			$this->assertTrue($res);
 			$this->assertTrue(is_array($res));
@@ -116,16 +116,6 @@ class TestFileManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testFormDirList(){
-		$sourceType = '';
-		$sourceComponent = '';
-		$command = '';
-		$baseWorkDir = api_get_path(SYS_COURSE_PATH).'document/';
-		$res = form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir);
-		$this->assertTrue($res);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
 
 	public function testMkpath(){
 		$path=api_get_path(SYS_COURSE_PATH).'document/';

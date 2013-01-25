@@ -91,7 +91,7 @@ class CourseArchiver {
             foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
                 $doc_dir = dirname($backup_dir . $document->path);
                 @mkdir($doc_dir, $perm_dirs, true);
-                copyDirTo($course->path . $document->path, $doc_dir, false);
+                FileManager::copyDirTo($course->path . $document->path, $doc_dir, false);
             }
         }
 
@@ -100,14 +100,14 @@ class CourseArchiver {
         if (is_array($course->resources[RESOURCE_EVENT])) {
             $doc_dir = dirname($backup_dir . '/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);
-            copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
+            FileManager::copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
         }
 
         //Copy learningpath author image		
         if (is_array($course->resources[RESOURCE_LEARNPATH])) {
             $doc_dir = dirname($backup_dir . '/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
-            copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
+            FileManager::copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
         }
 
         //Copy announcements attachments
@@ -115,7 +115,7 @@ class CourseArchiver {
         if (is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
             $doc_dir = dirname($backup_dir . '/upload/announcements/');
             @mkdir($doc_dir, $perm_dirs, true);
-            copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
+            FileManager::copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
         }
 
         // Zip the course-contents

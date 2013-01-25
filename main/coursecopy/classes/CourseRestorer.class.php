@@ -663,7 +663,7 @@ class CourseRestorer
                     switch ($this->file_option) {
                         case FILE_OVERWRITE :
                             rmdirr($path.$document->path);
-                            copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                            FileManager::copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
 
                             break;
                         case FILE_SKIP :
@@ -692,14 +692,14 @@ class CourseRestorer
                             }
 
                             rename($this->course->backup_path.'/'.$document->path, $this->course->backup_path.'/'.$new_file_name);
-                            copyDirTo($this->course->backup_path.'/'.$new_file_name, $path.dirname($new_file_name), false);
+                            FileManager::copyDirTo($this->course->backup_path.'/'.$new_file_name, $path.dirname($new_file_name), false);
                             rename($this->course->backup_path.'/'.$new_file_name, $this->course->backup_path.'/'.$document->path);
 
                             break;
                     } // end switch
                 } // end if file exists
                 else {
-                    copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
+                    FileManager::copyDirTo($this->course->backup_path.'/'.$document->path, $path.dirname($document->path), false);
                 }
             } // end for each
         }

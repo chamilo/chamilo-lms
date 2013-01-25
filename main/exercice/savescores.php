@@ -30,7 +30,7 @@ require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $full_file_path = $documentPath.$test;
 
-my_delete($full_file_path.$_user['user_id'].".t.html");
+FileManager::my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
 $tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);

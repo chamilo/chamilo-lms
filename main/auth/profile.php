@@ -96,7 +96,6 @@ EOF;
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 
 // Libraries
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 $tool_name = is_profile_editable() ? get_lang('ModifProfile') : get_lang('ViewProfile');

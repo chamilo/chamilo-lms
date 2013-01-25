@@ -44,14 +44,14 @@ class TestFileManager extends UnitTestCase {
 	public function testUpdatedbInfo(){
 		$action ='';
 		$oldPath ='';
-		$res = update_db_info($action, $oldPath, $newPath="");
+		$res = FileManager::update_db_info($action, $oldPath, $newPath="");
 		$this->assertTrue(is_null($res));
 		//var_dump($res);
 	}
 
 	public function testCheckNameExist(){
 		$filePath ='';
-		$res = check_name_exist($filePath);
+		$res = FileManager::check_name_exist($filePath);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
@@ -60,7 +60,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testMyDelete(){
 		$file='';
-		$res = my_delete($file);
+		$res = FileManager::my_delete($file);
 		$this->assertFalse($res);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res===false);
@@ -69,7 +69,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testRemoveDir(){
 		$dir='';
-		$res = removeDir($dir);
+		$res = FileManager::removeDir($dir);
 		$this->assertTrue(is_bool($res));
 		$this->assertFalse($res === true);
 		//var_dump($res);
@@ -78,7 +78,7 @@ class TestFileManager extends UnitTestCase {
 	public function testMyRename(){
 		$filePath ='documents';
 		$newFileName='';
-		$res = my_rename($filePath, $newFileName);
+		$res = FileManager::my_rename($filePath, $newFileName);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		//var_dump($res);
@@ -87,7 +87,7 @@ class TestFileManager extends UnitTestCase {
 	public function testMove(){
 		$source ='';
 		$target ='';
-		$res = move($source, $target);
+		$res = FileManager::move($source, $target);
 		$this->assertTrue(is_bool($res));
 		$this->assertTrue($res === false);
 		$this->assertFalse($res);
@@ -97,14 +97,14 @@ class TestFileManager extends UnitTestCase {
 	public function testCopyDirTo(){
 		$origDirPath='';
 		$destination='';
-		$res = copyDirTo($origDirPath, $destination, $move=true);
+		$res = FileManager::copyDirTo($origDirPath, $destination, $move=true);
 		$this->assertTrue($res===null);
 		$this->assertNull($res);
 	}
 
 	public function testIndexDir(){
 		$path='/var/www/path/';
-	  	$res = index_dir($path);
+	  	$res = FileManager::index_dir($path);
 		$this->assertFalse(is_array($res));
 		$this->assertNull($res);
 		//var_dump($res);
@@ -112,7 +112,7 @@ class TestFileManager extends UnitTestCase {
 
 	public function testIndexAndSortDir(){
 		$path='/var/www/path/';
-		$res = index_and_sort_dir($path);
+		$res = FileManager::index_and_sort_dir($path);
 		$this->assertFalse($res);
 		$this->assertFalse(is_array($res));
 		$this->assertTrue(is_bool($res));
@@ -120,16 +120,6 @@ class TestFileManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testFormDirList(){
-		$sourceType='';
-		$sourceComponent='';
-		$command='';
-		$baseWorkDir='';
-		$res =form_dir_list($sourceType, $sourceComponent, $command, $baseWorkDir);
-		$this->assertTrue($res);
-		$this->assertTrue(is_string($res));
-		//var_dump($res);
-	}
 
 	public function testMkpath(){
 		$path='/var/www/path/';

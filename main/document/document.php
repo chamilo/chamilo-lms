@@ -45,18 +45,7 @@ require_once $lib_path . 'fileDisplay.lib.php';
 require_once $lib_path . 'fileManage.lib.php';
 
 api_protect_course_script(true);
-/*
-Testing time labels
-$now = api_get_utc_datetime();
-var_dump(api_convert_and_format_date($now, TIME_NO_SEC_FORMAT));
-var_dump(api_convert_and_format_date($now, DATE_FORMAT_SHORT));
-var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG));
-var_dump(api_convert_and_format_date($now, DATE_FORMAT_NUMBER));
-var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG_24H));
-var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_SHORT));
-var_dump(api_convert_and_format_date($now, DATE_TIME_FORMAT_SHORT_TIME_FIRST));
-var_dump(api_convert_and_format_date($now, DATE_FORMAT_NUMBER_NO_YEAR));
-*/
+
 //erase temp nanogons' audio, image edit
 if(isset($_SESSION['temp_audio_nanogong']) && !empty($_SESSION['temp_audio_nanogong'])) {
 	unlink($_SESSION['temp_audio_nanogong']);
@@ -613,8 +602,8 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             if (file_exists($real_path_target)) {
                 $fileExist = true;
             }
-            if (move($base_work_dir . $document_to_move['path'], $base_work_dir . $_POST['move_to'])) {
-                update_db_info('update', $document_to_move['path'], $_POST['move_to'] . '/' . basename($document_to_move['path']));
+            if (FileManager::move($base_work_dir . $document_to_move['path'], $base_work_dir . $_POST['move_to'])) {
+                FileManager::update_db_info('update', $document_to_move['path'], $_POST['move_to'] . '/' . basename($document_to_move['path']));
 
                 //update database item property
                 $doc_id = $_POST['move_file'];
@@ -1035,7 +1024,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $invisibility_span_close = ($is_visible == 0) ? '</span>' : '';
 
             // Size (or total size of a directory)
-            $size = $document_data['filetype'] == 'folder' ? get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
+            $size = $document_data['filetype'] == 'folder' ? FileManager::get_total_folder_size($document_data['path'], $is_allowed_to_edit) : $document_data['size'];
 
             // Get the title or the basename depending on what we're using
             if ($document_data['title'] != '') {

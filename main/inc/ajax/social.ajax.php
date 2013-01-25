@@ -18,7 +18,7 @@ switch ($action) {
 
 		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
 		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
-		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
+		$FileManager::my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
 		$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
 		$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
@@ -43,7 +43,7 @@ switch ($action) {
 		}
 		$my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
 		$my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
-		$my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
+		$FileManager::my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
 		$friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
 		$type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
 		$is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
@@ -62,9 +62,9 @@ switch ($action) {
 			echo '';
 			break;
 		}
-		$my_delete_friend        = intval($_POST['delete_friend_id']);
+		$FileManager::my_delete_friend        = intval($_POST['delete_friend_id']);
 		if (isset($_POST['delete_friend_id'])) {
-			SocialManager::remove_user_rel_user($my_delete_friend);
+			SocialManager::remove_user_rel_user($FileManager::my_delete_friend);
 		}	
 		break;
 	case 'show_my_friends':	

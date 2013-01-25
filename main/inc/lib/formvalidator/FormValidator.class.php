@@ -6,20 +6,10 @@ require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm.php';
 require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm/advmultiselect.php';
 
 /**
- * Filter
- */
-define('NO_HTML', 1);
-define('STUDENT_HTML', 2);
-define('TEACHER_HTML', 3);
-define('STUDENT_HTML_FULLPAGE', 4);
-define('TEACHER_HTML_FULLPAGE', 5);
-
-/**
  * Objects of this class can be used to create/manipulate/validate user input.
  */
 class FormValidator extends HTML_QuickForm
 {
-
     /**
      * Create a form validator based on an array of form data:
      *
@@ -143,9 +133,9 @@ class FormValidator extends HTML_QuickForm
         $this->registerRule('filetype', null, 'HTML_QuickForm_Rule_Filetype', $dir . 'Rule/Filetype.php');
         $this->registerRule('multiple_required', 'required', 'HTML_QuickForm_Rule_MultipleRequired', $dir . 'Rule/MultipleRequired.php');
         $this->registerRule('url', null, 'HTML_QuickForm_Rule_Url', $dir . 'Rule/Url.php');
-        $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');       
+        $this->registerRule('compare_fields', null, 'HTML_QuickForm_Compare_Fields', $dir . 'Rule/CompareFields.php');
         $this->registerRule('compare_datetime_text', null, 'HTML_QuickForm_Rule_CompareDateTimeText', $dir . 'Rule/CompareDateTimeText.php');
-        
+
 
         // Modify the default templates
         $renderer = & $this->defaultRenderer();

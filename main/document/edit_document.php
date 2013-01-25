@@ -492,9 +492,9 @@ Display::display_footer();
 function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {    
     
 	$file_name_for_change = $base_work_dir.$dir.$source_file;
-	//api_display_debug_info("call my_rename: params $file_name_for_change, $rename_to");
+	//api_display_debug_info("call FileManager::my_rename: params $file_name_for_change, $rename_to");
     $rename_to = disable_dangerous_file($rename_to); // Avoid renaming to .htaccess file
-	$rename_to = my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API
+	$rename_to = FileManager::my_rename($file_name_for_change, stripslashes($rename_to)); // fileManage API
 
 	if ($rename_to) {
 		if (isset($dir) && $dir != '') {
@@ -505,7 +505,7 @@ function change_name($base_work_dir, $source_file, $rename_to, $dir, $doc) {
 			$new_full_file_name = '/'.$rename_to;
 		}
 
-		update_db_info('update', $source_file, $new_full_file_name); // fileManage API
+		FileManager::update_db_info('update', $source_file, $new_full_file_name); // fileManage API
 		$name_changed = get_lang('ElRen');
 		$info_message = get_lang('fileModified');
 

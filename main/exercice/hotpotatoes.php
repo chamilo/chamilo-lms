@@ -134,8 +134,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     if ($checked) { $imgcount = $imgcount-1; }
                     else {
                         $dialogBox .= $filename.' '.get_lang('NameNotEqual');
-                        my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
-                        update_db_info('delete', $uploadPath.'/'.$fld.'/'.$filename);
+                        FileManager::my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
+                        FileManager::update_db_info('delete', $uploadPath.'/'.$fld.'/'.$filename);
                     }
                     if ($imgcount == 0) { // all image uploaded
                         $finish = 1;

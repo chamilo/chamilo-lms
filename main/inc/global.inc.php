@@ -201,7 +201,6 @@ if (isset($_configuration['main_database'])) {
         )
     ));
 
-
     //Setting Doctrine ORM
     $app->register(new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider, array(
         "orm.proxies_dir" => $app['db.orm.proxies_dir'],

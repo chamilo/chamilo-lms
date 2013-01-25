@@ -91,7 +91,7 @@ class document_processor extends search_processor {
                 $url = sprintf($url, $course_path, $row['path']);
                 // Get the image path
                 include_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
-                $icon = choose_image(basename($row['path']));
+                $icon = FileManager::choose_image(basename($row['path']));
                 $thumbnail = api_get_path(WEB_CODE_PATH) . 'img/' . $icon;
                 $image = $thumbnail;
                 //FIXME: use big images

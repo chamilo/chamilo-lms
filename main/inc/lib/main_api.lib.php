@@ -359,6 +359,15 @@ define('MESSAGE_STATUS_INVITATION_DENIED',      '7');
 
 define('SESSION_LINK_TARGET', '_self');
 
+/**
+ * Form validator
+ */
+define('NO_HTML', 1);
+define('STUDENT_HTML', 2);
+define('TEACHER_HTML', 3);
+define('STUDENT_HTML_FULLPAGE', 4);
+define('TEACHER_HTML_FULLPAGE', 5);
+
 
 /**
  * Inclusion of internationalization libraries

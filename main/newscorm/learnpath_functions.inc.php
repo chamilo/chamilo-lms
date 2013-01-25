@@ -1885,7 +1885,7 @@ function exportSCORM($scormname, $course) {
 
     // Clear.
     include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-    my_delete($zipfilename);
+    FileManager::my_delete($zipfilename);
 }
 
 /**

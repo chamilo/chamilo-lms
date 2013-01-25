@@ -795,8 +795,8 @@ class scorm extends learnpath {
         DocumentManager :: file_send_for_download($zipfilename, true);
 
         // Delete the temporary zip file and directory in fileManage.lib.php
-        my_delete($zipfilename);
-        my_delete($zipfoldername);
+        FileManager::my_delete($zipfilename);
+        FileManager::my_delete($zipfoldername);
 
         return true;
     }

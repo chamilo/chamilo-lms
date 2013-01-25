@@ -369,7 +369,7 @@ class GroupManager {
 				if (file_exists($source_directory)) {
 					if (api_get_setting('permanently_remove_deleted_files') == 'true') {
 						//Delete
-						 my_delete($source_directory);
+						 FileManager::my_delete($source_directory);
 					} else {
 						//Rename
 						rename($source_directory, $destination_dir);

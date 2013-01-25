@@ -24,7 +24,7 @@ $time               = $_REQUEST['time'];
 
 $user_id = api_get_user_id();
 $full_file_path = $document_path.$doc_url;
-my_delete($full_file_path.$user_id.'.t.html');
+FileManager::my_delete($full_file_path.$user_id.'.t.html');
 $content = ReadFileCont($full_file_path.$user_id.'.t.html');
 
 if ($content == '') {

@@ -168,7 +168,7 @@ function import_exercise($file) {
 			$answer->save();
 		}
 		// delete the temp dir where the exercise was unzipped
-		my_delete($baseWorkDir . $uploadPath);
+		FileManager::my_delete($baseWorkDir . $uploadPath);
 		$operation = true;
 	}    
 	return $operation;

@@ -101,7 +101,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                     }
                                     $new_path = $chamiloFolder; //sample /images
                                     $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
-                                    update_db_info('update', $old_path, $new_path); //Chamilo
+                                    FileManager::update_db_info('update', $old_path, $new_path); //Chamilo
                                     $curdirpath = $new_path;
                                     $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
                                     $current_session_id = api_get_session_id();
@@ -152,7 +152,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                                 }
                                                 $new_path = $chamiloFolder; //sample /images
                                                 $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
-                                                update_db_info('update', $old_path, $new_path); //Chamilo
+                                                FileManager::update_db_info('update', $old_path, $new_path); //Chamilo
                                                 $curdirpath = $new_path;
                                                 $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
                                                 $current_session_id = api_get_session_id();
@@ -164,7 +164,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                                 }
                                                 $new_path = $chamiloFolder; //sample /images/book_highlight.jpg
                                                 $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
-                                                update_db_info('update', $old_path, $new_path); //Chamilo
+                                                FileManager::update_db_info('update', $old_path, $new_path); //Chamilo
                                                 //update items
                                                 $curdirpath = $new_path;
                                                 $doc_id = DocumentManager::get_document_id($_course, $curdirpath); //Chamilo
@@ -181,7 +181,7 @@ if (CONFIG_SYS_VIEW_ONLY || (!CONFIG_OPTIONS_CUT && !CONFIG_OPTIONS_COPY)) {
                                     $new_path = $chamiloFolder; //sample /images/book_highlight.jpg
                                     //update documents
                                     $dbTable = Database::get_course_table(TABLE_DOCUMENT); //Chamilo
-                                    update_db_info('update', $old_path, $new_path); //Chamilo
+                                    FileManager::update_db_info('update', $old_path, $new_path); //Chamilo
                                     //update items
                                     $curdirpath = $new_path;
                                     $doc_id = DocumentManager::get_document_id($_course, $curdirpath);

@@ -121,7 +121,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     }
 
     $filetype = $document_data['filetype'];
-    $size = $filetype == 'folder' ? get_total_folder_size($document_data['path'], api_is_allowed_to_edit(null, true)) : $document_data['size'];
+    $size = $filetype == 'folder' ? FileManager::get_total_folder_size($document_data['path'], api_is_allowed_to_edit(null, true)) : $document_data['size'];
     $path = $document_data['path'];
 
     $url_path = urlencode($document_data['path']);
@@ -363,7 +363,7 @@ function build_document_icon_tag($type, $path)
     $current_session_id = api_get_session_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     if ($type == 'file') {
-        $icon = choose_image($basename);
+        $icon = FileManager::choose_image($basename);
 
         if (preg_match('/_chnano_.wav$/i', $basename)) {
             $icon = "jplayer_play.png";

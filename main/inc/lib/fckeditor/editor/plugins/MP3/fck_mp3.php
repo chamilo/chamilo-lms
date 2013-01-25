@@ -47,10 +47,8 @@ include('../../../../../../inc/global.inc.php');
 		        <td>
 		  <?php
 		  $sType = "MP3";
-		  //if (api_is_in_course() || api_is_platform_admin())
-		  //{
-		 	 include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
-		  //}
+            include(api_get_path(INCLUDE_PATH).'course_document.inc.php');
+
 		  ?>
 		        </td>
 		      </tr>

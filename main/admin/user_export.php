@@ -15,7 +15,6 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 // Database table definitions
@@ -94,7 +93,7 @@ if ($form->validate()) {
 			$sql .= " FROM $user_table u ORDER BY lastname,firstname";
 		}
 		$filename = 'export_users_'.date('Y-m-d_H-i-s');
-	}	
+	}
 	$data = array();
 	$extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC',false);
 	if ($export['addcsvheader']=='1' AND $export['file_type']=='csv') {

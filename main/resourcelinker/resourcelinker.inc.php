@@ -98,7 +98,7 @@ function show_documents($folder)
 				}
 				else
 				{
-					$image = choose_image($row['path']);
+					$image = FileManager::choose_image($row['path']);
 					echo "<img src=\"../img/$image\" align=\"middle\" />";
 				}
 
@@ -158,7 +158,7 @@ function show_documents($folder)
 				}
 				else
 				{
-					$image = choose_image($path);
+					$image = FileManager::choose_image($path);
 					echo "<img src=\"../img/$image\" align=\"middle\" />";
 				}
 
@@ -309,7 +309,7 @@ function display_addedresource_link($type, $id, $style='')
 			$pathname = explode('/',$myrow['path']); // making a correct name for the link
 			$last = count($pathname) - 1;  // making a correct name for the link
 			$filename = $pathname[$last];  // making a correct name for the link
-			$image = choose_image($filename);
+			$image = FileManager::choose_image($filename);
 			$ext = explode('.',$filename);
 			$ext = strtolower($ext[sizeof($ext)-1]);
 			$myrow['path'] = rawurlencode($myrow['path']);
@@ -821,7 +821,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 				}
 			}
 			if (($builder != 'builder') and ($icon != 'wrap')) { echo "</td><td>"; }
-			$image=choose_image($filename);
+			$image=FileManager::choose_image($filename);
 
 			$sql="select * from $tbl_learnpath_item where id=$id_in_path";
 			$result=Database::query($sql);	$row=Database::fetch_array($result);

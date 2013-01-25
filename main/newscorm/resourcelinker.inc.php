@@ -95,7 +95,7 @@ function show_documents($folder) {
                 if (file_or_folder($row['path'])) {
                         echo '<img src="../img/file.gif" align="middle" />';
                 } else {
-                    $image = choose_image($row['path']);
+                    $image = FileManager::choose_image($row['path']);
                     echo "<img src=\"../img/$image\" align=\"middle\" />";
                 }
 
@@ -142,7 +142,7 @@ function show_documents($folder) {
                 if (file_or_folder($path)) {
                     echo '<img src="../img/file.gif" align="middle" />';
                 } else {
-                    $image = choose_image($path);
+                    $image = FileManager::choose_image($path);
                     echo "<img src=\"../img/$image\" align=\"middle\" />";
                 }
 
@@ -284,7 +284,7 @@ function display_addedresource_link($type, $id, $style = '') {
             $pathname = explode('/',$myrow['path']); // Making a correct name for the link.
             $last = count($pathname) - 1;  // Making a correct name for the link.
             $filename = $pathname[$last];  // Making a correct name for the link.
-            $image = choose_image($filename);
+            $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext)-1]);
             $myrow['path'] = rawurlencode($myrow['path']);
@@ -753,7 +753,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
-            $image = choose_image($filename);
+            $image = FileManager::choose_image($filename);
 
             $sql = "select * from $tbl_lp_item where id=$id_in_path";
             //error_log('New LP - Querying lp_item table: '.$sql, 0);
@@ -1578,7 +1578,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
             $last = count($pathname) - 1;  // Making a correct name for the link.
             $filename = $pathname[$last];  // Making a correct name for the link.
-            $image = choose_image($filename);
+            $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext) - 1]);
             $myrow['path'] = rawurlencode($myrow['path']);
@@ -1830,7 +1830,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
             $last = count($pathname) - 1;  // Making a correct name for the link.
             $filename = $pathname[$last];  // Making a correct name for the link.
-            $image = choose_image($filename);
+            $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext) - 1]);
             $myrow['path'] = rawurlencode($myrow['path']);

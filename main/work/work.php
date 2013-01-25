@@ -428,7 +428,7 @@ switch ($action) {
 			$realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
 			$form->addElement('hidden', 'newWorkUrl', $submitGroupWorkUrl);
 			$text_document = $form->addElement('text', 'document', get_lang('Document'));
-			$defaults['document'] = '<a href="' . format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
+			$defaults['document'] = '<a href="' . FileManager::format_url($submitGroupWorkUrl) . '">' . $realUrl . '</a>';
 			$text_document->freeze();
 		} elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
 			$workUrl = $currentCourseRepositoryWeb . $workUrl;
@@ -934,7 +934,7 @@ switch ($action) {
 			//security fix: make sure they can't move files that are not in the document table
 			if ($path = get_work_path($item_id)) {
 
-				if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
+				if (FileManager::move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
 					//update db
 					update_work_url($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
 
@@ -1075,7 +1075,7 @@ switch ($action) {
                     if ($row['contains_file'] == 1) {
                         if (!empty($work)) {
                             if (api_get_setting('permanently_remove_deleted_files') == 'true') {
-                                my_delete($currentCourseRepositorySys.'/'.$work);
+                                FileManager::my_delete($currentCourseRepositorySys.'/'.$work);
                                 Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));
                                 $file_deleted = true;
                             } else {

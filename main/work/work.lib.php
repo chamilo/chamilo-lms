@@ -1118,7 +1118,7 @@ function del_dir($id) {
     		require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
     		$new_dir = $work_data_url.'_DELETED_'.$id;
     		if (api_get_setting('permanently_remove_deleted_files') == 'true'){
-    			my_delete($work_data_url);
+    			FileManager::my_delete($work_data_url);
     		} else {
     			if (file_exists($work_data_url)) {
     				rename($work_data_url, $new_dir);
@@ -1193,7 +1193,7 @@ function update_dir_name($work_data, $new_name, $title) {
 		$new_name = Security::remove_XSS($new_name);
 		$new_name = replace_dangerous_char($new_name);
 		$new_name = disable_dangerous_file($new_name);
-		my_rename($base_work_dir.'/'.$path, $new_name);
+		FileManager::my_rename($base_work_dir.'/'.$path, $new_name);
 		$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 		//update all the files in the other directories according with the next query

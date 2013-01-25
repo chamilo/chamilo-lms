@@ -189,20 +189,13 @@ if ($docs_and_folders) {
 		$invisibility_span_open = ($id['visibility'] == 0) ? '<span class="invisible">' : '';
 		$invisibility_span_close = ($id['visibility'] == 0) ? '</span>' : '';
 		//size (or total size of a directory)
-		$size = $id['filetype'] == 'folder' ? get_total_folder_size($id['path'], $is_allowed_to_edit) : $id[size];
+		$size = $id['filetype'] == 'folder' ? FileManager::get_total_folder_size($id['path'], $is_allowed_to_edit) : $id[size];
 		//get the title or the basename depending on what we're using
 		if ($id['title'] != '') {
 			 $document_name = $id['title'];
 		} else {
 			$document_name = basename($id['path']);
 		}
-		//$row[] = $key; //testing
-		//data for checkbox
-		/*
-		if ($is_allowed_to_edit AND count($docs_and_folders) > 1) {
-			$row[] = $id['path'];
-		}
-		*/
 		// icons with hyperlinks
 		$row[]= '<a href="#" onclick="javascript: OpenFile(\''.$http_www.'/'.$id['title'].'\', \''.$sType.'\');return false;">'.build_document_icon_tag($id['filetype'],$id['path']).'</a>';
 		//document title with hyperlink
@@ -212,7 +205,7 @@ if ($docs_and_folders) {
 		$display_size = format_file_size($size);
 		$row[] = '<span style="display:none;">'.$size.'</span>'.$invisibility_span_open.$display_size.$invisibility_span_close;
 		//last edit date
-		$display_date = format_date(strtotime($id['lastedit_date']));
+		$display_date = date('d.m.Y', (strtotime($id['lastedit_date'])));
 		$row[] = '<span style="display:none;">'.$id['lastedit_date'].'</span>'.$invisibility_span_open.$display_date.$invisibility_span_close;
 
 		$sortable_data[] = $row;
@@ -242,24 +235,12 @@ $table->set_header($column++, api_htmlentities(get_lang('Title'), ENT_QUOTES));
 $table->set_header($column++, api_htmlentities(get_lang('Size'), ENT_QUOTES));
 $table->set_header($column++, api_htmlentities(get_lang('Date'), ENT_QUOTES));
 
-//currently only delete action -> take only DELETE right into account
-/*
-if (count($docs_and_folders) > 1) {
-	if ($is_allowed_to_edit) {
-		$form_actions = array();
-		$form_action['delete'] = get_lang('Delete');
-		$table->set_form_actions($form_action, 'path');
-	}
-}
-*/
-
 echo api_utf8_encode($table->get_table_html());
 echo api_utf8_encode($table_footer);
 
 // Functions
-
 ?>
-<script type="text/javascript">
+<script>
 <!--
 function OpenFile( fileUrl, type )
 {

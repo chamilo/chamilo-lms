@@ -14,7 +14,6 @@
  */
 
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php'; //check_name_exists()
 require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
 require_once api_get_path(SYS_CODE_PATH).'newscorm/scorm.class.php';
 

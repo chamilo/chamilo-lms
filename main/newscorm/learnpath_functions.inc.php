@@ -29,15 +29,16 @@ use \ChamiloSession as Session;
 
 /**
  * This function deletes an item
- * @param integer 	$id: the item we want to delete
- * @return boolean	True if item was deleted, false if not found or error
+ * @param integer     $id: the item we want to delete
+ * @return boolean    True if item was deleted, false if not found or error
  */
-function deleteitem($id) {
-    
+function deleteitem($id)
+{
+
     $course_id = api_get_course_int_id();
-    
-    $tbl_learnpath_item     = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    $tbl_learnpath_chapter  = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+
+    $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+    $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
     // Get the display order for this item before it is deleted.
     $sql = "SELECT display_order, parent_item_id FROM $tbl_lp_item WHERE c_id = $course_id AND id=$id";
     $result = Database::query($sql);
@@ -55,9 +56,9 @@ function deleteitem($id) {
     }
     // Update the other items and chapters.
     $sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
-    $result = Database::query($sql);
+    Database::query($sql);
     $sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_item_id";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     return true;
 }
@@ -66,13 +67,14 @@ function deleteitem($id) {
  * This function deletes a module(chapter) and all its steps(items).
  *
  * @param integer id of the chapter we want to delete
- * @return boolean	True on success and false if not found or error
+ * @return boolean    True on success and false if not found or error
  */
-function deletemodule($parent_item_id) {
+function deletemodule($parent_item_id)
+{
     global $learnpath_id;
     $course_id = api_get_course_int_id();
-    $tbl_learnpath_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    $tbl_learnpath_chapter 	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+    $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+    $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
     // Added for multi-level behaviour - slightly recursive.
     $sql = "SELECT * FROM $tbl_learnpath_chapter WHERE c_id = $course_id AND lp_id=$learnpath_id";
@@ -87,7 +89,7 @@ function deletemodule($parent_item_id) {
     }
 
     // Get this chapter's display order.
-    $sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter 
+    $sql = "SELECT display_order, parent_item_id FROM $tbl_learnpath_chapter
     		WHERE c_id = $course_id AND id=$parent_item_id and lp_id=$learnpath_id";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
@@ -117,14 +119,15 @@ function deletemodule($parent_item_id) {
 /**
  * This function deletes an entire path.
  *
- * @param integer 	$id: the path we want to delete
- * @return	void
+ * @param integer     $id: the path we want to delete
+ * @return    void
  */
-function deletepath($path_id) {
+function deletepath($path_id)
+{
     $tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    
+
     $course_id = api_get_course_int_id();
 
     $sql = "DELETE FROM $tbl_learnpath_main WHERE c_id = $course_id AND lp_id='$path_id'";
@@ -145,15 +148,16 @@ function deletepath($path_id) {
  * @param string    $direction: move the given chapter up or down
  * @param integer   Item ID
  * @param integer   $moduleid: the id of the chapter the element resides in
- * @return	boolean	Returns false on error
+ * @return    boolean    Returns false on error
  * @note    With this new version, the moveitem deals with items AND directories (not the base-level modules). This is a lot more complicated but is a temporary step towards new database structure as 'everything is an item'
  */
-function moveitem($direction, $id, $moduleid, $type = 'item') {
+function moveitem($direction, $id, $moduleid, $type = 'item')
+{
     global $learnpath_id;
     $course_id = api_get_course_int_id();
-    
-    $tbl_learnpath_item     = Database::get_course_table(TABLE_LEARNPATH_ITEM);
-    $tbl_learnpath_chapter  = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
+
+    $tbl_learnpath_item = Database::get_course_table(TABLE_LEARNPATH_ITEM);
+    $tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
 
     $tree = get_learnpath_tree($learnpath_id);
     $orig_order = 0;
@@ -216,13 +220,14 @@ function moveitem($direction, $id, $moduleid, $type = 'item') {
  *
  * @param   string $direction: move the given chapter up or down
  * @param   integer $id: the id of the chapter we want to move
- * @return	void
+ * @return    void
  */
-function movemodule($direction, $id) {
+function movemodule($direction, $id)
+{
     global $learnpath_id;
     $course_id = api_get_course_int_id();
-    
-    $tbl_learnpath_chapter  = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
+
+    $tbl_learnpath_chapter = Database::get_course_table(TABLE_LEARNPATH_CHAPTER);
     if ($direction == 'up') {
         $sortDirection = 'DESC';
     } else {
@@ -263,20 +268,27 @@ function movemodule($direction, $id) {
 
 /**
  * Inserts a new element in a learnpath table (item or chapter)
- * @param		string	Element type ('chapter' or 'item')
- * @param		string	Chapter name
- * @param		string	Chapter description (optional)
- * @param		integer	Parent chapter ID (default: 0)
- * @param		integer Learnpath ID
- * @param		mixed		If type 'item', then array(prereq_id=>value, prereq_..)
- * @return	integer	The new chapter ID, or false on failure
- * @TODO	Finish this function before it is used. Currently only chapters can be added using it.
+ * @param        string    Element type ('chapter' or 'item')
+ * @param        string    Chapter name
+ * @param        string    Chapter description (optional)
+ * @param        integer    Parent chapter ID (default: 0)
+ * @param        integer Learnpath ID
+ * @param        mixed        If type 'item', then array(prereq_id=>value, prereq_..)
+ * @return    integer    The new chapter ID, or false on failure
+ * @TODO    Finish this function before it is used. Currently only chapters can be added using it.
  * @note This function is currently never used!
  */
-function insert_item($type = 'item', $name, $chapter_description = '', $parent_id = 0, $learnpath_id = 0, $params = null) {
-    $tbl_learnpath_chapter	= Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    $tbl_learnpath_item 	= Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    
+function insert_item(
+    $type = 'item',
+    $name,
+    $chapter_description = '',
+    $parent_id = 0,
+    $learnpath_id = 0,
+    $params = null
+) {
+    $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
+    $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
+
     $course_id = api_get_course_int_id();
 
     // Getting the last order number from the chapters table, in this learnpath, for the parent chapter given.
@@ -295,10 +307,10 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
     $row = Database::fetch_array($result);
     $last_item_order = $row['display_order'];
     $new_order = max($last_chapter_order, $last_item_order) + 1;
-	
+
     if ($type === 'chapter') {
         $sql = "INSERT INTO $tbl_learnpath_chapter (c_id, lp_id, chapter_name, chapter_description, display_order)
-				VALUES ( $course_id, 
+				VALUES ( $course_id,
 						'".domesticate($learnpath_id)."',
                         '".domesticate(htmlspecialchars($name))."',
                         '".domesticate(htmlspecialchars($chapter_description))."',
@@ -309,7 +321,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
         }
         $id = Database :: insert_id();
     } elseif ($type === 'item') {
-        $sql = "INSERT INTO $tbl_learnpath_item (c_id, parent_item_id, item_type, display_order) VALUES 
+        $sql = "INSERT INTO $tbl_learnpath_item (c_id, parent_item_id, item_type, display_order) VALUES
         		($course_id, '".domesticate($parent_id)."','".domesticate(htmlspecialchars($type))."', $new_order )";
         $result = Database::query($sql);
         if ($result === false) {
@@ -317,6 +329,7 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
         }
         $id = Database :: insert_id();
     }
+
     return $id;
 }
 
@@ -324,8 +337,9 @@ function insert_item($type = 'item', $name, $chapter_description = '', $parent_i
  * This function returns an array with all the learnpath categories/chapters
  * @return array List of learnpath chapter titles
  */
-function array_learnpath_categories() {
-    $course_id = api_get_course_int_id();    
+function array_learnpath_categories()
+{
+    $course_id = api_get_course_int_id();
     global $learnpath_id;
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
@@ -335,21 +349,23 @@ function array_learnpath_categories() {
     while ($row = Database::fetch_array($result)) {
         $array_learnpath_categories[] = array($row['id'], $row['chapter_name']);
     }
+
     //$array_learnpath_categories = array($array_learnpath_categories_name, $array_learnpath_categories_id);
     return $array_learnpath_categories;
 }
 
 /**
-* Displays the learnpath chapters(=modules,categories) and their contents.
-* @param    integer     Chapter ID to display now (enables recursive behaviour)
-* @param    array       The array as returned by get_learnpath_tree, with all the elements of a learnpath compiled and structured into the array, by chapter id
-* @param    integer     Level (the depth of the call - helps in display)
-* @todo eliminate all global $lang declarations, use get_lang, improve structure.
-* @author   Denes Nagy
-* @author   Roan Embrechts
-* @author   Yannick Warnier <yannick.warnier@beeznest.com> - complete redesign for multi-level learnpath chapters
-*/
-function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $level = 0) {
+ * Displays the learnpath chapters(=modules,categories) and their contents.
+ * @param    integer     Chapter ID to display now (enables recursive behaviour)
+ * @param    array       The array as returned by get_learnpath_tree, with all the elements of a learnpath compiled and structured into the array, by chapter id
+ * @param    integer     Level (the depth of the call - helps in display)
+ * @todo eliminate all global $lang declarations, use get_lang, improve structure.
+ * @author   Denes Nagy
+ * @author   Roan Embrechts
+ * @author   Yannick Warnier <yannick.warnier@beeznest.com> - complete redesign for multi-level learnpath chapters
+ */
+function display_learnpath_chapters($parent_item_id = 0, $tree = array(), $level = 0)
+{
     //error_log('New LP - In learnpath_functions::display_learnpath_chapters', 0);
     global $color2;
     global $xml_output;
@@ -405,7 +421,7 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                 $xml_output .= "<chaptertitle>".$row['title']."</chaptertitle>";
                 $xml_output .= "<chapterdescription>".$row['description']."</chapterdescription>";
 
-                $counter ++;
+                $counter++;
                 if (($counter % 2) == 0) {
                     $oddclass = 'row_odd';
                 } else {
@@ -413,7 +429,15 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                 }
 
                 //echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9"><img src='../img/0.gif' width='13' height='13' border='0' title='$lg_add_learnpath_item'></a></td>\n"."  <td";
-                echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self()."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.api_get_self()."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item\"><img src='../img/0.gif' width='13' height='13' border='0' title='$lg_add_learnpath_item'></a></td>\n"."  <td";
+                echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat(
+                    "&nbsp;&gt;",
+                    $level
+                )."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self(
+                )."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat(
+                    "&nbsp;&nbsp;&nbsp;",
+                    $level
+                )."</i></td>\n".'  <td  align="center"><a href="'.api_get_self(
+                )."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item\"><img src='../img/0.gif' width='13' height='13' border='0' title='$lg_add_learnpath_item'></a></td>\n"."  <td";
                 if (is_prereq($learnpath_id)) {
                     echo " bgcolor='#ddddee'";
                 }
@@ -425,28 +449,32 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                     if ($i < $num_modules) {
                         // If we are still under the number of chapters in this section, show "move down".
                         //echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
-                        echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
+                        echo "  <td align=center>"."<a href='".api_get_self(
+                        )."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
                     } else {
                         echo '  <td align="center">&nbsp;</td>'."\n";
                     }
 
                     if ($i > 1) {
                         //echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
-                        echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
+                        echo '  <td align="center">'."<a href='".api_get_self(
+                        )."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
                     } else {
                         echo '  <td align="center">&nbsp;</td>'."\n";
                     }
 
                     echo "  <td align='center'>&nbsp;</td>\n";
                     //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=editmodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
-                    echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row['id']."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
+                    echo "  <td align='center'>"."<a href='".api_get_self(
+                    )."?lp_id=$learnpath_id&action=edititem&id=".$row['id']."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
 
                     //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=deletemodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 onclick=\"javascript: return confirmation('".$row['chapter_name']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
-                    echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=delete_item&id=".$row['id']."' onclick=\"javascript: return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
+                    echo "  <td align='center'>"."<a href='".api_get_self(
+                    )."?lp_id=$learnpath_id&action=delete_item&id=".$row['id']."' onclick=\"javascript: return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
                 }
 
                 echo "</tr>\n";
-                $i ++;
+                $i++;
 
                 $xml_output .= "<items>";
 
@@ -461,7 +489,15 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                 $row_items = $row;
                 echo "<tr>\n  <td colspan='2' valign='top'>";
                 //require 'resourcelinker.inc.php';
-                display_addedresource_link_in_learnpath($row_items['item_type'], $row_items['ref'], '', $row_items['id'], 'builder', 'icon', $level);
+                display_addedresource_link_in_learnpath(
+                    $row_items['item_type'],
+                    $row_items['ref'],
+                    '',
+                    $row_items['id'],
+                    'builder',
+                    'icon',
+                    $level
+                );
 
                 if ($row_items['description']) {
                     echo "<div align='justify'>&nbsp;&nbsp;&nbsp;{$row_items['description']}";
@@ -481,18 +517,26 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                         $prereq = $row_items['prerequisite'];
 
                         //if ($row_items['prereq_type'] == 'i') {
-                            // item
-                            $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE id='$prereq'"; // Check if prereq has been deleted.
-                            $result_items2 = Database::query($sql_items2);
-                            $number_items2 = Database::num_rows($result_items2);
-                            if ($number_items2 == 0) {
-                                echo get_lang('PrerequisiteDeletedError');
-                            }
-                            $row_items2 = Database::fetch_array($result_items2);
-                            display_addedresource_link_in_learnpath($row_items2['item_type'], $row_items2['ref'], '', $row_items2['id'], 'builder', '', 0);
-                            if ((($row_items2['item_type'] == TOOL_QUIZ) or ($row_items2['item_type'] == 'HotPotatoes')) and ($row_items['prerequisite'])) {
-                                //echo "&nbsp;({$row_items2['title']})";
-                            }
+                        // item
+                        $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE id='$prereq'"; // Check if prereq has been deleted.
+                        $result_items2 = Database::query($sql_items2);
+                        $number_items2 = Database::num_rows($result_items2);
+                        if ($number_items2 == 0) {
+                            echo get_lang('PrerequisiteDeletedError');
+                        }
+                        $row_items2 = Database::fetch_array($result_items2);
+                        display_addedresource_link_in_learnpath(
+                            $row_items2['item_type'],
+                            $row_items2['ref'],
+                            '',
+                            $row_items2['id'],
+                            'builder',
+                            '',
+                            0
+                        );
+                        if ((($row_items2['item_type'] == TOOL_QUIZ) or ($row_items2['item_type'] == 'HotPotatoes')) and ($row_items['prerequisite'])) {
+                            //echo "&nbsp;({$row_items2['title']})";
+                        }
                         //}
                         /*
                         if ($row_items['prereq_type'] == 'c') {
@@ -513,28 +557,33 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
                     // Move
                     if ($i < $num_modules) {
-                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a>"."</td>";
+                        echo "<td align='center'>"."<a href='".api_get_self(
+                        )."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a>"."</td>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
 
                     if ($i > 1) {
-                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>";
+                        echo "<td align='center'>"."<a href='".api_get_self(
+                        )."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
                     echo "</td>"."<td align='center'>";
 
                     // Edit prereq
-                    echo "<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\">"."</a>"."</td>";
+                    echo "<a href='".api_get_self(
+                    )."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\">"."</a>"."</td>";
 
                     // Edit
-                    echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\">"."</a>"."</td>";
+                    echo "<td align='center'><a href='".api_get_self(
+                    )."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\">"."</a>"."</td>";
 
                     // Delete
-                    echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$row_items['item_type']."');\">"."</a>";
+                    echo "<td align='center'><a href='".api_get_self(
+                    )."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$row_items['item_type']."');\">"."</a>";
                 }
-                $i ++;
+                $i++;
                 echo "</td></tr>";
             }
         }
@@ -544,11 +593,12 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
 
 /**
  * Displays the learning path items/steps.
- * @param		integer		Category ID
- * @return	void
+ * @param        integer        Category ID
+ * @return    void
  * @todo eliminate all global $lang declarations, use get_lang, improve structure.
  */
-function display_learnpath_items($categoryid) {
+function display_learnpath_items($categoryid)
+{
     global $xml_output;
     global $lg_prerequisites, $lg_move_down, $lg_move_up, $lg_edit_learnpath_item, $lg_delete_learnpath_item, $learnpath_id, $lg_add_prereq, $lg_prereq_deleted_error, $lg_pre_short, $langThisItem;
     $course_id = api_get_course_int_id();
@@ -561,7 +611,14 @@ function display_learnpath_items($categoryid) {
 
     while ($row_items = Database::fetch_array($result_items)) {
         echo "<tr><td colspan='2' valign='top'>";
-        display_addedresource_link_in_learnpath($row_items['item_type'], $row_items['ref'], '', $row_items['id'], 'builder', 'icon');
+        display_addedresource_link_in_learnpath(
+            $row_items['item_type'],
+            $row_items['ref'],
+            '',
+            $row_items['id'],
+            'builder',
+            'icon'
+        );
         if ($row_items['description']) {
             echo "<div align='justify'><font color='#999999'>&nbsp;&nbsp;&nbsp;{$row_items['description']}</font>";
         }
@@ -580,18 +637,25 @@ function display_learnpath_items($categoryid) {
                 $prereq = $row_items['prerequisite'];
 
                 //if ($row_items['prereq_type'] == 'i') {
-                    // item
-                    $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND id='$prereq'"; // Check if prereq has been deleted.
-                    $result_items2 = Database::query($sql_items2);
-                    $number_items2 = Database::num_rows($result_items2);
-                    if ($number_items2 == 0) {
-                        echo "<font color=red>$lg_prereq_deleted_error</font>";
-                    }
-                    $row_items2 = Database::fetch_array($result_items2);
-                    display_addedresource_link_in_learnpath($row_items2['item_type'], $row_items2['ref'], '', $row_items2['id'], 'builder', '');
-                    if ((($row_items2['item_type'] == 'Exercise') or ($row_items2['item_type'] == 'HotPotatoes')) and ($row_items['prerequisites'])) {
-                        echo "&nbsp;({$row_items2['title']})";
-                    }
+                // item
+                $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND id='$prereq'"; // Check if prereq has been deleted.
+                $result_items2 = Database::query($sql_items2);
+                $number_items2 = Database::num_rows($result_items2);
+                if ($number_items2 == 0) {
+                    echo "<font color=red>$lg_prereq_deleted_error</font>";
+                }
+                $row_items2 = Database::fetch_array($result_items2);
+                display_addedresource_link_in_learnpath(
+                    $row_items2['item_type'],
+                    $row_items2['ref'],
+                    '',
+                    $row_items2['id'],
+                    'builder',
+                    ''
+                );
+                if ((($row_items2['item_type'] == 'Exercise') or ($row_items2['item_type'] == 'HotPotatoes')) and ($row_items['prerequisites'])) {
+                    echo "&nbsp;({$row_items2['title']})";
+                }
                 //}
                 /*if ($row_items['prereq_type'] == 'c') {
                     // chapter
@@ -611,43 +675,49 @@ function display_learnpath_items($categoryid) {
 
             // Move
             if ($i < $number_items) {
-                echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\"></a></td>";
+                echo "<td align='center'><a href='".api_get_self(
+                )."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\"></a></td>";
             } else {
                 echo "<td width='30' align='center'>&nbsp;</td>";
             }
 
             if ($i > 1) {
-                echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\"></a>";
+                echo "<td align='center'><a href='".api_get_self(
+                )."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\"></a>";
             } else {
                 echo "<td width='30' align='center'>&nbsp;</td>";
             }
             echo "</td><td align='center'>";
 
             // Edit prereq
-            echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\"></a></td>";
+            echo "<a href='".api_get_self(
+            )."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\"></a></td>";
 
             // Edit
-            echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\"></a></td>";
+            echo "<td align='center'><a href='".api_get_self(
+            )."?lp_id=$learnpath_id&action=edititem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\"></a></td>";
 
             // Delete
             echo "<td align='center'>";
-            echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$langThisItem."');\"></a>";
+            echo "<a href='".api_get_self(
+            )."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$langThisItem."');\"></a>";
         }
-        $i ++;
+        $i++;
         echo "</td></tr>";
     }
 }
 
 /**
  * This function returns the items belonging to the chapter that contains the given item (brother items)
- * @param	integer	Item id
- * @return	array		Table containing the items
+ * @param    integer    Item id
+ * @return    array        Table containing the items
  */
-function learnpath_items($itemid) {
+function learnpath_items($itemid)
+{
     global $xml_output;
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $course_id = api_get_course_int_id();
-    
+
 
     $sql_items = "SELECT parent_item_id FROM $tbl_lp_item WHERE c_id = $course_id AND id='$itemid'";
     $moduleid_sql = Database::query($sql_items);
@@ -661,19 +731,21 @@ function learnpath_items($itemid) {
         $result[] = $ar;
         $ar = Database::fetch_array($result_items);
     }
+
     return $result;
 }
 
 /**
  * This function returns the chapters belonging to the path that contais the given chapter (brother chapters)
- * @param	integer	Learnpath id
- * @return array		Table containing the chapters
+ * @param    integer    Learnpath id
+ * @return array        Table containing the chapters
  */
-function learnpath_chapters($learnpath_id) {
-    global $xml_output, $learnpath_id;    
+function learnpath_chapters($learnpath_id)
+{
+    global $xml_output, $learnpath_id;
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $course_id = api_get_course_int_id();
-    
+
 
     $sql_items = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id='$learnpath_id' AND item_type='dokeos_chapter' ORDER BY display_order ASC";
     //$sql_items = "SELECT * FROM $tbl_learnpath_chapter WHERE lp_id='$learnpath_id' ORDER BY display_order ASC";
@@ -683,15 +755,17 @@ function learnpath_chapters($learnpath_id) {
         $result[] = $ar;
         $ar = Database::fetch_array($result_items);
     }
+
     return $result;
 }
 
 /**
  * This function tells if a learnpath contains items which are prerequisite to other items
- * @param	integer	Learnpath id
- * @return	boolean	True if this learnpath contains an item which is a prerequisite to something
+ * @param    integer    Learnpath id
+ * @return    boolean    True if this learnpath contains an item which is a prerequisite to something
  */
-function is_prereq($learnpath_id) {
+function is_prereq($learnpath_id)
+{
     global $xml_output;
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $course_id = api_get_course_int_id();
@@ -710,22 +784,24 @@ function is_prereq($learnpath_id) {
             }
         }
     }
+
     return ($prereq);
 }
 
 /**
  * This function returns the prerequisite sentence
- * @param	integer	Item ID
- * @return	string 	Prerequisite warning text
+ * @param    integer    Item ID
+ * @return    string     Prerequisite warning text
  */
-function prereqcheck($id_in_path) {
+function prereqcheck($id_in_path)
+{
     // 1. Initialise and import working vars.
     global $learnpath_id, $_user;
     global $langPrereqToEnter, $langPrereqTestLimit1, $langPrereqTestLimit2, $langPrereqTestLimitNow, $langPrereqFirstNeedTo, $langPrereqModuleMinimum1, $langPrereqModuleMinimum2;
     $tbl_learnpath_user = Database :: get_course_table(TABLE_LEARNPATH_USER);
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    
+
     $course_id = api_get_course_int_id();
 
     // 2. Initialise return value.
@@ -753,7 +829,14 @@ function prereqcheck($id_in_path) {
         $row3 = Database::fetch_array($result_items3);
 
         // 4.a.3 Get the link that needs to be shown for the current item (not the prereq)
-        $stepname = display_addedresource_link_in_learnpath($row['item_type'], $row['ref'], '', $id_in_path, 'builder', 'nolink');
+        $stepname = display_addedresource_link_in_learnpath(
+            $row['item_type'],
+            $row['ref'],
+            '',
+            $id_in_path,
+            'builder',
+            'nolink'
+        );
         // This is the step we want to open.
         $stepname = trim($stepname); // Removing occasional line breaks and white spaces
 
@@ -762,7 +845,14 @@ function prereqcheck($id_in_path) {
         $result6 = Database::query($sql6);
         $row6 = Database::fetch_array($result6);
         // 4.a.5 Get a link to the prerequisite item.
-        $prereqname = display_addedresource_link_in_learnpath($row6['item_type'], $row6['ref'], '', $id_in_path3, 'builder', 'nolink'); //this is the prereq of the step we want to open
+        $prereqname = display_addedresource_link_in_learnpath(
+            $row6['item_type'],
+            $row6['ref'],
+            '',
+            $id_in_path3,
+            'builder',
+            'nolink'
+        ); //this is the prereq of the step we want to open
 
         // 4.a.5 Initialise limit value.
         $limitok = true;
@@ -827,6 +917,7 @@ function prereqcheck($id_in_path) {
         // 5. If prerequisite type undefined, no prereq.
         $prereq = false;
     }
+
     // 6. Return the message (or false if no prerequisite waiting).
     return ($prereq);
 }
@@ -839,7 +930,8 @@ function prereqcheck($id_in_path) {
  * @comment This is a temporary function, which exists while the chapters and items
  *          are still in separate tables in the database. This function gathers the data in a unique tree.
  */
-function get_learnpath_tree($learnpath_id) {
+function get_learnpath_tree($learnpath_id)
+{
     //error_log('New LP - In learnpath_functions::get_learnpath_tree', 0);
     // Init elems
     //global $tbl_learnpath_item, $tbl_learnpath_chapter;
@@ -850,10 +942,10 @@ function get_learnpath_tree($learnpath_id) {
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
     $tree = array();
-    $chapters = array();    
+    $chapters = array();
     $all_items_by_chapter = array();
     $course_id = api_get_course_int_id();
-    
+
     $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = ".$learnpath_id." AND item_type='dokeos_chapter' ORDER BY display_order";
     //error_log('New LP - learnpath_functions - get_learnpath_tree: '.$sql,0);
     $res = Database::query($sql);
@@ -901,36 +993,45 @@ function get_learnpath_tree($learnpath_id) {
  * @return  array   List of elements in the first to last order
  * @author  Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function get_ordered_items_list($tree, $chapter = 0, $include_chapters = false) {
-    $list = array ();
+function get_ordered_items_list($tree, $chapter = 0, $include_chapters = false)
+{
+    $list = array();
     foreach ($tree[$chapter] as $order => $elem) {
         if ($elem['type'] == 'chapter') {
             if ($include_chapters === true) {
-                $list[] = array ('id' => $elem['id'], 'type' => $elem['type']);
+                $list[] = array('id' => $elem['id'], 'type' => $elem['type']);
             }
             $res = get_ordered_items_list($tree, $elem['id'], $include_chapters);
             foreach ($res as $elem) {
                 $list[] = $elem;
             }
         } elseif ($elem['type'] == 'item') {
-            $list[] = array ('id' => $elem['id'], 'type' => $elem['type'], 'item_type' => $elem['item_type'], 'parent_item_id' => $elem['parent_item_id'], 'item_id' => $elem['item_id']);
+            $list[] = array(
+                'id' => $elem['id'],
+                'type' => $elem['type'],
+                'item_type' => $elem['item_type'],
+                'parent_item_id' => $elem['parent_item_id'],
+                'item_id' => $elem['item_id']
+            );
         }
     }
+
     return $list;
 }
 
 /**
  * Displays the structure of a chapter recursively. Takes the result of get_learnpath_tree as argument
- * @param	array		Chapter structure
- * @param	integer	Chapter ID (start point in the tree)
- * @param	integer	Learnpath ID
- * @param	integer	User ID
- * @param	boolean	Indicates if the style is wrapped (true) or extended (false)
- * @param	integer	Level reached so far in the tree depth (enables recursive behaviour)
- * @return	array		Number of items, Number of items completed
- * @author	Many changes by Yannick Warnier <yannick.warnier@beeznest.com>
+ * @param    array        Chapter structure
+ * @param    integer    Chapter ID (start point in the tree)
+ * @param    integer    Learnpath ID
+ * @param    integer    User ID
+ * @param    boolean    Indicates if the style is wrapped (true) or extended (false)
+ * @param    integer    Level reached so far in the tree depth (enables recursive behaviour)
+ * @return    array        Number of items, Number of items completed
+ * @author    Many changes by Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id, $uid, $wrap, $level = 0) {
+function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id, $uid, $wrap, $level = 0)
+{
     //global $tbl_learnpath_user;
     $tbl_learnpath_user = Database :: get_course_table(TABLE_LEARNPATH_USER);
     $num = 0;
@@ -943,18 +1044,30 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
         }
         if ($elem['type'] === 'chapter') {
             if ($wrap) {
-                echo str_repeat("&nbsp;&nbsp;", $level).shorten(strip_tags($elem['chapter_name']), (35 - 3 * $level))."<br />\n";
+                echo str_repeat("&nbsp;&nbsp;", $level).shorten(
+                    strip_tags($elem['chapter_name']),
+                    (35 - 3 * $level)
+                )."<br />\n";
             } else {
-                echo "<tr><td colspan='3'>".str_repeat("&nbsp;&nbsp;", $level).shorten($elem['chapter_name'], (35 - 3 * $level))."</td></tr>\n";
+                echo "<tr><td colspan='3'>".str_repeat("&nbsp;&nbsp;", $level).shorten(
+                    $elem['chapter_name'],
+                    (35 - 3 * $level)
+                )."</td></tr>\n";
             }
 
             if ($wrap) {
                 if ($elem['chapter_description'] != '') {
-                    echo "<div class='description'>".str_repeat("&nbsp;&nbsp;", $level)."&nbsp;".shorten($elem['chapter_description'], (35 - 3 * $level))."</div>\n";
+                    echo "<div class='description'>".str_repeat("&nbsp;&nbsp;", $level)."&nbsp;".shorten(
+                        $elem['chapter_description'],
+                        (35 - 3 * $level)
+                    )."</div>\n";
                 }
             } else {
                 if ($elem['chapter_description'] != '') {
-                    echo "<tr><td colspan='3'><div class='description'>".str_repeat("&nbsp;&nbsp;", $level)."&nbsp;".shorten($elem['chapter_description'], (35 - 3 * $level))."</div></td></tr>\n";
+                    echo "<tr><td colspan='3'><div class='description'>".str_repeat(
+                        "&nbsp;&nbsp;",
+                        $level
+                    )."&nbsp;".shorten($elem['chapter_description'], (35 - 3 * $level))."</div></td></tr>\n";
                 }
             }
             list ($a, $b) = display_toc_chapter_contents($tree, $elem['id'], $learnpath_id, $uid, $wrap, $level + 1);
@@ -970,13 +1083,13 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
             $completed = '';
             if (($row0['status'] == 'completed') or ($row0['status'] == 'passed')) {
                 $completed = 'completed';
-                $num_completed ++;
+                $num_completed++;
             }
 
             if ($wrap) {
                 echo str_repeat("&nbsp;&nbsp;", $level)."<a name='{$elem['id']}' />\n";
             } else {
-                echo "<tr><td>".str_repeat("&nbsp;&nbsp;", $level-1)."<a name='{$elem['id']}' />\n";
+                echo "<tr><td>".str_repeat("&nbsp;&nbsp;", $level - 1)."<a name='{$elem['id']}' />\n";
             }
 
             if ($wrap) {
@@ -986,7 +1099,14 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
             if ($bold) {
                 echo "<b>";
             }
-            display_addedresource_link_in_learnpath($elem['item_type'], $elem['ref'], $completed, $elem['id'], 'player', $icon);
+            display_addedresource_link_in_learnpath(
+                $elem['item_type'],
+                $elem['ref'],
+                $completed,
+                $elem['id'],
+                'player',
+                $icon
+            );
             if ($bold) {
                 echo "</b>";
             }
@@ -996,10 +1116,11 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
                 echo "</td></tr>\n";
             }
 
-            $num ++;
+            $num++;
         }
     }
-    return array ($num, $num_completed);
+
+    return array($num, $num_completed);
 }
 
 /**
@@ -1014,7 +1135,8 @@ function display_toc_chapter_contents($tree, $parent_item_id = 0, $learnpath_id,
  * @deprecated this function seems to be unused
  * @note : forced display because of display_addedresource_link_in_learnpath behaviour (outputing a string would be better)
  */
-function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree = false, $level = 0, $counter = 0) {
+function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree = false, $level = 0, $counter = 0)
+{
     $tbl_learnpath_chapter = Database :: get_course_learnpath_chapter_table();
     $tbl_learnpath_item = Database :: get_course_learnpath_item_table();
     $tbl_learnpath_user = Database :: get_course_learnpath_user_table();
@@ -1035,9 +1157,12 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
         if ($elem['type'] == 'chapter') {
             if ($include_chapters === true) {
                 //$mytable .= "<tr class='$oddclass'><td colspan = '3'>".str_repeat('&nbsp;',$level*2+2).$elem['chapter_name']."</td></tr>\n";
-                echo "<tr class='$oddclass'><td colspan = '3'>".str_repeat('&nbsp;', $level * 2 + 2).$elem['chapter_name']."</td></tr>\n";
+                echo "<tr class='$oddclass'><td colspan = '3'>".str_repeat(
+                    '&nbsp;',
+                    $level * 2 + 2
+                ).$elem['chapter_name']."</td></tr>\n";
             }
-            $counter ++;
+            $counter++;
             //$mytable .= get_tracking_table($learnpath_id, $user_id, $elem['id'], $tree, $level + 1, $counter );
             get_tracking_table($learnpath_id, $user_id, $elem['id'], $tree, $level + 1, $counter);
 
@@ -1061,22 +1186,31 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
             //$mytable .= "<tr class='$oddclass'>"
             echo "<tr class='$oddclass'>"."<td class='mystatus'>".str_repeat("&nbsp;", $level * 2 + 2);
             //."<a href='$link?SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9' target='toc'>hop</a>"
-            display_addedresource_link_in_learnpath($elem['item_type'], $elem['ref'], $myrow['status'], $elem['id'], 'player', 'wrap');
+            display_addedresource_link_in_learnpath(
+                $elem['item_type'],
+                $elem['ref'],
+                $myrow['status'],
+                $elem['id'],
+                'player',
+                'wrap'
+            );
             //we should also add the total score here
-            echo "<td>"."<font color='$color'><div class='mystatus'>".$statusmessage."</div></font>"."</td>"."<td>"."<div class='mystatus' align='center'>". ($myrow['score'] == 0 ? '-' : $myrow['score'])."</div>"."</td>"."</tr>\n";
-            $counter ++;
+            echo "<td>"."<font color='$color'><div class='mystatus'>".$statusmessage."</div></font>"."</td>"."<td>"."<div class='mystatus' align='center'>".($myrow['score'] == 0 ? '-' : $myrow['score'])."</div>"."</td>"."</tr>\n";
+            $counter++;
         }
     }
+
     //return $mytable;
     return true;
 }
 
 /**
  * This function returns false if there is at least one item in the path
- * @param	Learnpath ID
- * @return	boolean	True if nothing was found, false otherwise
+ * @param    Learnpath ID
+ * @return    boolean    True if nothing was found, false otherwise
  */
-function is_empty($id) {
+function is_empty($id)
+{
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
     $course_id = api_get_course_int_id();
@@ -1105,13 +1239,14 @@ function is_empty($id) {
 
 /**
  * This function writes $content to $filename
- * @param	string	Destination filename
- * @param	string	Learnpath name
- * @param	integer	Learnpath ID
- * @param	string	Content to write
- * @return	void
+ * @param    string    Destination filename
+ * @param    string    Learnpath name
+ * @param    integer    Learnpath ID
+ * @param    string    Content to write
+ * @return    void
  */
-function exporttofile($filename, $LPname, $LPid, $content) {
+function exporttofile($filename, $LPname, $LPid, $content)
+{
 
     global $circle1_files; // This keeps all the files which are exported [0]:filename [1]:LP name.
     // The $circle1_files variable is going to be used to a deep extent in the imsmanifest.xml.
@@ -1133,21 +1268,22 @@ function exporttofile($filename, $LPname, $LPid, $content) {
 
 /**
  * This function exports the given Chamilo test
- * @param	integer	Test ID
- * @return string 	The test itself as an HTML string
+ * @param    integer    Test ID
+ * @return string     The test itself as an HTML string
  */
-function export_exercise($item_id) {
+function export_exercise($item_id)
+{
 
     global $expdir, $_course, $_configuration, $_SESSION, $_SERVER, $language_interface, $langExerciseNotFound, $langQuestion, $langOk, $origin, $questionNum;
 
     $exerciseId = $item_id;
-    
+
     require_once '../exercice/testcategory.class.php';
-    require_once '../exercice/exercise.class.php';    
+    require_once '../exercice/exercise.class.php';
     require_once '../exercice/question.class.php';
     require_once '../exercice/answer.class.php';
     require_once '../exercice/exercise.lib.php';
-    
+
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
 
     /* Clears the exercise session */
@@ -1174,12 +1310,14 @@ function export_exercise($item_id) {
 
         $sql = "SELECT title,description,sound,type,random,active FROM $TBL_EXERCISES WHERE id='$exerciseId'";
         // If the specified exercise doesn't exist or is disabled:
-        if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !api_is_allowed_to_edit() && ($origin != 'learnpath'))) {
+        if (!$objExercise->read($exerciseId) || (!$objExercise->selectStatus() && !api_is_allowed_to_edit(
+        ) && ($origin != 'learnpath'))
+        ) {
             die($langExerciseNotFound);
         }
 
         // Saves the object into the session.
-        Session::write('objExercise',$objExercise);
+        Session::write('objExercise', $objExercise);
     }
 
     $exerciseTitle = $objExercise->selectTitle();
@@ -1193,7 +1331,7 @@ function export_exercise($item_id) {
         $questionList = $randomQuestions ? $objExercise->selectRandomList() : $objExercise->selectQuestionList();
 
         // Saves the question list into the session.
-        Session::write('questionList',$questionList);
+        Session::write('questionList', $questionList);
     }
 
     $nbrQuestions = sizeof($questionList);
@@ -1204,7 +1342,7 @@ function export_exercise($item_id) {
         if (!$questionNum) {
             $questionNum = 1;
         } else {
-            $questionNum ++;
+            $questionNum++;
         }
     }
 
@@ -1213,7 +1351,9 @@ function export_exercise($item_id) {
     $test .= "<h3>".$exerciseTitle."</h3>";
 
     if (!empty ($exerciseSound)) {
-        $test .= "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\"&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 target=\"_blank\"><img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=".get_lang("Sound")."\" /></a>";
+        $test .= "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\"&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 target=\"_blank\"><img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=".get_lang(
+            "Sound"
+        )."\" /></a>";
     }
 
     $exerciseDescription = text_filter($exerciseDescription);
@@ -1256,7 +1396,7 @@ function export_exercise($item_id) {
     $i = 0;
 
     foreach ($questionList as $questionId) {
-        $i ++;
+        $i++;
 
         // For sequential exercises.
         if ($exerciseType == 2) {
@@ -1295,20 +1435,22 @@ function export_exercise($item_id) {
     $s .= "<script type='text/javascript'> loadPage(); </script>";
     $b = 2;
     $test .= $s;
+
     return ($test);
 }
 
 /**
  * This function exports the given item
- * @param	integer	Id from learnpath_items table
- * @param	integer	Item id
- * @param	string	Itm type
- * @param	boolean	Shall the SCORM communications features be added? (true). Default: false.
- * @return	void (outputs a zip file)
- * @todo	Try using the SCORM communications addition (adding a button and several javascript calls to the SCORM API) elsewhere than just in the export feature, so it doesn't look like an incoherent feature
+ * @param    integer    Id from learnpath_items table
+ * @param    integer    Item id
+ * @param    string    Itm type
+ * @param    boolean    Shall the SCORM communications features be added? (true). Default: false.
+ * @return    void (outputs a zip file)
+ * @todo    Try using the SCORM communications addition (adding a button and several javascript calls to the SCORM API) elsewhere than just in the export feature, so it doesn't look like an incoherent feature
  */
 
-function exportitem($id, $item_id, $item_type, $add_scorm_communications = false) {
+function exportitem($id, $item_id, $item_type, $add_scorm_communications = false)
+{
     $course_id = api_get_course_int_id();
 
     global $circle1_files, $expdir, $_course, $_SESSION, $GLOBALS;
@@ -1320,7 +1462,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
     include_once $libp.'answer.class.php';
     include_once $libp.'exercise.lib.php';
 
-    $langLasting = '';//avoid code parser warning
+    $langLasting = ''; //avoid code parser warning
     include_once $libp.'lang/english/announcements.inc.php'; //this line is here only for $langPubl in announcements
     include_once $libp.'lang/'.$language_interface.'/announcements.inc.php'; //this line is here only for $langPubl in announcements
     include_once $libp.'lang/english/agenda.inc.php'; //this line is here only for $langLasting
@@ -1411,11 +1553,14 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                     // 3.1.1 Update the check value for the month bar.
                     $barreMois = api_format_date($start_date_local, "%m");
                     // 3.1.2 Display the month bar.
-                    $expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_format_date($start_date_local, "%B %Y")."</td></tr>";
+                    $expcontent .= "<tr><td id=\"title\" colspan=\"2\" class=\"month\" valign=\"top\">".api_format_date(
+                        $start_date_local,
+                        "%B %Y"
+                    )."</td></tr>";
                 }
 
                 // 3.2 Display the agenda items (of this month): the date, hour and title.
-                $db_date = (int) api_format_date($start_date_local, "%d");
+                $db_date = (int)api_format_date($start_date_local, "%d");
                 if ($_GET['day'] != $db_date) {
                     // 3.2.1.a If the day given in the URL (might not be set) is different from this element's day, use style 'data'.
                     $expcontent .= "<tr><td class=\"data\" colspan='2'>";
@@ -1495,7 +1640,11 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 }
 
                 // 3.5 Write this content to the export string (formatted HTML array).
-                $expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_convert_and_format_date($last_post_datetime, null, date_default_timezone_get())."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
+                $expcontent .= "<tr>\n"."<td class=\"cell_header\">\n"."<font ".$colorBecauseNew.">".$langPubl." : ".api_convert_and_format_date(
+                    $last_post_datetime,
+                    null,
+                    date_default_timezone_get()
+                )."</font>\n"."</td>\n"."</tr>\n"."<tr>\n"."<td>\n".$content."</td>\n"."</tr>\n";
 
             } // while loop
 
@@ -1508,7 +1657,9 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
         case 'Course_description':
             // 1. Get course description data from database.
             $tbl_course_description = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
-            $result = Database::query("SELECT id, title, content FROM ".$tbl_course_description." WHERE c_id = $course_id  ORDER BY id");
+            $result = Database::query(
+                "SELECT id, title, content FROM ".$tbl_course_description." WHERE c_id = $course_id  ORDER BY id"
+            );
 
             // 2. Check this element.
             if (Database::num_rows($result)) {
@@ -1569,7 +1720,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 $match = GetSRCTags($orig);
 
                 // 4.a.3 For each src tag found, do the following:
-                for ($i = 0; $i < count($match); $i ++) {
+                for ($i = 0; $i < count($match); $i++) {
                     // 4.a.3.1 Get the tag (split from the key).
                     list ($key, $srctag) = each($match);
                     $src = $srctag;
@@ -1590,7 +1741,9 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                         // and we can decode them with those 3 lines, hoping this will not cause errors in case of other htmls,
                         // created by any other software.
                         // 4.a.3.2.a.4 Prepare source and destination paths.
-                        $source = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.dirname($myrow['path']).'/'.$src;
+                        $source = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.dirname(
+                            $myrow['path']
+                        ).'/'.$src;
                         $dest = $expdir.'/data/'.$src;
                         //CopyNCreate($source,$dest);
                         rcopy($source, $dest);
@@ -1684,7 +1837,9 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                     // and we can decode them with those 3 lines, hoping this will not cause errors in case of other htmls,
                     // created by any other software.
                     // Prepare source and destination paths.
-                    $source = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.dirname($myrow['path']).'/'.$src;
+                    $source = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.dirname(
+                        $myrow['path']
+                    ).'/'.$src;
                     $dest = $expdir.'/data/'.$src;
                     //CopyNCreate($source,$dest);
                     rcopy($source, $dest);
@@ -1701,10 +1856,10 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 
             $js_content = "var SaveScoreVariable = 0; // This variable is included by Chamilo LP export\n"."function mySaveScore() // This function is included by Chamilo LP export\n"."{\n"."   if (SaveScoreVariable==0)\n"."		{\n"."	   SaveScoreVariable = 1;\n".
                 //the following function are implemented in SCOFunctions.js
-    "      exitPageStatus = true;\n"."      computeTime();\n"."      doLMSSetValue( 'cmi.core.score.raw', Score );\n"."      doLMSSetValue( 'cmi.core.lesson_status', 'completed' );\n"."      doLMSCommit();\n"."      doLMSFinish();\n".
+                "      exitPageStatus = true;\n"."      computeTime();\n"."      doLMSSetValue( 'cmi.core.score.raw', Score );\n"."      doLMSSetValue( 'cmi.core.lesson_status', 'completed' );\n"."      doLMSCommit();\n"."      doLMSFinish();\n".
                 //				"      document.write('".$closewindow."');\n".
-        //if you insert the previous row, the test does not appear correctly !!!!
-    "		}\n"."}\n"."function Finish(){\n"." mySaveScore();";
+                //if you insert the previous row, the test does not appear correctly !!!!
+                "		}\n"."}\n"."function Finish(){\n"." mySaveScore();";
 
             $start = "<script type='text/javascript'> loadPage(); </script>";
             // 7. Replace the current MIT function call by our set of functions. In clear, transform HP to SCORM.
@@ -1728,8 +1883,8 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
         // POST BEGIN
         case 'Post':
             // 1. Get the forum post data from the database.
-            $tbl_posts =Database::get_course_table(TABLE_FORUM_POST);
-            $tbl_posts_text =Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
+            $tbl_posts = Database::get_course_table(TABLE_FORUM_POST);
+            $tbl_posts_text = Database::get_course_table(TOOL_FORUM_POST_TEXT_TABLE);
             $result = Database::query("SELECT * FROM $tbl_posts where c_id = $course_id AND post_id=$item_id");
             $myrow = Database::fetch_array($result);
             // Grabbing the title of the post.
@@ -1782,8 +1937,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
             $myrow = Database::fetch_array($result);
             $thelink = $myrow['url'];
             // 2. Check the link type (open in blank page or in current page).
-            if ($item_type == 'Link _blank')
-            {
+            if ($item_type == 'Link _blank') {
                 $target = '_blank';
             }
             // 3. Write the link to the export string.
@@ -1812,12 +1966,13 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
 
 /**
  * This function exports the given item's description into a separate file
- * @param	integer	Item id
- * @param	string	Item type
- * @param	string	Description
+ * @param    integer    Item id
+ * @param    string    Item type
+ * @param    string    Description
  * @return void
  */
-function exportdescription($id, $item_type, $description) {
+function exportdescription($id, $item_type, $description)
+{
     global $expdir;
     $filename = $item_type.$id.'.desc';
     $expcontent = $description;
@@ -1826,10 +1981,11 @@ function exportdescription($id, $item_type, $description) {
 
 /**
  * This function deletes an entire directory
- * @param	string	The directory path
- * @return boolean	True on success, false on failure
+ * @param    string    The directory path
+ * @return boolean    True on success, false on failure
  */
-function deldir($dir) {
+function deldir($dir)
+{
     $dh = opendir($dir);
     while ($file = readdir($dh)) {
         if ($file != '.' && $file != '..') {
@@ -1847,6 +2003,7 @@ function deldir($dir) {
     if (rmdir($dir)) {
         return true;
     }
+
     return false;
 }
 
@@ -1856,13 +2013,14 @@ function deldir($dir) {
  * Basically, all this function does is put the scorm directory back into a zip file (like the one
  * that was most probably used to import the course at first)
  * @deprecated this function is only called in the newscorm/scorm_admin.php which is deprecated
- * 
- * @param	string	Name of the SCORM path (or the directory under which it resides)
- * @param	array		Not used right now. Should replace the use of global $_course
- * @return	void
- * @author	imandak80
+ *
+ * @param    string    Name of the SCORM path (or the directory under which it resides)
+ * @param    array        Not used right now. Should replace the use of global $_course
+ * @return    void
+ * @author    imandak80
  */
-function exportSCORM($scormname, $course) {
+function exportSCORM($scormname, $course)
+{
     global $_course;
 
     // Initialize.
@@ -1882,9 +2040,6 @@ function exportSCORM($scormname, $course) {
 
     // Send to client.
     DocumentManager :: file_send_for_download($zipfilename, false, basename($scormname.'.zip'));
-
-    // Clear.
-    include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
     FileManager::my_delete($zipfilename);
 }
 
@@ -1892,20 +2047,21 @@ function exportSCORM($scormname, $course) {
  * This function returns an xml tag
  * $data behaves as the content in case of full tags
  * $data is an array of attributes in case of returning an opening tag
- * @param	string
- * @param	string
- * @param	array
- * @param	string
+ * @param    string
+ * @param    string
+ * @param    array
+ * @param    string
  * @return string
  */
-function xmltagwrite($tagname, $which, $data, $linebreak = 'yes') {
+function xmltagwrite($tagname, $which, $data, $linebreak = 'yes')
+{
     switch ($which) {
         case 'open':
             $tag = '<'.$tagname;
             $i = 0;
             while ($data[0][$i]) {
                 $tag .= ' '.$data[0][$i]."=\"".$data[1][$i]."\"";
-                $i ++;
+                $i++;
             }
             if ($tagname == 'file') {
                 $closing = '/';
@@ -1934,11 +2090,12 @@ function xmltagwrite($tagname, $which, $data, $linebreak = 'yes') {
 
 /**
  * This function writes the imsmanifest.xml and exports the chapter names
- * @param	array		Array containing filenames
- * @param	integer	Learnpath_id
- * @return	void
+ * @param    array        Array containing filenames
+ * @param    integer    Learnpath_id
+ * @return    void
  */
-function createimsmanifest($circle1_files, $learnpath_id) {
+function createimsmanifest($circle1_files, $learnpath_id)
+{
     global $_course, $LPname, $expdir, $LPnamesafe;
     //$tbl_learnpath_main, $tbl_learnpath_chapter, $tbl_learnpath_item,
     $tbl_learnpath_main = Database :: get_course_table(TABLE_LEARNPATH_MAIN);
@@ -1949,7 +2106,8 @@ function createimsmanifest($circle1_files, $learnpath_id) {
 
     // Header
     // Charset should be dependent on content.
-    $header = '<?xml version="1.0" encoding="'.api_get_system_encoding().'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
+    $header = '<?xml version="1.0" encoding="'.api_get_system_encoding(
+    ).'"?>'."\n<manifest identifier='".$LPnamesafe."' version='1.1'\n xmlns='http://www.imsproject.org/xsd/imscp_rootv1p1p2'\n xmlns:adlcp='http://www.adlnet.org/xsd/adlcp_rootv1p2'\n xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'\n xsi:schemaLocation='http://www.imsproject.org/xsd/imscp_rootv1p1p2 imscp_rootv1p1p2.xsd\n http://www.imsglobal.org/xsd/imsmd_rootv1p2p1 imsmd_rootv1p2p1.xsd\n http://www.adlnet.org/xsd/adlcp_rootv1p2 adlcp_rootv1p2.xsd'>\n";
 
     $org .= xmltagwrite('metadata', 'open');
     $org .= '  '.xmltagwrite('schema', 'full', 'ADL SCORM');
@@ -1971,7 +2129,7 @@ function createimsmanifest($circle1_files, $learnpath_id) {
     // Items list.
     $i = 0;
     $course_id = api_get_course_int_id();
-    
+
     $previous_item_id = '00';
     while ($circle1_files[0][$i]) {
         // Check whether we are in the border of two chapters.
@@ -2054,12 +2212,14 @@ function createimsmanifest($circle1_files, $learnpath_id) {
         }
 
         $mds = new mdstore(true); // RH: export metadata; if no table, create it
-        if (($mdt = $mds->mds_get($row['item_type'].'.'.$row['item_id'])))
-            if (($mdo = api_strpos($mdt, '<metadata>')) && ($mdc = api_strpos($mdt, '</metadata>')))
+        if (($mdt = $mds->mds_get($row['item_type'].'.'.$row['item_id']))) {
+            if (($mdo = api_strpos($mdt, '<metadata>')) && ($mdc = api_strpos($mdt, '</metadata>'))) {
                 $org .= '    '.api_substr($mdt, $mdo, $mdc - $mdo + 11)."\n";
+            }
+        }
 
         $org .= '    '.xmltagwrite('item', 'close');
-        $i ++;
+        $i++;
     }
 
     if ($circle1_files) {
@@ -2094,7 +2254,7 @@ function createimsmanifest($circle1_files, $learnpath_id) {
         $org .= '    '.xmltagwrite('file', 'open', $attributes);
 
         $org .= '  '.xmltagwrite('resource', 'close');
-        $i ++;
+        $i++;
     }
 
     $org .= xmltagwrite('resources', 'close');
@@ -2108,12 +2268,13 @@ function createimsmanifest($circle1_files, $learnpath_id) {
  * Gets the tags of the file given as parameter
  *
  * if $filename is not found, GetSRCTags(filename) will return FALSE
- * @param string		File path
- * @return mixed		Array of strings on success, false on failure
+ * @param string        File path
+ * @return mixed        Array of strings on success, false on failure
  * @author unknown
  * @author Included by imandak80
  */
-function GetSRCTags($fileName) {
+function GetSRCTags($fileName)
+{
     if (!($fp = fopen($fileName, 'r'))) {
         // Iif file can't be opened, return false.
         return false;
@@ -2125,7 +2286,11 @@ function GetSRCTags($fileName) {
     $matches = array();
     $srcList = array();
     // Get all src tags contents in this file. Use multi-line search.
-    preg_match_all('/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/mi', $contents, $matches); // Get the img src as contained between " or '
+    preg_match_all(
+        '/src(\s)*=(\s)*[\'"]([^\'"]*)[\'"]/mi',
+        $contents,
+        $matches
+    ); // Get the img src as contained between " or '
 
     foreach ($matches[3] as $match) {
         if (!in_array($match, $srcList)) {
@@ -2135,36 +2300,43 @@ function GetSRCTags($fileName) {
     if (count($srcList) == 0) {
         return false;
     }
+
     return $srcList;
 }
 
 /**
  * Copy file and create directories in the path if needed.
  *
- * @param	string	$source Source path
- * @param	string	$dest Destination path
- * @return boolean 	true on success, false on failure
+ * @param    string    $source Source path
+ * @param    string    $dest Destination path
+ * @return boolean     true on success, false on failure
  */
-function CopyNCreate($source, $dest) {
-    if (strcmp($source, $dest) == 0)
+function CopyNCreate($source, $dest)
+{
+    if (strcmp($source, $dest) == 0) {
         return false;
+    }
 
     $dir = '';
     $tdest = explode('/', $dest);
-    for ($i = 0; $i < sizeof($tdest) - 1; $i ++) {
+    for ($i = 0; $i < sizeof($tdest) - 1; $i++) {
         $dir = $dir.$tdest[$i].'/';
-        if (!is_dir($dir))
-            if (!mkdir($dir, api_get_permissions_for_new_directories()))
+        if (!is_dir($dir)) {
+            if (!mkdir($dir, api_get_permissions_for_new_directories())) {
                 return false;
+            }
+        }
     }
 
-    if (!copy($source, $dest))
+    if (!copy($source, $dest)) {
         return false;
+    }
 
     return true;
 }
 
-function rcopy($source, $dest) {
+function rcopy($source, $dest)
+{
     //error_log($source." -> ".$dest, 0);
     if (!file_exists($source)) {
         //error_log($source." does not exist", 0);
@@ -2195,6 +2367,7 @@ function rcopy($source, $dest) {
                 }
             }
         }
+
         return true;
     } else {
         // This is presumably a file.

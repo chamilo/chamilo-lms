@@ -97,9 +97,9 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
     }*/
 
     // Get max display_order so far in this parent chapter.
-    $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
-            "WHERE c_id = $course_id AND lp_id = $learnpath_id ".
-            " AND parent_item_id = $chapter_id";
+    $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item ".
+        "WHERE c_id = $course_id AND lp_id = $learnpath_id ".
+        " AND parent_item_id = $chapter_id";
     $res = Database::query($sql);
     $row = Database::fetch_array($res);
     $lastorder_item = $row['maxi'];
@@ -107,16 +107,16 @@ if (!empty ($_POST['add_chapter']) && !empty ($_POST['title'])) {
         $lastorder_item = 0;
         $previous = 0;
     } else {
-        $sql = "SELECT id FROM $tbl_lp_item " .
-                "WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
+        $sql = "SELECT id FROM $tbl_lp_item ".
+            "WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $previous = $row['id'];
     }
     $order = $lastorder_item + 1;
 
-    $sql = "INSERT INTO $tbl_lp_item "."(c_id, lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) " .
-            "VALUES "."($course_id, $learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
+    $sql = "INSERT INTO $tbl_lp_item "."(c_id, lp_id,item_type,title,parent_item_id,previous_item_id, next_item_id, display_order) ".
+        "VALUES "."($course_id, $learnpath_id,'dokeos_chapter','$title', $chapter_id, $previous, 0, $order )";
     //error_log('New LP - Inserting new resource: '.$sql, 0);
     $res = Database::query($sql);
     $my_id = Database::insert_id($res);
@@ -183,8 +183,8 @@ if ($add) {
     if ($from_learnpath == 'yes') {
         $i = 0;
         // Calculating the last order of the items of this chapter.
-        $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item " .
-                "WHERE c_id = $course_id AND lp_id = $learnpath_id AND parent_item_id=$chapter_id";
+        $sql = "SELECT MAX(display_order) as maxi FROM $tbl_lp_item ".
+            "WHERE c_id = $course_id AND lp_id = $learnpath_id AND parent_item_id=$chapter_id";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $lastorder_item = $row['maxi'];
@@ -192,8 +192,8 @@ if ($add) {
             $lastorder_item = 0;
             $previous = 0;
         } else {
-            $sql = "SELECT id FROM $tbl_lp_item " .
-                    "WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
+            $sql = "SELECT id FROM $tbl_lp_item ".
+                "WHERE lp_id = $learnpath_id AND parent_item_id=$chapter_id AND display_order = $lastorder_item";
             //error_log('New LP - resourcelinker.php - '.$sql, 0);
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
@@ -203,9 +203,9 @@ if ($add) {
         foreach ($addedresource as $addedresource_item) {
             // In the case we added a chapter, add this into the chapters list with the correct parent_id.
             if ($addedresource_item == 'Chap') {
-                $sql = "INSERT INTO $tbl_lp_item " .
-                        "(c_id, lp_id,item_type,title,parent_item_id,previous_item_id,next_item_id,display_order) " .
-                        "VALUES ($course_id, ".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
+                $sql = "INSERT INTO $tbl_lp_item ".
+                    "(c_id, lp_id,item_type,title,parent_item_id,previous_item_id,next_item_id,display_order) ".
+                    "VALUES ($course_id, ".$learnpath_id.",'dokeos_chapter','".$learnpath_chapter_name."',".$chapter_id.",$previous,0,".$lastorder.")";
                 //error_log('New LP - Inserting new resource: '.$sql, 0);
                 $res = Database::query($sql);
                 $my_id = Database::insert_id($res);
@@ -265,7 +265,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_DOCUMENT);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Exercise':
@@ -273,7 +273,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_QUIZ_TEST);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Forum':
@@ -285,7 +285,7 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_AGENDA);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
                     case 'Ad_Valvas':
@@ -293,13 +293,13 @@ if ($add) {
                         //get title from tool-type table
                         $tooltable = Database::get_course_table(TABLE_ANNOUNCEMENT);
                         $result = Database::query("SELECT * FROM $tooltable WHERE id=".$addedresourceid[$i]);
-                        $myrow=Database::fetch_array($result);
+                        $myrow = Database::fetch_array($result);
                         $title = $myrow['title'];
                         break;
 
                 }
-                $sql = "INSERT INTO $tbl_lp_item (c_id, lp_id, title, parent_item_id, item_type, ref, previous_item_id, next_item_id, display_order) " .
-                        "VALUES ($course_id, $learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
+                $sql = "INSERT INTO $tbl_lp_item (c_id, lp_id, title, parent_item_id, item_type, ref, previous_item_id, next_item_id, display_order) ".
+                    "VALUES ($course_id, $learnpath_id, '$title','$chapter_id', '$addedresource_item','$addedresourceid[$i]',$previous,0,'".$lastorder."')";
                 //error_log('New LP - Inserting new resource: '.$sql, 0);
                 $result = Database::query($sql);
                 $my_id = Database::insert_id($result);
@@ -311,18 +311,18 @@ if ($add) {
                 $addedresourceassigned[$i] = 1;
                 $resource_added = true;
             }
-            $i ++;
-            $lastorder ++;
+            $i++;
+            $lastorder++;
         }
         //$_SESSION['addedresource']=null;
         //$_SESSION['addedresourceid']=null;
         // cleaning up the session once again
         $_SESSION['addedresource'] = null;
-           $_SESSION['addedresourceid'] = null;
-           $_SESSION['addedresourceassigned'] = null;
-           unset ($_SESSION['addedresource']);
-           unset ($_SESSION['addedresourceid']);
-           unset ($_SESSION['addedresourceassigned']);
+        $_SESSION['addedresourceid'] = null;
+        $_SESSION['addedresourceassigned'] = null;
+        unset ($_SESSION['addedresource']);
+        unset ($_SESSION['addedresourceid']);
+        unset ($_SESSION['addedresourceassigned']);
     }
 }
 
@@ -340,10 +340,10 @@ if (isset($_SESSION['gradebook'])) {
 }
 
 if (!empty($gradebook) && $gradebook == 'view') {
-    $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+    $interbreadcrumb[] = array(
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 if ($_GET['source_id']) {
@@ -351,47 +351,46 @@ if ($_GET['source_id']) {
         case '1': // coming from Agenda
             if ($action == 'edit') {
                 $url = "../calendar/agenda.php?action=edit&id=49&originalresource=$originalresource";
-            }
-            elseif ($action == 'add') {
+            } elseif ($action == 'add') {
                 $url = "../calendar/agenda.php?action=add&originalresource=$originalresource";
             } else {
                 $url = "../calendar/agenda.php?action=add";
             }
             $originaltoolname = get_lang('Agenda');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
         case '2': // coming from forum: new topic
             $url = "../phpbb/newtopic.php?forum=$source_forum&md5=$md5";
             $originaltoolname = get_lang('ForumAddNewTopic');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
         case '3': // coming from forum: edit topic
             $url = "../phpbb/editpost.php?post_id=$post_id&topic=$topic&forum=$forum&md5=$md5&originalresource=no";
             $originaltoolname = get_lang('ForumEditTopic');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
         case '4': // coming from exercises: edit topic
             $url = "../exercice/admin.php?modifyAnswers=$modifyAnswers";
             $originaltoolname = get_lang('ExerciseAnswers');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
         case '5': // coming from learning path
             $from_learnpath = 'yes';
-            Session::write('from_learnpath',$from_learnpath);
+            Session::write('from_learnpath', $from_learnpath);
             break;
         case '6': // coming from forum: reply
             $url = "../phpbb/reply.php?topic=$topic&forum=$forum&parentid=$parentid";
             $url = $_SESSION['origintoolurl'];
             $originaltoolname = get_lang('ForumReply');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
@@ -407,7 +406,7 @@ if ($_GET['source_id']) {
                 $url = "../announcements/announcements.php?action=add";
             }
             $originaltoolname = get_lang('AdValvas');
-            $breadcrumbelement = array ('url' => $url, 'name' => $originaltoolname);
+            $breadcrumbelement = array('url' => $url, 'name' => $originaltoolname);
             session_unregister('from_learnpath');
             unset ($from_learnpath);
             break;
@@ -430,7 +429,7 @@ if ($_GET['source_id']) {
 // the information from the session. Else we use the information of the learningpath itself.
 if ($from_learnpath != 'yes') {
     $nameTools = get_lang('Attachment');
-    $interbreadcrumb[] = array ('url' => $_SESSION['origintoolurl'], 'name' => $_SESSION['origintoolname']);
+    $interbreadcrumb[] = array('url' => $_SESSION['origintoolurl'], 'name' => $_SESSION['origintoolname']);
 } else {
     $learnpath_select_query = "	SELECT * FROM $tbl_lp
                                           WHERE id=$learnpath_id";
@@ -444,9 +443,18 @@ if ($from_learnpath != 'yes') {
 
     $from_learnpath = 'yes';
     session_register('from_learnpath');
-    $interbreadcrumb[] = array ('url' => "../newscorm/lp_controller.php?action=list", 'name' => get_lang('LearningPath'));
-    $interbreadcrumb[] = array ('url' => "../newscorm/lp_controller.php?action=admin_view&lp_id=$learnpath_id", 'name' => stripslashes("{$therow['name']}"));
-    $interbreadcrumb[] = array ('url' => api_get_self()."?action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no", 'name' => "{$therow2['title']}");
+    $interbreadcrumb[] = array(
+        'url' => "../newscorm/lp_controller.php?action=list",
+        'name' => get_lang('LearningPath')
+    );
+    $interbreadcrumb[] = array(
+        'url' => "../newscorm/lp_controller.php?action=admin_view&lp_id=$learnpath_id",
+        'name' => stripslashes("{$therow['name']}")
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_self()."?action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no",
+        'name' => "{$therow2['title']}"
+    );
 }
 
 $htmlHeadXtra[] = '<script type="text/javascript">
@@ -473,7 +481,7 @@ $active_modules = array();
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 $sql_select_active = "SELECT * FROM $tool_table WHERE visibility='1'";
 $result_select_active = Database::query($sql_select_active);
-while ($row=Database::fetch_array($result_select_active)) {
+while ($row = Database::fetch_array($result_select_active)) {
     $active_modules[] = $row['name'];
 }
 ?>
@@ -481,154 +489,223 @@ while ($row=Database::fetch_array($result_select_active)) {
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td width="300" valign="top" style='padding-right:15px;'>
-      <table width="300" border="0" cellspacing="0" cellpadding="0" style='border-right:1px solid grey;'>
-<?php if ($from_learnpath != 'yes') { ?>
-        <tr>
-          <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
-        </tr>
+    <table width="300" border="0" cellspacing="0" cellpadding="0" style='border-right:1px solid grey;'>
+    <?php if ($from_learnpath != 'yes') { ?>
+    <tr>
+        <td width="26%"><b><?php echo get_lang('CourseResources'); ?></b></td>
+    </tr>
         <?php
         if (api_is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Documents')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Documents'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
         if (api_is_allowed_to_edit() || in_array(TOOL_CALENDAR_EVENT, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Agenda'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
         if (api_is_allowed_to_edit() || in_array(TOOL_ANNOUNCEMENT, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'AdValvas'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
         if (api_is_allowed_to_edit() || in_array(TOOL_BB_FORUM, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Forum'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
         if (api_is_allowed_to_edit() || in_array(TOOL_LINK, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Links')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Links'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
         if (api_is_allowed_to_edit() || in_array(TOOL_QUIZ, $active_modules)) {
-        ?>
+            ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Exercise'
+            )."</a>"; ?></td>
         </tr>
-        <?php
+            <?php
         }
-} else {
-?>
-        <!--tr>
+    } else {
+        ?>
+    <!--tr>
           <td width="26%"><b><?php echo get_lang('ExportableCourseResources'); ?></b></td>
         </tr-->
-<?php if ($multi_level_learnpath === true ) { ?>
+        <?php if ($multi_level_learnpath === true) { ?>
         <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=chapter&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Chapter')."</a>"; ?></td>
+            <td><?php echo "<a href=\"".api_get_self(
+            )."?content=chapter&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+                'Chapter'
+            )."</a>"; ?></td>
         </tr>
-<?php } ?>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Document')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Exercise')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Link')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Forum')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Agenda')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('AdValvas')."</a>"; ?></td>
-        </tr>
-        <!--tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Course_description&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('CourseDescription')."</a>"; ?></td>
+            <?php } ?>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Document&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Document'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Exercise&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Exercise'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Link&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Link'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Forum&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Forum'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Agenda&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Agenda'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Ad_Valvas&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'AdValvas'
+        )."</a>"; ?></td>
+    </tr>
+    <!--tr>
+          <td><?php echo "<a href=\"".api_get_self(
+    )."?content=Course_description&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+        'CourseDescription'
+    )."</a>"; ?></td>
         </tr-->
-        <!--tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Introduction_text&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('IntroductionText')."</a>"; ?></td>
+    <!--tr>
+          <td><?php echo "<a href=\"".api_get_self(
+    )."?content=Introduction_text&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+        'IntroductionText'
+    )."</a>"; ?></td>
         </tr-->
-        <!--tr>
-          <td>&nbsp;</td>
-        </tr-->
-        <!--tr>
+    <!--tr>
+      <td>&nbsp;</td>
+    </tr-->
+    <!--tr>
           <td width="26%"><b><?php echo get_lang('DokeosRelatedCourseMaterial'); ?></b></td>
         </tr-->
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Dropbox&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Dropbox')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Assignment&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Assignments')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Groups&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Groups')."</a>"; ?></td>
-        </tr>
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Users&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('Users')."</a>"; ?></td>
-        </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Dropbox&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Dropbox'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Assignment&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Assignments'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Groups&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Groups'
+        )."</a>"; ?></td>
+    </tr>
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Users&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'Users'
+        )."</a>"; ?></td>
+    </tr>
 
         <?php
-}
-?>
-        <!--tr>
-          <td>&nbsp;</td>
-        </tr-->
-        <!--tr>
+    }
+    ?>
+    <!--tr>
+      <td>&nbsp;</td>
+    </tr-->
+    <!--tr>
           <td><b><?php echo get_lang('ExternalResources'); ?></b></td>
         </tr-->
-        <tr>
-          <td><?php echo "<a href=\"".api_get_self()."?content=Externallink&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ExternalLink')."</a>"; ?></td>
-        </tr>
-        <?php
+    <tr>
+        <td><?php echo "<a href=\"".api_get_self(
+        )."?content=Externallink&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'ExternalLink'
+        )."</a>"; ?></td>
+    </tr>
+    <?php
 
-if ($from_learnpath != 'yes') {
-    echo "<tr><td>&nbsp;</td></tr>";
-    echo "<tr><td><b>".get_lang('ResourcesAdded')." (";
-    echo count($addedresource);
-    echo ")</b></td></tr>";
-    echo "<tr><td nowrap><a href=\"".api_get_self()."?showresources=true&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang('ShowDelete')."</a>";
-    echo "</td></tr>";
-}
-?>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-        <!--<tr>
+    if ($from_learnpath != 'yes') {
+        echo "<tr><td>&nbsp;</td></tr>";
+        echo "<tr><td><b>".get_lang('ResourcesAdded')." (";
+        echo count($addedresource);
+        echo ")</b></td></tr>";
+        echo "<tr><td nowrap><a href=\"".api_get_self(
+        )."?showresources=true&action=$action&id=$id&lp_id=$learnpath_id&parent_item_id=$chapter_id&source_forum=$source_forum&originalresource=no\">".get_lang(
+            'ShowDelete'
+        )."</a>";
+        echo "</td></tr>";
+    }
+    ?>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    <!--<tr>
           <td><b><?php echo get_lang('BackTo'); ?></b></td>
         </tr>//-->
-        <tr>
-          <td>
+    <tr>
+        <td>
 
-          <?php
+            <?php
 
-if ($from_learnpath != 'yes') {
-    echo "<form method=\"post\" action=\"{$_SESSION['origintoolurl']}\" style=\"margin: 0px;\"><input type=\"submit\" value=\"".'  '.get_lang('Ok').'  '."\"></form>";
-} else {
-    echo "<form method=\"get\" action=\"lp_controller.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"lp_id\" value=\"".htmlentities($learnpath_id)."\"><input type=\"hidden\" name=\"action\" value=\"admin_view\"><input type=\"submit\" value=\"".'  '.get_lang('Ok').'  '."\"></form>";
-}
-?>
+            if ($from_learnpath != 'yes') {
+                echo "<form method=\"post\" action=\"{$_SESSION['origintoolurl']}\" style=\"margin: 0px;\"><input type=\"submit\" value=\"".'  '.get_lang(
+                    'Ok'
+                ).'  '."\"></form>";
+            } else {
+                echo "<form method=\"get\" action=\"lp_controller.php\" style=\"margin: 0px;\"><input type=\"hidden\" name=\"lp_id\" value=\"".htmlentities(
+                    $learnpath_id
+                )."\"><input type=\"hidden\" name=\"action\" value=\"admin_view\"><input type=\"submit\" value=\"".'  '.get_lang(
+                    'Ok'
+                ).'  '."\"></form>";
+            }
+            ?>
 
-          </td>
-        </tr>
-        <tr>
-          <td>&nbsp;</td>
-        </tr>
-      </table>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;</td>
+    </tr>
+    </table>
     </td>
     <td valign="top">
       <?php
@@ -674,8 +751,12 @@ if ($content == 'Agenda') {
 
 if ($content == 'chapter') {
     echo '<table><form name="add_chapter" action="'.'" method="POST">'."\n";
-    echo '  <tr><td>'.get_lang('Title').'</td><td><input type="text" name="title" value="'.$title.'"></input></td></tr>'."\n";
-    echo '  <tr><td>'.get_lang('Description').'</td><td><input type="text" name="description" value="'.$description.'"></input></td></tr>'."\n";
+    echo '  <tr><td>'.get_lang(
+        'Title'
+    ).'</td><td><input type="text" name="title" value="'.$title.'"></input></td></tr>'."\n";
+    echo '  <tr><td>'.get_lang(
+        'Description'
+    ).'</td><td><input type="text" name="description" value="'.$description.'"></input></td></tr>'."\n";
     echo '  <tr><td></td><td><input type="submit" name="add_chapter" value="'.get_lang('AddIt').'"/></td></tr>'."\n";
     echo '</form></table>'."\n";
     //echo "<hr />";
@@ -688,7 +769,11 @@ if ($content == 'chapter') {
 // 2. we come to the resource linker for the first time (documents = default). In this case it can only be shown if
 //  			a. one is a teacher (documents can be shown even if the tool is inactive)
 //				b. one is a student AND the documents tool is active. Student cannot add documents if the documents tool is inactive (teacher can do this)
-if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || in_array(TOOL_DOCUMENT, $active_modules))) && !$_GET['showresources']) {
+if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || in_array(
+    TOOL_DOCUMENT,
+    $active_modules
+))) && !$_GET['showresources']
+) {
     // setting variables for file locations
     $baseServDir = $_configuration['root_sys'];
     $courseDir = $_course['path'].'/document';
@@ -696,7 +781,7 @@ if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || i
     // showing the link to move one folder up (when not in the root folder)
     show_folder_up();
     // showing the blue bar with the path in it when we are not in the root
-    if (get_levels($folder)) {
+    if (FileManager::get_levels($folder)) {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#4171B5\">";
         echo "<img src=\"../img/opendir.gif\" alt='directory'><font color=\"#ffffff\"><b>";
         echo $folder."</b></font></td></tr></table>";
@@ -745,7 +830,8 @@ if ($content == 'Forum') {
                 echo "<tr><td bgcolor='#4171B5' colspan='2'><font color='white'><b>".$myrow['cat_title']."</b></font></td></tr>";
             }
             $old_cat_title = $myrow['cat_title'];
-            echo "<tr><td><img src='../img/forum.gif'><a href='".api_get_self()."?content=Forum&category=".$myrow['cat_id']."&forum=".$myrow['forum_id']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow['forum_name']."</td><td>";
+            echo "<tr><td><img src='../img/forum.gif'><a href='".api_get_self(
+            )."?content=Forum&category=".$myrow['cat_id']."&forum=".$myrow['forum_id']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow['forum_name']."</td><td>";
             showorhide_addresourcelink('Forum', $myrow['forum_id']);
             echo "</td></tr>";
         }
@@ -769,7 +855,8 @@ if ($content == 'Forum') {
             $sql = "SELECT * FROM ".$TBL_FORUMTOPICS." WHERE forum_id=$forum";
             $result = Database::query($sql);
             while ($myrow = Database::fetch_array($result)) {
-                echo "<tr><td><a href='".api_get_self()."?content=Forum&category=$category&forum=1&thread=".$myrow['topic_id']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow['topic_title']."</a>  (".$myrow['prenom']." ".$myrow['nom'].")</td><td>";
+                echo "<tr><td><a href='".api_get_self(
+                )."?content=Forum&category=$category&forum=1&thread=".$myrow['topic_id']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow['topic_title']."</a>  (".$myrow['prenom']." ".$myrow['nom'].")</td><td>";
                 showorhide_addresourcelink("Thread", $myrow['topic_id']);
                 echo "</td></tr>";
             }
@@ -802,7 +889,9 @@ if ($content == 'Link') {
     $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
     if (($learnpath_id != '') and ($content == 'Link')) {
         echo "<form name='learnpath_link'><table>";
-        echo "<tr></td><td align='left'>".get_lang('LinkTarget')." :</td><td align='left'><select name='target' onchange='javascript: targetfunc();'><option value='_self' ";
+        echo "<tr></td><td align='left'>".get_lang(
+            'LinkTarget'
+        )." :</td><td align='left'><select name='target' onchange='javascript: targetfunc();'><option value='_self' ";
         if ($target == '_self') {
             echo "selected";
         }
@@ -872,90 +961,115 @@ if (($content == 'Exercise') || ($content == 'HotPotatoes')) {
 /* External Links */
 
 if ($content == 'Externallink') {
-?>
-  <form name="form1" method="post" action="">
-  <table width="80%" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-      <td align="right"><?php echo get_lang('ExternalLink'); ?> : &nbsp;</td>
-      <td align="left"><input name="external_link" type="text" id="external_link" value="http://"></td>
-      <?php
+    ?>
+<form name="form1" method="post" action="">
+    <table width="80%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td align="right"><?php echo get_lang('ExternalLink'); ?> : &nbsp;</td>
+            <td align="left"><input name="external_link" type="text" id="external_link" value="http://"></td>
+            <?php
 
-    if ($learnpath_id != '') {
-        echo "</tr><tr><td align='right'>".get_lang('LinkTarget')." :</td><td align='left'><select name='target'><option value='_self'>".get_lang('SameWindow')."</option><option value='_blank'>".get_lang('NewWindow')."</option></select></td>";
-    }
-?>
-    </tr>
-    <tr>
-      <td><?php if ($is_allowedToEdit) {echo get_lang('AddToLinks');} ?></td>
-      <td>
-        <?php if ($is_allowedToEdit){?>
-      <select name="add_2_links" id="add_2_links">
-      <option value="niet toevoegen" selected="selected">-<?php echo get_lang('DontAdd'); ?>-</option>
-      <option value="0"><?php echo get_lang('MainCategory'); ?></option>
-        <?php
+            if ($learnpath_id != '') {
+                echo "</tr><tr><td align='right'>".get_lang(
+                    'LinkTarget'
+                )." :</td><td align='left'><select name='target'><option value='_self'>".get_lang(
+                    'SameWindow'
+                )."</option><option value='_blank'>".get_lang('NewWindow')."</option></select></td>";
+            }
+            ?>
+        </tr>
+        <tr>
+            <td><?php if ($is_allowedToEdit) {
+                echo get_lang('AddToLinks');
+            } ?></td>
+            <td>
+                <?php if ($is_allowedToEdit) { ?>
+                <select name="add_2_links" id="add_2_links">
+                    <option value="niet toevoegen" selected="selected">-<?php echo get_lang('DontAdd'); ?>-</option>
+                    <option value="0"><?php echo get_lang('MainCategory'); ?></option>
+                    <?php
 
-    $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
-    $sql = "SELECT * FROM $tbl_categories ORDER BY display_order ASC";
-    echo $sql;
-    $result = Database::query($sql);
-    while ($row = Database::fetch_array($result)) {
-        echo "<option value='".$row['id']."'>".$row['category_title']."</option>";
-    }
-?>
+                    $tbl_categories = Database::get_course_table(TABLE_LINK_CATEGORY);
+                    $sql = "SELECT * FROM $tbl_categories ORDER BY display_order ASC";
+                    echo $sql;
+                    $result = Database::query($sql);
+                    while ($row = Database::fetch_array($result)) {
+                        echo "<option value='".$row['id']."'>".$row['category_title']."</option>";
+                    }
+                    ?>
 
-      </select><?php } ?></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td><input name="external_link_submit" type="submit" id="external_link_submit" value="<?php echo get_lang('AddIt'); ?>"></td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>&nbsp;</td>
-    </tr>
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-  </table>
+                </select><?php } ?></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input name="external_link_submit" type="submit" id="external_link_submit"
+                       value="<?php echo get_lang('AddIt'); ?>"></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td colspan="2">&nbsp;</td>
+        </tr>
+    </table>
 </form>
-    <?php
+<?php
 
 }
 
 /* Assignments */
 
 if ($content == 'Assignment') {
-    echo "<a href=".api_get_self()."?content=Ass&add=Ass&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".get_lang('AddAssignmentPage')."</a>";
+    echo "<a href=".api_get_self(
+    )."?content=Ass&add=Ass&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".get_lang(
+        'AddAssignmentPage'
+    )."</a>";
 }
 
 /* Dropbox */
 
 if ($content == 'Dropbox') {
-    echo "<a href='".api_get_self()."?content=Drop&add=Drop&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('DropboxAdd')."</a>";
+    echo "<a href='".api_get_self(
+    )."?content=Drop&add=Drop&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang(
+        'DropboxAdd'
+    )."</a>";
 }
 
 /* Introduction text */
 
 if ($content == 'Introduction_text') {
-    echo "<a href='".api_get_self()."?content=Intro&add=Intro&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('IntroductionTextAdd')."</a>";
+    echo "<a href='".api_get_self(
+    )."?content=Intro&add=Intro&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang(
+        'IntroductionTextAdd'
+    )."</a>";
 }
 
 /* Course description */
 
 if ($content == 'Course_description') {
-    echo "<a href='".api_get_self()."?content=Course_desc&add=Course_desc&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('CourseDescriptionAdd')."</a>";
+    echo "<a href='".api_get_self(
+    )."?content=Course_desc&add=Course_desc&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang(
+        'CourseDescriptionAdd'
+    )."</a>";
 }
 
 /* Groups */
 
 if ($content == 'Groups') {
-    echo "<a href='".api_get_self()."?content=Group&add=Group&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('GroupsAdd')."</a>";
+    echo "<a href='".api_get_self(
+    )."?content=Group&add=Group&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang(
+        'GroupsAdd'
+    )."</a>";
 }
 
 /* Users */
 
 if ($content == 'Users') {
-    echo "<a href='".api_get_self()."?content=User&add=User&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang('UsersAdd')."</a>";
+    echo "<a href='".api_get_self(
+    )."?content=User&add=User&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".get_lang(
+        'UsersAdd'
+    )."</a>";
 }
 
 if ($showresources) {

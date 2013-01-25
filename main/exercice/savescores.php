@@ -2,10 +2,10 @@
 
 /* For licensing terms, see /license.txt */
 /**
- * 	Saving the scores.
- * 	@package chamilo.exercise
- * 	@author
- * 	@version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
+ *     Saving the scores.
+ * @package chamilo.exercise
+ * @author
+ * @version $Id: savescores.php 15602 2008-06-18 08:52:24Z pcool $
  */
 /**
  * Code
@@ -24,8 +24,6 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $full_file_path = $documentPath.$test;
@@ -47,13 +45,14 @@ $jscript2run = '';
  * for HotPotatoes quizzes. When coming from the learning path, we
  * use the session variables telling us which item of the learning path has to
  * be updated (score-wise)
- * @param	string	File is the exercise name (the file name for a HP)
- * @param	integer	Score to save inside the tracking tables (HP and learnpath)
- * @return	void
+ * @param    string    File is the exercise name (the file name for a HP)
+ * @param    integer    Score to save inside the tracking tables (HP and learnpath)
+ * @return    void
  */
-function save_scores($file, $score) {
+function save_scores($file, $score)
+{
     global $origin, $_user, $_cid,
-    $TABLETRACK_HOTPOTATOES;
+           $TABLETRACK_HOTPOTATOES;
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();

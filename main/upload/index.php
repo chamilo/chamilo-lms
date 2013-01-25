@@ -2,22 +2,22 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* Main script for the documents tool
-*
-* This script allows the user to manage files and directories on a remote http server.
-*
-* The user can : - upload a file
-*
-* The script respects the strategical split between process and display, so the first
-* part is only processing code (init, process, display preparation) and the second
-* part is only display (HTML)
-*
-* @package chamilo.upload
-*/
+ * Main script for the documents tool
+ *
+ * This script allows the user to manage files and directories on a remote http server.
+ *
+ * The user can : - upload a file
+ *
+ * The script respects the strategical split between process and display, so the first
+ * part is only processing code (init, process, display preparation) and the second
+ * part is only display (HTML)
+ *
+ * @package chamilo.upload
+ */
 
 /**
  * INIT SECTION
-*/
+ */
 
 // name of the language file that needs to be included
 $language_file[] = "document";
@@ -30,7 +30,7 @@ $language_file[] = "learnpath";
 require_once '../inc/global.inc.php';
 
 $htmlHeadXtra[] =
-"<script type=\"text/javascript\">
+    "<script type=\"text/javascript\">
 <!-- //
 function check_unzip() {
 	if(document.upload.unzip.checked){
@@ -49,46 +49,38 @@ function check_unzip() {
 
 
 //$is_allowed_to_edit = api_is_allowed_to_edit();
-$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
-if(!$is_allowed_to_edit){
-	api_not_allowed(true);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+if (!$is_allowed_to_edit) {
+    api_not_allowed(true);
 }
 
-
-/*
-	Libraries
-*/
-
-//many useful functions in main_api.lib.php, by default included
-
-require_once(api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php');
-require_once(api_get_path(LIBRARY_PATH) . 'document.lib.php');
+require_once(api_get_path(LIBRARY_PATH).'document.lib.php');
 
 /*
 	Variables
 	- some need defining before inclusion of libraries
 */
-$courseDir   = $_course['path']."/document";
+$courseDir = $_course['path']."/document";
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
-$noPHP_SELF=true;
+$noPHP_SELF = true;
 $max_filled_space = DocumentManager::get_course_quota();
 
 //what's the current path?
-if(isset($_REQUEST['curdirpath'])) {
-	$path = $_REQUEST['curdirpath'];
-}else{
-	$path = '/';
+if (isset($_REQUEST['curdirpath'])) {
+    $path = $_REQUEST['curdirpath'];
+} else {
+    $path = '/';
 }
 // set calling tool
-if(isset($_REQUEST['tool'])) {
-	$my_tool = $_REQUEST['tool'];
-	$_SESSION['my_tool'] = $_REQUEST['tool'];
-}elseif(!empty($_SESSION['my_tool'])){
-	$my_tool = $_SESSION['my_tool'];
-}else{
-	$my_tool = 'document';
-	$_SESSION['my_tool'] = $my_tool;
+if (isset($_REQUEST['tool'])) {
+    $my_tool = $_REQUEST['tool'];
+    $_SESSION['my_tool'] = $_REQUEST['tool'];
+} elseif (!empty($_SESSION['my_tool'])) {
+    $my_tool = $_SESSION['my_tool'];
+} else {
+    $my_tool = 'document';
+    $_SESSION['my_tool'] = $my_tool;
 }
 
 // Check the path
@@ -103,7 +95,7 @@ if(isset($_REQUEST['tool'])) {
 event_access_tool(TOOL_UPLOAD);
 
 /**
- *	Prepare the header
+ *    Prepare the header
  */
 
 $htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
@@ -114,15 +106,15 @@ $htmlHeadXtra[] = '<script type="text/javascript">
 /**
  * Now call the corresponding display script, the current script acting like a controller.
  */
-switch($my_tool){
-	case TOOL_LEARNPATH:
-		require('form.scorm.php');
-		break;
-	//the following cases need to be distinguished later on
-	case TOOL_DROPBOX:
-	case TOOL_STUDENTPUBLICATION:
-	case TOOL_DOCUMENT:
-	default:
-		require('form.document.php');
-		break;
+switch ($my_tool) {
+    case TOOL_LEARNPATH:
+        require('form.scorm.php');
+        break;
+    //the following cases need to be distinguished later on
+    case TOOL_DROPBOX:
+    case TOOL_STUDENTPUBLICATION:
+    case TOOL_DOCUMENT:
+    default:
+        require('form.document.php');
+        break;
 }

@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *	@author Patrick Cool - original version
- *	@author Denes Nagy - further improvements for learning path builder
- *	@author Roan Embrechts - refactoring to improve code organisation
- *	@package chamilo.resourcelinker
- *	@todo use the constants for the tools
- *	@todo use Database API instead of creating table names locally.
+ * @author Patrick Cool - original version
+ * @author Denes Nagy - further improvements for learning path builder
+ * @author Roan Embrechts - refactoring to improve code organisation
+ * @package chamilo.resourcelinker
+ * @todo use the constants for the tools
+ * @todo use Database API instead of creating table names locally.
  */
 /**
  * Code
@@ -24,8 +24,8 @@ $use_anonymous = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php';
-if (!empty($_course['language'])){
-    $resource_linker_file =  api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';
+if (!empty($_course['language'])) {
+    $resource_linker_file = api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php';
     if (file_exists($resource_linker_file)) {
         require_once $resource_linker_file;
     }
@@ -34,7 +34,8 @@ require_once '../exercice/hotpotatoes.lib.php';
 
 /* FUNCTIONS */
 
-function unset_session_resources() {
+function unset_session_resources()
+{
     $_SESSION['addedresource'] = '';
     $_SESSION['addedresourceid'] = '';
     Session::erase(addedresource);
@@ -44,22 +45,29 @@ function unset_session_resources() {
 /**
  * Insert description here.
  */
-function show_folder_up() {
+function show_folder_up()
+{
     global $folder;
     global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
 
-    $level = get_levels($folder);
+    $level = FileManager::get_levels($folder);
 
     if ($level == 1) {
-        echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
+        echo "<a href='".api_get_self(
+        )."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang(
+            'LevelUp'
+        )."</a>";
     }
     if ($level && $level != 0 && $level != 1) {
-        $folder_up=$folder;
-        $folder_temp=explode('/',$folder);
-        $last=count($folder_temp)-1;
+        $folder_up = $folder;
+        $folder_temp = explode('/', $folder);
+        $last = count($folder_temp) - 1;
         unset($folder_temp[$last]);
-        $folder_up=implode('/',$folder_temp);
-        echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang('LevelUp')."</a>";
+        $folder_up = implode('/', $folder_temp);
+        echo "<a href='".api_get_self(
+        )."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang(
+            'LevelUp'
+        )."</a>";
     }
 }
 
@@ -67,7 +75,8 @@ function show_folder_up() {
  * Shows the documents of the document tool
  * @param $folder
  */
-function show_documents($folder) {
+function show_documents($folder)
+{
     global $_course;
     global $source_id, $action, $learnpath_id, $chapter_id, $originalresource;
 
@@ -78,22 +87,22 @@ function show_documents($folder) {
     } else {
         $visibility = "ip.visibility='1'";
     }
-    
+
     $course_id = api_get_course_int_id();
 
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $document_table = Database::get_course_table(TABLE_DOCUMENT);
-    $sql = "SELECT * from $document_table docs , $item_property_table ip 
-            WHERE   docs.c_id = $course_id AND 
-                    ip.c_id = $course_id AND 
+    $sql = "SELECT * from $document_table docs , $item_property_table ip
+            WHERE   docs.c_id = $course_id AND
+                    ip.c_id = $course_id AND
                     docs.id=ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND $visibility AND ip.to_group_id = 0 AND ip.to_user_id IS NULL  ORDER BY docs.path ASC";
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         if (!$folder) {
-            if (get_levels($row['path'])-1 == 1) {
+            if (FileManager::get_levels($row['path']) - 1 == 1) {
                 // showing the right icon.
                 if (file_or_folder($row['path'])) {
-                        echo '<img src="../img/file.gif" align="middle" />';
+                    echo '<img src="../img/file.gif" align="middle" />';
                 } else {
                     $image = FileManager::choose_image($row['path']);
                     echo "<img src=\"../img/$image\" align=\"middle\" />";
@@ -102,20 +111,26 @@ function show_documents($folder) {
                 // Folders should be clickable.
                 if (file_or_folder($row['path'])) {
                     echo "<a href='".api_get_self()."?content=Document";
-                    echo "&folder=".substr($row['path'], 1)."&source_id=$source_id&source_forum=".$_GET['source_forum']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".substr($row['path'], 1).'</a><br />';
+                    echo "&folder=".substr(
+                        $row['path'],
+                        1
+                    )."&source_id=$source_id&source_forum=".$_GET['source_forum']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".substr(
+                        $row['path'],
+                        1
+                    ).'</a><br />';
                 } else {
                     echo substr($row['path'], 1).' ';
-                    echo showorhide_addresourcelink('Document',$row['id']);
+                    echo showorhide_addresourcelink('Document', $row['id']);
                     echo '<br />';
                 }
             }
         } else {
             // We calculate the level we are in by using the $folder in the url.
             // We put +1 because it does not start with an / and in the database it does
-            $level = get_levels($folder) + 1;
+            $level = FileManager::get_levels($folder) + 1;
 
             // We calculate each level of the database entry.
-            $file_level=get_levels($row['path'])-1;
+            $file_level = FileManager::get_levels($row['path']) - 1;
             // If the level of the database entry is equal to the level we ar in, we put it into an array
             // as this is a potential good entry.
             if ($file_level == $level) {
@@ -126,7 +141,7 @@ function show_documents($folder) {
             //$conform_folder=strstr($haystack, $folder);
             //if (str_replace($folder.'/', '', $conform_folder) !== $folder) {
             //	$good_folders[] = $row['path'];
-                //echo str_replace($folder.'/', '', $conform_folder);
+            //echo str_replace($folder.'/', '', $conform_folder);
             //	echo '<br />';
             //	}// if (str_replace($folder.'/','',$conform_folder)!==$folder)
         } // else (if (!$folder))
@@ -171,11 +186,13 @@ function show_documents($folder) {
  * @param $filefolder
  * @todo use true and false instead of 1 and 0.
  */
-function file_or_folder($filefolder) {
+function file_or_folder($filefolder)
+{
     global $_course;
     global $baseServDir;
-    $courseDir   = $_course['path'].'/document';
+    $courseDir = $_course['path'].'/document';
     $baseWorkDir = api_get_path(SYS_COURSE_PATH).$courseDir;
+
     return (is_dir($baseWorkDir.$filefolder) ? 1 : 0);
 }
 
@@ -185,23 +202,24 @@ function file_or_folder($filefolder) {
  * @param $source_type
  * @param $source_id
  */
-function store_resources($source_type, $source_id) {
+function store_resources($source_type, $source_id)
+{
     global $_course;
     $resource_table = Database::get_course_table(TABLE_LINKED_RESOURCES);
     $course_id = api_get_course_int_id();
-    
+
     $addedresource = $_SESSION['addedresource'];
     $addedresourceid = $_SESSION['addedresourceid'];
     if ($_SESSION['addedresource']) {
         foreach ($addedresource as $resource_type) {
-            $sql="INSERT INTO $resource_table (c_id, source_type, source_id, resource_type, resource_id) VALUES 
+            $sql = "INSERT INTO $resource_table (c_id, source_type, source_id, resource_type, resource_id) VALUES
             ($course_id, '$source_type', '$source_id', '$resource_type', '".$addedresourceid[key($addedresource)]."')";
             Database::query($sql);
-            $i=key($addedresource);
+            $i = key($addedresource);
             next($addedresource);
         }
-        $_SESSION['addedresource']='';
-        $_SESSION['addedresourceid']='';
+        $_SESSION['addedresource'] = '';
+        $_SESSION['addedresourceid'] = '';
     }
 }
 
@@ -215,7 +233,8 @@ function store_resources($source_type, $source_id) {
  * @param $style this is used to style the link (for instance when a resource is hidden => the added resources should also be styled like they are hidden)
  * @todo use the constants for the type definitions.
  */
-function display_addedresource_link($type, $id, $style = '') {
+function display_addedresource_link($type, $id, $style = '')
+{
     global $_course;
     $course_id = api_get_course_int_id();
 
@@ -241,7 +260,9 @@ function display_addedresource_link($type, $id, $style = '') {
             $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
             $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
+            echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode(
+                $myrow['url']
+            )."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
             break;
         case 'Exercise':
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -249,13 +270,13 @@ function display_addedresource_link($type, $id, $style = '') {
             $myrow = Database::fetch_array($result);
             echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
             break;
-        case 'Forum':           
+        case 'Forum':
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
             echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
             break;
-        case 'Thread':  //=topics
+        case 'Thread': //=topics
             //@deprecated bb_posts, bb_posts_text, bb_forums
             /*
             $tbl_posts		= $_course['dbNameGlu'].'bb_posts';
@@ -281,23 +302,23 @@ function display_addedresource_link($type, $id, $style = '') {
             $dbTable = Database::get_course_table(TABLE_DOCUMENT);
             $result = Database::query("SELECT * FROM $dbTable WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $pathname = explode('/',$myrow['path']); // Making a correct name for the link.
-            $last = count($pathname) - 1;  // Making a correct name for the link.
-            $filename = $pathname[$last];  // Making a correct name for the link.
+            $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
+            $last = count($pathname) - 1; // Making a correct name for the link.
+            $filename = $pathname[$last]; // Making a correct name for the link.
             $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
-            $ext = strtolower($ext[sizeof($ext)-1]);
+            $ext = strtolower($ext[sizeof($ext) - 1]);
             $myrow['path'] = rawurlencode($myrow['path']);
-			
-			$array_ext=array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png');
-			
-			if (api_browser_support('svg')){				
-				$array_ext[]='svg';
-			}
-			if (api_browser_support('ogg')){
-				$array_ext[]='ogg';
-			}
-							
+
+            $array_ext = array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png');
+
+            if (api_browser_support('svg')) {
+                $array_ext[] = 'svg';
+            }
+            if (api_browser_support('ogg')) {
+                $array_ext[] = 'ogg';
+            }
+
             $in_frames = in_array($ext, $array_ext);
 
             echo '<img src="../img/'.$image.'" align="middle" /> <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.'>'.$filename."</a><br />\n";
@@ -325,63 +346,99 @@ function display_addedresource_link($type, $id, $style = '') {
  *                      if ="nolink" then only the name is returned with no href and no icon (note:only in this case, the result is not displayed, but returned)
  * @todo this function is too long, rewrite
  */
-function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0) {
+function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_path, $builder, $icon, $level = 0)
+{
     global $_course, $learnpath_id, $tbl_learnpath_item, $items;
     global $curDirPath, $_configuration, $enableDocumentParsing, $_course, $_user, $_cid;
-    
+
     $course_id = api_get_course_int_id();
-    
+
 
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
     $length = ((($builder == 'builder') && ($icon == 'nolink')) ? 65 : 32);
 
-    if ($builder != 'builder') $origin = 'learnpath';	//origin = learnpath in student view
+    if ($builder != 'builder') {
+        $origin = 'learnpath';
+    } //origin = learnpath in student view
     $linktype = $type;
-    if (($type == 'Link _self') or ($type == 'Link _blank')) $type = 'Link';
+    if (($type == 'Link _self') or ($type == 'Link _blank')) {
+        $type = 'Link';
+    }
 
     // YW switched litteral tool names to use of constants declared in main_api.lib.php
     switch ($type) {
         case TOOL_CALENDAR_EVENT:
         case 'Agenda':
-            $TABLEAGENDA 		= Database::get_course_table(TABLE_AGENDA);
+            $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
             $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['title'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['title'] = $row['title'];
+            }
             $desc = $row['description'];
             $agenda_id = $row['item_id'];
             echo str_repeat("&nbsp;&gt;", $level);
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($myrow['title'] == '') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($myrow['title'] == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($myrow['title'], $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/agenda.gif' align=\"absmiddle\" alt='agenda'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($myrow['title'], $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/agenda.gif' align=\"absmiddle\" alt='agenda'>";
+            }
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path\" class='$completed'>".shorten($myrow['title'], ($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path\" class='$completed'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../calendar/agenda.php?origin=$origin&agenda_id=$agenda_id\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
+                echo "<a href=\"../calendar/agenda.php?origin=$origin&agenda_id=$agenda_id\" class='$completed' target='_blank'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -392,10 +449,10 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
             if ($row['title'] != '') {
-                 $myrow['content'] = $row['title']; 
+                $myrow['content'] = $row['title'];
             }
             $desc = $row['description'];
             $ann_id = $row['item_id'];
@@ -403,110 +460,14 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
             // The title and the text are in the content field and we only want to display the title.
             list($title, $text) = split('<br>', $myrow['content']);
-            if ($title == '') { $title = $myrow['content']; }
+            if ($title == '') {
+                $title = $myrow['content'];
+            }
             $title = $myrow['title'];
             $text = $myrow['content'];
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
-            if ($icon != 'nolink') {
-                if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
-                }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
-
-            if ($title == '') {
-                $type = 'Announcement';
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>";
-                return(true);
-            }
-
-            if ($icon == 'nolink') { return(shorten($title,$length)); }
-            if ($icon == 'icon') { echo "<img src='../img/valves.gif' align=\"absmiddle\" alt='ad valvas'>"; }
-            if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path\" class='$completed'>".shorten($title, ($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path";
-                if ($desc != '') {
-                    if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
-                    } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
-                    }
-                }
-            } else {
-                echo "<a href=\"../announcements/announcements.php?origin=$origin&ann_id=$ann_id\" class='$completed' target='_blank'>".shorten($title, ($length-3*$level))."</a>";
-            }
-            break;
-
-        case TOOL_LINK:
-        case 'Link':
-            $TABLETOOLLINK	= Database::get_course_table(TABLE_LINK);
-            $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
-            $myrow = Database::fetch_array($result);
-
-            $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
-            $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['title'] = $row['title']; }
-            $desc=$row['description'];
-            echo str_repeat("&nbsp;&gt;", $level);
-
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
-            if ($icon != 'nolink') {
-                if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
-                }
-            }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
-
-            if ($myrow['title'] == '') {
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>";
-                return(true);
-            }
-
-            if ($icon == 'nolink') { return(shorten($myrow['title'], $length)); }
-            if ($icon == 'icon') {
-                if ($linktype == 'Link _self') { echo "<img src='../img/links.gif' align=\"absmiddle\" alt='links'>"; }
-                   else { echo "<img src='../img/link_blank.gif' align=\"absmiddle\" alt='blank links'>"; }
-            }
-            $thelink = $myrow['url'];
-            if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path\" class='$completed'>".shorten($myrow['title'], ($length-3*$level))."</a>";
-                $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path";
-                if ($desc != '') {
-                    if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
-                    } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
-                    }
-                }
-            } else {
-                echo "<a href=\"$thelink\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
-            }
-            break;
-
-        case TOOL_QUIZ:
-        case 'Exercise':
-            $TBL_EXERCICES  = Database::get_course_table(TABLE_QUIZ_TEST);
-            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
-            $myrow = Database::fetch_array($result);
-
-            if ($builder == 'builder') { $origin = 'builder'; }
-              // This is needed for the exercise_submit.php can delete the session info about tests.
-
-            $sql = "select * from $tbl_lp_item where id=$id_in_path";
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['title'] = $row['title']; }
-            $desc = $row['description'];
-            echo str_repeat("&nbsp;&gt;", $level);
-
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
@@ -515,78 +476,291 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
-
-            if ($myrow['title'] == '') {
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>";
-                return(true);
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
             }
 
-            if ($icon == 'nolink') { return(shorten($myrow['title'], $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/quiz.gif' align=\"absmiddle\" alt='quizz'>"; }
+            if ($title == '') {
+                $type = 'Announcement';
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($title, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/valves.gif' align=\"absmiddle\" alt='ad valvas'>";
+            }
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path\" class='$completed'>".shorten($myrow['title'], ($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path\" class='$completed'>".shorten(
+                    $title,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$ann_id#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten($myrow['title'], ($length-3*$level))."</a>";
+                echo "<a href=\"../announcements/announcements.php?origin=$origin&ann_id=$ann_id\" class='$completed' target='_blank'>".shorten(
+                    $title,
+                    ($length - 3 * $level)
+                )."</a>";
+            }
+            break;
+
+        case TOOL_LINK:
+        case 'Link':
+            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
+            $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
+            $myrow = Database::fetch_array($result);
+
+            $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['title'] = $row['title'];
+            }
+            $desc = $row['description'];
+            echo str_repeat("&nbsp;&gt;", $level);
+
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
+            if ($icon != 'nolink') {
+                if ($completed == 'completed') {
+                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                } else {
+                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+                    //echo "&nbsp;";
+                }
+            }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
+
+            if ($myrow['title'] == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($myrow['title'], $length));
+            }
+            if ($icon == 'icon') {
+                if ($linktype == 'Link _self') {
+                    echo "<img src='../img/links.gif' align=\"absmiddle\" alt='links'>";
+                } else {
+                    echo "<img src='../img/link_blank.gif' align=\"absmiddle\" alt='blank links'>";
+                }
+            }
+            $thelink = $myrow['url'];
+            if ($builder != 'builder') {
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path\" class='$completed'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path";
+                if ($desc != '') {
+                    if ($icon != 'wrap') {
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
+                }
+            } else {
+                echo "<a href=\"$thelink\" class='$completed' target='_blank'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
+            }
+            break;
+
+        case TOOL_QUIZ:
+        case 'Exercise':
+            $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
+            $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
+            $myrow = Database::fetch_array($result);
+
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
+            // This is needed for the exercise_submit.php can delete the session info about tests.
+
+            $sql = "select * from $tbl_lp_item where id=$id_in_path";
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['title'] = $row['title'];
+            }
+            $desc = $row['description'];
+            echo str_repeat("&nbsp;&gt;", $level);
+
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
+            if ($icon != 'nolink') {
+                if ($completed == 'completed') {
+                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                } else {
+                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+                    //echo "&nbsp;";
+                }
+            }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
+
+            if ($myrow['title'] == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($myrow['title'], $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/quiz.gif' align=\"absmiddle\" alt='quizz'>";
+            }
+            if ($builder != 'builder') {
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path\" class='$completed'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
+                if ($desc != '') {
+                    if ($icon != 'wrap') {
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
+                }
+            } else {
+                echo "<a href=\"../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow['id']."\" class='$completed' target='_blank'>".shorten(
+                    $myrow['title'],
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
         case 'hotpotatoes':
         case 'HotPotatoes':
-            $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
+            $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
             $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
             $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
             $name = GetQuizName($path, $documentPath);
 
-            if ($builder == 'builder') { $origin='builder'; }
-              // This is needed for the exercise_submit.php can delete the session info about tests.
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
+            // This is needed for the exercise_submit.php can delete the session info about tests.
 
             $sql = "select * from $tbl_lp_item where id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name=$row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name=='') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name,$length)); }
-            if ($icon == 'icon') { echo "<img src='../img/jqz.jpg' align=\"absmiddle\" alt='hot potatoes'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/jqz.jpg' align=\"absmiddle\" alt='hot potatoes'>";
+            }
 
             $cid = $_course['official_code'];
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "&nbsp;<a href=\"../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten($name,($length-3*$level))."</a>";
+                echo "&nbsp;<a href=\"../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id']."\" class='$completed' target='_blank'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -597,135 +771,232 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow["forum_name"] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow["forum_name"] = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($myrow["forum_name"]=='') { $type="Forum"; echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($myrow["forum_name"] == '') {
+                $type = "Forum";
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($myrow['forum_name'], $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($myrow['forum_name'], $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+            }
             $forumparameters = "forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path\" class='$completed'>".shorten($myrow["forum_name"],($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path\" class='$completed'>".shorten(
+                    $myrow["forum_name"],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../phpbb/viewforum.php?$forumparameters\" class='$completed' target='_blank'>".shorten($myrow["forum_name"],($length-3*$level))."</a>";
+                echo "<a href=\"../phpbb/viewforum.php?$forumparameters\" class='$completed' target='_blank'>".shorten(
+                    $myrow["forum_name"],
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
         case TOOL_THREAD:
-        case 'Thread':  //forum post
+        case 'Thread': //forum post
             $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
             $sql = "SELECT * FROM $tbl_topics where c_id = $course_id AND topic_id=$id";
             $result = Database::query($sql);
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['topic_title'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['topic_title'] = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($myrow["topic_title"] == '') { $type = "Forum Post"; echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($myrow["topic_title"] == '') {
+                $type = "Forum Post";
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($myrow['topic_title'], $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($myrow['topic_title'], $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+            }
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path\" class='$completed'>".shorten($myrow["topic_title"], ($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path\" class='$completed'>".shorten(
+                    $myrow["topic_title"],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."\" class='$completed' target='_blank'>".shorten($myrow["topic_title"],($length-3*$level))."</a>";
+                echo "<a href=\"../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."\" class='$completed' target='_blank'>".shorten(
+                    $myrow["topic_title"],
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
         case TOOL_POST:
         case 'Post':
-        //deprecated
+            //deprecated
             $tbl_posts = Database::get_course_table(TABLE_FORUM_POST);
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $tbl_posts where c_id = $course_id AND post_id=$id");
             $myrow = Database::fetch_array($result);
             // Grabbing the title of the post.
-            
+
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
-            $row=Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['post_title'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['post_title'] = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            $posternom = $myrow['nom'];				$posterprenom = $myrow['prenom'];
-            $posttime = $myrow['post_time'];			$posttext = $myrow['post_text'];
+            $posternom = $myrow['nom'];
+            $posterprenom = $myrow['prenom'];
+            $posttime = $myrow['post_time'];
+            $posttext = $myrow['post_text'];
             $posttitle = $myrow['post_title'];
             $posttext = str_replace('"', "'", $posttext);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
             if ($myrow["post_title"] == '') {
                 $type = 'Forum';
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true);
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
             }
 
-            if ($icon == 'nolink') { return(shorten($myrow["post_title"],$length)); }
-            if ($icon == 'icon') { echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>"; }
+            if ($icon == 'nolink') {
+                return (shorten($myrow["post_title"], $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+            }
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".intval($_GET['source_forum'])."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path\" class='$completed'>".shorten($myrow["post_title"],($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".intval($_GET['source_forum'])."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
+                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".intval(
+                    $_GET['source_forum']
+                )."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path\" class='$completed'>".shorten(
+                    $myrow["post_title"],
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self()."?action=closelesson&source_forum=".intval(
+                    $_GET['source_forum']
+                )."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."\" class='$completed' target='_blank'>".shorten($myrow["post_title"],($length-3*$level))."</a>";
+                echo "<a href=\"../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."\" class='$completed' target='_blank'>".shorten(
+                    $myrow["post_title"],
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -738,54 +1009,85 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             $myrow = Database::fetch_array($result);
 
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
-            $last = count($pathname) - 1;  // Making a correct name for the link.
-            $filename=$pathname[$last];  // Making a correct name for the link.
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            $last = count($pathname) - 1; // Making a correct name for the link.
+            $filename = $pathname[$last]; // Making a correct name for the link.
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
 
             echo str_repeat("&nbsp;&gt;", $level);
 
             if ($icon != 'nolink') {
-                if ($completed=='completed') {
+                if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
                 } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
             $image = FileManager::choose_image($filename);
 
             $sql = "select * from $tbl_lp_item where id=$id_in_path";
             //error_log('New LP - Querying lp_item table: '.$sql, 0);
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $filename = $row['title']; }
-            $desc=$row['description'];
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $filename = $row['title'];
+            }
+            $desc = $row['description'];
 
             if (($myrow['path'] == '') && ($filename == '')) {
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>";
-                return(true);
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
             }
 
-            if ($icon == 'nolink') { return(shorten($filename, $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/$image' align=\"absmiddle\" alt='$image'>"; }
-            if ($builder != 'builder')
-            {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path\" class='$completed'>".shorten($filename,($length-3*$level))."</a>";
+            if ($icon == 'nolink') {
+                return (shorten($filename, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/$image' align=\"absmiddle\" alt='$image'>";
+            }
+            if ($builder != 'builder') {
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path\" class='$completed'>".shorten(
+                    $filename,
+                    ($length - 3 * $level)
+                )."</a>";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc,($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
-                } $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path";
+                }
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path";
             } else {
-                $enableDocumentParsing=yes;
+                $enableDocumentParsing = yes;
                 if (!$enableDocumentParsing) {
                     // This is the solution for the non-parsing version in the builder.
                     $file = urlencode($myrow['path']);
-                    echo "<a href='../document/showinframes.php?file=$file' class='$completed' $hyperlink_target_parameter>".shorten($filename,($length-3*$level))."</a>";
+                    echo "<a href='../document/showinframes.php?file=$file' class='$completed' $hyperlink_target_parameter>".shorten(
+                        $filename,
+                        ($length - 3 * $level)
+                    )."</a>";
                 } else {
-                    echo "<a href=\"../document/download.php?doc_url=".$myrow['path']."\" class='$completed' $hyperlink_target_parameter>".shorten($filename,($length-3*$level))."</a>";
+                    echo "<a href=\"../document/download.php?doc_url=".$myrow['path']."\" class='$completed' $hyperlink_target_parameter>".shorten(
+                        $filename,
+                        ($length - 3 * $level)
+                    )."</a>";
                 }
             }
             break;
@@ -796,38 +1098,67 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name=$row['title']; }
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
-
-            if ($name=='') {
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true);
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
             }
 
-            if ($icon == 'nolink') { return(shorten($name, $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/works.gif' align=\"absmiddle\">"; }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
+
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/works.gif' align=\"absmiddle\">";
+            }
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>";
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
                     } else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>";
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
                     }
                 }
             } else {
-                echo "<a href=\"../work/work.php\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                echo "<a href=\"../work/work.php\" class='$completed' target='_blank'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -837,36 +1168,68 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name = $row['title']; }
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name == '') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name, $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/dropbox.gif' align=\"absmiddle\">"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/dropbox.gif' align=\"absmiddle\">";
+            }
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>"; }
-                    else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>"; }
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
                 }
             } else {
-                echo "<a href=\"../dropbox/index.php\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                echo "<a href=\"../dropbox/index.php\" class='$completed' target='_blank'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -874,12 +1237,17 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         case 'Introduction_text':
             $name = get_lang('IntroductionText');
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
@@ -888,25 +1256,49 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name == '') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name, $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/introduction.gif' align=\"absmiddle\" alt='introduction'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/introduction.gif' align=\"absmiddle\" alt='introduction'>";
+            }
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>";
-                $items[] = api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>"; }
-                    else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>"; }
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
                 }
             } else {
                 $s = api_get_path(WEB_COURSE_PATH)."$_cid/index.php?intro_cmdEdit=1";
-                echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name, ($length - 3 * $level))."</a>";
             }
             break;
 
@@ -914,38 +1306,68 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         case 'Course_description':
             $name = get_lang('CourseDescription');
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
-                }	else {
+                } else {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name == '') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name,$length)); }
-            if ($icon == 'icon') { echo "<img src='../img/info.gif' align=\"absmiddle\" alt='info'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/info.gif' align=\"absmiddle\" alt='info'>";
+            }
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>"; }
-                    else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>"; }
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
                 }
             } else {
-                $s=api_get_path(WEB_CODE_PATH)."course_description";
-                echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                $s = api_get_path(WEB_CODE_PATH)."course_description";
+                echo "<a href=\"$s\" class='$completed' target='_blank'>".shorten($name, ($length - 3 * $level))."</a>";
             }
             break;
 
@@ -953,13 +1375,17 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         case 'Groups':
             $name = get_lang('Groups');
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name=$row['title']; }
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
@@ -968,23 +1394,51 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name=='') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name, $length)); }
-            if ($icon == 'icon') { echo "<img src='../img/group.gif' align=\"absmiddle\" alt='group'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/group.gif' align=\"absmiddle\" alt='group'>";
+            }
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>"; }
-                    else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>"; }
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
                 }
             } else {
-                echo "<a href=\"../group/group.php?origin=$origin\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                echo "<a href=\"../group/group.php?origin=$origin\" class='$completed' target='_blank'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
 
@@ -992,13 +1446,17 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
         case 'Users':
             $name = get_lang('Users');
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $name = $row['title']; }
+            if ($row['title'] != '') {
+                $name = $row['title'];
+            }
             $desc = $row['description'];
             echo str_repeat("&nbsp;&gt;", $level);
 
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "<td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "<td>";
+            }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
                     echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
@@ -1007,26 +1465,55 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                     //echo "&nbsp;";
                 }
             }
-            if (($builder != 'builder') && ($icon != 'wrap')) { echo "</td><td>"; }
+            if (($builder != 'builder') && ($icon != 'wrap')) {
+                echo "</td><td>";
+            }
 
-            if ($name=='') { echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>"; return(true); }
+            if ($name == '') {
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
+                    'StepDeleted2'
+                )."</span>";
 
-            if ($icon == 'nolink') { return(shorten($name,$length)); }
-            if ($icon == 'icon') { echo "<img src='../img/members.gif' align=\"absmiddle\" alt='members'>"; }
+                return (true);
+            }
+
+            if ($icon == 'nolink') {
+                return (shorten($name, $length));
+            }
+            if ($icon == 'icon') {
+                echo "<img src='../img/members.gif' align=\"absmiddle\" alt='members'>";
+            }
 
             if ($builder != 'builder') {
-                echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path\" class='$completed'>".shorten($name,($length-3*$level))."</a>"; $items[]=api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
+                echo "<a href=\"".api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path\" class='$completed'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
+                $items[] = api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
                 if ($desc != '') {
                     if ($icon != 'wrap') {
-                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div></td></tr>"; }
-                    else {
-                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten($desc, ($length-3*$level))."</div>"; }
+                        echo "</tr><tr><td></td><td></td><td><div class='description'>&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div></td></tr>";
+                    } else {
+                        echo "<div class='description'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".shorten(
+                            $desc,
+                            ($length - 3 * $level)
+                        )."</div>";
+                    }
                 }
             } else {
-                echo "<a href=\"../user/user.php?origin=$origin\" class='$completed' target='_blank'>".shorten($name, ($length-3*$level))."</a>";
+                echo "<a href=\"../user/user.php?origin=$origin\" class='$completed' target='_blank'>".shorten(
+                    $name,
+                    ($length - 3 * $level)
+                )."</a>";
             }
             break;
-    }//end huge switch-statement
+    }
+    //end huge switch-statement
 }
 
 /**
@@ -1039,7 +1526,8 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
  * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
  * @param id_in_path  - the unique index in the items table
  */
-function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
+function get_addedresource_link_in_learnpath($type, $id, $id_in_path)
+{
     global $_course, $learnpath_id, $tbl_learnpath_item, $items;
     global $curDirPath, $_configuration, $enableDocumentParsing, $_user, $_cid;
 
@@ -1050,7 +1538,9 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
     $origin = 'learnpath';
 
     $linktype = $type;
-    if (($type == 'Link _self') || ($type == 'Link _blank')) { $type = 'Link'; }
+    if (($type == 'Link _self') || ($type == 'Link _blank')) {
+        $type = 'Link';
+    }
 
     $link = '';
 
@@ -1061,13 +1551,17 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['title'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['title'] = $row['title'];
+            }
             $desc = $row['description'];
             $agenda_id = $row['item_id'];
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Agenda&origin=$origin&agenda_id=$agenda_id#$id_in_path";
             } else {
                 $link .= "../calendar/agenda.php?origin=$origin&agenda_id=$agenda_id";
             }
@@ -1079,91 +1573,112 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             $myrow = Database::fetch_array($result);
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$id#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Ad_Valvas&origin=$origin&ann_id=$id#$id_in_path";
             } else {
                 $link .= "../announcements/announcements.php?origin=$origin&ann_id=$id";
             }
             break;
 
         case 'Link':
-            $TABLETOOLLINK	= Database::get_course_table(TABLE_LINK);
+            $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
             $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
 
             $thelink = $myrow['url'];
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=$linktype&origin=$origin&thelink=$thelink#$id_in_path";
             } else {
                 $link .= $thelink;
             }
             break;
 
         case 'Exercise':
-            $TBL_EXERCICES  = Database::get_course_table(TABLE_QUIZ_TEST);
+            $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
 
-            if ($builder == 'builder') { $origin = 'builder'; }
-              // This is needed for the exercise_submit.php can delete the session info about tests.
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
+            // This is needed for the exercise_submit.php can delete the session info about tests.
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['title'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['title'] = $row['title'];
+            }
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Exercise&origin=$origin&exerciseId=".$myrow["id"]."#$id_in_path";
             } else {
                 $link .= "../exercice/exercise_submit.php?origin=$origin&exerciseId=".$myrow["id"];
             }
             break;
 
         case 'HotPotatoes':
-              $TBL_DOCUMENT  = Database::get_course_table(TABLE_DOCUMENT);
+            $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
             $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
             $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
-              $name = GetQuizName($path, $documentPath);
+            $name = GetQuizName($path, $documentPath);
 
-            if ($builder=='builder') { $origin='builder'; }
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
 
             $cid = $_course['official_code'];
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=HotPotatoes&origin=$origin&id=$id#$id_in_path";
             } else {
                 $link .= "../exercice/showinframes.php?file=$path&cid=$cid&uid=".$_user['user_id'];
             }
             break;
 
         case 'Forum':
-        //deprecated
-            $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);  // TODO: This is the old table name, it should be corrected.
+            //deprecated
+            $TBL_FORUMS = Database::get_course_table(
+                TABLE_FORUM
+            ); // TODO: This is the old table name, it should be corrected.
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
 
-            if ($builder == 'builder') { $origin = 'builder'; }
+            if ($builder == 'builder') {
+                $origin = 'builder';
+            }
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['forum_name'] = $row['title']; }
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            if ($row['title'] != '') {
+                $myrow['forum_name'] = $row['title'];
+            }
 
-            if ($myrow['forum_name'] == '') { $type = 'Forum'; }
+            if ($myrow['forum_name'] == '') {
+                $type = 'Forum';
+            }
 
             $forumparameters = "forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Forum&origin=$origin&forumparameters=$forumparameters#$id_in_path";
             } else {
                 $link .= "../phpbb/viewforum.php?$forumparameters";
             }
             break;
 
-        case 'Thread':  //forum post
-        //deprecated
+        case 'Thread': //forum post
+            //deprecated
             $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
             $tbl_posts = Database::get_course_table(TABLE_FORUM_POST);
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
@@ -1172,37 +1687,44 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             $myrow = Database::fetch_array($result);
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	$row = Database::fetch_array($result);
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Thread&origin=$origin&topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"]."#$id_in_path";
             } else {
                 $link .= "../forum/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
             }
             break;
 
         case 'Post':
-        //deprecated
+            //deprecated
             $tbl_posts = Database::get_course_table(TABLE_FORUM_POST);
-            
+
             $result = Database::query("SELECT * FROM $tbl_posts where c_id = $course_id AND post_id=$id");
             $myrow = Database::fetch_array($result);
             // Grabbing the title of the post.
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
-            if ($row['title'] != '') { $myrow['post_title'] = $row['title']; }
+            if ($row['title'] != '') {
+                $myrow['post_title'] = $row['title'];
+            }
             $desc = $row['description'];
             //$link .= str_repeat("&nbsp;&gt;", $level);
 
-            $posternom = $myrow['nom'];				$posterprenom = $myrow['prenom'];
-            $posttime = $myrow['post_time'];		$posttext = $myrow['post_text'];
+            $posternom = $myrow['nom'];
+            $posterprenom = $myrow['prenom'];
+            $posttime = $myrow['post_time'];
+            $posttext = $myrow['post_text'];
             $posttitle = $myrow['post_title'];
             $posttext = str_replace('"', "'", $posttext);
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Post&origin=$origin&posternom=$posternom&posterprenom=$posterprenom&posttime=$posttime&posttext=$posttext&posttitle=$posttitle#$id_in_path";
             } else {
                 $link .= "../phpbb/viewtopic.php?topic=".$myrow["topic_id"]."&forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
             }
@@ -1214,15 +1736,16 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             $myrow = Database::fetch_array($result);
 
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
-            $last = count($pathname) - 1;  // Making a correct name for the link.
-            $filename = $pathname[$last];  // Making a correct name for the link.
+            $last = count($pathname) - 1; // Making a correct name for the link.
+            $filename = $pathname[$last]; // Making a correct name for the link.
 
             $sql = "select * from $tbl_lp_item where c_id = $course_id AND id=$id_in_path";
-            $result = Database::query($sql);	
+            $result = Database::query($sql);
             $row = Database::fetch_array($result);
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Document&origin=$origin&docurl=".$myrow["path"]."#$id_in_path";
             } else {
                 $enableDocumentParsing = yes;
                 if (!$enableDocumentParsing) {
@@ -1237,21 +1760,24 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
 
         case 'Assignments':
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Assignments&origin=$origin#$id_in_path";
             } else {
                 $link .= "../work/work.php";
             }
             break;
         case 'Dropbox':
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Dropbox&origin=$origin#$id_in_path";
             } else {
                 $link .= "../dropbox/index.php";
             }
             break;
         case 'Introduction_text':
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Introduction_text&origin=$origin#$id_in_path";
             } else {
                 $s = api_get_path(WEB_COURSE_PATH)."$_cid/index.php?intro_cmdEdit=1";
                 $link .= $s;
@@ -1259,7 +1785,8 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
             break;
         case 'Course_description':
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Course_description&origin=$origin#$id_in_path";
             } else {
                 $s = api_get_path(WEB_CODE_PATH).'course_description';
                 $link .= $s;
@@ -1268,47 +1795,58 @@ function get_addedresource_link_in_learnpath($type, $id, $id_in_path) {
         case 'Groups':
 
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Groups&origin=$origin#$id_in_path";
             } else {
                 $link .= "../group/group.php?origin=$origin";
             }
             break;
         case 'Users':
             if ($builder != 'builder') {
-                $link .= api_get_self()."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
+                $link .= api_get_self(
+                )."?action=closelesson&source_forum=".$_GET['source_forum']."&how=complete&id_in_path=$id_in_path&learnpath_id=$learnpath_id&type=Users&origin=$origin#$id_in_path";
             } else {
                 $link .= "../user/user.php?origin=$origin";
             }
             break;
-    }//end huge switch-statement
+    }
+
+    //end huge switch-statement
     return $link;
 }
 
 /**
  * This function is to remove an resource item from the array
  */
-function remove_resource($resource_key) {
+function remove_resource($resource_key)
+{
     $addedresource = $_SESSION['addedresource'];
     $addedresourceid = $_SESSION['addedresourceid'];
     unset($addedresource[$resource_key]);
     unset($addedresourceid[$resource_key]);
     $_SESSION['addedresource'] = $addedresource;
-    $_SESSION['addedresourceid'] = $addedresourceid ;
+    $_SESSION['addedresourceid'] = $addedresourceid;
 }
 
 /**
  * This function is to show the button "click to add resource" on the tool page
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function show_addresource_button($additionalparameters = '') {
+function show_addresource_button($additionalparameters = '')
+{
     global $charset;
-    echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(get_lang('Attachment'), ENT_QUOTES, $charset).'" '.$additionalparameters.' />';
+    echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(
+        get_lang('Attachment'),
+        ENT_QUOTES,
+        $charset
+    ).'" '.$additionalparameters.' />';
 }
 
 /**
  * This function is to delete ONE specific resource that were added to a specific item
  * Deprecated
- *//*
+ */
+/*
 function delete_one_added_resource($source_type, $source_id, $resource_type, $resource_id) {
     //echo "delete_one_added_resource";
     global $_course;
@@ -1320,7 +1858,8 @@ function delete_one_added_resource($source_type, $source_id, $resource_type, $re
 /**
  * This function is to delete the resources that were added to a specific item
  */
-function delete_added_resource($type, $id) {
+function delete_added_resource($type, $id)
+{
     global $_course;
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
@@ -1332,48 +1871,51 @@ function delete_added_resource($type, $id) {
  * This function is te delete all resources of a specific type (only used in announcements -- delete all)
  * Author : Frederik Vermeire <frederik.vermeire@pandora.be>
  */
-function delete_all_resources_type($type) {
-  global $_course;
-  $course_id = api_get_course_int_id();
-  $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
-  $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type'";
-  Database::query($sql);
+function delete_all_resources_type($type)
+{
+    global $_course;
+    $course_id = api_get_course_int_id();
+    $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
+    $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type'";
+    Database::query($sql);
 }
 
 /**
  * This function checks wether there are added resources or not
  */
-function check_added_resources($type, $id) {
+function check_added_resources($type, $id)
+{
     global $_course, $origin;
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
     $sql = "SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
     $result = Database::query($sql);
     $number_added = Database::num_rows($result);
-    if ($number_added != 0)
+    if ($number_added != 0) {
         return true;
-    else
+    } else {
         return false;
+    }
 }
 
 /**
  * this function is to load the resources that were added to a specific item
  * into the session variables
  */
-function edit_added_resources($type, $id) {
+function edit_added_resources($type, $id)
+{
     global $_course;
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
-    $sql="SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id=$id";
-    $result=Database::query($sql);
-    while ($row=Database::fetch_array($result))
-    {
-        $addedresource[]=$row["resource_type"];
-        $addedresourceid[]=$row["resource_id"];
+    $sql = "SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id=$id";
+    $result = Database::query($sql);
+    while ($row = Database::fetch_array($result)) {
+        $addedresource[] = $row["resource_type"];
+        $addedresourceid[] = $row["resource_id"];
     }
-    $_SESSION['addedresource']=$addedresource;
-    $_SESSION['addedresourceid']=$addedresourceid;
+    $_SESSION['addedresource'] = $addedresource;
+    $_SESSION['addedresourceid'] = $addedresourceid;
 }
 
 /**
@@ -1381,12 +1923,13 @@ function edit_added_resources($type, $id) {
  * first we delete all the added resources in the database,
  * then we add all the resources from the session object.
  */
-function update_added_resources($type, $id) {
+function update_added_resources($type, $id)
+{
     global $_course;
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
     // delete all the added resources for this item in the database;
-    $sql="DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' AND source_id='$id'";
+    $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' AND source_id='$id'";
     //echo $sql;
     Database::query($sql);
 
@@ -1400,21 +1943,35 @@ function update_added_resources($type, $id) {
 /**
  * this function is to display the resources that were added to a specific item
  */
-function display_added_resources($type, $id, $style = '') {
+function display_added_resources($type, $id, $style = '')
+{
     $course_id = api_get_course_int_id();
     // The array containing the icons
-    $arr_icons = array('Agenda'=>'../img/agenda.gif', 'Ad Valvas'=>'../img/valves.gif', 'Link'=>'../img/links.gif', 'Exercise'=>'../img/quiz.gif' );
+    $arr_icons = array(
+        'Agenda' => '../img/agenda.gif',
+        'Ad Valvas' => '../img/valves.gif',
+        'Link' => '../img/links.gif',
+        'Exercise' => '../img/quiz.gif'
+    );
 
     global $_course, $origin;
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
 
     $sql = "SELECT * FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
     $result = Database::query($sql);
-    while ($row=Database::fetch_array($result)) {
+    while ($row = Database::fetch_array($result)) {
         if ($origin != 'learnpath') {
-            display_addedresource_link($row['resource_type'], $row['resource_id'], $style) ;
+            display_addedresource_link($row['resource_type'], $row['resource_id'], $style);
         } else {
-            display_addedresource_link_in_learnpath($row['resource_type'], $row['resource_id'],'agendaitems','','builder','icon') ; echo "<br>";
+            display_addedresource_link_in_learnpath(
+                $row['resource_type'],
+                $row['resource_id'],
+                'agendaitems',
+                '',
+                'builder',
+                'icon'
+            );
+            echo "<br>";
         }
     }
 }
@@ -1424,7 +1981,8 @@ function display_added_resources($type, $id, $style = '') {
  * $showdeleteimg determine if the delete image should appear or not.
  * deleting an added resource is only possible through the resource linker file itself
  */
-function display_resources($showdeleteimg) {
+function display_resources($showdeleteimg)
+{
     global $action;
     global $resourceaction;
     global $id;
@@ -1450,50 +2008,65 @@ function display_resources($showdeleteimg) {
             parse_str($test[query], $output);
 
             if ($showdeleteimg == 1) {
-                echo "<a href=".api_get_self()."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key($addedresource)."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang('Delete')."' /></a><br />";
+                echo "<a href=".api_get_self(
+                )."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key(
+                    $addedresource
+                )."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang(
+                    'Delete'
+                )."' /></a><br />";
             }
             echo '</td></tr>';
             next($addedresource);
         }
         echo '</table>';
-    }
-    else { // it is a string
+    } else { // it is a string
         echo '';
     }
 } // end of the display_resources function
 
 
 /**
-* This function checks wether the link add resource should be displayed next the item in the linker page
-* So we have to check if the specific id of that tool is already in the array of the added resources
-* if it is already in, the link should not be showed since it would make it possible to add
-* the same resource a second time (=duplication of added resources)
-*/
-function showorhide_addresourcelink($type, $id) {
+ * This function checks wether the link add resource should be displayed next the item in the linker page
+ * So we have to check if the specific id of that tool is already in the array of the added resources
+ * if it is already in, the link should not be showed since it would make it possible to add
+ * the same resource a second time (=duplication of added resources)
+ */
+function showorhide_addresourcelink($type, $id)
+{
     global $from_learnpath, $source_id, $action, $learnpath_id, $chapter_id, $originalresource, $folder, $content, $target;
     $addedresource = $_SESSION['addedresource'];
     $addedresourceid = $_SESSION['addedresourceid'];
 
     if (is_array($_SESSION['addedresource'])) {
         foreach ($addedresource as $toolcompare) {
-            if ($toolcompare==$type && $addedresourceid[key($addedresource)] == $id) {
+            if ($toolcompare == $type && $addedresourceid[key($addedresource)] == $id) {
                 $show = 0;
             }
             next($addedresource);
         }
-        if ($from_learnpath) { $lang_add_it_or_resource = get_lang('AddIt'); } else { $lang_add_it_or_resource = get_lang('AddResource'); }
+        if ($from_learnpath) {
+            $lang_add_it_or_resource = get_lang('AddIt');
+        } else {
+            $lang_add_it_or_resource = get_lang('AddResource');
+        }
         if ($show !== 0) {
             if ($type == 'Document') {
-                echo "<a href=".api_get_self()."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".$lang_add_it_or_resource."</a>";
+                echo "<a href=".api_get_self(
+                )."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no>".$lang_add_it_or_resource."</a>";
             } else {
-                echo "<a href='".api_get_self()."?content=".$type."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
+                echo "<a href='".api_get_self(
+                )."?content=".$type."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
             }
         }
-    }
-    else { // if it is not an array, it is a string
+    } else { // if it is not an array, it is a string
         if ($_SESSION['addedresource'] !== $type || $_SESSION['addedresourceid'] !== $id) {
-            if ($from_learnpath) { $lang_add_it_or_resource = get_lang('AddIt'); } else { $lang_add_it_or_resource = get_lang('AddResource'); }
-            echo "<a href='".api_get_self()."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
+            if ($from_learnpath) {
+                $lang_add_it_or_resource = get_lang('AddIt');
+            } else {
+                $lang_add_it_or_resource = get_lang('AddResource');
+            }
+            echo "<a href='".api_get_self(
+            )."?content=".$type."&folder=".$folder."&source_forum=".$_GET['source_forum']."&add=".$id."&source_id=$source_id&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no&target=$target'>".$lang_add_it_or_resource."</a>";
         }
     }
 }
@@ -1503,21 +2076,28 @@ function showorhide_addresourcelink($type, $id) {
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Yannick Warnier <ywarnier@beeznest.org>, Dokeos - rebranding
- * @param string 	Course code
- * @param string 	The tool type (using constants declared in main_api.lib.php)
- * @param integer 	The resource ID
- * @param string	Resource style (e.g. when a resource is hidden => the added resources should also be styled like they are hidden)
- * @param boolean	Open in a new window (true) or in the current frame/window (false)?
+ * @param string     Course code
+ * @param string     The tool type (using constants declared in main_api.lib.php)
+ * @param integer     The resource ID
+ * @param string    Resource style (e.g. when a resource is hidden => the added resources should also be styled like they are hidden)
+ * @param boolean    Open in a new window (true) or in the current frame/window (false)?
  * @todo use the constants for the type definitions.
  */
-function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_window = true) {
+function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_window = true)
+{
     $_course = Database::get_course_info($course_code);
-    
+
     $course_id = api_get_course_int_id();
 
     // Styling the link of the added resource
-    if ($style != '') $styling = ' class="'.$style.'"';
-    if ($new_window) { $target = ' target = "_blank" '; } else { $target = ' target = "_self" '; }
+    if ($style != '') {
+        $styling = ' class="'.$style.'"';
+    }
+    if ($new_window) {
+        $target = ' target = "_blank" ';
+    } else {
+        $target = ' target = "_self" ';
+    }
 
     $output = '';
 
@@ -1539,7 +2119,9 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
             $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
+            $output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode(
+                $myrow['url']
+            )."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
             break;
         case TOOL_QUIZ:
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -1553,10 +2135,10 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $myrow = Database::fetch_array($result);
             $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
             break;
-        case TOOL_THREAD:  //=topics
+        case TOOL_THREAD: //=topics
             //$tbl_forum 		= Database::get_course_table(TABLE_FORUM);
             //$tbl_thread 	= Database::get_course_table(TABLE_FORUM_THREAD);
-            $tbl_post 		= Database::get_course_table(TABLE_FORUM_POST);
+            $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
             // grabbing the title of the post
             $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
             $result_title = Database::query($sql_title);
@@ -1576,8 +2158,8 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
-            $last = count($pathname) - 1;  // Making a correct name for the link.
-            $filename = $pathname[$last];  // Making a correct name for the link.
+            $last = count($pathname) - 1; // Making a correct name for the link.
+            $filename = $pathname[$last]; // Making a correct name for the link.
             $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext) - 1]);
@@ -1591,6 +2173,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
             break;
         */
     }
+
     return $output;
 }
 
@@ -1601,27 +2184,30 @@ function rl_get_html_resource_link($course_code, $type, $id, $style='', $new_win
  * The function is a big switch on tool type.
  * In each case, we query the corresponding table for information and build the link
  * with that information.
- * @author	Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
- * @param	string	Course code
- * @param	integer	The learning path ID (in lp table)
- * @param	integer	The database ID for that item in the lp_item table
+ * @author    Yannick Warnier <ywarnier@beeznest.org> - rebranding based on previous work (display_addedresource_link_in_learnpath())
+ * @param    string    Course code
+ * @param    integer    The learning path ID (in lp table)
+ * @param    integer    The database ID for that item in the lp_item table
  * @param id          - that is the correspondent id in the mirror tool (like Agenda item 2)
  * @param id_in_path  - the unique index in the items table
  */
-function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path) {
-    $tbl_lp_item 	= Database::get_course_table(TABLE_LP_ITEM);
-    
-    $course_info = api_get_course_info_by_id($course_id);    
+function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_path)
+{
+    $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+
+    $course_info = api_get_course_info_by_id($course_id);
     $course_id = $course_info['real_id'];
     $course_code = $course_info['code'];
     $session_id = api_get_session_id();
-    
-    $learnpath_id 	= intval($learnpath_id);
-    $id_in_path		= intval($id_in_path);
-    
+
+    $learnpath_id = intval($learnpath_id);
+    $id_in_path = intval($id_in_path);
+
     $sql_item = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $learnpath_id AND id = $id_in_path";
     $res_item = Database::query($sql_item);
-    if (Database::num_rows($res_item) < 1) return -1; //exit
+    if (Database::num_rows($res_item) < 1) {
+        return -1;
+    } //exit
     $row_item = Database::fetch_array($res_item);
 
     $type = strtolower($row_item['item_type']);
@@ -1643,19 +2229,21 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             break;
         case TOOL_LINK:
             $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
-            $result= Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
-            $myrow=Database::fetch_array($result);
-            $thelink=$myrow["url"];
+            $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
+            $myrow = Database::fetch_array($result);
+            $thelink = $myrow["url"];
             $link .= $thelink;
             break;
         case TOOL_QUIZ:
             if (!empty($id)) {
                 $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
                 $sql = "SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND id=$id";
-                $result= Database::query($sql);
-                $myrow=Database::fetch_array($result);
+                $result = Database::query($sql);
+                $myrow = Database::fetch_array($result);
 
-                if ($row_item['title'] != '') { $myrow['title'] = $row_item['title']; }
+                if ($row_item['title'] != '') {
+                    $myrow['title'] = $row_item['title'];
+                }
                 //$link .= $main_dir_path.'exercice/exercise_submit.php?lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
                 $link .= $main_dir_path.'exercice/overview.php?cidReq='.$course_code.'&session_id='.$session_id.'&lp_init=1&origin='.$origin.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path.'&exerciseId='.$id;
             }
@@ -1665,21 +2253,21 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND  id=$id");
             $myrow = Database::fetch_array($result);
             $path = $myrow['path'];
-            $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.'' .
-                    '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().'' .
-                    '&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path;
+            $link .= $main_dir_path.'exercice/showinframes.php?file='.$path.''.
+                '&origin='.$origin.'&cid='.$course_code.'&uid='.api_get_user_id().''.
+                '&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$id_in_path;
             break;
         case TOOL_FORUM:
             $link .= $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&origin=learnpath';
             break;
-        case TOOL_THREAD:  //forum post
+        case TOOL_THREAD: //forum post
             $tbl_topics = Database::get_course_table(TABLE_FORUM_THREAD);
             if (!empty($id)) {
                 $sql = "SELECT * FROM $tbl_topics WHERE c_id = $course_id AND thread_id=$id";
                 $result = Database::query($sql);
                 $myrow = Database::fetch_array($result);
-                $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.'' .
-                        '&forum='.$myrow['forum_id'].'&lp=true';
+                $link .= $main_dir_path.'forum/viewthread.php?origin=learnpath&thread='.$id.''.
+                    '&forum='.$myrow['forum_id'].'&lp=true';
             }
             break;
         case TOOL_POST:
@@ -1694,9 +2282,9 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             $posttitle = $title;
             $posttext = str_replace('"', "'", $posttext);
 
-            $link .= $main_dir_path.'forum/viewthread.php?post='.$id.'' .
-                    '&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].'' .
-                    '&lp=true';
+            $link .= $main_dir_path.'forum/viewthread.php?post='.$id.''.
+                '&thread='.$myrow['thread_id'].'&forum='.$myrow['forum_id'].''.
+                '&lp=true';
             break;
         case TOOL_DOCUMENT:
             $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -1707,8 +2295,8 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             $link .= $main_course_path.'document'.$docurl.'?'.api_get_cidreq();
             $openmethod = 2;
             $officedoc = false;
-            Session::write('openmethod',$openmethod);
-            Session::write('officedoc',$officedoc);
+            Session::write('openmethod', $openmethod);
+            Session::write('officedoc', $officedoc);
             break;
         case 'assignments':
             $link .= $main_dir_path.'work/work.php?origin='.$origin;
@@ -1739,11 +2327,12 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
  * Gets the name of a resource (generally used in learnpath when no name is provided)
  *
  * @author Yannick Warnier <ywarnier@beeznest.org>, Dokeos - rebranding
- * @param string 	Course code
- * @param string 	The tool type (using constants declared in main_api.lib.php)
- * @param integer 	The resource ID
+ * @param string     Course code
+ * @param string     The tool type (using constants declared in main_api.lib.php)
+ * @param integer     The resource ID
  */
-function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
+function rl_get_resource_name($course_code, $learnpath_id, $id_in_path)
+{
     $_course = Database::get_course_info($course_code);
     $course_id = $_course['real_id'];
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1791,7 +2380,7 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
             $myrow = Database::fetch_array($result);
             $output = $myrow['forum_name'];
             break;
-        case TOOL_THREAD:  //=topics
+        case TOOL_THREAD: //=topics
             $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
             // Grabbing the title of the post.
             $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
@@ -1828,8 +2417,8 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
             $result = Database::query("SELECT * FROM $tbl_doc WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
             $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
-            $last = count($pathname) - 1;  // Making a correct name for the link.
-            $filename = $pathname[$last];  // Making a correct name for the link.
+            $last = count($pathname) - 1; // Making a correct name for the link.
+            $filename = $pathname[$last]; // Making a correct name for the link.
             $image = FileManager::choose_image($filename);
             $ext = explode('.', $filename);
             $ext = strtolower($ext[sizeof($ext) - 1]);
@@ -1843,5 +2432,6 @@ function rl_get_resource_name($course_code, $learnpath_id, $id_in_path) {
             break;
         */
     }
+
     return stripslashes($output);
 }

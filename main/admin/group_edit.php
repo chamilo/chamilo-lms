@@ -1,24 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	@package chamilo.admin
-
-*/
+ * @package chamilo.admin
+ */
 // Language files that should be included
-$language_file = array('admin','userInfo');
+$language_file = array('admin', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-$libpath = api_get_path(LIBRARY_PATH);
-require_once $libpath.'fileUpload.lib.php';
-
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
-$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = array('url' => 'group_list.php','name' => get_lang('GroupList'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'group_list.php', 'name' => get_lang('GroupList'));
 
 $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
@@ -38,8 +34,8 @@ function text_longitud(){
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
-	header('Location: group_list.php');
-	exit;
+    header('Location: group_list.php');
+    exit;
 }
 
 $group_data = Database::fetch_array($res, 'ASSOC');
@@ -50,26 +46,36 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'id', $group_id);
 
 // name
-$form->addElement('text', 'name', get_lang('Name'), array('size'=>60, 'maxlength'=>120));
+$form->addElement('text', 'name', get_lang('Name'), array('size' => 60, 'maxlength' => 120));
 $form->applyFilter('name', 'html_filter');
 $form->applyFilter('name', 'trim');
 $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 
 // Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('rows'=>3, 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
+$form->addElement(
+    'textarea',
+    'description',
+    get_lang('Description'),
+    array('rows' => 3, 'cols' => 58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()")
+);
 $form->applyFilter('description', 'html_filter');
 $form->applyFilter('description', 'trim');
 
 // url
-$form->addElement('text', 'url', get_lang('URL'), array('size'=>35));
+$form->addElement('text', 'url', get_lang('URL'), array('size' => 35));
 $form->applyFilter('url', 'html_filter');
 $form->applyFilter('url', 'trim');
 // Picture
 $form->addElement('file', 'picture', get_lang('AddPicture'));
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+$allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
+$form->addRule(
+    'picture',
+    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    'filetype',
+    $allowed_picture_types
+);
 if (strlen($group_data['picture_uri']) > 0) {
-	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+    $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
 //Group Parentship
@@ -82,8 +88,8 @@ $form->addElement('select', 'parent_group', get_lang('GroupParentship'), $groups
 
 // Status
 $status = array();
-$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+$status[GROUP_PERMISSION_OPEN] = get_lang('Open');
+$status[GROUP_PERMISSION_CLOSED] = get_lang('Closed');
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
 // Submit button
@@ -93,49 +99,54 @@ $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation')
 $form->setDefaults($group_data);
 
 // Validate form
-if ( $form->validate()) {
-	$group = $form->exportValues();
+if ($form->validate()) {
+    $group = $form->exportValues();
 
-	$picture_element = $form->getElement('picture');
-	$picture = $picture_element->getValue();
+    $picture_element = $form->getElement('picture');
+    $picture = $picture_element->getValue();
 
-	$picture_uri = $group_data['picture_uri'];
-	if ($group['delete_picture']) {
-		$picture_uri = GroupPortalManager::delete_group_picture($group_id);
-		}
-	elseif (!empty($picture['name'])) {
-		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-	}
+    $picture_uri = $group_data['picture_uri'];
+    if ($group['delete_picture']) {
+        $picture_uri = GroupPortalManager::delete_group_picture($group_id);
+    } elseif (!empty($picture['name'])) {
+        $picture_uri = GroupPortalManager::update_group_picture(
+            $group_id,
+            $_FILES['picture']['name'],
+            $_FILES['picture']['tmp_name']
+        );
+    }
 
-	$name 			= $group['name'];
-	$description	= $group['description'];
-	$url 			= $group['url'];
-	$status 		= intval($group['visibility']);
-  $parent_group_id = intval($group['parent_group']);
+    $name = $group['name'];
+    $description = $group['description'];
+    $url = $group['url'];
+    $status = intval($group['visibility']);
+    $parent_group_id = intval($group['parent_group']);
 
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
-  GroupPortalManager::set_parent_group($group_id,$parent_group_id);
+    GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
+    GroupPortalManager::set_parent_group($group_id, $parent_group_id);
 
-	$tok = Security::get_token();
-	header('Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
-	exit();
+    $tok = Security::get_token();
+    header(
+        'Location: group_list.php?action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok
+    );
+    exit();
 }
 
 Display::display_header($tool_name);
 
 // Group picture
-$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
+$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id, 'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');
 $image_size = api_getimagesize($image_file);
 
 $img_attributes = 'src="'.$image_file.'?rand='.time().'" '
-	.'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
-	.'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
+    .'alt="'.api_get_person_name($user_data['firstname'], $user_data['lastname']).'" '
+    .'style="float:'.($text_dir == 'rtl' ? 'left' : 'right').'; padding:5px;" ';
 
 if ($image_size['width'] > 300) { //limit display width to 300px
-	$img_attributes .= 'width="300" ';
+    $img_attributes .= 'width="300" ';
 }
 
 // get the path,width and height from original picture
@@ -146,9 +157,9 @@ $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
 if ($image == '') {
-	echo '<img '.$img_attributes.' />';
+    echo '<img '.$img_attributes.' />';
 } else {
-	echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+    echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
 }
 
 // Display form

@@ -38,20 +38,37 @@ if (empty($action)) {
 /* 	Resource linker */
 $_SESSION['source_type'] = 'Agenda';
 require_once '../resourcelinker/resourcelinker.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 
 if (!empty($addresources)) {
     // When the "Add Resource" button is clicked we store all the form data into a session
-    $form_elements = array('day' => Security::remove_XSS($_POST['fday']), 'month' => Security::remove_XSS($_POST['fmonth']), 'year' => Security::remove_XSS($_POST['fyear']), 'hour' => Security::remove_XSS($_POST['fhour']), 'minutes' => Security::remove_XSS($_POST['fminute']),
-        'end_day' => Security::remove_XSS($_POST['end_fday']), 'end_month' => Security::remove_XSS($_POST['end_fmonth']), 'end_year' => Security::remove_XSS($_POST['end_fyear']), 'end_hours' => Security::remove_XSS($_POST['end_fhour']), 'end_minutes' => Security::remove_XSS($_POST['end_fminute']),
-        'title' => Security::remove_XSS(stripslashes($_POST['title'])), 'content' => Security::remove_XSS(stripslashes($_POST['content'])), 'id' => Security::remove_XSS($_POST['id']), 'action' => Security::remove_XSS($_POST['action']), 'to' => Security::remove_XSS($_POST['selectedform']));
+    $form_elements = array(
+        'day' => Security::remove_XSS($_POST['fday']),
+        'month' => Security::remove_XSS($_POST['fmonth']),
+        'year' => Security::remove_XSS($_POST['fyear']),
+        'hour' => Security::remove_XSS($_POST['fhour']),
+        'minutes' => Security::remove_XSS($_POST['fminute']),
+        'end_day' => Security::remove_XSS($_POST['end_fday']),
+        'end_month' => Security::remove_XSS($_POST['end_fmonth']),
+        'end_year' => Security::remove_XSS($_POST['end_fyear']),
+        'end_hours' => Security::remove_XSS($_POST['end_fhour']),
+        'end_minutes' => Security::remove_XSS($_POST['end_fminute']),
+        'title' => Security::remove_XSS(stripslashes($_POST['title'])),
+        'content' => Security::remove_XSS(stripslashes($_POST['content'])),
+        'id' => Security::remove_XSS($_POST['id']),
+        'action' => Security::remove_XSS($_POST['action']),
+        'to' => Security::remove_XSS($_POST['selectedform'])
+    );
     $_SESSION['formelements'] = $form_elements;
     // this is to correctly handle edits
     if ($id) {
         $action = "edit";
     }
     //print_r($form_elements);
-    header('Location: '.api_get_path(WEB_CODE_PATH)."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no");
+    header(
+        'Location: '.api_get_path(
+            WEB_CODE_PATH
+        )."resourcelinker/resourcelinker.php?source_id=1&action=$action&id=$id&originalresource=no"
+    );
     exit;
 }
 
@@ -85,8 +102,8 @@ if (!empty($_GET['sort']) and ($allow_individual_calendar_status == "show")) {
 
 // 4. filter user or group
 if (!empty($_GET['user']) or !empty($_GET['group'])) {
-    $_SESSION['user'] = (int) $_GET['user'];
-    $_SESSION['group'] = (int) $_GET['group'];
+    $_SESSION['user'] = (int)$_GET['user'];
+    $_SESSION['group'] = (int)$_GET['group'];
 }
 if ((!empty($_GET['user']) and $_GET['user'] == "none") or (!empty($_GET['group']) and $_GET['group'] == "none")) {
     Session::erase("user");
@@ -111,7 +128,10 @@ $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 if (!empty($group_id)) {
     $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = array("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array("url" => "../group/group_space.php?gidReq=".$group_id, "name" => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        "url" => "../group/group_space.php?gidReq=".$group_id,
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+    );
     Display::display_header($nameTools, 'Agenda');
 } elseif (empty($origin) or $origin != 'learnpath') {
     Display::display_header($nameTools, 'Agenda');
@@ -145,7 +165,9 @@ $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_US
 
 /*   			ACCESS RIGHTS */
 // permission stuff - also used by loading from global in agenda.inc.php
-$is_allowed_to_edit = api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous());
+$is_allowed_to_edit = api_is_allowed_to_edit(false, true) OR (api_get_course_setting(
+    'allow_user_edit_agenda'
+) && !api_is_anonymous());
 
 // Tool introduction
 Display::display_introduction_section(TOOL_CALENDAR_EVENT);
@@ -158,13 +180,13 @@ $select_month = '';
 $select_day = '';
 
 if (!empty($_GET['year'])) {
-    $select_year = (int) $_GET['year'];
+    $select_year = (int)$_GET['year'];
 }
 if (!empty($_GET['month'])) {
-    $select_month = (int) $_GET['month'];
+    $select_month = (int)$_GET['month'];
 }
 if (!empty($_GET['day'])) {
-    $select_day = (int) $_GET['day'];
+    $select_day = (int)$_GET['day'];
 }
 
 $today = getdate();
@@ -179,8 +201,15 @@ if (empty($select_month)) {
 echo '<div class="actions">';
 
 if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
-    GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(
+        false,
+        true
+    ) OR
+    GroupManager::user_has_access(
+        api_get_user_id(),
+        $group_id,
+        GroupManager::GROUP_TOOL_CALENDAR
+    ) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
 ) {
     echo display_courseadmin_links();
 }
@@ -192,27 +221,50 @@ $event_id = isset($_GET['id']) ? $_GET['id'] : null;
 $course_info = api_get_course_info();
 
 if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) OR
-     GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
-    ) {
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(
+        false,
+        true
+    )) OR
+    GroupManager::user_has_access(
+        api_get_user_id(),
+        $group_id,
+        GroupManager::GROUP_TOOL_CALENDAR
+    ) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+) {
     switch ($action) {
         case 'add':
             if (isset($_POST['submit_event']) && $_POST['submit_event']) {
-                $event_start = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
-                $event_stop = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
+                $event_start = (int)$_POST['fyear'].'-'.(int)$_POST['fmonth'].'-'.(int)$_POST['fday'].' '.(int)$_POST['fhour'].':'.(int)$_POST['fminute'].':00';
+                $event_stop = (int)$_POST['end_fyear'].'-'.(int)$_POST['end_fmonth'].'-'.(int)$_POST['end_fday'].' '.(int)$_POST['end_fhour'].':'.(int)$_POST['end_fminute'].':00';
                 $safe_title = Security::remove_XSS($_POST['title']);
                 $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
 
                 if ($_POST['empty_end_date'] == 'on') {
                     $event_stop = '0000-00-00 00:00:00';
                 }
-                $id = agenda_add_item($course_info, $safe_title, $_POST['content'], $event_start, $event_stop, $_POST['selected_form'], false, $safe_file_comment);
+                $id = agenda_add_item(
+                    $course_info,
+                    $safe_title,
+                    $_POST['content'],
+                    $event_start,
+                    $event_stop,
+                    $_POST['selected_form'],
+                    false,
+                    $safe_file_comment
+                );
                 if (!empty($_POST['repeat'])) {
                     $end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info, $id, $_POST['repeat_type'], $end, $_POST['selected_form'], $safe_file_comment);
+                    $res = agenda_add_repeat_item(
+                        $course_info,
+                        $id,
+                        $_POST['repeat_type'],
+                        $end,
+                        $_POST['selected_form'],
+                        $safe_file_comment
+                    );
                 }
                 Display::display_confirmation_message(get_lang('AddSuccess'));
             } else {
@@ -225,7 +277,14 @@ if (api_is_allowed_to_edit(false, true) OR
                 // a coach can only delete an element belonging to his session
                 $ann_id = store_agenda_item_as_announcement($event_id);
                 $tool_group_link = (isset($_SESSION['toolgroup']) ? '&toolgroup='.$_SESSION['toolgroup'] : '');
-                Display::display_normal_message(get_lang('CopiedAsAnnouncement').'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang('NewAnnouncement').'</a>', false);
+                Display::display_normal_message(
+                    get_lang(
+                        'CopiedAsAnnouncement'
+                    ).'&nbsp;<a href="../announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.get_lang(
+                        'NewAnnouncement'
+                    ).'</a>',
+                    false
+                );
             }
             break;
         case 'importical':
@@ -267,7 +326,7 @@ if (api_is_allowed_to_edit(false, true) OR
             }
             break;
         case "delete":
-            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id) )) {
+            if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $event_id))) {
                 // a coach can only delete an element belonging to his session
                 delete_agenda_item($event_id);
                 $action = 'view';
@@ -283,7 +342,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 display_one_agenda_item($_GET['agenda_id']);
             }
             break;
-        case "delete_attach":  //delete attachment file
+        case "delete_attach": //delete attachment file
             $id_attach = $_GET['id_attach'];
             if (!empty($id_attach)) {
                 delete_attachment_file($id_attach);

@@ -16,7 +16,7 @@
  */
 
 // Name of the language file that needs to be included.
-$language_file = array('create_course', 'registration','admin','exercice', 'course_description', 'course_info');
+$language_file = array('create_course', 'registration', 'admin', 'exercice', 'course_description', 'course_info');
 
 // Flag forcing the "current course" reset.
 $cidReset = true;
@@ -31,9 +31,6 @@ $this_section = SECTION_COURSES;
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immedialely, after filling this form.
 $course_validation_feature = api_get_setting('course_validation') == 'true';
-
-// Require additional libraries.
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 if ($course_validation_feature) {
     require_once api_get_path(LIBRARY_PATH).'course_request.lib.php';
@@ -50,10 +47,14 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     function advanced_parameters() {
         if(document.getElementById(\'options\').style.display == \'none\') {
             document.getElementById(\'options\').style.display = \'block\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang(
+    'AdvancedParameters'
+).'\';
         } else {
             document.getElementById(\'options\').style.display = \'none\';
-            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+    'AdvancedParameters'
+).'\';
         }
     }
 </script>';
@@ -82,23 +83,41 @@ $form = new FormValidator('add_course');
 $form->addElement('header', $tool_name);
 
 // Title
-$form->addElement('text', 'title', array(get_lang('CourseName'), get_lang('Ex')), array('class' => 'span6', 'id' => 'title'));
+$form->addElement(
+    'text',
+    'title',
+    array(get_lang('CourseName'), get_lang('Ex')),
+    array('class' => 'span6', 'id' => 'title')
+);
 $form->applyFilter('title', 'html_filter');
 $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
-$form -> addElement('advanced_settings',$advanced);
-$form -> addElement('html','<div id="options" style="display:none">');
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+    'AdvancedParameters'
+).'</div></span></a>';
+$form->addElement('advanced_settings', $advanced);
+$form->addElement('html', '<div id="options" style="display:none">');
 
 // Course category.
-$categories_select = $form->addElement('select', 'category_code', array(get_lang('Fac'), get_lang('TargetFac')), array(), array('id'=> 'category_code','class'=>'chzn-select', 'style'=>'width:350px'));
+$categories_select = $form->addElement(
+    'select',
+    'category_code',
+    array(get_lang('Fac'), get_lang('TargetFac')),
+    array(),
+    array('id' => 'category_code', 'class' => 'chzn-select', 'style' => 'width:350px')
+);
 $form->applyFilter('category_code', 'html_filter');
-$categories_select->addOption('-','');
+$categories_select->addOption('-', '');
 CourseManager::select_and_sort_categories($categories_select);
 
 
 // Course code
-$form->add_textfield('wanted_code', array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')), '', array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE));
+$form->add_textfield(
+    'wanted_code',
+    array(get_lang('Code'), get_lang('OnlyLettersAndNumbers')),
+    '',
+    array('class' => 'span3', 'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE)
+);
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_COURSE_LENGTH_CODE);
 
@@ -108,7 +127,11 @@ $form->addRule('wanted_code', get_lang('Max'), 'maxlength', CourseManager::MAX_C
 
 // The teacher
 //get_lang('ExplicationTrainers')
-$titular = & $form->addElement('hidden', 'tutor_name', ''); //array(get_lang('Professor'), null), null, array('size' => '60', 'disabled' => 'disabled'));
+$titular = & $form->addElement(
+    'hidden',
+    'tutor_name',
+    ''
+); //array(get_lang('Professor'), null), null, array('size' => '60', 'disabled' => 'disabled'));
 //$form->applyFilter('tutor_name', 'html_filter');
 
 if ($course_validation_feature) {
@@ -122,12 +145,17 @@ if ($course_validation_feature) {
     //$form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
 
     // Target audience of the requested course.
-    $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'), array('class' => 'span6', 'rows' => '3'));
+    $form->addElement(
+        'textarea',
+        'target_audience',
+        get_lang('TargetAudience'),
+        array('class' => 'span6', 'rows' => '3')
+    );
     //$form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
 }
 
 // Course language.
-$form->addElement('select_language', 'course_language', get_lang('Ln'), array(), array('style'=>'width:150px'));
+$form->addElement('select_language', 'course_language', get_lang('Ln'), array(), array('style' => 'width:150px'));
 $form->applyFilter('select_language', 'html_filter');
 
 // Exemplary content checkbox.
@@ -165,10 +193,15 @@ if ($course_validation_feature) {
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
 
-$form->addElement('html','</div>');
+$form->addElement('html', '</div>');
 
 // Submit button.
-$form->addElement('button', 'submit', $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'), 'class="add"');
+$form->addElement(
+    'button',
+    'submit',
+    $course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'),
+    'class="add"'
+);
 
 // The progress bar of this form.
 $form->add_progress_bar();
@@ -187,21 +220,23 @@ $message = null;
 if ($form->validate()) {
     $course_values = $form->exportValues();
 
-    $wanted_code        = $course_values['wanted_code'];
+    $wanted_code = $course_values['wanted_code'];
     //$tutor_name         = $course_values['tutor_name'];
-    $category_code      = $course_values['category_code'];
-    $title              = $course_values['title'];
-    $course_language    = $course_values['course_language'];
-    $exemplary_content  = !empty($course_values['exemplary_content']);
+    $category_code = $course_values['category_code'];
+    $title = $course_values['title'];
+    $course_language = $course_values['course_language'];
+    $exemplary_content = !empty($course_values['exemplary_content']);
 
     if ($course_validation_feature) {
-        $description     = $course_values['description'];
-        $objetives       = $course_values['objetives'];
+        $description = $course_values['description'];
+        $objetives = $course_values['objetives'];
         $target_audience = $course_values['target_audience'];
     }
 
     if ($wanted_code == '') {
-        $wanted_code = CourseManager::generate_course_code(api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE));
+        $wanted_code = CourseManager::generate_course_code(
+            api_substr($title, 0, CourseManager::MAX_COURSE_LENGTH_CODE)
+        );
     }
 
     // Check whether the requested course code has already been occupied.
@@ -215,19 +250,19 @@ if ($form->validate()) {
         if (!$course_validation_feature) {
 
             $params = array();
-            $params['title']                = $title;
-            $params['exemplary_content']    = $exemplary_content;
-            $params['wanted_code']          = $wanted_code;
-            $params['category_code']        = $category_code;
-            $params['course_language']      = $course_language;
-            $params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
+            $params['title'] = $title;
+            $params['exemplary_content'] = $exemplary_content;
+            $params['wanted_code'] = $wanted_code;
+            $params['category_code'] = $category_code;
+            $params['course_language'] = $course_language;
+            $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
 
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
 
-                $directory  = $course_info['directory'];
-                $title      = $course_info['title'];
+                $directory = $course_info['directory'];
+                $title = $course_info['title'];
 
                 // Preparing a confirmation message.
                 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
@@ -246,14 +281,26 @@ if ($form->validate()) {
             }
         } else {
             // Create a request for a new course.
-            $request_id = CourseRequestManager::create_course_request($wanted_code, $title, $description, $category_code, $course_language, $objetives, $target_audience, api_get_user_id(), $exemplary_content);
+            $request_id = CourseRequestManager::create_course_request(
+                $wanted_code,
+                $title,
+                $description,
+                $category_code,
+                $course_language,
+                $objetives,
+                $target_audience,
+                api_get_user_id(),
+                $exemplary_content
+            );
 
             if ($request_id) {
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
-                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
+                $message = (is_array(
+                    $course_request_info
+                ) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
                 $message = Display :: return_message($message, 'confirmation', false);
-                $message .=  '<div style="float: left; margin:0px; padding: 0px;">' .
-                    '<a class="btn" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>' .
+                $message .= '<div style="float: left; margin:0px; padding: 0px;">'.
+                    '<a class="btn" href="'.api_get_path(WEB_PATH).'user_portal.php">'.get_lang('Enter').'</a>'.
                     '</div>';
             } else {
                 $message = Display :: return_message(get_lang('CourseRequestCreationFailed'), 'error', false);

@@ -5,11 +5,11 @@
  * This code is inherited from admin/user_import.php
  * @package chamilo.reporting
  * Created on 26 julio 2008  by Julio Montoya gugli100@gmail.com
-*/
+ */
 /**
  * Main script
  */
-$language_file = array ('admin', 'registration', 'index', 'trad4all', 'tracking');
+$language_file = array('admin', 'registration', 'index', 'trad4all', 'tracking');
 
 $cidReset = true;
 require '../inc/global.inc.php';
@@ -17,19 +17,17 @@ require_once 'myspace.lib.php';
 
 $this_section = SECTION_PLATFORM_ADMIN; // TODO: Platform admin section?
 
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 $tool_name = get_lang('ImportUserListXMLCSV');
 api_block_anonymous_users();
 
-$interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('MySpace'));
+$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('MySpace'));
 $id_session = '';
 if (isset($_GET['id_session']) && $_GET['id_session'] != '') {
- 	$id_session = intval($_GET['id_session']);
-	$interbreadcrumb[] = array ('url' => 'session.php', 'name' => get_lang('Sessions'));
-	$interbreadcrumb[] = array ('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
+    $id_session = intval($_GET['id_session']);
+    $interbreadcrumb[] = array('url' => 'session.php', 'name' => get_lang('Sessions'));
+    $interbreadcrumb[] = array('url' => 'course.php?id_session='.$id_session.'', 'name' => get_lang('Course'));
 }
 
 // Set this option to true to enforce strict purification for usenames.
@@ -44,87 +42,112 @@ if (!api_is_coach()) {
 
 // Checking whether the current coach is the admin coach.
 if (api_get_setting('add_users_by_coach') == 'true') {
-	if (!api_is_platform_admin()) {
-		if (isset($_REQUEST['id_session'])) {
-			$id_session = intval($_REQUEST['id_session']);
-			$sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
-			$rs = Database::query($sql);
-			if (Database::result($rs, 0, 0) != $_user['user_id']) {
-				api_not_allowed(true);
-			}
-		} else {
-			api_not_allowed(true);
-		}
-	}
+    if (!api_is_platform_admin()) {
+        if (isset($_REQUEST['id_session'])) {
+            $id_session = intval($_REQUEST['id_session']);
+            $sql = 'SELECT id_coach FROM '.Database :: get_main_table(TABLE_MAIN_SESSION).' WHERE id='.$id_session;
+            $rs = Database::query($sql);
+            if (Database::result($rs, 0, 0) != $_user['user_id']) {
+                api_not_allowed(true);
+            }
+        } else {
+            api_not_allowed(true);
+        }
+    }
 } else {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 set_time_limit(0);
 
 if ($_POST['formSent'] && $_FILES['import_file']['size'] !== 0) {
-	$file_type = $_POST['file_type'];
-	$id_session = intval($_POST['id_session']);
-	if ($file_type == 'csv') {
-		$users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
-	} else {
-		$users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);
-	}
-	if (count($users) > 0) {
-		$results = MySpace::validate_data($users);
-		$errors = $results['errors'];
-		$users = $results['users'];
+    $file_type = $_POST['file_type'];
+    $id_session = intval($_POST['id_session']);
+    if ($file_type == 'csv') {
+        $users = MySpace::parse_csv_data($_FILES['import_file']['tmp_name']);
+    } else {
+        $users = MySpace::parse_xml_data($_FILES['import_file']['tmp_name']);
+    }
+    if (count($users) > 0) {
+        $results = MySpace::validate_data($users);
+        $errors = $results['errors'];
+        $users = $results['users'];
 
-		if (count($errors) == 0) {
-			if (!empty($id_session)) {
-				$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-				// Selecting all the courses from the session id requested.
-				$sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
-				$result = Database::query($sql);
-				$course_list = array();
-				while ($row = Database::fetch_array($result)) {
-					$course_list[] = $row['course_code'];
-				}
-				$errors = MySpace::get_user_creator($users, $course_list, $id_session);
-				$users = MySpace::check_all_usernames($users, $course_list, $id_session);
-				if (count($errors) == 0) {
-					MySpace::save_data($users, $course_list, $id_session);
-				}
-			} else {
-				header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoSessionId')));
-			}
-		}
-	} else {
-		header('Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(get_lang('NoUsersRead')));
-	}
+        if (count($errors) == 0) {
+            if (!empty($id_session)) {
+                $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                // Selecting all the courses from the session id requested.
+                $sql = "SELECT course_code FROM $tbl_session_rel_course WHERE id_session='$id_session'";
+                $result = Database::query($sql);
+                $course_list = array();
+                while ($row = Database::fetch_array($result)) {
+                    $course_list[] = $row['course_code'];
+                }
+                $errors = MySpace::get_user_creator($users, $course_list, $id_session);
+                $users = MySpace::check_all_usernames($users, $course_list, $id_session);
+                if (count($errors) == 0) {
+                    MySpace::save_data($users, $course_list, $id_session);
+                }
+            } else {
+                header(
+                    'Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(
+                        get_lang('NoSessionId')
+                    )
+                );
+            }
+        }
+    } else {
+        header(
+            'Location: course.php?id_session='.$id_session.'&action=error_message&message='.urlencode(
+                get_lang('NoUsersRead')
+            )
+        );
+    }
 }
 
 Display :: display_header($tool_name);
 
 if ($_FILES['import_file']['size'] == 0 && $_POST) {
-	Display::display_error_message(get_lang('ThisFieldIsRequired'));
+    Display::display_error_message(get_lang('ThisFieldIsRequired'));
 }
 
 if (count($errors) != 0) {
-	$error_message = '<ul>';
-	foreach ($errors as $index => $error_user) {
-		$error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';
-		$error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
-		$error_message .= '</li>';
-	}
-	$error_message .= '</ul>';
-	Display :: display_error_message($error_message, false);
+    $error_message = '<ul>';
+    foreach ($errors as $index => $error_user) {
+        $error_message .= '<li><strong>'.$error_user['error'].'</strong>: ';
+        $error_message .= api_get_person_name($error_user['FirstName'], $error_user['LastName']);
+        $error_message .= '</li>';
+    }
+    $error_message .= '</ul>';
+    Display :: display_error_message($error_message, false);
 }
 
 $form = new FormValidator('user_import');
 $form->addElement('hidden', 'formSent');
-$form->addElement('hidden', 'id_session',$id_session);
+$form->addElement('hidden', 'id_session', $id_session);
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $form->addRule('import_file', get_lang('ThisFieldIsRequired'), 'required');
-$allowed_file_types = array ('xml', 'csv');
-$form->addRule('import_file', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
-$form->addElement('radio', 'file_type', get_lang('FileType'), 'XML (<a href="../admin/example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
-$form->addElement('radio', 'file_type', null, 'CSV (<a href="../admin/example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
+$allowed_file_types = array('xml', 'csv');
+$form->addRule(
+    'import_file',
+    get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')',
+    'filetype',
+    $allowed_file_types
+);
+$form->addElement(
+    'radio',
+    'file_type',
+    get_lang('FileType'),
+    'XML (<a href="../admin/example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
+    'xml'
+);
+$form->addElement(
+    'radio',
+    'file_type',
+    null,
+    'CSV (<a href="../admin/example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+    'csv'
+);
 $form->addElement('radio', 'sendMail', get_lang('SendMailToUsers'), get_lang('Yes'), 1);
 $form->addElement('radio', 'sendMail', null, get_lang('No'), 0);
 $form->addElement('submit', 'submit', get_lang('Ok'));

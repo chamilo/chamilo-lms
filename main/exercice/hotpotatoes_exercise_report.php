@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *	Exercise list: This script shows the list of exercises for administrators and students.
- *	@package chamilo.exercise
- *	@author hubert.borderiou
+ *    Exercise list: This script shows the list of exercises for administrators and students.
+ * @package chamilo.exercise
+ * @author hubert.borderiou
  *
  */
 /**
@@ -30,28 +30,26 @@ require_once 'exercise.class.php';
 require_once 'exercise.lib.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once 'hotpotatoes.lib.php';
 
 // need functions of statsutils lib to display previous exercices scores
-require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 
 /*	Constants and variables */
-$is_allowedToEdit           = api_is_allowed_to_edit(null, true) || api_is_drh();
-$is_tutor                   = api_is_allowed_to_edit(true);
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
+$is_tutor = api_is_allowed_to_edit(true);
 
-$TBL_QUESTIONS              = Database :: get_course_table(TABLE_QUIZ_QUESTION);
-$TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-$TBL_TRACK_HOTPOTATOES_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$TBL_LP_ITEM_VIEW           = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+$TBL_QUESTIONS = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+$TBL_TRACK_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+$TBL_TRACK_HOTPOTATOES_EXERCICES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+$TBL_LP_ITEM_VIEW = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
-$course_id            = api_get_course_int_id();
-$hotpotatoes_path     = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
-$filter_user          = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
+$course_id = api_get_course_int_id();
+$hotpotatoes_path = isset($_REQUEST['path']) ? $_REQUEST['path'] : null;
+$filter_user = isset($_REQUEST['filter_by_user']) ? intval($_REQUEST['filter_by_user']) : null;
 
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
 
@@ -61,14 +59,12 @@ if (empty($hotpotatoes_path)) {
 }
 
 if (!$is_allowedToEdit) {
-   // api_not_allowed();
+    // api_not_allowed();
 }
 
 if (!empty($_REQUEST['path'])) {
     $parameters['path'] = Security::remove_XSS($_REQUEST['path']);
 }
-
-
 
 
 if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
@@ -88,9 +84,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 //                break;
 //            case 'csv' :
 //            default :
-                $export = new HotpotatoesExerciseResult();
-                $export->exportCompleteReportCSV($documentPath, $hotpotatoes_path);
-                exit;
+        $export = new HotpotatoesExerciseResult();
+        $export->exportCompleteReportCSV($documentPath, $hotpotatoes_path);
+        exit;
 //                break;
 //        }
     } else {
@@ -215,11 +211,23 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
-        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS($hotpotatoes_path).' ">'.Display::return_icon('save.png',   get_lang('Export'),'',ICON_SIZE_MEDIUM).'</a>';
+        $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon(
+            'back.png',
+            get_lang('GoBackToQuestionList'),
+            '',
+            ICON_SIZE_MEDIUM
+        ).'</a>';
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&path='.Security::remove_XSS(
+            $hotpotatoes_path
+        ).' ">'.Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 } else {
-    $actions .= '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+    $actions .= '<a href="exercice.php">'.Display :: return_icon(
+        'back.png',
+        get_lang('GoBackToQuestionList'),
+        '',
+        ICON_SIZE_MEDIUM
+    ).'</a>';
 }
 
 //Deleting an attempt
@@ -237,13 +245,13 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+    $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
     $objExerciseTmp = new Exercise();
     if ($objExerciseTmp->read($exercise_id)) {
         $interbreadcrumb[] = array("url" => "admin.php?exerciseId=".$exercise_id, "name" => $objExerciseTmp->name);
     }
 } else {
-    $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook","name" => get_lang('Exercices'));
+    $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
     $objExerciseTmp = new Exercise();
     if ($objExerciseTmp->read($exercise_id)) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
@@ -252,9 +260,9 @@ if ($is_allowedToEdit || $is_tutor) {
 
 Display :: display_header($nameTools);
 
-$actions = Display::div($actions, array('class'=> 'actions'));
+$actions = Display::div($actions, array('class' => 'actions'));
 
-$extra =  '<script type="text/javascript">
+$extra = '<script type="text/javascript">
     $(document).ready(function() {
 
         $( "#dialog:ui-dialog" ).dialog( "destroy" );
@@ -289,19 +297,29 @@ $extra =  '<script type="text/javascript">
 
 $extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
 $form = new FormValidator('report', 'post', null, null, array('class' => 'form-vertical'));
-$form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', array('id' => 'export_format_csv_label'));
+$form->addElement(
+    'radio',
+    'export_format',
+    null,
+    get_lang('ExportAsCSV'),
+    'csv',
+    array('id' => 'export_format_csv_label')
+);
 //$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
 //$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
 $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';
 
-if ($is_allowedToEdit)
+if ($is_allowedToEdit) {
     echo $extra;
+}
 
 echo $actions;
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_hotpotatoes_exercise_results&path='.$hotpotatoes_path.'&filter_by_user='.$filter_user;
+$url = api_get_path(
+    WEB_AJAX_PATH
+).'model.ajax.php?a=get_hotpotatoes_exercise_results&path='.$hotpotatoes_path.'&filter_by_user='.$filter_user;
 
 //$activeurl = '?sidx=session_active';
 $action_links = '';
@@ -309,7 +327,7 @@ $action_links = '';
 //Generating group list
 
 $group_list = GroupManager::get_group_list();
-$group_parameters = array('group_all:'.get_lang('All'),'group_none:'.get_lang('None'));
+$group_parameters = array('group_all:'.get_lang('All'), 'group_none:'.get_lang('None'));
 
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];
@@ -320,27 +338,48 @@ if (!empty($group_parameters)) {
 
 if ($is_allowedToEdit || $is_tutor) {
 
-	//The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('FirstName'), get_lang('LastName'), get_lang('LoginName'),
-                        get_lang('Group'), get_lang('StartDate'),  get_lang('Score'),  get_lang('Actions'));
+    //The order is important you need to check the the $column variable in the model.ajax.php file
+    $columns = array(
+        get_lang('FirstName'),
+        get_lang('LastName'),
+        get_lang('LoginName'),
+        get_lang('Group'),
+        get_lang('StartDate'),
+        get_lang('Score'),
+        get_lang('Actions')
+    );
 
-  //Column config
-  // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
-	$column_model   = array(
-                        array('name'=>'firstname',      'index'=>'firstname',		'width'=>'50',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'lastname',		    'index'=>'lastname',		'width'=>'50',   'align'=>'left', 'formatter'=>'action_formatter', 'search' => 'false'),
-                        array('name'=>'login',          'hidden'=>'true',       'index'=>'username',        'width'=>'40',   'align'=>'left', 'search' => 'false'),
-                        array('name'=>'group_name',		  'index'=>'group_id',    'width'=>'40',   'align'=>'left', 'search' => 'false'),
-            						array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
-            						array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
-            						array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
-                       );
+    //Column config
+    // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
+    $column_model = array(
+        array('name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array(
+            'name' => 'lastname',
+            'index' => 'lastname',
+            'width' => '50',
+            'align' => 'left',
+            'formatter' => 'action_formatter',
+            'search' => 'false'
+        ),
+        array(
+            'name' => 'login',
+            'hidden' => 'true',
+            'index' => 'username',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'false'
+        ),
+        array('name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
+    );
 
     $action_links = '
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"),":::"), ENT_QUOTES).'";
+        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"), ":::"), ENT_QUOTES).'";
         var tabLoginx = loginx.split(/:::/);
         // tabLoginx[0] is before and tabLoginx[1] is after :::
         // may be empty string but is defined
@@ -348,15 +387,15 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 } else {
     //The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns        = array(get_lang('StartDate'),  get_lang('Score'),  get_lang('Actions'));
+    $columns = array(get_lang('StartDate'), get_lang('Score'), get_lang('Actions'));
 
-  //Column config
-  // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
-	$column_model   = array(
-                        array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
-            			array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
-            			array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
-                       );
+    //Column config
+    // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
+    $column_model = array(
+        array('name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'left', 'search' => 'false'),
+        array('name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false')
+    );
 }
 
 //Autowidth
@@ -370,79 +409,82 @@ $extra_params['height'] = 'auto';
 ?>
 <script>
 
-function setSearchSelect(columnName) {
-    $("#results").jqGrid('setColProp', columnName,
-    {
-       searchoptions:{
-            dataInit:function(el){
-                $("option[value='1']",el).attr("selected", "selected");
-                setTimeout(function(){
-                    $(el).trigger('change');
-                },1000);
-            }
-        }
-    });
-}
-
-function exportExcel() {
-    var mya=new Array();
-    mya=$("#results").getDataIDs();  // Get All IDs
-    var data=$("#results").getRowData(mya[0]);     // Get First row to get the labels
-    var colNames=new Array();
-    var ii=0;
-    for (var i in data){colNames[ii++]=i;}    // capture col names
-    var html="";
-
-    for(i=0;i<mya.length;i++) {
-        data=$("#results").getRowData(mya[i]); // get each row
-        for(j=0;j<colNames.length;j++) {
-            html=html+data[colNames[j]]+","; // output each column as tab delimited
-        }
-        html=html+"\n";  // output each row with end of line
+    function setSearchSelect(columnName) {
+        $("#results").jqGrid('setColProp', columnName,
+                {
+                    searchoptions:{
+                        dataInit:function (el) {
+                            $("option[value='1']", el).attr("selected", "selected");
+                            setTimeout(function () {
+                                $(el).trigger('change');
+                            }, 1000);
+                        }
+                    }
+                });
     }
-    html = html+"\n";  // end of line at the end
 
-    var form = $("#export_report_form");
+    function exportExcel() {
+        var mya = new Array();
+        mya = $("#results").getDataIDs();  // Get All IDs
+        var data = $("#results").getRowData(mya[0]);     // Get First row to get the labels
+        var colNames = new Array();
+        var ii = 0;
+        for (var i in data) {
+            colNames[ii++] = i;
+        }    // capture col names
+        var html = "";
 
-    $("#csvBuffer").attr('value', html);
-    form.target='_blank';
-    form.submit();
-}
+        for (i = 0; i < mya.length; i++) {
+            data = $("#results").getRowData(mya[i]); // get each row
+            for (j = 0; j < colNames.length; j++) {
+                html = html + data[colNames[j]] + ","; // output each column as tab delimited
+            }
+            html = html + "\n";  // output each row with end of line
+        }
+        html = html + "\n";  // end of line at the end
 
-$(function() {
+        var form = $("#export_report_form");
+
+        $("#csvBuffer").attr('value', html);
+        form.target = '_blank';
+        form.submit();
+    }
+
+    $(function () {
     <?php
-    echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-    if ($is_allowedToEdit || $is_tutor) { ?>
+    if ($is_allowedToEdit || $is_tutor) {
+        ?>
 
         //setSearchSelect("status");
         //
         //view:true, del:false, add:false, edit:false, excel:true}
-        $("#results").jqGrid('navGrid','#results_pager', {view:true, edit:false, add:false, del:false, excel:false},
-            {height:280, reloadAfterSubmit:false}, // view options
-            {height:280, reloadAfterSubmit:false}, // edit options
-            {height:280, reloadAfterSubmit:false}, // add options
-            {reloadAfterSubmit: false}, // del options
-            {width:500} // search options
+        $("#results").jqGrid('navGrid', '#results_pager', {view:true, edit:false, add:false, del:false, excel:false},
+                {height:280, reloadAfterSubmit:false}, // view options
+                {height:280, reloadAfterSubmit:false}, // edit options
+                {height:280, reloadAfterSubmit:false}, // add options
+                {reloadAfterSubmit:false}, // del options
+                {width:500} // search options
         );
 
         //Adding search options
         var options = {
-            'stringResult': true,
-            'autosearch' : true,
+            'stringResult':true,
+            'autosearch':true,
             'searchOnEnter':false
         }
-        jQuery("#results").jqGrid('filterToolbar',options);
+        jQuery("#results").jqGrid('filterToolbar', options);
         var sgrid = $("#results")[0];
         sgrid.triggerToolbar();
 
-    <?php } ?>
-});
+        <?php } ?>
+    });
 </script>
 <form id="export_report_form" method="post" action="hotpotatoes_exercise_report.php">
-    <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
-    <input type="hidden" name="export_report" id="export_report" value="1" />
-    <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path ?>" />
+    <input type="hidden" name="csvBuffer" id="csvBuffer" value=""/>
+    <input type="hidden" name="export_report" id="export_report" value="1"/>
+    <input type="hidden" name="path" id="path" value="<?php echo $hotpotatoes_path ?>"/>
 </form>
 <?php
 

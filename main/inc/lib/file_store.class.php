@@ -12,17 +12,16 @@ class FileStore
     /**
      *
      * @param int $c_id
-     * @param string $sub_path 
-
-     * @return FileStore 
+     * @param string $sub_path
+     * @return FileStore
      */
-    static function course($c_id, $sub_path = '') 
-    { 
-        
+    static function course($c_id, $sub_path = '')
+    {
+
         $sys_path = api_get_path(SYS_COURSE_PATH);
         $course = api_get_course_info_by_id($c_id);
         $course_path = $course['path'];
-        $path = $sys_path . $course_path . $sub_path;
+        $path = $sys_path.$course_path.$sub_path;
         if (!is_dir($path)) {
             $mode = api_get_permissions_for_new_directories();
             $success = mkdir($path, $mode, true);
@@ -30,6 +29,7 @@ class FileStore
                 return false;
             }
         }
+
         return new self($path);
     }
 
@@ -49,7 +49,7 @@ class FileStore
 
     function accept($filename)
     {
-        return (bool) filter_extension($filename);
+        return (bool)FileManager::filter_extension($filename);
     }
 
     function add($path)
@@ -59,24 +59,29 @@ class FileStore
 
         $new_path = "$root/$id";
         $success = @move_uploaded_file($path, $new_path);
+
         return $success ? $id : false;
     }
-    
-    function remove($path){
-        
+
+    function remove($path)
+    {
+
         $root = $this->root();
         $full_path = "$root/$path";
-        if(is_file($full_path)){
+        if (is_file($full_path)) {
             $result = unlink($full_path);
+
             return $result;
         }
-        return  false;
+
+        return false;
     }
 
     function get($id)
     {
         $root = $this->root();
         $result = "$root/$id";
+
         return $result;
     }
 
@@ -89,6 +94,7 @@ class FileStore
             $id = uniqid('');
             $path = "$root/$id";
         }
+
         return $id;
     }
 

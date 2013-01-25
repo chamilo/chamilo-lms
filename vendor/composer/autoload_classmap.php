@@ -172,7 +172,7 @@ return array(
     'FSTools_File' => $baseDir . '/main/inc/lib/htmlpurifier/extras/FSTools/File.php',
     'Facebook' => $baseDir . '/main/auth/external_login/facebook-php-sdk/src/facebook.php',
     'FacebookApiException' => $baseDir . '/main/auth/external_login/facebook-php-sdk/src/base_facebook.php',
-    'FileManager' => $baseDir . '/main/inc/lib/fileManage.lib.php',
+    'FileManager' => $baseDir . '/main/inc/lib/fileManager.lib.php',
     'FileReader' => $baseDir . '/main/inc/lib/system/io/file_reader.class.php',
     'FileStore' => $baseDir . '/main/inc/lib/file_store.class.php',
     'FileWriter' => $baseDir . '/main/inc/lib/system/io/file_writer.class.php',

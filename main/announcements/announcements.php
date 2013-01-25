@@ -7,8 +7,8 @@
  * @author Julio Montoya <gugli100@gmail.com>, MORE code cleaning 2011
  *
  * @abstract The task of the internship was to integrate the 'send messages to specific users' with the
- * 			 Announcements tool and also add the resource linker here. The database also needed refactoring
- * 			 as there was no title field (the title was merged into the content field)
+ *              Announcements tool and also add the resource linker here. The database also needed refactoring
+ *              as there was no title field (the title was merged into the content field)
  * @package chamilo.announcements
  * @todo make AWACS out of the configuration settings
  * @todo this file is 1300+ lines without any functions -> needs to be split into
@@ -54,9 +54,6 @@ $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
 /* 	Libraries	 */
 
-$lib = api_get_path(LIBRARY_PATH); //avoid useless function calls
-require_once $lib.'fileUpload.lib.php';
-
 $course_id = api_get_course_int_id();
 
 /* 	Tracking	 */
@@ -74,7 +71,12 @@ if (!empty($_POST['To'])) {
     }
     $display_form = true;
 
-    $form_elements = array('emailTitle' => $safe_emailTitle, 'newContent' => $safe_newContent, 'id' => $_POST['id'], 'emailoption' => $_POST['email_ann']);
+    $form_elements = array(
+        'emailTitle' => $safe_emailTitle,
+        'newContent' => $safe_newContent,
+        'id' => $_POST['id'],
+        'emailoption' => $_POST['email_ann']
+    );
     $_SESSION['formelements'] = $form_elements;
 
     $form_elements = $_SESSION['formelements'];
@@ -148,7 +150,10 @@ $group_id = api_get_group_id();
 if (!empty($group_id)) {
     $group_properties = GroupManager :: get_group_properties($group_id);
     $interbreadcrumb[] = array("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array("url" => "../group/group_space.php?gidReq=".$group_id, "name" => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        "url" => "../group/group_space.php?gidReq=".$group_id,
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 }
 
 $announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
@@ -159,7 +164,7 @@ if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
     Display::display_header($nameTools, get_lang('Announcements'));
 }
 
-if (AnnouncementManager::user_can_edit_announcement()){
+if (AnnouncementManager::user_can_edit_announcement()) {
     /*
       Change visibility of announcement
      */
@@ -242,7 +247,11 @@ if (AnnouncementManager::user_can_edit_announcement()){
             $rs = Database::query($sql);
             $myrow = Database::fetch_array($rs);
             $last_id = $id;
-            $edit_attachment = AnnouncementManager::edit_announcement_attachment_file($last_id, $_FILES['user_upload'], $file_comment);
+            $edit_attachment = AnnouncementManager::edit_announcement_attachment_file(
+                $last_id,
+                $_FILES['user_upload'],
+                $file_comment
+            );
 
             if ($myrow) {
                 $announcement_to_modify = $myrow['id'];
@@ -304,8 +313,12 @@ if (AnnouncementManager::user_can_edit_announcement()){
             if ($thisAnnouncementOrderFound) {
                 $nextAnnouncementId = $announcementId;
                 $nextAnnouncementOrder = $announcementOrder;
-                Database::query("UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'  WHERE c_id = $course_id AND id =  '$thisAnnouncementId'");
-                Database::query("UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder' WHERE c_id = $course_id AND id =  '$nextAnnouncementId.'");
+                Database::query(
+                    "UPDATE $tbl_announcement SET display_order = '$nextAnnouncementOrder'  WHERE c_id = $course_id AND id =  '$thisAnnouncementId'"
+                );
+                Database::query(
+                    "UPDATE $tbl_announcement  SET display_order = '$thisAnnouncementOrder' WHERE c_id = $course_id AND id =  '$nextAnnouncementId.'"
+                );
                 break;
             }
             // STEP 1 : FIND THE ORDER OF THE ANNOUNCEMENT
@@ -336,54 +349,76 @@ if (AnnouncementManager::user_can_edit_announcement()){
     if ($submitAnnouncement && empty($emailTitle)) {
         $error_message = get_lang('TitleIsRequired');
         $content_to_modify = $newContent;
-    } else if ($submitAnnouncement) {
-        $selected_form = isset($_POST['selectedform']) ? $_POST['selectedform'] : null;
+    } else {
+        if ($submitAnnouncement) {
+            $selected_form = isset($_POST['selectedform']) ? $_POST['selectedform'] : null;
 
-        if (isset($id) && $id) {
-            // there is an Id => the announcement already exists => update mode
-            if ($ctok == $_POST['sec_token']) {
-                $file_comment = $_POST['file_comment'];
-                $file = $_FILES['user_upload'];
-                AnnouncementManager::edit_announcement($id, $emailTitle, $newContent, $selected_form, $file, $file_comment);
+            if (isset($id) && $id) {
+                // there is an Id => the announcement already exists => update mode
+                if ($ctok == $_POST['sec_token']) {
+                    $file_comment = $_POST['file_comment'];
+                    $file = $_FILES['user_upload'];
+                    AnnouncementManager::edit_announcement(
+                        $id,
+                        $emailTitle,
+                        $newContent,
+                        $selected_form,
+                        $file,
+                        $file_comment
+                    );
 
-                /* 		MAIL FUNCTION	 */
-                if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($id);
+                    /* 		MAIL FUNCTION	 */
+                    if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
+                        AnnouncementManager::send_email($id);
+                    }
+                    $message = get_lang('AnnouncementModified');
                 }
-                $message = get_lang('AnnouncementModified');
-            }
-        } else {
-            //insert mode
-            if ($ctok == $_POST['sec_token']) {
-                $file = $_FILES['user_upload'];
-                $file_comment = $_POST['file_comment'];
+            } else {
+                //insert mode
+                if ($ctok == $_POST['sec_token']) {
+                    $file = $_FILES['user_upload'];
+                    $file_comment = $_POST['file_comment'];
 
-                if (!empty($group_id)) {
-                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $selected_form, $file, $file_comment);
-                } else {
-                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $selected_form, $file, $file_comment);
-                }
-                //store_resources($_SESSION['source_type'],$insert_id);
-                $_SESSION['select_groupusers'] = "hide";
-                $message = get_lang('AnnouncementAdded');
+                    if (!empty($group_id)) {
+                        $insert_id = AnnouncementManager::add_group_announcement(
+                            $safe_emailTitle,
+                            $safe_newContent,
+                            array('GROUP:'.$group_id),
+                            $selected_form,
+                            $file,
+                            $file_comment
+                        );
+                    } else {
+                        $insert_id = AnnouncementManager::add_announcement(
+                            $safe_emailTitle,
+                            $safe_newContent,
+                            $selected_form,
+                            $file,
+                            $file_comment
+                        );
+                    }
+                    //store_resources($_SESSION['source_type'],$insert_id);
+                    $_SESSION['select_groupusers'] = "hide";
+                    $message = get_lang('AnnouncementAdded');
 
-                /* 		MAIL FUNCTION	 */
-                if (isset($_POST['email_ann']) && $_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($insert_id);
-                }
-            } // end condition token
-        } // isset
-        // UNSET VARIABLES
-        unset($form_elements);
-        $_SESSION['formelements'] = null;
+                    /* 		MAIL FUNCTION	 */
+                    if (isset($_POST['email_ann']) && $_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
+                        AnnouncementManager::send_email($insert_id);
+                    }
+                } // end condition token
+            } // isset
+            // UNSET VARIABLES
+            unset($form_elements);
+            $_SESSION['formelements'] = null;
 
-        $newContent = null;
-        $emailTitle = null;
+            $newContent = null;
+            $emailTitle = null;
 
-        unset($emailTitle);
-        unset($newContent);
-        unset($content_to_modify);
-        unset($title_to_modify);
+            unset($emailTitle);
+            unset($newContent);
+            unset($content_to_modify);
+            unset($title_to_modify);
+        }
     } // if $submit Announcement
 }
 
@@ -428,7 +463,8 @@ if (api_is_allowed_to_edit(false, true)) {
 
         if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
             if (api_get_group_id() == 0) {
-                $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".api_get_user_id()."'".
+                $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id(
+                )."' OR ( ip.to_user_id='".api_get_user_id()."'".
                     "OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
             } else {
                 $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."'
@@ -447,7 +483,7 @@ if (api_is_allowed_to_edit(false, true)) {
 
         // the user is member of several groups => display personal announcements AND his group announcements AND the general announcements
         if (is_array($group_memberships) && count($group_memberships) > 0) {
-           $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
+            $sql = "SELECT announcement.*, ip.visibility, ip.to_group_id, ip.insert_user_id
                 FROM $tbl_announcement announcement, $tbl_item_property ip
                 WHERE
                     announcement.c_id = $course_id AND
@@ -466,7 +502,8 @@ if (api_is_allowed_to_edit(false, true)) {
             if ($_user['user_id']) {
 
                 if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
+                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id(
+                    )."' OR ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
                 } else {
                     $cond_user_id = " AND ( ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
                 }
@@ -521,30 +558,59 @@ $show_actions = false;
 if (AnnouncementManager::user_can_edit_announcement()) {
     echo '<div class="actions">';
     if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify', 'view'))) {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq(
+        )."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+            'back.png',
+            get_lang('Back'),
+            '',
+            ICON_SIZE_MEDIUM
+        )."</a>";
     } else {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq(
+        )."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+            'new_announce.png',
+            get_lang('AddAnnouncement'),
+            '',
+            ICON_SIZE_MEDIUM
+        )."</a>";
     }
     $show_actions = true;
 } else {
     if (isset($_GET['action']) && in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq(
+        )."&origin=".(empty($_GET['origin']) ? '' : $_GET['origin'])."'>".Display::return_icon(
+            'back.png',
+            get_lang('Back'),
+            '',
+            ICON_SIZE_MEDIUM
+        )."</a>";
         echo '</div>';
     }
 }
 
 if (api_is_allowed_to_edit() && $announcement_number > 1) {
     if ($group_id == 0) {
-        if (!$show_actions)
+        if (!$show_actions) {
             echo '<div class="actions">';
-        if (!isset($_GET['action']) OR !in_array($_GET['action'], array('add', 'modify', 'view')))
-            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png', get_lang('AnnouncementDeleteAll'), '', ICON_SIZE_MEDIUM)."</a>";
+        }
+        if (!isset($_GET['action']) OR !in_array($_GET['action'], array('add', 'modify', 'view'))) {
+            echo "<a href=\"".api_get_self()."?".api_get_cidreq(
+            )."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang(
+                "ConfirmYourChoice"
+            )."')) return false;\">".Display::return_icon(
+                'delete_announce.png',
+                get_lang('AnnouncementDeleteAll'),
+                '',
+                ICON_SIZE_MEDIUM
+            )."</a>";
+        }
     }
 }
 
-if ($show_actions)
+if ($show_actions) {
     echo '</div>';
+}
 
 //	ANNOUNCEMENTS LIST
 
@@ -571,7 +637,8 @@ if ($display_form) {
     // DISPLAY ADD ANNOUNCEMENT COMMAND
     //echo '<form method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?publish_survey='.Security::remove_XSS($surveyid).'&id='.Security::remove_XSS($_GET['id']).'&db_name='.$db_name.'&cidReq='.Security::remove_XSS($_GET['cidReq']).'" style="margin:0px;">';
     $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
-    echo '<form class="form-horizontal" method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self().'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
+    echo '<form class="form-horizontal" method="post" name="f1" enctype = "multipart/form-data" action="'.api_get_self(
+    ).'?id='.$id.'&'.api_get_cidreq().'" style="margin:0px;">';
     if (empty($_GET['id'])) {
         $form_name = get_lang('AddAnnouncement');
     } else {
@@ -585,7 +652,12 @@ if ($display_form) {
     if (empty($group_id)) {
         echo '<div class="control-group">
                 <label class="control-label">'.
-        Display::return_icon('group.png', get_lang('ModifyRecipientList'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
+            Display::return_icon(
+                'group.png',
+                get_lang('ModifyRecipientList'),
+                array('align' => 'absmiddle'),
+                ICON_SIZE_SMALL
+            ).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
 					</label>
 					<div class="controls">';
         if (isset($_GET['id']) && is_array($to)) {
@@ -611,7 +683,11 @@ if ($display_form) {
             // setting the variables for the form elements: the title of the email
             $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
             // setting the variables for the form elements: the message of the email
-            $content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), $since);
+            $content_to_modify = sprintf(
+                get_lang('RemindInactiveLearnersMailContent'),
+                api_get_setting('siteName'),
+                $since
+            );
             // when we want to remind the users who have never been active then we have a different subject and content for the announcement
             if ($_GET['since'] == 'never') {
                 $title_to_modify = sprintf(get_lang('RemindInactiveLearnersMailSubject'), api_get_setting('siteName'));
@@ -624,14 +700,17 @@ if ($display_form) {
         echo '		</div>
 					</div>';
 
-        if (!isset($announcement_to_modify))
+        if (!isset($announcement_to_modify)) {
             $announcement_to_modify = '';
+        }
 
         ($email_ann == '1') ? $checked = 'checked' : $checked = '';
         echo '	<div class="control-group">
                     <div class="controls">
                         <label class="checkbox" for="email_ann">
-                            <input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked> '.get_lang('EmailOption').'</label>
+                            <input id="email_ann" class="checkbox" type="checkbox" value="1" name="email_ann" checked> '.get_lang(
+            'EmailOption'
+        ).'</label>
                     </div>
                 </div>';
     } else {
@@ -643,7 +722,10 @@ if ($display_form) {
         echo '<div class="control-group">
               <div class="controls">
               <input class="checkbox" type="checkbox" value="1" name="email_ann" '.$checked.'>
-              '.get_lang('EmailOption').': <span id="recipient_overview">'.Display::label(get_lang('MyGroup'), 'success').'</span>
+              '.get_lang('EmailOption').': <span id="recipient_overview">'.Display::label(
+            get_lang('MyGroup'),
+            'success'
+        ).'</span>
               <a href="#" onclick="toggle_sendto();">'.get_lang('ModifyRecipientList').'</a>';
         AnnouncementManager::show_to_form_group($group_id, $to);
         echo '</div></div>';
@@ -656,19 +738,24 @@ if ($display_form) {
 					<span class="form_required">*</span> '.get_lang('EmailTitle').'
 				</label>
 				<div class="controls">
-					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS($title_to_modify).'" class="span4">
+					<input type="text" id="emailTitle" name="emailTitle" value="'.Security::remove_XSS(
+        $title_to_modify
+    ).'" class="span4">
 				</div>
 			</div>';
 
     unset($title_to_modify);
     $title_to_modify = null;
 
-    if (!isset($announcement_to_modify))
+    if (!isset($announcement_to_modify)) {
         $announcement_to_modify = "";
-    if (!isset($content_to_modify))
+    }
+    if (!isset($content_to_modify)) {
         $content_to_modify = "";
-    if (!isset($title_to_modify))
+    }
+    if (!isset($title_to_modify)) {
         $title_to_modify = "";
+    }
 
     echo '<input type="hidden" name="id" value="'.$announcement_to_modify.'" />';
 
@@ -686,7 +773,10 @@ if ($display_form) {
 
     echo '<div class="row"><div class="formw">';
 
-    echo Display::display_normal_message(get_lang('Tags').' <br /><br />'.implode('<br />', AnnouncementManager::get_tags()), false);
+    echo Display::display_normal_message(
+        get_lang('Tags').' <br /><br />'.implode('<br />', AnnouncementManager::get_tags()),
+        false
+    );
 
     echo $oFCKeditor->CreateHtml();
     echo '</div></div>';
@@ -694,7 +784,9 @@ if ($display_form) {
     //File attachment
     echo '	<div class="control-group">
 				<div class="controls">
-				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>
+				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
+        'AddAnAttachment'
+    ).'</span></a>
 				    <br />
 					<table id="options" style="display: none;">
 					<tr>
@@ -719,16 +811,27 @@ if ($display_form) {
     if (empty($group_id)) {
         echo '<input type="hidden" name="submitAnnouncement" value="OK">';
         echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-        echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+        echo '<button class="btn save" type="button"  value="'.'  '.get_lang(
+            'Send'
+        ).'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang(
+            'ButtonPublishAnnouncement'
+        ).'</button><br /><br />';
     } else {
         echo '<input type="hidden" name="submitAnnouncement" value="OK">';
         echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-        echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+        echo '<button class="btn save" type="button"  value="'.'  '.get_lang(
+            'Send'
+        ).'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang(
+            'ButtonPublishAnnouncement'
+        ).'</button><br /><br />';
     }
     echo '</div></div>';
     echo '</form><br />';
 
-    if ((isset($_GET['action']) && isset($_GET['id']) && is_array($to)) || isset($_GET['remindallinactives']) || isset($_GET['remind_inactive'])) {
+    if ((isset($_GET['action']) && isset($_GET['id']) && is_array(
+        $to
+    )) || isset($_GET['remindallinactives']) || isset($_GET['remind_inactive'])
+    ) {
         echo '<script>toggle_sendto();</script>';
     }
 } // displayform
@@ -744,7 +847,10 @@ if ($display_announcement_list) {
 
     $group_memberships = GroupManager::get_group_ids($course_id, api_get_user_id());
 
-    if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+    if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting(
+        'allow_user_edit_announcement'
+    ) && !api_is_anonymous())
+    ) {
         // A.1. you are a course admin with a USER filter
         // => see only the messages of this specific user + the messages of the group (s)he is member of.
         if (!empty($_SESSION['user'])) {
@@ -827,7 +933,8 @@ if ($display_announcement_list) {
             if (AnnouncementManager::user_can_edit_announcement()) {
                 if (api_get_group_id() == 0) {
                     //No group
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR ( ip.to_user_id='".$_user['user_id']."'".
+                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id(
+                    )."' OR ( ip.to_user_id='".$_user['user_id']."'".
                         " OR ip.to_group_id IN (0, ".implode(", ", $group_memberships)."))) ";
                 } else {
                     $cond_user_id = " AND (
@@ -837,7 +944,10 @@ if ($display_announcement_list) {
                 }
             } else {
                 if (api_get_group_id() == 0) {
-                    $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(", ", $group_memberships).")) ";
+                    $cond_user_id = " AND (ip.to_user_id=$user_id OR ip.to_group_id IN (0, ".implode(
+                        ", ",
+                        $group_memberships
+                    ).")) ";
                 } else {
                     $cond_user_id = " AND (
                             (ip.to_user_id = $user_id AND ip.to_group_id = ".api_get_group_id().") OR
@@ -863,7 +973,8 @@ if ($display_announcement_list) {
         } else {
             if ($_user['user_id']) {
                 if ((api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
-                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id()."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
+                    $cond_user_id = " AND (ip.lastedit_user_id = '".api_get_user_id(
+                    )."' OR (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0')) ";
                 } else {
                     $cond_user_id = " AND (ip.to_user_id='".$_user['user_id']."' OR ip.to_group_id='0') ";
                 }
@@ -908,14 +1019,22 @@ if ($display_announcement_list) {
 
     // DISPLAY: NO ITEMS
 
-    if (!isset($_GET['action']) || !in_array($_GET['action'], array('add', 'modify', 'view')))
+    if (!isset($_GET['action']) || !in_array($_GET['action'], array('add', 'modify', 'view'))) {
         if ($num_rows == 0) {
-            if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
+            if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting(
+                'allow_user_edit_announcement'
+            ) && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')
+            ) {
                 echo '<div id="no-data-view">';
                 echo '<h2>'.get_lang('Announcements').'</h2>';
                 echo Display::return_icon('valves.png', '', array(), 64);
                 echo '<div class="controls">';
-                echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin']), array('class' => 'btn'));
+                echo Display::url(
+                    get_lang('AddAnnouncement'),
+                    api_get_self()."?".api_get_cidreq(
+                    )."&action=add&origin=".(empty($_GET['origin']) ? '' : $_GET['origin']),
+                    array('class' => 'btn')
+                );
                 echo '</div>';
                 echo '</div>';
             } else {
@@ -929,8 +1048,12 @@ if ($display_announcement_list) {
             $ths = Display::tag('th', get_lang('Title'));
             $ths .= Display::tag('th', get_lang('By'));
             $ths .= Display::tag('th', get_lang('LastUpdateDate'));
-            if (api_is_allowed_to_edit(false, true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))
-                OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+            if (api_is_allowed_to_edit(false, true) OR (api_is_course_coach() && api_is_element_in_the_session(
+                TOOL_ANNOUNCEMENT,
+                $myrow['id']
+            ))
+                OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+            ) {
                 $ths .= Display::tag('th', get_lang('Modify'));
             }
 
@@ -947,7 +1070,12 @@ if ($display_announcement_list) {
 
                     $title = $myrow['title'].$sent_to_icon;
 
-                    $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $myrow['id'], $session_id);
+                    $item_visibility = api_get_item_visibility(
+                        $_course,
+                        TOOL_ANNOUNCEMENT,
+                        $myrow['id'],
+                        $session_id
+                    );
                     $myrow['visibility'] = $item_visibility;
 
                     // the styles
@@ -973,16 +1101,33 @@ if ($display_announcement_list) {
 
                     $user_info = api_get_user_info($myrow['insert_user_id']);
                     $username = sprintf(get_lang("LoginX"), $user_info['username']);
-                    $username_span = Display::tag('span', api_get_person_name($user_info['firstName'], $user_info['lastName']), array('title' => $username));
+                    $username_span = Display::tag(
+                        'span',
+                        api_get_person_name($user_info['firstName'], $user_info['lastName']),
+                        array('title' => $username)
+                    );
                     echo Display::tag('td', $username_span);
-                    echo Display::tag('td', api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG));
+                    echo Display::tag(
+                        'td',
+                        api_convert_and_format_date($myrow['insert_date'], DATE_TIME_FORMAT_LONG)
+                    );
 
                     // we can edit if : we are the teacher OR the element belongs to the session we are coaching OR the option to allow users to edit is on
                     $modify_icons = '';
-                    if (api_is_allowed_to_edit(false, true) OR (api_is_course_coach() && api_is_element_in_the_session(TOOL_ANNOUNCEMENT, $myrow['id']))
-                        OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) {
+                    if (api_is_allowed_to_edit(false, true) OR (api_is_course_coach() && api_is_element_in_the_session(
+                        TOOL_ANNOUNCEMENT,
+                        $myrow['id']
+                    ))
+                        OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
+                    ) {
 
-                        $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=modify&id=".$myrow['id']."\">".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>";
+                        $modify_icons = "<a href=\"".api_get_self()."?".api_get_cidreq(
+                        )."&action=modify&id=".$myrow['id']."\">".Display::return_icon(
+                            'edit.png',
+                            get_lang('Edit'),
+                            '',
+                            ICON_SIZE_SMALL
+                        )."</a>";
                         if ($myrow['visibility'] == 1) {
                             $image_visibility = "visible";
                             $alt_visibility = get_lang('Hide');
@@ -990,22 +1135,41 @@ if ($display_announcement_list) {
                             $image_visibility = "invisible";
                             $alt_visibility = get_lang('Visible');
                         }
-                        $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : '')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
-                            Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
+                        $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
+                        )."&origin=".(!empty($_GET['origin']) ? Security::remove_XSS(
+                            $_GET['origin']
+                        ) : '')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+                            Display::return_icon(
+                                $image_visibility.'.png',
+                                $alt_visibility,
+                                '',
+                                ICON_SIZE_SMALL
+                            )."</a>";
 
                         // DISPLAY MOVE UP COMMAND only if it is not the top announcement
                         if ($iterator != 1) {
-                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&up=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('up.gif', get_lang('Up'))."</a>";
+                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
+                            )."&up=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon(
+                                'up.gif',
+                                get_lang('Up')
+                            )."</a>";
                         } else {
                             $modify_icons .= Display::return_icon('up_na.gif', get_lang('Up'));
                         }
                         if ($iterator < $bottomAnnouncement) {
-                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon('down.gif', get_lang('Down'))."</a>";
+                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
+                            )."&down=".$myrow["id"]."&sec_token=".$stok."\">".Display::return_icon(
+                                'down.gif',
+                                get_lang('Down')
+                            )."</a>";
                         } else {
                             $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
                         }
                         if (api_is_allowed_to_edit(false, true)) {
-                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
+                            $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq(
+                            )."&action=delete&id=".$myrow['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(
+                                api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)
+                            )."')) return false;\">".
                                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                                 "</a>";
                         }
@@ -1018,6 +1182,7 @@ if ($display_announcement_list) {
             } // end while
             echo "</table>";
         }
+    }
 } // end: if ($displayAnnoucementList)
 
 if (isset($_GET['action']) && $_GET['action'] == 'view') {

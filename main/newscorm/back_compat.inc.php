@@ -11,5 +11,3 @@
  * Code
  */
 require_once '../inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php'; // replace_dangerous_char()

@@ -55,10 +55,6 @@ api_protect_course_script(true);
 // Including necessary files
 require_once 'work.lib.php';
 
-include_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-
 $course_id      = api_get_course_int_id();
 $course_info    = api_get_course_info();
 $user_id 	    = api_get_user_id();

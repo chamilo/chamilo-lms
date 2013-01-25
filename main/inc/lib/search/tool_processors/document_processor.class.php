@@ -77,12 +77,12 @@ class document_processor extends search_processor {
 
             $doc_id = Database::escape_string($doc_id);
             $sql = "SELECT * FROM       $doc_table
-                    WHERE      $doc_table.id = $doc_id AND c_id = $course_id 
+                    WHERE      $doc_table.id = $doc_id AND c_id = $course_id
                     LIMIT 1";
             $dk_result = Database::query($sql);
 
             $sql = "SELECT insert_user_id FROM       $item_property_table
-                    WHERE   ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id 
+                    WHERE   ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id
                     LIMIT 1";
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
@@ -90,7 +90,6 @@ class document_processor extends search_processor {
                 $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
                 $url = sprintf($url, $course_path, $row['path']);
                 // Get the image path
-                include_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
                 $icon = FileManager::choose_image(basename($row['path']));
                 $thumbnail = api_get_path(WEB_CODE_PATH) . 'img/' . $icon;
                 $image = $thumbnail;

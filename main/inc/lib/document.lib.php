@@ -2821,8 +2821,7 @@ class DocumentManager {
     * @return	string	The HTML list
     */
     public static function write_resources_tree($course_info, $session_id, $resources_sorted, $num = 0, $lp_id = false, $target = '', $add_move_button = false, $overwrite_url = null) {
-    	require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
-
+    	
     	$img_path 		= api_get_path(WEB_IMG_PATH);
     	$img_sys_path 	= api_get_path(SYS_CODE_PATH).'img/';
     	$web_code_path 	= api_get_path(WEB_CODE_PATH);
@@ -3230,6 +3229,6 @@ class DocumentManager {
         return $system_folders;
     }
 
-    
+
 }
 //end class DocumentManager

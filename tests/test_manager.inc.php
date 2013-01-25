@@ -68,7 +68,6 @@ require_once $maindir.'course_info/download.lib.php';
 
 /**Files inside '/../main/lib/' */
 require_once $libdir.'urlmanager.lib.php';
-require_once $libdir.'fileDisplay.lib.php';
 require_once $libdir.'groupmanager.lib.php';
 require_once $libdir.'usermanager.lib.php';
 require_once $libdir.'social.lib.php';

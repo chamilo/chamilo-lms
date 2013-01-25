@@ -39,11 +39,6 @@ $this_section = SECTION_COURSES;
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
 
-/* Libraries */
-require_once $lib_path . 'fileUpload.lib.php';
-require_once $lib_path . 'fileDisplay.lib.php';
-require_once $lib_path . 'fileManage.lib.php';
-
 api_protect_course_script(true);
 
 //erase temp nanogons' audio, image edit

@@ -26,7 +26,6 @@ $nameTools = get_lang('ModifInfo');
 
 /*	Libraries */
 require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 api_protect_course_script(true);
 api_block_anonymous_users();

@@ -10,9 +10,7 @@ require 'global.inc.php';
 
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 
 //if(!$is_in_admin){
 if (!api_is_platform_admin()){

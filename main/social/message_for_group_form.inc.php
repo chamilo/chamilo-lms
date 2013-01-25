@@ -17,7 +17,6 @@ if (api_get_setting('allow_social_tool') !='true') {
 }
 
 require_once api_get_path(LIBRARY_PATH).'fckeditor/fckeditor.php';
-require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
 
 $tok = Security::get_token();
 
@@ -43,24 +42,24 @@ $to_group = '';
 $subject = '';
 $message = '';
 if (!empty($group_id) && $allowed_action) {
-	$group_info = GroupPortalManager::get_group_data($group_id);	
+	$group_info = GroupPortalManager::get_group_data($group_id);
 	$is_member = GroupPortalManager::is_group_member($group_id);
-	
+
     if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
-        api_not_allowed(true);        
+        api_not_allowed(true);
     }
 
 	$to_group   = $group_info['name'];
 	if (!empty($message_id)) {
-		$message_info = MessageManager::get_message_by_id($message_id);		
-		if ($allowed_action == 'reply_message_group') {				
+		$message_info = MessageManager::get_message_by_id($message_id);
+		if ($allowed_action == 'reply_message_group') {
 			$subject  = get_lang('Reply').': '.api_xml_http_response_encode($message_info['title']);
 			//$message  = api_xml_http_response_encode($message_info['content']);
 		} else {
 			$subject  = api_xml_http_response_encode($message_info['title']);
 			$message  = api_xml_http_response_encode($message_info['content']);
-		}	
-	} 	
+		}
+	}
 }
 
 $page_item = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1;
@@ -84,27 +83,27 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 		if (api_get_setting('allow_message_tool')=='true') {
             //normal message
 	   		$user_info = api_get_user_info($userfriend_id);
-	  		//echo api_xml_http_response_encode(get_lang('To')).":&nbsp;&nbsp;".api_xml_http_response_encode($to_group); 
+	  		//echo api_xml_http_response_encode(get_lang('To')).":&nbsp;&nbsp;".api_xml_http_response_encode($to_group);
 	  		$height = 180;
 	  		if ($allowed_action == 'add_message_group') {
 	  		    $height = 140;
 	  		    echo '<span style="color:red">*</span> '.api_xml_http_response_encode(get_lang('Title')).' :<br />';
-	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br /><br />';		 	 
+	  		    echo '<input id="txt_subject_id" name="title" type="text" style="width:450px;" value="'.$subject.'"><br /><br />';
 	  		}
-	  		//echo api_xml_http_response_encode(get_lang('Description')).' :<br />';		   		
-	   		
+	  		//echo api_xml_http_response_encode(get_lang('Description')).' :<br />';
+
 			$oFCKeditor = new FCKeditor('content') ;
 			$oFCKeditor->ToolbarSet = 'messages';
 			$oFCKeditor->Width		= '95%';
 			$oFCKeditor->Height		= $height;
 			$oFCKeditor->Value		= $message;
-								
-			$return =	$oFCKeditor->CreateHtml();	
+
+			$return =	$oFCKeditor->CreateHtml();
 			echo $return;
 			if ($allowed_action == 'add_message_group') {
-			    echo '<div><span style="color:red"> * </span>'.get_lang('FieldRequired').'</div>';    
+			    echo '<div><span style="color:red"> * </span>'.get_lang('FieldRequired').'</div>';
 			}
-	   		?>	   				   		
+	   		?>
 	   		<br /><br />
 	   		<?php echo api_xml_http_response_encode(get_lang('AttachmentFiles')); ?> :<br />
 			<span id="filepaths"><div id="filepath_1"><input type="file" name="attach_1" size="20" /></div></span>
@@ -112,15 +111,15 @@ $page_topic  = !empty($_GET['topics_page_nr'])?intval($_GET['topics_page_nr']):1
 				<a href="javascript://" onclick="return add_image_form()">
 			    <?php echo get_lang('AddOneMoreFile') ?></a>
 			</div>
-			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)		   				   				   		
+			(<?php echo api_xml_http_response_encode(sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize')))) ?>)
 	   		<br />
 	   		<br />
-	   		
+
 	   		<?php if ($allowed_action == 'add_message_group') { ?>
 	   			<button class="btn save" onclick="if(validate_text_empty(this.form.title.value,'<?php echo get_lang('YouShouldWriteASubject')?>')){return false;}" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
 	   		<?php } else { ?>
 	   			<button class="btn save" type="submit" value="<?php echo api_xml_http_response_encode(get_lang('SendMessage')); ?>"><?php echo api_xml_http_response_encode(get_lang('SendMessage')) ?></button>
-	   		<?php } ?>	
+	   		<?php } ?>
 	<?php } ?>
 	</dl>
 </td>

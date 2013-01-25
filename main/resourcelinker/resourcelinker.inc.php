@@ -17,12 +17,6 @@ use \ChamiloSession as Session;
  * INIT SECTION
  */
 
-// name of the language file that needs to be included
-//$language_file = "resourcelinker";// TODO: Repeated deleting and moving the rest of this lang file to trad4all
-
-//include(api_get_path(SYS_CODE_PATH).'lang/english/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
-//include(api_get_path(SYS_CODE_PATH).'lang/'.$_course['language'].'/resourcelinker.inc.php'); // TODO: Repeated deleting and moving the rest of this lang file to trad4all
-include_once(api_get_path(LIBRARY_PATH).'fileDisplay.lib.php');
 include(api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php');
 
 /**
@@ -246,7 +240,7 @@ function display_addedresource_link($type, $id, $style='')
 	{
 		$styling = ' class="'.$style.'"';
 	}
-    
+
     $course_id = api_get_course_int_id();
 
 	switch ($type)

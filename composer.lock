@@ -261,12 +261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common",
-                "reference": "f44d98d5fdd102959e2bf71b36392dbacf0e568d"
+                "reference": "db84fc111652774f22b72a916aef40ce3f584e45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/common/archive/f44d98d5fdd102959e2bf71b36392dbacf0e568d.zip",
-                "reference": "f44d98d5fdd102959e2bf71b36392dbacf0e568d",
+                "url": "https://github.com/doctrine/common/archive/db84fc111652774f22b72a916aef40ce3f584e45.zip",
+                "reference": "db84fc111652774f22b72a916aef40ce3f584e45",
                 "shasum": ""
             },
             "require": {
@@ -277,7 +277,7 @@
                 "doctrine/lexer": "1.*",
                 "doctrine/annotations": "1.*"
             },
-            "time": "2013-01-20 19:00:57",
+            "time": "2013-01-25 05:59:24",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -335,12 +335,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal",
-                "reference": "f444b115d162e50aeeabaaef1edd0b65b61a7438"
+                "reference": "19269218ee387bd96b4fc8f31b1f492f298c5917"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/dbal/archive/f444b115d162e50aeeabaaef1edd0b65b61a7438.zip",
-                "reference": "f444b115d162e50aeeabaaef1edd0b65b61a7438",
+                "url": "https://github.com/doctrine/dbal/archive/19269218ee387bd96b4fc8f31b1f492f298c5917.zip",
+                "reference": "19269218ee387bd96b4fc8f31b1f492f298c5917",
                 "shasum": ""
             },
             "require": {
@@ -353,7 +353,7 @@
             "suggest": {
                 "symfony/console": "For helpful console commands such as SQL execution and import of files."
             },
-            "time": "2013-01-23 23:16:30",
+            "time": "2013-01-25 06:00:32",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -643,12 +643,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "baa42fda5607978d70040b9f38b6b3a13823c903"
+                "reference": "93349ad3ab200c7aa69237355c4ee811d359d160"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/baa42fda5607978d70040b9f38b6b3a13823c903.zip",
-                "reference": "baa42fda5607978d70040b9f38b6b3a13823c903",
+                "url": "https://github.com/l3pp4rd/DoctrineExtensions/archive/93349ad3ab200c7aa69237355c4ee811d359d160.zip",
+                "reference": "93349ad3ab200c7aa69237355c4ee811d359d160",
                 "shasum": ""
             },
             "require": {
@@ -668,7 +668,7 @@
                 "doctrine/mongodb": ">=1.0.0",
                 "doctrine/mongodb-odm": ">=1.0.0-BETA7"
             },
-            "time": "2013-01-18 18:21:44",
+            "time": "2013-01-24 18:57:40",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -968,12 +968,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/fabpot/Silex.git",
-                "reference": "f7a8956f96e991f86a5fc4811876bef76e3a4e25"
+                "reference": "a23c221e609a17dfc2923066e1680149b7678cf9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/fabpot/Silex/archive/f7a8956f96e991f86a5fc4811876bef76e3a4e25.zip",
-                "reference": "f7a8956f96e991f86a5fc4811876bef76e3a4e25",
+                "url": "https://github.com/fabpot/Silex/archive/a23c221e609a17dfc2923066e1680149b7678cf9.zip",
+                "reference": "a23c221e609a17dfc2923066e1680149b7678cf9",
                 "shasum": ""
             },
             "require": {
@@ -1009,7 +1009,7 @@
                 "symfony/css-selector": ">=2.1,<2.3-dev",
                 "symfony/dom-crawler": ">=2.1,<2.3-dev"
             },
-            "time": "2013-01-24 12:18:41",
+            "time": "2013-01-25 06:59:19",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1145,18 +1145,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "v2.2.0-BETA2"
+                "reference": "fdb2d9320106926266a0f7a5a97aab7213e11ad6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/archive/v2.2.0-BETA2.zip",
-                "reference": "v2.2.0-BETA2",
+                "url": "https://github.com/symfony/Console/archive/fdb2d9320106926266a0f7a5a97aab7213e11ad6.zip",
+                "reference": "fdb2d9320106926266a0f7a5a97aab7213e11ad6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2013-01-18 08:14:58",
+            "time": "2013-01-24 15:55:08",
             "type": "library",
             "extra": {
                 "branch-alias": {

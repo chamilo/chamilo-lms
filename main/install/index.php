@@ -27,6 +27,8 @@ define('MAX_FORM_FIELD_LENGTH', 80);
 
 require_once '../inc/global.inc.php';
 
+require_once __DIR__.'../../../vendor/autoload.php';
+
 require_once 'install.lib.php';
 require_once 'i_database.class.php';
 
@@ -129,7 +131,6 @@ if (!empty($_POST['old_version'])) {
 }
 
 require_once __DIR__.'/version.php';
-
 
 // A protection measure for already installed systems.
 

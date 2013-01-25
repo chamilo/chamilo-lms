@@ -2,16 +2,16 @@
 
 /**
  * Chamilo session.
- * 
+ *
  * Usage:
- * 
- * 
+ *
+ *
  *      use ChamiloSession as Session;
- * 
+ *
  *      Session::read('name');
- * 
+ *
  * Or
- * 
+ *
  *      Chamilo::session()->...
  *      session()->...
  *
@@ -25,7 +25,7 @@ class ChamiloSession extends System\Session
 
     /**
      *
-     * @return ChamiloSession 
+     * @return ChamiloSession
      */
     static function instance()
     {
@@ -33,13 +33,15 @@ class ChamiloSession extends System\Session
         if (empty($result)) {
             $result = new ChamiloSession();
         }
+
         return $result;
     }
 
     static function session_lifetime()
     {
         global $_configuration;
-        return $_configuration['session_lifetime'];
+
+        return isset($_configuration['session_lifetime']) ? $_configuration['session_lifetime'] : 3600;
     }
 
     static function session_stored_in_db()
@@ -74,11 +76,18 @@ class ChamiloSession extends System\Session
 
         if (self::session_stored_in_db() && function_exists('session_set_save_handler')) {
             $handler = new SessionHandler();
-            @session_set_save_handler(array(& $handler, 'open'), array(& $handler, 'close'), array(& $handler, 'read'), array(& $handler, 'write'), array(& $handler, 'destroy'), array(& $handler, 'garbage'));
+            @session_set_save_handler(
+                array(& $handler, 'open'),
+                array(& $handler, 'close'),
+                array(& $handler, 'read'),
+                array(& $handler, 'write'),
+                array(& $handler, 'destroy'),
+                array(& $handler, 'garbage')
+            );
         }
 
         /*
-         * Prevent Session fixation bug fixes  
+         * Prevent Session fixation bug fixes
          * See http://support.chamilo.org/issues/3600
          * http://php.net/manual/en/session.configuration.php
          * @todo use session_set_cookie_params with some custom admin parameters
@@ -88,12 +97,12 @@ class ChamiloSession extends System\Session
         //the session ID is only accepted from a cookie
         ini_set('session.use_only_cookies', 1);
 
-        //HTTPS only if possible 
+        //HTTPS only if possible
         //ini_set('session.cookie_secure', 1);
-        //session ID in the cookie is only readable by the server 
+        //session ID in the cookie is only readable by the server
         ini_set('session.cookie_httponly', 1);
 
-        //Use entropy file    
+        //Use entropy file
         //session.entropy_file
         //ini_set('session.entropy_length', 128);
         //Do not include the identifier in the URL, and not to read the URL for identifiers.
@@ -107,8 +116,10 @@ class ChamiloSession extends System\Session
         if ($already_installed) {
             if (!isset($session['checkChamiloURL'])) {
                 $session['checkChamiloURL'] = api_get_path(WEB_PATH);
-            } else if ($session['checkChamiloURL'] != api_get_path(WEB_PATH)) {
-                self::clear();
+            } else {
+                if ($session['checkChamiloURL'] != api_get_path(WEB_PATH)) {
+                    self::clear();
+                }
             }
         }
 
@@ -119,7 +130,7 @@ class ChamiloSession extends System\Session
 
     /**
      * Session start time: that is the last time the user accesseed the application.
-     * 
+     *
      * @return int timestamp
      */
     function start_time()
@@ -129,20 +140,21 @@ class ChamiloSession extends System\Session
 
     /**
      * Session end time: when the session expires.
-     * 
+     *
      * @return int timestamp
      */
     function end_time()
     {
         $start_time = $this->start_time();
         $lifetime = self::session_lifetime();
+
         return $start_time + $lifetime;
     }
 
     /**
      * Returns true if the session is stalled. I.e. if session end time is
      * greater than now. Returns false otherwise.
-     * 
+     *
      * @return bool
      */
     function is_stalled()
@@ -161,7 +173,7 @@ class ChamiloSession extends System\Session
 
     /**
      * The current (logged in) user.
-     * 
+     *
      * @return CurrentUser
      */
     public function user()
@@ -170,9 +182,10 @@ class ChamiloSession extends System\Session
         if (empty($result)) {
             $result = CurrentUser::instance();
         }
+
         return $result;
     }
-    
+
     /**
      *
      * @return CurrentCourse
@@ -183,14 +196,14 @@ class ChamiloSession extends System\Session
         if (empty($result)) {
             $result = CurrentCourse::instance();
         }
+
         return $result;
     }
-    
-   
+
 
     /**
      * The current group for the current (logged in) user.
-     * 
+     *
      * @return int
      */
     public function group_id()

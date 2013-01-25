@@ -147,13 +147,15 @@ $app->register(
 $app->register(new Silex\Provider\FormServiceProvider());
 
 //Monolog
-$app->register(
-    new Silex\Provider\MonologServiceProvider(),
-    array(
-        'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
-        'monolog.name' => 'chamilo',
-    )
-);
+if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+    $app->register(
+        new Silex\Provider\MonologServiceProvider(),
+        array(
+            'monolog.logfile' => api_get_path(SYS_ARCHIVE_PATH).'chamilo_development.log',
+            'monolog.name' => 'chamilo',
+        )
+    );
+}
 
 /*
 //Monolog examples
@@ -239,7 +241,6 @@ if (isset($_configuration['main_database'])) {
         )
     );
 
-
     //Setting Doctrine2 extensions
 
     $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
@@ -317,19 +318,23 @@ $app->error(
 /*
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 ErrorHandler::register();
- */
+*/
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 //Filters
 $app->before(
     function () use ($app) {
-        //Check the PHP version
-        if (api_check_php_version() == false) {
-            $app->abort(500, "Incorrect PHP version"); //error 1
-        }
 
         if (!file_exists($app['configuration_file'])) {
             return new RedirectResponse(api_get_path(WEB_CODE_PATH).'install');
+        }
+
+        //Check the PHP version
+        if (api_check_php_version() == false) {
+            $app->abort(500, "Incorrect PHP version");
+        }
+        if (!is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
+            $app->abort(500, "archive folder must be writeable");
         }
         //$app['request']->getSession()->start();
     }
@@ -345,14 +350,14 @@ $app->finish(
         //@todo will be removed before a stable release
         $mtime = microtime();
         $mtime = explode(" ", $mtime);
-        $mtime = $mtime[1] + $mtime[0];
+        $mtime = $mtime[1] + $mtime[0]; /*
 
         $message = "Page loaded in:".($mtime - START);
         $app['monolog']->addInfo($message);
         $message = "memory_get_usage: ".format_file_size(memory_get_usage(true));
         $app['monolog']->addInfo($message);
         $message = "memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true));
-        $app['monolog']->addInfo($message);
+        $app['monolog']->addInfo($message);*/
     }
 );
 
@@ -392,9 +397,10 @@ if (!($conn_return = @Database::connect(
     //$app->abort(500, "Database is unavailable"); //error 3
 }
 
+/*
 if (!$_configuration['db_host']) {
     //$app->abort(500, "Database is unavailable"); //error 3
-}
+}*/
 
 
 /* RETRIEVING ALL THE CHAMILO CONFIG SETTINGS FOR MULTIPLE URLs FEATURE*/
@@ -418,7 +424,11 @@ if (!empty($_configuration['multiple_access_urls'])) {
 // The system has not been designed to use special SQL modes that were introduced since MySQL 5.
 Database::query("set session sql_mode='';");
 
-if (!Database::select_db($_configuration['main_database'], $database_connection)) {
+if (isset($_configuration['main_database']) && !Database::select_db(
+    $_configuration['main_database'],
+    $database_connection
+)
+) {
     //$app->abort(500, "Database is unavailable"); //error 3
 }
 
@@ -459,19 +469,21 @@ Database::query("SET NAMES 'utf8';");
 //@todo user silex session provider instead of a custom class
 Chamilo::session()->start($already_installed);
 
-$settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
-$settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
+if ($already_installed) {
+    $settings_refresh_info = api_get_settings_params_simple(array('variable = ?' => 'settings_latest_update'));
+    $settings_latest_update = $settings_refresh_info ? $settings_refresh_info['selected_value'] : null;
 
-$_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-$_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+    $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+    $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
 
-if (!isset($_setting)) {
-    api_set_settings_and_plugins();
-} else {
-    if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+    if (!isset($_setting)) {
         api_set_settings_and_plugins();
-        $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
-        $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+    } else {
+        if (isset($_setting['settings_latest_update']) && $_setting['settings_latest_update'] != $settings_latest_update) {
+            api_set_settings_and_plugins();
+            $_setting = isset($_SESSION['_setting']) ? $_SESSION['_setting'] : null;
+            $_plugins = isset($_SESSION['_plugins']) ? $_SESSION['_plugins'] : null;
+        }
     }
 }
 
@@ -505,10 +517,10 @@ $app->register(
     new Silex\Provider\SwiftmailerServiceProvider(),
     array(
         'swiftmailer.options' => array(
-            'host' => $platform_email['SMTP_HOST'],
-            'port' => $platform_email['SMTP_PORT'],
-            'username' => $platform_email['SMTP_USER'],
-            'password' => $platform_email['SMTP_PASS'],
+            'host' => isset($platform_email['SMTP_HOST']) ? $platform_email['SMTP_HOST'] : null,
+            'port' => isset($platform_email['SMTP_PORT']) ? $platform_email['SMTP_PORT'] : null,
+            'username' => isset($platform_email['SMTP_USER']) ? $platform_email['SMTP_USER'] : null,
+            'password' => isset($platform_email['SMTP_PASS']) ? $platform_email['SMTP_PASS'] : null,
             'encryption' => null,
             'auth_mode' => null
         )

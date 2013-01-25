@@ -981,7 +981,8 @@ function get_sql_file_contents($file, $section, $print_errors = true)
  * @param string $title
  * @return id if inserted document
  */
-function FileManager::add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null){
+function add_document_180($_course, $path, $filetype, $filesize, $title, $comment = null)
+{
     $table_document = Database::get_course_table(TABLE_DOCUMENT, $_course['dbName']);
     $sql = "INSERT INTO $table_document
     (`path`,`filetype`,`size`,`title`, `comment`)
@@ -1028,17 +1029,6 @@ function display_language_selection_box($name = 'language_list', $default_langua
 {
     // Reading language list.
     $language_list = get_language_folder_list();
-
-    /*
-    // Reduction of the number of languages shown. Enable this fragment of code for customization purposes.
-    // Modify the language list according to your preference. Don't exclude the 'english' item.
-    $language_to_display = array('asturian', 'bulgarian', 'english', 'italian', 'french', 'slovenian', 'slovenian_unicode', 'spanish');
-    foreach ($language_list as $key => & $value) {
-        if (!in_array($key, $language_to_display)) {
-            unset($language_list[$key]);
-        }
-    }
-    */
 
     // Sanity checks due to the possibility for customizations.
     if (!is_array($language_list) || empty($language_list)) {

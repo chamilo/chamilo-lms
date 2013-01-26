@@ -186,7 +186,7 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 
 			TB_WIDTH = (params['width']*1) + 30 || 630; //defaults to 630 if no paramaters were added to URL
 			TB_HEIGHT = (params['height']*1) + 40 || 40; //defaults to 440 if no paramaters were added to URL. Chamilo change 440 by 40
-			ajaxContentW = TB_WIDTH - 30;
+			ajaxContentW = TB_WIDTH - 5;
 			ajaxContentH = TB_HEIGHT - 45;
 			
 			if(url.indexOf('TB_iframe') != -1){// either iframe or ajax window		

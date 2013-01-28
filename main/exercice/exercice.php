@@ -700,7 +700,15 @@ if (!empty($exercise_list)) {
                             $attempt_text = get_lang('NotAttempted');
                         }
                     } else {
-                        $attempt_text = get_lang('CantShowResults');
+                        // if we don't show the score
+                        if ($num > 0) {
+                            // if the exercice has been attempted
+                            $attempt_text = get_lang('CantShowResults');
+                        }
+                        else {
+                            // if the exercice hasn't been attempted
+                            $attempt_text = get_lang('NotAttempted');
+                        }
                     }
 
                     $class_tip = '';

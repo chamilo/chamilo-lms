@@ -432,27 +432,47 @@ class MigrationCustom {
     }
 
     static function create_attendance($data) {
-        //error_log('create_attendance');
+        //error_log('Creating attendances for user '.$data['user_id']);
         $session_id = $data['session_id'];
         $user_id    = $data['user_id'];
 
         if (!empty($session_id) && !empty($user_id)) {
             $attendance = new Attendance();
-            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            $course_list = false;
+            global $data_list;
+            if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
+            } else {
+                $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            }
+
             $attendance_id = null;
 
             if (!empty($course_list)) {
+                //We know there's only one course by session. Take it.
                 $course = current($course_list);
 
                 //Creating attendance
                 if (isset($course['code'])) {
-                    $course_info = api_get_course_info($course['code']);
+                    if (is_array($data_list) && isset($data_list) && $data_list['boost_courses']) {
+                        $course_info = array('real_id' => $data_list['course_ids'][$course['code']]);
+                    } else {
+                        $course_info = api_get_course_info($course['code']);
+                    }
 
-                    $attendance->set_course_id($course_info['code']);
+                    $attendance->set_course_id($course['code']);
                     $attendance->set_course_int_id($course_info['real_id']);
+                    //$attendance->set_course_int_id($course_id);
                     $attendance->set_session_id($session_id);
 
-                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+                    if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                        $list = $data_list['sessions_attendances'][$course_info['real_id']][$session_id];
+                        foreach ($list as $at_id) {
+                            $attendance_list[] = array('id' => $at_id);
+                        }
+                    } else {
+                        $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+                    }
                     if (empty($attendance_list)) {
                         $attendance->set_name('Asistencia');
                         $attendance->set_description('');
@@ -461,7 +481,10 @@ class MigrationCustom {
                         $link_to_gradebook = false;
                         //$attendance->category_id = $_POST['category_id'];
                         $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);
-                        error_log("Attendance added course code: {$course['code']} - session_id: $session_id");
+                        if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                            $data_list['sessions_attendances'][$course_info['real_id']][$session_id][] = $attendance_id;
+                        }
+                        //error_log("Attendance added course code: {$course['code']} - session_id: $session_id");
                         //only 1 course per session
                     } else {
                         $attendance_data = current($attendance_list);
@@ -471,19 +494,36 @@ class MigrationCustom {
 
                     if ($attendance_id) {
                         //Attendance date exists?
-                        $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
+                        if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                            $cal_info['id'] = $data_list['sessions_attendance_dates'][$attendance_id][$data['fecha']];
+                        } else {
+                            $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
+                        }
                         if ($cal_info && isset($cal_info['id'])) {
                             $cal_id = $cal_info['id'];
                         } else {
                             //Creating the attendance date
                             $attendance->set_date_time($data['fecha']);
                             $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+                            if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                                $data_list['sessions_attendance_dates'][$attendance_id][$data['fecha']] = $cal_id;
+                            }
                             //error_log("Creating attendance calendar $cal_id");
                         }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id => $data['status']);
-                        $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
-                        error_log("Adding calendar to user: $user_id to calendar: $cal_id");
+                        if (is_array($data_list['create_attendance'])) {
+                            $data_list['create_attendance'][] = array($cal_id, $user_id, $data['status'], $attendance_id, $course_info['real_id'], $data['fecha']);
+                            $limit = 10;
+                            if (count($data_list['create_attendance']) == $limit) {
+                                //error_log('Flushing attendances list because reached '.$limit);
+                                $attendance->attendance_sheet_group_add($data_list['create_attendance'],false,true);
+                                $data_list['create_attendance'] = array();
+                            }
+                        } else {
+                            $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
+                        }
+                        //error_log("Adding calendar to user: $user_id to calendar: $cal_id");
                     } else {
                         error_log('No attendance_id created');
                     }
@@ -497,12 +537,19 @@ class MigrationCustom {
     }
 
     static function convert_attendance_status($status) {
-        if (!in_array($status,array_keys(self::$attend_status))) { return null; }
-        return self::$attend_status[$status];
+        switch ($status) {
+          case 'AUS:': return 0;
+          case 'PRE': return 1;
+          case 'T45': return 2;
+          case 'TAR': return 3;
+          default: return null;
+        }
+//        if (!in_array($status,array_keys(self::$attend_status))) { return null; }
+//        return self::$attend_status[$status];
     }
 
     static function create_thematic($data) {
-        error_log('create_thematic');
+        //error_log('create_thematic');
         $session_id = $data['session_id'];
 
         if (!empty($session_id)) {
@@ -577,7 +624,9 @@ class MigrationCustom {
         $session_id = isset($data['session_id']) ? $data['session_id'] : null;
 
         if (!empty($session_id)) {
-            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            global $data_list;
+            $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
+            //$course_list = SessionManager::get_course_list_by_session_id($session_id);
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
@@ -628,7 +677,9 @@ class MigrationCustom {
         $user_id = isset($data['user_id']) ? $data['user_id'] : null;
 
         if (!empty($session_id) && !empty($user_id)) {
-            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            global $data_list;
+            $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
+            //$course_list = SessionManager::get_course_list_by_session_id($session_id);
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
@@ -687,7 +738,9 @@ class MigrationCustom {
         $title = 'Evaluación General';
 
         if (!empty($session_id) && !empty($user_id)) {
-            $course_list = SessionManager::get_course_list_by_session_id($session_id);
+            global $data_list;
+            //$course_list = SessionManager::get_course_list_by_session_id($session_id);
+            $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
@@ -1366,7 +1419,6 @@ class MigrationCustom {
                         'option_order'          => null
                     );
                     $extra_field_option->update($extra_field_option_info);
-error_log('Editing extra field: '.print_r($extra_field_option_info,1));
                     $options_updated[] = $option['id'];
                 }
 
@@ -2824,5 +2876,42 @@ error_log('Editing extra field: '.print_r($extra_field_option_info,1));
             }
         }
         return $time;
+    }
+    static function fill_data_list(&$omigrate) {
+        if (is_array($omigrate) && isset($omigrate) && $omigrate['boost_users']) {
+            // uidIdPersona field is ID 13 in user_field
+            $sql = "SELECT user_id, field_value FROM user_field_values WHERE field_id = 13 ORDER BY user_id";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['users'][$row['field_value']] = $row['user_id'];
+            }
+        }
+        if (is_array($omigrate) && isset($omigrate) && $omigrate['boost_courses']) {
+            // uidIdCurso field is ID 5 in course_field
+            $sql = "SELECT course_code, field_value FROM course_field_values WHERE field_id = 5 ORDER BY course_code";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['courses'][$row['field_value']] = $row['course_code'];
+            }
+            $sql = "SELECT id, code FROM course";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['course_ids'][$row['code']] = $row['id'];
+            }
+        }
+        if (is_array($omigrate) && isset($omigrate) && $omigrate['boost_sessions']) {
+            // uidIdPrograma field is ID 1 in session_field
+            $sql = "SELECT session_id, field_value FROM session_field_values WHERE field_id = 1 ORDER BY session_id";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['sessions'][$row['field_value']] = $row['session_id'];
+            }
+            $sql = "SELECT id_session, course_id, course_code FROM session_rel_course";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['session_course'][$row['id_session']] = $row['course_code'];
+            }
+        }
+        return true;
     }
 }

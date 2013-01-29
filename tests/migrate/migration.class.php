@@ -104,6 +104,7 @@ class Migration {
     public function migrate($matches) {
         error_log("\n" . '------------ ['.date('H:i:s').'] Migration->migrate function called ------------' . "\n");
         $extra_fields = array();
+        global $data_list;
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $idx => $table) {
             if ($idx === 'web_service_calls') { continue;}
@@ -132,13 +133,16 @@ class Migration {
                 continue;
             }
             $num_rows = $this->num_rows();
+            $data_list['create_attendance'] = array();
 
             if ($num_rows) {
                 error_log('Records found: ' . $num_rows);
                 $item = 1;
                 $lastpct = 0;
                 //error_log(print_r($table['extra_fields'],1));
+                $save_row = array();
                 while ($row = $this->fetch_array()) {
+//$start = microtime();
                     self::execute_field_match($table, $row, $extra_fields);
                     $percentage = ($item / $num_rows) * 100;
                     $newpct = intval($percentage);
@@ -148,6 +152,19 @@ class Migration {
                         error_log("Processing item {$table['orig_table']} #$item $percentage%");
                     }
                     $item++;
+//$total = microtime() - $start;
+//error_log('Insert took '.$total);
+                    $save_row = $row;
+                }
+                if (count($data_list['create_attendance']) > 0) {
+                    $limit = 10;
+                    $fill = 10 - count($data_list['create_attendance']);
+                    for ($ijk = 0; $ijk<$fill; $ijk++) {
+                        $data_list['create_attendance'][] = array(0=>null);
+                    }
+                    self::execute_field_match($table, $save_row, $extra_fields);
+                    error_log('Executing '.($limit-$fill).'remains of create_attendance() list');
+                    $data_list['create_attendance'] = array();
                 }
                 error_log('Finished processing table ' . $table['orig_table'] . " \n\n");
             } else {
@@ -1052,7 +1069,7 @@ class Migration {
         //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
-        // If a dest table exists, fill $my_extra_fields
+        // If a dest table has been defined, fill $my_extra_fields with the extra_fields defined for that table
         $my_extra_fields = isset($table['dest_table']) && isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
         $extra_field_obj = null;
         $extra_field_value_obj = null;
@@ -1062,6 +1079,11 @@ class Migration {
         }
         $extra_fields_to_insert = array();
         global $data_list;
+        // Fill the data list, if possible
+        if (count($data_list['users'])<1) {
+            MigrationCustom::fill_data_list($data_list);
+        }
+
 
         foreach ($table['fields_match'] as $id_field => $details) {
             //if ($table['dest_table'] == 'session') {error_log('Processing field '.$details['orig']);}
@@ -1093,7 +1115,7 @@ class Migration {
             //Extra field values
             $extra_field = isset($my_extra_fields) && isset($my_extra_fields[$details['dest']]) ? $my_extra_fields[$details['dest']] : null;
             // Check the array is there
-            //if($table['dest_table'] == 'session') error_log('Fucking Extra field: '.print_r($extra_field,1));
+            //if($table['dest_table'] == 'session') error_log('Extra field: '.print_r($extra_field,1));
             if (!empty($extra_field) && $extra_field_obj) {
                 //if($table['dest_table'] == 'session') error_log('Extra_field no es vacío');
                 // Check the "options" array is defined for this field (checking is_array is crucial here, see BT#5215)
@@ -1102,7 +1124,7 @@ class Migration {
                     //if($details['orig']=='uidIdPrograma') { error_log('Eso era lo inicial, del cual se tomó '.$details['dest'].': '.print_r($my_extra_fields,1));}
                     $options = $extra_field['options'];
                     $field_type = $extra_field['field_type'];
-                    //if ($table['dest_table'] == 'session') {error_log('Field orid: '.$details['orig']);}
+                    //if ($table['dest_table'] == 'session') {error_log('Field orig: '.$details['orig']);}
 
                     if (!empty($options)) {
                         //if ($table['dest_table'] == 'session') {error_log('Options not empty');}

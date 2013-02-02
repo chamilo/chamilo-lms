@@ -824,6 +824,7 @@ $is_courseCoach     = false; //course coach
 */
 //Course - User permissions
 $is_sessionAdmin    = false;
+$is_courseCoach     = false; //course coach
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
 {

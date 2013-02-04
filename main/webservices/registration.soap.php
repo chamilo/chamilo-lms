@@ -1318,6 +1318,15 @@ function WSEditUsers($params) {
         if (!is_null($auth_source)) {
             $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
         }
+        // Exception for admins in case no status is provided in WS call...
+        $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+        $resadmin = Database::query($sqladmin);
+        $is_admin = Database::num_rows($resadmin);
+        if (empty($status) && $is_admin) {
+            $status = 1;
+        } else {
+            $status = 5;
+        }
         $sql .=	"
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
@@ -1462,6 +1471,15 @@ function WSEditUser($params) {
     }
     if (!is_null($auth_source)) {
         $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+    }
+    // Exception for admins in case no status is provided in WS call...
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $resadmin = Database::query($sqladmin);
+    $is_admin = Database::num_rows($resadmin);
+    if (empty($status) && $is_admin) {
+        $status = 1;
+    } else {
+        $status = 5;
     }
     $sql .=	"
             email='".Database::escape_string($email)."',
@@ -1681,6 +1699,15 @@ function WSEditUsersPasswordCrypted($params) {
         if (!is_null($auth_source)) {
             $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
         }
+        // Exception for admins in case no status is provided in WS call...
+        $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+        $resadmin = Database::query($sqladmin);
+        $is_admin = Database::num_rows($resadmin);
+        if (empty($status) && $is_admin) {
+            $status = 1;
+        } else {
+            $status = 5;
+        }
         $sql .=	"
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
@@ -1845,6 +1872,15 @@ function WSEditUserPasswordCrypted($params) {
     }
     if (!is_null($auth_source)) {
         $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+    }
+    // Exception for admins in case no status is provided in WS call...
+    $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
+    $resadmin = Database::query($sqladmin);
+    $is_admin = Database::num_rows($resadmin);
+    if (empty($status) && $is_admin) {
+        $status = 1;
+    } else {
+        $status = 5;
     }
     $sql .=	"
                 email='".Database::escape_string($email)."',

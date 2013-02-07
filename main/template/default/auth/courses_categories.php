@@ -84,20 +84,35 @@ $stok = Security::get_token();
                                 $subcategory1_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory1_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory1_name.' ('.$count_courses_lv2.') </a> ';
                             }
                             echo '<li style="margin-left:20px;">'.$subcategory1_link.'</li>';
-                        }
 
-                        // level 3
-                        if (!empty($browse_course_categories[$subcategory1_code])) {
-                            foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {
-                                $subcategory2_name = $subcategory2['name'];
-                                $subcategory2_code = $subcategory2['code'];
-                                $count_courses_lv3 = $subcategory2['count_courses'];
-                                if ($code == $subcategory2_code) {
-                                    $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
-                                } else {
-                                    $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
+                            // level 3
+                            if (!empty($browse_course_categories[$subcategory1_code])) {
+                                foreach ($browse_course_categories[$subcategory1_code] as $subcategory2) {
+                                    $subcategory2_name = $subcategory2['name'];
+                                    $subcategory2_code = $subcategory2['code'];
+                                    $count_courses_lv3 = $subcategory2['count_courses'];
+                                    if ($code == $subcategory2_code) {
+                                        $subcategory2_link = '<strong>'.$subcategory2_name.' ('.$count_courses_lv3.')</strong>';
+                                    } else {
+                                        $subcategory2_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory2_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory2_name.'</a> ('.$count_courses_lv3.')';
+                                    }
+                                    echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
+
+                                    // level 4
+                                    if (!empty($browse_course_categories[$subcategory2_code])) {
+                                        foreach ($browse_course_categories[$subcategory2_code] as $subcategory3) {
+                                            $subcategory3_name = $subcategory3['name'];
+                                            $subcategory3_code = $subcategory3['code'];
+                                            $count_courses_lv4 = $subcategory3['count_courses'];
+                                            if ($code == $subcategory3_code) {
+                                                $subcategory3_link = '<strong>'.$subcategory3_name.' ('.$count_courses_lv4.')</strong>';
+                                            } else {
+                                                $subcategory3_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code='.$subcategory3_code.'&amp;hidden_links='.$hidden_links.'">'.$subcategory3_name.' ('.$count_courses_lv4.') </a>';
+                                            }
+                                            echo '<li style="margin-left:60px;">'.$subcategory3_link.'</li>';
+                                        }
+                                    }
                                 }
-                                echo '<li style="margin-left:40px;">'.$subcategory2_link.'</li>';
                             }
                         }
                     }

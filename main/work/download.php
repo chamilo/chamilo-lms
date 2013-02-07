@@ -71,7 +71,7 @@ if (!empty($course_info['real_id'])) {
         
         $work_is_visible = ($item_info['visibility'] == 1 && $row['accepted'] == 1);
         $doc_visible_for_all = ($course_info['show_score'] == 1);
-        $is_editor = api_is_allowed_to_edit();
+        $is_editor = api_is_allowed_to_edit(true,true,true);
         $student_is_owner_of_work = ($row['user_id'] == api_get_user_id());
         
 	    if ($is_editor

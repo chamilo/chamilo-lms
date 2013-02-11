@@ -117,7 +117,10 @@ class BlockTeacherGraph extends Block {
 				$username = $teacher_info['username'];
 				$time_by_days = array();
 				foreach ($a_last_week as $day) {
-					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, false, $day);
+					$start_date = date('Y-m-d 00:00:00', $day);
+                    $end_date   = date('Y-m-d 23:59:59', $day);
+
+                    $time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);
 					$hours = floor($time_on_platform_by_day / 3600);			
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
 					$time_by_days[] = $min;					

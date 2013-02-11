@@ -2310,8 +2310,12 @@ class UserManager {
                 $categories[$row['session_category_id']]['session_category']['date_end']                    = $row['session_category_date_end'];
 
                 $session_id = $row['id'];
-                $session_info = api_get_session_info($session_id);
-
+                //$session_info = api_get_session_info($session_id);
+                // The only usage of $session_info is to call 
+                // api_get_session_date_valudation, which only needs id and
+                // dates from the session itself, which we already have in $row,
+                //  so really no need to query the session table again
+                $session_info = $row;
                 //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
 

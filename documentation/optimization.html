@@ -145,6 +145,23 @@ ALTER TABLE lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE lp_item_view ADD INDEX  idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id);
 </pre>
 These will be available in Chamilo 1.10 directly, but we cannot put them into Chamilo 1.9 from now on for organizational reasons.<br />
+<h3>InnoDB Engine and table locking vs row locking</h3>
+<p>
+InnoDB is one of the table engines you can use in MySQL. The main advantage of InnoDB is that you can have table locking per row instead of table locking per table. This means that, if one single insert or update query is very slow and executes on a critical table in Chamilo (user, course, etc), it will lock the whole table and no other query will be able to execute, which might seriously affect the efficiency of your database.</p>
+<p>Luckily, you can change the engine for one table "on-the-fly", which allows you to effectively check whether this makes a considerable difference. Our recommendation: only do that when seeing that a "SHOW FULL PROCESSLIST" in your database client shows many "Waiting for lock on table [...]".
+</p>
+<p>
+To change these engines, just launch the following command:
+<pre>
+ALTER TABLE course ENGINE=INNODB;
+ALTER TABLE user ENGINE=INNODB;
+ALTER TABLE session ENGINE=INNODB;
+ALTER TABLE session_rel_course ENGINE=INNODB;
+ALTER TABLE session_rel_course_rel_user ENGINE=INNODB;
+</pre>
+If used on large tables, this might take a considerable time (can take around 60s for a million rows), so try to execute at night or during lower usage periods.
+</p>
+
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.1/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />

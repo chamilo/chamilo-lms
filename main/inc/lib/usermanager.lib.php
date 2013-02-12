@@ -2305,6 +2305,21 @@ class UserManager
                     }
                 }
             }
+        } else {
+            //check if user is general coach for this session
+            $s = api_get_session_info($session_id);
+            if ($s['id_coach'] == $user_id) {
+                if (count($course_list)==0) {
+                    $course_list = SessionManager::get_course_list_by_session_id($session_id);
+                    if (!empty($course_list)) {
+                        foreach ($course_list as $course) {
+                            if (!in_array($course['code'],$courses)) {
+                                $personal_course_list[] = $course;
+                            }
+                        }
+                    }
+                }
+            }
         }
         return $personal_course_list;
     }

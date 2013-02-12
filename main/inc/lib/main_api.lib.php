@@ -1042,6 +1042,7 @@ function _api_format_user($user, $add_password = false) {
         $firstname = $user['firstName'];
         $lastname = $user['lastName'];
     }
+    $result['phone']= $user['phone'];
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
 

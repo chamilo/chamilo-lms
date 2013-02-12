@@ -104,7 +104,9 @@ class Migration {
     public function migrate($matches) {
         error_log("\n" . '------------ ['.date('H:i:s').'] Migration->migrate function called ------------' . "\n");
         $extra_fields = array();
-        global $data_list;
+        global $data_list, $utc_datetime;
+        define('USER_FUNC_EXCEPTION_GRADEBOOK','MigrationCustom::add_gradebook_result_with_evaluation');
+        define('USER_FUNC_EXCEPTION_ATTENDANCE','MigrationCustom::create_attendance');
         // Browsing through 1st-level arrays in db_matches.php
         foreach ($matches as $idx => $table) {
             if ($idx === 'web_service_calls') { continue;}
@@ -134,6 +136,8 @@ class Migration {
             }
             $num_rows = $this->num_rows();
             $data_list['create_attendance'] = array();
+            $data_list['create_eval_results'] = array();
+            $data_list['create_eval_results_limit'] = 200;
 
             if ($num_rows) {
                 error_log('Records found: ' . $num_rows);
@@ -142,29 +146,37 @@ class Migration {
                 //error_log(print_r($table['extra_fields'],1));
                 $save_row = array();
                 while ($row = $this->fetch_array()) {
-//$start = microtime();
+                    $utc_datetime = api_get_utc_datetime();
                     self::execute_field_match($table, $row, $extra_fields);
                     $percentage = ($item / $num_rows) * 100;
                     $newpct = intval($percentage);
                     if ($newpct>$lastpct && floor($percentage) % 10 == 0) {
                         $percentage = round($percentage, 3);
                         $lastpct = $newpct;
-                        error_log("Processing item {$table['orig_table']} #$item $percentage%");
+                        error_log("Processing item {$table['orig_table']} #$item $percentage% (to put into ".$table['dest_table'].")");
                     }
                     $item++;
-//$total = microtime() - $start;
-//error_log('Insert took '.$total);
                     $save_row = $row;
                 }
                 if (count($data_list['create_attendance']) > 0) {
-                    $limit = 10;
-                    $fill = 10 - count($data_list['create_attendance']);
+                    $limit = 100;
+                    $fill = $limit - count($data_list['create_attendance']);
                     for ($ijk = 0; $ijk<$fill; $ijk++) {
-                        $data_list['create_attendance'][] = array(0=>null);
+                        $data_list['create_attendance'][] = array();
                     }
                     self::execute_field_match($table, $save_row, $extra_fields);
-                    error_log('Executing '.($limit-$fill).'remains of create_attendance() list');
+                    error_log('Executing '.($limit-$fill).'remains of create_attendance list');
                     $data_list['create_attendance'] = array();
+                }
+                if (count($data_list['create_eval_results']) > 0) {
+                    $limit = $data_list['create_eval_results_limit'];
+                    $fill = $limit - count($data_list['create_eval_results']);
+                    for ($ijk = 0; $ijk<$fill; $ijk++) {
+                        $data_list['create_eval_results'][] = array();
+                    }
+                    self::execute_field_match($table, $save_row, $extra_fields);
+                    error_log('Executing '.($limit-$fill).'remains of create_eval_results list');
+                    $data_list['create_eval_results'] = array();
                 }
                 error_log('Finished processing table ' . $table['orig_table'] . " \n\n");
             } else {
@@ -172,9 +184,9 @@ class Migration {
             }
 
             //Stop here (only for tests)
-            if ($table['orig_table'] == 'gradebook_evaluation_type') {
+            //if ($table['orig_table'] == 'gradebook_evaluation_type') {
                 //exit;
-            }
+            //}
         }
     }
 
@@ -192,7 +204,8 @@ class Migration {
             $client = new SoapClient($url, array('cache_wsdl' => WSDL_CACHE_NONE));
         } catch (SoapFault $fault) {
             $error = 1;
-            die('Error connecting');
+            return false;
+            //die('Error connecting');
         }
 
         $client->debug_flag = true;
@@ -631,9 +644,9 @@ class Migration {
         $params['time_update'] = $params['time_insert'] = api_get_utc_datetime();
 
         $inserted_id = Database::insert($table, $params);
-        if ($inserted_id) {
+        //if ($inserted_id) {
             //error_log("Transaction added #$inserted_id");
-        }
+        //}
         return $inserted_id;
     }
 
@@ -668,7 +681,9 @@ class Migration {
         $branch_id = intval($branch_id);
         $status_id = intval($status_id);
 
-        $extra_conditions = " AND branch_id = $branch_id ";
+        //$extra_conditions = " AND branch_id = $branch_id ";
+        // Temporary patch to avoid attendances and gradebook transactions
+        $extra_conditions = " AND branch_id = $branch_id and action < 31";
         $sql = "SELECT * FROM $table WHERE status_id = $status_id $extra_conditions ORDER BY id ";
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
@@ -781,16 +796,18 @@ class Migration {
      * @return The operation results
      */
     function get_transactions_from_webservice($params = array()) {
-        error_log("get_transactions_from_webservice() function called \n");
+        error_log("get_transactions_from_webservice() function called");
 
         $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
         $transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
         $number_of_transactions = isset($params['number_of_transactions']) ? $params['number_of_transactions'] : 2;
+        $transactions_found = 0;
 
         //Testing transactions
         $web_service_params = $this->web_service_connection_info;
 
-        /*$result = self::soap_call($web_service_params,'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
+        /*
+        $result = self::soap_call($web_service_params,'usuarioDetalles', array('uididpersona' => 'D236776B-D7A5-47FF-8328-55EBE9A59015'));
         $result = self::soap_call($web_service_params,'programaDetalles', array('uididprograma' => 'C3671999-095E-4018-9826-678BAFF595DF'));
         $result = self::soap_call($web_service_params,'cursoDetalles', array('uididcurso' => 'E2334974-9D55-4BB4-8B57-FCEFBE2510DC'));
         $result = self::soap_call($web_service_params,'faseDetalles', array('uididfase' => 'EBF63F1C-FBD7-46A5-B039-80B5AF064929'));
@@ -800,9 +817,9 @@ class Migration {
         $result = self::soap_call($web_service_params,'sedeDetalles', array('uididsede' => '7379A7D3-6DC5-42CA-9ED4-97367519F1D9'));
         $result = self::soap_call($web_service_params,'horarioDetalles', array('uididhorario' => 'E395895A-B480-456F-87F2-36B3A1EBB81C'));
         $result = self::soap_call($web_service_params,'transacciones', array('ultimo' => 354911, 'cantidad' => 2));
+        $result = self::soap_call($web_service_params, 'notaDetalles',  array('uididpersona' => 'FC30EE0F-5C6F-4934-884B-BE7B68F96164', 'uididprograma' => 'bc0bdf04-cc08-4817-97c7-72840ca1171c', 'intIdSede' => 3));
         */
 
-        $result = self::soap_call($web_service_params, 'notaDetalles',  array('uididpersona' => 'FC30EE0F-5C6F-4934-884B-BE7B68F96164', 'uididprograma' => 'bc0bdf04-cc08-4817-97c7-72840ca1171c', 'intIdSede' => 3));
 
         if (empty($branch_id)) {
             $branches = self::get_branches();
@@ -810,7 +827,7 @@ class Migration {
             $branches = array('branch_id' => $branch_id);
         }
 
-        error_log(count($branches)." branches found \n");
+        error_log(count($branches)." branche(s) found");
 
         if (!empty($branches)) {
             foreach ($branches as $branch) {
@@ -826,10 +843,11 @@ class Migration {
                     'cantidad'  => isset($number_of_transactions) && !empty($number_of_transactions) ? $number_of_transactions : 2,
                     'intIdSede' => $branch['branch_id'],
                 );
-                error_log("Branch #".$branch['branch_id']." - treating $number_of_transactions transaction(s) starting with transaction #$last_transaction_id \n");
-                MigrationCustom::process_transactions($params, $web_service_params);
+                error_log("Branch #".$branch['branch_id']." - treating $number_of_transactions transaction(s) starting with transaction #$last_transaction_id");
+                $transactions_found += MigrationCustom::process_transactions($params, $web_service_params);
             }
         }
+        return $transactions_found;
     }
 
     /**
@@ -843,6 +861,7 @@ class Migration {
         $branch_id = isset($params['branch_id']) ? $params['branch_id'] : null;
         //$transaction_id = isset($params['transaction_id']) ? $params['transaction_id'] : null;
         //$number_of_transactions = isset($params['number_of_transactions']) ? $params['number_of_transactions'] : 2;
+        $transactions_count = 0;
 
         //Getting transactions of the migration_transaction table
         if (empty($branch_id)) {
@@ -857,6 +876,7 @@ class Migration {
 
             foreach ($branches as $branch_info) {
                 //Get uncompleted transactions
+                $transactions = array();
                 $transactions = self::get_transactions(0, $branch_info['branch_id']);
 
                 //Getting latest executed transaction
@@ -869,6 +889,7 @@ class Migration {
                 }
 
                 $count = count($transactions);
+                $transactions_count += $count;
 
                 $item = 1;//counter
                 if (!empty($transactions)) {
@@ -882,11 +903,11 @@ class Migration {
                             $percentage = $item / $count * 100;
                             if (round($percentage) % 10 == 0) {
                                 $percentage = round($percentage, 3);
-                                error_log("\nProcessing transaction #{$transaction['id']} $percentage%");
+                                error_log("Processing transaction #{$transaction['id']} $percentage%");
                             }
                             $item++;
 
-                            error_log("\nWaiting for transaction #$latest_id_attempt ...");
+                            error_log("Progressing towards last transaction: #$latest_id_attempt ...");
 
                             //Checking "huecos"
                             //Waiting transaction is fine continue:
@@ -914,6 +935,7 @@ class Migration {
                 $function_to_call($action_data['params']);
             }
         }
+        return $transactions_count;
     }
 
     function execute_transaction($transaction_info) {
@@ -921,24 +943,40 @@ class Migration {
 
         $validate = MigrationCustom::validate_transaction($transaction_info);
         if (isset($validate['error']) && $validate['error']) {
+            if ($transaction_info['failed_attempts'] >= 3) {
+                self::update_transaction(array('id' => $transaction_info['id'] , 'failed_attempts' => $transaction_info['failed_attempts']+1, 'status_id' => 5));
+            } else {
+                self::update_transaction(array('id' => $transaction_info['id'] , 'failed_attempts' => $transaction_info['failed_attempts']+1));
+            }
             return $validate;
         }
-        error_log("\n-----------------------------------------------------------------------");
+        error_log("-----------------------------------");
         error_log("Executing transaction ".$transaction_info['id']);
-        error_log("\n-----------------------------------------------------------------------");
+        error_log("-----------------------------------");
 
         $function_to_call = "transaction_" . $transaction_info['action'];
         if (method_exists('MigrationCustom', $function_to_call)) {
 
-            error_log("\nCalling function MigrationCustom::$function_to_call()");
+            error_log("Calling function MigrationCustom::$function_to_call()");
 
             $result = MigrationCustom::$function_to_call($transaction_info, $this->web_service_connection_info);
-            $result['message'] = "\nFunction reponse: ".$result['message'];
+            $result['message'] = "Function response: ".$result['message'];
             //error_log('Reponse: '.$result['message']);
             if (!empty($transaction_info['id'])) {
-                self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));
+                if (isset($result['error']) && $result['error'] == true) {
+                   if ($transaction_info['failed_attempts'] >= 3) {
+                       // if this failed several times, mark as abandonned (change status to 5)
+                       self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => 5, 'failed_attempts' => $transaction_info['failed_attempts']));
+                   } else {
+                       // if this failed but not too many times yet, just increment failed_attempts
+                       self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id'], 'failed_attempts' => $transaction_info['failed_attempts'] + 1));
+                   }
+                } else {
+                   // did not fail. Update status (to 2, most likely)
+                   self::update_transaction(array('id' => $transaction_info['id'] , 'status_id' => $result['status_id']));
+                }
             } else {
-                error_log("Cant update transaction, id was not provided");
+                error_log("Can't update transaction, id was not provided");
             }
             return $result;
         } else {
@@ -1069,7 +1107,8 @@ class Migration {
         //error_log('execute_field_match');
         $dest_row = array();
         $first_field = '';
-        // If a dest table has been defined, fill $my_extra_fields with the extra_fields defined for that table
+        // If a dest table has been defined, fill $my_extra_fields with the 
+        //  extra_fields defined for that table
         $my_extra_fields = isset($table['dest_table']) && isset($extra_fields[$table['dest_table']]) ? $extra_fields[$table['dest_table']] : null;
         $extra_field_obj = null;
         $extra_field_value_obj = null;
@@ -1168,15 +1207,19 @@ class Migration {
             //error_log('Calling '.$table['dest_func'].' on data recovered: '.print_r($dest_row, 1));
             $dest_row['return_item_if_already_exists'] = true;
 
-            $item_result = call_user_func_array($table['dest_func'], array($dest_row, $data_list));
-
-/*            if (isset($table['show_in_error_log']) && $table['show_in_error_log'] == false) {
-
-            } else {
-                //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
+            $item_result = false;
+            // Using call_user_func_array() has a serious impact on performance
+            switch($table['dest_func']) {
+                case USER_FUNC_EXCEPTION_GRADEBOOK:
+                    MigrationCustom::add_gradebook_result_with_evaluation($dest_row);
+                    break;
+                case USER_FUNC_EXCEPTION_ATTENDANCE:
+                    MigrationCustom::create_attendance($dest_row);
+                    break;
+                default:
+                    $item_result = call_user_func_array($table['dest_func'], array($dest_row, $data_list));
             }
-*/
-            //error_log('Result of calling ' . $table['dest_func'] . ': ' . print_r($item_result, 1));
+
             //After the function was executed fill the $data_list array
             switch ($table['dest_table']) {
                 case 'course':
@@ -1186,7 +1229,7 @@ class Migration {
                     } else {
                         error_log('Course Not FOUND');
                         error_log(print_r($item_result, 1));
-                        exit;
+                        return false;
                     }
                     $handler_id = $item_result['code'];
                     break;

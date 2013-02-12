@@ -17,6 +17,7 @@ class MigrationCustom {
     const TRANSACTION_STATUS_SUCCESSFUL = 2;
     const TRANSACTION_STATUS_DEPRECATED = 3; //??
     const TRANSACTION_STATUS_FAILED = 4;
+    const TRANSACTION_STATUS_ABANDONNED = 5;
     /**
      * Types of transaction operations read from the external databases
      */
@@ -51,11 +52,11 @@ class MigrationCustom {
     const TRANSACTION_TYPE_DEL_FASE    = 29;
     const TRANSACTION_TYPE_EDIT_FASE   = 30;
 
-    //Notas
+    //Gradebook
     const TRANSACTION_TYPE_ADD_NOTA    = 31;
     const TRANSACTION_TYPE_DEL_NOTA    = 32;
     const TRANSACTION_TYPE_EDIT_NOTA   = 33;
-    //Asis
+    //Attendances
     const TRANSACTION_TYPE_ADD_ASSIST  = 34;
     const TRANSACTION_TYPE_DEL_ASSIST  = 35;
     const TRANSACTION_TYPE_EDIT_ASSIST = 36;
@@ -219,7 +220,8 @@ class MigrationCustom {
         if (empty($data['uidIdPersona'])) {
             error_log('User does not have a uidIdPersona');
             error_log(print_r($data, 1));
-            exit;
+            return false;
+            //exit;
         }
 
         $data['uidIdPersona'] = strtoupper($data['uidIdPersona']);
@@ -305,7 +307,8 @@ class MigrationCustom {
         if (empty($data['username'])) {
             error_log('No Username provided');
             error_log(print_r($data, 1));
-            exit;
+            return false;
+            //exit;
         }
         $id_persona = $data['uidIdPersona'];
         unset($data['uidIdPersona']);
@@ -432,7 +435,7 @@ class MigrationCustom {
     }
 
     static function create_attendance($data) {
-        //error_log('Creating attendances for user '.$data['user_id']);
+        //error_log('create_attendance');
         $session_id = $data['session_id'];
         $user_id    = $data['user_id'];
 
@@ -462,7 +465,6 @@ class MigrationCustom {
 
                     $attendance->set_course_id($course['code']);
                     $attendance->set_course_int_id($course_info['real_id']);
-                    //$attendance->set_course_int_id($course_id);
                     $attendance->set_session_id($session_id);
 
                     if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
@@ -514,7 +516,7 @@ class MigrationCustom {
                         $users_present = array($user_id => $data['status']);
                         if (is_array($data_list['create_attendance'])) {
                             $data_list['create_attendance'][] = array($cal_id, $user_id, $data['status'], $attendance_id, $course_info['real_id'], $data['fecha']);
-                            $limit = 10;
+                            $limit = 100;
                             if (count($data_list['create_attendance']) == $limit) {
                                 //error_log('Flushing attendances list because reached '.$limit);
                                 $attendance->attendance_sheet_group_add($data_list['create_attendance'],false,true);
@@ -537,15 +539,8 @@ class MigrationCustom {
     }
 
     static function convert_attendance_status($status) {
-        switch ($status) {
-          case 'AUS:': return 0;
-          case 'PRE': return 1;
-          case 'T45': return 2;
-          case 'TAR': return 3;
-          default: return null;
-        }
-//        if (!in_array($status,array_keys(self::$attend_status))) { return null; }
-//        return self::$attend_status[$status];
+        if (!in_array($status,array_keys(self::$attend_status))) { return null; }
+        return self::$attend_status[$status];
     }
 
     static function create_thematic($data) {
@@ -588,9 +583,9 @@ class MigrationCustom {
                     }
                 }
 
-                if ($course_info['code'] != 'B05') {
+                //if ($course_info['code'] != 'B05') {
                     //exit;
-                }
+                //}
             } else {
                 error_log("No courses in session $session_id ");
             }
@@ -620,7 +615,7 @@ class MigrationCustom {
     }
 
     static function create_gradebook_evaluation($data){
-        error_log('create_gradebook_evaluation() function called');
+        //error_log('create_gradebook_evaluation() function called');
         $session_id = isset($data['session_id']) ? $data['session_id'] : null;
 
         if (!empty($session_id)) {
@@ -631,11 +626,16 @@ class MigrationCustom {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
                     //Get gradebook
-                    $gradebook = new Gradebook();
-                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
-                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                    $gradebook = array('id' => $data_list['session_course_gradebook'][$course_data['code']][$session_id]);
+                    //$gradebook = new Gradebook();
+                    //$gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
                     if (!empty($gradebook)) {
                         //Check if gradebook exists
+                        $eval = 0;
+                        $evals_found = $data_list['session_course_gradebook_eval'][$course_data['code']][$data['gradebook_description']];
+                        if (!empty($evals_found)) {
+                            return null;
+                        }
                         $eval = new Evaluation();
                         $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
 
@@ -651,10 +651,11 @@ class MigrationCustom {
                             $eval->set_weight(100);
                             $eval->set_max(100);
                             $eval->set_visible(1);
-                            $eval->add();
-                            error_log("Gradebook evaluation was created!!");
+                            $eval_id = $eval->add();
+                            $data_list['session_course_gradebook_eval'][$course_data['code']][$data['gradebook_description']] = $eval_id;
+                            error_log("Gradebook evaluation ID $eval_id created!!");
                         } else {
-                            error_log("Gradebook evaluation was already created :( ");
+                            error_log("Gradebook evaluation already exists - skipping insert :/ ");
                         }
                     } else {
                         error_log("Gradebook does not exists");
@@ -677,36 +678,62 @@ class MigrationCustom {
         $user_id = isset($data['user_id']) ? $data['user_id'] : null;
 
         if (!empty($session_id) && !empty($user_id)) {
-            global $data_list;
+            global $data_list, $utc_datetime;
             $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
             //$course_list = SessionManager::get_course_list_by_session_id($session_id);
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
                     //Get gradebook
-                    $gradebook = new Gradebook();
-                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
-                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");
+                    $gradebook = array('id' => $data_list['session_course_gradebook'][$course_data['code']][$session_id]);
+                    //$gradebook = new Gradebook();
+                    //$gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    //error_log("Looking for gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");
                     if (!empty($gradebook)) {
                         error_log("Gradebook exists: {$gradebook['id']}");
 
                         //Check if gradebook exists
-                        $eval = new Evaluation();
-                        $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
-
-                        if (!empty($evals_found)) {
-                            $evaluation = current($evals_found);
-                            $eval_id = $evaluation->get_id();
+                        $eval = 0;
+                        $eval_id = $data_list['session_course_gradebook_eval'][$course_data['code']][$data['gradebook_description']];
+                        if (empty($eval_id)) {
+                            $eval = new Evaluation();
+                            $evals_found = $eval->load(null, null, null, $gradebook['id'], null, null);
+                            if (!empty($evals_found)) {
+                                $evaluation = current($evals_found);
+                                $eval_id = $evaluation->get_id();
+                            }
+                        }
+                        //if (!empty($evals_found)) {
+                        if (!empty($eval_id)) {
+                            //$evaluation = current($evals_found);
+                            //$eval_id = $evaluation->get_id();
 
                             //Eval found
-                            $res = new Result();
-                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            $check_result = $data_list['course_eval_results'][$eval_id][$user_id];
+                            //$res = new Result();
+                            //$check_result = Result :: load (null, $user_id, $eval_id);
                             if (empty($check_result)) {
-                                $res->set_evaluation_id($eval_id);
-                                $res->set_user_id($user_id);
+                                $res = new Result();
+                                $eval_data = array(
+                                    'user_id' => $user_id,
+                                    'evaluation_id' => $eval_id,
+                                    //'created_at' => api_get_utc_datetime(),
+                                    'created_at' => $utc_datetime,
+                                    'score' => $data['nota'],
+                                );
+                                //$res->set_evaluation_id($eval_id);
+                                //$res->set_user_id($user_id);
                                 //if no scores are given, don't set the score
-                                $res->set_score($data['nota']);
-                                $res->add();
+                                //$res->set_score($data['nota']);
+                                //$res->add();
+                                $limit = 250;
+                                if (count($data_list['create_eval_results'])>$limit) {
+                                    $data_list['create_eval_results'][] = $eval_data;
+                                    $res->group_add($data_list['create_eval_results']);
+                                    $data_list['create_eval_results'] = array();
+                                } else {
+                                    $data_list['create_eval_results'][] = $eval_data;
+                                }
                                 error_log("Result saved :)");
                             } else {
                                 error_log("Result already added ");
@@ -738,23 +765,26 @@ class MigrationCustom {
         $title = 'Evaluación General';
 
         if (!empty($session_id) && !empty($user_id)) {
-            global $data_list;
+            global $data_list, $utc_datetime;
             //$course_list = SessionManager::get_course_list_by_session_id($session_id);
             $course_list = array(0 => array('code' => $data_list['session_course'][$session_id]));
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+                    $gradebook = array('id' => $data_list['session_course_gradebook'][$course_data['code']][$session_id]);
                     //Get gradebook
-                    $gradebook = new Gradebook();
-                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
-                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");
+                    //$gradebook = new Gradebook();
+                    //$gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    //error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id, user_id: $user_id");
                     if (!empty($gradebook)) {
                         error_log("Gradebook exists: {$gradebook['id']}");
 
                         //Creates
                         $eval = new Evaluation();
-                        $evals_found = $eval->load(null, null, $course_data['code'], $gradebook['id'], null, null, $title);
-
+                        $evals_found = false;
+                        if (isset($data_list['course_evals'][$course_data['code']][$gradebook['id']][$title])) {
+                            $evals_found = $data_list['course_evals'][$course_data['code']][$gradebook['id']][$title]; 
+                        }
                         if (empty($evals_found)) {
                             $eval->set_name($title);
                             //$eval->set_evaluation_type_id($data['gradebook_evaluation_type_id']);
@@ -767,27 +797,40 @@ class MigrationCustom {
                             $eval->set_max(100); //score of tinNota is over 100
                             $eval->set_visible(1);
                             $eval->add();
-                            error_log("Gradebook evaluation was created!!");
                             $eval_id = $eval->get_id();
-                            error_log("eval id created: $eval_id");
+                            $data_list['course_evals'][$course_data['code']][$gradebook['id']][$title] = $eval_id;
                         } else {
-                            $eval = current($evals_found);
-                            error_log("Gradebook evaluation already exists ");
-                            $eval_id = $eval->get_id();
-                            error_log("eval id loaded : $eval_id");
+                            $eval_id = $evals_found;
                         }
 
                         if ($eval_id) {
-                            $res = new Result();
                             //Check if already exists
-                            $check_result = Result :: load (null, $user_id, $eval_id);
+                            //$check_result = Result :: load (null, $user_id, $eval_id);
+                            $check_result = $data_list['course_eval_results'][$eval_id][$user_id];
                             if (empty($check_result)) {
-                                $res->set_evaluation_id($eval_id);
-                                $res->set_user_id($user_id);
-                                //if no scores are given, don't set the score
-                                $res->set_score($data['nota']);
-                                $res->add();
-                                error_log("Result Added :)");
+                                //$res = new Result();
+                                //$res->set_evaluation_id($eval_id);
+                                //$res->set_user_id($user_id);
+                                ////if no scores are given, don't set the score
+                                //$res->set_score($data['nota']);
+                                //$res_id = $res->add();
+                                $eval_data = array(
+                                    'user_id' => $user_id,
+                                    'evaluation_id' => $eval_id,
+                                    //'created_at' => api_get_utc_datetime(),
+                                    'created_at' => $utc_datetime,
+                                    'score' => $data['nota'],
+                                );
+                                $data_list['course_eval_results'][$eval_id][$user_id] = $res_id;
+                                $limit = $data_list['create_eval_results_limit'];
+                                if (count($data_list['create_eval_results'])>$limit) {
+                                    $data_list['create_eval_results'][] = $eval_data;
+                                    $res = new Result();
+                                    $res->group_add($data_list['create_eval_results']);
+                                    $data_list['create_eval_results'] = array();
+                                } else {
+                                    $data_list['create_eval_results'][] = $eval_data;
+                                }
                             } else {
                                 error_log("Result already added ");
                             }
@@ -814,6 +857,7 @@ class MigrationCustom {
     //añadir usuario: usuario_agregar UID
     //const TRANSACTION_TYPE_ADD_USER    =  1;
     static function transaction_1($data, $web_service_details) {
+         global $data_list;
          $uidIdPersonaId = $data['item_id'];
          //Add user call the webservice
          $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId));
@@ -824,6 +868,7 @@ class MigrationCustom {
 
             if ($chamilo_user_info && $chamilo_user_info['user_id']) {
                 $chamilo_user_info = api_get_user_info($chamilo_user_info['user_id'], false, false, true);
+                $data_list['users'][$uidIdPersonaId] = $chamilo_user_info['user_id'];
                 return array(
                     'entity' => 'user',
                     'before' => null,
@@ -833,7 +878,7 @@ class MigrationCustom {
                 );
             } else {
                 return array(
-                    'message' => "User was not created : $uidIdPersonaId \n UserManager::add() params: ".print_r($user_info, 1)." \n Reponse: \n ".print_r($api_failureList, 1),
+                    'message' => "User was not created : $uidIdPersonaId \n UserManager::add() params: ".print_r($user_info, 1)." \nResponse: \n ".print_r($api_failureList, 1),
                     'status_id' => self::TRANSACTION_STATUS_FAILED
                 );
             }
@@ -846,12 +891,14 @@ class MigrationCustom {
     //const TRANSACTION_TYPE_DEL_USER    =  2;
     static function transaction_2($data) {
         $uidIdPersonaId = strtoupper($data['item_id']);
-        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
+        global $data_list;
+        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId, $data_list);
         if ($user_id) {
             $chamilo_user_info_before = api_get_user_info($user_id, false, false, true);
             $result = UserManager::delete_user($user_id);
             $chamilo_user_info = api_get_user_info($user_id, false, false, true);
             if ($result) {
+                $data_list['users'][$uidIdPersonaId] = null;
                 return array(
                     'entity' => 'user',
                     'before' => $chamilo_user_info_before,
@@ -873,11 +920,14 @@ class MigrationCustom {
         }
     }
 
-    //editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
-    //const TRANSACTION_TYPE_EDIT_USER   =  3;
+    /**
+     * editar detalles de usuario (nombre/correo/contraseña) usuario_editar UID
+     * const TRANSACTION_TYPE_EDIT_USER   =  3;
+     */
     static function transaction_3($data, $web_service_details) {
         $uidIdPersonaId = strtoupper($data['item_id']);
-        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId);
+        global $data_list;
+        $user_id = self::get_user_id_by_persona_id($uidIdPersonaId, $data_list);
         if ($user_id) {
             $user_info = Migration::soap_call($web_service_details, 'usuarioDetalles', array('intIdSede'=> $data['branch_id'], 'uididpersona' => $uidIdPersonaId));
             if ($user_info['error'] == false) {
@@ -911,7 +961,8 @@ class MigrationCustom {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
-        $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+        global $data_list;
+        $user_id = self::get_user_id_by_persona_id($uidIdPersona,$data_list);
 
         if (empty($user_id)) {
             return array(
@@ -922,8 +973,8 @@ class MigrationCustom {
 
         //Move A to B
         if (!empty($uidIdPrograma) && !empty($uidIdProgramaDestination)) {
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
 
             if (!empty($session_id) && !empty($destination_session_id)) {
 
@@ -966,7 +1017,7 @@ class MigrationCustom {
 
         //Move A to empty
         if (!empty($uidIdPrograma) && empty($uidIdProgramaDestination)) {
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 //SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
@@ -983,7 +1034,7 @@ class MigrationCustom {
 
          //Move empty to A
         if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination)) {
-            $session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
+            $session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
                 SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
@@ -1020,6 +1071,7 @@ class MigrationCustom {
     //añadir curso curso_agregar CID
     //const TRANSACTION_TYPE_ADD_COURSE  =  5;
     static function transaction_5($data, $web_service_details) {
+        global $data_list;
         $uidCursoId = $data['item_id'];
         $course_info = Migration::soap_call($web_service_details, 'cursoDetalles', array('intIdSede'=> $data['branch_id'], 'uididcurso' => $uidCursoId));
         if ($course_info['error'] == false) {
@@ -1027,6 +1079,7 @@ class MigrationCustom {
             $course_info = CourseManager::create_course($course_info);
             $course_info = api_get_course_info($course_info['code'], true);
             if (!empty($course_info)) {
+                $data_list['courses'][$uidCursoId] = $course_info['code'];
                 return array(
                         'entity' => 'course',
                         'before' => null,
@@ -1048,11 +1101,13 @@ class MigrationCustom {
     //eliminar curso curso_eliminar CID
     //const TRANSACTION_TYPE_DEL_COURSE  =  6;
     static function transaction_6($data) {
+        global $data_list;
         $course_code = self::get_real_course_code($data['item_id']);
         if (!empty($course_code)) {
             $course_info_before = api_get_course_info($course_code, true);
             CourseManager::delete_course($course_code);
             $course_info = api_get_course_info($course_code, true);
+            $data_list['courses'][$data['item_id']] = null;
             return array(
                     'entity' => 'course',
                     'before' => $course_info_before,
@@ -1113,8 +1168,9 @@ class MigrationCustom {
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
 
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-        $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination);
+        global $data_list;
+        $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+        $destination_session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
 
         if (!empty($course_code)) {
             if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination) && !empty($destination_session_id)) {
@@ -1141,6 +1197,7 @@ class MigrationCustom {
     //añadir p.a. pa_agregar PID
     // const TRANSACTION_TYPE_ADD_SESS    =  8;
     static function transaction_8($data, $web_service_details) {
+        global $data_list;
         $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('intIdSede'=> $data['branch_id'], 'uididprograma' => $data['item_id']));
 
         if ($session_info['error'] == false) {
@@ -1150,12 +1207,13 @@ class MigrationCustom {
             $session_id = SessionManager::add($session_info);
             $session_info = api_get_session_info($session_id, true);
             if ($session_id) {
+                $data_list['sessions'][$data['item_id']] = $session_id;
                 return array(
                    'entity' => 'session',
                    'before' => null,
                    'after'  => $session_info,
                    'message' => "Session was created. Id: $session_id session data: ".print_r($session_info, 1),
-                   'status_id' => self::TRANSACTION_STATUS_FAILED
+                   'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                 );
             } else {
                 return array(
@@ -1174,11 +1232,13 @@ class MigrationCustom {
     //const TRANSACTION_TYPE_DEL_SESS    =  9;
     static function transaction_9($data) {
         $uidIdPrograma = $data['item_id'];
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+        global $data_list;
+        $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
         if (!empty($session_id)) {
             $session_info_before = api_get_session_info($session_id, true);
             SessionManager::delete_session($session_id, true);
             $session_info = api_get_session_info($session_id, true);
+            $data_list['sessions'][$data['item_id']] = null;
             return array(
                    'entity' => 'session',
                    'before' => $session_info_before,
@@ -1198,10 +1258,12 @@ class MigrationCustom {
     // const TRANSACTION_TYPE_EDIT_SESS   = 10;
     static function transaction_10($data, $web_service_details) {
         $uidIdPrograma = $data['item_id'];
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+        global $data_list;
+        $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
         if (!empty($session_id)) {
             $session_info = Migration::soap_call($web_service_details, 'programaDetalles', array('intIdSede'=> $data['branch_id'], 'uididprograma' => $data['item_id']));
             if ($session_info['error'] == false) {
+                self::fix_access_dates($session_info);
                 $session_info['id'] = $session_id;
                 unset($session_info['error']);
                 $session_info_before = api_get_session_info($session_id, true);
@@ -1226,13 +1288,14 @@ class MigrationCustom {
     }
 
     static function transaction_cambiar_generic($extra_field_variable, $data) {
+        global $data_list;
         $uidIdPrograma = $data['item_id'];
         //$orig_id = $data['orig_id'];
         $destination_id = $data['dest_id'];
 
         $common_message = " - item_id:  $uidIdPrograma, dest_id: $destination_id -  looking for extra_field_variable: $extra_field_variable - with data ".print_r($data, 1);
 
-        $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
+        $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
         if (!empty($session_id)) {
             //??
             $extra_field = new ExtraField('session');
@@ -1602,6 +1665,7 @@ class MigrationCustom {
     //            añadir nota_agregar IID
     // const TRANSACTION_TYPE_ADD_NOTA  = 31;
     static function transaction_31($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -1612,8 +1676,8 @@ class MigrationCustom {
             $uidIdPersona  = $original_data['item_id'];
             $score         = $data['name'];
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                 return array(
@@ -1708,6 +1772,7 @@ class MigrationCustom {
     // eliminar nota_eliminar IID
     // const TRANSACTION_TYPE_DEL_NOTA  = 32;
     static function transaction_32($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -1718,8 +1783,8 @@ class MigrationCustom {
             $uidIdPrograma = $original_data['orig_id'];
             $uidIdPersona  = $original_data['item_id'];
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                 return array(
@@ -1798,6 +1863,7 @@ class MigrationCustom {
     //            editar nota_editar IID
     // const TRANSACTION_TYPE_EDIT_NOTA = 33;
     static function transaction_33($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'notaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -1809,8 +1875,8 @@ class MigrationCustom {
             $uidIdPersona  = $original_data['item_id'];
             $score         = $data['name'];
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                 return array(
@@ -1924,6 +1990,7 @@ class MigrationCustom {
     //            añadir assist_agregar IID
     // const TRANSACTION_TYPE_ADD_ASSIST  = 34;
     static function transaction_34($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -1939,8 +2006,8 @@ class MigrationCustom {
             $attendance_date = $data['date_assist'];
             $attendance_user_status = $data['status']; // modified in the asistenciaDetalles function
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                 return array(
@@ -2060,6 +2127,7 @@ class MigrationCustom {
     //            eliminar assist_eliminar IID
     // const TRANSACTION_TYPE_DEL_ASSIST  = 35;
     static function transaction_35($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -2074,8 +2142,8 @@ class MigrationCustom {
 
             $attendance_date = $data['date_assist'];
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                 return array(
@@ -2181,6 +2249,7 @@ class MigrationCustom {
     //            editar assist_editar IID
     // const TRANSACTION_TYPE_EDIT_ASSIST = 36;
     static function transaction_36($original_data, $web_service_details) {
+        global $data_list;
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
@@ -2195,8 +2264,8 @@ class MigrationCustom {
             $attendance_date = $data['date_assist'];
             $attendance_user_status = $data['status']; // modified in the asistenciaDetalles function
 
-            $session_id = self::get_session_id_by_programa_id($uidIdPrograma);
-            $user_id = self::get_user_id_by_persona_id($uidIdPersona);
+            $session_id = self::get_session_id_by_programa_id($uidIdPrograma, $data_list);
+            $user_id = self::get_user_id_by_persona_id($uidIdPersona, $data_list);
 
             if (empty($user_id)) {
                   return array(
@@ -2342,6 +2411,7 @@ class MigrationCustom {
     static function process_transactions($params, $web_service_details) {
         $transactions = Migration::soap_call($web_service_details, 'transacciones', $params);
         $transaction_status_list = self::get_transaction_status_list();
+        $counter = 0;
 
         if (isset($transactions) && isset($transactions['error']) && $transactions['error'] == true) {
             error_log($transactions['message']);
@@ -2349,26 +2419,33 @@ class MigrationCustom {
             $counter = count($transactions);
             error_log("Processing ".$counter." transaction(s)");
             $count = 1;
+            $exclude_list = self::check_transactions_duplicity($transactions);
             if (!empty($transactions)) {
-                foreach ($transactions as $transaction_info) {
+                foreach ($transactions as $id => $transaction_info) {
+                    $result = array();
                     //Add transactions here
-                    error_log("Processing transaction: ".$count);
-                    $result = self::process_transaction($transaction_info, $transaction_status_list);
+                    if (in_array($id,$exclude_list)) {
+                        // Insert as deprecated
+                        $result = self::process_transaction($transaction_info, $transaction_status_list, null, true);
+                    } else {
+                        // Do normal insert
+                        $result = self::process_transaction($transaction_info, $transaction_status_list);
+                    }
                     $count++;
                     if ($result['error'] == true) {
-                        error_log("ERROR:");
-                        error_log($result['message']);
-                        exit;
+                        error_log('ERROR: '.$result['message']);
+                        //exit;
                     } else {
                         error_log($result['message']);
                     }
                }
             }
         }
+        return $counter;
     }
 
     static function validate_transaction($transaction_info) {
-        if (empty($transaction_info) || empty($transaction_info['transaction_id']) || empty($transaction_info['action']) || empty($transaction_info['branch_id'])) {
+        if (empty($transaction_info) || empty($transaction_info['transaction_id']) || empty($transaction_info['action']) || empty($transaction_info['branch_id']) || empty($transaction_info['item_id'])) {
             return array(
                 'id' => null,
                 'error' => true,
@@ -2382,9 +2459,12 @@ class MigrationCustom {
     /**
      *
      * @param array simple return of the webservice transaction
+     * @param array
+     * @param bool Force deletion of the transaction if it exists already (and reexecute)
+     * @param int  Whether this transaction should be inserted as deprecated or not
      * @return int
      */
-    static function process_transaction($transaction_info, $transaction_status_list = array(), $forced = false) {
+    static function process_transaction($transaction_info, $transaction_status_list = array(), $forced = false, $deprecated = false) {
         if ($transaction_info) {
             if (empty($transaction_status_list)) {
                 $transaction_status_list = self::get_transaction_status_list();
@@ -2398,7 +2478,7 @@ class MigrationCustom {
                    'branch_id'      => isset($transaction_info['idsede']) ? $transaction_info['idsede'] : null,
                    'dest_id'        => isset($transaction_info['dest']) ? $transaction_info['dest'] : null,
                    'info'           => isset($transaction_info['infoextra']) ? $transaction_info['infoextra'] : null,
-                   'status_id'      => 0
+                   'status_id'      => $deprecated ? TRANSACTION_STATUS_DEPRECATED : 0,
             );
 
             $validate = self::validate_transaction($params);
@@ -2417,11 +2497,12 @@ class MigrationCustom {
 
             if (empty($transaction_info)) {
                 $transaction_id = Migration::add_transaction($params);
+                if ($deprecated) { error_log('Inserted transaction '.$transaction_id.' as deprecated'); }
                 if ($transaction_id) {
                     return array(
                         'id' => $transaction_id,
                         'error' => false,
-                        'message' => "Third party transaction id #{$params['transaction_id']} added to Chamilo with id #$transaction_id"
+                        'message' => "3rd party trans id #{$params['transaction_id']} added to Chamilo, id #$transaction_id, status {$params['status_id']}"
                     );
                 } else {
                     return array(
@@ -2548,6 +2629,7 @@ class MigrationCustom {
      *
      */
     static function programaDetalles($data, $params) {
+        global $data_list;
         $result = self::genericDetalles($data, __FUNCTION__, $params);
         if ($result['error'] == true) {
             return $result;
@@ -2604,7 +2686,7 @@ class MigrationCustom {
         //$result['estado'] = intval($result['estado']);
 
         //Searching id_coach
-        $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach']);
+        $result['id_coach'] = MigrationCustom::get_user_id_by_persona_id($result['id_coach'], $data_list);
 
         unset($result['uididprograma']);
         unset($result['uididsede']);
@@ -2778,7 +2860,9 @@ class MigrationCustom {
 
     /**
      * Review the dates given in the session details array and make sure we
-     * define them in the best possible way
+     * define them in the best possible way. Although it is nice to call this
+     * function, in general, people from ICPNA define the date during an update
+     * following the creation.
      * @param array Array of session data passed by reference (modified in-place)
      * @return bool Always returns true
      */
@@ -2792,6 +2876,8 @@ class MigrationCustom {
         $aed = (!empty($data['access_end_date'])?$data['access_end_date']:$nt);
         $casd = (!empty($data['coach_access_start_date'])?$data['coach_access_start_date']:$nt);
         $caed = (!empty($data['coach_access_end_date'])?$data['coach_access_end_date']:$nt);
+        $dsd = (!empty($data['display_start_date'])?$data['display_start_date']:$asd);
+        $ded = (!empty($data['display_end_date'])?$data['display_end_date']:$aed);
         $vstart = $vend = $nt;
         $matches = array();
         $match = preg_match('/-\s(\d{4})(\d{2})\s-/',$row['name'],$matches);
@@ -2848,10 +2934,24 @@ class MigrationCustom {
                 $caed = $aed;
             }
         }
-        $params['access_start_date'] = $asd;
-        $params['access_end_date'] = $aed;
-        $params['coach_access_start_date'] = $casd;
-        $params['coach_access_end_date'] = $caed;
+        // Fix end dates at 23:59:59 if same as start date
+        if ($asd == $aed) {
+            $aed = substr($aed,0,11).'23:59:59';
+        }
+        if ($casd == $caed) {
+            $caed = substr($caed,0,11).'23:59:59';
+        }
+        if ($dsd == $ded) {
+            $ded = substr($ded,0,11).'23:59:59';
+        }
+        $data['access_start_date'] = $asd;
+        $data['access_end_date'] = $aed;
+        $data['display_start_date'] = $dsd;
+        $data['display_end_date'] = $ded;
+        $data['coach_access_start_date'] = $casd;
+        $data['coach_access_end_date'] = $caed;
+        $data['name'] .= '#'.substr($dsd,7,2);
+
         return true;
     }
 
@@ -2912,6 +3012,86 @@ class MigrationCustom {
               $omigrate['session_course'][$row['id_session']] = $row['course_code'];
             }
         }
+        if (is_array($omigrate) && isset($omigrate) && $omigrate['boost_gradebooks']) {
+            //$evals_found = $eval->load(null, null, $course_data['code'], $gradebook['id'], null, null, $title);
+            $tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
+            $sql = "SELECT id, course_code, category_id, name FROM $tbl_grade_evaluations ORDER BY course_code";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['course_evals'][$row['course_code']][$row['category_id']][$row['name']] = $row['id'];
+            }
+            $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+            $sql = "SELECT id, user_id, evaluation_id FROM $tbl_grade_results ORDER BY evaluation_id";
+            $res =  Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['course_eval_results'][$row['evaluation_id']][$row['user_id']] = $row['id'];
+            }
+            $sql = "SELECT course_code, session_id, id FROM gradebook_category ORDER BY course_code, session_id";
+            $res = Database::query($sql);
+            while ($row = Database::fetch_array($res)) {
+              $omigrate['session_course_gradebook'][$row['course_code']][$row['session_id']] = $row['id'];
+            }
+        }
         return true;
+    }
+    /**
+     * Check if some transactions are not deprecated because of another one
+     * doing the same afterwards
+     * @param array Array of transactions as received by the web service call
+     * @return array Simplified list of IDs to exclude from the transaction array
+     */
+    protected function check_transactions_duplicity($transactions) {
+        // The $transactions array received has rows with the following format
+        // $transaction_info('idt','ida','id','orig','idsede','dest','infoextra')
+        $cleanable = array();
+        // Simple repeat operations check (in particular, subscriptions cannot
+        // be considered cleanable)
+        $cleanable_actions = array(
+            TRANSACTION_TYPE_ADD_USER,
+            TRANSACTION_TYPE_DEL_USER,
+            TRANSACTION_TYPE_EDIT_USER,
+            TRANSACTION_TYPE_ADD_COURSE,
+            TRANSACTION_TYPE_DEL_COURSE,
+            TRANSACTION_TYPE_EDIT_COURSE,
+            TRANSACTION_TYPE_ADD_SESS,
+            TRANSACTION_TYPE_DEL_SESS,
+            TRANSACTION_TYPE_EDIT_SESS,
+            TRANSACTION_TYPE_ADD_SCHED,
+            TRANSACTION_TYPE_DEL_SCHED,
+            TRANSACTION_TYPE_ADD_ROOM,
+            TRANSACTION_TYPE_DEL_ROOM,
+            TRANSACTION_TYPE_EDIT_ROOM,
+            TRANSACTION_TYPE_ADD_BRANCH,
+            TRANSACTION_TYPE_DEL_BRANCH,
+            TRANSACTION_TYPE_EDIT_BRANCH,
+            TRANSACTION_TYPE_ADD_FREQ,
+            TRANSACTION_TYPE_DEL_FREQ,
+            TRANSACTION_TYPE_EDIT_FREQ,
+            TRANSACTION_TYPE_ADD_INTENS,
+            TRANSACTION_TYPE_DEL_INTENS,
+            TRANSACTION_TYPE_EDIT_INTENS,
+            TRANSACTION_TYPE_ADD_FASE,
+            TRANSACTION_TYPE_DEL_FASE,
+            TRANSACTION_TYPE_EDIT_FASE,
+        );
+        $list_all = array_keys($transactions);
+        $exclude = array();
+        // Browse through all transactions
+        foreach ($transactions as $id => $t) {
+            //If the item is in the "cleanable actions" list, register it.
+            //  Otherwise, just ignore (it won't be inserted in the excluded 
+            //  list)
+            if (in_array($t['ida'],$cleanable_actions)) {
+                if (isset($cleanable[$t['id']][$t['ida']])) {
+                    //if same id, same action was already defined, remember id
+                    // for exclusion
+                    error_log('Excluding duplicated transaction '.$t['idt'].'. Transaction '.$transactions[$cleanable[$t['id']][$t['ida']]]['idt'].' duplicates it');
+                    error_log('SELECT * FROM branch_transaction WHERE branch_id = '.$t['idsede'].' AND transaction_id IN ('.$t['idt'].','.$transactions[$cleanable[$t['id']][$t['ida']]]['idt'].');');
+                    $exclude[] = $cleanable[$t['id']][$t['ida']];
+                }
+                $cleanable[$t['id']][$t['ida']] = $id;
+            }
+        }
+        return $exclude;
     }
 }

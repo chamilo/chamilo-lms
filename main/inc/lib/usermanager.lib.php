@@ -2251,56 +2251,102 @@ class UserManager {
             //$order = ' ORDER BY session_category_name DESC, short_name DESC ';
             $order = ' ORDER BY session_category_name DESC, name DESC ';
         }
-
         if ($is_time_over) {
-            $condition_date_end = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
+            $condition_date_end1 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00') OR moved_to <> 0) ";
+            $condition_date_end2 = " AND ((session.access_end_date < '$now' AND session.access_end_date != '0000-00-00 00:00:00')) ";
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
-                $condition_date_end = null;
+                $condition_date_end1 = null;
+                $condition_date_end2 = null;
             } else {
                 //Student can't access before this dates
-                $condition_date_end = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') AND moved_to = 0 ";
+                $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
+                $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
             }
         }
 
-        $select = "SELECT DISTINCT
-                    session.id,
-                    session.name, ".
-                    //SUBSTR(session.name,LOCATE('-',session.name)+1) as short_name,
-                   " access_start_date,
-                    access_end_date,
-                    coach_access_start_date,
-                    coach_access_end_date,
+        $select = "SELECT DISTINCT ".
+                   " session.id, ".
+                   " session.name, ".
+                   //" SUBSTR(session.name,LOCATE('-',session.name)+2) as short_name, ".
+                   " access_start_date, ".
+                   " access_end_date, ".
+                   " coach_access_start_date, ".
+                   " coach_access_end_date, ".
 
-                    display_start_date,
-                    display_end_date,
+                   " display_start_date, ".
+                   " display_end_date, ".
 
-                    session_category_id,
-                    session_category.name as session_category_name,
-                    session_category.date_start session_category_date_start,
-                    session_category.date_end session_category_date_end,
+                   " session_category_id, ".
+                   " session_category.name as session_category_name, ".
+                   " session_category.date_start session_category_date_start, ".
+                   " session_category.date_end session_category_date_end, ".
+                   " id_coach ";
 
-                    moved_to,
-                    moved_status,
-                    id_coach,
-                    scu.id_user";
+         $select_1 = ", moved_to, ".
+                     " moved_status, ".
+                     " scu.id_user";
 
         if ($get_count) {
             $select = "SELECT count(session.id) as total_rows ";
         }
+        // select specific to course coaches
+        $select1 = " $select ".($get_count?'':$select_1)." FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
+        $sql1 = $select1 . " INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id and scu.id_user = $user_id) LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user WHERE scu.id_user = $user_id $condition_date_end1 $order";
 
-        $sql = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                      INNER JOIN $tbl_session_course_user as scu ON (scu.id_session = session.id and scu.id_user = $user_id)
-                      LEFT JOIN $tbl_session_user su ON su.id_session = session.id AND su.id_user = scu.id_user
-                WHERE (
-                         scu.id_user = $user_id OR session.id_coach = $user_id
-                      )  $condition_date_end $order";
+        // select specific to session coaches
+        $select2 = " $select FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id) ";
+        $sql2 = $select2 . "  WHERE session.id_coach = $user_id $condition_date_end2 $order";
 
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-
-            while ($row = Database::fetch_array($result)) {
+        $result1 = Database::query($sql1);
+        $result2 = Database::query($sql2);
+        $join = array();
+        $ordered_join = array();
+        $ids = array();
+        if (Database::num_rows($result2) > 0) {
+            // First take $row2, as it contains less data and this data
+            //  is enough
+            while ($row2 = Database::fetch_array($result2)) {
+                $join[] = $row2;
+                $ids[] = $row2['id'];
+            }
+        }
+        if (Database::num_rows($result1) > 0) {
+            // Now add the diff with $row1, ordering elements as planned by 
+            //   query
+            $i = 0;
+            while ($row1 = Database::fetch_array($result1)) {
+                if (!in_array($row1['id'],$ids)) {
+                    if ($reverse_order) {
+                        while (strcmp($row1['session_category_name'],$join[$i]['session_category_name'])<=0 && isset($join[$i])) {
+                            $ordered_join[] = $join[$i];
+                            $i++;
+                        }
+                    } else {
+                        while (strcmp($row1['session_category_name'],$join[$i]['session_category_name'])>0 && isset($join[$i])) {
+                            $ordered_join[] = $join[$i];
+                            $i++;
+                        }
+                        if (strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0 && isset($join[$i])) {
+                            while (strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
+                                $ordered_join[] = $join[$i];
+                                $i++;
+                            }
+                        }
+                    }
+                    $ordered_join[] = $row1;
+                    $join[] = $row1;
+                }
+                //$i++;
+            }
+        }
+        if (count($ordered_join)==0) {
+            $ordered_join = $join;
+        }
+        if (count($ordered_join)>0) {
+            //while ($row = Database::fetch_array($result1)) {
+            foreach ($ordered_join as $row) {
                 if ($get_count) {
                     return $row['total_rows'];
                 }
@@ -2313,9 +2359,10 @@ class UserManager {
                 //$session_info = api_get_session_info($session_id);
                 // The only usage of $session_info is to call 
                 // api_get_session_date_valudation, which only needs id and
-                // dates from the session itself, which we already have in $row,
-                //  so really no need to query the session table again
+                // dates from the session itself, so really no need to query
+                // the session table again
                 $session_info = $row;
+
                 //Checking session visibility
                 $visibility = api_get_session_visibility($session_id, null, false);
 
@@ -2334,7 +2381,6 @@ class UserManager {
                         continue;
                     }
                 }
-
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_name']            = $row['name'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['session_id']              = $row['id'];
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['id_coach']                = $row['id_coach'];

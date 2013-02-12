@@ -893,7 +893,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                 $result = Database::query($sql);
                 $row     = Database::store_result($result);
 
-                //I'm a session admin?
+                //Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
                     $_courseUser['role'] = 'Professor';
                     $is_courseMember     = false;
@@ -902,63 +902,80 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                     $is_courseCoach      = false;
                     $is_sessionAdmin     = true;
                 } else {
-                    //Im a coach or a student?
-                    $sql = "SELECT cu.id_user, cu.status FROM $tbl_session_course_user cu
-                            WHERE   course_code = '$_cid' AND
-                                    cu.id_user     = '".$user_id."' AND
-                                    cu.id_session  = '".$session_id."'
-                            LIMIT 1";
+                    // Am I a session coach for this session?
+                    $sql = "SELECT id, id_coach FROM $tbl_session session ".
+                           "INNER JOIN $tbl_session_course sc ".
+                           "ON sc.id_session = session.id ".
+                           "WHERE session.id = $session_id ".
+                           "AND session.id_coach = $user_id ".
+                           "AND sc.course_code = '$_cid'";
                     $result = Database::query($sql);
-
                     if (Database::num_rows($result)) {
-                        $row = Database::fetch_array($result, 'ASSOC');
-
-                        $session_course_status = $row['status'];
-
-                        switch ($session_course_status) {
-                            case '2': // coach - teacher
-                                $_courseUser['role'] = 'Professor';
-                                $is_courseMember     = true;
-                                $is_courseTutor      = true;
-                                $is_courseCoach      = true;
-                                $is_sessionAdmin     = false;
-
-                                if (api_get_setting('extend_rights_for_coach') == 'true') {
-                                    $is_courseAdmin = true;
-                                } else {
-                                    $is_courseAdmin = false;
-                                }
-                                Session::write('_courseUser', $_courseUser);
-                                break;
-                            case '0': //Student
-                                $_courseUser['role'] = '';
-                                $is_courseMember     = true;
-                                $is_courseTutor      = false;
-                                $is_courseAdmin      = false;
-                                $is_courseCoach      = false;
-                                $is_sessionAdmin     = false;
-
-                                Session::write('_courseUser', $_courseUser);
-                                break;
-                            default:
-                                //unregister user
-                                $_courseUser['role'] = '';
-                                $is_courseMember     = false;
-                                $is_courseTutor      = false;
-                                $is_courseAdmin      = false;
-                                $is_sessionAdmin     = false;
-                                $is_courseCoach      = false;
-                                Session::erase('_courseUser');
-                                break;
-                        }
-                    } else {
-                        //unregister user
-                        $is_courseMember     = false;
+                        $_courseUser['role'] = 'Professor';
+                        $is_courseMember     = true;
                         $is_courseTutor      = false;
-                        $is_courseAdmin      = false;
+                        $is_courseCoach      = true;
                         $is_sessionAdmin     = false;
-                        $is_courseCoach      = false;
-                        Session::erase('_courseUser');
+                    } else {
+                        // Am I a course coach or a student?
+                        $sql = "SELECT cu.id_user, cu.status ".
+                               "FROM $tbl_session_course_user cu ".
+                               "WHERE   course_code = '$_cid' AND ".
+                               " cu.id_user     = '".$user_id."' AND ".
+                               " cu.id_session  = '".$session_id."' ".
+                               "LIMIT 1";
+                        $result = Database::query($sql);
+    
+                        if (Database::num_rows($result)) {
+                            $row = Database::fetch_array($result, 'ASSOC');
+    
+                            $session_course_status = $row['status'];
+    
+                            switch ($session_course_status) {
+                                case '2': // coach - teacher
+                                    $_courseUser['role'] = 'Professor';
+                                    $is_courseMember     = true;
+                                    $is_courseTutor      = true;
+                                    $is_courseCoach      = true;
+                                    $is_sessionAdmin     = false;
+    
+                                    if (api_get_setting('extend_rights_for_coach') == 'true') {
+                                        $is_courseAdmin = true;
+                                    } else {
+                                        $is_courseAdmin = false;
+                                    }
+                                    Session::write('_courseUser', $_courseUser);
+                                    break;
+                                case '0': //Student
+                                    $_courseUser['role'] = '';
+                                    $is_courseMember     = true;
+                                    $is_courseTutor      = false;
+                                    $is_courseAdmin      = false;
+                                    $is_courseCoach      = false;
+                                    $is_sessionAdmin     = false;
+    
+                                    Session::write('_courseUser', $_courseUser);
+                                    break;
+                                default:
+                                    //unregister user
+                                    $_courseUser['role'] = '';
+                                    $is_courseMember     = false;
+                                    $is_courseTutor      = false;
+                                    $is_courseAdmin      = false;
+                                    $is_sessionAdmin     = false;
+                                    $is_courseCoach      = false;
+                                    Session::erase('_courseUser');
+                                    break;
+                            }
+                        } else {
+                            //unregister user
+                            $is_courseMember     = false;
+                            $is_courseTutor      = false;
+                            $is_courseAdmin      = false;
+                            $is_sessionAdmin     = false;
+                            $is_courseCoach      = false;
+                            Session::erase('_courseUser');
+                        }
                     }
                 }
             }

@@ -179,6 +179,18 @@ class Result
 		}
 
 	}
+        /**
+         * Group insertion assuming all data is correct
+         */
+        public function group_add($list) {
+	    $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
+            $sql = "INSERT INTO $tbl_grade_results (user_id, evaluation_id, created_at, score) VALUES ";
+            foreach ($list as $row) {
+                $sql.= "(".intval($row['user_id']).",".$row['evaluation_id'].",'".$row['created_at']."','".$row['score']."'),";
+            }
+            $sql = substr($sql,0,-1);
+            $res = Database::query($sql);
+        }
 	/**
 	 * insert log result
 	 */

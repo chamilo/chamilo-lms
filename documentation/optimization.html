@@ -38,9 +38,7 @@
 
 
 <h2><b>Contents</b></h2>
-
 <ol>
-
   <li><a href="#1.Using-XCache">Using xCache or APC</a></li>
   <li><a href="#2.Slow-queries">Slow queries</a></li>
   <li><a href="#3.Indexes-caching">Indexes caching</a></li>
@@ -48,6 +46,7 @@
   <li><a href="#5.Users-upload-directories">Users upload directories</a></li>
   <li><a href="#6.Zlib-compression">Zlib compressed output</a></li>
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
+  <li><a href="#8.HTTP-caching-media">HTTP caching for media</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -228,9 +227,83 @@ Some administration scripts *have to* handle lists of all users, and this might 
 This mode is not loaded by default, but could still be selected, leading to a "Fatal error: Allowed memory size ... exhausted" message.<br />
 The only non-scripted solution here is to allow for the corresponding amount of RAM for your PHP configuration (<em>memory_limit = 300M</em>) or your specific VirtualHost if you use mod-php5 (<em>php_value memory_limit 300M</em>).<br/>
 <hr />
+<h2><a name="8.HTTP-caching-media">HTTP caching for media</a></h2>
+<p>Images are (always) part of the heaviest resources around for a website, together with CSS an JavaScript libraries. 
+Obviously, audio files and videos can be much heavier still, but are much less frequent (for now).</p>
+<p>Any web browser will allow you to play a little with HTTP headers. 
+Describing what HTTP really is, is not meant to be in this quick guide, but let's just say that, with the right configuration in your web server, you can "tell" the user's browser to re-use content he already downloaded instead of asking it again from the web server.</p>
+<p>It's easy to underestimate the potential gains of doing this. i
+On a typical web page, your browser will have between 20 (highly optimized) and 200 (not optimized at all) different "items" to download. 
+In Chamilo LMS 1.9, this number is around 40 per page. The first one is the .php file, which tells the browser which other resources to load, then the browser sends requests for these.
+This includes icons (around 20, depending on the page), JS libraries (around 6), CSS files (around 12) and any other multimedia resource you might have.</p>
+<p>Something that is rarely understood by most webmasters or sysadmins is that each one of these resources, unless otherwise configured, will imply a separate request to the server. 
+Even if the server has a mechanism to indicate that a file hasn't changed since the last time, and as such shouldn't be downloaded again, the request is still sent by the browser, received by the server, checked, answered and received again by the browser. 
+While you're waiting for your page to load, your browser is likely to have sent 40 requests and received 40 answers potentially thousands of miles away. You could reduce this to 5, if planned properly.</p>
+<p>Even if this last sentence didn't impress you, you'll have to understand that each of these requests comes to your server, uses a server client (or thread, in the best case scenario) which requires memory, reads on disk (unless you've got some nice reverse-proxy mechanism), replies, writes the log for that request and finally goes back to sleep (or to answer the next request). 
+This might all seem invisible for a few requests, but when you start having hundreds of users connecting to your Chamilo site every few seconds, you'll start noticing.</p>
+<h4>So, how do we make this better?</h4>
+<p>There is one mechanism that will improve this situation. It's called setting "Expiry" headers, and it is based on the idea that, if we tll the browser how long to keep a specific image in cache, the browser will save it locally, identify it by its URL (so the same image offered on 2 different URLs will be considered as 2 different images) and, when a new page is loaded, if the same image is requested and the expiry date and time have not been reached, it will just load it from cache.<br />
+No call to the server, no loading the image, no web server processing, no I/O on the server's disk.<br />
+This is probably the single best optimization you can setup on your site.</p>
+<p>This measure has to be taken with caution though... some images might be dynamic, or you might want to ensure that the image can only be loaded when the user is connected...<br />
+So only a few images (but that's enough by us) will be configurable this way.<br />
+And that's alright, because we know exactly which images can be configured this way:<br />
+<ul>
+  <li>All the interface icons</li>
+  <li>The CSS files (unless you change them often</li>
+  <li>The homepage images (just make sure you change the name of the files when updating them)</li>
+  <li>Even the JS files can be cached</li>
+</ul>
+</p>
+<h3>Setting up expiry headers in Apache</h3>
+<p>
+The following example is made to be inserted in an Apache's &lt;VirtualHost&gt; block, and should be adapted to fit in other web servers configurations. Some of the settings here might require the activation of the ModExpire and the ModHeader modules:
+<pre>
+  ExpiresActive On
+  &lt;Directory "/var/www/chamilo/main/img"&gt;
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType application/x-shockwave-flash "access plus 1 month"
+  &lt;/Directory&gt;
+  &lt;Directory "/var/www/chamilo/main/inc/lib"&gt;
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+  &lt;/Directory&gt;
+  &lt;Directory "/var/www/chamilo/main/css"&gt;
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType text/css "access plus 1 month"
+  &lt;/Directory&gt;
+  &lt;Directory "/var/www/chamilo/home"&gt;
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+    ExpiresByType image/gif "access plus 3 hours"
+    ExpiresByType image/jpg "access plus 3 hours"
+    ExpiresByType image/png "access plus 3 hours"
+  &lt;/Directory&gt;
+</pre>
+These settings explicitly mention the file MIME types that will be put in cache, and for how long. For heavily-optimized sites, where all editors are aware of the settings, understand and apply them, it is common to find cache expiry periods of one full year for images.<br />
+If you want to change some content put in cache by the client, though, you will need to change the name of the file (and its reference in the HTML/PHP file that includes it).<br />
+This is an easy way to massively reduce your bandwidth (80% reduction?), the speed of page loading for your users and the use of resources on your web server.
+</p>
 <h2>Authors</h2>
 <ul>
-<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:ywarnier@beeznest.net">ywarnier@beeznest.net</a></li>
+<li>Yannick Warnier, Zend Certified PHP Engineer, BeezNest Belgium SPRL, <a href="mailto:yannick.warnier@beeznest.com">yannick.warnier@beeznest.com</a></li>
 </ul>
 </div>
 </body>

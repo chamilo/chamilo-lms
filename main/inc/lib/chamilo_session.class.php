@@ -125,7 +125,15 @@ class ChamiloSession extends System\Session
             }
         }
 
-        if (!$session->has('starttime') || $session->is_valid()) {
+        /*if (!$session->has('starttime') || $session->is_valid()) {
+            $session->write('starttime', time());
+        }*/
+        // if the session time has expired, refresh the starttime value, so we're starting to count down from a later time
+        if ( $session->has('starttime') && $session->is_valid()) {
+            //error_log('Time expired, cancel session');
+            $session->destroy();
+        } else {
+            //error_log('Time not expired, extend session for a bit more');
             $session->write('starttime', time());
         }
     }

@@ -1715,7 +1715,7 @@ class SessionManager {
                 if ($create_new_courses) {
                     //Just in case
                     if (function_exists('ini_set')) {
-                    	ini_set('memory_limit','256M');
+                    	api_set_memory_limit('256M');
                     	ini_set('max_execution_time',0);
                     }
                     $params = array();

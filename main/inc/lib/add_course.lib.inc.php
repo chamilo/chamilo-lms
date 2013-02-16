@@ -15,8 +15,17 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 /* FUNCTIONS */
 
-// TODO: Such a function might be useful in other places too. It might be moved in the CourseManager class.
-// Also, the function might be upgraded for avoiding code duplications.
+/**
+ * Generates a course code from a course title
+ * @todo Such a function might be useful in other places too. It might be moved in the CourseManager class.
+ * @todo the function might be upgraded for avoiding code duplications (currently, it might suggest a code that is already in use)
+ * @param string A course title
+ * @param string The course title encoding (defaults to type defined globally)
+ * @return string A proposed course code
+ * @assert (null,null) === false
+ * @assert ('ABC_DEF', null) === 'ABCDEF'
+ * @assert ('ABC09*^[%A', null) === 'ABC09A'
+ */
 function generate_course_code($course_title, $encoding = null) {
     if (empty($encoding)) {
         $encoding = api_get_system_encoding();
@@ -34,6 +43,7 @@ function generate_course_code($course_title, $encoding = null) {
  * @param bool      Use code-independent keys
  * @return array    An array with the needed keys ['currentCourseCode'], ['currentCourseId'], ['currentCourseDbName'], ['currentCourseRepository']
  * @todo Eliminate the global variables.
+ * @assert (null) === false
  */
 function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base_name = '', $prefix_for_path = '', $add_unique_prefix = false, $use_code_indepedent_keys = true) {
     global $prefixAntiNumber, $_configuration;
@@ -92,6 +102,10 @@ function define_course_keys($wanted_code, $prefix_for_all = '', $prefix_for_base
 
 /**
  * Initializes a file repository for a newly created course.
+ * @param string Course repository
+ * @param string Course code
+ * @return int 0
+ * @assert (null,null) === false
  */
 function prepare_course_repository($course_repository, $course_code) {
 
@@ -193,6 +207,11 @@ function prepare_course_repository($course_repository, $course_code) {
     return 0;
 };
 
+/**
+ * Gets an array with all the course tables (deprecated?)
+ * @return array
+ * @assert (null) !== null
+ */
 function get_course_tables() {
     $tables = array();
 
@@ -289,7 +308,11 @@ function get_course_tables() {
     return $tables;
 }
 
-/* Executed only before create_course_tables() */
+/**
+ * Executed only before create_course_tables()
+ * @return void
+ * @assert (null) === null
+ */
 function drop_course_tables() {
     $list = get_course_tables();
     foreach ($list as $table) {
@@ -299,7 +322,11 @@ function drop_course_tables() {
 }
 
 /**
- * Creates all the necessary tables for a new course
+ * Creates all the necessary tables for a new course (deprecated since 1.9.0 as
+ * we only use a single database, configured at install time)
+ * @param string Course DB name
+ * @return int 0
+ * @assert (null) === false
  */
 function create_course_tables($course_db_name = null) {
     global $_configuration;
@@ -1991,6 +2018,17 @@ function create_course_tables($course_db_name = null) {
     return 0;
 }
 
+/**
+ * Returns a list of all files in the given course directory. The requested
+ * directory will be checked against a "checker" directory to avoid access to
+ * protected/unauthorized files
+ * @param string Complete path to directory we want to list
+ * @param array A list of files to which we want to add the files found
+ * @param string Type of base directory from which we want to recover the files
+ * @return array
+ * @assert (null,null,null) === false
+ * @assert ('abc',array(),'') === array()
+ */
 function browse_folders($path, $files, $media) {
     if ($media == 'images') {
         $code_path = api_get_path(SYS_CODE_PATH).'default_course_document/images/';
@@ -2021,6 +2059,13 @@ function browse_folders($path, $files, $media) {
     return $files;
 }
 
+/**
+ * Sorts pictures by type (used?)
+ * @param array List of files (sthg like array(0=>array('png'=>1)))
+ * @param string File type
+ * @return array The received array without files not matching type
+ * @assert (array(),null) === array()
+ */
 function sort_pictures($files, $type) {
     $pictures = array();
     foreach ($files as $key => $value){
@@ -2033,8 +2078,12 @@ function sort_pictures($files, $type) {
 
 /**
  * Fills the course repository with some example content.
+ * @param string Course directory name (without prefix/suffix). eg "ABC"
+ * @param bool Whether we want to fill it with example content or not
+ * @return array The (structured) list of files created
  * @version	 1.2
  * @deprecated this function has been merged into the fill_db_course
+ * @assert (null, null) === false
  */
 function fill_course_repository($course_repository, $fill_with_exemplary_content = null) {
 
@@ -2208,11 +2257,12 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
 }
 
 /**
- * Function to convert a string from the Dokeos language files to a string ready
- * to insert into the database.
+ * Function to convert a string from the language files to a string ready
+ * to insert into the database (escapes single quotes)
  * @author Bart Mollet (bart.mollet@hogent.be)
  * @param string $string The string to convert
  * @return string The string converted to insert into the database
+ * @assert ('a\'b') === 'ab'
  */
 function lang2db($string) {
     $string = str_replace("\\'", "'", $string);
@@ -2222,7 +2272,15 @@ function lang2db($string) {
 
 /**
  * Fills the course database with some required content and example content.
+ * @param int Course (int) ID
+ * @param string Course directory name (e.g. 'ABC')
+ * @param string Language used for content (e.g. 'spanish')
+ * @param bool Whether to fill the course with example content
+ * @return bool False on error, true otherwise
  * @version 1.2
+ * @assert (null, '', '', null) === false
+ * @assert (1, 'ABC', null, null) === false
+ * @assert (1, 'TEST', 'spanish', true) === true
  */
 function fill_db_course($course_id, $course_repository, $language, $fill_with_exemplary_content = null) {
     if (is_null($fill_with_exemplary_content)) {
@@ -2637,6 +2695,8 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
  * the visibility of the tool)
  * @param string    $variable
  * @author Patrick Cool, patrick.cool@ugent.be
+ * @assert ('true') === true
+ * @assert ('false') === false
  */
 function string2binary($variable) {
     if ($variable == 'true') {
@@ -2648,20 +2708,11 @@ function string2binary($variable) {
 }
 
 /**
- * function register_course to create a record in the course table of the main database
- * @param string    $course_sys_code
- * @param string    $course_screen_code
- * @param string    $course_repository
- * @param string    $course_db_name
- * @param string    $tutor_name
- * @param string    $category
- * @param string    $title              complete name of course
- * @param string    $course_language    lang for this course
- * @param string    $uid                uid of owner
- * @param integer                       Expiration date in unix time representation
- * @param array                         Optional array of teachers' user ID
- * @return int      0
+ * Function register_course to create a record in the course table of the main database
+ * @param array Course details (see code for details)
+ * @return int  Created course ID
  * @todo use an array called $params instead of lots of params
+ * @assert (null) === false
  */
 function register_course($params) {
     global $error_msg, $firstExpirationDelay;
@@ -2860,6 +2911,7 @@ function register_course($params) {
  * @param string        Absolute path to the ZIP file
  * @param bool          Whether the ZIP file is compressed (not implemented). Defaults to TRUE.
  * @return array        List of files properties from the ZIP package
+ * @assert (null) === false
  */
 function readPropertiesInArchive($archive, $is_compressed = true) {
     include api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';

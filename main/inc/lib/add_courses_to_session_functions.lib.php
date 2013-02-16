@@ -1,13 +1,29 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * Definition of the AddCourseToSession class
+ * @package chamilo.library
+ */
+/**
+ * Init
+ */
 require_once (api_get_path(LIBRARY_PATH).'xajax/xajax.inc.php');
 //require_once (api_get_path(SYS_CODE_PATH).'admin/add_courses_to_session.php');
 
-
+/**
+ * AddCourseToSession class
+ */
 class AddCourseToSession {
-
-	public function search_courses($needle,$type) {
+    /**
+     * Searches a course, given a search string and a type of search box
+     * @param string Search string
+     * @param string Type of search box ('single' or anything else)
+     * @return string XajaxResponse
+     * @assert () !== null
+     * @assert ('abc', 'single') !== null
+     * @assert ('abc', 'multiple') !== null
+     */
+    public function search_courses($needle,$type) {
 		global $tbl_course, $tbl_session_rel_course, $id_session;
 
 		$xajax_response = new XajaxResponse();
@@ -103,4 +119,3 @@ class AddCourseToSession {
 		return $xajax_response;
 	}
 }
-?>

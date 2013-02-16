@@ -1,7 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Access_url_edit_session_to_url class
+ * Definition of the Accessurleditsessiontourl class
+ * @package chamilo.library
+ */
+/**
+ * Init
+ */
+require_once ('xajax/xajax.inc.php');
+/**
+ * Accessurleditsessiontourl class
  * Contains several functions dealing with displaying,
  * editing,... of a Access_url_edit_session_to_url_functions
  *
@@ -9,15 +17,6 @@
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
- * @package chamilo.include
- */
-/**
- * Code
- */
-require_once ('xajax/xajax.inc.php');
-/**
- * Class
- * @package chamilo.include
  */
 class Accessurleditsessionstourl {
 

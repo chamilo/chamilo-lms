@@ -1,5 +1,9 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Definition of the AccessToken class
+ * @package chamilo.library
+ */
 /**
  * An access token. Can be passed between applications to grant access.
  * 
@@ -26,7 +30,6 @@
  *      $token = new AccessToken(1, 1, '+*ç*%ç*ç');
  *      $url = '.....?access_token=' . $token;
  *
- * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class AccessToken

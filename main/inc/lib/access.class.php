@@ -1,5 +1,9 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Definition of the Access class
+ * @package chamilo.library
+ */
 /**
  * Authorize or deny calls. 
  * 
@@ -14,7 +18,6 @@
  * (form, javascript for javascript, etc) can get access to the same token.
  * 
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
- * @license /license.txt
  */
 abstract class Access
 {

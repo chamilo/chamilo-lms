@@ -1,5 +1,13 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
+/**
+ * Definition of the Accessurleditcoursestourl class
+ * @package chamilo.library
+ */
+/**
+ * Init
+ */
+require_once ('xajax/xajax.inc.php');
 /**
  * Access_url_edit_courses_to_url class
  * Contains several functions dealing with displaying,
@@ -9,11 +17,7 @@
  * @author Toon Keppens <toon@vi-host.net>
  * @author Julio Montoya - Cleaning code
  * @author Ricardo Rodriguez - Separated the function and code
- *
  */
-
-require_once ('xajax/xajax.inc.php');
-
 class Accessurleditcoursestourl {
 
 	function search_courses($needle, $id)

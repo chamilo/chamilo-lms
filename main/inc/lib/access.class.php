@@ -25,6 +25,7 @@ abstract class Access
      * Return view and edit access.
      * 
      * @return  \Access
+     * @assert () !== null
      */
     public static function all()
     {
@@ -35,6 +36,7 @@ abstract class Access
      * Return no access.
      * 
      * @return  \Access
+     * @assert () === null
      */
     public static function forbidden()
     {
@@ -48,6 +50,7 @@ abstract class Access
      * Returns true if security token is valid, false otherwise.
      * 
      * @return bool
+     * @assert () === false
      */
     public function is_token_valid()
     {
@@ -63,7 +66,8 @@ abstract class Access
      * Returns the token contained in the session. 
      * Stores the token for further reuse so that it can be changed in session.
      * 
-     * @return string 
+     * @return string
+     * @assert () !== null
      */
     public function get_session_token()
     {
@@ -81,6 +85,7 @@ abstract class Access
      * 
      * Stores the existing session token before saving the new one so that 
      * the current call can still be validated after calling this function.
+     * @assert () === ''
      */
 
     public function get_token()
@@ -111,6 +116,10 @@ abstract class Access
      */
     public abstract function can_view();
 
+    /**
+     * Returns whether this access is authorized or not. Synonym for can_view()
+     * @assert () === false
+     */
     public function authorize()
     {
         return $this->can_view();

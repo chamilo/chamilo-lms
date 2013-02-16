@@ -1,7 +1,15 @@
 <?php
-/* For licensing terms, see /chamilo_license.txt */
+/* For licensing terms, see /license.txt */
 /**
- * Access_url_edit_users_to_url class
+ * Accessurledituserstourl class definition
+ * @package chamilo.library
+ */
+/**
+ * Code
+ */
+require_once ('xajax/xajax.inc.php');
+/**
+ * Accessurledituserstourl class definition
  * Contains several functions dealing with displaying,
  * editing,... of a Access_url_edit_users_to_url_functions
  *
@@ -11,15 +19,8 @@
  * @author Ricardo Rodriguez - Separated the function and code
  * @package chamilo.library
  */
-/**
- * Code
- */
-require_once ('xajax/xajax.inc.php');
-/**
- * Class
- * @package chamilo.library
- */
-class Accessurledituserstourl{
+class Accessurledituserstourl
+{
 
 	function search_users($needle, $id)
 	{

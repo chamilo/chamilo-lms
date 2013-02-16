@@ -20,6 +20,14 @@ require_once ('xajax/xajax.inc.php');
  */
 class Accessurleditcoursestourl {
 
+        /**
+         * Search for a list of available courses by title or code, based on
+         * a given string
+         * @param string String to search for
+         * @param int Deprecated param
+         * @return string A formatted, xajax answer block
+         * @assert () === false
+         */
 	function search_courses($needle, $id)
 	{
 		global $tbl_course;

@@ -19,7 +19,13 @@ require_once ('xajax/xajax.inc.php');
  * @author Ricardo Rodriguez - Separated the function and code
  */
 class Accessurleditsessionstourl {
-
+        /**
+         * Search sessions by name, based on a search string
+         * @param string Search string
+         * @param int Deprecated param
+         * @return string Xajax response block
+         * @assert () === false
+         */
 	function search_sessions($needle, $id)
 	{
 		global $tbl_session;

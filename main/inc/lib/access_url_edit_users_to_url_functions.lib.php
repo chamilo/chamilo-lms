@@ -21,7 +21,14 @@ require_once ('xajax/xajax.inc.php');
  */
 class Accessurledituserstourl
 {
-
+        /**
+         * Search users by username, firstname or lastname, based on the given
+         * search string
+         * @param string Search string
+         * @param int Deprecated param
+         * @return string Xajax response block
+         * @assert () === false
+         */
 	function search_users($needle, $id)
 	{
 		global $tbl_user, $tbl_access_url_rel_user;

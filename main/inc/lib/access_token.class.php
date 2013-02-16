@@ -35,6 +35,11 @@
 class AccessToken
 {
 
+    /**
+     * Makes sure the static token exists and is a reference to an AccessToken
+     * object
+     * @assert () !== null
+     */
     static function empty_token()
     {
         static $result = null;
@@ -45,9 +50,12 @@ class AccessToken
     }
 
     /**
-     *
-     * @param type $string
+     * Parses a given string to find a token
+     * @param string A base64-encoded string
      * @return AccessToken 
+     * @assert ('') !== null
+     * @assert (base64_encode('a/b')) !== null
+     * @assert (base64_encode('a/b/c')) !== null
      */
     static function parse($string)
     {
@@ -69,11 +77,12 @@ class AccessToken
     }
     
     /**
-     *
-     * @param int       $id
-     * @param int       $user_id
-     * @param string    $key 
+     * Creates a token based on an ID, an user ID and a key
+     * @param int       ID
+     * @param int       User id
+     * @param string    Key
      * @return AccessToken
+     * @assert (0, 0, 'a') !== null
      */
     static function create($id, $user_id, $key)
     {
@@ -86,10 +95,11 @@ class AccessToken
     protected $key = '';
 
     /**
-     *
-     * @param int       $id
-     * @param int       $user_id
-     * @param string    $key 
+     * Constructor
+     * @param int       ID
+     * @param int       User ID
+     * @param string    Key
+     * @assert (1,1,1) === null
      */
     function __construct($id, $user_id, $key)
     {
@@ -100,8 +110,8 @@ class AccessToken
 
     /**
      * The user_api_key id.
-     * 
      * @return int
+     * @assert () > 0
      */
     function get_id()
     {
@@ -109,9 +119,9 @@ class AccessToken
     }
 
     /**
-     * User id.
-     * 
+     * User id
      * @return string
+     * @assert () > 0
      */
     function get_user_id()
     {
@@ -120,8 +130,8 @@ class AccessToken
 
     /**
      * User api key.
-     * 
      * @return string
+     * @assert () !== null
      */
     function get_key()
     {
@@ -130,8 +140,8 @@ class AccessToken
 
     /**
      * True if the token is an empty token. I.e. a no access token.
-     * 
      * @return bool
+     * @assert () === true
      */
     function is_empty()
     {
@@ -141,8 +151,8 @@ class AccessToken
     /**
      * Validate token against the database. Returns true if token is valid, 
      * false otherwise.
-     * 
      * @return boolean 
+     * @assert () === false
      */
     function is_valid()
     {
@@ -171,8 +181,8 @@ class AccessToken
     /**
      * Returns a string representation of the token that can be passed in a url or a form.
      * The string representation can be parsed by calling AccessToken::parse();
-     * 
      * @return string
+     * @assert () !== null
      */
     function __toString()
     {

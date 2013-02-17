@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * Document download/view script
+ * @package chamilo.document
+ */
+/**
+ * Init
+ */
 Use Model\Document;
 Use Model\Course;
 

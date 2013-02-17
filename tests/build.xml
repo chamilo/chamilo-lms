@@ -90,7 +90,8 @@
    </simpletest>
  </target-->
 
- <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
+ <target name="phpunit" description="Run unit tests with PHPUnit">
+   <!-- depends="lint"-->
    <!--exec executable="phpunit" failonerror="true"-->
    <exec executable="phpunit">
      <arg line="-c ${basedir}/phpunit/phpunit.xml" />
@@ -99,7 +100,7 @@
 
  <target name="phpdoc" description="Generate API documentation">
    <exec executable="phpdoc">
-     <arg line="-ti ChamiloLMS --target ${basedir}/api  -d ${basedir}/.. -i ${basedir}/*,${basedir}/../archive/*,${basedir}/../home/*,${basedir}/../main/inc/entity/*,${basedir}/../main/inc/lib/symfony/*,${basedir}/../main/inc/lib/phpdocx/*,${basedir}/../main/inc/lib/phpqrcode/*,${basedir}/../main/inc/lib/mpdf/*,${basedir}/../main/inc/lib/internationalization_database/transliteration/*,${basedir}/../main/inc/lib/phpmailer/*,${basedir}/../main/inc/lib/htmlpurifier/*,${basedir}/../main/inc/lib/fckeditor/*,${basedir}/../main/inc/lib/formvalidator/*,${basedir}/../main/upload/users/*,${basedir}/../main/lang/*,${basedir}/../courses/*,.htaccess" />
+     <arg line="-ti ChamiloLMS --target ${basedir}/api  --directory ${basedir}/.. -i ${basedir}/../archive/*,${basedir}/../home/*,${basedir}/../main/inc/entity/*,${basedir}/../main/inc/lib/symfony/*,${basedir}/../main/inc/lib/phpdocx/*,${basedir}/../main/inc/lib/phpqrcode/*,${basedir}/../main/inc/lib/mpdf/*,${basedir}/../main/inc/lib/internationalization_database/transliteration/*,${basedir}/../main/inc/lib/phpmailer/*,${basedir}/../main/inc/lib/htmlpurifier/*,${basedir}/../main/inc/lib/fckeditor/*,${basedir}/../main/inc/lib/formvalidator/*,${basedir}/../main/upload/users/*,${basedir}/../main/lang/*,${basedir}/../courses/*,.htaccess" />
    </exec>
  </target>
  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">

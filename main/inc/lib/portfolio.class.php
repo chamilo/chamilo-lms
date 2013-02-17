@@ -1,13 +1,16 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /*
  * This file contains several classes related to portfolios management to avoid
  * having too much files under the lib/. 
  * 
  * Once external libraries are moved to their own directory it would be worth
  * moving them to their own files under a common portfolio directory.
+ * @package chamilo.portfolio
  */
-
+/**
+ * Init
+ */
 use Model\Document;
 use Model\Course;
 
@@ -27,12 +30,10 @@ use Model\Course;
  *      - portfolio action
  * 
  * Note:
- * 
- *
- * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
-class Portfolio extends Portfolio\Portfolio
+//class Portfolio extends Portfolio\Portfolio
+class Portfolio
 {
 
     /**

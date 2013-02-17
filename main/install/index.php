@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  * Chamilo installation
  *
@@ -14,7 +13,9 @@
  * @todo (busy) organise code into functions
  * @package chamilo.install
  */
-
+/**
+ * Init
+ */
 /*		CONSTANTS */
 
 use \ChamiloSession as Session;

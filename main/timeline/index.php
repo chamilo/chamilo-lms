@@ -1,10 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**	
-	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
-*	@package chamilo.timeline
-*/
-
+ *	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
+ *	@package chamilo.timeline
+ */
+/**
+ * Init
+ */
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 require_once '../inc/global.inc.php';

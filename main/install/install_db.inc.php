@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
  *	Install the Chamilo database
  *	Notice : This script has to be included by index.php
@@ -10,7 +9,9 @@
 
 /* This page is called only during a NEW chamilo installation */
 /* This page can only be access through including from the install script.  */
-
+/**
+ * Init checks
+ */
 if (!defined('SYSTEM_INSTALLATION')) {
 	echo 'You are not allowed here!';
 	exit;

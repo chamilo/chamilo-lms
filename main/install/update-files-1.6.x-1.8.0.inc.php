@@ -1,7 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
 /**
  * Chamilo LMS
  *
@@ -17,6 +15,9 @@
  * - record an item_property for each directory added
  *
  * @package chamilo.install
+ */
+/**
+ * Init
  */
 Log::notice('Entering file');
 

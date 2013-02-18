@@ -246,7 +246,8 @@ class Attendance
 	}
 
 	/**
-	 * add attendaces inside table
+	 * Add attendaces sheet inside table. This is the *list of* dates, not
+         * a specific date in itself.
 	 * @param  bool   true for adding link in gradebook or false otherwise (optional)
 	 * @return int    last attendance id
 	 */

@@ -5,11 +5,11 @@
    depends="prepare,phpunit,pdepend,phpdoc"/>
 
  <target name="clean" description="Cleanup build artifacts">
-  <!--delete dir="${basedir}/../tests/api"/>
+  <delete dir="${basedir}/../tests/api"/>
   <delete dir="${basedir}/../tests/code-browser"/>
   <delete dir="${basedir}/../tests/coverage"/>
   <delete dir="${basedir}/../tests/logs"/>
-  <delete dir="${basedir}/../tests/pdepend"/-->
+  <delete dir="${basedir}/../tests/pdepend"/>
  </target>
 
  <target name="prepare" depends="clean" description="Prepare for build">
@@ -90,8 +90,7 @@
    </simpletest>
  </target-->
 
- <target name="phpunit" description="Run unit tests with PHPUnit">
-   <!-- depends="lint"-->
+ <target name="phpunit" description="Run unit tests with PHPUnit" depends="lint">
    <!--exec executable="phpunit" failonerror="true"-->
    <exec executable="phpunit">
      <arg line="-c ${basedir}/phpunit/phpunit.xml" />

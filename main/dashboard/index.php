@@ -1,12 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
 * Template (front controller in MVC pattern) used for distpaching to the controllers depend on the current action  
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.dashboard
 */
-
+/**
+ * Init
+ */
 // name of the language file that needs to be included
 $language_file = array ('index', 'tracking', 'userInfo', 'admin', 'gradebook');
 $cidReset = true;

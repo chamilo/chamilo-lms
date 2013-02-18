@@ -4,12 +4,11 @@
 *	Exercise reminder overview
 *	Then it shows the results on the screen.
 *	@package chamilo.exercise
-
 * 	@author Julio Montoya Armas switchable fill in blank option added
-
 */
-
-/*	INIT SECTION	*/
+/**
+ *	INIT SECTION
+ */
 require_once 'exercise.class.php';
 require_once 'question.class.php';
 require_once 'answer.class.php';

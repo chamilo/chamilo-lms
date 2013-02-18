@@ -1,16 +1,22 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Set of unit tests for the web services
  * 
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
+ * @package chamilo.tests
  */
-
+/**
+ * Init
+ */
 ini_set('soap.wsdl_cache_enabled', 0);
 
 require_once(dirname(__FILE__).'/../main/inc/global.inc.php');
 
 require_once(dirname(__FILE__).'/simpletest/autorun.php');
-
+/**
+ * @package chamilo.tests
+ */
 class TestSoapWebService extends UnitTestCase {
 	protected $_secret_key;
 	

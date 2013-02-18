@@ -1,11 +1,13 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
  * A standalone test for testing the function rmdirr()
  * @author Ivan Tcholakov, September 2009.
- * For licensing terms, see /dokeos_license.txt
+ * @package chamilo.tests
  */
-
+/**
+ * Init
+ */
 //ini_set('memory_limit','128M');
 
 $_current_dir = dirname(__FILE__).'/';

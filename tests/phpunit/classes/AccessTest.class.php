@@ -4,7 +4,8 @@
  */
 // exiting because generates fatal error:
 // Fatal error: Cannot instantiate abstract class Access in /var/lib/jenkins/jobs/chamilo-lms-1.9/workspace/tests/phpunit/classes/AccessTest.class.php on line 18
-exit;
+//exit;
+return;
 class AccessTest extends PHPUnit_Framework_TestCase
 {
     /**

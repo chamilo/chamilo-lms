@@ -1,8 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * 
+ * Gradebook controller
  * @package chamilo.gradebook
+ */
+/**
+ * Init
  */
 $language_file= 'gradebook';
 // $cidReset : This is the main difference with gradebook.php, here we say,

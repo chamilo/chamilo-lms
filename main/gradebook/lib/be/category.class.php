@@ -5,13 +5,16 @@
  * @package chamilo.gradebook
  */
 /**
+ * Init
+ */
+require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
+require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
+require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
+/**
  * Class
  * @package chamilo.gradebook
  */
 
-require_once api_get_path(LIBRARY_PATH).'skill.lib.php';
-require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-require_once api_get_path(LIBRARY_PATH).'grade_model.lib.php';
 
 class Category implements GradebookItem
 {

@@ -624,6 +624,47 @@ class Attendance
 		return $affected_rows;
 	}
 
+    /**
+     * Unstable version! Needs review! Use only for speed boosts! 
+     * Add attendaces sheet inside table, by group to reduce db stress
+     * @param       array  Array of calendar_id, user_id, status, attendance_id, course_id, date, all assumed pre-filtered
+     * @param       bool   Whether to save absent users
+     * @param       bool   Whether to set done_attendance to 1 in db
+     * @return      int    affected rows
+     */
+    public function attendance_sheet_group_add($list, $save_user_absents = true, $done_attendance = true) {
+        $tbl_attendance_sheet   = Database::get_course_table(TABLE_ATTENDANCE_SHEET);
+        $tbl_attendance_calendar= Database::get_course_table(TABLE_ATTENDANCE_CALENDAR);
+
+        $user_ids = array();
+        $date_now = api_get_utc_datetime();
+        //$calendar_date_value = $calendar_data['date_time'];
+        $lastedit_user_id = api_get_user_id();
+        $lastedit_type = self::DONE_ATTENDANCE_LOG_TYPE;
+        $sql = "INSERT INTO $tbl_attendance_sheet (c_id, user_id, attendance_calendar_id, presence) VALUES ";
+        foreach ($list as $row) {
+            if ($row[0] != null) { //ignore placeholders
+                $sql .= "(".intval($row[4]).','.intval($row[1]).','.intval($row[0]).','.$row[2].'),';
+                $user_ids[] = intval($row[1]);
+            }
+            if ($done_attendance) {
+                // update done_attendance inside attendance calendar table
+                $sql2 = "UPDATE $tbl_attendance_calendar SET done_attendance = 1 WHERE c_id = ".intval($row[4])." AND id = '".intval($row[0])."'";
+                $r2 = Database::query($sql2);
+            }
+            // Save user's results
+            $this->update_users_results(array(intval($row[1])), $attendance_id);
+            //save attendance sheet log
+            $this->save_attendance_sheet_log(intval($row[3]), $date_now, $lastedit_type, $lastedit_user_id, $row[5]);
+        }
+        $sql = substr($sql,0,-1);
+        //error_log($sql);
+        $r = Database::query($sql);
+        $users_absent = array_diff($user_ids, $user_results);
+        $affected_rows = Database::affected_rows($r);
+        return $affected_rows;
+    }
+
 	/**
 	 * update users' attendance results
 	 * @param 	array  registered users inside current course

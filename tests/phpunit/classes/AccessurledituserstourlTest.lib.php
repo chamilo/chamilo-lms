@@ -15,6 +15,9 @@ class AccessurledituserstourlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        ob_start();
+        require_once dirname(__FILE__).'/../../../main/inc/lib/access_url_edit_users_to_url_functions.lib.php';
+        require_once dirname(__FILE__).'/../../../main/inc/lib/main_api.lib.php';
         $this->object = new Accessurledituserstourl;
     }
 
@@ -24,6 +27,7 @@ class AccessurledituserstourlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        ob_end_clean();
     }
 
     /**
@@ -33,9 +37,11 @@ class AccessurledituserstourlTest extends PHPUnit_Framework_TestCase
      */
     public function testSearch_users()
     {
-        $this->assertSame(
+        $this->assertThat(
           false,
-          $this->object->search_users()
+          $this->logicalNot(
+            $this->equalTo($this->object->search_users(null, null))
+          )
         );
     }
 }

@@ -15,6 +15,9 @@ class AccessurleditsessionstourlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        ob_start();
+        require_once dirname(__FILE__).'/../../../main/inc/lib/access_url_edit_sessions_to_url_functions.lib.php';
+        require_once dirname(__FILE__).'/../../../main/inc/lib/main_api.lib.php';
         $this->object = new Accessurleditsessionstourl;
     }
 
@@ -24,6 +27,7 @@ class AccessurleditsessionstourlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        ob_end_clean();
     }
 
     /**
@@ -33,9 +37,11 @@ class AccessurleditsessionstourlTest extends PHPUnit_Framework_TestCase
      */
     public function testSearch_sessions()
     {
+        ob_start();
         $this->assertSame(
           false,
-          $this->object->search_sessions()
+          $this->object->search_sessions(null,null)
         );
+        ob_end_clean();
     }
 }

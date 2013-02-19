@@ -443,8 +443,8 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 		$table = new SortableTable('tracking_sessions_myspace', 'count_sessions_coached');
 		$table->set_header(0, get_lang('Title'), false);
         $table->set_header(1, get_lang('Date'), false);		
-        $table->set_header(2, get_lang('NbStudentPerSession'), false);
-		$table->set_header(3, get_lang('NbCoursesPerSession'), false);
+        $table->set_header(2, get_lang('NbCoursesPerSession'), false);
+		$table->set_header(3, get_lang('NbStudentPerSession'), false);
 		$table->set_header(4, get_lang('Details'), false);
 
 		$all_data = array();

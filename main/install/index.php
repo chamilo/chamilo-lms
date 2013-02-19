@@ -746,7 +746,7 @@ if (@$_POST['step2']) {
     // Push the web server to send these strings before we start the real
     // installation process
     flush(); 
-    ob_flush();
+    //ob_flush(); //#5565
     
 	if ($installType == 'update') {
 

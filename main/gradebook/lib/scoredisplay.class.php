@@ -308,7 +308,7 @@ class ScoreDisplay
         
         if ($type == SCORE_BAR) {
             $percentage = $my_score[0]/$my_score[1]*100;            
-            return Display::bar_progress($percentage);
+            return Display::bar_progress($percentage, null, null, true);
         }
         
         if ($type == SCORE_SIMPLE) {   

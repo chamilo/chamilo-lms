@@ -131,7 +131,7 @@ class ResultTable extends SortableTable
 				$row[] = $item['firstname'];
 			}
             
-			$row[] =  Display::bar_progress($item['percentage_score'], false, $item['score']);
+			$row[] =  Display::bar_progress($item['percentage_score'], false, $item['score'], true);
             //$row[] =  Display::bar_progress($item['percentage_score'], true);                        
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];

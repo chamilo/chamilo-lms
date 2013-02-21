@@ -1346,10 +1346,28 @@ class Display {
         }
         return $html;
     }
-
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
+    /**
+     * Returns a styled HTML progress bar corresponding to the given progress.
+     * Defaults to a blue bar (options allow you to change that)
+     * @param int Percentage of progress
+     * @param bool Whether to show the textual percentage or not
+     * @param string Extra information to show (in case we do not show the percentage)
+     * @param bool Whether to play with other colors
+     * @param int Percentage below which to show a red bar
+     * @param int Percentage below which to show an orange bar
+     * @param int Percentage below which to show a blue bar (normal)
+     * @assert (null) === false
+     */
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null, $colors = false, $fail = 50, $warn = 60, $normal = 80) {
         $percentage = intval($percentage);
-        $div = '<div class="progress progress-striped">
+        $type = '';
+        if ($colors) {
+            $type = 'progress-success';
+            if ($percentage < $fail) { $type = 'progress-danger'; }
+            elseif ($percentage < $warn) { $type = 'progress-warning'; }
+            elseif ($percentage < $normal) { $type = ''; } 
+        }
+        $div = '<div class="progress progress-striped '.$type.'">
                     <div class="bar" style="width: '.$percentage.'%;"></div>
                 </div>';
         if ($show_percentage) {

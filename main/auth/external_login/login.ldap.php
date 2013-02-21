@@ -71,5 +71,7 @@ if ($ldap_user !== false) {
     error_log('extldap_authenticate error');
     $loginFailed = true;
     $uidReset = false;
-    unset($_user['user_id']);
+    if (isset($_user) && isset($_user['user_id'])) {
+        unset($_user['user_id']);
+    }
 }

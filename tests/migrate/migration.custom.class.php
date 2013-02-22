@@ -62,11 +62,11 @@ class MigrationCustom {
     const TRANSACTION_TYPE_EDIT_ASSIST = 36;
 
     public static $attend_status = array(
-        'DEF' => null,
+        'DEF' => 4,
         'AUS' => 0,
         'PRE' => 1,
-        'TAR' => 3,
-        'T45' => 2,
+        'TAR' => 2,
+        'T45' => 3,
     );
 
     static function get_transaction_status_list() {
@@ -1032,7 +1032,7 @@ class MigrationCustom {
             }
         }
 
-         //Move empty to A
+        //Move empty to A
         if (empty($uidIdPrograma) && !empty($uidIdProgramaDestination)) {
             $session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
             if (!empty($session_id)) {
@@ -2026,6 +2026,7 @@ class MigrationCustom {
             $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
             if (!empty($course_list)) {
+                //There's only one course per session so far
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
 
@@ -2052,12 +2053,27 @@ class MigrationCustom {
                     $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
 
                     if (empty($attendance_list)) {
-                        return array(
-                            'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
-                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        $d = array(
+                            'session_id' => $session_id,
+                            'user_id' => $user_id,
+                            'fecha' => $attendance_date,
+                            'status' => $attendance_user_status,
                         );
+                        //self::create_attendance($d);
+                        /*return array(
+                            'entity' => 'attendance_sheet',
+                            'before' => null,
+                            'after'  => $attendance_sheet_after,
+                            'message' => "Attendance sheet added with id: $result",
+                            'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
+                        );*/
+                    //    return array(
+                    //        'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
+                    //        'status_id' => self::TRANSACTION_STATUS_FAILED
+                    //    );
                         //only 1 course per session
                     } else {
+                    
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
                         error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
@@ -2950,7 +2966,7 @@ class MigrationCustom {
         $data['display_end_date'] = $ded;
         $data['coach_access_start_date'] = $casd;
         $data['coach_access_end_date'] = $caed;
-        $data['name'] .= '#'.substr($dsd,7,2);
+	$data['name'] .= ' [#'.substr($dsd,8,2).']';
 
         return true;
     }

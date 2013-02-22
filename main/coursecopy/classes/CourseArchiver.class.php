@@ -46,7 +46,8 @@ class CourseArchiver {
         $course_info_file = $backup_dir . 'course_info.dat';
         $zip_dir = api_get_path(SYS_ARCHIVE_PATH);
         $user = api_get_user_info();
-        $zip_file = $user['user_id'] . '_' . $course->code . '_' . date("Ymd-His") . '.zip';
+        $date = new DateTime(api_get_local_time());
+        $zip_file = $user['user_id'] . '_' . $course->code . '_' . $date->format('Ymd-His') . '.zip';
         $php_errormsg = '';
         $res = @mkdir($backup_dir, $perm_dirs);
         if ($res === false) {

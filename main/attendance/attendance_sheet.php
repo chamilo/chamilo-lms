@@ -154,27 +154,27 @@ $(document).ready(function() {
             return false;
         }
 
-        if (my_button.is('.btn')) {
-            current_class = 'btn';
-            state = 1;
-            my_class = 'btn-success';
-        }
-
         if (my_button.is('.btn-success')) {
             current_class = 'btn-success';
             state = 0;
             my_class = 'btn-danger';
         }
 
+        if (my_button.is('.btn')) {
+            current_class = 'btn';
+            state = 1;
+            my_class = 'btn-success';
+        }
+
          if (my_button.is('.btn-danger')) {
             current_class = 'btn-danger';
-            state = 3;
+            state = 2;
             my_class = 'btn-info';
         }
 
          if (my_button.is('.btn-info')) {
             current_class = 'btn-info';
-            state = 2;
+            state = 3;
             my_class = 'btn-warning';
         }
 

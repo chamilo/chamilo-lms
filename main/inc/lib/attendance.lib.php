@@ -1485,6 +1485,7 @@ class Attendance
         return array(
             1, //presence
             2, //late
+            3, //very late
         );
     }
 

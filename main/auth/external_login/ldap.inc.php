@@ -242,10 +242,12 @@ function extldap_import_all_users() {
     }
     //browse ASCII values from a to z to avoid 1000 results limit of LDAP
     $count = 0;
+    $alphanum = array('0','1','2','3','4','5','6','7','8','9');
     for ($a=97;$a<=122;$a++) {
-        $char1 = chr($a);
-        for ($b=97;$b<=122;$b++) {
-            $char2 = chr($b);
+        $alphanum[] = chr($a);
+    }
+    foreach ($alphanum as $char1) {
+        foreach ($alphanum as $char2) {
             //$user_search = "uid=*";
             $user_search = "sAMAccountName=$char1$char2*";
             //Search distinguish name of user
@@ -261,14 +263,14 @@ function extldap_import_all_users() {
                 $user_id = extldap_add_user_by_array($users[$key], true);
                 $count ++;
                 if ($user_id) {
-//                    echo "User #$user_id created or updated\n";
+                    // echo "User #$user_id created or updated\n";
                 } else {
-//                    echo "User was not created\n";
+                    // echo "User was not created\n";
                 }
             }
         }
     }
-    echo "Found $count users in total\n";
+    //echo "Found $count users in total\n";
     @ldap_close($ds);
 }
 /**

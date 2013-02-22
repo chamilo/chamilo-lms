@@ -154,16 +154,16 @@ $(document).ready(function() {
             return false;
         }
 
-        if (my_button.is('.btn-success')) {
-            current_class = 'btn-success';
-            state = 0;
-            my_class = 'btn-danger';
-        }
-
         if (my_button.is('.btn')) {
             current_class = 'btn';
             state = 1;
             my_class = 'btn-success';
+        }
+
+        if (my_button.is('.btn-success')) {
+            current_class = 'btn-success';
+            state = 0;
+            my_class = 'btn-danger';
         }
 
          if (my_button.is('.btn-danger')) {

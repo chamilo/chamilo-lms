@@ -43,7 +43,7 @@ function openid_redirect_http($url, $message) {
  * Creates a js auto-submit redirect for (for the 2.x protocol)
  * This function should be deprecated for 1.8.6.2 needs documentation
  */
-function openid_redirect($url, $message) {    
+function openid_redirect($url, $message) {
     $output = '<html><head><title>' . get_lang('OpenIDRedirect') . "</title></head>\n<body>";
     $output .= '<form method="post" action="' . $url . '" id="openid-redirect-form">';
     foreach ($message as $key => $value) {
@@ -52,8 +52,8 @@ function openid_redirect($url, $message) {
     $output .= '<noscript><input type="submit" name="submit" value="' . get_lang('Send') . '"/></noscript>';
     $output .= '</form>';
     $output .= '<script type="text/javascript">document.getElementById("openid-redirect-form").submit();</script>';
-    $output .= "</body></html>";    
-    return $output;    
+    $output .= "</body></html>";
+    return $output;
 }
 
 /**

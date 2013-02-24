@@ -44,7 +44,7 @@ function openid_form() {
  */
 function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
 
-    $claimed_id = _openid_normalize($claimed_id);    
+    $claimed_id = _openid_normalize($claimed_id);
     $services = openid_discovery($claimed_id);    
     if (count($services) == 0) {
         echo 'Sorry, that is not a valid OpenID. Please ensure you have spelled your ID correctly.';
@@ -61,8 +61,8 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
 
     // If bcmath is present, then create an association
     $assoc_handle = '';
-    if (function_exists('bcadd')) {        
-        $assoc_handle = openid_association($op_endpoint);        
+    if (function_exists('bcadd')) {
+        $assoc_handle = openid_association($op_endpoint);
     }    
     // Now that there is an association created, move on
     // to request authentication from the IdP
@@ -71,10 +71,10 @@ function openid_begin($claimed_id, $return_to = '', $form_values = array()) {
         $identity = 'http://openid.net/identifier_select/2.0';
     }
     $authn_request = openid_authentication_request($claimed_id, $identity, $return_to, $assoc_handle, $services[0]['version']);    
-    if ($services[0]['version'] == 2) {        
-        openid_redirect($op_endpoint, $authn_request);
+    if ($services[0]['version'] == 2) {
+        echo openid_redirect($op_endpoint, $authn_request);
     } else {
-        openid_redirect_http($op_endpoint, $authn_request);
+        echo openid_redirect_http($op_endpoint, $authn_request);
     }
 }
 

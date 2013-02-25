@@ -132,5 +132,7 @@ ALTER TABLE session_rel_course MODIFY COLUMN nbr_users int unsigned NOT NULL def
 ALTER TABLE track_e_exercices MODIFY COLUMN session_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices MODIFY COLUMN exe_exo_id int unsigned NOT NULL default 0;
 
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1);
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21309' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21455' WHERE variable = 'chamilo_database_version';

@@ -908,6 +908,7 @@ VALUES
 ('gradebook_show_percentage_in_reports',NULL,'radio','Gradebook','true','GradebookShowPercentageInReportsTitle','GradebookShowPercentageInReportsComment',NULL,NULL, 0),
 ('session_page_enabled', NULL, 'radio', 'Session', 'true', 'SessionPageEnabledTitle', 'SessionPageEnabledComment', NULL, NULL, 1),
 ('settings_latest_update', NULL, NULL, NULL, '', '','', NULL, NULL, 0),
+('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, 'xxx','DatabaseVersion','', NULL, NULL, 0);
 
 UNLOCK TABLES;
@@ -3080,4 +3081,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21309' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21455' WHERE variable = 'chamilo_database_version';

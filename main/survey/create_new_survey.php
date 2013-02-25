@@ -252,7 +252,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
                     $input_name_list .= 'profile_'.$key.',';
                 }
             }
-            // Necesary to know the fields
+            // Needed to know the fields
             $form->addElement('hidden', 'input_name_list', $input_name_list);
 
             // Set defaults form fields
@@ -317,8 +317,6 @@ if ($form->validate()) {
             $survey_id = intval($return['id']);
             if ($survey_id > 0) {
 
-                $title_gradebook = ''; // Not needed here.
-                $description_gradebook = ''; // Not needed here.
                 $survey_weight = floatval($_POST['survey_weight']);
                 $max_score = 1;
 
@@ -329,10 +327,10 @@ if ($form->validate()) {
                         $course_id,
                         $gradebook_link_type,
                         $survey_id,
-                        $title_gradebook,
+                        null,
                         $survey_weight,
                         $max_score,
-                        $description_gradebook,
+                        null,
                         1,
                         $session_id
                     );

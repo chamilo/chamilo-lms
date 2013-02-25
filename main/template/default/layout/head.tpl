@@ -35,17 +35,17 @@ if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.us
 //]]>
 
 
-                       
-function setCheckbox(value, table_id) {    
-    checkboxes = $("#"+table_id+" input:checkbox");   
-    $.each(checkboxes, function(index, checkbox) { 
+
+function setCheckbox(value, table_id) {
+    checkboxes = $("#"+table_id+" input:checkbox");
+    $.each(checkboxes, function(index, checkbox) {
          checkbox.checked = value;
         if (value) {
             $(checkbox).parentsUntil("tr").parent().addClass("row_selected");
         } else {
-            $(checkbox).parentsUntil("tr").parent().removeClass("row_selected");            
-        }      
-    });   
+            $(checkbox).parentsUntil("tr").parent().removeClass("row_selected");
+        }
+    });
     return false;
 }
 
@@ -53,13 +53,13 @@ function action_click(element, table_id) {
     d = $("#"+table_id);
     if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
         return false;
-    } else {            
-        var action =$(element).attr("data-action");                                    
-        $('#'+table_id+' input[name="action"] ').attr("value", action);        
+    } else {
+        var action =$(element).attr("data-action");
+        $('#'+table_id+' input[name="action"] ').attr("value", action);
         d.submit();
         return false;
     }
-}                        
+}
 
 /* Global chat variables */
 var ajax_url        = '{{ _p.web_ajax }}chat.ajax.php';
@@ -83,7 +83,7 @@ function get_url_params(q, attribute) {
 }
 
 function check_brand() {
-    if ($('.subnav').length) {        
+    if ($('.subnav').length) {
         if ($(window).width() >= 969) {
             $('.subnav .brand').hide();
         } else {
@@ -99,7 +99,7 @@ $(window).resize(function() {
 $(document).scroll(function() {
 
     // Top bar scroll effect
-    if ($('body').width() > 959) {   
+    if ($('body').width() > 959) {
         if ($('.subnav').length) {
             if (!$('.subnav').attr('data-top')) {
                 // If already fixed, then do nothing
@@ -119,10 +119,10 @@ $(document).scroll(function() {
     } else {
         //$('.subnav .brand').hide();
     }
-    
+
     //Exercise warning fixed at the top
     var fixed =  $("#exercise_clock_warning");
-    if (fixed.length) {        
+    if (fixed.length) {
         if (!fixed.attr('data-top')) {
             // If already fixed, then do nothing
             if (fixed.hasClass('subnav-fixed')) return;
@@ -194,10 +194,10 @@ $(document).scroll(function() {
             }
         }
     }
-});    
+});
 
 $(function() {
-    
+
     check_brand();
 
     //Removes the yellow input in Chrome
@@ -205,7 +205,7 @@ $(function() {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
-                var name = $(this).attr('name');                
+                var name = $(this).attr('name');
                 $(this).after(this.outerHTML).remove();
                 $('input[name=' + name + ']').val(text);
             });
@@ -216,19 +216,19 @@ $(function() {
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
     }
-    
+
     //Dropdown effect
     $('.dropdown-toggle').dropdown();
 
     //Responsive effect
     $(".collapse").collapse();
-        
-    $(".accordion_jquery").accordion({        
+
+    $(".accordion_jquery").accordion({
         autoHeight: false,
         active: false, // all items closed by default
         collapsible: true,
         header: ".accordion-heading"
-    })
+    });
 
     //Global popup
     $('.ajax').on('click', function() {
@@ -277,7 +277,7 @@ $(function() {
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);
-    
+
     $('#navigation > li').hover(
         function () {
             $('a',$(this)).stop().animate({

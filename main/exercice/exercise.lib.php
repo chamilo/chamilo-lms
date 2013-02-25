@@ -1191,8 +1191,11 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                         if ($locked == false || api_is_platform_admin()) {
                             $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], $results[$i]['exe_date'], false);
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
-                            $actions .=' <a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '" onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $user, $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
-                            $actions .='&nbsp;';
+
+                            $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '"
+                                onclick="javascript:if(!confirm(\'' . sprintf(get_lang('DeleteAttempt'), $results[$i]['username'], $dt) . '\')) return false;">'.Display :: return_icon('delete.png', get_lang('Delete')).'</a>';
+                            $delete_link = utf8_encode($delete_link);
+                            $actions .= $delete_link.'&nbsp;';
                         }
 
                     } else {
@@ -2134,7 +2137,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
             //this variable commes from exercise_submit_modal.php
             ob_start();
-            
+
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
             if (empty($result)) {

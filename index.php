@@ -41,9 +41,16 @@ $htmlHeadXtra[] = '
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ *
+ */
 class IndexController
 {
 
+    /**
+     * @param Silex\Application $app
+     * @return Symfony\Component\HttpFoundation\Response
+     */
     public function indexAction(Application $app)
     {
         $request = $app['request'];
@@ -190,6 +197,9 @@ class IndexController
         }
     }
 
+    /**
+     * @param Silex\Application $app
+     */
     function set_login_form(Application $app)
     {
         $user_id = api_get_user_id();
@@ -222,6 +232,10 @@ class IndexController
         online_logout($user_id, true);
     }
 
+    /**
+     * @param Silex\Application $app
+     * @return string
+     */
     function display_login_form(Application $app)
     {
         /* {{ form_widget(form) }}
@@ -237,7 +251,12 @@ class IndexController
          */
 
         $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addElement(
+            'text',
+            'login',
+            get_lang('UserName'),
+            array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus')
+        );
         $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
         $html = $form->return_form();
@@ -248,6 +267,7 @@ class IndexController
         return $html;
     }
 }
+
 $app->match('/', 'IndexController::indexAction', 'POST|GET');
 $app->run();
 //$app['http_cache']->run();

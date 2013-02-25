@@ -5139,51 +5139,6 @@ function api_is_xml_http_request() {
 }
 
 /**
- * Substitute for json_encode function for PHP version < 5.2.
- *
- * The following function has been adopted from Drupal's "Image Browser" project,
- * @link http://drupal.org/project/imagebrowser
- * version 6.x-2.x-dev, 2010-Mar-11,
- * @link http://ftp.drupal.org/files/projects/imagebrowser-6.x-2.x-dev.tar.gz
- */
-if (!function_exists('json_encode')) {
-    function json_encode($a = false) {
-        if (is_null($a)) return 'null';
-        if ($a === false) return 'false';
-        if ($a === true) return 'true';
-        if (is_scalar($a)) {
-            if (is_float($a)) {
-                // Always use "." for floats.
-                return floatval(str_replace(",", ".", strval($a)));
-            }
-
-            if (is_string($a)) {
-                static $json_replaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
-                return '"' . str_replace($json_replaces[0], $json_replaces[1], $a) . '"';
-            }
-            else
-            return $a;
-        }
-        $is_list = true;
-        for ($i = 0, reset($a); $i < count($a); $i++, next($a)) {
-            if (key($a) !== $i) {
-                $is_list = false;
-                break;
-            }
-        }
-        $result = array();
-        if ($is_list) {
-            foreach ($a as $v) $result[] = json_encode($v);
-            return '[' . join(',', $result) . ']';
-        }
-        else {
-            foreach ($a as $k => $v) $result[] = json_encode($k).':'.json_encode($v);
-            return '{' . join(',', $result) . '}';
-        }
-    }
-}
-
-/**
  * This wrapper function has been implemented for avoiding some known problems about the function getimagesize().
  * @link http://php.net/manual/en/function.getimagesize.php
  * @link http://www.dokeos.com/forum/viewtopic.php?t=12345

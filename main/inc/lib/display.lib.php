@@ -848,8 +848,11 @@ class Display {
     public static function grid_js($div_id, $url, $column_names, $column_model, $extra_params, $data = array(), $formatter = '', $width_fix = false) {
         $obj = new stdClass();
 
-        if (!empty($url))
+        if (!empty($url)) {
             $obj->url       = $url;
+        }
+
+        $column_names = array_map("utf8_encode", $column_names);
 
         $obj->colNames      = $column_names;
         $obj->colModel      = $column_model;
@@ -862,7 +865,6 @@ class Display {
         //Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = array(20, 50, 100, 500, 1000, $all_value);
-            //$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
         }
 
         $json = '';
@@ -893,8 +895,6 @@ class Display {
             $obj->rowNum     = $extra_params['rowNum'];
         }
 
-        //height: 'auto',
-
         $obj->viewrecords = 'true';
 
         if (!empty($extra_params['viewrecords']))
@@ -910,8 +910,6 @@ class Display {
         if (!empty($data)) {
             $data_var = $div_id.'_data';
             $json.=' var '.$data_var.' = '.json_encode($data).';';
-          /*  $json.='for(var i=0;i<='.$data_var.'.length;i++)
-                    jQuery("#'.$div_id.'").jqGrid(\'addRowData\',i+1,'.$data_var.'[i]);';*/
             $obj->data = $data_var;
             $obj->datatype = 'local';
             $json.="\n";
@@ -1523,7 +1521,7 @@ class Display {
                                 '.$item['title'].'
                                 </a>
                           </div>';
-                
+
                 $html .= '<div id="collapse'.$count.'" class="accordion-body">';
                 $html .= '<div class="accordion-my-inner">
                             '.$item['content'].'

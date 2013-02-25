@@ -1501,9 +1501,8 @@ class learnpath
                          mastery_score = ".$mastery_score.
                 //", max_score = " . $max_score . " " . // Max score cannot be changed in the form anyway - see display_item_prerequisites_form().
                 " WHERE c_id = ".$course_id." AND ref = '".$prerequisite_id."'"; // Will this be enough to ensure unicity?
-            $res_upd = Database::query($sql_upd);
+            Database::query($sql_upd);
         }
-
         // TODO: Update the item object (can be ignored for now because refreshed).
         return true;
     }
@@ -1516,7 +1515,6 @@ class learnpath
      */
     public function escape_string($string)
     {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::escape_string('.$string.')', 0); }
         return Database::escape_string($string);
     }
 
@@ -2645,7 +2643,7 @@ class learnpath
         if (empty($prereq)) {
             return '';
         }
-        //var_dump($this->refs_list, $prereq);
+
         if (preg_match('/^\d+$/', $prereq) && is_object($this->items[$prereq])) {
             // If the prerequisite is a simple integer ID and this ID exists as an item ID,
             // then simply return it (with the ITEM_ prefix).
@@ -6001,13 +5999,13 @@ class learnpath
         //$return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=step&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewStep') . '">' . Display :: return_icon('new_learnigpath_object.png', get_lang('NewStep'),'',ICON_SIZE_MEDIUM).'</a>';
 //		echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;gradebook=' . $gradebook . '&amp;action=add_item&amp;type=chapter&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" title="' . get_lang('NewChapter') . '">' . Display :: return_icon('add_learnpath_section.png', get_lang('NewChapter'),'',ICON_SIZE_MEDIUM).'</a>';
 
-        $return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
+        /*$return .= '<a href="'.api_get_self().'?'.api_get_cidreq(
         ).'&amp;action=admin_view&amp;lp_id='.$_SESSION['oLP']->lp_id.'&amp;updateaudio=true">'.Display :: return_icon(
             'upload_audio.png',
             get_lang('UpdateAllAudioFragments'),
             '',
             ICON_SIZE_MEDIUM
-        ).'</a>';
+        ).'</a>';*/
 
         $return .= '<a href="lp_controller.php?'.api_get_cidreq(
         ).'&amp;action=edit&amp;lp_id='.$_SESSION['oLP']->lp_id.'">'.Display :: return_icon(
@@ -8843,10 +8841,6 @@ class learnpath
         $row = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
-        //$preq_mastery = $row['mastery_score'];
-        //$preq_max = $row['max_score'];
-
-        $return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
 
         $return = '<legend>';
         $return .= get_lang('AddEditPrerequisites');
@@ -8924,8 +8918,6 @@ class learnpath
             $return .= $arrLP[$i]['title'].'</label>';
             $return .= '</td>';
 
-            //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
-
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_'.$arrLP[$i]['id'].'" type="text" value="'.(($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0).'" /></center>';
@@ -8951,9 +8943,7 @@ class learnpath
         $return .= '<button class="save" name="submit_button" type="submit">'.get_lang(
             'ModifyPrerequisites'
         ).'</button>';
-
         $return .= '</form>';
-
         return $return;
     }
 

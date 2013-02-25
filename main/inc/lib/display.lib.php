@@ -1523,10 +1523,8 @@ class Display {
                                 '.$item['title'].'
                                 </a>
                           </div>';
-                //$html .= '<div id="collapse'.$count.'" class="accordion-body collapse in">
+                
                 $html .= '<div id="collapse'.$count.'" class="accordion-body">';
-
-                //$html .= '<div class="accordion-inner">
                 $html .= '<div class="accordion-my-inner">
                             '.$item['content'].'
                             </div>

@@ -141,10 +141,6 @@ var sv_sco = \''.intval($_REQUEST['lp_id']).'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
 $htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
-/**
- * Get a link to the corresponding document.
- */
-
 if ($debug) {
     error_log(" src: $src ");
     error_log(" lp_type: $lp_type ");
@@ -488,8 +484,9 @@ if ($show_audioplayer) {
         var innerHauteur = (IE) ? document.body.clientHeight : window.innerHeight;
         var debugsize = 0;
         // -40 is a static adjustement for margin, spaces on the page
-    <?php if (!empty($_SESSION['oLP']->scorm_debug)) {echo 'debugsize = 150;'
-} ?>
+    <?php if (!empty($_SESSION['oLP']->scorm_debug)) {
+        echo 'debugsize = 150;';
+    } ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
             document.getElementById('content_id').style.height = innerHauteur + 'px';

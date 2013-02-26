@@ -2,13 +2,14 @@
 
 /* For licensing terms, see /license.txt */
 /**
- *  @author Julio Montoya <gugli100@gmail.com>
- *  @todo better organization of the class, methods and variables
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @todo better organization of the class, methods and variables
  *
  * */
 use \ChamiloSession as Session;
 
-class Template {
+class Template
+{
 
     public $style = 'default'; //see the template folder
     public $preview_theme = null;
@@ -28,7 +29,8 @@ class Template {
     public $force_plugin_load = true;
     public $app;
 
-    function __construct($title = null, $app = null) {
+    function __construct($title = null, $app = null)
+    {
         if (empty($app)) {
             global $app;
             $this->app = $app;
@@ -40,19 +42,19 @@ class Template {
         $this->app['template_style'] = 'default';
         $this->app['default_layout'] = 'layout_1_col.tpl';
 
-        $show_header        = $app['template.show_header'];
-        $show_footer        = $app['template.show_footer'];
-        $show_learnpath     = $app['template.show_learnpath'];
-        $hide_global_chat   = $app['template.hide_global_chat'];
-        $load_plugins       = $app['template.load_plugins'];
+        $show_header = $app['template.show_header'];
+        $show_footer = $app['template.show_footer'];
+        $show_learnpath = $app['template.show_learnpath'];
+        $hide_global_chat = $app['template.hide_global_chat'];
+        $load_plugins = $app['template.load_plugins'];
 
         //Page title
-        $this->title        = $title;
+        $this->title = $title;
         $this->show_learnpath = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
         $this->load_plugins = $load_plugins;
 
-         // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
+        // Current themes: cupertino, smoothness, ui-lightness. Find the themes folder in main/inc/lib/javascript/jquery-ui
         $this->jquery_ui_theme = 'smoothness';
 
         //Setting system variables
@@ -96,11 +98,13 @@ class Template {
 
     }
 
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
         return Display:: return_icon($image, '', array(), $size, false, true);
     }
 
-    public static function format_date($timestamp, $format = null) {
+    public static function format_date($timestamp, $format = null)
+    {
         return api_format_date($timestamp, $format);
     }
 
@@ -112,24 +116,26 @@ class Template {
      * @param object $item
      * @return string
      */
-    public static function key($item){
+    public static function key($item)
+    {
         $id = isset($item->id) ? $item->id : null;
         $c_id = isset($item->c_id) ? $item->c_id : null;
         $result = '';
-        if($c_id){
+        if ($c_id) {
             $result = "c_id=$c_id";
         }
-        if($id){
-            if($result){
+        if ($id) {
+            if ($result) {
                 $result .= "&amp;id=$id";
-            }else{
+            } else {
                 $result .= "&amp;id=$id";
             }
         }
         return $result;
     }
 
-    function set_help($help_input = null) {
+    function set_help($help_input = null)
+    {
         if (!empty($help_input)) {
             $help = $help_input;
         } else {
@@ -141,8 +147,12 @@ class Template {
             if (!empty($help)) {
                 $help = Security::remove_XSS($help);
                 $help_content = '<li class="help">';
-                $help_content .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help . '&height=400&width=600" class="ajax" title="' . get_lang('Help') . '">';
-                $help_content .= '<img src="' . api_get_path(WEB_IMG_PATH) . 'help.large.png" alt="' . get_lang('Help') . '" title="' . get_lang('Help') . '" />';
+                $help_content .= '<a href="'.api_get_path(
+                    WEB_CODE_PATH
+                ).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
+                $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
+                    'Help'
+                ).'" title="'.get_lang('Help').'" />';
                 $help_content .= '</a></li>';
             }
         }
@@ -153,7 +163,8 @@ class Template {
      * Use template system to parse the actions menu
      * @todo finish it!
      * */
-    function set_actions($actions) {
+    function set_actions($actions)
+    {
         $action_string = '';
         if (!empty($actions)) {
             foreach ($actions as $action) {
@@ -166,7 +177,8 @@ class Template {
     /**
      * Shortcut to display a 1 col layout (index.php)
      * */
-    function display_one_col_template() {
+    function display_one_col_template()
+    {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
     }
@@ -174,7 +186,8 @@ class Template {
     /**
      * Shortcut to display a 2 col layout (userportal.php)
      * */
-    function display_two_col_template() {
+    function display_two_col_template()
+    {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
     }
@@ -182,7 +195,8 @@ class Template {
     /**
      * Displays an empty template
      */
-    function display_blank_template() {
+    function display_blank_template()
+    {
         $tpl = $this->get_template('layout/blank.tpl');
         $this->display($tpl);
     }
@@ -190,7 +204,8 @@ class Template {
     /**
      * Displays an empty template
      */
-    function display_no_layout_template() {
+    function display_no_layout_template()
+    {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
     }
@@ -199,7 +214,8 @@ class Template {
      * Sets the footer visibility
      * @param bool true if we show the footer
      */
-    function set_footer($status) {
+    function set_footer($status)
+    {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
     }
@@ -208,7 +224,8 @@ class Template {
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function set_header($status) {
+    function set_header($status)
+    {
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
@@ -253,19 +270,22 @@ class Template {
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
-    function get_template($name) {
-        return $this->app['template_style'] . '/' . $name;
+    function get_template($name)
+    {
+        return $this->app['template_style'].'/'.$name;
     }
 
     /** Set course parameters */
-    private function set_course_parameters() {
+    private function set_course_parameters()
+    {
         //Setting course id
         $course_id = api_get_course_int_id();
         $this->course_id = $course_id;
     }
 
     /** Set user parameters */
-    private function set_user_parameters() {
+    private function set_user_parameters()
+    {
         $user_info = array();
         $user_info['logged'] = 0;
         $this->user_is_logged_in = false;
@@ -280,8 +300,15 @@ class Template {
             }
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
-            $messages_invitations_count = GroupPortalManager::get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
-            $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label($messages_invitations_count, 'warning') : null;
+            $messages_invitations_count = GroupPortalManager::get_groups_by_user_count(
+                $user_info['user_id'],
+                GROUP_USER_PERMISSION_PENDING_INVITATION,
+                false
+            );
+            $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label(
+                $messages_invitations_count,
+                'warning'
+            ) : null;
             $this->user_is_logged_in = true;
         }
         //Setting the $_u array that could be use in any template
@@ -289,7 +316,8 @@ class Template {
     }
 
     /** Set system parameters */
-    private function set_system_parameters() {
+    private function set_system_parameters()
+    {
         global $_configuration;
 
         //Setting app paths/URLs
@@ -317,7 +345,8 @@ class Template {
 
     /**
      * Set theme, include CSS files  */
-    function set_css_files() {
+    function set_css_files()
+    {
         global $disable_js_and_css_files;
         $css = array();
 
@@ -336,18 +365,19 @@ class Template {
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'font_awesome/font-awesome.css');
 
         //Extra CSS files
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
         if ($this->show_learnpath) {
-            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
-            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
+            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
+            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
         }
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
 
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
@@ -355,7 +385,7 @@ class Template {
 
         $css_file_to_string = null;
         foreach ($css as $file) {
-           $css_file_to_string .= api_get_css($file);
+            $css_file_to_string .= api_get_css($file);
         }
 
         // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
@@ -375,13 +405,15 @@ class Template {
 
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $css_file_to_string .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
+            $css_file_to_string .= 'img, div { behavior: url('.api_get_path(
+                WEB_LIBRARY_PATH
+            ).'javascript/iepngfix/iepngfix.htc) } '."\n";
         }
 
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
 
-            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
+            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
 
@@ -390,11 +422,12 @@ class Template {
         $this->assign('logo', $logo);
     }
 
-    function set_js_files() {
+    function set_js_files()
+    {
         global $disable_js_and_css_files, $htmlHeadXtra;
         //JS files
         $js_files = array(
-          'modernizr.js',
+            'modernizr.js',
             'jquery.min.js',
             'chosen/chosen.jquery.min.js',
             'jquery-ui/'.$this->jquery_ui_theme.'/jquery-ui-custom.min.js',
@@ -436,7 +469,7 @@ class Template {
             $extra_headers = null;
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {
-                    $extra_headers .= $this_html_head . "\n";
+                    $extra_headers .= $this_html_head."\n";
                 }
             }
             $this->assign('extra_headers', $extra_headers);
@@ -446,7 +479,8 @@ class Template {
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {
+    private function set_header_parameters()
+    {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $_configuration, $this_section;
         $nameTools = $this->title;
         $navigation = $this->return_navigation_array();
@@ -477,11 +511,12 @@ class Template {
 
         $title_string = '';
         for ($i = 0; $i < count($title_list); $i++) {
-            $title_string .=$title_list[$i];
+            $title_string .= $title_list[$i];
             if (isset($title_list[$i + 1])) {
                 $item = trim($title_list[$i + 1]);
-                if (!empty($item))
-                    $title_string .=' - ';
+                if (!empty($item)) {
+                    $title_string .= ' - ';
+                }
             }
         }
 
@@ -497,15 +532,15 @@ class Template {
         if (!empty($_configuration['cdn_enable'])) {
             $prefetch .= '<meta http-equiv="x-dns-prefetch-control" content="on">';
             foreach ($_configuration['cdn'] as $host => $exts) {
-                $prefetch .= '<link rel="dns-prefetch" href="' . $host . '">';
+                $prefetch .= '<link rel="dns-prefetch" href="'.$host.'">';
             }
         }
 
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
-        $this->assign('section_name', 'section-' . $this_section);
+        $this->assign('section_name', 'section-'.$this_section);
 
-        $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
         if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
@@ -515,12 +550,12 @@ class Template {
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(REL_PATH) . 'home/' . $clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_PATH) . 'home/' . $clean_url;
+                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
 
                 //we create the new dir for the new sites
-                if (is_file($icon_real_homep . 'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="' . $homep . 'favicon.ico" type="image/x-icon" />';
+                if (is_file($icon_real_homep.'favicon.ico')) {
+                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
                 }
             }
         }
@@ -534,7 +569,11 @@ class Template {
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="' . api_get_path(WEB_IMG_PATH) . 'bug.large.png" style="vertical-align: middle;" alt="' . get_lang('ReportABug') . '" title="' . get_lang('ReportABug') . '"/></a>
+		        						<img src="'.api_get_path(
+                WEB_IMG_PATH
+            ).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
+                'ReportABug'
+            ).'"/></a>
 		    						  </li>';
         }
         $this->assign('bug_notification_link', $bug_notification_link);
@@ -587,7 +626,8 @@ class Template {
     /**
      * Set footer parameteres
      */
-    private function set_footer_parameters() {
+    private function set_footer_parameters()
+    {
         global $_configuration;
 
         //Show admin data
@@ -595,7 +635,10 @@ class Template {
 
         if (api_get_setting('show_administrator_data') == 'true') {
             //Administrator name
-            $administrator_data = get_lang('Manager') . ' : ' . Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
+            $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
+                api_get_setting('emailAdministrator'),
+                api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))
+            );
             $this->assign('administrator_name', $administrator_data);
         }
 
@@ -621,10 +664,10 @@ class Template {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
                     if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs') . ' : ';
+                        $tutor_data .= get_lang('Coachs').' : ';
                         $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 1) {
-                        $tutor_data .= get_lang('Coach') . ' : ';
+                        $tutor_data .= get_lang('Coach').' : ';
                         $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
@@ -651,7 +694,7 @@ class Template {
                     if (count($mail) > 1) {
                         $label = get_lang('Teachers');
                     }
-                    $teacher_data .= $label . ' : ' . array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
                 }
                 $this->assign('teachers', $teacher_data);
             }
@@ -660,56 +703,64 @@ class Template {
           $this->assign('execution_stats', $stats); */
     }
 
-    function show_header_template() {
+    function show_header_template()
+    {
         $tpl = $this->get_template('layout/show_header.tpl');
         $this->display($tpl);
     }
 
-    function show_footer_template() {
+    function show_footer_template()
+    {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
 
     /* Sets the plugin content in a template variable */
-    function set_plugin_region($plugin_region) {
+    function set_plugin_region($plugin_region)
+    {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
             if (!empty($region_content)) {
-                $this->assign('plugin_' . $plugin_region, $region_content);
+                $this->assign('plugin_'.$plugin_region, $region_content);
             } else {
-                $this->assign('plugin_' . $plugin_region, null);
+                $this->assign('plugin_'.$plugin_region, null);
             }
         }
         return null;
     }
 
-    public function fetch($template = null) {
+    public function fetch($template = null)
+    {
         $template = $this->app['twig']->loadTemplate($template);
         return $template->render(array());
     }
 
-    public function assign($key, $value = null) {
+    public function assign($key, $value = null)
+    {
         $this->app['twig']->addGlobal($key, $value);
     }
 
-    public function display($template) {
+    public function display($template)
+    {
         echo $this->app['twig']->render($template);
     }
 
-    function show_page_loaded_info() {
+    function show_page_loaded_info()
+    {
         //@todo will be removed before a stable release
         $mtime = microtime();
-        $mtime = explode(" ",$mtime);
+        $mtime = explode(" ", $mtime);
         $mtime = $mtime[1] + $mtime[0];
         error_log('--------------------------------------------------------');
-        error_log("Page loaded in:".($mtime-START));
+        error_log("Page loaded in:".($mtime - START));
         error_log("memory_get_usage: ".format_file_size(memory_get_usage(true)));
         error_log("memory_get_peak_usage: ".format_file_size(memory_get_peak_usage(true)));
     }
 
-    function return_menu() {
-        $navigation         = $this->return_navigation_array();
-        $navigation         = $navigation['navigation'];
+    function return_menu()
+    {
+        $navigation = $this->return_navigation_array();
+        $navigation = $navigation['navigation'];
 
         // Displaying the tabs
 
@@ -736,7 +787,7 @@ class Template {
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep     = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(SYS_PATH).'home/'.$clean_url; //homep for Home Path
                 //we create the new dir for the new sites
                 if (!is_dir($homep)) {
                     mkdir($homep, api_get_permissions_for_new_directories());
@@ -746,7 +797,7 @@ class Template {
             $homep = api_get_path(SYS_PATH).'home/';
         }
 
-        $ext      = '.html';
+        $ext = '.html';
         $menutabs = 'home_tabs';
         $home_top = '';
 
@@ -760,7 +811,7 @@ class Template {
 
         $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
-        $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
+        $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
         $lis = '';
@@ -768,7 +819,7 @@ class Template {
         if (!empty($open)) {
             if (strpos($open, 'show_menu') === false) {
                 if (api_is_anonymous()) {
-                    $navigation[SECTION_CAMPUS]  = null;
+                    $navigation[SECTION_CAMPUS] = null;
                 }
             } else {
                 //$lis .= Display::tag('li', $open);
@@ -793,43 +844,46 @@ class Template {
 
         $menu = null;
         if (!empty($lis)) {
-             $menu .= $lis;
+            $menu .= $lis;
         }
         return $menu;
     }
 
-    function return_navigation_links() {
-		$html = '';
+    function return_navigation_links()
+    {
+        $html = '';
 
-		// Deleting the myprofile link.
-		if (api_get_setting('allow_social_tool') == 'true') {
-			unset($this->menu_navigation['myprofile']);
-		}
+        // Deleting the myprofile link.
+        if (api_get_setting('allow_social_tool') == 'true') {
+            unset($this->menu_navigation['myprofile']);
+        }
 
-		// Main navigation section.
-		// Tabs that are deactivated are added here.
-		if (!empty($this->menu_navigation)) {
-			$content = '<ul class="nav nav-list">';
-			foreach ($this->menu_navigation as $section => $navigation_info) {
-				$current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
-				$content .= '<li'.$current.'>';
-				$content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
-				$content .= '</li>';
-			}
-			$content .= '</ul>';
-			$html = PageController::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
-		}
-		return $html;
-	}
+        // Main navigation section.
+        // Tabs that are deactivated are added here.
+        if (!empty($this->menu_navigation)) {
+            $content = '<ul class="nav nav-list">';
+            foreach ($this->menu_navigation as $section => $navigation_info) {
+                $current = $section == $GLOBALS['this_section'] ? ' id="current"' : '';
+                $content .= '<li'.$current.'>';
+                $content .= '<a href="'.$navigation_info['url'].'" target="_self">'.$navigation_info['title'].'</a>';
+                $content .= '</li>';
+            }
+            $content .= '</ul>';
+            $html = PageController::show_right_block(get_lang('MainNavigation'), $content, 'navigation_link_block');
+        }
+        return $html;
+    }
 
-    function render_layout($layout = null) {
+    function render_layout($layout = null)
+    {
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
         }
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
-    function render_template($template, $elements = array()) {
+    function render_template($template, $elements = array())
+    {
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 
@@ -842,7 +896,8 @@ class Template {
      * @return array containing all the possible tabs
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    function get_tabs() {
+    function get_tabs()
+    {
         global $_course;
 
         $navigation = array();
@@ -854,7 +909,7 @@ class Template {
 
         // My Courses
 
-        if(api_is_allowed_to_create_course()) {
+        if (api_is_allowed_to_create_course()) {
             // Link to my courses for teachers
             $navigation['mycourses']['url'] = api_get_path(WEB_PATH).'user_portal.php?nosession=true';
             $navigation['mycourses']['title'] = get_lang('MyCourses');
@@ -865,7 +920,9 @@ class Template {
         }
 
         // My Profile
-        $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+        $navigation['myprofile']['url'] = api_get_path(
+            WEB_CODE_PATH
+        ).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
         $navigation['myprofile']['title'] = get_lang('ModifyProfile');
 
         // Link to my agenda
@@ -874,7 +931,9 @@ class Template {
 
         // Gradebook
         if (api_get_setting('gradebook_enable') == 'true') {
-            $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+            $navigation['mygradebook']['url'] = api_get_path(
+                WEB_CODE_PATH
+            ).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
             $navigation['mygradebook']['title'] = get_lang('MyGradebook');
         }
 
@@ -890,9 +949,8 @@ class Template {
         }
 
 
-
         // Social
-        if (api_get_setting('allow_social_tool')=='true') {
+        if (api_get_setting('allow_social_tool') == 'true') {
             $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
             /*
             // get count unread message and total invitations
@@ -923,11 +981,12 @@ class Template {
         }*/
 
         // Custom tabs
-        for ($i = 1; $i<=3; $i++)
+        for ($i = 1; $i <= 3; $i++) {
             if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
                 $navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
                 $navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
             }
+        }
 
         // Platform administration
         if (api_is_platform_admin(true)) {
@@ -937,7 +996,8 @@ class Template {
         return $navigation;
     }
 
-    function return_logo($theme) {
+    function return_logo($theme)
+    {
         $_course = api_get_course_info();
         $html = '';
         $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';
@@ -946,13 +1006,13 @@ class Template {
         if (file_exists($logo)) {
             $site_name = api_get_setting('Institution').' - '.$site_name;
             $html .= '<div id="logo">';
-                $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';
-                $logo = Display::img($image_url, $site_name, array('title'=>$site_name));
-                $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
+            $image_url = api_get_path(WEB_CSS_PATH).$theme.'/images/header-logo.png';
+            $logo = Display::img($image_url, $site_name, array('title' => $site_name));
+            $html .= Display::url($logo, api_get_path(WEB_PATH).'index.php');
             $html .= '</div>';
         } else {
             $html .= '<a href="'.api_get_path(WEB_PATH).'index.php" target="_top">'.$site_name.'</a>';
-            $iurl  = api_get_setting('InstitutionUrl');
+            $iurl = api_get_setting('InstitutionUrl');
             $iname = api_get_setting('Institution');
 
             if (!empty($iname)) {
@@ -971,78 +1031,121 @@ class Template {
             }
         }
 
-       /* //  Course title section
-        if (!empty($_cid) and $_cid != -1 and isset($_course)) {
-            //Put the name of the course in the header
-            $html .= '<div id="my_courses">';
-            $html .= '</div>';
-        } elseif (isset($nameTools) && $language_file != 'course_home') {
-            //Put the name of the user-tools in the header
-            if (!isset($user_id)) {
-                //echo '<div id="my_courses"></div>';
-            } elseif (!$noPHP_SELF) {
-                $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
-            } else {
-                $html .= '<div id="my_courses">'.$nameTools.'</div>';
-            }
-        }*/
+        /* //  Course title section
+         if (!empty($_cid) and $_cid != -1 and isset($_course)) {
+             //Put the name of the course in the header
+             $html .= '<div id="my_courses">';
+             $html .= '</div>';
+         } elseif (isset($nameTools) && $language_file != 'course_home') {
+             //Put the name of the user-tools in the header
+             if (!isset($user_id)) {
+                 //echo '<div id="my_courses"></div>';
+             } elseif (!$noPHP_SELF) {
+                 $html .= '<div id="my_courses"><a href="'.api_get_self().'?'.api_get_cidreq(). '" target="_top">'.$nameTools.'</a></div>';
+             } else {
+                 $html .= '<div id="my_courses">'.$nameTools.'</div>';
+             }
+         }*/
         return $html;
     }
 
-    function return_notification_menu() {
+    function return_notification_menu()
+    {
 
-        $_course    = api_get_course_info();
-        $course_id  = api_get_course_id();
-        $user_id    = api_get_user_id();
+        $_course = api_get_course_info();
+        $course_id = api_get_course_id();
+        $user_id = api_get_user_id();
 
         $html = '';
 
-        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting(
+            'showonline',
+            'users'
+        ) == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)
+        ) {
             $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
 
             $number_online_in_course = 0;
-            if(!empty($_course['id'])) {
-                $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+            if (!empty($_course['id'])) {
+                $number_online_in_course = who_is_online_in_this_course_count(
+                    $user_id,
+                    api_get_setting('time_limit_whosonline'),
+                    $_course['id']
+                );
             }
 
             // Display the who's online of the platform
             if ($number) {
-                if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id)) {
-                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang('UsersOnline').'" >'.
-                                Display::return_icon('user.png', get_lang('UsersOnline'), array(), ICON_SIZE_TINY).' '.$number.'</a></li>';
+                if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting(
+                    'showonline',
+                    'users'
+                ) == 'true' AND $user_id)
+                ) {
+                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_top" title="'.get_lang(
+                        'UsersOnline'
+                    ).'" >'.
+                        Display::return_icon(
+                            'user.png',
+                            get_lang('UsersOnline'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ).' '.$number.'</a></li>';
                 }
             }
 
             // Display the who's online for the course
             if ($number_online_in_course) {
-                if (is_array($_course) AND api_get_setting('showonline', 'course') == 'true' AND isset($_course['sysCode'])) {
-                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
-                            Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), array(), ICON_SIZE_TINY).' '.$number_online_in_course.' </a></li>';
+                if (is_array($_course) AND api_get_setting(
+                    'showonline',
+                    'course'
+                ) == 'true' AND isset($_course['sysCode'])
+                ) {
+                    $html .= '<li><a href="'.api_get_path(
+                        WEB_PATH
+                    ).'whoisonline.php?cidReq='.$_course['sysCode'].'" target="_top">'.
+                        Display::return_icon(
+                            'course.png',
+                            get_lang('UsersOnline').' '.get_lang('InThisCourse'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ).' '.$number_online_in_course.' </a></li>';
                 }
             }
 
             // Display the who's online for the session
             if (isset($user_id) && api_get_session_id() != 0) {
                 if (api_is_allowed_to_edit()) {
-                    $html .= '<li><a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php?session_id='.api_get_session_id().'&id_coach='.$user_id.'" >'.
-                        Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), array(), ICON_SIZE_TINY).' </a></li>';
+                    $html .= '<li><a href="'.api_get_path(
+                        WEB_PATH
+                    ).'whoisonlinesession.php?session_id='.api_get_session_id().'&id_coach='.$user_id.'" >'.
+                        Display::return_icon(
+                            'session.png',
+                            get_lang('UsersConnectedToMySessions'),
+                            array(),
+                            ICON_SIZE_TINY
+                        ).' </a></li>';
                 }
             }
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $html .= '<li class="resize_font">';
-            $html .= '<span class="decrease_font" title="'.get_lang('DecreaseFontSize').'">A</span> <span class="reset_font" title="'.get_lang('ResetFontSize').'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
+            $html .= '<span class="decrease_font" title="'.get_lang(
+                'DecreaseFontSize'
+            ).'">A</span> <span class="reset_font" title="'.get_lang(
+                'ResetFontSize'
+            ).'">A</span> <span class="increase_font" title="'.get_lang('IncreaseFontSize').'">A</span>';
             $html .= '</li>';
         }
         return $html;
     }
 
-    function return_navigation_array() {
+    function return_navigation_array()
+    {
 
-        $navigation         = array();
-        $menu_navigation    = array();
-        $possible_tabs      = $this->get_tabs();
+        $navigation = array();
+        $menu_navigation = array();
+        $possible_tabs = $this->get_tabs();
 
         // Campus Homepage
         if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
@@ -1061,7 +1164,10 @@ class Template {
             }
 
             // My Profile
-            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
+            if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting(
+                'allow_social_tool'
+            ) != 'true'
+            ) {
                 $navigation['myprofile'] = $possible_tabs['myprofile'];
             } else {
                 $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
@@ -1078,7 +1184,7 @@ class Template {
             if (api_get_setting('gradebook_enable') == 'true') {
                 if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
                     $navigation['mygradebook'] = $possible_tabs['mygradebook'];
-                } else{
+                } else {
                     $menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
                 }
             }
@@ -1103,7 +1209,7 @@ class Template {
                 if (api_get_setting('allow_social_tool') == 'true') {
                     $navigation['social'] = $possible_tabs['social'];
                 }
-            } else{
+            } else {
                 $menu_navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
 
@@ -1112,7 +1218,7 @@ class Template {
                 if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
                     $navigation['dashboard'] = $possible_tabs['dashboard'];
                 }
-            } else{
+            } else {
                 $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
 
@@ -1128,7 +1234,10 @@ class Template {
             // Reports
             if (!empty($possible_tabs['reports'])) {
                 if (api_get_setting('show_tabs', 'reports') == 'true') {
-                    if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight('show_tabs:reports')) {
+                    if ((api_is_platform_admin() || api_is_drh() || api_is_session_admin()) && Rights::hasRight(
+                        'show_tabs:reports'
+                    )
+                    ) {
                         $navigation['reports'] = $possible_tabs['reports'];
                     }
                 } else {
@@ -1137,7 +1246,7 @@ class Template {
             }
 
             // Custom tabs
-            for ($i=1;$i<=3;$i++)
+            for ($i = 1; $i <= 3; $i++) {
                 if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true') {
                     $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
                 } else {
@@ -1145,18 +1254,24 @@ class Template {
                         $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
                     }
                 }
+            }
         }
-        $return = array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
+        $return = array(
+            'menu_navigation' => $menu_navigation,
+            'navigation' => $navigation,
+            'possible_tabs' => $possible_tabs
+        );
         return $return;
     }
 
-    function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
+    function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
+    {
 
-        $session_id     = api_get_session_id();
-        $session_name   = api_get_session_name($session_id);
-        $_course        = api_get_course_info();
-        $user_id        = api_get_user_id();
-        $course_id      = api_get_course_id();
+        $session_id = api_get_session_id();
+        $session_name = api_get_session_name($session_id);
+        $_course = api_get_course_info();
+        $user_id = api_get_user_id();
+        $course_id = api_get_course_id();
 
 
         /*  Plugins for banner section */
@@ -1172,24 +1287,39 @@ class Template {
 
         if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
 
-            $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+            $navigation_item['url'] = $web_course_path.$_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
             $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
             switch (api_get_setting('breadcrumbs_course_homepage')) {
                 case 'get_lang':
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', get_lang('CourseHomepageLink')).' '.get_lang('CourseHomepageLink');
+                    $navigation_item['title'] = Display::img(
+                        api_get_path(WEB_CSS_PATH).'home.png',
+                        get_lang('CourseHomepageLink')
+                    ).' '.get_lang('CourseHomepageLink');
                     break;
                 case 'course_code':
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['official_code']).' '.$_course['official_code'];
+                    $navigation_item['title'] = Display::img(
+                        api_get_path(WEB_CSS_PATH).'home.png',
+                        $_course['official_code']
+                    ).' '.$_course['official_code'];
                     break;
                 case 'session_name_and_course_title':
-                    $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                    $navigation_item['title'] = Display::img(
+                        api_get_path(WEB_CSS_PATH).'home.png',
+                        $_course['name'].$my_session_name
+                    ).' '.$course_title.$my_session_name;
                     break;
                 default:
-                    if (api_get_session_id() != -1 ) {
-                        $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name'].$my_session_name).' '.$course_title.$my_session_name;
+                    if (api_get_session_id() != -1) {
+                        $navigation_item['title'] = Display::img(
+                            api_get_path(WEB_CSS_PATH).'home.png',
+                            $_course['name'].$my_session_name
+                        ).' '.$course_title.$my_session_name;
                     } else {
-                        $navigation_item['title'] = Display::img(api_get_path(WEB_CSS_PATH).'home.png', $_course['name']).' '.$course_title;
+                        $navigation_item['title'] = Display::img(
+                            api_get_path(WEB_CSS_PATH).'home.png',
+                            $_course['name']
+                        ).' '.$course_title;
                     }
                     break;
             }
@@ -1198,7 +1328,7 @@ class Template {
             $navigation_item_my_courses['title'] = get_lang('MyCourses');
             $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
             $navigation[] = $navigation_item_my_courses;
-            */
+             */
             $navigation[] = $navigation_item;
         }
 
@@ -1215,22 +1345,22 @@ class Template {
                 // titles for shared folders
                 if ($breadcrumb_step['name'] == 'shared_folder') {
                     $navigation_item['title'] = get_lang('UserFolders');
-                } elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
+                } elseif (strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
                     $navigation_item['title'] = get_lang('UserFolders');
-                } elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {
+                } elseif (strstr($breadcrumb_step['name'], 'sf_user_')) {
                     $userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
                     $navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-                } elseif($breadcrumb_step['name'] == 'chat_files') {
+                } elseif ($breadcrumb_step['name'] == 'chat_files') {
                     $navigation_item['title'] = get_lang('ChatFiles');
-                } elseif($breadcrumb_step['name'] == 'images') {
+                } elseif ($breadcrumb_step['name'] == 'images') {
                     $navigation_item['title'] = get_lang('Images');
-                } elseif($breadcrumb_step['name'] == 'video') {
+                } elseif ($breadcrumb_step['name'] == 'video') {
                     $navigation_item['title'] = get_lang('Video');
-                } elseif($breadcrumb_step['name'] == 'audio') {
+                } elseif ($breadcrumb_step['name'] == 'audio') {
                     $navigation_item['title'] = get_lang('Audio');
-                } elseif($breadcrumb_step['name'] == 'flash') {
+                } elseif ($breadcrumb_step['name'] == 'flash') {
                     $navigation_item['title'] = get_lang('Flash');
-                } elseif($breadcrumb_step['name'] == 'gallery') {
+                } elseif ($breadcrumb_step['name'] == 'gallery') {
                     $navigation_item['title'] = get_lang('Gallery');
                 }
                 //Fixes breadcrumb title now we applied the Security::remove_XSS and we cut the string depending of the MAX_LENGTH_BREADCRUMB value
@@ -1270,7 +1400,10 @@ class Template {
         /* Part 4 . Show the teacher view/student view button at the right of the breadcrumb */
         $view_as_student_link = null;
         if ($user_id && isset($course_id)) {
-            if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting('student_view_enabled') == 'true') {
+            if ((api_is_course_admin() || api_is_platform_admin()) && api_get_setting(
+                'student_view_enabled'
+            ) == 'true'
+            ) {
                 $view_as_student_link = api_display_tool_view_option();
             }
         }
@@ -1286,34 +1419,38 @@ class Template {
                 // $home_link.= '<span class="divider">/</span>';
 
                 if (!empty($home_link)) {
-                    $lis.= Display::tag('li', $home_link);
+                    $lis .= Display::tag('li', $home_link);
                 }
 
                 foreach ($final_navigation as $bread) {
                     $bread_check = trim(strip_tags($bread));
                     if (!empty($bread_check)) {
-                        if ($final_navigation_count-1 > $i) {
+                        if ($final_navigation_count - 1 > $i) {
                             $bread .= '<span class="divider">/</span>';
                         }
-                        $lis.= Display::tag('li', $bread);
+                        $lis .= Display::tag('li', $bread);
                         $i++;
                     }
                 }
             } else {
                 if (!empty($home_link)) {
-                    $lis.= Display::tag('li', $home_link);
+                    $lis .= Display::tag('li', $home_link);
                 }
             }
 
             // View as student/teacher link
             if (!empty($view_as_student_link)) {
-                $lis.= Display::tag('li', $view_as_student_link, array('id' => 'view_as_link','class' => 'pull-right'));
+                $lis .= Display::tag(
+                    'li',
+                    $view_as_student_link,
+                    array('id' => 'view_as_link', 'class' => 'pull-right')
+                );
             }
 
             if (!empty($lis)) {
-                $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
+                $html .= Display::tag('ul', $lis, array('class' => 'breadcrumb'));
             }
         }
-        return $html ;
+        return $html;
     }
 }

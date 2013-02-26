@@ -21,15 +21,18 @@ The more frequent ones have been marked with *
 
 @media (max-width: 320px) {
     header #header_center, header #header_right, header #header_left {
-        display:none;
+        display: none;
     }
+
     .navbar {
-      margin-top: 0em;
+        margin-top: 0em;
     }
+
     #main_content .span3 #login_block {
         width: 160px;
         float: left;
     }
+
     #main_content .span3 #help_block {
         width: 60px;
         float: right;
@@ -39,29 +42,34 @@ The more frequent ones have been marked with *
 
     /* No view as link*/
     #view_as_link {
-        display:none;
+        display: none;
     }
+
     /* Smaller brand */
     .navbar .brand {
-         font-size: 14px;
-         text-shadow: 0px;
+        font-size: 14px;
+        text-shadow: 0px;
     }
 
     /* In order to avoid clicking in the main title instead of the expand button */
-    .subnav .navbar-inner .in{
+    .subnav .navbar-inner .in {
         margin-top: 45px;
     }
+
     #main_content .span3 #login_block {
         width: 180px;
     }
+
     #main_content .span3 #help_block {
         width: 100px;
     }
+
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
         margin-left: 20px;
     }
+
     /* Course- home - Show 2 icons instead of one */
     .course-tool {
         float: left;
@@ -72,18 +80,22 @@ The more frequent ones have been marked with *
     .course-tool h4 {
         font-size: 15px;
     }
+
     /* in admin, reduce block height but increase width (from 47%) as there
        will be only one for the whole width */
     #settings .span6 {
         min-height: none;
         width: 95%;
     }
+
     .section-mycourses .menu-column, .section-mycampus .menu-column {
         width: 95%;
     }
+
     .section-mycampus .menu-column #login_block {
         width: 95%;
     }
+
     .section-mycourses .menu-column #user_image_block,
     .section-mycourses .menu-column #profile_block,
     .section-mycourses .menu-column #skill_block,
@@ -95,25 +107,32 @@ The more frequent ones have been marked with *
     .section-mycourses .menu-column #notice_block {
         display: none;
     }
+
     .section-mycampus #homepage {
         width: 260px;
     }
+
     .section-mycampus #hot_courses {
         width: 260px;
     }
+
     .section-mycourses #top_main_content {
         margin-right: 15px;
     }
+
     .section-mycourses #main_content {
         margin-right: 15px;
         width: 260px;
     }
+
     .section-mycourses .course-box .course-box-actions {
         display: none;
     }
+
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
         width: 95%;
     }
+
     footer {
         margin-top: 0px;
     }
@@ -121,28 +140,30 @@ The more frequent ones have been marked with *
 
 @media (min-width: 321px) and (max-width: 480px) {
     header #header_center, header #header_right, header #header_left {
-        display:none;
+        display: none;
     }
+
     .navbar {
-      margin-top: 0em;
+        margin-top: 0em;
     }
-    .subnav .navbar-inner .in{
+
+    .subnav .navbar-inner .in {
         margin-top: 45px;
     }
 
     /* No chat in mobiles */
     #chatmain {
-        display:none;
+        display: none;
     }
 
     /* No topbar */
     #topbar {
-        display:none;
+        display: none;
     }
 
     /* No view as link*/
     #view_as_link {
-        display:none;
+        display: none;
     }
 
     /* Brand fix */
@@ -152,7 +173,7 @@ The more frequent ones have been marked with *
     }
 
     .subnav .dropdown-toggle {
-        display:none;
+        display: none;
     }
 
     .subnav .nav > li > a, .navbar .dropdown-menu a {
@@ -169,10 +190,10 @@ The more frequent ones have been marked with *
     }
 
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
+        color: #999;
     }
 
-    #footer_left , #footer_right #admin_name, #footer_right #software_name {
+    #footer_left, #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
     }
 
@@ -182,7 +203,7 @@ The more frequent ones have been marked with *
 
     /* No resize font */
     .resize_font {
-        display:none;
+        display: none;
     }
 
     h3 {
@@ -195,7 +216,7 @@ The more frequent ones have been marked with *
 
     /* No notifications */
     .notification-panel {
-        display:none;
+        display: none;
     }
 
     /* only for the course tools */
@@ -203,6 +224,7 @@ The more frequent ones have been marked with *
         float: left;
         margin-left: 10px;
     }
+
     /* Course- home - Show 2 icons instead of one */
     .course-tool {
         float: left;
@@ -218,28 +240,34 @@ The more frequent ones have been marked with *
     .subbav .dropdown-menu a:hover {
         background-color: #555;
     }
+
     #main_content .span3 #login_block {
         width: 280px;
         float: left;
     }
+
     #main_content .span3 #help_block {
         width: 100px;
         float: right;
         margin-left: 10px;
         margin-right: 10px;
     }
+
     /* in admin, reduce block height but increase width (from 47%) as there
        will be only one for the whole width */
     #settings .span6 {
         min-height: none;
         width: 95%;
     }
+
     .section-mycourses .menu-column, .section-mycampus .menu-column {
         width: 95%;
     }
+
     .section-mycampus .menu-column #login_block {
         width: 95%;
     }
+
     .section-mycourses .menu-column #user_image_block,
     .section-mycourses .menu-column #profile_block,
     .section-mycourses .menu-column #skill_block,
@@ -251,25 +279,32 @@ The more frequent ones have been marked with *
     .section-mycourses .menu-column #notice_block {
         display: none;
     }
+
     .section-mycampus #homepage {
         width: 400px;
     }
+
     .section-mycampus #hot_courses {
         width: 400px;
     }
+
     .section-mycourses #top_main_content {
         margin-right: 15px;
     }
+
     .section-mycourses #main_content {
         margin-right: 15px;
         width: 400px;
     }
+
     .section-mycourses .course-box .course-box-actions {
         display: none;
     }
+
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
         width: 95%;
     }
+
     footer {
         margin-top: 0px;
     }
@@ -278,29 +313,31 @@ The more frequent ones have been marked with *
 @media (min-width: 481px) and (max-width: 800px) {
     /* No topbar */
     #topbar {
-        display:none;
+        display: none;
     }
 
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
     }
+
     .course-tool {
         width: 210px;
     }
+
     .course-tool h4 {
         font-size: 14px;
     }
 
     .subnav .dropdown-toggle {
-        display:none;
+        display: none;
     }
 
     header #header_center, header #header_right {
-        display:none;
+        display: none;
     }
 
-     #footer_right #admin_name, #footer_right #software_name {
+    #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
     }
 
@@ -311,8 +348,9 @@ The more frequent ones have been marked with *
     footer .container .row {
         padding-top: 15px;
     }
+
     .notification-panel {
-        display:none;
+        display: none;
     }
 
     /* Remove any padding from the body */
@@ -326,30 +364,34 @@ The more frequent ones have been marked with *
 
     /* Subnav */
     .subnav {
-        border:1px solid #fff;
+        border: 1px solid #fff;
         position: static;
         top: auto;
         z-index: auto;
         width: 100%;
         height: auto;
         -webkit-box-shadow: none;
-            -moz-box-shadow: none;
-                box-shadow: none;
+        -moz-box-shadow: none;
+        box-shadow: none;
     }
+
     .subnav .nav > li {
         float: none;
     }
+
     .subnav .nav > li > a {
         border: 0;
     }
+
     .subnav .nav > li + li > a {
         border-top: 1px solid #e5e5e5;
     }
+
     .subnav .nav > li:first-child > a,
     .subnav .nav > li:first-child > a:hover {
         -webkit-border-radius: 4px 4px 0 0;
-            -moz-border-radius: 4px 4px 0 0;
-                border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
     }
 
     .subnav .navbar-inner li a:hover {
@@ -357,56 +399,66 @@ The more frequent ones have been marked with *
         color: #fff;
     }
 
-     /* .new_actions */
+    /* .new_actions */
     .new_actions {
-        border:1px solid #fff;
+        border: 1px solid #fff;
         position: static;
         top: auto;
         z-index: auto;
         width: 100%;
         height: auto;
         -webkit-box-shadow: none;
-            -moz-box-shadow: none;
-                box-shadow: none;
-                text-align: center;
+        -moz-box-shadow: none;
+        box-shadow: none;
+        text-align: center;
     }
+
     .new_actions .nav > li {
         float: none;
     }
+
     .new_actions .nav > li > a {
         border: 0;
     }
+
     .new_actions .nav > li + li > a {
         border-top: 1px solid #e5e5e5;
     }
+
     .new_actions .nav > li:first-child > a,
     .new_actions .nav > li:first-child > a:hover {
         -webkit-border-radius: 4px 4px 0 0;
-            -moz-border-radius: 4px 4px 0 0;
-                border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
     }
 
     #section-social .row > [class*="span"], #section-social .row-fluid > [class*="span"] {
         float: left;
     }
+
     /* Some fixes for w~720px */
     .section-mycampus #top_main_content .content-column {
         float: none;
     }
+
     .section-mycampus #homepage {
         float: left;
         width: 450px;
     }
+
     .section-mycampus #hot_courses {
         float: left;
         width: 660px;
     }
+
     .section-mycampus #hot_courses .page-header {
         width: 650px;
     }
+
     .section-mycourses .course-box .course-box-actions {
         display: none;
     }
+
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
         width: 660px;
     }
@@ -421,10 +473,10 @@ The more frequent ones have been marked with *
     }
 
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
+        color: #999;
     }
 
-    #footer_left , #footer_right #admin_name, #footer_right #software_name {
+    #footer_left, #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
     }
 
@@ -433,10 +485,16 @@ The more frequent ones have been marked with *
     }
 }
 
+@media (min-width: 800px) {
+    .advmultiselect [class*="span4"] {
+        margin-left: 10px;
+    }
+}
+
 @media (min-width: 801px) and (max-width: 979px) {
     /* No topbar */
     #topbar {
-        display:none;
+        display: none;
     }
 
     /* fixes tabs */
@@ -446,16 +504,17 @@ The more frequent ones have been marked with *
     }
 
     .subnav .dropdown-toggle {
-        display:none;
+        display: none;
     }
 
     .subnav .nav > li > a, .navbar .dropdown-menu a {
         color: #ccc;
     }
 
-   .subnav .nav > li > a:hover,
-   .subnav .dropdown-menu a:hover {
+    .subnav .nav > li > a:hover,
+    .subnav .dropdown-menu a:hover {
     }
+
     .course-tool {
         width: 220px;
     }
@@ -470,6 +529,7 @@ The more frequent ones have been marked with *
     #topbar_push {
         height: 0px;
     }
+
     .section-social .span9 {
         width: 530px;
     }
@@ -486,15 +546,19 @@ The more frequent ones have been marked with *
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
     }
+
     .course-tool {
         width: 280px;
     }
-    .section-social .span9, .section-mycourses .span9{
+
+    .section-social .span9, .section-mycourses .span9 {
         width: 680px;
     }
+
     .section-social .social-menu {
         width: 200px;
     }
+
     .section-social .span5 {
         width: 350px;
     }
@@ -503,13 +567,17 @@ The more frequent ones have been marked with *
 /* LARGE DESKTOP SCREENS */
 @media (min-width: 1201px) {
     #top_main_content .span12 {
-       /* width: 98%; */
+        /* width: 98%; */
     }
+
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
     }
+
     .course-tool {
         width: 260px;
     }
 }
+
+

@@ -215,7 +215,8 @@ class SessionManager {
 
     /**
      * Gets the admin session list callback of the admin/session_list.php page
-     * @param array order and limit keys
+     * @param array $options order and limit keys
+     * @return array
      */
 	public static function get_sessions_admin($options) {
 		$tbl_session            = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -229,10 +230,10 @@ class SessionManager {
 			$where.=" AND s.session_admin_id = $user_id ";
 		}
 
-		$coach_name = " CONCAT (u.lastname , ' ', u.firstname) as coach_name ";
+		$coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
 
 		if (api_is_western_name_order()) {
-			$coach_name = " CONCAT (u.firstname, ' ', u.lastname) as coach_name ";
+			$coach_name = " CONCAT(u.firstname, ' ', u.lastname) as coach_name ";
 		}
 
 		$today = api_get_utc_datetime();
@@ -723,12 +724,13 @@ class SessionManager {
                 }
             //}
         }
+
         // count users in this session-course relation
-        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$id_session' AND course_code='$enreg_course' AND status<>2";
+        $sql = "SELECT COUNT(id_user) as nbUsers FROM $tbl_session_rel_course_rel_user WHERE id_session='$session_id' AND course_code='$course_code' AND status<>2";
         $rs = Database::query($sql);
         list($nbr_users) = Database::fetch_array($rs);
         // update the session-course relation to add the users total
-        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$id_session' AND course_code='$enreg_course'";
+        $update_sql = "UPDATE $tbl_session_rel_course SET nbr_users=$nbr_users WHERE id_session='$session_id' AND course_code='$course_code'";
         Database::query($update_sql);
     }
 
@@ -1667,7 +1669,7 @@ class SessionManager {
      * @param $copy_users
      * @param $create_new_courses
      * @param $set_exercises_lp_invisible
-     * @return unknown_type
+     * @return int
      */
     public function copy_session($id, $copy_courses = true, $copy_users = true, $create_new_courses = false, $set_exercises_lp_invisible = false) {
         $id = intval($id);

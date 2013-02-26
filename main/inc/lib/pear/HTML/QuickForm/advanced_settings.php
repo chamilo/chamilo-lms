@@ -22,40 +22,41 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
 {
     // {{{ constructor
 
-   /**
-    * Class constructor
-    *
-    * @param string $text   raw HTML to add
-    * @access public
-    * @return void
-    */
+    /**
+     * Class constructor
+     *
+     * @param string $text   raw HTML to add
+     * @access public
+     * @return void
+     */
     function HTML_QuickForm_advanced_settings($text = null)
     {
         $this->HTML_QuickForm_static(null, null, $text);
         $this->_type = 'html';
     }
-    
-   /**
-    * Accepts a renderer
-    *
-    * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
-    * @access public
-    * @return void
-    */
-    function accept(&$renderer, $required=false, $error=null)
+
+    /**
+     * Accepts a renderer
+     *
+     * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
+     * @access public
+     * @return void
+     */
+    function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderHtml($this);
     } // end func accept
-    
-    
-    function toHtml() {
-         return '<div class="control-group ">
+
+
+    function toHtml()
+    {
+        return '<div class="control-group">
                     <label class="control-label"></label>
                     <div class="controls">
                     '.HTML_QuickForm_static::toHtml().'
                         </div>
                  </div>
-                                        
+
                 ';
-    } //end func toHtml
-} //end class HTML_QuickForm_html
+    }
+}

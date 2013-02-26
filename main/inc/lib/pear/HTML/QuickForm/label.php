@@ -18,18 +18,19 @@ require_once 'HTML/QuickForm/static.php';
  * @since       3.0
  * @deprecated  Please use the templates rather than add raw HTML via this element
  */
-class HTML_QuickForm_label extends HTML_QuickForm_static 
+class HTML_QuickForm_label extends HTML_QuickForm_static
 {
     // {{{ constructor
 
-   /**
-    * Class constructor
-    *
-    * @param string $text   raw HTML to add
-    * @access public
-    * @return void
-    */
-    function HTML_QuickForm_label($label = null, $text = null) {        
+    /**
+     * Class constructor
+     *
+     * @param string $text   raw HTML to add
+     * @access public
+     * @return void
+     */
+    function HTML_QuickForm_label($label = null, $text = null)
+    {
         $this->HTML_QuickForm_static(null, $label, $text);
         $this->_type = 'html';
     }
@@ -37,29 +38,26 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     // }}}
     // {{{ accept()
 
-   /**
-    * Accepts a renderer
-    *
-    * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
-    * @access public
-    * @return void
-    */
-    function accept(&$renderer, $required=false, $error=null) {
+    /**
+     * Accepts a renderer
+     *
+     * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
+     * @access public
+     * @return void
+     */
+    function accept(&$renderer, $required = false, $error = null)
+    {
         $renderer->renderHtml($this);
     }
-    
-    function toHtml() {        
-         return '<div class="control-group ">
+
+    function toHtml()
+    {
+        return '<div class="control-group">
                     <label class="control-label">'.$this->getLabel().'</label>
                     <div class="controls">
                     '.HTML_QuickForm_static::toHtml().'
                         </div>
                  </div>
-                                        
                 ';
-    } //end func toHtml
-
-    
-
-    // }}}
-} //end class HTML_QuickForm_html
+    }
+}

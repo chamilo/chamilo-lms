@@ -2260,8 +2260,8 @@ class UserManager {
         } else {
             if (api_is_allowed_to_create_course()) {
                 //Teachers can access the session depending in the access_coach date
-                $condition_date_end1 = null;
-                $condition_date_end2 = null;
+                $condition_date_start1 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
+                $condition_date_start2 = " AND (session.coach_access_start_date <= '$now' OR session.coach_access_start_date = '0000-00-00 00:00:00') ";
             } else {
                 //Student can't access before the start date or after the end date
                 $condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";

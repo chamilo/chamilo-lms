@@ -2167,5 +2167,91 @@
         ],
         "description": "Symfony Validator Component",
         "homepage": "http://symfony.com"
+    },
+    {
+        "name": "fzaninotto/faker",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fzaninotto/Faker.git",
+            "reference": "d2bd9144075c0bb05fc14844e1446c2054b5da66"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/d2bd9144075c0bb05fc14844e1446c2054b5da66",
+            "reference": "d2bd9144075c0bb05fc14844e1446c2054b5da66",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2013-02-27 10:20:31",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Faker": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "François Zaninotto"
+            }
+        ],
+        "description": "Faker is a PHP library that generates fake data for you.",
+        "keywords": [
+            "data",
+            "faker",
+            "fixtures"
+        ]
+    },
+    {
+        "name": "emanueleminotto/faker-service-provider",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/EmanueleMinotto/FakerServiceProvider.git",
+            "reference": "dedf255efaaa94d00f8af44bf5faeae6d3c557e6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/EmanueleMinotto/FakerServiceProvider/zipball/dedf255efaaa94d00f8af44bf5faeae6d3c557e6",
+            "reference": "dedf255efaaa94d00f8af44bf5faeae6d3c557e6",
+            "shasum": ""
+        },
+        "require": {
+            "fzaninotto/faker": "1.1.*"
+        },
+        "time": "2013-02-06 15:50:34",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "EmanueleMinotto": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Emanuele Minotto",
+                "email": "minottoemanuele@gmail.com",
+                "homepage": "http://emanueleminotto.wordpress.com/"
+            }
+        ],
+        "description": "Faker Service Provider for Silex"
     }
 ]

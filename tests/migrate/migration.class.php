@@ -623,9 +623,9 @@ class Migration {
 
         foreach ($transaction_hardcoded as  $transaction) {
             $transaction['branch_id'] = 2;
-            if ($transaction['action'] < 31) {
+            /*if ($transaction['action'] < 31) {
                 continue;
-            }
+            }*/
             self::add_transaction($transaction);
         }
     }
@@ -683,7 +683,7 @@ class Migration {
 
         //$extra_conditions = " AND branch_id = $branch_id ";
         // Temporary patch to avoid attendances and gradebook transactions
-        $extra_conditions = " AND branch_id = $branch_id and action < 31";
+        $extra_conditions = " AND branch_id = $branch_id";
         $sql = "SELECT * FROM $table WHERE status_id = $status_id $extra_conditions ORDER BY id ";
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');

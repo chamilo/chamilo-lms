@@ -2313,7 +2313,7 @@ class UserManager {
             }
         }
         if (Database::num_rows($result1) > 0) {
-            // Now add the diff with $row1, ordering elements as planned by 
+            // Now add the diff with $row1, ordering elements as planned by
             //   query
             $i = 0;
             while ($row1 = Database::fetch_array($result1)) {
@@ -2357,8 +2357,8 @@ class UserManager {
 
                 $session_id = $row['id'];
                 //$session_info = api_get_session_info($session_id);
-                // The only usage of $session_info is to call 
-                // api_get_session_date_valudation, which only needs id and
+                // The only usage of $session_info is to call
+                // api_get_session_date_validation, which only needs id and
                 // dates from the session itself, so really no need to query
                 // the session table again
                 $session_info = $row;
@@ -2414,8 +2414,8 @@ class UserManager {
                     $course_list[] = $course;
                 }
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses']                 = $course_list;
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_to']                = $row['moved_to'];
-                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_status']            = $row['moved_status'];
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_to']                = isset($row['moved_to']) ? $row['moved_to'] : null;
+                $categories[$row['session_category_id']]['sessions'][$row['id']]['moved_status']            = isset($row['moved_status']) ? $row['moved_status'] : null;
             }
         }
         return $categories;

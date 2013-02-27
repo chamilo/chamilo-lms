@@ -21,13 +21,6 @@ use Silex\Provider\DoctrineServiceProvider;
  */
 class DoctrineServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        if (!is_dir(__DIR__.'/../../../../vendor/doctrine/common/lib') || !is_dir(__DIR__.'/../../../../vendor/doctrine/dbal/lib')) {
-            $this->markTestSkipped('Doctrine Common/DBAL dependencies were not installed.');
-        }
-    }
-
     public function testOptionsInitializer()
     {
         $app = new Application();
@@ -38,6 +31,10 @@ class DoctrineServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testSingleConnection()
     {
+        if (!in_array('sqlite', \PDO::getAvailableDrivers())) {
+            $this->markTestSkipped('pdo_sqlite is not available');
+        }
+
         $app = new Application();
         $app->register(new DoctrineServiceProvider(), array(
             'db.options' => array('driver' => 'pdo_sqlite', 'memory' => true),
@@ -55,6 +52,10 @@ class DoctrineServiceProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testMultipleConnections()
     {
+        if (!in_array('sqlite', \PDO::getAvailableDrivers())) {
+            $this->markTestSkipped('pdo_sqlite is not available');
+        }
+
         $app = new Application();
         $app->register(new DoctrineServiceProvider(), array(
             'dbs.options' => array(

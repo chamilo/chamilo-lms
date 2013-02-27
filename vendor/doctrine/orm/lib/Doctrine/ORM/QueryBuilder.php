@@ -134,7 +134,8 @@ class QueryBuilder
      * This producer method is intended for convenient inline usage. Example:
      *
      * <code>
-     *     $qb = $em->createQueryBuilder()
+     *     $qb = $em->createQueryBuilder();
+     *     $qb
      *         ->select('u')
      *         ->from('User', 'u')
      *         ->where($qb->expr()->eq('u.id', 1));
@@ -197,8 +198,6 @@ class QueryBuilder
         if ($this->_dql !== null && $this->_state === self::STATE_CLEAN) {
             return $this->_dql;
         }
-
-        $dql = '';
 
         switch ($this->_type) {
             case self::DELETE:
@@ -1048,8 +1047,8 @@ class QueryBuilder
      * Specifies an ordering for the query results.
      * Replaces any previously specified orderings, if any.
      *
-     * @param string $sort  The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string|Expr\OrderBy $sort  The ordering expression.
+     * @param string              $order The ordering direction.
      *
      * @return QueryBuilder This QueryBuilder instance.
      */
@@ -1063,14 +1062,16 @@ class QueryBuilder
     /**
      * Adds an ordering to the query results.
      *
-     * @param string $sort  The ordering expression.
-     * @param string $order The ordering direction.
+     * @param string|Expr\OrderBy $sort  The ordering expression.
+     * @param string              $order The ordering direction.
      *
      * @return QueryBuilder This QueryBuilder instance.
      */
     public function addOrderBy($sort, $order = null)
     {
-        return $this->add('orderBy', new Expr\OrderBy($sort, $order), true);
+        $orderBy = ($sort instanceof Expr\OrderBy) ? $sort : new Expr\OrderBy($sort, $order);
+
+        return $this->add('orderBy', $orderBy, true);
     }
 
     /**

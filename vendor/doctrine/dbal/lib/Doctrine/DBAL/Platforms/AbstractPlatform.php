@@ -1000,7 +1000,7 @@ abstract class AbstractPlatform
     /**
      * Get the sql snippet to append to any SELECT statement which locks rows in shared read lock.
      *
-     * This defaults to the ASNI SQL "FOR UPDATE", which is an exclusive lock (Write). Some database
+     * This defaults to the ANSI SQL "FOR UPDATE", which is an exclusive lock (Write). Some database
      * vendors allow to lighten this constraint up to be a real read lock.
      *
      * @return string
@@ -1013,7 +1013,7 @@ abstract class AbstractPlatform
     /**
      * Get the SQL snippet to append to any SELECT statement which obtains an exclusive lock on the rows.
      *
-     * The semantics of this lock mode should equal the SELECT .. FOR UPDATE of the ASNI SQL standard.
+     * The semantics of this lock mode should equal the SELECT .. FOR UPDATE of the ANSI SQL standard.
      *
      * @return string
      */
@@ -1973,16 +1973,6 @@ abstract class AbstractPlatform
     }
 
     /**
-     * Get sql query to show a list of database.
-     *
-     * @return string
-     */
-    public function getShowDatabasesSQL()
-    {
-        throw DBALException::notSupported(__METHOD__);
-    }
-
-    /**
      * Obtain DBMS specific SQL code portion needed to set the FOREIGN KEY constraint
      * of a field declaration to be used in statements like CREATE TABLE.
      *
@@ -2569,6 +2559,16 @@ abstract class AbstractPlatform
      * @return boolean
      */
     public function supportsCommentOnStatement()
+    {
+        return false;
+    }
+
+    /**
+     * Does this platform have native guid type.
+     *
+     * @return boolean
+     */
+    public function hasNativeGuidType()
     {
         return false;
     }

@@ -157,7 +157,7 @@ Dynamic routing
 
 Now, you can create another controller for viewing individual blog posts::
 
-    $app->get('/blog/show/{id}', function (Silex\Application $app, $id) use ($blogPosts) {
+    $app->get('/blog/{id}', function (Silex\Application $app, $id) use ($blogPosts) {
         if (!isset($blogPosts[$id])) {
             $app->abort(404, "Post $id does not exist.");
         }
@@ -170,6 +170,9 @@ Now, you can create another controller for viewing individual blog posts::
 
 This route definition has a variable ``{id}`` part which is passed to the
 closure.
+
+The current ``Application`` is automatically injected by Silex to the Closure
+thanks to the type hinting.
 
 When the post does not exist, we are using ``abort()`` to stop the request
 early. It actually throws an exception, which we will see how to handle later
@@ -217,21 +220,47 @@ Other methods
 ~~~~~~~~~~~~~
 
 You can create controllers for most HTTP methods. Just call one of these
-methods on your application: ``get``, ``post``, ``put``, ``delete``. You can
-also call ``match``, which will match all methods::
+methods on your application: ``get``, ``post``, ``put``, ``delete``::
+
+    $app->put('/blog/{id}', function ($id) {
+        ...
+    });
+
+    $app->delete('/blog/{id}', function ($id) {
+        ...
+    });
+
+.. tip::
+
+    Forms in most web browsers do not directly support the use of other HTTP 
+    methods. To use methods other than GET and POST you can utilize a special 
+    form field with a name of ``_method``. The form's ``method`` attribute must 
+    be set to POST when using this field::
+
+        <form action="/my/target/route/" method="post">
+            ...
+            <input type="hidden" id="_method" name="_method" value="PUT" />
+        </form>
+
+    If using Symfony Components 2.2+ you will need to explicitly enable this
+    method override::
+
+        use Symfony\Component\HttpFoundation\Request;
+
+        Request::enableHttpMethodParameterOverride();
+        $app->run();
+
+You can also call ``match``, which will match all methods. This can be
+restricted via the ``method`` method::
 
     $app->match('/blog', function () {
         ...
     });
 
-You can then restrict the allowed methods via the ``method`` method::
-
     $app->match('/blog', function () {
         ...
     })
     ->method('PATCH');
-
-You can match multiple methods with one controller using regex syntax::
 
     $app->match('/blog', function () {
         ...
@@ -250,27 +279,27 @@ Route variables
 As it has been shown before you can define variable parts in a route like
 this::
 
-    $app->get('/blog/show/{id}', function ($id) {
+    $app->get('/blog/{id}', function ($id) {
         ...
     });
 
 It is also possible to have more than one variable part, just make sure the
 closure arguments match the names of the variable parts::
 
-    $app->get('/blog/show/{postId}/{commentId}', function ($postId, $commentId) {
+    $app->get('/blog/{postId}/{commentId}', function ($postId, $commentId) {
         ...
     });
 
 While it's not suggested, you could also do this (note the switched
 arguments)::
 
-    $app->get('/blog/show/{postId}/{commentId}', function ($commentId, $postId) {
+    $app->get('/blog/{postId}/{commentId}', function ($commentId, $postId) {
         ...
     });
 
 You can also ask for the current Request and Application objects::
 
-    $app->get('/blog/show/{id}', function (Application $app, Request $request, $id) {
+    $app->get('/blog/{id}', function (Application $app, Request $request, $id) {
         ...
     });
 
@@ -279,7 +308,7 @@ You can also ask for the current Request and Application objects::
     Note for the Application and Request objects, Silex does the injection
     based on the type hinting and not on the variable name::
 
-        $app->get('/blog/show/{id}', function (Application $foo, Request $bar, $id) {
+        $app->get('/blog/{id}', function (Application $foo, Request $bar, $id) {
             ...
         });
 
@@ -328,14 +357,14 @@ requirements using regular expressions by calling ``assert`` on the
 The following will make sure the ``id`` argument is numeric, since ``\d+``
 matches any amount of digits::
 
-    $app->get('/blog/show/{id}', function ($id) {
+    $app->get('/blog/{id}', function ($id) {
         ...
     })
     ->assert('id', '\d+');
 
 You can also chain these calls::
 
-    $app->get('/blog/show/{postId}/{commentId}', function ($postId, $commentId) {
+    $app->get('/blog/{postId}/{commentId}', function ($postId, $commentId) {
         ...
     })
     ->assert('postId', '\d+')
@@ -368,7 +397,7 @@ really be used. You can give a route a name by calling ``bind`` on the
     })
     ->bind('homepage');
 
-    $app->get('/blog/show/{id}', function ($id) {
+    $app->get('/blog/{id}', function ($id) {
         ...
     })
     ->bind('blog_post');
@@ -515,7 +544,7 @@ once a response is returned, the following handlers are ignored.
 The error handlers are also called when you use ``abort`` to abort a request
 early::
 
-    $app->get('/blog/show/{id}', function (Silex\Application $app, $id) use ($blogPosts) {
+    $app->get('/blog/{id}', function (Silex\Application $app, $id) use ($blogPosts) {
         if (!isset($blogPosts[$id])) {
             $app->abort(404, "Post $id does not exist.");
         }
@@ -610,6 +639,35 @@ after every chunk::
         }
         fclose($fh);
     };
+
+Sending a file
+--------------
+
+If you want to return a file, you can use the ``sendFile`` helper method.
+It eases returning files that would otherwise not be publicly available. Simply
+pass it your file path, status code, headers and the content disposition and it
+will create a ``BinaryFileResponse`` based response for you::
+
+    $app->get('/files/{path}', function ($path) use ($app) {
+        if (!file_exists('/base/path/' . $path)) {
+            $app->abort(404);
+        }
+
+        return $app->sendFile('/base/path/' . $path);
+    });
+
+To further customize the response before returning it, check the API doc for
+`Symfony\Component\HttpFoundation\BinaryFileResponse
+<http://api.symfony.com/master/Symfony/Component/HttpFoundation/BinaryFileResponse.html>`_::
+
+    return $app
+        ->sendFile('/base/path/' . $path)
+        ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'pic.jpg')
+    ;
+
+.. note::
+
+    HttpFoundation 2.2 or greater is required for this feature to be available.
 
 Traits
 ------

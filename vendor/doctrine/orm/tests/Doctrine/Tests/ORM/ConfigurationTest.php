@@ -230,9 +230,9 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
 
     public function testAddGetFilters()
     {
-        $this->assertSame(null, $this->configuration->getFilter('NonExistingFilter'));
+        $this->assertSame(null, $this->configuration->getFilterClassName('NonExistingFilter'));
         $this->configuration->addFilter('FilterName', __CLASS__);
-        $this->assertSame(__CLASS__, $this->configuration->getFilter('FilterName'));
+        $this->assertSame(__CLASS__, $this->configuration->getFilterClassName('FilterName'));
     }
 
     public function setDefaultRepositoryClassName()
@@ -259,6 +259,18 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
         $quoteStrategy = $this->getMock('Doctrine\ORM\Mapping\QuoteStrategy');
         $this->configuration->setQuoteStrategy($quoteStrategy);
         $this->assertSame($quoteStrategy, $this->configuration->getQuoteStrategy());
+    }
+
+    /**
+     * @group DDC-1955
+     */
+    public function testSetGetEntityListenerResolver()
+    {
+        $this->assertInstanceOf('Doctrine\ORM\Mapping\EntityListenerResolver', $this->configuration->getEntityListenerResolver());
+        $this->assertInstanceOf('Doctrine\ORM\Mapping\DefaultEntityListenerResolver', $this->configuration->getEntityListenerResolver());
+        $resolver = $this->getMock('Doctrine\ORM\Mapping\EntityListenerResolver');
+        $this->configuration->setEntityListenerResolver($resolver);
+        $this->assertSame($resolver, $this->configuration->getEntityListenerResolver());
     }
 }
 

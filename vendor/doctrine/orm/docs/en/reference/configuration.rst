@@ -53,18 +53,6 @@ different types of Doctrine Installations:
     This assumes you've created some kind of script to test
     the following code in. Something like a ``test.php`` file.
 
-PEAR
-^^^^
-
-.. code-block:: php
-
-    <?php
-    // test.php
-    
-    require 'Doctrine/ORM/Tools/Setup.php';
-
-    Doctrine\ORM\Tools\Setup::registerAutoloadPEAR();
-
 Tarball Download
 ^^^^^^^^^^^^^^^^
 
@@ -76,22 +64,6 @@ Tarball Download
 
     $lib = "/path/to/doctrine2-orm/lib";
     Doctrine\ORM\Tools\Setup::registerAutoloadDirectory($lib);
-
-Git
-^^^
-
-The Git bootstrap assumes that you have fetched the related
-packages through ``git submodule update --init``
-
-.. code-block:: php
-
-    <?php
-    // test.php
-    require 'Doctrine/ORM/Tools/Setup.php';
-    
-    $lib = '/path/to/doctrine2-orm-root';
-    Doctrine\ORM\Tools\Setup::registerAutoloadGit($lib);
-
 
 Additional Symfony Components
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -572,10 +544,7 @@ script and the ``Doctrine\ORM\Tools\Console\ConsoleRunner`` command
 for inspiration how to setup the cli.
 
 If you installed Doctrine 2 through Composer, then the Doctrine command is
-available to you in the bin-dir, by default at ``vendor/.bin/doctrine``.
-
-If you installed Doctrine 2 through PEAR, the ``doctrine`` command
-line tool should already be available to you.
+available to you in the bin-dir, by default at ``vendor/bin/doctrine-orm``.
 
 In general the required code looks like this:
 

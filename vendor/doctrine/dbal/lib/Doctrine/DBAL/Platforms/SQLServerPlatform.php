@@ -20,6 +20,7 @@
 
 namespace Doctrine\DBAL\Platforms;
 
+use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Schema\ForeignKeyConstraint;
@@ -34,6 +35,7 @@ use Doctrine\DBAL\Schema\Table;
  * @author Roman Borschel <roman@code-factory.org>
  * @author Jonathan H. Wage <jonwage@gmail.com>
  * @author Benjamin Eberlei <kontakt@beberlei.de>
+ * @author Steve Müller <st.mueller@dzh-online.de>
  */
 class SQLServerPlatform extends AbstractPlatform
 {
@@ -104,6 +106,22 @@ class SQLServerPlatform extends AbstractPlatform
     public function supportsReleaseSavepoints()
     {
         return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsSchemas()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasNativeGuidType()
+    {
+        return true;
     }
 
     /**
@@ -380,14 +398,6 @@ class SQLServerPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getShowDatabasesSQL()
-    {
-        return 'SHOW DATABASES';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getListTablesSQL()
     {
         // "sysdiagrams" table must be ignored as it's internal SQL Server table for Database Diagrams
@@ -458,17 +468,9 @@ class SQLServerPlatform extends AbstractPlatform
     /**
      * {@inheritDoc}
      */
-    public function getRegexpExpression()
-    {
-        return 'RLIKE';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getGuidExpression()
     {
-        return 'UUID()';
+        return 'NEWID()';
     }
 
     /**
@@ -668,32 +670,58 @@ class SQLServerPlatform extends AbstractPlatform
 
     /**
      * {@inheritDoc}
-     *
-     * @link http://lists.bestpractical.com/pipermail/rt-devel/2005-June/007339.html
      */
     protected function doModifyLimitQuery($query, $limit, $offset = null)
     {
         if ($limit > 0) {
-            if ($offset == 0) {
-                $query = preg_replace('/^(SELECT\s(DISTINCT\s)?)/i', '\1TOP ' . $limit . ' ', $query);
-            } else {
-                $orderby = stristr($query, 'ORDER BY');
+            $orderby = stristr($query, 'ORDER BY');
+            //Remove ORDER BY from $query
+            $query = preg_replace('/\s+ORDER\s+BY\s+([^\)]*)/', '', $query);
+            $over = 'ORDER BY';
 
-                if ( ! $orderby) {
-                    $over = 'ORDER BY (SELECT 0)';
-                } else {
-                    $over = preg_replace('/\"[^,]*\".\"([^,]*)\"/i', '"inner_tbl"."$1"', $orderby);
+            if ( ! $orderby) {
+                $over .= ' (SELECT 0)';
+            } else {
+                //Clear ORDER BY
+                $orderby = preg_replace('/ORDER\s+BY\s+([^\)]*)(.*)/', '$1', $orderby);
+                $orderbyParts = explode(',', $orderby);
+                $orderbyColumns = array();
+
+                //Split ORDER BY into parts
+                foreach ($orderbyParts as &$part) {
+                    $part = trim($part);
+                    if (preg_match('/(([^\s]*)\.)?([^\.\s]*)\s*(ASC|DESC)?/i', $part, $matches)) {
+                        $orderbyColumns[] = array(
+                            'table' => empty($matches[2]) ? '[^\.\s]*' : $matches[2],
+                            'column' => $matches[3],
+                            'sort' => isset($matches[4]) ? $matches[4] : null
+                        );
+                    }
                 }
 
-                // Remove ORDER BY clause from $query
-                $query = preg_replace('/\s+ORDER BY(.*)/', '', $query);
-                $query = preg_replace('/\sFROM/i', ", ROW_NUMBER() OVER ($over) AS doctrine_rownum FROM", $query);
+                //Find alias for each colum used in ORDER BY
+                if (count($orderbyColumns)) {
+                    foreach ($orderbyColumns as $column) {
+                        if (preg_match('/' . $column['table'] . '\.(' . $column['column'] . ')\s*(AS)?\s*([^,\s\)]*)/i', $query, $matches)) {
+                            $over .= ' ' . $matches[3];
+                            $over .= isset($column['sort']) ? ' ' . $column['sort'] . ',' : ',';
+                        } else {
+                            $over .= ' ' . $column['column'];
+                            $over .= isset($column['sort']) ? ' ' . $column['sort'] . ',' : ',';
+                        }
+                    }
 
-                $start = $offset + 1;
-                $end = $offset + $limit;
-
-                $query = "SELECT * FROM ($query) AS doctrine_tbl WHERE doctrine_rownum BETWEEN $start AND $end";
+                    $over = rtrim($over, ',');
+                }
             }
+
+            //Replace only first occurrence of FROM with $over to prevent changing FROM also in subqueries.
+            $query = preg_replace('/\sFROM/i', ", ROW_NUMBER() OVER ($over) AS doctrine_rownum FROM", $query, 1);
+
+            $start = $offset + 1;
+            $end = $offset + $limit;
+
+            $query = "SELECT * FROM ($query) AS doctrine_tbl WHERE doctrine_rownum BETWEEN $start AND $end";
         }
 
         return $query;
@@ -845,16 +873,21 @@ class SQLServerPlatform extends AbstractPlatform
      */
     public function appendLockHint($fromClause, $lockMode)
     {
-        // @todo correct
-        if ($lockMode == \Doctrine\DBAL\LockMode::PESSIMISTIC_READ) {
-            return $fromClause . ' WITH (tablockx)';
+        switch ($lockMode) {
+            case LockMode::NONE:
+                $lockClause = ' WITH (NOLOCK)';
+                break;
+            case LockMode::PESSIMISTIC_READ:
+                $lockClause = ' WITH (HOLDLOCK, ROWLOCK)';
+                break;
+            case LockMode::PESSIMISTIC_WRITE:
+                $lockClause = ' WITH (UPDLOCK, ROWLOCK)';
+                break;
+            default:
+                $lockClause = '';
         }
 
-        if ($lockMode == \Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE) {
-            return $fromClause . ' WITH (tablockx)';
-        }
-
-        return $fromClause;
+        return $fromClause . $lockClause;
     }
 
     /**

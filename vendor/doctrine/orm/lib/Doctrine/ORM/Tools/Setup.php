@@ -34,59 +34,6 @@ use Doctrine\ORM\Mapping\Driver\YamlDriver;
 class Setup
 {
     /**
-     * Use this method to register all autoloaders for a setup where Doctrine is checked out from
-     * its github repository at {@link http://github.com/doctrine/doctrine2}
-     *
-     * @param string $gitCheckoutRootPath
-     *
-     * @return void
-     */
-    public static function registerAutoloadGit($gitCheckoutRootPath)
-    {
-        if (!class_exists('Doctrine\Common\ClassLoader', false)) {
-            require_once $gitCheckoutRootPath . "/lib/vendor/doctrine-common/lib/Doctrine/Common/ClassLoader.php";
-        }
-
-        $loader = new ClassLoader("Doctrine\Common", $gitCheckoutRootPath . "/lib/vendor/doctrine-common/lib");
-        $loader->register();
-
-        $loader = new ClassLoader("Doctrine\DBAL", $gitCheckoutRootPath . "/lib/vendor/doctrine-dbal/lib");
-        $loader->register();
-
-        $loader = new ClassLoader("Doctrine\ORM", $gitCheckoutRootPath . "/lib");
-        $loader->register();
-
-        $loader = new ClassLoader("Symfony\Component", $gitCheckoutRootPath . "/lib/vendor");
-        $loader->register();
-    }
-
-    /**
-     * Use this method to register all autoloaders for a setup where Doctrine is installed
-     * though {@link http://pear.doctrine-project.org}.
-     *
-     * @return void
-     */
-    public static function registerAutoloadPEAR()
-    {
-        if (!class_exists('Doctrine\Common\ClassLoader', false)) {
-            require_once "Doctrine/Common/ClassLoader.php";
-        }
-
-        $loader = new ClassLoader("Doctrine");
-        $loader->register();
-
-        $parts = explode(PATH_SEPARATOR, get_include_path());
-
-        foreach ($parts as $includePath) {
-            if ($includePath != "." && file_exists($includePath . "/Doctrine")) {
-                $loader = new ClassLoader("Symfony\Component", $includePath . "/Doctrine");
-                $loader->register();
-                return;
-            }
-        }
-    }
-
-    /**
      * Use this method to register all autoloads for a downloaded Doctrine library.
      * Pick the directory the library was uncompressed into.
      *

@@ -3,10 +3,24 @@ language: php
 php:
   - 5.3
   - 5.4
+  - 5.5
+
+matrix:
+  allow_failures:
+    - php: 5.5
 
 env:
-    - DOCTRINE_ORM_REV=origin/2.1.x DOCTRINE_COMMON_REV=origin/2.1.x DOCTRINE_DBAL_REV=origin/2.1.x
-    - DOCTRINE_ORM_REV=origin/2.2
-    - DOCTRINE_ORM_REV=origin/master
+  - DOCTRINE_ORM_VERSION=2.2.*
+  - DOCTRINE_ORM_VERSION=2.3.*
+  - DOCTRINE_ORM_VERSION=dev-master
+  - SOLARIUM_VERSION=2.*
+  - SOLARIUM_VERSION=3.0.*
+  - SOLARIUM_VERSION=3.1.*
 
-before_script: php vendors.php
+services: mongodb
+
+before_script:
+  - pecl -q install mongo-1.3.4 && echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - sh -c "if [ $DOCTRINE_ORM_VERSION ]; then composer require doctrine/orm:${DOCTRINE_ORM_VERSION} --dev --no-update; fi"
+  - sh -c "if [ $SOLARIUM_VERSION ]; then composer require solarium/solarium:${SOLARIUM_VERSION} --dev --no-update; fi"
+  - composer install --dev

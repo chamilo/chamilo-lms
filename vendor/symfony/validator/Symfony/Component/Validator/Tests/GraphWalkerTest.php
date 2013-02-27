@@ -12,10 +12,11 @@
 namespace Symfony\Component\Validator\Tests;
 
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintAValidator;
-
+use Symfony\Component\Validator\DefaultTranslator;
+use Symfony\Component\Validator\ValidationVisitor;
 use Symfony\Component\Validator\Tests\Fixtures\Entity;
 use Symfony\Component\Validator\Tests\Fixtures\Reference;
-use Symfony\Component\Validator\Tests\Fixtures\FakeClassMetadataFactory;
+use Symfony\Component\Validator\Tests\Fixtures\FakeMetadataFactory;
 use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 use Symfony\Component\Validator\Tests\Fixtures\FailingConstraint;
 use Symfony\Component\Validator\GraphWalker;
@@ -30,22 +31,54 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
 {
     const CLASSNAME = 'Symfony\Component\Validator\Tests\Fixtures\Entity';
 
-    protected $factory;
+    /**
+     * @var ValidationVisitor
+     */
+    private $visitor;
+
+    /**
+     * @var FakeMetadataFactory
+     */
+    protected $metadataFactory;
+
+    /**
+     * @var GraphWalker
+     */
     protected $walker;
+
+    /**
+     * @var ClassMetadata
+     */
     protected $metadata;
 
     protected function setUp()
     {
-        $this->factory = new FakeClassMetadataFactory();
-        $this->walker = new GraphWalker('Root', $this->factory, new ConstraintValidatorFactory());
+        set_error_handler(array($this, "deprecationErrorHandler"));
+
+        $this->metadataFactory = new FakeMetadataFactory();
+        $this->visitor = new ValidationVisitor('Root', $this->metadataFactory, new ConstraintValidatorFactory(), new DefaultTranslator());
+        $this->walker = $this->visitor->getGraphWalker();
         $this->metadata = new ClassMetadata(self::CLASSNAME);
+        $this->metadataFactory->addMetadata($this->metadata);
     }
 
     protected function tearDown()
     {
-        $this->factory = null;
+        restore_error_handler();
+
+        $this->metadataFactory = null;
+        $this->visitor = null;
         $this->walker = null;
         $this->metadata = null;
+    }
+
+    public function deprecationErrorHandler($errorNumber, $message, $file, $line, $context)
+    {
+        if ($errorNumber & E_USER_DEPRECATED) {
+            return true;
+        }
+
+        return \PHPUnit_Util_ErrorHandler::handleError($errorNumber, $message, $file, $line);
     }
 
     public function testWalkObjectPassesCorrectClassAndProperty()
@@ -77,6 +110,18 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         $entity = new Entity();
 
         $this->walker->walkObject($this->metadata, $entity, 'Default', '');
+        $this->walker->walkObject($this->metadata, $entity, 'Default', '');
+
+        $this->assertCount(1, $this->walker->getViolations());
+    }
+
+    public function testWalkObjectOnceInVisitorAndOnceInWalkerValidatesConstraintsOnce()
+    {
+        $this->metadata->addConstraint(new ConstraintA());
+
+        $entity = new Entity();
+
+        $this->visitor->validate($entity, 'Default', '');
         $this->walker->walkObject($this->metadata, $entity, 'Default', '');
 
         $this->assertCount(1, $this->walker->getViolations());
@@ -142,6 +187,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
             'Failed',
+            'Failed',
             array(),
             'Root',
             'firstName',
@@ -165,7 +211,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
             // propagated to the reference
             'groups' => 'Default',
         )));
-        $this->factory->addClassMetadata($referenceMetadata);
+        $this->metadataFactory->addMetadata($referenceMetadata);
 
         $this->walker->walkObject($this->metadata, $entity, 'Default', '');
 
@@ -173,6 +219,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         // "Default" was launched
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
+            'Failed',
             'Failed',
             array(),
             'Root',
@@ -200,6 +247,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         // Only group "Second" was validated
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
+            'Failed',
             'Failed',
             array(),
             'Root',
@@ -235,7 +283,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata($entityMetadata);
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -255,6 +303,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
             'Failed',
+            'Failed',
             array(),
             'Root',
             'path',
@@ -268,7 +317,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata($entityMetadata);
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -287,6 +336,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
             'Failed',
+            'Failed',
             array(),
             'Root',
             'path[key]',
@@ -300,8 +350,8 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
-        $this->factory->addClassMetadata(new ClassMetadata('ArrayIterator'));
+        $this->metadataFactory->addMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata(new ClassMetadata('ArrayIterator'));
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -320,6 +370,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
             'Failed',
+            'Failed',
             array(),
             'Root',
             'path[key]',
@@ -333,8 +384,8 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
-        $this->factory->addClassMetadata(new ClassMetadata('ArrayIterator'));
+        $this->metadataFactory->addMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata(new ClassMetadata('ArrayIterator'));
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -361,8 +412,8 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
-        $this->factory->addClassMetadata(new ClassMetadata('ArrayIterator'));
+        $this->metadataFactory->addMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata(new ClassMetadata('ArrayIterator'));
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -392,8 +443,8 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Entity();
         $entityMetadata = new ClassMetadata(get_class($entity));
-        $this->factory->addClassMetadata($entityMetadata);
-        $this->factory->addClassMetadata(new ClassMetadata('ArrayIterator'));
+        $this->metadataFactory->addMetadata($entityMetadata);
+        $this->metadataFactory->addMetadata(new ClassMetadata('ArrayIterator'));
 
         // add a constraint for the entity that always fails
         $entityMetadata->addConstraint(new FailingConstraint());
@@ -418,6 +469,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
 
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
+            'Failed',
             'Failed',
             array(),
             'Root',
@@ -465,7 +517,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
     {
         $this->metadata->addPropertyConstraint('reference', new Valid());
 
-        $this->setExpectedException('Symfony\Component\Validator\Exception\UnexpectedTypeException');
+        $this->setExpectedException('Symfony\Component\Validator\Exception\NoSuchMetadataException');
 
         $this->walker->walkPropertyValue(
             $this->metadata,
@@ -484,6 +536,7 @@ class GraphWalkerTest extends \PHPUnit_Framework_TestCase
 
         $violations = new ConstraintViolationList();
         $violations->add(new ConstraintViolation(
+            'message',
             'message',
             array('param' => 'value'),
             'Root',

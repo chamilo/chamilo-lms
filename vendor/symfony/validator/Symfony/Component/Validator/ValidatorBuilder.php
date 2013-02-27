@@ -12,6 +12,7 @@
 namespace Symfony\Component\Validator;
 
 use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
+use Symfony\Component\Validator\Mapping\ClassMetadataFactoryAdapter;
 use Symfony\Component\Validator\Exception\ValidatorException;
 use Symfony\Component\Validator\Mapping\Loader\LoaderChain;
 use Symfony\Component\Validator\Mapping\ClassMetadataFactoryInterface;
@@ -22,6 +23,7 @@ use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader;
 use Symfony\Component\Validator\Mapping\Loader\XmlFileLoader;
 use Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader;
+use Symfony\Component\Translation\TranslatorInterface;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
@@ -60,7 +62,7 @@ class ValidatorBuilder implements ValidatorBuilderInterface
     private $annotationReader = null;
 
     /**
-     * @var ClassMetadataFactoryInterface
+     * @var MetadataFactoryInterface
      */
     private $metadataFactory;
 
@@ -73,6 +75,16 @@ class ValidatorBuilder implements ValidatorBuilderInterface
      * @var CacheInterface
      */
     private $metadataCache;
+
+    /**
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * @var null|string
+     */
+    private $translationDomain;
 
     /**
      * {@inheritdoc}
@@ -213,10 +225,15 @@ class ValidatorBuilder implements ValidatorBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function setMetadataFactory(ClassMetadataFactoryInterface $metadataFactory)
+    public function setMetadataFactory($metadataFactory)
     {
         if (count($this->xmlMappings) > 0 || count($this->yamlMappings) > 0 || count($this->methodMappings) > 0 || null !== $this->annotationReader) {
             throw new ValidatorException('You cannot set a custom metadata factory after adding custom mappings. You should do either of both.');
+        }
+
+        if ($metadataFactory instanceof ClassMetadataFactoryInterface
+                && !$metadataFactory instanceof MetadataFactoryInterface) {
+            $metadataFactory = new ClassMetadataFactoryAdapter($metadataFactory);
         }
 
         $this->metadataFactory = $metadataFactory;
@@ -244,6 +261,26 @@ class ValidatorBuilder implements ValidatorBuilderInterface
     public function setConstraintValidatorFactory(ConstraintValidatorFactoryInterface $validatorFactory)
     {
         $this->validatorFactory = $validatorFactory;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslator(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTranslationDomain($translationDomain)
+    {
+        $this->translationDomain = $translationDomain;
 
         return $this;
     }
@@ -290,7 +327,8 @@ class ValidatorBuilder implements ValidatorBuilderInterface
         }
 
         $validatorFactory = $this->validatorFactory ?: new ConstraintValidatorFactory();
+        $translator = $this->translator ?: new DefaultTranslator();
 
-        return new Validator($metadataFactory, $validatorFactory, $this->initializers);
+        return new Validator($metadataFactory, $validatorFactory, $translator, $this->translationDomain, $this->initializers);
     }
 }

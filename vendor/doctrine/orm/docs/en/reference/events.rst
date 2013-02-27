@@ -148,7 +148,8 @@ the life-time of their registered entities.
    delete operations. It is not called for a DQL DELETE statement.
 -  prePersist - The prePersist event occurs for a given entity
    before the respective EntityManager persist operation for that
-   entity is executed.
+   entity is executed. It should be noted that this event is only triggered on
+   *initial* persist of an entity
 -  postPersist - The postPersist event occurs for an entity after
    the entity has been made persistent. It will be invoked after the
    database insert operations. Generated primary key values are
@@ -196,9 +197,7 @@ listeners:
 
 
 -  Lifecycle Callbacks are methods on the entity classes that are
-   called when the event is triggered. They receive absolutely no
-   arguments and are specifically designed to allow changes inside the
-   entity classes state.
+   called when the event is triggered. They receives some kind of ``EventArgs``.
 -  Lifecycle Event Listeners are classes with specific callback
    methods that receives some kind of ``EventArgs`` instance which
    give access to the entity, EntityManager or other relevant data.
@@ -335,6 +334,31 @@ model.
 The ``key`` of the lifecycleCallbacks is the name of the method and
 the value is the event type. The allowed event types are the ones
 listed in the previous Lifecycle Events section.
+
+Lifecycle Callbacks Event Argument
+-----------------------------------
+
+.. versionadded:: 2.4
+
+Since 2.4 the triggered event is given to the lifecycle-callback.
+
+With the additional argument you have access to the
+``EntityManager`` and ``UnitOfWork`` APIs inside these callback methods.
+
+.. code-block:: php
+
+    <?php
+    // ...
+
+    class User
+    {
+        public function preUpdate(PreUpdateEventArgs $event)
+        {
+            if ($event->hasChangedField('username')) {
+                // Do something when the username is changed.
+            }
+        }
+    }
 
 Listening to Lifecycle Events
 -----------------------------
@@ -625,6 +649,209 @@ postLoad
 
 This event is called after an entity is constructed by the
 EntityManager.
+
+Entity listeners
+----------------
+
+.. versionadded:: 2.4
+
+An entity listeners is a lifecycle listener classes used for an entity.
+
+- The entity listeners mapping may be applied to an entity class or mapped superclass.
+- An entity listener is defined by mapping the entity class with the corresponding mapping.
+
+.. configuration-block::
+
+    .. code-block:: php
+
+        <?php
+        namespace MyProject\Entity;
+
+        /** @Entity @EntityListeners({"UserListener"}) */
+        class User
+        {
+            // ....
+        }
+    .. code-block:: xml
+
+        <doctrine-mapping>
+            <entity name="MyProject\Entity\User">
+                <entity-listeners>
+                    <entity-listener class="UserListener"/>
+                </entity-listeners>
+                <!-- .... -->
+            </entity>
+        </doctrine-mapping>
+    .. code-block:: yaml
+
+        MyProject\Entity\User:
+          type: entity
+          entityListeners:
+            UserListener:
+          # ....
+
+.. _reference-entity-listeners:
+
+Entity listeners class
+~~~~~~~~~~~~~~~~~~~~~~
+
+An ``Entity Listener`` could be any class, by default it should be a class with a no-arg constructor.
+
+- Different from :ref:`reference-events-implementing-listeners` an ``Entity Listener`` is invoked just to the specified entity
+- An entity listener method receives two arguments, the entity instance and the lifecycle event.
+- A callback method could be defined by naming convention or specifying a method mapping.
+- When the listener mapping is not given the parser will lookup for methods that match with the naming convention.
+- When the listener mapping is given the parser won't lookup for any naming convention.
+
+.. code-block:: php
+
+    <?php
+    class UserListener
+    {
+        public function preUpdate(User $user, PreUpdateEventArgs $event)
+        {
+            // Do something on pre update.
+        }
+    }
+
+To define a specific event listener method
+you should map the listener method using the event type mapping.
+
+.. configuration-block::
+
+    .. code-block:: php
+
+        <?php
+        class UserListener
+        {
+            /** @PrePersist */
+            public function prePersistHandler(User $user, LifecycleEventArgs $event) { // ... }
+
+            /** @PostPersist */
+            public function postPersistHandler(User $user, LifecycleEventArgs $event) { // ... }
+
+            /** @PreUpdate */
+            public function preUpdateHandler(User $user, PreUpdateEventArgs $event) { // ... }
+
+            /** @PostUpdate */
+            public function postUpdateHandler(User $user, LifecycleEventArgs $event) { // ... }
+
+            /** @PostRemove */
+            public function postRemoveHandler(User $user, LifecycleEventArgs $event) { // ... }
+
+            /** @PreRemove */
+            public function preRemoveHandler(User $user, LifecycleEventArgs $event) { // ... }
+
+            /** @PreFlush */
+            public function preFlushHandler(User $user, PreFlushEventArgs $event) { // ... }
+
+            /** @PostLoad */
+            public function postLoadHandler(User $user, LifecycleEventArgs $event) { // ... }
+        }
+    .. code-block:: xml
+
+        <doctrine-mapping>
+            <entity name="MyProject\Entity\User">
+                 <entity-listeners>
+                    <entity-listener class="UserListener">
+                        <lifecycle-callback type="preFlush"      method="preFlushHandler"/>
+                        <lifecycle-callback type="postLoad"      method="postLoadHandler"/>
+
+                        <lifecycle-callback type="postPersist"   method="postPersistHandler"/>
+                        <lifecycle-callback type="prePersist"    method="prePersistHandler"/>
+
+                        <lifecycle-callback type="postUpdate"    method="postUpdateHandler"/>
+                        <lifecycle-callback type="preUpdate"     method="preUpdateHandler"/>
+
+                        <lifecycle-callback type="postRemove"    method="postRemoveHandler"/>
+                        <lifecycle-callback type="preRemove"     method="preRemoveHandler"/>
+                    </entity-listener>
+                </entity-listeners>
+                <!-- .... -->
+            </entity>
+        </doctrine-mapping>
+    .. code-block:: yaml
+
+        MyProject\Entity\User:
+          type: entity
+          entityListeners:
+            UserListener:
+              preFlush: [preFlushHandler]
+              postLoad: [postLoadHandler]
+
+              postPersist: [postPersistHandler]
+              prePersist: [prePersistHandler]
+
+              postUpdate: [postUpdateHandler]
+              preUpdate: [preUpdateHandler]
+
+              postRemove: [postRemoveHandler]
+              preRemove: [preRemoveHandler]
+          # ....
+    
+
+
+Entity listeners resolver
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+Doctrine invoke the listener resolver to get the listener instance.
+
+- An resolver allows you register a specific ``Entity Listener`` instance.
+- You can also implement your own resolver by extending ``Doctrine\ORM\Mapping\DefaultEntityListenerResolver`` or implementing ``Doctrine\ORM\Mapping\EntityListenerResolver``
+
+Specifying an entity listener instance :
+
+.. code-block:: php
+
+    <?php
+    // User.php
+
+    /** @Entity @EntityListeners({"UserListener"}) */
+    class User
+    {
+        // ....
+    }
+
+    // UserListener.php
+    class UserListener
+    {
+        public function __construct(MyService $service)
+        {
+            $this->service = $service;
+        }
+
+        public function preUpdate(User $user, PreUpdateEventArgs $event)
+        {
+            $this->service->doSomething($user);
+        }
+    }
+
+    // register a entity listener.
+    $listener = $container->get('user_listener');
+    $em->getConfiguration()->getEntityListenerResolver()->register($listener);
+
+Implementing your own resolver :
+
+.. code-block:: php
+
+    <?php
+    class MyEntityListenerResolver extends \Doctrine\ORM\Mapping\DefaultEntityListenerResolver
+    {
+        public function __construct($container)
+        {
+            $this->container = $container;
+        }
+
+        public function resolve($className)
+        {
+            // resolve the service id by the given class name;
+            $id = 'user_listener';
+
+            return $this->container->get($id);
+        }
+    }
+
+    // configure the listener resolver.
+    $em->getConfiguration()->setEntityListenerResolver($container->get('my_resolver'));
 
 Load ClassMetadata Event
 ------------------------

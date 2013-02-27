@@ -36,9 +36,16 @@ class SQLServerPlatformTest extends AbstractPlatformTestCase
         );
     }
 
+    /**
+     * @expectedException Doctrine\DBAL\DBALException
+     */
+    public function testDoesNotSupportRegexp()
+    {
+        $this->_platform->getRegexpExpression();
+    }
+
     public function testGeneratesSqlSnippets()
     {
-        $this->assertEquals('RLIKE', $this->_platform->getRegexpExpression(), 'Regular expression operator is not correct');
         $this->assertEquals('"', $this->_platform->getIdentifierQuoteCharacter(), 'Identifier quote character is not correct');
         $this->assertEquals('(column1 + column2 + column3)', $this->_platform->getConcatExpression('column1', 'column2', 'column3'), 'Concatenation expression is not correct');
     }
@@ -67,7 +74,7 @@ class SQLServerPlatformTest extends AbstractPlatformTestCase
     {
         $dropDatabaseExpectation = 'DROP DATABASE foobar';
 
-        $this->assertEquals('SHOW DATABASES', $this->_platform->getShowDatabasesSQL());
+        $this->assertEquals('SELECT * FROM SYS.DATABASES', $this->_platform->getListDatabasesSQL());
         $this->assertEquals('CREATE DATABASE foobar', $this->_platform->getCreateDatabaseSQL('foobar'));
         $this->assertEquals($dropDatabaseExpectation, $this->_platform->getDropDatabaseSQL('foobar'));
         $this->assertEquals('DROP TABLE foobar', $this->_platform->getDropTableSQL('foobar'));
@@ -119,6 +126,11 @@ class SQLServerPlatformTest extends AbstractPlatformTestCase
         $this->assertTrue($this->_platform->supportsIdentityColumns());
     }
 
+    public function testSupportsSchemas()
+    {
+        $this->assertTrue($this->_platform->supportsSchemas());
+    }
+
     public function testDoesNotSupportSavePoints()
     {
         $this->assertTrue($this->_platform->supportsSavepoints());
@@ -142,13 +154,13 @@ class SQLServerPlatformTest extends AbstractPlatformTestCase
     public function testModifyLimitQuery()
     {
         $sql = $this->_platform->modifyLimitQuery('SELECT * FROM user', 10, 0);
-        $this->assertEquals('SELECT TOP 10 * FROM user', $sql);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS doctrine_rownum FROM user) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
     }
 
     public function testModifyLimitQueryWithEmptyOffset()
     {
         $sql = $this->_platform->modifyLimitQuery('SELECT * FROM user', 10);
-        $this->assertEquals('SELECT TOP 10 * FROM user', $sql);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS doctrine_rownum FROM user) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
     }
 
     public function testModifyLimitQueryWithOffset()
@@ -160,13 +172,40 @@ class SQLServerPlatformTest extends AbstractPlatformTestCase
     public function testModifyLimitQueryWithAscOrderBy()
     {
         $sql = $this->_platform->modifyLimitQuery('SELECT * FROM user ORDER BY username ASC', 10);
-        $this->assertEquals('SELECT TOP 10 * FROM user ORDER BY username ASC', $sql);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY username ASC) AS doctrine_rownum FROM user) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
     }
 
     public function testModifyLimitQueryWithDescOrderBy()
     {
         $sql = $this->_platform->modifyLimitQuery('SELECT * FROM user ORDER BY username DESC', 10);
-        $this->assertEquals('SELECT TOP 10 * FROM user ORDER BY username DESC', $sql);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY username DESC) AS doctrine_rownum FROM user) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testModifyLimitQueryWithMultipleOrderBy()
+    {
+        $sql = $this->_platform->modifyLimitQuery('SELECT * FROM user ORDER BY username DESC, usereamil ASC', 10);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY username DESC, usereamil ASC) AS doctrine_rownum FROM user) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testModifyLimitQueryWithSubSelect()
+    {
+        $sql = $this->_platform->modifyLimitQuery('SELECT * FROM (SELECT u.id as uid, u.name as uname) dctrn_result', 10);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY (SELECT 0)) AS doctrine_rownum FROM (SELECT u.id as uid, u.name as uname) dctrn_result) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testModifyLimitQueryWithSubSelectAndOrder()
+    {
+        $sql = $this->_platform->modifyLimitQuery('SELECT * FROM (SELECT u.id as uid, u.name as uname ORDER BY u.name DESC) dctrn_result', 10);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY uname DESC) AS doctrine_rownum FROM (SELECT u.id as uid, u.name as uname) dctrn_result) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 1 AND 10', $sql);
+    }
+
+    public function testModifyLimitQueryWithSubSelectAndMultipleOrder()
+    {
+        $sql = $this->_platform->modifyLimitQuery('SELECT * FROM (SELECT u.id as uid, u.name as uname ORDER BY u.name DESC, id ASC) dctrn_result', 10, 5);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY uname DESC, uid ASC) AS doctrine_rownum FROM (SELECT u.id as uid, u.name as uname) dctrn_result) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 6 AND 15', $sql);
+
+        $sql = $this->_platform->modifyLimitQuery('SELECT * FROM (SELECT u.id uid, u.name uname ORDER BY u.name DESC, id ASC) dctrn_result', 10, 5);
+        $this->assertEquals('SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY uname DESC, uid ASC) AS doctrine_rownum FROM (SELECT u.id uid, u.name uname) dctrn_result) AS doctrine_tbl WHERE doctrine_rownum BETWEEN 6 AND 15', $sql);
     }
 
     /**

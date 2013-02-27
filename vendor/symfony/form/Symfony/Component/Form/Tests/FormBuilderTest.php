@@ -50,10 +50,10 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(method_exists($this->builder, 'setName'));
     }
 
-    public function testAddNameNoString()
+    public function testAddNameNoStringAndNoInteger()
     {
         $this->setExpectedException('Symfony\Component\Form\Exception\UnexpectedTypeException');
-        $this->builder->add(1234);
+        $this->builder->add(true);
     }
 
     public function testAddTypeNoString()
@@ -80,6 +80,13 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->builder->has('foo'));
         $this->builder->add('foo', 'text');
         $this->assertTrue($this->builder->has('foo'));
+    }
+
+    public function testAddIntegerName()
+    {
+        $this->assertFalse($this->builder->has(0));
+        $this->builder->add(0, 'text');
+        $this->assertTrue($this->builder->has(0));
     }
 
     public function testAll()
@@ -155,7 +162,7 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUnknown()
     {
-        $this->setExpectedException('Symfony\Component\Form\Exception\FormException', 'The child with the name "foo" does not exist.');
+        $this->setExpectedException('Symfony\Component\Form\Exception\Exception', 'The child with the name "foo" does not exist.');
         $this->builder->get('foo');
     }
 
@@ -240,17 +247,14 @@ class FormBuilderTest extends \PHPUnit_Framework_TestCase
 
         $config = $builder->getFormConfig();
         $reflClass = new \ReflectionClass($config);
-        $factory = $reflClass->getProperty('factory');
         $parent = $reflClass->getProperty('parent');
         $children = $reflClass->getProperty('children');
         $unresolvedChildren = $reflClass->getProperty('unresolvedChildren');
 
-        $factory->setAccessible(true);
         $parent->setAccessible(true);
         $children->setAccessible(true);
         $unresolvedChildren->setAccessible(true);
 
-        $this->assertNull($factory->getValue($config));
         $this->assertNull($parent->getValue($config));
         $this->assertEmpty($children->getValue($config));
         $this->assertEmpty($unresolvedChildren->getValue($config));

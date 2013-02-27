@@ -99,20 +99,27 @@ class Logger implements LoggerInterface
      *
      * @var array of Monolog\Handler\HandlerInterface
      */
-    protected $handlers = array();
-
-    protected $processors = array();
+    protected $handlers;
 
     /**
-     * @param string $name The logging channel
+     * Processors that will process all log records
+     *
+     * To process records of a single handler instead, add the processor on that specific handler
+     *
+     * @var array of callables
      */
-    public function __construct($name)
+    protected $processors;
+
+    /**
+     * @param string $name       The logging channel
+     * @param array  $handlers   Optional stack of handlers, the first one in the array is called first, etc.
+     * @param array  $processors Optional array of processors
+     */
+    public function __construct($name, array $handlers = array(), array $processors = array())
     {
         $this->name = $name;
-
-        if (!static::$timezone) {
-            static::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
-        }
+        $this->handlers = $handlers;
+        $this->processors = $processors;
     }
 
     /**
@@ -187,6 +194,11 @@ class Logger implements LoggerInterface
         if (!$this->handlers) {
             $this->pushHandler(new StreamHandler('php://stderr', static::DEBUG));
         }
+
+        if (!static::$timezone) {
+            static::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
+        }
+
         $record = array(
             'message' => (string) $message,
             'context' => $context,

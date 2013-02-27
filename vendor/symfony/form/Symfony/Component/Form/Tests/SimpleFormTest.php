@@ -14,7 +14,7 @@ namespace Symfony\Component\Form\Tests;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\Form\Util\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyPath;
 use Symfony\Component\Form\FormConfigBuilder;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Exception\TransformationFailedException;
@@ -644,6 +644,7 @@ class SimpleFormTest extends AbstractFormTest
     {
         $test = $this;
         $validator = $this->getFormValidator();
+        set_error_handler(array('Symfony\Component\Form\Test\DeprecationErrorHandler', 'handle'));
         $form = $this->getBuilder()
             ->addValidator($validator)
             ->getForm();
@@ -656,6 +657,8 @@ class SimpleFormTest extends AbstractFormTest
         }));
 
         $form->bind('foobar');
+
+        restore_error_handler();
     }
 
     public function testBindResetsErrors()
@@ -684,7 +687,7 @@ class SimpleFormTest extends AbstractFormTest
     {
         $type = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
         $view = $this->getMock('Symfony\Component\Form\FormView');
-        $parentForm = $this->getMock('Symfony\Component\Form\Tests\FormInterface');
+        $parentForm = $this->getMock('Symfony\Component\Form\Test\FormInterface');
         $parentView = $this->getMock('Symfony\Component\Form\FormView');
         $form = $this->getBuilder()->setType($type)->getForm();
         $form->setParent($parentForm);
@@ -739,7 +742,7 @@ class SimpleFormTest extends AbstractFormTest
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\FormException
+     * @expectedException \Symfony\Component\Form\Exception\Exception
      * @expectedExceptionMessage A form with an empty name cannot have a parent form.
      */
     public function testFormCannotHaveEmptyNameNotInRootLevel()
@@ -785,7 +788,7 @@ class SimpleFormTest extends AbstractFormTest
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\FormException
+     * @expectedException \Symfony\Component\Form\Exception\Exception
      */
     public function testViewDataMustNotBeObjectIfDataClassIsNull()
     {
@@ -815,7 +818,7 @@ class SimpleFormTest extends AbstractFormTest
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\FormException
+     * @expectedException \Symfony\Component\Form\Exception\Exception
      */
     public function testViewDataMustBeObjectIfDataClassIsSet()
     {
@@ -830,7 +833,7 @@ class SimpleFormTest extends AbstractFormTest
     }
 
     /**
-     * @expectedException \Symfony\Component\Form\Exception\FormException
+     * @expectedException \Symfony\Component\Form\Exception\Exception
      */
     public function testSetDataCannotInvokeItself()
     {

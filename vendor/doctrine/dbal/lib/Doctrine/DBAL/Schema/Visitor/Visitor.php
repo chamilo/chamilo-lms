@@ -21,14 +21,14 @@
 
 namespace Doctrine\DBAL\Schema\Visitor;
 
-use Doctrine\DBAL\Platforms\AbstractPlatform,
-    Doctrine\DBAL\Schema\Table,
-    Doctrine\DBAL\Schema\Schema,
-    Doctrine\DBAL\Schema\Column,
-    Doctrine\DBAL\Schema\ForeignKeyConstraint,
-    Doctrine\DBAL\Schema\Constraint,
-    Doctrine\DBAL\Schema\Sequence,
-    Doctrine\DBAL\Schema\Index;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\Table;
+use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\ForeignKeyConstraint;
+use Doctrine\DBAL\Schema\Constraint;
+use Doctrine\DBAL\Schema\Sequence;
+use Doctrine\DBAL\Schema\Index;
 
 /**
  * Schema Visitor used for Validation or Generation purposes.

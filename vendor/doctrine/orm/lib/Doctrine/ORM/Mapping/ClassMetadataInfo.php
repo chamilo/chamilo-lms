@@ -26,6 +26,7 @@ use Doctrine\DBAL\Types\Type;
 use ReflectionClass;
 use Doctrine\Common\Persistence\Mapping\ClassMetadata;
 use Doctrine\Common\ClassLoader;
+use Doctrine\Common\EventArgs;
 
 /**
  * A <tt>ClassMetadata</tt> instance holds all the object-relational mapping metadata
@@ -437,6 +438,13 @@ class ClassMetadataInfo implements ClassMetadata
     public $lifecycleCallbacks = array();
 
     /**
+     * READ-ONLY: The registered entity listeners.
+     *
+     * @var array
+     */
+    public $entityListeners = array();
+
+    /**
      * READ-ONLY: The association mappings of this class.
      *
      * The mapping definition array supports the following keys:
@@ -597,7 +605,7 @@ class ClassMetadataInfo implements ClassMetadata
     /**
      * The ReflectionProperty instances of the mapped class.
      *
-     * @var array
+     * @var \ReflectionProperty[]
      */
     public $reflFields = array();
 
@@ -685,13 +693,14 @@ class ClassMetadataInfo implements ClassMetadata
             return $id;
         }
 
-        $value = $this->reflFields[$this->identifier[0]]->getValue($entity);
+        $id = $this->identifier[0];
+        $value = $this->reflFields[$id]->getValue($entity);
 
-        if ($value !== null) {
-            return array($this->identifier[0] => $value);
+        if (null === $value) {
+            return array();
         }
 
-        return array();
+        return array($id => $value);
     }
 
     /**
@@ -1313,10 +1322,7 @@ class ClassMetadataInfo implements ClassMetadata
         $mapping['sourceEntity'] = $this->name;
 
         if (isset($mapping['targetEntity'])) {
-            if (strlen($this->namespace) > 0 && strpos($mapping['targetEntity'], '\\') === false) {
-                $mapping['targetEntity'] = $this->namespace . '\\' . $mapping['targetEntity'];
-            }
-
+            $mapping['targetEntity'] = $this->fullyQualifiedClassName($mapping['targetEntity']);
             $mapping['targetEntity'] = ltrim($mapping['targetEntity'], '\\');
         }
 
@@ -1671,9 +1677,7 @@ class ClassMetadataInfo implements ClassMetadata
     }
 
     /**
-     * Gets the mapped identifier field of this class.
-     *
-     * @return array|string
+     * {@inheritDoc}
      */
     public function getIdentifier()
     {
@@ -1904,11 +1908,7 @@ class ClassMetadataInfo implements ClassMetadata
     public function setSubclasses(array $subclasses)
     {
         foreach ($subclasses as $subclass) {
-            if (strpos($subclass, '\\') === false && strlen($this->namespace)) {
-                $this->subClasses[] = $this->namespace . '\\' . $subclass;
-            } else {
-                $this->subClasses[] = $subclass;
-            }
+            $this->subClasses[] = $this->fullyQualifiedClassName($subclass);
         }
     }
 
@@ -2261,11 +2261,9 @@ class ClassMetadataInfo implements ClassMetadata
 
                 $queryMapping['isSelfClass'] = true;
                 $queryMapping['resultClass'] = $this->name;
-
-            } else if (strlen($this->namespace) > 0 && strpos($queryMapping['resultClass'], '\\') === false) {
-                $queryMapping['resultClass'] = $this->namespace . '\\' . $queryMapping['resultClass'];
             }
 
+            $queryMapping['resultClass'] = $this->fullyQualifiedClassName($queryMapping['resultClass']);
             $queryMapping['resultClass'] = ltrim($queryMapping['resultClass'], '\\');
         }
 
@@ -2304,10 +2302,10 @@ class ClassMetadataInfo implements ClassMetadata
                     $entityResult['isSelfClass'] = true;
                     $entityResult['entityClass'] = $this->name;
 
-                } else if (strlen($this->namespace) > 0 && strpos($entityResult['entityClass'], '\\') === false) {
-                    $entityResult['entityClass'] = $this->namespace . '\\' . $entityResult['entityClass'];
                 }
 
+                $entityResult['entityClass'] = $this->fullyQualifiedClassName($entityResult['entityClass']);
+  
                 $resultMapping['entities'][$key]['entityClass'] = ltrim($entityResult['entityClass'], '\\');
                 $resultMapping['entities'][$key]['isSelfClass'] = $entityResult['isSelfClass'];
 
@@ -2419,17 +2417,15 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function setCustomRepositoryClass($repositoryClassName)
     {
-        if ($repositoryClassName !== null && strpos($repositoryClassName, '\\') === false
-                && strlen($this->namespace) > 0) {
-            $repositoryClassName = $this->namespace . '\\' . $repositoryClassName;
-        }
-        $this->customRepositoryClassName = $repositoryClassName;
+        $this->customRepositoryClassName = $this->fullyQualifiedClassName($repositoryClassName);
     }
 
     /**
      * Dispatches the lifecycle event of the given entity to the registered
      * lifecycle callbacks and lifecycle listeners.
      *
+     * @deprecated Deprecated since version 2.4 in favor of \Doctrine\ORM\Event\ListenersInvoker
+     * 
      * @param string $lifecycleEvent The lifecycle event.
      * @param object $entity         The Entity on which the event occured.
      *
@@ -2490,6 +2486,33 @@ class ClassMetadataInfo implements ClassMetadata
     public function setLifecycleCallbacks(array $callbacks)
     {
         $this->lifecycleCallbacks = $callbacks;
+    }
+
+    /**
+     * Adds a entity listener for entities of this class.
+     *
+     * @param string $eventName The entity lifecycle event.
+     * @param string $class     The listener class.
+     * @param string $method    The listener callback method.
+     *
+     * @throws \Doctrine\ORM\Mapping\MappingException
+     */
+    public function addEntityListener($eventName, $class, $method)
+    {
+        $class = $this->fullyQualifiedClassName($class);
+
+        if ( ! class_exists($class)) {
+            throw MappingException::entityListenerClassNotFound($class, $this->name);
+        }
+
+        if ( ! method_exists($class, $method)) {
+            throw MappingException::entityListenerMethodNotFound($class, $method, $this->name);
+        }
+
+        $this->entityListeners[$eventName][] = array(
+            'class'  => $class,
+            'method' => $method
+        );
     }
 
     /**
@@ -2557,10 +2580,7 @@ class ClassMetadataInfo implements ClassMetadata
      */
     public function addDiscriminatorMapClass($name, $className)
     {
-        if (strlen($this->namespace) > 0 && strpos($className, '\\') === false) {
-            $className = $this->namespace . '\\' . $className;
-        }
-
+        $className = $this->fullyQualifiedClassName($className);
         $className = ltrim($className, '\\');
         $this->discriminatorMap[$name] = $className;
 
@@ -2981,5 +3001,18 @@ class ClassMetadataInfo implements ClassMetadata
             }
         }
         return $relations;
+    }
+
+    /**
+     * @param   string $className
+     * @return  string
+     */
+    public function fullyQualifiedClassName($className)
+    {
+        if ($className !== null && strpos($className, '\\') === false && strlen($this->namespace) > 0) {
+            return $this->namespace . '\\' . $className;
+        }
+
+        return $className;
     }
 }

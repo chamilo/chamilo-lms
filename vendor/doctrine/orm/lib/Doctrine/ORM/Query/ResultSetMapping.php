@@ -544,3 +544,4 @@ class ResultSetMapping
         return $this;
     }
 }
+

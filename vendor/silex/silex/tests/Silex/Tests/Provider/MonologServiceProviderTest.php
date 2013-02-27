@@ -24,13 +24,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function setUp()
-    {
-        if (!is_dir(__DIR__.'/../../../../vendor/monolog/monolog/src')) {
-            $this->markTestSkipped('Monolog dependency was not installed.');
-        }
-    }
-
     public function testRequestLogging()
     {
         $app = $this->getApplication();
@@ -97,7 +90,7 @@ class MonologServiceProviderTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/error');
         $app->handle($request);
 
-        $pattern = "#RuntimeException: very bad error \(uncaught exception\) at .*Silex/Tests/Provider/MonologServiceProviderTest\.php line \d+#";
+        $pattern = "#RuntimeException: very bad error \(uncaught exception\) at .* line \d+#";
         $this->assertMatchingRecord($pattern, Logger::CRITICAL, $app['monolog.handler']);
     }
 

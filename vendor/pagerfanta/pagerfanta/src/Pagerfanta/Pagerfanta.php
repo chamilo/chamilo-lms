@@ -38,8 +38,7 @@ class Pagerfanta implements PagerfantaInterface
     /**
      * Constructor.
      *
-     * @param AdapterInterface $adapter    An adapter.
-     * @param integer          $maxPerPage The maximum of results per page.
+     * @param AdapterInterface $adapter An adapter.
      *
      * @api
      */

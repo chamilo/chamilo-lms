@@ -10,6 +10,7 @@
 if (PHP_SAPI != 'cli') {
     exit;
 }
+$num_trans = 500; //how many transactions to process during each execution
 // Check for pidfile. Normally, no concurrent write is possible as transactions
 //  should be started at about 120 seconds intervals.
 $pidfile = __DIR__.'/chamilo.transaction.pid';
@@ -48,13 +49,18 @@ $branch_id = 0;
 // We need $branch_id defined before calling db_matches.php
 // The only thing we need from db_matches is the definition of the web service
 require_once 'db_matches.php';
-    
+/**
+ * Process
+ */   
 $migration = new Migration();    
 $migration->set_web_service_connection_info($matches);    
 require $migration->web_service_connection_info['filename'];
 $mig = new $migration->web_service_connection_info['class'];
 error_log('Building in-memory data_list for speed-up '.time());
 $data_list = array('boost_users'=>true, 'boost_courses'=>true, 'boost_sessions'=>true);
+/**
+ * Build an array of in-memory database data to reduce time spent querying
+ */
 if (count($data_list['users'])<1) {
     MigrationCustom::fill_data_list($data_list);
 }
@@ -62,42 +68,29 @@ error_log('Built in-memory data_list for speed-up '.time());
 
 // Counter for transactions found and dealt with
 $count_transactions = 0;
-
-// Check all branches one by one
+/**
+ * Check each branch for transactions to execute (and execute them)
+ */
 $branches = $migration->get_branches();
 foreach ($branches as $id => $branch) {
     $response = '';
     $branch_id = $branch['branch_id'];
     if ($mode == 'process') {
         //Load transactions saved before
-	$params = array('branch_id' => $branch_id, 'number_of_transactions' => '500');
+	$params = array('branch_id' => $branch_id, 'number_of_transactions' => $num_trans);
         $migration->get_transactions_from_webservice($params);
         $count_transactions += $migration->execute_transactions($params);
 
-//        $trans_id = $migration->get_latest_transaction_id_by_branch($branch_id);
-//        error_log("Last transaction was $trans_id for branch $branch_id");
-//        $params = array(
-//            'ultimo' => $trans_id,
-//            'cantidad' => 100,
-//            'intIdSede' => $branch_id,
-//        );
-//        $result = $mig->process_transactions($params,$migration->web_service_connection_info);
     } else {
         //if mode==fix
         error_log('Fixing transactions');
-        $params = array('branch_id' => $branch_id, 'number_of_transactions' => '500');
+        $params = array('branch_id' => $branch_id, 'number_of_transactions' => $num_trans);
         $migration->execute_transactions($params);
     }
-    //$result = $migration->load_transaction_by_third_party_id($trans_id, $branch_id);
-    //$response .= $result['message'];
-    //if (isset($result['raw_reponse'])) {
-    //    $response .= $result['raw_reponse'];
-    //}
-    //if (!empty($response)) {
-    //    error_log($response);
-    //}
 }
-// Free the PID file
+/**
+ * Free the PID file used as semaphore
+ */
 if (is_file($pidfile)) {
   $opid = trim(file_get_contents($pidfile));
   if (intval($opid) == intval($pid)) {

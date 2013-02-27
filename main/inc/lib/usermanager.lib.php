@@ -2324,17 +2324,17 @@ class UserManager {
             while ($row1 = Database::fetch_array($result1)) {
                 if (!in_array($row1['id'],$ids)) {
                     if ($reverse_order) {
-                        while (strcmp($row1['session_category_name'],$join[$i]['session_category_name'])<=0 && isset($join[$i])) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])<=0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
                     } else {
-                        while (strcmp($row1['session_category_name'],$join[$i]['session_category_name'])>0 && isset($join[$i])) {
+                        while (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name'])>0) {
                             $ordered_join[] = $join[$i];
                             $i++;
                         }
-                        if (strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0 && isset($join[$i])) {
-                            while (strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
+                        if (isset($join[$i]) && strcmp($row1['session_category_name'],$join[$i]['session_category_name']) === 0) {
+                            while (isset($join[$i]) && strcmp($row1['short_name'],$join[$i]['short_name'])>0) {
                                 $ordered_join[] = $join[$i];
                                 $i++;
                             }

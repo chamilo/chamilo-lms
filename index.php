@@ -46,7 +46,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class IndexController
 {
-
     /**
      * @param Silex\Application $app
      * @return Symfony\Component\HttpFoundation\Response
@@ -121,7 +120,7 @@ class IndexController
         }
 
         //Hot courses & announcements
-        $hot_courses = null;
+        $hot_courses         = null;
         $announcements_block = null;
 
         // When loading a chamilo page do not include the hot courses and news
@@ -170,7 +169,7 @@ class IndexController
             // The user has been already authenticated, we are now to find the last login of the user.
             if (!empty($this->user_id)) {
                 $track_login_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql_last_login = "SELECT login_date
+                $sql_last_login    = "SELECT login_date
                                     FROM $track_login_table
                                     WHERE login_user_id = '".$this->user_id."'
                                     ORDER BY login_date DESC LIMIT 1";
@@ -190,7 +189,6 @@ class IndexController
                     decodeOpenInfos();
                 }
             }
-            // End login -- if ($_POST['submitAuth'])
         } else {
             // Only if login form was not sent because if the form is sent the user was already on the page.
             event_open();
@@ -202,7 +200,7 @@ class IndexController
      */
     function set_login_form(Application $app)
     {
-        $user_id = api_get_user_id();
+        $user_id    = api_get_user_id();
         $login_form = null;
         if (!$user_id || api_is_anonymous($user_id)) {
 

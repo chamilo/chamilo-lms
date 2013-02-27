@@ -2223,9 +2223,9 @@ class UserManager {
     /**
      * Gives a list of [session_category][session_id] for the current user.
      * @param integer $user_id
-     * @param boolean  optional true if limit time from session is over, false otherwise
-         * @param boolean Whether to return only a count (true) or the full result (false)
-         * @param boolean Whether to order by alphabetical order (false) or reverse-alphabetical
+     * @param boolean optional true if we want to see expired sessions, false otherwise
+     * @param boolean Whether to return only a count (true) or the full result (false)
+     * @param boolean Whether to order by alphabetical order (false) or reverse-alphabetical (used in history to show latest sessions on top)
      * @return array  list of statuses [session_category][session_id]
      * @todo ensure multiple access urls are managed correctly
      */
@@ -2243,7 +2243,10 @@ class UserManager {
         $now = api_get_utc_datetime();
 
         // Get the list of sessions per user
-        $condition_date_end = null;
+        $condition_date_start1 = null;
+        $condition_date_start2 = null;
+        $condition_date_end1 = null;
+        $condition_date_end2 = null;
         // uncomment commented query lines to alter the query sorting
         //$order = ' ORDER BY session_category_name, short_name ';
         $order = ' ORDER BY session_category_name, name ';
@@ -2260,7 +2263,9 @@ class UserManager {
                 $condition_date_end1 = null;
                 $condition_date_end2 = null;
             } else {
-                //Student can't access before this dates
+                //Student can't access before the start date or after the end date
+                $condition_date_start1 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
+                $condition_date_start2 = " AND (session.access_start_date <= '$now' OR session.access_start_date = '0000-00-00 00:00:00') ";
                 $condition_date_end1 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
                 $condition_date_end2 = " AND (session.access_end_date >= '$now' OR session.access_end_date = '0000-00-00 00:00:00') ";
             }

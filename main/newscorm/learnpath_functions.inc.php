@@ -438,10 +438,8 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array (), $leve
                     }
 
                     echo "  <td align='center'>&nbsp;</td>\n";
-                    //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=editmodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
                     echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row['id']."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
 
-                    //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=deletemodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 onclick=\"javascript: return confirmation('".$row['chapter_name']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
                     echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&action=delete_item&id=".$row['id']."' onclick=\"javascript: return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
                 }
 

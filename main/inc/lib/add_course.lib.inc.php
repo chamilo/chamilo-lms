@@ -2673,7 +2673,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         $course = api_get_course_info_by_id($course_id);
         $course_code = $course['code'];
         // father gradebook
-        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,NULL,NULL,$example_cert_id)");
+        Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',0,100,0,75,NULL,$example_cert_id)");
         $gbid = Database :: insert_id();
         Database::query("INSERT INTO $TABLEGRADEBOOK (name, description, user_id, course_code, parent_id, weight, visible, certif_min_score, session_id, document_id) VALUES ('$course_code','',1,'$course_code',$gbid,100,1,75,NULL,$example_cert_id)");
         $gbid = Database :: insert_id();

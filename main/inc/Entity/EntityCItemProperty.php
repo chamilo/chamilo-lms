@@ -1,14 +1,21 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 /**
  * EntityCItemProperty
  *
  * @Table(name="c_item_property")
- * @Entity
+ * @Entity(repositoryClass="Entity\Repository\ItemPropertyRepository")
  */
 class EntityCItemProperty
 {
@@ -16,8 +23,6 @@ class EntityCItemProperty
      * @var integer
      *
      * @Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @Id
-     * @GeneratedValue(strategy="NONE")
      */
     private $cId;
 
@@ -26,7 +31,7 @@ class EntityCItemProperty
      *
      * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @Id
-     * @GeneratedValue(strategy="NONE")
+     * @GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
@@ -103,14 +108,14 @@ class EntityCItemProperty
     /**
      * @var \DateTime
      *
-     * @Column(name="start_visible", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @Column(name="start_visible", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $startVisible;
 
     /**
      * @var \DateTime
      *
-     * @Column(name="end_visible", type="datetime", precision=0, scale=0, nullable=false, unique=false)
+     * @Column(name="end_visible", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $endVisible;
 
@@ -121,6 +126,32 @@ class EntityCItemProperty
      */
     private $idSession;
 
+    /**
+     *
+     * @ManyToOne(targetEntity="EntityUser")
+     * @JoinColumn(name="to_user_id", referencedColumnName="user_id")
+     **/
+    private $user;
+
+
+    /**
+     * @ManyToOne(targetEntity="EntityCourse")
+     * @JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course;
+
+    public function __construct(EntityUser $user, EntityCourse $course)
+    {
+        $this->user = $user;
+        $this->course = $course;
+
+        $this->setCId($course->getId());
+        $this->setToUserId($user->getUserId());
+        $this->setInsertUserId(api_get_user_id());
+        $this->setLasteditUserId(api_get_user_id());
+        $this->setInsertDate(new \DateTime());
+        $this->setLasteditDate(new \DateTime());
+    }
 
     /**
      * Set cId
@@ -138,7 +169,7 @@ class EntityCItemProperty
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -161,7 +192,7 @@ class EntityCItemProperty
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -184,7 +215,7 @@ class EntityCItemProperty
     /**
      * Get tool
      *
-     * @return string 
+     * @return string
      */
     public function getTool()
     {
@@ -207,7 +238,7 @@ class EntityCItemProperty
     /**
      * Get insertUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getInsertUserId()
     {
@@ -230,7 +261,7 @@ class EntityCItemProperty
     /**
      * Get insertDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInsertDate()
     {
@@ -253,7 +284,7 @@ class EntityCItemProperty
     /**
      * Get lasteditDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLasteditDate()
     {
@@ -276,7 +307,7 @@ class EntityCItemProperty
     /**
      * Get ref
      *
-     * @return integer 
+     * @return integer
      */
     public function getRef()
     {
@@ -299,7 +330,7 @@ class EntityCItemProperty
     /**
      * Get lasteditType
      *
-     * @return string 
+     * @return string
      */
     public function getLasteditType()
     {
@@ -322,7 +353,7 @@ class EntityCItemProperty
     /**
      * Get lasteditUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLasteditUserId()
     {
@@ -345,7 +376,7 @@ class EntityCItemProperty
     /**
      * Get toGroupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getToGroupId()
     {
@@ -368,7 +399,7 @@ class EntityCItemProperty
     /**
      * Get toUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getToUserId()
     {
@@ -391,7 +422,7 @@ class EntityCItemProperty
     /**
      * Get visibility
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisibility()
     {
@@ -414,7 +445,7 @@ class EntityCItemProperty
     /**
      * Get startVisible
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartVisible()
     {
@@ -437,7 +468,7 @@ class EntityCItemProperty
     /**
      * Get endVisible
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndVisible()
     {
@@ -460,7 +491,7 @@ class EntityCItemProperty
     /**
      * Get idSession
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdSession()
     {

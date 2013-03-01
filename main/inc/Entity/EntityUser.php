@@ -1,14 +1,25 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\ManyToMany;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\Common\Collections\Criteria;
+
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * EntityUser
  *
  * @Table(name="user")
- * @Entity
+ * @Entity(repositoryClass="Entity\Repository\UserRepository")
  */
 class EntityUser
 {
@@ -203,21 +214,68 @@ class EntityUser
      */
     private $hrDeptId;
 
+    /**
+     * @OneToMany(targetEntity="EntityCourseRelUser", mappedBy="user")
+     **/
+    private $courses;
+
+    /**
+     * @OneToMany(targetEntity="EntityCItemProperty", mappedBy="user")
+     **/
+    private $items;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->courses = new ArrayCollection();
+        $this->items = new ArrayCollection();
+    }
+
+    /**
+     *
+     */
+    public function getLps()
+    {
+        //return $this->lps;
+        /*$criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("id", "666"))
+            //->orderBy(array("username" => "ASC"))
+            //->setFirstResult(0)
+            //->setMaxResults(20)
+        ;
+        $lps = $this->lps->matching($criteria);*/
+        /*return $this->lps->filter(
+            function($entry) use ($idsToFilter) {
+                return $entry->getId() == 1;
+        });*/
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompleteName()
+    {
+        return $this->lastname .', '. $this->firstname .' ('. $this->email .')';
+    }
 
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
         return $this->userId;
     }
 
+
     /**
      * Set lastname
      *
      * @param string $lastname
+     *
      * @return EntityUser
      */
     public function setLastname($lastname)
@@ -230,7 +288,7 @@ class EntityUser
     /**
      * Get lastname
      *
-     * @return string 
+     * @return string
      */
     public function getLastname()
     {
@@ -241,6 +299,7 @@ class EntityUser
      * Set firstname
      *
      * @param string $firstname
+     *
      * @return EntityUser
      */
     public function setFirstname($firstname)
@@ -253,7 +312,7 @@ class EntityUser
     /**
      * Get firstname
      *
-     * @return string 
+     * @return string
      */
     public function getFirstname()
     {
@@ -276,7 +335,7 @@ class EntityUser
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {
@@ -299,7 +358,7 @@ class EntityUser
     /**
      * Get password
      *
-     * @return string 
+     * @return string
      */
     public function getPassword()
     {
@@ -322,7 +381,7 @@ class EntityUser
     /**
      * Get authSource
      *
-     * @return string 
+     * @return string
      */
     public function getAuthSource()
     {
@@ -345,7 +404,7 @@ class EntityUser
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -368,7 +427,7 @@ class EntityUser
     /**
      * Get status
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getStatus()
     {
@@ -391,7 +450,7 @@ class EntityUser
     /**
      * Get officialCode
      *
-     * @return string 
+     * @return string
      */
     public function getOfficialCode()
     {
@@ -414,7 +473,7 @@ class EntityUser
     /**
      * Get phone
      *
-     * @return string 
+     * @return string
      */
     public function getPhone()
     {
@@ -437,7 +496,7 @@ class EntityUser
     /**
      * Get pictureUri
      *
-     * @return string 
+     * @return string
      */
     public function getPictureUri()
     {
@@ -460,7 +519,7 @@ class EntityUser
     /**
      * Get creatorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCreatorId()
     {
@@ -483,7 +542,7 @@ class EntityUser
     /**
      * Get competences
      *
-     * @return string 
+     * @return string
      */
     public function getCompetences()
     {
@@ -506,7 +565,7 @@ class EntityUser
     /**
      * Get diplomas
      *
-     * @return string 
+     * @return string
      */
     public function getDiplomas()
     {
@@ -529,7 +588,7 @@ class EntityUser
     /**
      * Get openarea
      *
-     * @return string 
+     * @return string
      */
     public function getOpenarea()
     {
@@ -552,7 +611,7 @@ class EntityUser
     /**
      * Get teach
      *
-     * @return string 
+     * @return string
      */
     public function getTeach()
     {
@@ -575,7 +634,7 @@ class EntityUser
     /**
      * Get productions
      *
-     * @return string 
+     * @return string
      */
     public function getProductions()
     {
@@ -598,7 +657,7 @@ class EntityUser
     /**
      * Get chatcallUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getChatcallUserId()
     {
@@ -621,7 +680,7 @@ class EntityUser
     /**
      * Get chatcallDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getChatcallDate()
     {
@@ -644,7 +703,7 @@ class EntityUser
     /**
      * Get chatcallText
      *
-     * @return string 
+     * @return string
      */
     public function getChatcallText()
     {
@@ -667,7 +726,7 @@ class EntityUser
     /**
      * Get language
      *
-     * @return string 
+     * @return string
      */
     public function getLanguage()
     {
@@ -690,7 +749,7 @@ class EntityUser
     /**
      * Get registrationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRegistrationDate()
     {
@@ -713,7 +772,7 @@ class EntityUser
     /**
      * Get expirationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpirationDate()
     {
@@ -736,7 +795,7 @@ class EntityUser
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -759,7 +818,7 @@ class EntityUser
     /**
      * Get openid
      *
-     * @return string 
+     * @return string
      */
     public function getOpenid()
     {
@@ -782,7 +841,7 @@ class EntityUser
     /**
      * Get theme
      *
-     * @return string 
+     * @return string
      */
     public function getTheme()
     {
@@ -805,7 +864,7 @@ class EntityUser
     /**
      * Get hrDeptId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHrDeptId()
     {

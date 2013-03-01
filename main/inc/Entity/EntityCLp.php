@@ -1,34 +1,42 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+
+use Doctrine\ORM\Mapping\MappedSuperclass;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
+use Doctrine\ORM\Mapping\PreUpdate;
+
 
 /**
  * EntityCLp
  *
  * @Table(name="c_lp")
- * @Entity
+ * @Entity(repositoryClass="Entity\Repository\LpRepository")
  */
 class EntityCLp
 {
     /**
      * @var integer
      *
-     * @Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @Id
-     * @GeneratedValue(strategy="NONE")
+     * @GeneratedValue(strategy="IDENTITY")
      */
-    private $cId;
+    private $id;
 
     /**
      * @var integer
      *
-     * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @Id
-     * @GeneratedValue(strategy="NONE")
+     * @Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+
      */
-    private $id;
+    private $cId;
+
 
     /**
      * @var integer
@@ -226,6 +234,18 @@ class EntityCLp
      */
     private $expiredOn;
 
+    public function __construct() {
+
+    }
+
+    public function getLps() {
+        /*$query = $this->em->createQuery('SELECT u FROM Entity\Entry e WHERE :region_id MEMBER OF e.regions');
+        $query->setParameter('region_id',  1);
+        return $query->getResult();*/
+    }
+
+
+
 
     /**
      * Set cId
@@ -243,7 +263,7 @@ class EntityCLp
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -266,7 +286,7 @@ class EntityCLp
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -289,7 +309,7 @@ class EntityCLp
     /**
      * Get lpType
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpType()
     {
@@ -312,7 +332,7 @@ class EntityCLp
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -335,7 +355,7 @@ class EntityCLp
     /**
      * Get ref
      *
-     * @return string 
+     * @return string
      */
     public function getRef()
     {
@@ -358,7 +378,7 @@ class EntityCLp
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -381,7 +401,7 @@ class EntityCLp
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -404,7 +424,7 @@ class EntityCLp
     /**
      * Get forceCommit
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getForceCommit()
     {
@@ -427,7 +447,7 @@ class EntityCLp
     /**
      * Get defaultViewMod
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultViewMod()
     {
@@ -450,7 +470,7 @@ class EntityCLp
     /**
      * Get defaultEncoding
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultEncoding()
     {
@@ -473,7 +493,7 @@ class EntityCLp
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -496,7 +516,7 @@ class EntityCLp
     /**
      * Get contentMaker
      *
-     * @return string 
+     * @return string
      */
     public function getContentMaker()
     {
@@ -519,7 +539,7 @@ class EntityCLp
     /**
      * Get contentLocal
      *
-     * @return string 
+     * @return string
      */
     public function getContentLocal()
     {
@@ -542,7 +562,7 @@ class EntityCLp
     /**
      * Get contentLicense
      *
-     * @return string 
+     * @return string
      */
     public function getContentLicense()
     {
@@ -565,7 +585,7 @@ class EntityCLp
     /**
      * Get preventReinit
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPreventReinit()
     {
@@ -588,7 +608,7 @@ class EntityCLp
     /**
      * Get jsLib
      *
-     * @return string 
+     * @return string
      */
     public function getJsLib()
     {
@@ -611,7 +631,7 @@ class EntityCLp
     /**
      * Get debug
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDebug()
     {
@@ -634,7 +654,7 @@ class EntityCLp
     /**
      * Get theme
      *
-     * @return string 
+     * @return string
      */
     public function getTheme()
     {
@@ -657,7 +677,7 @@ class EntityCLp
     /**
      * Get previewImage
      *
-     * @return string 
+     * @return string
      */
     public function getPreviewImage()
     {
@@ -680,7 +700,7 @@ class EntityCLp
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -703,7 +723,7 @@ class EntityCLp
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -726,7 +746,7 @@ class EntityCLp
     /**
      * Get prerequisite
      *
-     * @return integer 
+     * @return integer
      */
     public function getPrerequisite()
     {
@@ -749,7 +769,7 @@ class EntityCLp
     /**
      * Get hideTocFrame
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getHideTocFrame()
     {
@@ -772,7 +792,7 @@ class EntityCLp
     /**
      * Get seriousgameMode
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSeriousgameMode()
     {
@@ -795,7 +815,7 @@ class EntityCLp
     /**
      * Get useMaxScore
      *
-     * @return integer 
+     * @return integer
      */
     public function getUseMaxScore()
     {
@@ -818,7 +838,7 @@ class EntityCLp
     /**
      * Get autolunch
      *
-     * @return integer 
+     * @return integer
      */
     public function getAutolunch()
     {
@@ -841,7 +861,7 @@ class EntityCLp
     /**
      * Get createdOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedOn()
     {
@@ -864,7 +884,7 @@ class EntityCLp
     /**
      * Get modifiedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getModifiedOn()
     {
@@ -887,7 +907,7 @@ class EntityCLp
     /**
      * Get publicatedOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPublicatedOn()
     {
@@ -910,7 +930,7 @@ class EntityCLp
     /**
      * Get expiredOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiredOn()
     {

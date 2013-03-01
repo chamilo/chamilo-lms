@@ -1,8 +1,16 @@
 <?php
 
-
+namespace Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\JoinColumn;
+
 
 /**
  * EntityCourseRelUser
@@ -13,11 +21,18 @@ use Doctrine\ORM\Mapping as ORM;
 class EntityCourseRelUser
 {
     /**
+     * @var integer
+     *
+     * @Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @Id
+     * @GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @Column(name="course_code", type="string", length=40, precision=0, scale=0, nullable=false, unique=false)
-     * @Id
-     * @GeneratedValue(strategy="NONE")
      */
     private $courseCode;
 
@@ -88,6 +103,55 @@ class EntityCourseRelUser
      */
     private $legalAgreement;
 
+    /**
+     * @var integer
+     *
+     * @Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $cId;
+
+    /**
+     * @ManyToOne(targetEntity="EntityUser")
+     * @JoinColumn(name="user_id", referencedColumnName="user_id")
+     */
+    private $user;
+
+    /**
+     * @ManyToOne(targetEntity="EntityCourse")
+     * @JoinColumn(name="c_id", referencedColumnName="id")
+     */
+    private $course;
+
+    public function __construct(EntityCourse $course, EntityUser $user)
+    {
+        $this->course = $course;
+        $this->user = $user;
+    }
+
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return EntityCourseRelUser
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+
 
     /**
      * Set courseCode
@@ -105,7 +169,7 @@ class EntityCourseRelUser
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -128,7 +192,7 @@ class EntityCourseRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -151,7 +215,7 @@ class EntityCourseRelUser
     /**
      * Get relationType
      *
-     * @return integer 
+     * @return integer
      */
     public function getRelationType()
     {
@@ -174,7 +238,7 @@ class EntityCourseRelUser
     /**
      * Get status
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getStatus()
     {
@@ -197,7 +261,7 @@ class EntityCourseRelUser
     /**
      * Get role
      *
-     * @return string 
+     * @return string
      */
     public function getRole()
     {
@@ -220,7 +284,7 @@ class EntityCourseRelUser
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {
@@ -243,7 +307,7 @@ class EntityCourseRelUser
     /**
      * Get tutorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTutorId()
     {
@@ -266,7 +330,7 @@ class EntityCourseRelUser
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {
@@ -289,7 +353,7 @@ class EntityCourseRelUser
     /**
      * Get userCourseCat
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserCourseCat()
     {
@@ -312,7 +376,7 @@ class EntityCourseRelUser
     /**
      * Get legalAgreement
      *
-     * @return integer 
+     * @return integer
      */
     public function getLegalAgreement()
     {

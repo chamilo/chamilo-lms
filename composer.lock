@@ -1,5 +1,5 @@
 {
-    "hash": "fc6045490aa8291c39f0b9fd8d43abd6",
+    "hash": "b72f351439fe1882d4759a792709fac7",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -166,7 +166,7 @@
                     "homepage": "http://www.jwage.com/"
                 },
                 {
-                    "name": "Guilherme Blanco",
+                    "name": "Christoph Dorn",
                     "email": "guilhermeblanco@gmail.com",
                     "homepage": "http://www.instaclick.com"
                 },
@@ -179,7 +179,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -433,7 +433,7 @@
                     "homepage": "http://www.jwage.com/"
                 },
                 {
-                    "name": "Guilherme Blanco",
+                    "name": "Christoph Dorn",
                     "email": "guilhermeblanco@gmail.com",
                     "homepage": "http://www.instaclick.com"
                 },
@@ -446,7 +446,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "https://github.com/schmittjoh",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -519,12 +519,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/doctrine/migrations",
+                "url": "https://github.com/doctrine/migrations.git",
                 "reference": "e1f6efcd94993b493de5c6a413cbc327ea9c0caa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/migrations/archive/e1f6efcd94993b493de5c6a413cbc327ea9c0caa.zip",
+                "url": "https://api.github.com/repos/doctrine/migrations/zipball/e1f6efcd94993b493de5c6a413cbc327ea9c0caa",
                 "reference": "e1f6efcd94993b493de5c6a413cbc327ea9c0caa",
                 "shasum": ""
             },
@@ -574,12 +574,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "e5779a0756306c7ae34536b9adaf964c00465bb6"
+                "reference": "2372a85d9fff9f55197bc1b4f434e7cee469706b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/e5779a0756306c7ae34536b9adaf964c00465bb6",
-                "reference": "e5779a0756306c7ae34536b9adaf964c00465bb6",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/2372a85d9fff9f55197bc1b4f434e7cee469706b",
+                "reference": "2372a85d9fff9f55197bc1b4f434e7cee469706b",
                 "shasum": ""
             },
             "require": {
@@ -636,7 +636,89 @@
                 "database",
                 "orm"
             ],
-            "time": "2013-02-27 11:47:02"
+            "time": "2013-03-01 00:02:20"
+        },
+        {
+            "name": "emanueleminotto/faker-service-provider",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/EmanueleMinotto/FakerServiceProvider.git",
+                "reference": "dedf255efaaa94d00f8af44bf5faeae6d3c557e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/EmanueleMinotto/FakerServiceProvider/zipball/dedf255efaaa94d00f8af44bf5faeae6d3c557e6",
+                "reference": "dedf255efaaa94d00f8af44bf5faeae6d3c557e6",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "1.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "EmanueleMinotto": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Emanuele Minotto",
+                    "email": "minottoemanuele@gmail.com",
+                    "homepage": "http://emanueleminotto.wordpress.com/"
+                }
+            ],
+            "description": "Faker Service Provider for Silex",
+            "time": "2013-02-06 15:50:34"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "d2bd9144075c0bb05fc14844e1446c2054b5da66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/d2bd9144075c0bb05fc14844e1446c2054b5da66",
+                "reference": "d2bd9144075c0bb05fc14844e1446c2054b5da66",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Faker": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2013-02-27 10:20:31"
         },
         {
             "name": "gedmo/doctrine-extensions",
@@ -644,12 +726,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-                "reference": "8017f0f555e925faf60d511f4d091d40bcf14c3c"
+                "reference": "0e19859e1f262f9a380cd399964610cf3f73dcfe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/8017f0f555e925faf60d511f4d091d40bcf14c3c",
-                "reference": "8017f0f555e925faf60d511f4d091d40bcf14c3c",
+                "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/0e19859e1f262f9a380cd399964610cf3f73dcfe",
+                "reference": "0e19859e1f262f9a380cd399964610cf3f73dcfe",
                 "shasum": ""
             },
             "require": {
@@ -715,19 +797,19 @@
                 "tree",
                 "uploadable"
             ],
-            "time": "2013-02-24 23:48:40"
+            "time": "2013-03-01 15:53:01"
         },
         {
             "name": "knplabs/knp-menu",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "http://github.com/KnpLabs/KnpMenu.git",
+                "url": "https://github.com/KnpLabs/KnpMenu.git",
                 "reference": "730bc37232f5f813822acf80edfbd89381ea5971"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/KnpLabs/KnpMenu/archive/730bc37232f5f813822acf80edfbd89381ea5971.zip",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenu/zipball/730bc37232f5f813822acf80edfbd89381ea5971",
                 "reference": "730bc37232f5f813822acf80edfbd89381ea5971",
                 "shasum": ""
             },
@@ -765,7 +847,7 @@
                     "email": "stof@notk.org"
                 },
                 {
-                    "name": "KnpLabs",
+                    "name": "Knplabs",
                     "homepage": "http://knplabs.com"
                 },
                 {
@@ -1123,12 +1205,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config.git",
-                "reference": "01a1b2fe40ca5267a3cd549c44610d160df9f149"
+                "reference": "2b8694ad7f46072b154faaf5e74f2a06cb828fa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Config/zipball/01a1b2fe40ca5267a3cd549c44610d160df9f149",
-                "reference": "01a1b2fe40ca5267a3cd549c44610d160df9f149",
+                "url": "https://api.github.com/repos/symfony/Config/zipball/2b8694ad7f46072b154faaf5e74f2a06cb828fa7",
+                "reference": "2b8694ad7f46072b154faaf5e74f2a06cb828fa7",
                 "shasum": ""
             },
             "require": {
@@ -1161,7 +1243,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "http://symfony.com",
-            "time": "2013-02-18 21:28:20"
+            "time": "2013-03-01 10:42:20"
         },
         {
             "name": "symfony/console",
@@ -1170,12 +1252,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "f65e34d058f0990a724f78e8d091dc0a20e439ac"
+                "reference": "fae82dad073a491b91a2ad6cda2ef5d8b19a5152"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/f65e34d058f0990a724f78e8d091dc0a20e439ac",
-                "reference": "f65e34d058f0990a724f78e8d091dc0a20e439ac",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/fae82dad073a491b91a2ad6cda2ef5d8b19a5152",
+                "reference": "fae82dad073a491b91a2ad6cda2ef5d8b19a5152",
                 "shasum": ""
             },
             "require": {
@@ -1208,7 +1290,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-01-31 21:39:01"
+            "time": "2013-03-01 06:43:27"
         },
         {
             "name": "symfony/dependency-injection",
@@ -1387,12 +1469,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Form.git",
-                "reference": "5e94e043a3e62cdceebdebdbd16f608402de7f37"
+                "reference": "d6f10ccdb536483738443d76ee01c7418fb2cabe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Form/zipball/5e94e043a3e62cdceebdebdbd16f608402de7f37",
-                "reference": "5e94e043a3e62cdceebdebdbd16f608402de7f37",
+                "url": "https://api.github.com/repos/symfony/Form/zipball/d6f10ccdb536483738443d76ee01c7418fb2cabe",
+                "reference": "d6f10ccdb536483738443d76ee01c7418fb2cabe",
                 "shasum": ""
             },
             "require": {
@@ -1437,7 +1519,7 @@
             ],
             "description": "Symfony Form Component",
             "homepage": "http://symfony.com",
-            "time": "2013-02-23 06:47:02"
+            "time": "2013-03-01 10:46:19"
         },
         {
             "name": "symfony/http-foundation",
@@ -1446,12 +1528,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpFoundation.git",
-                "reference": "v2.1.8"
+                "reference": "21569f5f8c380bb03fbb14b2c4192667e3383a71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/v2.1.8",
-                "reference": "v2.1.8",
+                "url": "https://api.github.com/repos/symfony/HttpFoundation/zipball/21569f5f8c380bb03fbb14b2c4192667e3383a71",
+                "reference": "21569f5f8c380bb03fbb14b2c4192667e3383a71",
                 "shasum": ""
             },
             "require": {
@@ -1480,7 +1562,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "http://symfony.com",
-            "time": "2013-02-22 18:02:22"
+            "time": "2013-03-01 10:39:52"
         },
         {
             "name": "symfony/http-kernel",
@@ -1656,12 +1738,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/PropertyAccess.git",
-                "reference": "c4f11cd0671ab7b5d7f552033cd0055fec3199d3"
+                "reference": "134f64768dee9b1a5158af3790debbe6365a948b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/c4f11cd0671ab7b5d7f552033cd0055fec3199d3",
-                "reference": "c4f11cd0671ab7b5d7f552033cd0055fec3199d3",
+                "url": "https://api.github.com/repos/symfony/PropertyAccess/zipball/134f64768dee9b1a5158af3790debbe6365a948b",
+                "reference": "134f64768dee9b1a5158af3790debbe6365a948b",
                 "shasum": ""
             },
             "require": {
@@ -1705,7 +1787,7 @@
                 "property path",
                 "reflection"
             ],
-            "time": "2013-02-07 16:43:41"
+            "time": "2013-03-01 10:42:20"
         },
         {
             "name": "symfony/routing",
@@ -1887,12 +1969,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/TwigBridge.git",
-                "reference": "v2.2.0-RC3"
+                "reference": "42a6a2d626709a770af31d7216c57fea7a04a984"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/v2.2.0-RC3",
-                "reference": "v2.2.0-RC3",
+                "url": "https://api.github.com/repos/symfony/TwigBridge/zipball/42a6a2d626709a770af31d7216c57fea7a04a984",
+                "reference": "42a6a2d626709a770af31d7216c57fea7a04a984",
                 "shasum": ""
             },
             "require": {
@@ -1944,7 +2026,7 @@
             ],
             "description": "Symfony Twig Bridge",
             "homepage": "http://symfony.com",
-            "time": "2013-02-23 06:46:07"
+            "time": "2013-03-01 10:42:10"
         },
         {
             "name": "symfony/validator",
@@ -1953,12 +2035,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Validator.git",
-                "reference": "8ad85eb50e3d1bb09aa398c1032b7a6eec953404"
+                "reference": "a307f75f9fa64489428b870b7aec7c6469710f31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Validator/zipball/8ad85eb50e3d1bb09aa398c1032b7a6eec953404",
-                "reference": "8ad85eb50e3d1bb09aa398c1032b7a6eec953404",
+                "url": "https://api.github.com/repos/symfony/Validator/zipball/a307f75f9fa64489428b870b7aec7c6469710f31",
+                "reference": "a307f75f9fa64489428b870b7aec7c6469710f31",
                 "shasum": ""
             },
             "require": {
@@ -2005,7 +2087,7 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "http://symfony.com",
-            "time": "2013-02-11 11:27:01"
+            "time": "2013-03-01 10:42:20"
         },
         {
             "name": "symfony/yaml",
@@ -2055,12 +2137,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa"
+                "reference": "39d94faabcea7d60b90c2996d51e1b6691ab39d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa",
-                "reference": "bc30d9b7e24b0cd2f02078064b2d9fe1c20aa1aa",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/39d94faabcea7d60b90c2996d51e1b6691ab39d2",
+                "reference": "39d94faabcea7d60b90c2996d51e1b6691ab39d2",
                 "shasum": ""
             },
             "require": {
@@ -2096,7 +2178,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-02-26 13:03:39"
+            "time": "2013-02-28 14:08:49"
         }
     ],
     "packages-dev": null,

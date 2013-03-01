@@ -39,7 +39,8 @@
         "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
         "pagerfanta/pagerfanta": "dev-master",
         "knplabs/knp-menu": "2.0.*@dev",
-        "gedmo/doctrine-extensions": "2.3.*@dev"
+        "gedmo/doctrine-extensions": "2.3.*@dev",
+        "emanueleminotto/faker-service-provider": "master"
     },
     "minimum-stability": "dev"
 }

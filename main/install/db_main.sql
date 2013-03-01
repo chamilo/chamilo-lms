@@ -327,6 +327,8 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS course_rel_user;
 CREATE TABLE IF NOT EXISTS course_rel_user (
+  id int unsigned AUTO_INCREMENT,
+  c_id INT NOT NULL unsigned,
   course_code varchar(40) NOT NULL,
   user_id int unsigned NOT NULL default '0',
   status tinyint NOT NULL default '5',
@@ -337,9 +339,10 @@ CREATE TABLE IF NOT EXISTS course_rel_user (
   user_course_cat int default '0',
   relation_type int default 0,
   legal_agreement INTEGER DEFAULT 0,
-  PRIMARY KEY  (course_code,user_id,relation_type)
+  PRIMARY KEY(id)
 );
 ALTER TABLE course_rel_user ADD INDEX (user_id);
+ALTER TABLE course_rel_user ADD INDEX (c_id, user_id);
 
 --
 -- Dumping data for table course_rel_user
@@ -3081,4 +3084,4 @@ CREATE TABLE branch_transaction (
 );
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21455' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21477' WHERE variable = 'chamilo_database_version';

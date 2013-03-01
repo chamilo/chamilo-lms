@@ -118,6 +118,7 @@ ALTER TABLE c_survey_invitation ADD COLUMN group_id INT NOT NULL DEFAULT 0;
 
 ALTER TABLE c_lp ADD COLUMN category_id INT unsigned NOT NULL default 0;
 ALTER TABLE c_lp ADD COLUMN max_attempts INT NOT NULL default 0;
+ALTER TABLE c_lp ADD COLUMN subscribe_users INT NOT NULL default 0;
 
 CREATE TABLE c_lp_category (id int unsigned NOT NULL auto_increment, c_id INT unsigned NOT NULL, name VARCHAR(255), PRIMARY KEY (id));
 
@@ -132,7 +133,22 @@ ALTER TABLE session_rel_course MODIFY COLUMN nbr_users int unsigned NOT NULL def
 ALTER TABLE track_e_exercices MODIFY COLUMN session_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices MODIFY COLUMN exe_exo_id int unsigned NOT NULL default 0;
 
+ALTER TABLE course_rel_user MODIFY COLUMN c_id int unsigned NOT NULL;
+
+ALTER TABLE course_rel_user DROP PRIMARY KEY;
+ALTER TABLE course_rel_user ADD COLUMN c_id int unsigned NOT NULL default 0;
+ALTER TABLE course_rel_user ADD COLUMN id int unsigned AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE course_rel_user ADD INDEX (c_id, user_id);
+
+ALTER TABLE c_item_property MODIFY id INT NOT NULL;
+ALTER TABLE c_item_property DROP PRIMARY KEY;
+ALTER TABLE c_item_property DROP COLUMN id;
+ALTER TABLE c_item_property ADD COLUMN id bigint unsigned NOT NULL auto_increment, ADD PRIMARY KEY (id);
+
+ALTER TABLE c_item_property MODIFY COLUMN start_visible datetime default NULL;
+ALTER TABLE c_item_property MODIFY COLUMN end_visible datetime default NULL;
+
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('user_name_order', NULL, 'textfield', 'Platform', '', 'UserNameOrderTitle', 'UserNameOrderComment', NULL, NULL, 1);
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.21455' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.21477' WHERE variable = 'chamilo_database_version';

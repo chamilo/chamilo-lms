@@ -553,8 +553,11 @@ class CourseManager {
 
         } else {
             $course_sort = self::userCourseSort($user_id, $course_code);
+            $course_info = api_get_course_info($course_code);
             $result = @Database::query("INSERT INTO ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-                    SET course_code = '$course_code',
+                    SET
+                        c_id = ".$course_info['real_id'].",
+                        course_code = '$course_code',
                         user_id     = '$user_id',
                         status      = '".$status."',
                         sort        = '". ($course_sort)."'");

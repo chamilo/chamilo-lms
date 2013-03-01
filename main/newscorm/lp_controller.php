@@ -688,7 +688,7 @@ switch ($action) {
 
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
-
+            $_SESSION['oLP']->set_subscribe_users($_REQUEST['subscribe_users']);
             $_SESSION['oLP']->set_max_attempts($_REQUEST['max_attempts']);
 
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {

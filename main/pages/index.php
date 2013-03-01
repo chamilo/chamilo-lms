@@ -94,8 +94,6 @@ class PagesController {
         //return $grid->getGridResponse('MyProjectMyBundle::myGrid.html.twig');
         */
 
-
-
         $em = $app['orm.em'];
         $dql = 'SELECT a FROM Entity\EntityPages a';
         $query = $em->createQuery($dql)->setFirstResult(0)->setMaxResults(100);

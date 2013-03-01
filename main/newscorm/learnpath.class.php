@@ -69,6 +69,7 @@ class learnpath
     public $lp_view_session_id = 0; // The specific view might be bound to a session.
     public $prerequisite = 0;
     public $use_max_score = 1; // 1 or 0
+    public $subscribe_users = 0;
     public $created_on = '';
     public $modified_on = '';
     public $publicated_on = '';
@@ -157,6 +158,7 @@ class learnpath
                 $this->hide_toc_frame = $row['hide_toc_frame'];
                 $this->lp_session_id = $row['session_id'];
                 $this->use_max_score = $row['use_max_score'];
+                $this->subscribe_users = $row['subscribe_users'];
                 $this->created_on = $row['created_on'];
                 $this->modified_on = $row['modified_on'];
                 $this->ref = $row['ref'];
@@ -2332,13 +2334,13 @@ class learnpath
      * @param   string  Course code (optional)
      * @return    bool    True if
      */
-    public static function is_lp_visible_for_student($lp_id, $student_id, $course = null)
+    public static function is_lp_visible_for_student($lp_id, $student_id, $course_code = null)
     {
         $lp_id = (int)$lp_id;
-        $course = api_get_course_info($course);
+        $course_info = api_get_course_info($course_code);
         $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE c_id = ".$course['real_id']." AND id = $lp_id";
+        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE c_id = ".$course_info['real_id']." AND id = $lp_id";
         $rs = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs) > 0) {
@@ -2347,6 +2349,7 @@ class learnpath
             $is_visible = true;
             $progress = 0;
 
+            //Checking LP prerequisites
             if (!empty($prerequisite)) {
                 $progress = self::get_db_progress($prerequisite, $student_id, '%', '', false, api_get_session_id());
                 $progress = intval($progress);
@@ -2358,7 +2361,7 @@ class learnpath
             // Also check the time availability of the LP
 
             if ($is_visible) {
-                //Adding visibility reestrinctions
+                //Adding visibility restrictions
                 if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
                     if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
                         //api_not_allowed();
@@ -4751,6 +4754,12 @@ class learnpath
         return $this->max_attempts;
     }
 
+
+    public function get_subscribe_users()
+    {
+        return $this->subscribe_users;
+    }
+
     public function check_attempts()
     {
         $max_attempts = $this->get_max_attempts();
@@ -4804,6 +4813,28 @@ class learnpath
     }
 
     /**
+     * Sets subscribe_users
+     * @param   string  $value Optional string giving the new location of this learnpath
+     * @return  bool True on success / False on error
+     */
+    public function set_subscribe_users($value = 0)
+    {
+        if ($this->debug > 0) {
+            error_log('New LP - In learnpath::set_subscribe_users()', 0);
+        }
+        $this->subscribe_users = intval($value);;
+        $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_id = $this->get_id();
+        $sql = "UPDATE $lp_table SET subscribe_users = '".$this->subscribe_users."' WHERE c_id = ".$this->course_int_id." AND id = '$lp_id'";
+
+        if ($this->debug > 2) {
+            error_log('New LP - lp updated with new set_subscribe_users : '.$this->subscribe_users, 0);
+        }
+        Database::query($sql);
+        return true;
+    }
+
+    /**
      * Sets use_max_score
      * @param   string  Optional string giving the new location of this learnpath
      * @return  boolean True on success / False on error
@@ -4813,8 +4844,7 @@ class learnpath
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_use_max_score()', 0);
         }
-        $use_max_score = intval($use_max_score);
-        $this->use_max_score = $use_max_score;
+        $this->use_max_score = intval($use_max_score);
         $lp_table = Database :: get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
         $sql = "UPDATE $lp_table SET use_max_score = '".$this->use_max_score."' WHERE c_id = ".$this->course_int_id." AND id = '$lp_id'";
@@ -4823,7 +4853,6 @@ class learnpath
             error_log('New LP - lp updated with new use_max_score : '.$this->use_max_score, 0);
         }
         Database::query($sql);
-
         return true;
     }
 

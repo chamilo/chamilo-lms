@@ -172,6 +172,8 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
+$form->addElement('checkbox', 'subscribe_users', null, get_lang('SubscribeUsersToLP'));
+
 //Submit button
 $form->addElement('style_submit_button', 'Submit', get_lang('SaveLPSettings'),'class="save"');
 
@@ -180,8 +182,9 @@ $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
 $defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
-$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
+$defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) ) ? api_get_local_time($expired_on): date('Y-m-d 12:00:00', time()+84600);
 $defaults['max_attempts'] = $_SESSION['oLP']->get_max_attempts();
+$defaults['subscribe_users'] = $_SESSION['oLP']->get_subscribe_users();
 $form->setDefaults($defaults);
 
 echo '<div class="row">';

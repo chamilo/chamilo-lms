@@ -103,7 +103,6 @@ if ($is_allowed_to_edit) {
 
 /* DISPLAY SCORM LIST */
 
-
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
 
 $category_test = new Entity\EntityCLpCategory;
@@ -155,10 +154,10 @@ foreach ($categories as $item) {
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
-        $autolunch_exists = false;
+        $autolaunch_exists = false;
         foreach ($flat_list as $id => $details) {
 
-            // Validacion when belongs to a session
+            // Validation when belongs to a session
             $session_img = api_get_session_image($details['lp_session'], $_user['status']);
 
             if (!$is_allowed_to_edit && $details['lp_visibility'] == 0) {
@@ -353,7 +352,7 @@ foreach ($categories as $item) {
                     }
                 }
 
-                /*  DEBUG  */
+                /*  Debug  */
 
                 if ($test_mode == 'test' or api_is_platform_admin()) {
                     if ($details['lp_scorm_debug'] == 1) {
@@ -379,11 +378,17 @@ foreach ($categories as $item) {
                 //Copy
                 $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
+                //Subscribe users
+                $subscribe_users = null;
+                if ($details['subscribe_users'] == 1) {
+                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), "lp_subscribe_users.php?lp_id=$id");
+                }
+
                 /* Auto Lunch LP code */
                 $lp_auto_lunch_icon = '';
                 if (api_get_course_setting('enable_lp_auto_launch') == 1) {
-                    if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
-                        $autolunch_exists = true;
+                    if ($details['autolaunch'] == 1 && $autolaunch_exists == false) {
+                        $autolaunch_exists = true;
                         $lp_auto_lunch_icon = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=auto_launch&status=0&lp_id='.$id.'">
                         <img src="../img/launch.png" border="0" title="'.get_lang('DisableLPAutoLaunch').'" /></a>';
                     } else {
@@ -406,7 +411,6 @@ foreach ($categories as $item) {
                 } else {
                     $dsp_delete = Display::return_icon('delete_na.png', get_lang('LearnpathDeleteLearnpath'), '', ICON_SIZE_SMALL);
                 }
-
 
                 /* COLUMN ORDER	 */
 
@@ -440,14 +444,14 @@ foreach ($categories as $item) {
                 $export_icon = ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=export_to_pdf&lp_id='.$id.'">'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
             }
 
-            echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$dsp_reinit.
+            echo $dsp_line.$start_time.$end_time.$dsp_progress.$dsp_desc.$dsp_export.$dsp_edit.$dsp_build.$dsp_edit_lp.$dsp_visible.$dsp_publish.$subscribe_users.$dsp_reinit.
             $dsp_default_view.$dsp_debug.$dsp_disk.$copy.$lp_auto_lunch_icon.$export_icon.$dsp_delete.$dsp_order.$dsp_edit_close;
             $lp_showed = true;
 
             echo "</tr>";
             $current++; //counter for number of elements treated
         } // end foreach ($flat_list)
-        // TODO: Erint some user-friendly message if counter is still = 0 to tell nothing can be display yet.
+        // TODO: Some user-friendly message if counter is still = 0 to tell nothing can be display yet.
         echo "</table>";
     }
 }
@@ -465,6 +469,6 @@ $course_info = api_get_course_info();
 learnpath::generate_learning_path_folder($course_info);
 
 //Deleting the objects
-    Session::erase('oLP');
-    Session::erase('lpobject');
-    Display::display_footer();
+Session::erase('oLP');
+Session::erase('lpobject');
+Display::display_footer();

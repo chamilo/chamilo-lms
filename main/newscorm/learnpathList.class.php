@@ -119,6 +119,7 @@ class learnpathList {
             } else {
                 $row['expired_on'] = '';
             }
+            //@todo user LP object
             $this->list[$row['id']] = array(
                 'lp_type'           => $row['lp_type'],
                 'lp_session'        => $row['session_id'],
@@ -144,7 +145,8 @@ class learnpathList {
                 'modified_on'       => $row['modified_on'],
                 'publicated_on'     => $row['publicated_on'],
                 'expired_on'        => $row['expired_on'],
-                'category_id'        => $row['category_id']
+                'category_id'       => $row['category_id'],
+                'subscribe_users'   => $row['subscribe_users']
             );
             $names[$row['name']] = $row['id'];
         }

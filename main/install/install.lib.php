@@ -3734,6 +3734,7 @@ function create_course_tables($course_db_name = null)
         "hide_toc_frame tinyint 			NOT NULL DEFAULT 0, ".
         "seriousgame_mode tinyint 			NOT NULL DEFAULT 0, ".
         "use_max_score  int unsigned        not null default 1, ".
+        "subscribe_users  int unsigned      not null default 0, ".
         "autolunch      int unsigned        not null default 0, ". // auto lunch LP
         "created_on     DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', ".
         "modified_on    DATETIME 			NOT NULL DEFAULT '0000-00-00 00:00:00', ".

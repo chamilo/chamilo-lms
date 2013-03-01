@@ -19,10 +19,10 @@
  *         but use a redirect immediately. By doing so the $already_installed variable can be removed.
  * @todo make it possible to enable / disable the tracking through the Chamilo config page.
  *
+ *
  */
 
 //@todo will be removed before a stable release
-
 $mtime = microtime();
 $mtime = explode(" ", $mtime);
 $mtime = $mtime[1] + $mtime[0];
@@ -145,6 +145,40 @@ $app->register(
 
 //Form provider
 $app->register(new Silex\Provider\FormServiceProvider());
+/*
+use Doctrine\Common\Persistence\AbstractManagerRegistry;
+
+class ManagerRegistry extends AbstractManagerRegistry
+{
+    protected $container;
+
+    protected function getService($name)
+    {
+        return $this->container[$name];
+    }
+
+    protected function resetService($name)
+    {
+        unset($this->container[$name]);
+    }
+
+    public function getAliasNamespace($alias)
+    {
+        throw new \BadMethodCallException('Namespace aliases not supported.');
+    }
+
+    public function setContainer(Application $container)
+    {
+        $this->container = $container;
+    }
+}
+
+$app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
+    $managerRegistry = new ManagerRegistry(null, array(), array('orm.em'), null, null, $app['orm.proxies_namespace']);
+    $managerRegistry->setContainer($app);
+    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($managerRegistry);
+    return $extensions;
+}));*/
 
 //Monolog
 if (is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
@@ -228,7 +262,9 @@ if (isset($_configuration['main_database'])) {
     $app->register(
         new Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider,
         array(
+            'orm.auto_generate_proxies' => true,
             "orm.proxies_dir" => $app['db.orm.proxies_dir'],
+            //'orm.proxies_namespace' => '\Doctrine\ORM\Proxy\Proxy',
             "orm.em.options" => array(
                 "mappings" => array(
                     array(
@@ -340,10 +376,17 @@ $app->before(
     }
 );
 
-$app->after(
-    function () {
-    }
-);
+if ($app['debug']) {
+    $logger = new Doctrine\DBAL\Logging\DebugStack();
+    $app['db.config']->setSQLLogger($logger);
+
+    $app->after(function() use ($app, $logger) {
+        // Log all queries as DEBUG.
+        foreach ( $logger->queries as $query ) {
+            $app['monolog']->debug($query['sql'], array('params' =>$query['params'], 'types' => $query['types']));
+        }
+    });
+}
 
 $app->finish(
     function () use ($app) {
@@ -378,7 +421,6 @@ require_once $lib_path.'text.lib.php';
 require_once $lib_path.'array.lib.php';
 require_once $lib_path.'events.lib.inc.php';
 require_once $lib_path.'online.inc.php';
-
 
 /*  DATABASE CONNECTION  */
 
@@ -540,7 +582,7 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
 }
 
-//error_reporting(-1);
+error_reporting(-1);
 if (api_get_setting('server_type') == 'test') {
     //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 } else {
@@ -550,7 +592,7 @@ if (api_get_setting('server_type') == 'test') {
     - full fake register globals block
     */
     error_reporting(E_COMPILE_ERROR | E_ERROR | E_CORE_ERROR);
-
+/*
     // TODO: These obsolete variables $HTTP_* to be check whether they are actually used.
     if (!isset($HTTP_GET_VARS)) {
         $HTTP_GET_VARS = $_GET;
@@ -588,7 +630,7 @@ if (api_get_setting('server_type') == 'test') {
                 $GLOBALS[$key] = $HTTP_SERVER_VARS[$key];
             }
         }
-    }
+    }*/
 }
 
 /*	LOAD LANGUAGE FILES SECTION */

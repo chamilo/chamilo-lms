@@ -690,6 +690,7 @@ if (isset($_GET['studentoverview'])) {
             $cat->set_parent_id(0);
             $cat->set_weight(100);
             $cat->set_visible(0);
+            $cat->set_certificate_min_score(75);
             $can_edit = api_is_allowed_to_edit(true, true);
             if ($can_edit) {
                 $cat->add();

@@ -28,6 +28,7 @@ if (empty($servers)) {
 }
 
 $data_list = array('users'=>array(),'courses'=>array(),'sessions'=>array());
+$utc_datetime = api_get_utc_datetime();
 
 $start = time();
 echo "\n-- Starting at ".date('h:i:s')." local server time\n";

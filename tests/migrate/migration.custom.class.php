@@ -438,6 +438,8 @@ class MigrationCustom {
         //error_log('create_attendance');
         $session_id = $data['session_id'];
         $user_id    = $data['user_id'];
+        $time = self::get_horario_value($session_id);
+        $fecha = $data['fecha']." $time:00";
 
         if (!empty($session_id) && !empty($user_id)) {
             $attendance = new Attendance();
@@ -449,7 +451,7 @@ class MigrationCustom {
                 $course_list = SessionManager::get_course_list_by_session_id($session_id);
             }
 
-            $attendance_id = null;
+            $attendance_sheet_id = null;
 
             if (!empty($course_list)) {
                 //We know there's only one course by session. Take it.
@@ -467,7 +469,7 @@ class MigrationCustom {
                     $attendance->set_course_int_id($course_info['real_id']);
                     $attendance->set_session_id($session_id);
 
-                    if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                    if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions'] && isset($data_list['sessions_attendances'][$course_info['real_id']][$session_id])) {
                         $list = $data_list['sessions_attendances'][$course_info['real_id']][$session_id];
                         foreach ($list as $at_id) {
                             $attendance_list[] = array('id' => $at_id);
@@ -482,52 +484,58 @@ class MigrationCustom {
                         //$attendance->set_attendance_weight($_POST['attendance_weight']);
                         $link_to_gradebook = false;
                         //$attendance->category_id = $_POST['category_id'];
-                        $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);
+                        $attendance_sheet_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);
                         if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
-                            $data_list['sessions_attendances'][$course_info['real_id']][$session_id][] = $attendance_id;
+                            $data_list['sessions_attendances'][$course_info['real_id']][$session_id][] = $attendance_sheet_id;
                         }
                         //error_log("Attendance added course code: {$course['code']} - session_id: $session_id");
                         //only 1 course per session
                     } else {
+                        // Only one attendance sheet by course and session (at least during migration)
                         $attendance_data = current($attendance_list);
-                        $attendance_id = $attendance_data['id'];
-                        //error_log("Attendance found in attendance_id = $attendance_id - course code: {$course['code']} - session_id: $session_id");
+                        $attendance_sheet_id = $attendance_data['id'];
+                        //error_log("Attendance found in attendance_sheet_id = $attendance_sheet_id - course code: {$course['code']} - session_id: $session_id");
                     }
-
-                    if ($attendance_id) {
+                    // Now the attendance_sheet has been found or created, check the date
+                    if ($attendance_sheet_id) {
+                        //error_log('Processing attendance sheet '.$attendance_sheeet_id.' for session '.$session_id.', course '.$course_info['real_id'].', date '.$fecha);
                         //Attendance date exists?
-                        if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
-                            $cal_info['id'] = $data_list['sessions_attendance_dates'][$attendance_id][$data['fecha']];
+                        $cal_info = array();
+                        $cal_id = null;
+                        if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions'] && $data_list['sessions_attendance_dates'][$attendance_sheet_id][$fecha]) {
+                            $cal_info['id'] = $data_list['sessions_attendance_dates'][$attendance_sheet_id][$fecha];
                         } else {
-                            $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $data['fecha']);
+                            $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_sheet_id, $fecha);
                         }
-                        if ($cal_info && isset($cal_info['id'])) {
+                        // Get (or create) the attendance date ID
+                        if (isset($cal_info['id'])) {
                             $cal_id = $cal_info['id'];
                         } else {
-                            //Creating the attendance date
-                            $attendance->set_date_time($data['fecha']);
-                            $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
+                            $attendance->set_date_time($fecha);
+                            //Creating the attendance date and get ID
+                            $cal_id = $attendance->attendance_calendar_add($attendance_sheet_id, true);
                             if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
-                                $data_list['sessions_attendance_dates'][$attendance_id][$data['fecha']] = $cal_id;
+                                $data_list['sessions_attendance_dates'][$attendance_sheet_id][$fecha] = $cal_id;
                             }
                             //error_log("Creating attendance calendar $cal_id");
                         }
                         //Adding presence for the user (by default everybody is present)
                         $users_present = array($user_id => $data['status']);
                         if (is_array($data_list['create_attendance'])) {
-                            $data_list['create_attendance'][] = array($cal_id, $user_id, $data['status'], $attendance_id, $course_info['real_id'], $data['fecha']);
+                            $data_list['create_attendance'][] = array($cal_id, $user_id, $data['status'], $attendance_sheet_id, $course_info['real_id'], $fecha);
                             $limit = 100;
                             if (count($data_list['create_attendance']) == $limit) {
-                                //error_log('Flushing attendances list because reached '.$limit);
+                                //error_log('Flushing attendances list because reached '.$limit.": \n".print_r($data_list['create_attendance'],1));
                                 $attendance->attendance_sheet_group_add($data_list['create_attendance'],false,true);
                                 $data_list['create_attendance'] = array();
                             }
                         } else {
-                            $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_id, false,  true);
+                            $attendance->attendance_sheet_add($cal_id, $users_present, $attendance_sheet_id, false,  true);
                         }
                         //error_log("Adding calendar to user: $user_id to calendar: $cal_id");
                     } else {
-                        error_log('No attendance_id created');
+                        // We should never get here
+                        error_log('No attendance_sheet_id created');
                     }
                 } else {
                     error_log("Course not found for session: $session_id");
@@ -625,10 +633,16 @@ class MigrationCustom {
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
-                    //Get gradebook
-                    $gradebook = array('id' => $data_list['session_course_gradebook'][$course_data['code']][$session_id]);
-                    //$gradebook = new Gradebook();
-                    //$gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                    //Get gradebook (if does not exist, create it)
+                    $gradebook = null;
+                    if (!empty($data_list['session_course_gradebook'][$course_data['code']][$session_id])) {
+                        $gradebook = array('id' => $data_list['session_course_gradebook'][$course_data['code']][$session_id]);
+                    } else {
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                        $gradebook = array('id' => create_default_course_gradebook($course_data['code'], false, $session_id));
+                        error_log('Gradebook not found. Creating one with ID '.$gradebook['id']);
+                        $data_list['session_course_gradebook'][$course_data['code']][$session_id] = $gradebook['id'];
+                    }
                     if (!empty($gradebook)) {
                         //Check if gradebook exists
                         $eval = 0;
@@ -637,7 +651,7 @@ class MigrationCustom {
                             return null;
                         }
                         $eval = new Evaluation();
-                        $evals_found = $eval->load(null, null, $course_data['code'], null, null, null, $data['gradebook_description']);
+                        $evals_found = $eval->load(null, null, $course_data['code'], $gradebook['id'], null, null, $data['gradebook_description']);
 
                         if (empty($evals_found)) {
                             $eval->set_name($data['gradebook_description']);
@@ -961,6 +975,7 @@ class MigrationCustom {
         $uidIdPersona = $data['item_id'];
         $uidIdPrograma = $data['orig_id'];
         $uidIdProgramaDestination = $data['dest_id'];
+        $status = (!empty($data['info'])?$data['info']:null);
         global $data_list;
         $user_id = self::get_user_id_by_persona_id($uidIdPersona,$data_list);
 
@@ -1037,7 +1052,20 @@ class MigrationCustom {
             $session_id = self::get_session_id_by_programa_id($uidIdProgramaDestination, $data_list);
             if (!empty($session_id)) {
                 $before = SessionManager::get_user_status_in_session($session_id, $user_id);
-                SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                if (isset($status) && $status == 1) {
+                    $course_list = SessionManager::get_course_list_by_session_id($session_id);
+                    if (!empty($course_list)) {
+                        $course_data = current($course_list);
+                        SessionManager::set_coach_to_course_session($user_id, $session_id, $course_data['code']);
+                    } else {
+                        return array(
+                            'message' => 'Could not subscribe to course: no course in session '.$uidIdProgramaDestination,
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                    }
+                } else {
+                    SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+                }
                 $message = 'Move empty to Session';
                 return self::check_if_user_is_subscribe_to_session($user_id, $session_id, $message, $before);
             } else {
@@ -1697,10 +1725,16 @@ class MigrationCustom {
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
+                    //Look for gradebook and create it if it does not exist yet
                     $gradebook = new Gradebook();
                     $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
                     error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
-
+                    if (count($gradebook)===0) {
+                        require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                        $gradebook = array('id' => create_default_course_gradebook($course_data['code'], false, $session_id));
+                        error_log('Gradebook not found. Creating one with ID '.$gradebook['id']);
+                        $data_list['session_course_gradebook'][$course_data['code']][$session_id] = $gradebook['id'];
+                    }
                     if (!empty($gradebook)) {
                         //Check if gradebook exists
                         $eval = new Evaluation();
@@ -1805,9 +1839,22 @@ class MigrationCustom {
             if (!empty($course_list)) {
                 $course_data = current($course_list);
                 if (isset($course_data['code'])) {
-                    $gradebook = new Gradebook();
-                    $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
-                    error_log("Looking gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                    $gradebook = null;
+                    if (!empty($data_list['session_course_gradebook'][$course_data['code']][$session_id])) {
+                        $gradebook['id'] = $data_list['session_course_gradebook'][$course_data['code']][$session_id];
+                    } else {
+                        $gradebook = new Gradebook();
+                        $gradebook = $gradebook->get_first(array('where' => array('course_code = ? AND session_id = ?' => array($course_data['code'], $session_id))));
+                        error_log("Searching for gradebook in course code:  {$course_data['code']} - session_id: $session_id");
+                        if (count($gradebook)===0) {
+                            require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
+                            $gradebook = array('id' => create_default_course_gradebook($course_data['code'], false, $session_id));
+                            error_log('Gradebook not found. Creating one with ID '.$gradebook['id']);
+                            $data_list['session_course_gradebook'][$course_data['code']][$session_id] = $gradebook['id'];
+                        }
+                    }
+                    // At this point we tried 3 different ways of obtaining a
+                    // gradebook id, so no chance to fail (hopefully)
                     if (!empty($gradebook)) {
                         //Check if gradebook exists
                         $eval = new Evaluation();
@@ -1994,7 +2041,7 @@ class MigrationCustom {
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
-            'sdtfecha'     => $original_data['info'],
+            'uididfecha'     => $original_data['info'],
             'intIdSede'    => $original_data['branch_id']
         ));
 
@@ -2039,7 +2086,8 @@ class MigrationCustom {
                             'status_id' => self::TRANSACTION_STATUS_FAILED
                         );
                     }
-
+                    // attendance are registered with date + time, so get time 
+                    // from session schedule
                     $time = self::get_horario_value($session_id);
                     $attendance_date .= " $time:00";
 
@@ -2049,16 +2097,34 @@ class MigrationCustom {
                     $attendance->set_course_id($course_info['code']);
                     $attendance->set_course_int_id($course_info['real_id']);
                     $attendance->set_session_id($session_id);
+                    $attendance_list = array();
+                    if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions'] && isset($data_list['sessions_attendances'][$course_info['real_id']][$session_id])) {
+                        //error_log('Found reference to an existing sheet in data_list');
+                        $list = $data_list['sessions_attendances'][$course_info['real_id']][$session_id];
+                        foreach ($list as $at_id) {
+                            $attendance_list[$at_id] = array('id' => $at_id);
+                            //error_log('attendance sheet is '.$at_id);
+                        }
+                    } else {
+                        $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
+                        //error_log('Gotten attendance_sheet from table '.$attendance_list[0]['id']);
+                    }
 
-                    $attendance_list = $attendance->get_attendances_list($course_info['real_id'], $session_id);
-
-                    if (empty($attendance_list)) {
+                    if (count($attendance_list)==0) {
                         $d = array(
                             'session_id' => $session_id,
                             'user_id' => $user_id,
                             'fecha' => $attendance_date,
                             'status' => $attendance_user_status,
                         );
+                        $attendance->set_name('Asistencia');
+                        $attendance->set_description('');
+                        $link_to_gradebook = false;
+                        $attendance_id = $attendance->attendance_add($link_to_gradebook, self::default_admin_id);
+                        if (is_array($data_list) && isset($data_list) && $data_list['boost_sessions']) {
+                            $data_list['sessions_attendances'][$course_info['real_id']][$session_id][] = $attendance_sheet_id;
+                        }
+                        //error_log("Attendance created in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
                         //self::create_attendance($d);
                         /*return array(
                             'entity' => 'attendance_sheet',
@@ -2067,16 +2133,18 @@ class MigrationCustom {
                             'message' => "Attendance sheet added with id: $result",
                             'status_id' => self::TRANSACTION_STATUS_SUCCESSFUL
                         );*/
-                    //    return array(
-                    //        'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
-                    //        'status_id' => self::TRANSACTION_STATUS_FAILED
-                    //    );
+                        /*
+                        return array(
+                            'message' => "Attendance not found for course code: {$course_info['code']} - session_id: $session_id",
+                            'status_id' => self::TRANSACTION_STATUS_FAILED
+                        );
+                        */
                         //only 1 course per session
                     } else {
                     
                         $attendance_data = current($attendance_list);
                         $attendance_id = $attendance_data['id'];
-                        error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
+                        //error_log("Attendance found in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id - $attendance_date");
                     }
 
                     $cal_info = $attendance->get_attendance_calendar_data_by_date($attendance_id, $attendance_date);
@@ -2087,9 +2155,10 @@ class MigrationCustom {
 
                         //Creating the attendance date
                         $attendance->set_date_time($attendance_date);
+error_log('Setting date '.$attendance_date);
                         $cal_id = $attendance->attendance_calendar_add($attendance_id, true);
 
-                        error_log("Creating a new calendar item $cal_id");
+                        //error_log("Creating a new calendar item $cal_id");
 
                         /*return array(
                             'message' => "Attendance calendar does not exist for date: $attendance_date in attendance_id = $attendance_id - course code: {$course_info['code']} - session_id: $session_id",
@@ -2147,7 +2216,7 @@ class MigrationCustom {
         $data = Migration::soap_call($web_service_details, 'asistenciaDetalles', array(
             'uididpersona' => $original_data['item_id'],
             'uididprograma'=> $original_data['orig_id'],
-            'sdtfecha'     => $original_data['info'],
+            'uididfecha'     => $original_data['info'],
             'intIdSede'    => $original_data['branch_id']
         ));
 
@@ -2986,9 +3055,9 @@ class MigrationCustom {
         if (isset($horario_info) && isset($horario_info[0])) {
             $horario = $horario_info[0]['option_display_text'];
             $horario_array = explode(' ', $horario);
-
-            if (isset($horario_array[0])) {
-                $time = $horario_array[0];
+            //Schedule format is "(01) 07:00 09:00" in this case. Adapt to your case
+            if (isset($horario_array[1])) {
+                $time = $horario_array[1];
             }
         }
         return $time;

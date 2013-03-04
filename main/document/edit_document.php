@@ -213,7 +213,7 @@ if (empty($document_data['parents'])) {
     }
 }
 
-if (!is_allowed_to_edit) {
+if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 

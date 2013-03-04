@@ -7,17 +7,16 @@
  * @author Diego Escalante Urrelo <diegoe@gmail.com>
  * @author Marco Antonio Villegas Vega <marvil07@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> Lots of bug fixing
- * 
+ *
  */
 /**
- * Code 
+ * Code
  */
 require api_get_path(LIBRARY_PATH).'search/search_widget.php';
 require api_get_path(LIBRARY_PATH).'search/ChamiloQuery.php';
 require_once api_get_path(LIBRARY_PATH).'search/IndexableChunk.class.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
-$htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'. api_get_path(WEB_PATH) .'main/newscorm/lp_list_search.css" />';
 event_access_tool(TOOL_SEARCH);
 
 if (isset($_SESSION['gradebook'])){
@@ -79,7 +78,7 @@ foreach ($specific_fields as $specific_field) {
             }
         }
     } else {
-        $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);        
+        $sf_terms_for_code = xapian_get_all_terms(1000, $specific_field['code']);
         foreach ($sf_terms_for_code as $term) {
             if (!empty($term)) {
                 $term_array[] = chamilo_get_boolean_query($term['name']); // Here name includes prefix.
@@ -91,19 +90,19 @@ foreach ($specific_fields as $specific_field) {
 // Get right group of terms to show on multiple select.
 $fixed_queries = array();
 $course_filter = NULL;
-if ( ($cid=api_get_course_id()) != -1 ) {    
+if ( ($cid=api_get_course_id()) != -1 ) {
     // Results only from actual course.
     $course_filter = chamilo_get_boolean_query(XAPIAN_PREFIX_COURSEID . $cid);
 }
 
-if (count($term_array)) {    
+if (count($term_array)) {
     $fixed_queries = chamilo_join_queries($term_array, null, $op);
-    
+
     if ($course_filter != NULL) {
         $fixed_queries = chamilo_join_queries($fixed_queries, $course_filter, 'and');
     }
 } else {
-    if (!empty($query)) {        
+    if (!empty($query)) {
         $fixed_queries = array($course_filter);
     }
 }
@@ -166,7 +165,7 @@ if (count($blocks) > 0) {
         }
     }
     $additional_parameters['operator'] = $op;
-    
+
     $s->additional_parameters = $additional_parameters;
 
     if ($mode == 'default') {

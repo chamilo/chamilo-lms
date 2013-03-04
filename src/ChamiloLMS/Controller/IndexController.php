@@ -19,7 +19,7 @@ class IndexController
     {
         $request = $app['request'];
 
-        $token = $app['security']->getToken();
+        //$token = $app['security']->getToken();
 
         //Actions
         $logout = $request->get('logout');
@@ -215,7 +215,7 @@ class IndexController
           return $app['template']->assign('form', $form->createView());
          */
 
-        $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
+        $form = new \FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
         $form->addElement(
             'text',
             'login',

@@ -1114,6 +1114,9 @@ function _api_format_user($user, $add_password = false) {
     if (api_is_anonymous()) {
         return $user;
     }
+
+    $firstname = $lastname = null;
+
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
@@ -1222,7 +1225,7 @@ function _api_format_user($user, $add_password = false) {
  */
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false, $add_extra_values = false) {
     if ($user_id == '') {
-        return _api_format_user($GLOBALS['_user']);
+        return _api_format_user(api_get_user_id());
     }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE user_id='".Database::escape_string($user_id)."'";
     $result = Database::query($sql);
@@ -6741,6 +6744,7 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $body, $send
 	         }
 	    }
     }
+
     $message = str_replace(array("\n\r", "\n", "\r"), '<br />', $message);
     $mail->Body = '<html><head></head><body>'.$message.'</body></html>';
 

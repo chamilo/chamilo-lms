@@ -352,6 +352,7 @@ class PageController
      */
     static function return_reservation_block() {
         $html = '';
+        $booking_content = null;
         if (api_get_setting('allow_reservation') == 'true' && api_is_allowed_to_create_course()) {
             $booking_content .='<ul class="nav nav-list">';
             $booking_content .='<a href="main/reservation/reservation.php">'.get_lang('ManageReservations').'</a><br />';
@@ -397,7 +398,7 @@ class PageController
      * @return void Doesn't return anything but prepares and HTML block for use in templates
      * @assert () !== 1
      */
-    static function return_exercise_block($personal_course_list) {
+    static function return_exercise_block($personal_course_list, $tpl) {
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         $exercise_list = array();
         if (!empty($personal_course_list)) {
@@ -419,8 +420,8 @@ class PageController
                 $exercise_list = msort($exercise_list, 'tms');
                 $my_exercise = $exercise_list[0];
                 $url = Display::url($my_exercise['title'], api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$my_exercise['id'].'&cidReq='.$my_exercise['course_code'].'&id_session='.$my_exercise['session_id']);
-                $this->page->assign('exercise_url', $url);
-                $this->page->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
+                $tpl->assign('exercise_url', $url);
+                $tpl->assign('exercise_end_date', api_convert_and_format_date($my_exercise['end_time'], DATE_FORMAT_SHORT));
             }
         }
     }
@@ -764,7 +765,7 @@ class PageController
         $special_courses = '';
 
         $load_directories_preview = api_get_setting('show_documents_preview') == 'true' ? true : false;
-        
+
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
             //Display special courses

@@ -58,7 +58,7 @@ function online_logout($user_id = null, $logout_redirect = false) {
     $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
     if (empty($user_id)) {
-        $user_id = intval($_GET['uid']);
+        $user_id = api_get_user_id();
     }
 
     //Changing global chat status to offline
@@ -70,15 +70,17 @@ function online_logout($user_id = null, $logout_redirect = false) {
     // selecting the last login of the user
     $sql_last_connection="SELECT login_id, login_date FROM $tbl_track_login WHERE login_user_id='$user_id' ORDER BY login_date DESC LIMIT 0,1";
     $q_last_connection=Database::query($sql_last_connection);
+    $i_id_last_connection = null;
     if (Database::num_rows($q_last_connection)>0) {
-        $i_id_last_connection=Database::result($q_last_connection,0,"login_id");
+        $i_id_last_connection = Database::result($q_last_connection,0,"login_id");
     }
 
-    if (!isset($_SESSION['login_as'])) {
+    if (!isset($_SESSION['login_as']) && !empty($i_id_last_connection)) {
         $current_date = api_get_utc_datetime();
-        $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id='$i_id_last_connection'";
+        $s_sql_update_logout_date="UPDATE $tbl_track_login SET logout_date='".$current_date."' WHERE login_id = '$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
+
     LoginDelete($user_id); //from inc/lib/online.inc.php - removes the "online" status
 
     //the following code enables the use of an external logout function.

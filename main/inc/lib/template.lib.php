@@ -10,7 +10,6 @@ use \ChamiloSession as Session;
 
 class Template
 {
-
     public $style = 'default'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc

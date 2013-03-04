@@ -8,7 +8,6 @@
  *   (which doesn't occur anymore when servertype config setting is set to test,
  *    and which will disappear completely in Dokeos 1.6.1)
  * - include of /conf/configuration.php;
- * - include of several libraries: main_api, database, display, text, security;
  * - selecting the main database;
  * - include of language files.
  *
@@ -130,6 +129,71 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 ));*/
 
 //$app->register(new Silex\Provider\SessionServiceProvider());
+
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\User;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Doctrine\DBAL\Connection;
+
+class UserProvider implements UserProviderInterface
+{
+    private $conn;
+
+    public function __construct(Connection $conn)
+    {
+        $this->conn = $conn;
+    }
+
+    public function loadUserByUsername($username)
+    {
+        $stmt = $this->conn->executeQuery('SELECT * FROM users WHERE username = ?', array(strtolower($username)));
+
+        if (!$user = $stmt->fetch()) {
+            throw new UsernameNotFoundException(sprintf('Username "%s" does not exist.', $username));
+        }
+        $roles = 'student';
+        echo $user['username'];exit;
+        return new User($user['username'], $user['password'], explode(',', $roles), true, true, true, true);
+    }
+
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        return $this->loadUserByUsername($user->getUsername());
+    }
+
+    public function supportsClass($class)
+    {
+        return $class === 'Symfony\Component\Security\Core\User\User';
+    }
+}
+/*
+$app->register(new Silex\Provider\SecurityServiceProvider(), array(
+    'security.firewalls' => array(
+        'secured' => array(
+            'pattern' => '^/admin/',
+            'form'    => array(
+                'login_path' => '/login',
+                'check_path' => '/admin/login_check'
+            ),
+            'logout' => array('path' => '/logout', 'target' => '/'),
+            'users' => $app->share(function() use ($app) {
+                return new UserProvider($app['db']);
+            })
+        )
+    ),
+    'security.role_hierarchy'=> array(
+        'ROLE_ADMIN' => array('ROLE_EDITOR'),
+        "ROLE_EDITOR" => array('ROLE_WRITER'),
+        "ROLE_WRITER" => array('ROLE_USER'),
+        "ROLE_USER" => array("ROLE_SUSCRIBER"),
+    )
+));*/
 
 //URL generator provider
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
@@ -311,15 +375,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
 //Registering Chamilo service provider
 $app->register(new ChamiloServiceProvider(), array());
-
-//Controllers as services
-$app->register(new Silex\Provider\ServiceControllerServiceProvider());
-
-$app['pages.controller'] = $app->share(
-    function () use ($app) {
-        return new PagesController($app['pages.repository']);
-    }
-);
 
 //Manage error messages
 
@@ -883,4 +938,44 @@ if (empty($default_quota)) {
 }
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
+//Controllers as services
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+
+$app['pages.controller'] = $app->share(function () use ($app) {
+    return new PagesController($app['pages.repository']);
+});
+
+$app['index.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\IndexController();
+});
+
+$app['userportal.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\UserPortalController();
+});
+
+/*
+class PostController
+{
+    protected $repo;
+
+    public function __construct()
+    {
+    }
+    public function indexJsonAction()
+    {
+        return 'ddd';
+    }
+}
+
+$app['posts.controller'] = $app->share(function() use ($app) {
+    return new PostController();
+});
+$app->mount('/', "posts.controller");*/
+
+//index.php
+$app->get('/', 'index.controller:indexAction');
+//user_portal.php
+$app->get('/userportal', 'userportal.controller:indexAction');
+
+//$app->mount('/', 'index.controller');
 return $app;

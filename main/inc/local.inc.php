@@ -20,98 +20,8 @@
  * The course id is stored in $_cid session variable.
  * The group  id is stored in $_gid session variable.
  *
- *
- *                    VARIABLES AFFECTING THE SCRIPT BEHAVIOR
- *
- * string  $login
- * string  $password
- * boolean $logout
- *
- * string  $cidReq   : course id requested
- * boolean $cidReset : ask for a course Reset, if no $cidReq is provided in the
- *                     same time, all course informations is removed from the
- *                     current session
- *
- * int     $gidReq   : group Id requested
- * boolean $gidReset : ask for a group Reset, if no $gidReq is provided in the
- *                     same time, all group informations is removed from the
- *                     current session
- *
- *
- *                   VARIABLES SET AND RETURNED BY THE SCRIPT
- *
- * All the variables below are set and returned by this script.
- *
- * USER VARIABLES
- *
- * string    $_user ['firstName'   ]
- * string    $_user ['lastName'    ]
- * string    $_user ['mail'        ]
- * string    $_user ['lastLogin'   ]
- * string    $_user ['official_code']
- * string    $_user ['picture_uri'  ]
- * string    $_user['user_id']
- *
- * boolean $is_platformAdmin
- * boolean $is_allowedCreateCourse
- *
- * COURSE VARIABLES
- * see the function get_course_info_with_category
-* boolean $is_courseMember
-* boolean $is_courseTutor
-* boolean $is_courseAdmin
-*
-*
-* GROUP VARIABLES
-*
-* int     $_gid (the group id)
-*
-*
-*                       IMPORTANT ADVICE FOR DEVELOPERS
-*
-* We strongly encourage developers to use a connection layer at the top of
-* their scripts rather than use these variables, as they are, inside the core
-* of their scripts. It will make code maintenance much easier.
-*
-*    Many if the functions you need you can already find in the
-*    main_api.lib.php
-*
-* We encourage you to use functions to access these global "kernel" variables.
-* You can add them to e.g. the main API library.
-*
-*
-*                               SCRIPT STRUCTURE
-*
-* 1. The script determines if there is an authentication attempt. This part
-* only chek if the login name and password are valid. Afterwards, it set the
-* $_user['user_id'] (user id) and the $uidReset flag. Other user informations are retrieved
-* later. It's also in this section that optional external authentication
-* devices step in.
-*
-* 2. The script determines what other session informations have to be set or
-* reset, setting correctly $cidReset (for course) and $gidReset (for group).
-*
-* 3. If needed, the script retrieves the other user informations (first name,
-		* last name, ...) and stores them in session.
-*
-* 4. If needed, the script retrieves the course information and stores them
-* in session
-*
-* 5. The script initializes the user permission status and permission for the
-* course level
-*
-* 6. If needed, the script retrieves group informations an store them in
-* session.
-*
-* 7. The script initializes the user status and permission for the group level.
-*
-*    @package chamilo.include
+ *    @package chamilo.include
 */
-
-/*
-	 INIT SECTION
-	 variables should be initialised here
- */
 
 //require_once api_get_path(LIBRARY_PATH).'conditionallogin.lib.php'; moved to autologin
 // verified if exists the username and password in session current
@@ -125,7 +35,7 @@ if (isset($_SESSION['conditional_login']['uid']) && $_SESSION['conditional_login
 
     $_user['user_id'] = $_SESSION['conditional_login']['uid'];
     $_user['status']  = $uData['status'];
-    Session::write('_user',$_user);
+    Session::write('_user', $_user);
     Session::erase('conditional_login');
     $uidReset=true;
     event_login();
@@ -218,7 +128,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     }
 
     $cas_login=false;
-    if ($cas_activated  AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) {
+    if ($cas_activated AND !isset($_user['user_id']) and !isset($_POST['login'])  && !$logout) {
         require_once api_get_path(SYS_PATH).'main/auth/cas/authcas.php';
         $cas_login = cas_is_authenticated();
     }
@@ -603,7 +513,6 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             // Extracting the user data
 
             $uData = Database::fetch_array($result);
-
             $_user =  _api_format_user($uData, false);
             $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
 
@@ -611,7 +520,7 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
 
-            Session::write('_user',$_user);
+            Session::write('_user', $_user);
             UserManager::update_extra_field_value($_user['user_id'], 'already_logged_in', 'true');
             Session::write('is_platformAdmin',$is_platformAdmin);
             Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);

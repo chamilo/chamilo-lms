@@ -2,7 +2,8 @@
     "autoload": {
         "psr-0": {
             "Entity" : "main/inc/",
-            "Gedmo": "vendor/gedmo/doctrine-extensions/lib'"
+            "Gedmo": "vendor/gedmo/doctrine-extensions/lib",
+            "ChamiloLMS" : "src/"
         },
         "classmap": [
             "main/auth",

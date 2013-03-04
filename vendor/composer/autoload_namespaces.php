@@ -31,7 +31,7 @@ return array(
     'Pagerfanta\\' => $vendorDir . '/pagerfanta/pagerfanta/src/',
     'Monolog' => $vendorDir . '/monolog/monolog/src/',
     'Knp\\Menu\\' => $vendorDir . '/knplabs/knp-menu/src/',
-    'Gedmo' => array($baseDir . '/vendor/gedmo/doctrine-extensions/lib\'', $vendorDir . '/gedmo/doctrine-extensions/lib/'),
+    'Gedmo' => array($baseDir . '/vendor/gedmo/doctrine-extensions/lib', $vendorDir . '/gedmo/doctrine-extensions/lib/'),
     'Faker' => $vendorDir . '/fzaninotto/faker/src/',
     'Entity' => $baseDir . '/main/inc/',
     'EmanueleMinotto' => $vendorDir . '/emanueleminotto/faker-service-provider/src/',
@@ -47,4 +47,5 @@ return array(
     'Dflydev\\Silex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Pimple\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
     'Dflydev\\Cilex\\Provider\\DoctrineOrm' => $vendorDir . '/dflydev/doctrine-orm-service-provider/src',
+    'ChamiloLMS' => $baseDir . '/src/',
 );

@@ -528,7 +528,7 @@ class FileManager
     Function kept for compatibility with older PHP versions.
     Function is binary safe (is needed on Windows)
      */
-    function compat_load_file($file_name)
+    static function compat_load_file($file_name)
     {
         $buffer = '';
         if (file_exists($file_name)) {
@@ -540,7 +540,7 @@ class FileManager
         return $buffer;
     }
 
-    function choose_image($file_name)
+    static function choose_image($file_name)
     {
         static $type, $image;
 
@@ -631,7 +631,7 @@ class FileManager
      * @param  - $file_path (string) - Relative local path of the file on the hard disk
      * @return - Relative url
      */
-    function format_url($file_path)
+    static function format_url($file_path)
     {
         $path_component = explode('/', $file_path);
         $path_component = array_map('rawurlencode', $path_component);
@@ -1925,16 +1925,13 @@ class FileManager
      */
     static function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_file)
     {
-        global $_course;
-
         // Open the file
-
         $fp = fopen($html_file, 'r');
         $buffer = fread($fp, filesize($html_file));
 
+        $new_html_content = null;
 
         // Fix the image tags
-
         for ($i = 0, $fileNb = count($original_img_path); $i < $fileNb; $i++) {
             $replace_what = $original_img_path[$i];
             // We only need the directory and the filename /path/to/file_html_files/missing_file.gif -> file_html_files/missing_file.gif

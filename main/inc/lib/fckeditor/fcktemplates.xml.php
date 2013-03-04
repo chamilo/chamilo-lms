@@ -204,16 +204,16 @@ function load_personal_templates($user_id = 0) {
 
     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
     $table_document = Database::get_course_table(TABLE_DOCUMENT);
-    
+
     $course_id = api_get_course_int_id();
 
     // The sql statement for getting all the user defined templates
     $sql = "SELECT template.id, template.title, template.description, template.image, template.ref_doc, document.path
             FROM ".$table_template." template, ".$table_document." document
-            WHERE 
-                user_id='".Database::escape_string($user_id)."' AND 
+            WHERE
+                user_id='".Database::escape_string($user_id)."' AND
                 course_code='".Database::escape_string(api_get_course_id())."' AND
-                document.c_id = $course_id AND 
+                document.c_id = $course_id AND
                 document.id = template.ref_doc";
 
     $result_template = Database::query($sql);
@@ -221,7 +221,6 @@ function load_personal_templates($user_id = 0) {
     while ($row = Database::fetch_array($result_template)) {
 
         $row['content'] = file_get_contents(api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path']);
-        //$row['content'] = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$row['path'];
 
         if (!empty($row['image'])) {
             $image = api_get_path(WEB_PATH).'courses/'.$_course['path'].'/upload/template_thumbnails/'.$row['image'];
@@ -252,7 +251,7 @@ function load_empty_template() {
         <![CDATA[
            <html>
            <head>
-               <meta charset="<?php echo api_get_system_encoding(); ?>" />        
+               <meta charset="<?php echo api_get_system_encoding(); ?>" />
            </head>
            <body  dir="<?php echo api_get_text_direction(); ?>">
            </body>

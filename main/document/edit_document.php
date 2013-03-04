@@ -174,10 +174,7 @@ if ($is_certificate_mode) {
     $html_editor_config['BaseHref'] = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
 }
 
-$is_allowed_to_edit = api_is_allowed_to_edit(
-    null,
-    true
-) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true) || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), $dir, $current_session_id);
 $noPHP_SELF = true;
 
 /*	Other initialization code */
@@ -222,7 +219,7 @@ if (!is_allowed_to_edit) {
 
 event_access_tool(TOOL_DOCUMENT);
 
-//TODO:check the below code and his funcionality
+//TODO:check the below code and his functionality
 if (!is_allowed_to_edit()) {
     if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
         api_not_allowed();
@@ -285,7 +282,7 @@ if ($is_allowed_to_edit) {
             if ($read_only_flag == 0) {
                 if (!empty($content)) {
                     if ($fp = @fopen($document_data['absolute_path'], 'w')) {
-                        // For flv player, change absolute paht temporarely to prevent from erasing it in the following lines
+                        // For flv player, change absolute path temporarely to prevent from erasing it in the following lines
                         $content = str_replace(array('flv=h', 'flv=/'), array('flv=h|', 'flv=/|'), $content);
 
                         // Change the path of mp3 to absolute

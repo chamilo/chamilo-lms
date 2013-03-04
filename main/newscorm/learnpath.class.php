@@ -4141,7 +4141,7 @@ class learnpath
         $sql = "SELECT * FROM $tbl_tool WHERE c_id = ".$course_id." AND link='$link' and image='scormbuilder.gif' and link LIKE '$link%' $session_condition";
         $result = Database::query($sql);
         $num = Database :: num_rows($result);
-        //if ($this->debug > 2) { error_log('New LP - '.$sql.' - '.$num, 0); }
+
         if (($set_visibility == 'i') && ($num > 0)) {
             $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link='$link' and image='scormbuilder.gif' $session_condition)";
         } elseif (($set_visibility == 'v') && ($num == 0)) {

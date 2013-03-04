@@ -47,7 +47,7 @@ if (!empty($course)) {
 	$chat_path = $document_path.$basepath_chat.'/';
 
 	$TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-	
+
 	$course_id = api_get_course_int_id();
 
 	if (!is_dir($chat_path)) {
@@ -75,7 +75,7 @@ if (!empty($course)) {
 	} else {
 		$filename_chat = 'messages-'.$date_now.'.log.html';
 	}
-	
+
 	if (!file_exists($chat_path.$filename_chat)) {
 		@fclose(fopen($chat_path.$filename_chat, 'w'));
 		if (!api_is_anonymous()) {
@@ -116,7 +116,7 @@ if (!empty($course)) {
 
 		update_existing_document($_course, $doc_id, 0);
 	}
-	
+
 	$remove = 0;
 	$content = array();
 	if (file_exists($chat_path.$basename_chat.'.log.html')) {
@@ -155,7 +155,7 @@ if (!empty($course)) {
 	if ($isMaster || $is_courseCoach) {
 		$rand = mt_rand(1, 1000);
 		echo '<div style="margin-left: 5px;">';
-		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&cidReq='.$_GET['cidReq'].'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
+		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
 		echo '</div>';
 	}
 } else {

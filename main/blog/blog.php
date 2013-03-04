@@ -10,9 +10,14 @@
  */
 // name of the language file that needs to be included
 $language_file = "blog";
+require_once '../inc/global.inc.php';
+
 $blog_id = intval($_GET['blog_id']);
 
-require_once '../inc/global.inc.php';
+if (empty($blog_id)) {
+    api_not_allowed(true);
+}
+
 $this_section   = SECTION_COURSES;
 $current_course_tool  = TOOL_BLOGS;
 
@@ -287,7 +292,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<form action="blog.php" method="get" enctype="multipart/form-data">
 						<input type="hidden" name="blog_id" value="<?php echo $blog_id ?>" />
 						<input type="hidden" name="action" value="view_search_result" />
-						<input type="text" size="20" name="q" value="<?php echo (isset($_GET['q']) ? $_GET['q'] : ''); ?>" /><button class="btn search" type="submit"><?php echo get_lang('Search'); ?></button>
+						<input type="text" size="20" name="q" value="<?php echo isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : ''; ?>" /><button class="btn search" type="submit"><?php echo get_lang('Search'); ?></button>
 					</form>
 				</td>
 			</tr>
@@ -302,7 +307,7 @@ Blog :: display_minimonthcalendar($month, $year, $blog_id);
 					<?php Blog::get_personal_task_list(); ?>
 				</td>
 			</tr>
-		</table>		
+		</table>
 	</td>
 	<td valign="top" class="blog_right">
 		<?php

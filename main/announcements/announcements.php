@@ -109,6 +109,8 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show")) {
 	$_SESSION['select_groupusers'] = "hide";
 }
 
+$origin = empty($_GET['origin']) ? '' : Security::remove_XSS($_GET['origin']);
+
 /* 	Action handling */
 
 // display the form
@@ -130,7 +132,7 @@ $htmlHeadXtra[] = AnnouncementManager::to_javascript();
 
 if(!empty($_GET['toolgroup'])){
 	if($_GET['toolgroup'] == strval(intval($_GET['toolgroup']))){ //check is integer
-		$toolgroup = $_GET['toolgroup'];
+		$toolgroup = intval($_GET['toolgroup']);
 		$_SESSION['select_groupusers'] = 'hide';
 	} else {
 		$toolgroup = 0;
@@ -338,7 +340,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 	/*
 		Submit announcement
 	*/
-	
+
 	$emailTitle=(!empty($_POST['emailTitle'])?$safe_emailTitle:'');
 	$newContent=(!empty($_POST['newContent'])?$safe_newContent:'');
 
@@ -538,15 +540,15 @@ $show_actions = false;
 if ((api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())) and (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath')) {
 	echo '<div class="actions">';
 	if (isset($_GET['action']) && in_array($_GET['action'], array('add', 'modify','view'))) {
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
 	} else {
-	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
+	   echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin."'>".Display::return_icon('new_announce.png',get_lang('AddAnnouncement'),'',ICON_SIZE_MEDIUM)."</a>";
 	}
 	$show_actions = true;
 } else {
     if (in_array($_GET['action'], array('view'))) {
         echo '<div class="actions">';
-        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".(empty($_GET['origin'])?'':$_GET['origin'])."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
+        echo "<a href='".api_get_self()."?".api_get_cidreq()."&origin=".$origin."'>".Display::return_icon('back.png',get_lang('Back'),'',ICON_SIZE_MEDIUM)."</a>";
         echo '</div>';
     }
 }
@@ -941,7 +943,7 @@ if ($display_announcement_list) {
             echo '<h2>'.get_lang('Announcements').'</h2>';
             echo Display::return_icon('valves.png', '', array(), 64);
             echo '<div class="controls">';
-            echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".(empty($_GET['origin'])?'':$_GET['origin']) , array('class' => 'btn'));
+            echo Display::url(get_lang('AddAnnouncement'), api_get_self()."?".api_get_cidreq()."&action=add&origin=".$origin, array('class' => 'btn'));
             echo '</div>';
             echo '</div>';
         } else {
@@ -1022,7 +1024,7 @@ if ($display_announcement_list) {
     					$image_visibility="invisible";
     					$alt_visibility=get_lang('Visible');
     				}
-    				$modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".(!empty($_GET['origin'])?Security::remove_XSS($_GET['origin']):'')."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
+    				$modify_icons .=  "<a href=\"".api_get_self()."?".api_get_cidreq()."&origin=".$origin."&action=showhide&id=".$myrow['id']."&sec_token=".$stok."\">".
     						Display::return_icon($image_visibility.'.png', $alt_visibility,'',ICON_SIZE_SMALL)."</a>";
 
     				// DISPLAY MOVE UP COMMAND only if it is not the top announcement

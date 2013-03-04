@@ -75,7 +75,7 @@ $chat_size_new = 0;
 if (file_exists($file)) {
     $chat_size_new = filesize($file);
 }
- 
+
 $sql = "SELECT user_id FROM $tbl_chat_connected WHERE user_id='".$_user['user_id']."' $extra_condition";
 $result = Database::query($sql);
 
@@ -98,7 +98,7 @@ list($connected_new) = Database::fetch_row($result);
 disconnect_user_of_chat ();
 require 'header_frame.inc.php';
 ?>
-<form name="formHidden" method="post" action="<?php echo api_get_self().'?cidReq='.$_GET['cidReq']; ?>">
+<form name="formHidden" method="post" action="<?php echo api_get_self().'?'.api_get_cidreq(); ?>">
 <input type="hidden" name="chat_size_old" value="<?php echo $chat_size_new; ?>">
 <input type="hidden" name="connected_old" value="<?php echo $connected_new; ?>">
 </form>

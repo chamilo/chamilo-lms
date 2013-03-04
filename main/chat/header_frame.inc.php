@@ -66,7 +66,7 @@ function updateChat()
 {
 	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>')
 	{
-		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&cidReq='.$_GET['cidReq']; ?>#bottom';
+		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
 	}
 }
 
@@ -87,9 +87,8 @@ function eventMessage()
 {
 	<?php if($chat_size): ?>
 	parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
-	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&cidReq='.$_GET['cidReq']; ?>#bottom';
+	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
 	<?php endif; ?>
-
 	document.formMessage.message.focus();
 }
 

@@ -155,7 +155,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	$emoticon_img204  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/flag_red_small.gif" alt="'.get_lang('Stop').'" title="'.get_lang('Stop').'" />';
 
 	if ($sent) {
-		$message = trim(htmlspecialchars(stripslashes($_POST['message']), ENT_QUOTES, $charset));
+		$message = Security::remove_XSS(trim(htmlspecialchars(stripslashes($_POST['message']), ENT_QUOTES, $charset)));
 		$message = str_replace($emoticon_text1, $emoticon_img1, $message);
 		$message = str_replace($emoticon_text2, $emoticon_img2, $message);
 		$message = str_replace($emoticon_text3, $emoticon_img3, $message);

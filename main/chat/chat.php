@@ -21,8 +21,8 @@ if ($_GET["origin"] != 'whoisonline') {
 } else {
 	$origin = $_SESSION['origin'];
 	$target = $_SESSION['target'];
-	$_SESSION['origin']=$_GET["origin"];
-	$_SESSION['target']=$_GET["target"];
+	$_SESSION['origin']= Security::remove_XSS($_GET["origin"]);
+	$_SESSION['target']= Security::remove_XSS($_GET["target"]);
 }
 
 /*  TRACKING */
@@ -71,7 +71,7 @@ if ($_SESSION['_gid'] OR $_GET['group_id']) {
 
 	$group_properties  = GroupManager :: get_group_properties($_clean['group_id']);
 	$interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
-	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$_SESSION['_gid'], 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+	$interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.api_get_group_id(), 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 	$noPHP_SELF = true;
 	$shortBanner = false;
 	$add_group_to_title = ' ('.$group_properties['name'].')';

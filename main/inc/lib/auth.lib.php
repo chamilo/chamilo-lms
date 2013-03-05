@@ -409,7 +409,7 @@ class Auth {
     }
 
     /**
-     * get the browsing of the course categories (faculties)
+     * Get the browsing of the course categories (faculties)
      * @return array    array containing a list with all the categories and subcategories(if needed)
      */
     public function browse_course_categories() {
@@ -435,11 +435,9 @@ class Auth {
      * @return  array   Courses data
      */
     public function browse_courses_in_category($category_code, $random_value = null) {
-        global $_configuration;
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
 
         // Get course list auto-register
         $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
@@ -488,7 +486,7 @@ class Auth {
             $id_in = null;
             while (list($id) = Database::fetch_row($result)) {
                 if ($id_in) {
-                    $id_in.=",$id";
+                    $id_in.= ",$id";
                 } else {
                     $id_in = "$id";
                 }
@@ -537,7 +535,6 @@ class Auth {
                 'count_connections' => $count_connections_last_month
             );
         }
-
         return $courses;
     }
 
@@ -571,8 +568,7 @@ class Auth {
         $search_term_safe = Database::escape_string($search_term);
         $sql_find = "SELECT * FROM $TABLECOURS WHERE (code LIKE '%" . $search_term_safe . "%' OR title LIKE '%" . $search_term_safe . "%' OR tutor_name LIKE '%" . $search_term_safe . "%') $without_special_courses ORDER BY title, visual_code ASC";
 
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);

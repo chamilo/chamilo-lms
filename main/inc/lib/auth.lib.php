@@ -395,15 +395,14 @@ class Auth {
         }
 
         $sql = "SELECT * FROM $tbl_course WHERE category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
-        // Showing only the courses of the current Dokeos access_url_id.
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+
+        if (api_is_multiple_url_enabled()) {
             $url_access_id = api_get_current_access_url_id();
             if ($url_access_id != -1) {
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                                        ON (url_rel_course.course_code=course.code)
-                                        WHERE access_url_id = $url_access_id AND category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
+                        ON (url_rel_course.course_code=course.code)
+                        WHERE access_url_id = $url_access_id AND category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
             }
         }
         return Database::num_rows(Database::query($sql));
@@ -466,7 +465,7 @@ class Auth {
             $result = Database::query($sql);
             list($num_records) = Database::fetch_row($result);
 
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
 
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -500,7 +499,7 @@ class Auth {
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
 
             //showing only the courses of the current Chamilo access_url_id
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 $url_access_id = api_get_current_access_url_id();
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course

@@ -29,7 +29,7 @@ $stok = Security::get_token();
     });
 </script>
 
-<?php if (intval($_GET['hidden_links']) != 1) { ?>
+<?php if (!isset($_GET['hidden_links']) || ($_GET['hidden_links']) != 1) { ?>
 
 <div class="actions">
     <form class="form-search" method="post" action="<?php echo api_get_self(); ?>?action=subscribe&amp;hidden_links=0">
@@ -143,7 +143,7 @@ $stok = Security::get_token();
                 }
 
                 $rating = Display::return_rating_system('star_'.$course['real_id'], $ajax_url.'&amp;course_id='.$course['real_id'], $course['point_info']);
-
+                $icon_title = null;
                 echo '<div class="well_border"><div class="row">';
                     echo '<div class="span2">';
                         echo '<div class="thumbnail">';

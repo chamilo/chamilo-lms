@@ -1185,7 +1185,7 @@ class CourseManager {
         $session_id     = intval($session_id);
         $course_code    = Database::escape_string($course_code);
 
-        $sql .= 'SELECT DISTINCT count(*) as count  FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
+        $sql = 'SELECT DISTINCT count(*) as count  FROM '.Database::get_main_table(TABLE_MAIN_USER).' as user ';
         $where = array();
         if (!empty($session_id)) {
             $sql .= ' LEFT JOIN '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).' as session_course_user

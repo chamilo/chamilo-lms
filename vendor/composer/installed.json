@@ -831,78 +831,6 @@
         ]
     },
     {
-        "name": "doctrine/dbal",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/doctrine/dbal.git",
-            "reference": "042cfa61d57bc4686f68a3021cd4a926f8348050"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/dbal/zipball/042cfa61d57bc4686f68a3021cd4a926f8348050",
-            "reference": "042cfa61d57bc4686f68a3021cd4a926f8348050",
-            "shasum": ""
-        },
-        "require": {
-            "doctrine/common": "2.4.x-dev",
-            "php": ">=5.3.2"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "3.7.*",
-            "symfony/console": "2.*"
-        },
-        "suggest": {
-            "symfony/console": "For helpful console commands such as SQL execution and import of files."
-        },
-        "time": "2013-02-27 12:20:01",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4.x-dev"
-            }
-        },
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Doctrine\\DBAL\\": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jonathan Wage",
-                "email": "jonwage@gmail.com",
-                "homepage": "http://www.jwage.com/"
-            },
-            {
-                "name": "Guilherme Blanco",
-                "email": "guilhermeblanco@gmail.com",
-                "homepage": "http://www.instaclick.com"
-            },
-            {
-                "name": "Roman Borschel",
-                "email": "roman@code-factory.org"
-            },
-            {
-                "name": "Benjamin Eberlei",
-                "email": "kontakt@beberlei.de"
-            }
-        ],
-        "description": "Database Abstraction Layer",
-        "homepage": "http://www.doctrine-project.org",
-        "keywords": [
-            "database",
-            "dbal",
-            "persistence",
-            "queryobject"
-        ]
-    },
-    {
         "name": "doctrine/migrations",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2055,18 +1983,90 @@
         ]
     },
     {
+        "name": "doctrine/dbal",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/doctrine/dbal.git",
+            "reference": "55128a6549b777ec91d7808989df236dbd508111"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/doctrine/dbal/zipball/55128a6549b777ec91d7808989df236dbd508111",
+            "reference": "55128a6549b777ec91d7808989df236dbd508111",
+            "shasum": ""
+        },
+        "require": {
+            "doctrine/common": "2.4.x-dev",
+            "php": ">=5.3.2"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "3.7.*",
+            "symfony/console": "2.*"
+        },
+        "suggest": {
+            "symfony/console": "For helpful console commands such as SQL execution and import of files."
+        },
+        "time": "2013-03-04 22:33:37",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4.x-dev"
+            }
+        },
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Doctrine\\DBAL\\": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jonathan Wage",
+                "email": "jonwage@gmail.com",
+                "homepage": "http://www.jwage.com/"
+            },
+            {
+                "name": "Guilherme Blanco",
+                "email": "guilhermeblanco@gmail.com",
+                "homepage": "http://www.instaclick.com"
+            },
+            {
+                "name": "Roman Borschel",
+                "email": "roman@code-factory.org"
+            },
+            {
+                "name": "Benjamin Eberlei",
+                "email": "kontakt@beberlei.de"
+            }
+        ],
+        "description": "Database Abstraction Layer",
+        "homepage": "http://www.doctrine-project.org",
+        "keywords": [
+            "database",
+            "dbal",
+            "persistence",
+            "queryobject"
+        ]
+    },
+    {
         "name": "doctrine/orm",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/doctrine/doctrine2.git",
-            "reference": "b30d6dfd8e88b67f63f2e154c0828d8e9ab7b8a0"
+            "reference": "399584db4c3db4846dd7038ec0ca5bec8dcafe54"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/b30d6dfd8e88b67f63f2e154c0828d8e9ab7b8a0",
-            "reference": "b30d6dfd8e88b67f63f2e154c0828d8e9ab7b8a0",
+            "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/399584db4c3db4846dd7038ec0ca5bec8dcafe54",
+            "reference": "399584db4c3db4846dd7038ec0ca5bec8dcafe54",
             "shasum": ""
         },
         "require": {
@@ -2078,7 +2078,7 @@
         "suggest": {
             "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
         },
-        "time": "2013-03-03 17:14:30",
+        "time": "2013-03-04 22:39:01",
         "bin": [
             "bin/doctrine",
             "bin/doctrine.php"
@@ -2133,12 +2133,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/l3pp4rd/DoctrineExtensions.git",
-            "reference": "80eb92fb80b06425260cb5d3488d852caa38df1f"
+            "reference": "v2.3.5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/80eb92fb80b06425260cb5d3488d852caa38df1f",
-            "reference": "80eb92fb80b06425260cb5d3488d852caa38df1f",
+            "url": "https://api.github.com/repos/l3pp4rd/DoctrineExtensions/zipball/v2.3.5",
+            "reference": "v2.3.5",
             "shasum": ""
         },
         "require": {
@@ -2158,7 +2158,7 @@
             "doctrine/mongodb-odm": ">=1.0.0-BETA7",
             "doctrine/orm": ">=2.3.2"
         },
-        "time": "2013-03-04 13:45:49",
+        "time": "2013-03-05 06:32:22",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2214,18 +2214,18 @@
         "source": {
             "type": "git",
             "url": "https://github.com/fzaninotto/Faker.git",
-            "reference": "843e60b04f923402b8a9d78c7ae742e09b581b1b"
+            "reference": "a1fd779b525c6a7669c136d23ca9c8130e4441b8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/843e60b04f923402b8a9d78c7ae742e09b581b1b",
-            "reference": "843e60b04f923402b8a9d78c7ae742e09b581b1b",
+            "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/a1fd779b525c6a7669c136d23ca9c8130e4441b8",
+            "reference": "a1fd779b525c6a7669c136d23ca9c8130e4441b8",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.3"
         },
-        "time": "2013-03-04 14:55:49",
+        "time": "2013-03-04 17:05:06",
         "type": "library",
         "extra": {
             "branch-alias": {

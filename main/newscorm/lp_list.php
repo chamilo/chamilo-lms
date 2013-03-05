@@ -277,10 +277,13 @@ foreach ($categories as $item) {
 
                 // Session test not necessary if we want to show base course learning paths inside the session (see http://support.chamilo.org/projects/chamilo-18/wiki/Tools_and_sessions).
                 //if ($current_session == $details['lp_session']) {
-                if ($details['lp_visibility'] == 0) {
-                    $dsp_visible = "<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL)."</a>";
-                } else {
-                    $dsp_visible = "<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>".Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL)."</a>";
+
+                if (!isset($details['subscribe_users']) || $details['subscribe_users'] != 1) {
+                    if ($details['lp_visibility'] == 0) {
+                        $dsp_visible = "<a href=\"".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=1\">".Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL)."</a>";
+                    } else {
+                        $dsp_visible = "<a href='".api_get_self()."?".api_get_cidreq()."&lp_id=$id&action=toggle_visible&new_status=0'>".Display::return_icon('visible.png', get_lang('Hide'), '', ICON_SIZE_SMALL)."</a>";
+                    }
                 }
 
                 /* PUBLISH COMMAND */
@@ -326,7 +329,7 @@ foreach ($categories as $item) {
                 /* FUll screen VIEW */
                 if ($current_session == $details['lp_session']) {
 
-                switch($details['lp_view_mode']) {
+                switch ($details['lp_view_mode']) {
                     case 'fullscreen':
                         $dsp_default_view = '<a href="lp_controller.php?'.api_get_cidreq().'&action=switch_view_mode&lp_id='.$id.'">'.
                             Display::return_icon('view_fullscreen.png', get_lang('ViewModeFullScreen'), '', ICON_SIZE_SMALL).'</a>';
@@ -364,7 +367,6 @@ foreach ($categories as $item) {
                     }
                 }
 
-
                 /* Export */
 
                 if ($details['lp_type'] == 1) {
@@ -381,7 +383,7 @@ foreach ($categories as $item) {
                 //Subscribe users
                 $subscribe_users = null;
                 if ($details['subscribe_users'] == 1) {
-                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), "lp_subscribe_users.php?lp_id=$id");
+                    $subscribe_users = Display::url(Display::return_icon('add.png', get_lang('AddUsers')), api_get_path(WEB_PATH)."learnpath/subscribe_users/$id");
                 }
 
                 /* Auto Lunch LP code */

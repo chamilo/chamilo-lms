@@ -38,4 +38,5 @@ $htmlHeadXtra[] = '
 //$cookie = new Cookie('TestCookie', 'cookies_yes', time()+3600*24*31*12);
 //$response->headers->setCookie($cookie);
 
+
 $app->run();

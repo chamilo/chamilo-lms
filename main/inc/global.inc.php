@@ -130,6 +130,7 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
 
 //$app->register(new Silex\Provider\SessionServiceProvider());
 
+/*
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\User;
@@ -172,7 +173,7 @@ class UserProvider implements UserProviderInterface
         return $class === 'Symfony\Component\Security\Core\User\User';
     }
 }
-/*
+
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'secured' => array(
@@ -953,6 +954,10 @@ $app['userportal.controller'] = $app->share(function () use ($app) {
     return new ChamiloLMS\Controller\UserPortalController();
 });
 
+$app['learnpath.controller'] = $app->share(function () use ($app) {
+    return new ChamiloLMS\Controller\LearnpathController();
+});
+
 /*
 class PostController
 {
@@ -976,6 +981,9 @@ $app->mount('/', "posts.controller");*/
 $app->get('/', 'index.controller:indexAction');
 //user_portal.php
 $app->get('/userportal', 'userportal.controller:indexAction');
+
+$app->get('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
+$app->post('/learnpath/subscribe_users/{id}', 'learnpath.controller:indexAction')->bind('subscribe_users');
 
 //$app->mount('/', 'index.controller');
 return $app;

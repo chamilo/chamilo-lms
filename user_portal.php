@@ -15,6 +15,10 @@
  * @todo display_digest, shouldn't this be removed and be made into an extension?
  */
 
+//Temporal hack
+header('Location: web/userportal');
+exit;
+
 /**
  * INIT SECTION
  */
@@ -78,6 +82,3 @@ if ($load_dirs) {
     });
     </script>';
 }
-
-$app->get('/', 'UserPortalController::indexAction');
-$app->run();
